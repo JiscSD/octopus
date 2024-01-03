@@ -1,29 +1,24 @@
 import React from 'react';
-import axios from 'axios';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Interfaces from '@interfaces';
 import * as Helpers from '@helpers';
 import * as Components from '@components';
-import * as api from '@api';
 import * as Config from '@config';
-import * as Contexts from '@contexts';
-import * as SWRConfig from 'swr';
-import * as FaIcons from 'react-icons/fa';
-import { useRouter } from 'next/router';
+import * as Hooks from '@hooks';
 
 type Props = {
     publication: Interfaces.Publication;
     user: Interfaces.User;
-    canCreateNewVersion?: boolean;
-    canEditNewVersion?: boolean;
     controlRequests: Interfaces.ControlRequest[];
 };
 
 const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
-    const confirmation = Contexts.useConfirmationModal();
-    const router = useRouter();
-    const [error, setError] = React.useState('');
-    const [loading, setLoading] = React.useState(false);
+    const { handleCreateNewVersion, loadingNewVersion, newVersionError } = Hooks.useCreateNewVersion(
+        props.publication.id
+    );
+    const { handleControlRequest, loadingControlRequest, controlRequestError } = Hooks.useControlRequest(
+        props.publication.id
+    );
 
     const latestLiveVersion = props.publication.versions.find((version) => version.isLatestLiveVersion);
     const isAuthorOnLatestLive =
@@ -36,64 +31,6 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
     const draftExistsWithoutPermission = !draftExistsWithPermission && !latestLiveVersion?.isLatestVersion;
     const hasAlreadyRequestedControl = props.controlRequests.some(
         (request) => request.data.publicationVersion.versionOf === props.publication.id
-    );
-
-    const handleCreateNewVersion = React.useCallback(
-        async (e: React.MouseEvent<Element, MouseEvent>) => {
-            setError('');
-            setLoading(true);
-
-            try {
-                // create new version
-                await api.post(
-                    `${Config.endpoints.publications}/${props.publication.id}/publication-versions`,
-                    {},
-                    Helpers.getJWT()
-                );
-
-                // redirect user to the edit page
-                await router.push(`/publications/${props.publication.id}/edit?step=0`);
-            } catch (error) {
-                console.log(error);
-                setError(axios.isAxiosError(error) ? error.response?.data?.message : (error as Error).message);
-            }
-
-            setLoading(false);
-        },
-        [props.publication.id, router]
-    );
-
-    const handleTakeOverEditing = React.useCallback(
-        async (e: React.MouseEvent<Element, MouseEvent>) => {
-            const confirmed = await confirmation(
-                'Take over editing',
-                'This action will remove the current corresponding author and allow you to make edits instead. Are you sure you want to do this?',
-                <FaIcons.FaEdit className="h-8 w-8 text-grey-600" />,
-                'Request Control'
-            );
-
-            if (confirmed) {
-                setError('');
-                setLoading(true);
-
-                try {
-                    // request control over this version
-                    await api.get(
-                        `${Config.endpoints.publications}/${props.publication.id}/publication-versions/latest/request-control`,
-                        Helpers.getJWT()
-                    );
-
-                    // re-fetch control requests for this user
-                    await SWRConfig.mutate(`${Config.endpoints.users}/me/control-requests`);
-                } catch (error) {
-                    console.log(error);
-                    setError(axios.isAxiosError(error) ? error.response?.data?.message : (error as Error).message);
-                }
-
-                setLoading(false);
-            }
-        },
-        [confirmation, props.publication.id]
     );
 
     const divider = <span className="border-b border-grey-300 pt-4 dark:border-teal-500 sm:border-r sm:pb-4" />;
@@ -109,11 +46,11 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
         />
     ) : (
         <>
-            {error && <Components.Alert severity="ERROR" title={error} className="mt-4" />}
+            {controlRequestError && <Components.Alert severity="ERROR" title={controlRequestError} className="mt-4" />}
             <Components.Button
-                disabled={loading}
+                disabled={loadingControlRequest}
                 title="Take over editing"
-                onClick={handleTakeOverEditing}
+                onClick={handleControlRequest}
                 endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
                 className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
             />
@@ -158,55 +95,55 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                 {draftVersion ? (
                     <div className="flex h-full flex-col justify-between">
                         <p>
-                            Last updated:{' '}
+                            Last updated on{' '}
                             <time suppressHydrationWarning>{Helpers.formatDate(draftVersion.updatedAt)}</time>
                         </p>
                         <p className="flex-grow pb-5">
                             Status: {Helpers.getPublicationStatusByAuthor(draftVersion, props.user)}
                         </p>
-                        {['DRAFT', 'LOCKED'].includes(draftVersion.currentStatus) ? (
-                            props.user.id === draftVersion.user.id ? (
-                                <Components.Button
-                                    href={`/publications/${props.publication.id}/edit?step=0`}
-                                    endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
-                                    title="Edit Draft"
-                                    className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
-                                />
-                            ) : (
-                                <>
-                                    <p>
-                                        <Components.Link
-                                            href={`${Config.urls.viewUser.path}/${draftVersion.user.id}`}
-                                            className="underline"
-                                        >
-                                            {draftVersion.user.firstName.substring(0, 1)}. {draftVersion.user.lastName}
-                                        </Components.Link>{' '}
-                                        has created a new draft version
-                                    </p>
-                                    {isAuthorOnLatestLive && requestControl}
-                                </>
-                            )
-                        ) : (
+                        {props.user.id !== draftVersion.user.id ? (
+                            <>
+                                <p>
+                                    <Components.Link
+                                        href={`${Config.urls.viewUser.path}/${draftVersion.user.id}`}
+                                        className="underline"
+                                    >
+                                        {draftVersion.user.firstName.substring(0, 1)}. {draftVersion.user.lastName}
+                                    </Components.Link>{' '}
+                                    is working on a new draft version
+                                </p>
+                                {isAuthorOnLatestLive && requestControl}
+                            </>
+                        ) : draftVersion.currentStatus === 'LOCKED' ? (
                             <Components.Button
                                 href={`/publications/${props.publication.id}`}
                                 endIcon={<OutlineIcons.EyeIcon className="h-4" />}
                                 title="View Draft"
-                                className="mt-5 bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
+                                className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
+                            />
+                        ) : (
+                            <Components.Button
+                                href={`/publications/${props.publication.id}/edit?step=0`}
+                                endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
+                                title="Edit Draft"
+                                className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
                             />
                         )}
                     </div>
                 ) : isAuthorOnLatestLive ? (
                     draftExistsWithoutPermission ? (
                         <div className="flex h-full flex-col justify-between">
-                            <p>Someone else has created a new draft version, and you do not yet have access to it.</p>
+                            <p>Someone else is working on a new draft version, and you do not yet have access to it.</p>
                             {requestControl}
                         </div>
                     ) : (
                         <>
                             <p className="flex-grow pb-5">New draft not created</p>
-                            {error && <Components.Alert severity="ERROR" title={error} className="mt-4" />}
+                            {newVersionError && (
+                                <Components.Alert severity="ERROR" title={newVersionError} className="mt-4" />
+                            )}
                             <Components.Button
-                                disabled={loading}
+                                disabled={loadingNewVersion}
                                 title="Create Draft Version"
                                 onClick={handleCreateNewVersion}
                                 endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
@@ -225,7 +162,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                     <>
                         <div className="flex-grow">
                             <p>
-                                Published on:{' '}
+                                Published on{' '}
                                 <time suppressHydrationWarning>
                                     {latestLiveVersion.publishedDate &&
                                         Helpers.formatDate(latestLiveVersion.publishedDate)}

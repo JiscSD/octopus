@@ -12,6 +12,10 @@ const getPublicationsSchema: I.JSONSchemaType<I.UserPublicationsFilters> = {
             type: 'number',
             minimum: 1,
             default: 10
+        },
+        versionStatus: {
+            type: 'string',
+            nullable: true
         }
     },
     required: []

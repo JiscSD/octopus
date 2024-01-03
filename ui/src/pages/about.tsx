@@ -3,11 +3,9 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Framer from 'framer-motion';
-
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
-import * as Types from '@types';
 
 type CardItemProps = {
     title: string;
@@ -145,6 +143,17 @@ const About: NextPage = (): React.ReactElement => (
                         />
                     </div>
                 </div>
+            </PageSection>
+            <PageSection>
+                <Components.HTMLVideo
+                    width="100%"
+                    title="An introduction to Octopus"
+                    showCaption
+                    controls
+                    controlsList="nodownload"
+                    srcMp4="https://octopus-promo-video.s3.eu-west-1.amazonaws.com/Jisc+-+Octopus+Animation.mp4"
+                    poster="https://octopus-promo-video.s3.eu-west-1.amazonaws.com/octopus-promo-video-poster.jpg"
+                />
             </PageSection>
             <PageSection>
                 <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">

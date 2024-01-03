@@ -132,7 +132,12 @@ export const get = async (id: string, isAccountOwner = false) => {
     return user;
 };
 
-export const getPublications = async (id: string, params: I.UserPublicationsFilters, isAccountOwner: boolean) => {
+export const getPublications = async (
+    id: string,
+    params: I.UserPublicationsFilters,
+    isAccountOwner: boolean,
+    versionStatusArray?: I.PublicationStatusEnum[]
+) => {
     const { offset, limit } = params;
 
     const where: Prisma.PublicationWhereInput = {
@@ -156,7 +161,19 @@ export const getPublications = async (id: string, params: I.UserPublicationsFilt
                 }
             }
         ],
-        ...(!isAccountOwner && { versions: { some: { isLatestLiveVersion: true } } })
+        ...(isAccountOwner
+            ? versionStatusArray
+                ? {
+                      versions: {
+                          some: {
+                              currentStatus: {
+                                  in: versionStatusArray
+                              }
+                          }
+                      }
+                  }
+                : {}
+            : { versions: { some: { isLatestLiveVersion: true } } })
     };
 
     const userPublications = await client.prisma.publication.findMany({

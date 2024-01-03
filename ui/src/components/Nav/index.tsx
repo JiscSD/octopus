@@ -14,6 +14,7 @@ import * as Framer from 'framer-motion';
 type FlickerLessLinkProps = {
     subItem: Interfaces.NavMenuItem;
     active: boolean;
+    onClick?: (event: React.MouseEvent<HTMLAnchorElement>) => void;
 };
 
 const FlickerLessLink = React.forwardRef<HTMLAnchorElement, FlickerLessLinkProps>((props, ref) => {
@@ -162,16 +163,13 @@ const Nav: React.FC = (): React.ReactElement => {
                                 animate={{ opacity: 1 }}
                                 transition={{ duration: 0.25 }}
                                 exit={{ opacity: 0 }}
-                                className="absolute right-0 top-10 z-20 w-max rounded bg-white-50 px-4 shadow-md dark:border-2 dark:border-teal-300 dark:bg-grey-800"
+                                className="absolute right-0 top-10 z-50 w-max rounded bg-white-50 px-4 shadow-md dark:border-2 dark:border-teal-300 dark:bg-grey-800"
                             >
                                 <ul>
                                     {items.map((item) => (
                                         <li key={item.value} className="my-4">
                                             {item.subItems?.length ? (
-                                                <HeadlessUI.Menu
-                                                    as="div"
-                                                    className="relative z-50 inline-block text-left"
-                                                >
+                                                <HeadlessUI.Menu as="div" className="relative inline-block text-left">
                                                     <HeadlessUI.Menu.Button className="rounded border-transparent p-2 font-medium text-grey-800 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-white-50">
                                                         <span className="flex items-center">
                                                             {item.label}
@@ -189,7 +187,7 @@ const Nav: React.FC = (): React.ReactElement => {
                                                     >
                                                         <HeadlessUI.Menu.Items
                                                             as="ul"
-                                                            className="focus:outline-none dark:divide-teal-600 dark:border-teal-500 dark:bg-grey-800"
+                                                            className="mt-1 focus:outline-none dark:divide-teal-600 dark:border-teal-500 dark:bg-grey-800"
                                                         >
                                                             {item.subItems.map((subItem, index) => (
                                                                 <li
@@ -198,8 +196,9 @@ const Nav: React.FC = (): React.ReactElement => {
                                                                 >
                                                                     <HeadlessUI.Menu.Item>
                                                                         {({ active }) => (
-                                                                            <Components.Link
-                                                                                href={subItem.value}
+                                                                            <FlickerLessLink
+                                                                                active={active}
+                                                                                subItem={subItem}
                                                                                 onClick={(e) => {
                                                                                     if (
                                                                                         typeof subItem.onClick ===
@@ -210,14 +209,7 @@ const Nav: React.FC = (): React.ReactElement => {
 
                                                                                     handleClose();
                                                                                 }}
-                                                                                className={`${
-                                                                                    active
-                                                                                        ? 'ring-yellow-400 hover:ring-transparent active:ring-yellow-400 '
-                                                                                        : 'ring-transparent'
-                                                                                } text-white m-0 block w-full rounded-md p-1 ring-2`}
-                                                                            >
-                                                                                {subItem.label}
-                                                                            </Components.Link>
+                                                                            />
                                                                         )}
                                                                     </HeadlessUI.Menu.Item>
                                                                 </li>
@@ -280,7 +272,7 @@ const Nav: React.FC = (): React.ReactElement => {
                                     >
                                         <HeadlessUI.Menu.Items
                                             as="ul"
-                                            className="divide-gray-100 absolute right-0 mt-2 w-56 origin-top-right divide-y divide-grey-200 divide-opacity-40 rounded-md border-2 border-transparent bg-white-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:divide-teal-600 dark:border-teal-500 dark:bg-grey-800"
+                                            className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-grey-200 divide-opacity-40 rounded-md border-2 border-transparent bg-white-50 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:divide-teal-600 dark:border-teal-500 dark:bg-grey-800"
                                         >
                                             {item.subItems.map((subItem, index) => (
                                                 <li
