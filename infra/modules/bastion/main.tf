@@ -1,6 +1,6 @@
-resource "aws_security_group" "ec2_sg_new" {
+resource "aws_security_group" "ec2_sg" {
   name   = "ec2-sg"
-  vpc_id = var.vpc_id_new
+  vpc_id = var.vpc_id
 
   egress {
     from_port   = 0
@@ -10,9 +10,14 @@ resource "aws_security_group" "ec2_sg_new" {
   }
 
   tags = {
-    Name        = "bastion_sg_${var.environment}_new"
+    Name        = "bastion_sg_${var.environment}"
     Environment = var.environment
   }
+}
+
+moved {
+  from = aws_security_group.ec2_sg_new
+  to   = aws_security_group.ec2_sg
 }
 
 resource "aws_iam_role" "allow_ssm_role" {
@@ -66,8 +71,8 @@ data "aws_ami" "amazon-linux-2023" {
 resource "aws_instance" "bastion" {
   ami                         = data.aws_ami.amazon-linux-2023.id
   instance_type               = "t3.small" # Anything lower and npm install can crash the instance
-  subnet_id                   = var.public_subnet_new
-  vpc_security_group_ids      = [aws_security_group.ec2_sg_new.id]
+  subnet_id                   = var.public_subnet
+  vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
   associate_public_ip_address = true
   user_data                   = data.template_file.install_software.rendered
   iam_instance_profile        = aws_iam_instance_profile.allow_ssm_iam_profile.name

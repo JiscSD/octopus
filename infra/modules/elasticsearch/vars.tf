@@ -1,4 +1,4 @@
-variable "vpc_id_new" {
+variable "vpc_id" {
   type = string
 }
 
@@ -6,7 +6,7 @@ variable "environment" {
   type = string
 }
 
-variable "private_subnet_ids_new" {
+variable "private_subnet_ids" {
   type = list(string)
 }
 

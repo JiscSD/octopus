@@ -18,9 +18,9 @@ resource "random_string" "db_master_pass" {
 #   aws_service_name = "es.amazonaws.com"
 # }
 
-resource "aws_security_group" "elasticsearch_new" {
+resource "aws_security_group" "elasticsearch" {
   name   = "${var.environment}-elasticsearch-sg-new"
-  vpc_id = var.vpc_id_new
+  vpc_id = var.vpc_id
 
   ingress {
     from_port = 443
@@ -29,6 +29,11 @@ resource "aws_security_group" "elasticsearch_new" {
 
     cidr_blocks = [var.vpc_cidr_block]
   }
+}
+
+moved {
+  from = aws_security_group.elasticsearch_new
+  to   = aws_security_group.elasticsearch
 }
 
 resource "aws_elasticsearch_domain" "elasticsearch" {
@@ -64,8 +69,8 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
   }
 
   vpc_options {
-    subnet_ids         = var.private_subnet_ids_new
-    security_group_ids = [aws_security_group.elasticsearch_new.id]
+    subnet_ids         = var.private_subnet_ids
+    security_group_ids = [aws_security_group.elasticsearch.id]
   }
 
   advanced_options = {
