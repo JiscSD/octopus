@@ -17,18 +17,6 @@ locals {
   private_subnets_map = jsondecode(data.aws_ssm_parameter.private_subnets_new.value)
 }
 
-resource "aws_vpc" "main" {
-  cidr_block           = var.cidr_block
-  enable_dns_support   = true
-  enable_dns_hostnames = true
-
-  assign_generated_ipv6_cidr_block = true
-
-  tags = {
-    Name = "${var.environment}_${var.project_name}_vpc"
-  }
-}
-
 resource "aws_vpc" "main_new" {
   cidr_block           = data.aws_ssm_parameter.vpc_cidr_block_new.value
   enable_dns_support   = true
@@ -38,14 +26,6 @@ resource "aws_vpc" "main_new" {
 
   tags = {
     Name = "${var.environment}_${var.project_name}_vpc_new"
-  }
-}
-
-resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.main.id
-
-  tags = {
-    Name = "${var.environment}_${var.project_name}_igw"
   }
 }
 
@@ -59,15 +39,6 @@ resource "aws_internet_gateway" "igw_new" {
 
 
 # AZ 1
-resource "aws_subnet" "public_az1" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public_subnets[0]
-  availability_zone = data.aws_availability_zones.available.names[0]
-
-  tags = {
-    Name = "${var.environment}_${var.project_name}_public_subnet_az1"
-  }
-}
 resource "aws_subnet" "public_az1_new" {
   vpc_id            = aws_vpc.main_new.id
   cidr_block        = local.public_subnets_map[0]
@@ -75,15 +46,6 @@ resource "aws_subnet" "public_az1_new" {
 
   tags = {
     Name = "${var.environment}_${var.project_name}_public_subnet_az1_new"
-  }
-}
-resource "aws_subnet" "private_az1" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = var.private_subnets[0]
-  availability_zone = data.aws_availability_zones.available.names[0]
-
-  tags = {
-    Name = "${var.environment}_${var.project_name}_private_subnet_az1"
   }
 }
 
@@ -98,15 +60,6 @@ resource "aws_subnet" "private_az1_new" {
 }
 
 # AZ 2
-resource "aws_subnet" "public_az2" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public_subnets[1]
-  availability_zone = data.aws_availability_zones.available.names[1]
-
-  tags = {
-    Name = "${var.environment}_${var.project_name}_public_subnet_az2"
-  }
-}
 
 resource "aws_subnet" "public_az2_new" {
   vpc_id            = aws_vpc.main_new.id
@@ -115,15 +68,6 @@ resource "aws_subnet" "public_az2_new" {
 
   tags = {
     Name = "${var.environment}_${var.project_name}_public_subnet_az2_new"
-  }
-}
-resource "aws_subnet" "private_az2" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = var.private_subnets[1]
-  availability_zone = data.aws_availability_zones.available.names[1]
-
-  tags = {
-    Name = "${var.environment}_${var.project_name}_private_subnet_az2"
   }
 }
 
@@ -138,15 +82,6 @@ resource "aws_subnet" "private_az2_new" {
 }
 
 # AZ 3
-resource "aws_subnet" "public_az3" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public_subnets[2]
-  availability_zone = data.aws_availability_zones.available.names[2]
-
-  tags = {
-    Name = "${var.environment}_${var.project_name}_public_subnet_az3"
-  }
-}
 
 resource "aws_subnet" "public_az3_new" {
   vpc_id            = aws_vpc.main_new.id
@@ -155,16 +90,6 @@ resource "aws_subnet" "public_az3_new" {
 
   tags = {
     Name = "${var.environment}_${var.project_name}_public_subnet_az3_new"
-  }
-}
-
-resource "aws_subnet" "private_az3" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = var.private_subnets[2]
-  availability_zone = data.aws_availability_zones.available.names[2]
-
-  tags = {
-    Name = "${var.environment}_${var.project_name}_private_subnet_az3"
   }
 }
 
@@ -178,14 +103,6 @@ resource "aws_subnet" "private_az3_new" {
   }
 }
 
-resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.main.id
-
-  tags = {
-    Name = "${var.environment}_octopus_route_table"
-  }
-}
-
 resource "aws_route_table" "public_new" {
   vpc_id = aws_vpc.main_new.id
 
@@ -194,21 +111,10 @@ resource "aws_route_table" "public_new" {
   }
 }
 
-resource "aws_route" "vpc_public_route" {
-  route_table_id         = aws_route_table.public.id
-  destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.igw.id
-}
-
 resource "aws_route" "vpc_public_route_new" {
   route_table_id         = aws_route_table.public_new.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.igw_new.id
-}
-
-resource "aws_route_table_association" "public_az1" {
-  subnet_id      = aws_subnet.public_az1.id
-  route_table_id = aws_route_table.public.id
 }
 
 resource "aws_route_table_association" "public_az1_new" {
@@ -216,19 +122,9 @@ resource "aws_route_table_association" "public_az1_new" {
   route_table_id = aws_route_table.public_new.id
 }
 
-resource "aws_route_table_association" "public_az2" {
-  subnet_id      = aws_subnet.public_az2.id
-  route_table_id = aws_route_table.public.id
-}
-
 resource "aws_route_table_association" "public_az2_new" {
   subnet_id      = aws_subnet.public_az2_new.id
   route_table_id = aws_route_table.public_new.id
-}
-
-resource "aws_route_table_association" "public_az3" {
-  subnet_id      = aws_subnet.public_az3.id
-  route_table_id = aws_route_table.public.id
 }
 
 resource "aws_route_table_association" "public_az3_new" {
@@ -236,13 +132,6 @@ resource "aws_route_table_association" "public_az3_new" {
   route_table_id = aws_route_table.public_new.id
 }
 
-resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.main.id
-
-  tags = {
-    Name = "${var.environment}_${var.project_name}_private_route_table"
-  }
-}
 
 resource "aws_route_table" "private_new" {
   vpc_id = aws_vpc.main_new.id
@@ -252,20 +141,10 @@ resource "aws_route_table" "private_new" {
   }
 }
 
-resource "aws_route" "vpc_private_route" {
-  route_table_id         = aws_route_table.private.id
-  destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.nat.id
-}
-
 resource "aws_route" "vpc_private_route_new" {
   route_table_id         = aws_route_table.private_new.id
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = aws_nat_gateway.nat_new.id
-}
-resource "aws_route_table_association" "private_az1" {
-  subnet_id      = aws_subnet.private_az1.id
-  route_table_id = aws_route_table.private.id
 }
 
 resource "aws_route_table_association" "private_az1_new" {
@@ -273,19 +152,9 @@ resource "aws_route_table_association" "private_az1_new" {
   route_table_id = aws_route_table.private_new.id
 }
 
-resource "aws_route_table_association" "private_az2" {
-  subnet_id      = aws_subnet.private_az2.id
-  route_table_id = aws_route_table.private.id
-}
-
 resource "aws_route_table_association" "private_az2_new" {
   subnet_id      = aws_subnet.private_az2_new.id
   route_table_id = aws_route_table.private_new.id
-}
-
-resource "aws_route_table_association" "private_az3" {
-  subnet_id      = aws_subnet.private_az3.id
-  route_table_id = aws_route_table.private.id
 }
 
 resource "aws_route_table_association" "private_az3_new" {
@@ -294,31 +163,6 @@ resource "aws_route_table_association" "private_az3_new" {
 }
 
 # security group for serverless
-resource "aws_security_group" "sls_sg" {
-  name        = "sls_api_sg_dev"
-  description = "Allow TLS inbound traffic from IPv4/6"
-  vpc_id      = aws_vpc.main.id
-
-  ingress {
-    description = "everyone"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "security_group_for_serverless_api_platform_${var.environment}"
-  }
-}
-
 resource "aws_security_group" "sls_sg_new" {
   name        = "${var.environment}_${var.project_name}_sls_api_sg_new"
   description = "Allow TLS inbound traffic from IPv4/6"
@@ -346,30 +190,12 @@ resource "aws_security_group" "sls_sg_new" {
 
 # NAT
 
-resource "aws_eip" "nat_eip" {
-  domain     = "vpc"
-  depends_on = [aws_internet_gateway.igw]
-
-  tags = {
-    Name = "${var.environment}_octopus_nat_eip"
-  }
-}
-
 resource "aws_eip" "nat_eip_new" {
   domain     = "vpc"
   depends_on = [aws_internet_gateway.igw_new]
 
   tags = {
     Name = "${var.environment}_octopus_nat_eip_new"
-  }
-}
-
-resource "aws_nat_gateway" "nat" {
-  allocation_id = aws_eip.nat_eip.id
-  subnet_id     = aws_subnet.public_az1.id
-  depends_on    = [aws_internet_gateway.igw]
-  tags = {
-    Name = "${var.environment}_octopus_nat"
   }
 }
 
@@ -384,21 +210,11 @@ resource "aws_nat_gateway" "nat_new" {
 
 
 # SSM
-resource "aws_ssm_parameter" "vpc_id" {
-  name  = "${var.environment}_${var.project_name}_vpc_id"
-  type  = "String"
-  value = aws_vpc.main.id
-}
 
 resource "aws_ssm_parameter" "vpc_id_new" {
   name  = "${var.environment}_${var.project_name}_vpc_id_new"
   type  = "String"
   value = aws_vpc.main_new.id
-}
-resource "aws_ssm_parameter" "public_subnet_az1" {
-  name  = "${var.environment}_${var.project_name}_public_subnet_az1_old"
-  type  = "String"
-  value = aws_subnet.public_az1.id
 }
 
 resource "aws_ssm_parameter" "public_subnet_az1_new" {
@@ -406,61 +222,31 @@ resource "aws_ssm_parameter" "public_subnet_az1_new" {
   type  = "String"
   value = aws_subnet.public_az1_new.id
 }
-resource "aws_ssm_parameter" "public_subnet_az2" {
-  name  = "${var.environment}_${var.project_name}_public_subnet_az2_old"
-  type  = "String"
-  value = aws_subnet.public_az2.id
-}
 
 resource "aws_ssm_parameter" "public_subnet_az2_new" {
   name  = "${var.environment}_${var.project_name}_public_subnet_az2"
   type  = "String"
   value = aws_subnet.public_az2_new.id
 }
-resource "aws_ssm_parameter" "public_subnet_az3" {
-  name  = "${var.environment}_${var.project_name}_public_subnet_az3_old"
-  type  = "String"
-  value = aws_subnet.public_az3.id
-}
 resource "aws_ssm_parameter" "public_subnet_az3_new" {
   name  = "${var.environment}_${var.project_name}_public_subnet_az3"
   type  = "String"
   value = aws_subnet.public_az3_new.id
-}
-resource "aws_ssm_parameter" "private_subnet_az1" {
-  name  = "${var.environment}_${var.project_name}_private_subnet_az1_old"
-  type  = "String"
-  value = aws_subnet.private_az1.id
 }
 resource "aws_ssm_parameter" "private_subnet_az1_new" {
   name  = "${var.environment}_${var.project_name}_private_subnet_az1"
   type  = "String"
   value = aws_subnet.private_az1_new.id
 }
-resource "aws_ssm_parameter" "private_subnet_az2" {
-  name  = "${var.environment}_${var.project_name}_private_subnet_az2_old"
-  type  = "String"
-  value = aws_subnet.private_az2.id
-}
 resource "aws_ssm_parameter" "private_subnet_az2_new" {
   name  = "${var.environment}_${var.project_name}_private_subnet_az2"
   type  = "String"
   value = aws_subnet.private_az2_new.id
 }
-resource "aws_ssm_parameter" "private_subnet_az3" {
-  name  = "${var.environment}_${var.project_name}_private_subnet_az3_old"
-  type  = "String"
-  value = aws_subnet.private_az3.id
-}
 resource "aws_ssm_parameter" "private_subnet_az3_new" {
   name  = "${var.environment}_${var.project_name}_private_subnet_az3"
   type  = "String"
   value = aws_subnet.private_az3_new.id
-}
-resource "aws_ssm_parameter" "sls_sg" {
-  name  = "${var.environment}_${var.project_name}_sls_sg_old"
-  type  = "String"
-  value = aws_security_group.sls_sg.id
 }
 resource "aws_ssm_parameter" "sls_sg_new" {
   name  = "${var.environment}_${var.project_name}_sls_sg"
