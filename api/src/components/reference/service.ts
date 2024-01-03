@@ -1,5 +1,6 @@
 import * as client from 'lib/client';
 import * as I from 'interface';
+import * as publicationVersionService from 'publicationVersion/service';
 
 export const getAllByPublicationVersion = async (publicationVersionId: string) => {
     return await client.prisma.references.findMany({
@@ -16,7 +17,11 @@ export const updateAll = async (publicationVersionId: string, data: I.UpdateRefe
         }
     });
 
-    return await client.prisma.references.createMany({
+    const create = await client.prisma.references.createMany({
         data
     });
+
+    await publicationVersionService.update(publicationVersionId, { updatedAt: new Date().toISOString() });
+
+    return create;
 };
