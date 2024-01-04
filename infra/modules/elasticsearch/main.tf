@@ -19,7 +19,7 @@ resource "random_string" "db_master_pass" {
 # }
 
 resource "aws_security_group" "elasticsearch" {
-  name   = "${var.environment}-elasticsearch-sg-new"
+  name   = "${var.environment}-elasticsearch-sg"
   vpc_id = var.vpc_id
 
   ingress {
@@ -31,94 +31,94 @@ resource "aws_security_group" "elasticsearch" {
   }
 }
 
-resource "aws_elasticsearch_domain" "elasticsearch" {
-  domain_name           = "${var.environment}-octopus"
-  elasticsearch_version = "OpenSearch_2.7"
+# resource "aws_elasticsearch_domain" "elasticsearch" {
+#   domain_name           = "${var.environment}-octopus"
+#   elasticsearch_version = "OpenSearch_2.7"
 
-  encrypt_at_rest {
-    enabled = true
-  }
+#   encrypt_at_rest {
+#     enabled = true
+#   }
 
-  node_to_node_encryption {
-    enabled = true
-  }
+#   node_to_node_encryption {
+#     enabled = true
+#   }
 
-  ebs_options {
-    ebs_enabled = true
-    volume_size = 10
-  }
+#   ebs_options {
+#     ebs_enabled = true
+#     volume_size = 10
+#   }
 
-  domain_endpoint_options {
-    enforce_https       = true
-    tls_security_policy = "Policy-Min-TLS-1-0-2019-07"
-  }
+#   domain_endpoint_options {
+#     enforce_https       = true
+#     tls_security_policy = "Policy-Min-TLS-1-0-2019-07"
+#   }
 
-  cluster_config {
-    instance_type          = var.instance_size
-    instance_count         = 3
-    zone_awareness_enabled = true
+#   cluster_config {
+#     instance_type          = var.instance_size
+#     instance_count         = 3
+#     zone_awareness_enabled = true
 
-    zone_awareness_config {
-      availability_zone_count = 3
-    }
-  }
+#     zone_awareness_config {
+#       availability_zone_count = 3
+#     }
+#   }
 
-  vpc_options {
-    subnet_ids         = var.private_subnet_ids
-    security_group_ids = [aws_security_group.elasticsearch.id]
-  }
+#   vpc_options {
+#     subnet_ids         = var.private_subnet_ids
+#     security_group_ids = [aws_security_group.elasticsearch.id]
+#   }
 
-  advanced_options = {
-    "rest.action.multi.allow_explicit_index" = "true"
-    "override_main_response_version"         = "true"
-  }
+#   advanced_options = {
+#     "rest.action.multi.allow_explicit_index" = "true"
+#     "override_main_response_version"         = "true"
+#   }
 
-  advanced_security_options {
-    enabled                        = true
-    internal_user_database_enabled = true
+#   advanced_security_options {
+#     enabled                        = true
+#     internal_user_database_enabled = true
 
-    master_user_options {
-      master_user_name     = "octopus_admin"
-      master_user_password = random_string.db_master_pass.result
-    }
-  }
+#     master_user_options {
+#       master_user_name     = "octopus_admin"
+#       master_user_password = random_string.db_master_pass.result
+#     }
+#   }
 
-  access_policies = <<CONFIG
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "es:*",
-            "Principal": "*",
-            "Effect": "Allow",
-            "Resource": "arn:aws:es:eu-west-1:948306873545:domain/${var.environment}-octopus/*"
-        }
-    ]
-  }
-  CONFIG
+#   access_policies = <<CONFIG
+#   {
+#     "Version": "2012-10-17",
+#     "Statement": [
+#         {
+#             "Action": "es:*",
+#             "Principal": "*",
+#             "Effect": "Allow",
+#             "Resource": "arn:aws:es:eu-west-1:948306873545:domain/${var.environment}-octopus/*"
+#         }
+#     ]
+#   }
+#   CONFIG
 
-  #   depends_on = [
-  #     aws_iam_service_linked_role.elasticsearch
-  #   ]
+#   #   depends_on = [
+#   #     aws_iam_service_linked_role.elasticsearch
+#   #   ]
 
-}
+# }
 
 // Save password to SSM
-resource "aws_ssm_parameter" "elasticsearch_domain" {
-  name      = "elasticsearch_domain_${var.environment}_octopus"
-  type      = "String"
-  value     = aws_elasticsearch_domain.elasticsearch.domain_name
-  overwrite = true
+# resource "aws_ssm_parameter" "elasticsearch_domain" {
+#   name      = "elasticsearch_domain_${var.environment}_octopus"
+#   type      = "String"
+#   value     = aws_elasticsearch_domain.elasticsearch.domain_name
+#   overwrite = true
 
-}
+# }
 
-resource "aws_ssm_parameter" "elasticsearch_endpoint" {
-  name      = "elasticsearch_endpoint_${var.environment}_octopus"
-  type      = "String"
-  value     = aws_elasticsearch_domain.elasticsearch.endpoint
-  overwrite = true
+# resource "aws_ssm_parameter" "elasticsearch_endpoint" {
+#   name      = "elasticsearch_endpoint_${var.environment}_octopus"
+#   type      = "String"
+#   value     = aws_elasticsearch_domain.elasticsearch.endpoint
+#   overwrite = true
 
-}
+# }
 
 resource "aws_ssm_parameter" "elasticsearch_user" {
   name      = "elasticsearch_user_${var.environment}_octopus"

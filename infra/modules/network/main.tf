@@ -37,6 +37,7 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
+
 # AZ 1
 resource "aws_subnet" "public_az1" {
   vpc_id            = aws_vpc.main.id
@@ -47,7 +48,6 @@ resource "aws_subnet" "public_az1" {
     Name = "${var.environment}_${var.project_name}_public_subnet_az1"
   }
 }
-
 resource "aws_subnet" "private_az1" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = local.private_subnets_map[0]
@@ -68,7 +68,6 @@ resource "aws_subnet" "public_az2" {
     Name = "${var.environment}_${var.project_name}_public_subnet_az2"
   }
 }
-
 resource "aws_subnet" "private_az2" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = local.private_subnets_map[1]
@@ -80,7 +79,6 @@ resource "aws_subnet" "private_az2" {
 }
 
 # AZ 3
-
 resource "aws_subnet" "public_az3" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = local.public_subnets_map[2]
@@ -90,7 +88,6 @@ resource "aws_subnet" "public_az3" {
     Name = "${var.environment}_${var.project_name}_public_subnet_az3"
   }
 }
-
 resource "aws_subnet" "private_az3" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = local.private_subnets_map[2]
@@ -129,7 +126,6 @@ resource "aws_route_table_association" "public_az3" {
   subnet_id      = aws_subnet.public_az3.id
   route_table_id = aws_route_table.public.id
 }
-
 
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
@@ -206,53 +202,45 @@ resource "aws_nat_gateway" "nat" {
   }
 }
 
-# SSM
 
+# SSM
 resource "aws_ssm_parameter" "vpc_id" {
   name  = "${var.environment}_${var.project_name}_vpc_id"
   type  = "String"
   value = aws_vpc.main.id
 }
-
 resource "aws_ssm_parameter" "public_subnet_az1" {
   name  = "${var.environment}_${var.project_name}_public_subnet_az1"
   type  = "String"
   value = aws_subnet.public_az1.id
 }
-
 resource "aws_ssm_parameter" "public_subnet_az2" {
   name  = "${var.environment}_${var.project_name}_public_subnet_az2"
   type  = "String"
   value = aws_subnet.public_az2.id
 }
-
 resource "aws_ssm_parameter" "public_subnet_az3" {
   name  = "${var.environment}_${var.project_name}_public_subnet_az3"
   type  = "String"
   value = aws_subnet.public_az3.id
 }
-
 resource "aws_ssm_parameter" "private_subnet_az1" {
   name  = "${var.environment}_${var.project_name}_private_subnet_az1"
   type  = "String"
   value = aws_subnet.private_az1.id
 }
-
 resource "aws_ssm_parameter" "private_subnet_az2" {
   name  = "${var.environment}_${var.project_name}_private_subnet_az2"
   type  = "String"
   value = aws_subnet.private_az2.id
 }
-
 resource "aws_ssm_parameter" "private_subnet_az3" {
   name  = "${var.environment}_${var.project_name}_private_subnet_az3"
   type  = "String"
   value = aws_subnet.private_az3.id
 }
-
 resource "aws_ssm_parameter" "sls_sg" {
   name  = "${var.environment}_${var.project_name}_sls_sg"
   type  = "String"
   value = aws_security_group.sls_sg.id
 }
-
