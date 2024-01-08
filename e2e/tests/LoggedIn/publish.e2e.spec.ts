@@ -2156,6 +2156,7 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new version
         await page.getByTestId(publicationTestId).locator(PageModel.myAccount.createDraftVersionButton).click();
+        await page.locator('button[title="Confirm"]').click();
         await page.waitForResponse(
             (response) => response.request().method() === 'POST' && response.url().includes('/publication-versions')
         );
@@ -2207,6 +2208,7 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new version
         await page.getByTestId(publicationTestId).locator(PageModel.myAccount.createDraftVersionButton).click();
+        await page.locator('button[title="Confirm"]').click();
         await page.waitForResponse(
             (response) => response.request().method() === 'POST' && response.url().includes('/publication-versions')
         );
@@ -2230,24 +2232,29 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.versionsAccordionButton).waitFor();
 
         // switch between versions
-        const versionsAccordion = await page.locator(PageModel.publish.versionsAccordion);
-        await expect(versionsAccordion.locator('p:has-text("Version 3: Currently viewed")')).toBeVisible();
+        await expect(
+            page.locator('#desktop-versions-accordion p:has-text("Version 3: Currently viewed")')
+        ).toBeVisible();
         expect(page.url()).toContain('/versions/latest');
 
         // switch to v2
-        await versionsAccordion.locator('a:has-text("Version 2")').click();
+        await page.locator('#desktop-versions-accordion a:has-text("Version 2: ")').click();
         await page.waitForURL('**/versions/2');
-        await expect(versionsAccordion.locator('a:has-text("Version 3: Draft")')).toBeVisible();
-        await expect(versionsAccordion.locator('p:has-text("Version 2: Currently viewed")')).toBeVisible();
+        await expect(page.locator('#desktop-versions-accordion a:has-text("Version 3: Draft")')).toBeVisible();
+        await expect(
+            page.locator('#desktop-versions-accordion p:has-text("Version 2: Currently viewed")')
+        ).toBeVisible();
 
         // switch to v1
-        await versionsAccordion.locator('a:has-text("Version 1")').click();
+        await page.locator('#desktop-versions-accordion a:has-text("Version 1: ")').click();
         await page.waitForURL('**/versions/1');
-        await expect(versionsAccordion.locator('a:has-text("Version 3: Draft")')).toBeVisible();
-        await expect(versionsAccordion.locator('p:has-text("Version 1: Currently viewed")')).toBeVisible();
+        await expect(page.locator('#desktop-versions-accordion a:has-text("Version 3: Draft")')).toBeVisible();
+        await expect(
+            page.locator('#desktop-versions-accordion p:has-text("Version 1: Currently viewed")')
+        ).toBeVisible();
 
         // switch back to v3
-        await versionsAccordion.locator('a:has-text("Version 3")').click();
+        await page.locator('#desktop-versions-accordion a:has-text("Version 3: ")').click();
         await page.waitForURL('**/versions/3');
 
         // go back to edit page
@@ -2313,6 +2320,7 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new version
         await page.getByTestId(publicationTestId).locator(PageModel.myAccount.createDraftVersionButton).click();
+        await page.locator('button[title="Confirm"]').click();
         await page.waitForResponse(
             (response) => response.request().method() === 'POST' && response.url().includes('/publication-versions')
         );
@@ -2430,6 +2438,7 @@ test.describe('Publication flow + co-authors', () => {
         await expect(page2.locator('aside button[title="Versions"]')).toBeVisible();
         await expect(page2.locator('aside a:has-text("Create New Version")')).toBeVisible();
         await page2.locator('aside a:has-text("Create New Version")').click();
+        await page2.locator('button[title="Confirm"]').click();
 
         // wait to be redirected to the edit page
         await page2.waitForURL('**/edit?**');
