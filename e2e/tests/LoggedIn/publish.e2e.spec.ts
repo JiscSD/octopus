@@ -1501,6 +1501,7 @@ test.describe('Publication flow + co-authors', () => {
             .getByTestId(publicationContainerTestId)
             .locator(PageModel.myAccount.createDraftVersionButton)
             .click();
+        await page2.locator('button[title="Confirm"]').click();
         await page2.waitForResponse(
             (response) => response.request().method() === 'POST' && response.url().includes('/publication-versions')
         );
