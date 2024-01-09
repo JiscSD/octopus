@@ -228,6 +228,9 @@ export const PageModel = {
             manualAffiliationLink: 'input[placeholder="Link"]',
             affiliationDetails: 'textarea[placeholder="Enter any details"]'
         },
+        researchProcess: {
+            selfDeclaration: '#self-declaration'
+        },
         versionsAccordion: 'aside >> #versions-accordion',
         versionsAccordionButton: 'aside button[title="Versions"]'
     },
