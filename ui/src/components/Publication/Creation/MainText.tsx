@@ -217,7 +217,10 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                 Manage references
                             </h3>
                             <div className="overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
-                                <table className="w-full divide-y divide-grey-100  dark:divide-teal-300">
+                                <table
+                                    data-testid="references-table"
+                                    className="w-full divide-y divide-grey-100  dark:divide-teal-300"
+                                >
                                     <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
                                         <tr>
                                             <th className="py-4 pl-4 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">

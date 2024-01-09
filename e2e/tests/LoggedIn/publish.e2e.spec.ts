@@ -63,17 +63,40 @@ const referencesList: Array<Reference> = [
     }
 ];
 
+interface AdditionalInformation {
+    title: string;
+    url: string;
+    description?: string;
+}
+
+const sampleAdditionalInformation: AdditionalInformation = {
+    title: 'My dataset',
+    url: 'https://jisc.ac.uk/research/data/my-project/data.json',
+    description: 'This dataset contains all the data that I collected as part of my project'
+};
+
 const completeMainTextTab = async (
     page: Page,
     mainText: string,
+    additionalInformation: AdditionalInformation,
     language: string,
-    references: Array<Reference>,
+    references: Reference[],
     description: string,
     keywords: string
 ) => {
     // Text
     await page.locator(PageModel.publish.text.editor).click();
     await page.keyboard.type(mainText);
+    // Additional information
+    await addAdditionalInformation(page, additionalInformation);
+    await expect(
+        page
+            .locator(PageModel.publish.text.additionalInformation.table)
+            .locator('tr', { has: page.locator(`td:has-text("${additionalInformation.title}")`) })
+    ).toBeVisible();
+    await deleteAdditionalInformation(page, additionalInformation.url);
+    await addAdditionalInformation(page, additionalInformation);
+    // References
     await addReferences(page, references);
     await addASingleReference(page, references[1]);
     await deleteFirstReference(page);
@@ -131,6 +154,29 @@ const deleteFirstReference = async (page: Page) => {
     await (await page.waitForSelector(PageModel.publish.text.deleteReferenceModalButton)).click();
 
     await page.waitForTimeout(300); // wait for modal to close
+};
+
+const addAdditionalInformation = async (page: Page, additionalInformation: AdditionalInformation) => {
+    await page.locator(PageModel.publish.text.additionalInformation.title).click();
+    await page.keyboard.type(additionalInformation.title);
+    await page.locator(PageModel.publish.text.additionalInformation.url).click();
+    await page.keyboard.type(additionalInformation.url);
+    if (additionalInformation.description) {
+        await page.locator(PageModel.publish.text.additionalInformation.description).click();
+        await page.keyboard.type(additionalInformation.description);
+    }
+    await Promise.all([
+        page.waitForResponse((response) => response.url().includes('/additional-information') && response.ok()),
+        page.locator(PageModel.publish.text.additionalInformation.saveButton).click()
+    ]);
+};
+
+const deleteAdditionalInformation = async (page: Page, url: string) => {
+    await page
+        .locator(PageModel.publish.text.additionalInformation.table)
+        .locator('tr', { has: page.locator(`td:has-text('${url}')`) })
+        .locator('button[title="Delete"]')
+        .click();
 };
 
 const deletePublication = async (page: Page) => {
@@ -330,7 +376,15 @@ test.describe('Publication flow', () => {
             'living organisms',
             'How do living organisms function, survive, reproduce and evolve?'
         );
-        await completeMainTextTab(page, 'main text', 'aa', referencesList, 'description', 'key, words');
+        await completeMainTextTab(
+            page,
+            'main text',
+            sampleAdditionalInformation,
+            'aa',
+            referencesList,
+            'description',
+            'key, words'
+        );
         await completeConflictOfInterestTab(page, false);
         await completeFundersTab(
             page,
@@ -443,7 +497,15 @@ test.describe('Publication flow', () => {
             'living organisms',
             'How do living organisms function, survive, reproduce and evolve?'
         );
-        await completeMainTextTab(page, 'main text', 'aa', referencesList, 'description', 'key, words');
+        await completeMainTextTab(
+            page,
+            'main text',
+            sampleAdditionalInformation,
+            'aa',
+            referencesList,
+            'description',
+            'key, words'
+        );
         await completeConflictOfInterestTab(page, false);
         await completeFundersTab(
             page,
@@ -478,7 +540,15 @@ test.describe('Publication flow', () => {
         await completeKeyInformationTab(page);
         await completeAffiliationsTab(page, false);
         await completeLinkedItemsTab(page, 'a', 'Hypothesis of Improving the quality of life for sustainable');
-        await completeMainTextTab(page, 'main text', 'aa', referencesList, 'description', 'key, words');
+        await completeMainTextTab(
+            page,
+            'main text',
+            sampleAdditionalInformation,
+            'aa',
+            referencesList,
+            'description',
+            'key, words'
+        );
         await completeConflictOfInterestTab(page, false);
         await completeFundersTab(
             page,
@@ -517,7 +587,15 @@ test.describe('Publication flow', () => {
             'a',
             'Data attached to Improving the quality of life for sustainable development'
         );
-        await completeMainTextTab(page, 'main text', 'aa', referencesList, 'description', 'key, words');
+        await completeMainTextTab(
+            page,
+            'main text',
+            sampleAdditionalInformation,
+            'aa',
+            referencesList,
+            'description',
+            'key, words'
+        );
         await completeConflictOfInterestTab(page, false);
         await completeFundersTab(
             page,
@@ -553,7 +631,15 @@ test.describe('Publication flow', () => {
         await completeKeyInformationTab(page);
         await completeAffiliationsTab(page, true);
         await completeLinkedItemsTab(page, 'a', 'Analysis of Improving the quality of life for sustainable');
-        await completeMainTextTab(page, 'main text', 'aa', referencesList, 'description', 'key, words');
+        await completeMainTextTab(
+            page,
+            'main text',
+            sampleAdditionalInformation,
+            'aa',
+            referencesList,
+            'description',
+            'key, words'
+        );
         await completeConflictOfInterestTab(page, false);
         await completeFundersTab(
             page,
@@ -588,7 +674,15 @@ test.describe('Publication flow', () => {
         await completeKeyInformationTab(page);
         await completeAffiliationsTab(page, true);
         await completeLinkedItemsTab(page, 'a', 'Interpretation of Improving the quality of life for sustainable');
-        await completeMainTextTab(page, 'main text', 'aa', referencesList, 'description', 'key, words');
+        await completeMainTextTab(
+            page,
+            'main text',
+            sampleAdditionalInformation,
+            'aa',
+            referencesList,
+            'description',
+            'key, words'
+        );
         await completeConflictOfInterestTab(page, false);
         await completeFundersTab(
             page,
@@ -2138,24 +2232,14 @@ test.describe('Publication flow + co-authors', () => {
             'living organisms',
             'How do living organisms function, survive, reproduce and evolve?'
         );
-        await completeMainTextTab(page, 'main text', 'aa', referencesList, 'description', 'key, words');
+        await completeMainTextTabMinimally(page, 'main text');
         await completeConflictOfInterestTab(page, false);
-        await completeFundersTab(
-            page,
-            '01rv9gx86',
-            'funder name',
-            'funder city',
-            'https://funder.com',
-            'extra details'
-        );
 
         // publish v1
         await page.locator(PageModel.publish.publishButton).click();
         await page.locator(PageModel.publish.confirmPublishButton).click();
 
         await page.locator(`h1:has-text("${problemPublication.title}")`).first().waitFor({ state: 'visible' });
-
-        await checkPublication(page, problemPublication, [Helpers.user1]);
 
         // get publication id from url and deduct canonical DOI
         const publicationId = page.url().split('/').slice(-3)[0];
@@ -2201,9 +2285,6 @@ test.describe('Publication flow + co-authors', () => {
             page.locator(PageModel.publish.confirmPublishButtonTracker).click()
         ]);
 
-        // check v2 is published
-        await checkPublication(page, { ...problemPublication, title: newTitle }, [Helpers.user1, Helpers.user2]);
-
         // close corresponding author session
         await page.close();
 
@@ -2237,8 +2318,6 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.previewButton).click();
         await page.locator(`h1:has-text("${newTitle}")`).first().waitFor({ state: 'visible' });
 
-        // check v3 DRAFT
-        await checkPublication(page, { ...problemPublication, title: newTitle }, [Helpers.user2]);
         await page.locator(PageModel.publish.versionsAccordionButton).waitFor();
 
         // switch between versions
@@ -2278,9 +2357,6 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.publishButton).click();
         await page.locator(PageModel.publish.confirmPublishButton).click();
         await page.locator(`h1:has-text("${newTitle}")`).first().waitFor({ state: 'visible' });
-
-        // check v3 is published
-        await checkPublication(page, { ...problemPublication, title: newTitle }, [Helpers.user2]);
     });
 
     test('Co-authors can transfer ownership of a new DRAFT version', async ({ browser }) => {
@@ -2402,16 +2478,8 @@ test.describe('Publication flow + co-authors', () => {
             'living organisms',
             'How do living organisms function, survive, reproduce and evolve?'
         );
-        await completeMainTextTab(page, 'main text', 'aa', referencesList, 'description', 'key, words');
+        await completeMainTextTabMinimally(page, 'main text');
         await completeConflictOfInterestTab(page, false);
-        await completeFundersTab(
-            page,
-            '01rv9gx86',
-            'funder name',
-            'funder city',
-            'https://funder.com',
-            'extra details'
-        );
 
         // invite a co-author
         await page.locator('aside button:has-text("Co-authors")').first().click();

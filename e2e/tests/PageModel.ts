@@ -192,6 +192,13 @@ export const PageModel = {
         },
         text: {
             editor: '.ProseMirror >> nth=0',
+            additionalInformation: {
+                title: 'input[placeholder="Title*"]',
+                url: 'input[placeholder="URL*"]',
+                description: 'input[placeholder="Short description"]',
+                saveButton: 'button[aria-label="Save link"]',
+                table: 'table[data-testid="additional-information-table"]'
+            },
             language: 'select[name="language"]',
             references: '.ProseMirror >> nth=1',
             addReferencesButton: 'button[name="Add references"]',
@@ -200,7 +207,7 @@ export const PageModel = {
             continueModalButton: 'button[aria-label="Continue"]',
             saveReferenceModalButton: 'div[role=dialog] button[title="Save"]',
             deleteReferenceModalButton: 'div[role="dialog"] button[title="Delete"]',
-            deleteFirstReferenceButton: 'tr:first-of-type button[title="Delete"]',
+            deleteFirstReferenceButton: 'table[data-testid="references-table"] tr:first-of-type button[title="Delete"]',
             addReferenceButton: 'tr:first-of-type button[title="Add below"]',
             description:
                 'text=Short descriptionInclude a short description of your publication to aid discover >> textarea',

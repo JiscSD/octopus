@@ -86,7 +86,10 @@ const Table: React.FC = () => {
     return (
         <Framer.motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }} className="mt-8">
             {!!publicationVersion.additionalInformation.length && (
-                <table className="mb-6 min-w-full divide-y divide-grey-100 overflow-hidden shadow ring-1 ring-black ring-opacity-5 dark:divide-teal-300 dark:ring-transparent  md:rounded-lg">
+                <table
+                    data-testid="additional-information-table"
+                    className="mb-6 min-w-full divide-y divide-grey-100 overflow-hidden shadow ring-1 ring-black ring-opacity-5 dark:divide-teal-300 dark:ring-transparent  md:rounded-lg"
+                >
                     <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
                         <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
                             Title
