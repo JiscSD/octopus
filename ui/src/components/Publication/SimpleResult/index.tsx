@@ -112,7 +112,12 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                     </Components.Link>{' '}
                                     is working on a new draft version
                                 </p>
-                                {isAuthorOnLatestLive && requestControl}
+                                <Components.Button
+                                    href={`/publications/${props.publication.id}`}
+                                    endIcon={<OutlineIcons.EyeIcon className="h-4" />}
+                                    title="View Draft"
+                                    className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
+                                />
                             </>
                         ) : draftVersion.currentStatus === 'LOCKED' ? (
                             <Components.Button

@@ -796,6 +796,7 @@ const checkPublicationOnAccountPage = async (
     if (navigate) {
         await page.locator(PageModel.header.usernameButton).click();
         await page.locator(PageModel.header.myAccountButton).click();
+        await page.waitForURL(`${Helpers.UI_BASE}/account`);
     }
     const publicationContainer = await page.getByTestId('publication-' + publicationDetails.id);
     switch (state) {
@@ -806,6 +807,7 @@ const checkPublicationOnAccountPage = async (
             await expect(publicationContainer).toContainText('(Corresponding Author)');
             await expect(publicationContainer).toContainText('Status: Draft');
             await expect(publicationContainer.locator(PageModel.myAccount.editDraftButton)).toBeVisible();
+            await expect(publicationContainer.locator(PageModel.myAccount.viewDraftButton)).not.toBeVisible();
             await expect(publicationContainer).toContainText('Never published');
             break;
         case 'pending coauthor approval':
@@ -815,9 +817,12 @@ const checkPublicationOnAccountPage = async (
         case 'pending your approval':
             await expect(publicationContainer).toContainText('(Author)');
             await expect(publicationContainer).toContainText('Status: Pending your approval');
+            await expect(publicationContainer.locator(PageModel.myAccount.viewDraftButton)).toBeVisible();
+            await expect(publicationContainer.locator(PageModel.myAccount.requestControlButton)).not.toBeVisible();
             break;
         case 'approved':
             await expect(publicationContainer).toContainText('Status: Ready to publish');
+            await expect(publicationContainer.locator(PageModel.myAccount.viewDraftButton)).toBeVisible();
             break;
         case 'published once':
             await expect(publicationContainer).toContainText('1 published version');
@@ -837,12 +842,16 @@ const checkPublicationOnAccountPage = async (
             await expect(publicationContainer).toContainText(
                 'Someone else is working on a new draft version, and you do not yet have access to it'
             );
+            await expect(publicationContainer.locator(PageModel.myAccount.requestControlButton)).toBeVisible();
+            await expect(publicationContainer.locator(PageModel.myAccount.viewDraftButton)).not.toBeVisible();
             break;
         case "coauthor's unlocked draft":
             await expect(publicationContainer).toContainText('Status: Editing in progress');
             await expect(publicationContainer).toContainText(
                 `${Helpers.user2.shortName} is working on a new draft version`
             );
+            await expect(publicationContainer.locator(PageModel.myAccount.viewDraftButton)).toBeVisible();
+            await expect(publicationContainer.locator(PageModel.myAccount.requestControlButton)).not.toBeVisible();
             break;
     }
 };
