@@ -98,6 +98,7 @@ export interface PublicationVersion {
     coAuthors: CoAuthor[];
     publication: CorePublication;
     topics: BaseTopic[];
+    additionalInformation: AdditionalInformation[];
 }
 
 export interface Publication extends CorePublication {
@@ -514,4 +515,11 @@ export interface ControlRequest {
             versionOf: string;
         };
     };
+}
+
+export interface AdditionalInformation {
+    id: string;
+    title: string;
+    url: string;
+    description: string;
 }

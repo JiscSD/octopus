@@ -181,6 +181,16 @@ const MainText: React.FC = (): React.ReactElement | null => {
                 </select>
             </div>
 
+            <div>
+                <Components.PublicationCreationStepTitle text="Link to part of this work hosted elsewhere" />
+                <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
+                    Please add links to any other resources you have used for this publication, such as large datasets,
+                    software repositories, video sites, and so on.
+                </span>
+                <Components.AdditionalInformationForm />
+                <Components.AdditionalInformationTable />
+            </div>
+
             <div className="space-y-4">
                 <Components.PublicationCreationStepTitle text="References" />
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">

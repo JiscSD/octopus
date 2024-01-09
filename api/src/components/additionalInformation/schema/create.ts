@@ -4,7 +4,8 @@ const createAdditionalInformationSchema: I.JSONSchemaType<I.CreateAdditionalInfo
     type: 'object',
     properties: {
         title: {
-            type: 'string'
+            type: 'string',
+            minLength: 1
         },
         url: {
             type: 'string'
