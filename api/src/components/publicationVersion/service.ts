@@ -81,6 +81,14 @@ export const getById = (id: string) =>
                     title: true,
                     createdAt: true
                 }
+            },
+            additionalInformation: {
+                select: {
+                    id: true,
+                    title: true,
+                    url: true,
+                    description: true
+                }
             }
         }
     });
@@ -168,6 +176,14 @@ export const get = (publicationId: string, version: string | number) =>
                     id: true,
                     title: true,
                     createdAt: true
+                }
+            },
+            additionalInformation: {
+                select: {
+                    id: true,
+                    title: true,
+                    url: true,
+                    description: true
                 }
             }
         }
@@ -301,6 +317,14 @@ export const update = (id: string, data: Prisma.PublicationVersionUpdateInput) =
                     id: true,
                     title: true,
                     createdAt: true
+                }
+            },
+            additionalInformation: {
+                select: {
+                    id: true,
+                    title: true,
+                    url: true,
+                    description: true
                 }
             }
         }
@@ -594,6 +618,15 @@ export const create = async (previousVersion: I.PublicationVersion, user: I.User
                         name: funder.name
                     }))
                 }
+            },
+            additionalInformation: {
+                createMany: {
+                    data: previousVersion.additionalInformation.map((additionalInformation) => ({
+                        title: additionalInformation.title,
+                        url: additionalInformation.url,
+                        description: additionalInformation.description
+                    }))
+                }
             }
         },
         include: {
@@ -665,6 +698,14 @@ export const create = async (previousVersion: I.PublicationVersion, user: I.User
                     id: true,
                     title: true,
                     createdAt: true
+                }
+            },
+            additionalInformation: {
+                select: {
+                    id: true,
+                    title: true,
+                    url: true,
+                    description: true
                 }
             }
         }
