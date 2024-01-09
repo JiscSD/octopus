@@ -7,7 +7,7 @@ CREATE TABLE "AdditionalInformation" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "publicationVersionId" TEXT NOT NULL,
 
-    CONSTRAINT "ExternalResource_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "AdditionalInformation_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey

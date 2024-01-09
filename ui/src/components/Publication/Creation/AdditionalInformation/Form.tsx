@@ -10,7 +10,7 @@ import * as Helpers from '@helpers';
 import * as Interfaces from '@interfaces';
 import * as Stores from '@stores';
 
-const AddAdditionalInformation: React.FC = () => {
+const Form: React.FC = () => {
     const { publicationVersion, updatePublicationVersion } = Stores.usePublicationCreationStore();
     const user = Stores.useAuthStore((state) => state.user);
 
@@ -93,4 +93,4 @@ const AddAdditionalInformation: React.FC = () => {
     );
 };
 
-export default AddAdditionalInformation;
+export default Form;

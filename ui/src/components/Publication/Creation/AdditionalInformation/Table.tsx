@@ -106,7 +106,7 @@ const Table: React.FC = () => {
                     </thead>
                     <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
                         {publicationVersion.additionalInformation.map((item) => (
-                            <TableRow item={item} />
+                            <TableRow item={item} key={item.id} />
                         ))}
                     </tbody>
                 </table>
