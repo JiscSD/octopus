@@ -60,6 +60,7 @@ const AddAdditionalInformation: React.FC = () => {
 
     return (
         <fieldset className="flex flex-col items-start">
+            {error && <Components.Alert severity="ERROR" title={error} className="mb-3 w-1/2" />}
             <input
                 placeholder="Title*"
                 className="mb-4 w-1/2 rounded border border-grey-100  bg-white-50 p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400"
@@ -88,7 +89,6 @@ const AddAdditionalInformation: React.FC = () => {
                     <ReactIconsFA.FaRegSave className="h-6 w-6 text-teal-500 transition-colors dark:text-white-50" />
                 }
             />
-            {error && <Components.Alert severity="ERROR" title={error} className="mt-3 w-1/2" />}
         </fieldset>
     );
 };
