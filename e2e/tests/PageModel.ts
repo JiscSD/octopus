@@ -139,7 +139,8 @@ export const PageModel = {
         editDraftButton: 'a:has-text("Edit Draft")',
         viewDraftButton: 'a:has-text("View Draft")',
         createDraftVersionButton: 'button:has-text("Create Draft Version")',
-        viewButton: 'a:has-text("View")'
+        viewButton: 'a:has-text("View")',
+        requestControlButton: 'button:has-text("Take over editing")'
     },
     myPublications: {
         liveAuthorPageButton: 'a:has-text("View my public author page")'
