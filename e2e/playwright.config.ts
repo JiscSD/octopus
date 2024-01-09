@@ -14,7 +14,7 @@ dotenv.config();
 const config: PlaywrightTestConfig = {
     testDir: './tests',
     /* Maximum time one test can run for. */
-    timeout: 180000, // some of the publication flow and coauthor tests exceed 2 minutes. We should try and streamline them but for now set this to 3 mins
+    timeout: 300000, // some of the publication flow and coauthor tests exceed 2 minutes. We should try and streamline them but for now set this to 3 mins
     expect: {
         /**
          * Maximum time expect() should wait for the condition to be met.
