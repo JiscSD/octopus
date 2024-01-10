@@ -12,7 +12,7 @@ export const create = async (
     >
 ): Promise<I.JSONResponse> => {
     try {
-        const publicationVersion = await publicationVersionService.getById(event.pathParameters.id);
+        const publicationVersion = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
 
         if (!publicationVersion) {
             return response.json(404, {
@@ -42,7 +42,10 @@ export const create = async (
         }
 
         // Create the additional information
-        const additionalInformation = await additionalInformationService.create(event.pathParameters.id, event.body);
+        const additionalInformation = await additionalInformationService.create(
+            event.pathParameters.publicationVersionId,
+            event.body
+        );
 
         return response.json(200, additionalInformation);
     } catch (err) {

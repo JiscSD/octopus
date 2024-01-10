@@ -7,7 +7,7 @@ export const create = async (
     event: I.AuthenticatedAPIRequest<I.CreateFunderRequestBody, undefined, I.CreateFunderPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publicationVersion = await publicationVersionService.getById(event.pathParameters.id);
+        const publicationVersion = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
 
         //check that the publication exists
         if (!publicationVersion) {
@@ -51,7 +51,7 @@ export const destroy = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteFunderPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publicationVersion = await publicationVersionService.getById(event.pathParameters.id);
+        const publicationVersion = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
 
         //check that the publication version exists
         if (!publicationVersion) {
@@ -73,7 +73,7 @@ export const destroy = async (
             });
         }
 
-        const funder = await funderService.destroy(publicationVersion.id, event.pathParameters.funder);
+        const funder = await funderService.destroy(publicationVersion.id, event.pathParameters.funderId);
 
         return response.json(200, funder);
     } catch (err) {

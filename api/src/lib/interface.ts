@@ -283,7 +283,7 @@ export type FlagCategory =
     | 'INAPPROPRIATE';
 
 export interface CreateFlagPathParams {
-    id: string;
+    publicationId: string;
 }
 
 export interface CreateFlagRequestBody {
@@ -477,17 +477,16 @@ export interface CreateCoAuthorRequestBody {
 }
 
 export interface CreateCoAuthorPathParams {
-    id: string;
+    publicationVersionId: string;
 }
 
 export interface DeleteCoAuthorPathParams {
-    id: string;
-
-    coauthor: string;
+    publicationVersionId: string;
+    coauthorId: string;
 }
 
-export interface ConfirmCoAuthorPathParams {
-    id: string;
+export interface LinkCoAuthorPathParams {
+    publicationVersionId: string;
 }
 
 export interface ConfirmCoAuthorBody {
@@ -500,7 +499,7 @@ export interface ChangeCoAuthorRequestBody {
     confirm: boolean;
 }
 export interface UpdateCoAuthorPathParams {
-    id: string;
+    publicationVersionId: string;
 }
 
 export interface ImageSentBody {
@@ -574,17 +573,8 @@ export interface Reference {
 
 export type UpdateReferencesBody = Array<Reference>;
 
-export interface CreateReferencePath {
-    id: string;
-}
-
-export interface UpdateReferencePath {
-    id: string;
-    referenceId: string;
-}
-
-export interface RemoveAllReferencesPathParams {
-    id: string;
+export interface CreateReferencePathParams {
+    publicationVersionId: string;
 }
 
 export interface OctopusInformation {
@@ -615,12 +605,12 @@ export interface EmailSendOptions {
 }
 
 export interface CreateFunderPathParams {
-    id: string;
+    publicationVersionId: string;
 }
 
 export interface DeleteFunderPathParams {
-    id: string;
-    funder: string;
+    publicationVersionId: string;
+    funderId: string;
 }
 
 export interface CreateFunderRequestBody {
@@ -635,12 +625,12 @@ export interface GetFlagByID {
     id: string;
 }
 
-export interface GetFlagsByUserID {
-    id: string;
+export interface GetUserFlagsPathParams {
+    userId: string;
 }
 
-export interface GetFlagsByPublicationID {
-    id: string;
+export interface GetPublicationFlagsPathParams {
+    publicationId: string;
 }
 
 export interface DOIResponse {
@@ -658,7 +648,7 @@ export interface DOIResponse {
 //affiliations
 
 export interface UpdateAffiliationsPathParams {
-    id: string;
+    publicationVersionId: string;
 }
 
 export interface UpdateAffiliationsBody {
@@ -673,8 +663,8 @@ export interface UserPublicationsFilters {
 }
 
 export interface SendApprovalReminderPathParams {
-    id: string;
-    coauthor: string;
+    publicationVersionId: string;
+    coauthorId: string;
 }
 
 type NameType = 'Personal' | 'Organizational';
@@ -911,7 +901,7 @@ export interface RequestControlEvent extends Record<string, unknown>, Omit<Event
 
 // Additional information
 export interface CreateAdditionalInformationPathParams {
-    id: string;
+    publicationVersionId: string;
 }
 
 export interface CreateAdditionalInformationBody {

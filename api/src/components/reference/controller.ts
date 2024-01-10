@@ -4,10 +4,10 @@ import * as referenceService from 'reference/service';
 import * as publicationVersionService from 'publicationVersion/service';
 
 export const get = async (
-    event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateReferencePath>
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateReferencePathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const references = await referenceService.getAllByPublicationVersion(event.pathParameters.id);
+        const references = await referenceService.getAllByPublicationVersion(event.pathParameters.publicationVersionId);
 
         return response.json(200, references);
     } catch (err) {
@@ -16,10 +16,10 @@ export const get = async (
 };
 
 export const updateAll = async (
-    event: I.AuthenticatedAPIRequest<I.UpdateReferencesBody, undefined, I.CreateReferencePath>
+    event: I.AuthenticatedAPIRequest<I.UpdateReferencesBody, undefined, I.CreateReferencePathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const version = await publicationVersionService.getById(event.pathParameters.id);
+        const version = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
 
         //check that the version exists
         if (!version) {

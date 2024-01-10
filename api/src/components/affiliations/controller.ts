@@ -14,7 +14,7 @@ export const updateAffiliations = async (
     try {
         const isIndependent = event.body.isIndependent;
         const affiliations = event.body.affiliations;
-        const publicationVersionId = event.pathParameters.id;
+        const publicationVersionId = event.pathParameters.publicationVersionId;
         // Get publication version
         const version = await publicationVersionService.getById(publicationVersionId);
 

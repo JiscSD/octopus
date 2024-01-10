@@ -20,10 +20,10 @@ export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByI
 };
 
 export const getPublicationFlags = async (
-    event: I.APIRequest<undefined, undefined, I.GetFlagsByPublicationID>
+    event: I.APIRequest<undefined, undefined, I.GetPublicationFlagsPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const flags = await flagService.getByPublicationID(event.pathParameters.id);
+        const flags = await flagService.getByPublicationID(event.pathParameters.publicationId);
 
         return response.json(200, flags);
     } catch (err) {
@@ -34,10 +34,10 @@ export const getPublicationFlags = async (
 };
 
 export const getUserFlags = async (
-    event: I.APIRequest<undefined, undefined, I.GetFlagsByUserID>
+    event: I.APIRequest<undefined, undefined, I.GetUserFlagsPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const flags = await flagService.getByUserID(event.pathParameters.id);
+        const flags = await flagService.getByUserID(event.pathParameters.userId);
 
         return response.json(200, flags);
     } catch (err) {
@@ -51,7 +51,7 @@ export const createFlag = async (
     event: I.AuthenticatedAPIRequest<I.CreateFlagRequestBody, undefined, I.CreateFlagPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event.pathParameters.id);
+        const publication = await publicationService.get(event.pathParameters.publicationId);
 
         if (!publication || !publication.versions.some((version) => version.isLatestLiveVersion)) {
             return response.json(404, {
@@ -74,7 +74,7 @@ export const createFlag = async (
         }
 
         const doesDuplicateFlagExist = await publicationService.doesDuplicateFlagExist(
-            event.pathParameters.id,
+            event.pathParameters.publicationId,
             event.body.category,
             event.user.id
         );
@@ -86,7 +86,7 @@ export const createFlag = async (
         }
 
         const flag = await flagService.createFlag(
-            event.pathParameters.id,
+            event.pathParameters.publicationId,
             event.user.id,
             event.body.category,
             event.body.comment
