@@ -60,7 +60,7 @@ describe('Create publication', () => {
         expect(createPublicationRequest.status).toEqual(401);
     });
 
-    test('Invalid publication type, created by user that does exist (422)', async () => {
+    test('Invalid publication type, created by user that does exist (400)', async () => {
         const createPublicationRequest = await testUtils.agent
             .post('/publications')
             .query({
@@ -71,10 +71,10 @@ describe('Create publication', () => {
                 title: 'Publication test 4'
             });
 
-        expect(createPublicationRequest.status).toEqual(422);
+        expect(createPublicationRequest.status).toEqual(400);
     });
 
-    test('Attempt to create publication with no title, created by user that does exist (422)', async () => {
+    test('Attempt to create publication with no title, created by user that does exist (400)', async () => {
         const createPublicationRequest = await testUtils.agent
             .post('/publications')
             .query({
@@ -85,10 +85,10 @@ describe('Create publication', () => {
                 content: 'Content'
             });
 
-        expect(createPublicationRequest.status).toEqual(422);
+        expect(createPublicationRequest.status).toEqual(400);
     });
 
-    test('Attempt to create publication with no title, content or type, created by user that does exist (422)', async () => {
+    test('Attempt to create publication with no title, content or type, created by user that does exist (400)', async () => {
         const createPublicationRequest = await testUtils.agent
             .post('/publications')
             .query({
@@ -96,10 +96,10 @@ describe('Create publication', () => {
             })
             .send({});
 
-        expect(createPublicationRequest.status).toEqual(422);
+        expect(createPublicationRequest.status).toEqual(400);
     });
 
-    test('Attempt to create publication with added invalid properties, created by user that does exist (422)', async () => {
+    test('Attempt to create publication with added invalid properties, created by user that does exist (400)', async () => {
         const createPublicationRequest = await testUtils.agent
             .post('/publications')
             .query({
@@ -109,10 +109,10 @@ describe('Create publication', () => {
                 title: 'Example',
                 type: 'PEER_REVIEW',
                 content: 'Content',
-                keyDoesNotExist: 'This should return a 422'
+                keyDoesNotExist: 'This should return a 400'
             });
 
-        expect(createPublicationRequest.status).toEqual(422);
+        expect(createPublicationRequest.status).toEqual(400);
     });
 
     test('Valid publication created by real user with content does not have a publishedDate (200)', async () => {
@@ -161,7 +161,7 @@ describe('Create publication', () => {
                 language: 'zz' // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
             });
 
-        expect(createPublicationRequest.status).toEqual(422);
+        expect(createPublicationRequest.status).toEqual(400);
     });
 
     test('Publication failed to be created if language provided is less than 2 chars', async () => {
@@ -177,7 +177,7 @@ describe('Create publication', () => {
                 language: 'e'
             });
 
-        expect(createPublicationRequest.status).toEqual(422);
+        expect(createPublicationRequest.status).toEqual(400);
     });
 
     test('Publication failed to be created if language provided is more than 2 chars', async () => {
@@ -193,7 +193,7 @@ describe('Create publication', () => {
                 language: 'enn'
             });
 
-        expect(createPublicationRequest.status).toEqual(422);
+        expect(createPublicationRequest.status).toEqual(400);
     });
 
     test('Publication created with default language code if no language code is provided', async () => {

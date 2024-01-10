@@ -71,7 +71,7 @@ describe('Create a piece of additional information', () => {
                 url: 'https://jisc.ac.uk'
             });
 
-        expect(createAdditionalInformation.status).toEqual(422);
+        expect(createAdditionalInformation.status).toEqual(400);
     });
 
     test('User cannot create additional information without supplying a URL', async () => {
@@ -82,7 +82,7 @@ describe('Create a piece of additional information', () => {
                 title: 'Example title'
             });
 
-        expect(createAdditionalInformation.status).toEqual(422);
+        expect(createAdditionalInformation.status).toEqual(400);
     });
 
     test('User cannot supply a description over 255 characters long', async () => {
@@ -93,10 +93,10 @@ describe('Create a piece of additional information', () => {
                 title: 'Example title',
                 url: 'https://jisc.ac.uk',
                 description:
-                    'This is a description that is 256 characters long. It has to be this long in order to test the validation of the create external resource API endpoint. If this request gets rejected with a status code of 422, that means that the validation has rejected it.'
+                    'This is a description that is 256 characters long. It has to be this long in order to test the validation of the create external resource API endpoint. If this request gets rejected with a status code of 400, that means that the validation has rejected it.'
             });
 
-        expect(createAdditionalInformation.status).toEqual(422);
+        expect(createAdditionalInformation.status).toEqual(400);
     });
 
     test('User cannot supply an invalid URL', async () => {

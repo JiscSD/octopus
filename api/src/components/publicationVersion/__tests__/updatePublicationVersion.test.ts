@@ -65,7 +65,7 @@ describe('Update publication version', () => {
             .query({ apiKey: 123456789 })
             .send({ licence: 'CC_BY_SA' });
 
-        expect(updatedVersion.status).toEqual(422);
+        expect(updatedVersion.status).toEqual(400);
     });
 
     test('Can update keywords', async () => {
@@ -92,7 +92,7 @@ describe('Update publication version', () => {
             .query({ apiKey: 123456789 })
             .send({ doesNotExist: 'invalid-parameter' });
 
-        expect(updatedVersion.status).toEqual(422);
+        expect(updatedVersion.status).toEqual(400);
     });
 
     test('Cannot update LIVE publication', async () => {
@@ -110,7 +110,7 @@ describe('Update publication version', () => {
             .query({ apiKey: 123456789 })
             .send({ keywords: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'] });
 
-        expect(updatedVersion.status).toEqual(422);
+        expect(updatedVersion.status).toEqual(400);
     });
 
     test('Cannot add more than 160 characters into a description', async () => {
@@ -122,7 +122,7 @@ describe('Update publication version', () => {
                     'testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123testing123x'
             });
 
-        expect(updatedVersion.status).toEqual(422);
+        expect(updatedVersion.status).toEqual(400);
     });
 
     // Language tests
@@ -150,7 +150,7 @@ describe('Update publication version', () => {
                 language: 'zz' // https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
             });
 
-        expect(createPublicationRequest.status).toEqual(422);
+        expect(createPublicationRequest.status).toEqual(400);
     });
 
     test('Publication failed to be updated if language provided is less than 2 chars', async () => {
@@ -163,7 +163,7 @@ describe('Update publication version', () => {
                 language: 'e'
             });
 
-        expect(createPublicationRequest.status).toEqual(422);
+        expect(createPublicationRequest.status).toEqual(400);
     });
 
     test('Publication failed to be updated if language provided is more than 2 chars', async () => {
@@ -176,7 +176,7 @@ describe('Update publication version', () => {
                 language: 'enn'
             });
 
-        expect(createPublicationRequest.status).toEqual(422);
+        expect(createPublicationRequest.status).toEqual(400);
     });
 
     test('Publication failed to update if is not protocol or hypotheses and supplies a self declaration', async () => {

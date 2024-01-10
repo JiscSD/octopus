@@ -59,6 +59,6 @@ describe.only('Create topic', () => {
                 parentIds: []
             });
 
-        expect(createTopicRequest.status).toEqual(422);
+        expect(createTopicRequest.status).toEqual(400);
     });
 });

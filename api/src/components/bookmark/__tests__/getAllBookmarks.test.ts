@@ -16,7 +16,7 @@ describe('Get multiple bookmarks', () => {
     test('Must specify a bookmark type', async () => {
         const bookmarks = await testUtils.agent.get('/bookmarks').query({ apiKey: '987654321' });
 
-        expect(bookmarks.status).toEqual(422);
+        expect(bookmarks.status).toEqual(400);
     });
 
     test('Cannot access bookmarks as an un-authenticated user', async () => {
