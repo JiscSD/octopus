@@ -2602,15 +2602,6 @@ test.describe('Publication Flow + File import', () => {
 
         await completeConflictOfInterestTab(page, false);
 
-        await completeFundersTab(
-            page,
-            '01rv9gx86',
-            'funder name',
-            'funder city',
-            'https://funder.com',
-            'extra details'
-        );
-
         await page.locator(PageModel.publish.publishButton).click();
         await page.locator(PageModel.publish.confirmPublishButton).click();
 
