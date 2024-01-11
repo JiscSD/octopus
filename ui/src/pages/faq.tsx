@@ -6,11 +6,6 @@ import { NextPage } from 'next';
 import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
-import * as Types from '@types';
-
-type Props = {
-    faqContents: [{ href: string; title: string; content: string }];
-};
 
 const faqContents = [
     {
@@ -151,7 +146,7 @@ const faqContents = [
     }
 ];
 
-const Faq: NextPage<Props> = (props): JSX.Element => (
+const Faq: NextPage = (): JSX.Element => (
     <>
         <Head>
             <title>{Config.urls.faq.title}</title>
@@ -170,7 +165,9 @@ const Faq: NextPage<Props> = (props): JSX.Element => (
 
             <section className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
                 <aside className="col-span-2 pt-2 lg:block">
-                    <Components.FaqSidebar jumpToList={faqContents.map(({ href, title }) => ({ href, title }))} />
+                    <Components.PageContentsSidebar
+                        jumpToList={faqContents.map(({ href, title }) => ({ href, title }))}
+                    />
                 </aside>
                 <div className="pt-14 lg:col-span-6 lg:pt-0">
                     {faqContents.map((faqContent) => (
