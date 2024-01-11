@@ -25,7 +25,7 @@ describe('Request co-authors approvals', () => {
             .put('/publication-versions/publication-problem-live-v1/coauthors/request-approval')
             .query({ apiKey: '123456789' });
 
-        expect(livePublicationVersionResponse.status).toEqual(403);
+        expect(livePublicationVersionResponse.status).toEqual(400);
     });
 
     test('Cannot request approvals if user is not the creator', async () => {

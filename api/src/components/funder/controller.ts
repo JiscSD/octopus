@@ -16,16 +16,16 @@ export const create = async (
             });
         }
 
-        //check that the publication is live
-        if (publicationVersion.currentStatus !== 'DRAFT') {
-            return response.json(403, {
-                message: 'You can only add funding to a draft publication.'
-            });
-        }
-
         if (event.user.id !== publicationVersion.user.id) {
             return response.json(403, {
                 message: 'You do not have permissions to add a funder.'
+            });
+        }
+
+        //check that the publication is live
+        if (publicationVersion.currentStatus !== 'DRAFT') {
+            return response.json(400, {
+                message: 'You can only add funding to a draft publication.'
             });
         }
 
@@ -62,7 +62,7 @@ export const destroy = async (
 
         //check that the publication is live
         if (publicationVersion.currentStatus !== 'DRAFT') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'You cannot delete funding from a publication that is not a draft.'
             });
         }

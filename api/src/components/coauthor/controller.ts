@@ -65,7 +65,7 @@ export const updateAll = async (
 
         // Is the current version of the publication not live?
         if (version.currentStatus === 'LIVE') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'This publication version is LIVE and therefore cannot be edited.'
             });
         }
@@ -146,7 +146,7 @@ export const remove = async (
 
         // Is the current version of the publication not live?
         if (version.currentStatus === 'LIVE') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'This publication version is LIVE and therefore cannot be edited.'
             });
         }
@@ -192,7 +192,7 @@ export const link = async (
         }
 
         if (version.currentStatus === 'LIVE') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'This publication version is LIVE and therefore cannot be edited.'
             });
         }
@@ -304,7 +304,7 @@ export const updateConfirmation = async (
 
         // Is the publication's current version in locked mode?
         if (version.currentStatus !== 'LOCKED') {
-            return response.json(403, {
+            return response.json(400, {
                 message:
                     version.currentStatus === 'LIVE'
                         ? 'You cannot approve a LIVE publication version'
@@ -378,7 +378,7 @@ export const requestApproval = async (
         }
 
         if (version.currentStatus === 'LIVE') {
-            return response.json(403, { message: 'Cannot request approvals for a LIVE publication version.' });
+            return response.json(400, { message: 'Cannot request approvals for a LIVE publication version.' });
         }
 
         // check if user is not the corresponding author
@@ -466,7 +466,7 @@ export const sendApprovalReminder = async (
 
     // Can only send reminder on publication versions that have been locked for review
     if (version.currentStatus !== 'LOCKED') {
-        return response.json(403, {
+        return response.json(400, {
             message: 'A reminder is not able to be sent unless approval is being requested'
         });
     }

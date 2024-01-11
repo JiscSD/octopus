@@ -53,9 +53,15 @@ export const createFlag = async (
     try {
         const publication = await publicationService.get(event.pathParameters.publicationId);
 
-        if (!publication || !publication.versions.some((version) => version.isLatestLiveVersion)) {
+        if (!publication) {
             return response.json(404, {
-                message: 'Cannot flag that a publication that does not exist, or is not LIVE'
+                message: 'Cannot flag that a publication that does not exist'
+            });
+        }
+
+        if (!publication.versions.some((version) => version.isLatestLiveVersion)) {
+            return response.json(400, {
+                message: 'Cannot flag a publication that has not gone live'
             });
         }
 
@@ -156,7 +162,7 @@ export const createFlagComment = async (
         }
 
         if (flag.resolved) {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'You cannot comment on a flag that has already been resolved.'
             });
         }
@@ -243,7 +249,7 @@ export const resolveFlag = async (
         }
 
         if (flag.resolved) {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'This flag has already been resolved.'
             });
         }

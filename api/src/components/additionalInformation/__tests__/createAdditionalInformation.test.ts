@@ -42,7 +42,7 @@ describe('Create a piece of additional information', () => {
                 url: 'https://jisc.ac.uk'
             });
 
-        expect(createAdditionalInformation.status).toEqual(403);
+        expect(createAdditionalInformation.status).toEqual(400);
         expect(createAdditionalInformation.body.message).toEqual(
             'You can only add additional information to a draft publication'
         );

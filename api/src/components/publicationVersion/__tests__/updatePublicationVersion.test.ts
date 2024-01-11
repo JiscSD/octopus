@@ -101,7 +101,7 @@ describe('Update publication version', () => {
             .query({ apiKey: 123456789 })
             .send({ title: 'Brand new title' });
 
-        expect(updatedVersion.status).toEqual(403);
+        expect(updatedVersion.status).toEqual(400);
     });
 
     test('Cannot add more than 10 keywords', async () => {
@@ -224,7 +224,7 @@ describe('Update publication version', () => {
             .query({ apiKey: '123456789' })
             .send({ topics: ['test-topic-1'] });
 
-        expect(updateTopicsRequest.status).toEqual(403);
+        expect(updateTopicsRequest.status).toEqual(400);
         expect(updateTopicsRequest.body.message).toEqual(
             'A publication version that is not in DRAFT state cannot be updated.'
         );

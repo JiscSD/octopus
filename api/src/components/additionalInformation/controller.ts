@@ -22,7 +22,7 @@ export const create = async (
 
         // Ensure that the publication version is DRAFT
         if (publicationVersion?.currentStatus !== 'DRAFT') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'You can only add additional information to a draft publication'
             });
         }
@@ -70,7 +70,7 @@ export const deleteAdditionalInformation = async (
 
         // Ensure that the publication version is a draft
         if (publicationVersion.currentStatus !== 'DRAFT') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'You cannot delete additional information from a publication version that is not a draft.'
             });
         }

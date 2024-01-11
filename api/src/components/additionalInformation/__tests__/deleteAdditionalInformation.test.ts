@@ -34,7 +34,7 @@ describe('Delete a piece of additional information', () => {
             )
             .query({ apiKey: '123456789' });
 
-        expect(deleteAdditionalInformation.status).toEqual(403);
+        expect(deleteAdditionalInformation.status).toEqual(400);
         expect(deleteAdditionalInformation.body.message).toEqual(
             'You cannot delete additional information from a publication version that is not a draft.'
         );

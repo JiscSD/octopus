@@ -40,7 +40,7 @@ export const updateAll = async (
         if (event.user.id !== 'octopus') {
             //check that the publication is live
             if (version.currentStatus !== 'DRAFT') {
-                return response.json(403, {
+                return response.json(400, {
                     message: 'You can only add references to a draft publication.'
                 });
             }

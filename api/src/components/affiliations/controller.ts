@@ -27,7 +27,7 @@ export const updateAffiliations = async (
 
         // Check if version is LIVE
         if (version.currentStatus === 'LIVE') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'You cannot add affiliations to a LIVE publication.'
             });
         }

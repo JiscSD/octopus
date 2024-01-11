@@ -30,7 +30,7 @@ describe('create a funder', () => {
                 link: 'https://jisc.ac.uk'
             });
 
-        expect(funder.status).toEqual(403);
+        expect(funder.status).toEqual(400);
     });
     test('User cannot add a funder to another DRAFT publication version', async () => {
         const funder = await testUtils.agent
