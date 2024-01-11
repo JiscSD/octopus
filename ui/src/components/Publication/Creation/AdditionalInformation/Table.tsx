@@ -87,7 +87,7 @@ const Table: React.FC = () => {
         <Framer.motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }} className="mt-8">
             {!!publicationVersion.additionalInformation.length && (
                 <table
-                    data-testid="additional-information-table"
+                    aria-label="additional-information-table"
                     className="mb-6 min-w-full divide-y divide-grey-100 overflow-hidden shadow ring-1 ring-black ring-opacity-5 dark:divide-teal-300 dark:ring-transparent  md:rounded-lg"
                 >
                     <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">

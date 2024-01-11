@@ -585,3 +585,11 @@ export const htmlToText = (htmlString: string): string => {
         return $(':root').text() || '';
     }
 };
+
+export const toKebabCase = (string: string): string => {
+    return string
+        .toLowerCase() // Convert to lower case
+        .replace(/[^\w\s\']|_/g, '') // Remove everything except alphanumeric characters and whitespace
+        .replace(/\s+/g, ' ') // Condense longer whitespace down to one space
+        .replace(/\s/g, '-'); // Replace single spaces with hyphen
+};

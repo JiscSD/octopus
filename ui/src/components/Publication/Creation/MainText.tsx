@@ -218,7 +218,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
                             </h3>
                             <div className="overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
                                 <table
-                                    data-testid="references-table"
+                                    aria-label="references-table"
                                     className="w-full divide-y divide-grey-100  dark:divide-teal-300"
                                 >
                                     <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">

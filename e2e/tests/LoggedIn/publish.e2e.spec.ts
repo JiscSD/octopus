@@ -245,15 +245,20 @@ const completeFundersTab = async (
 
 interface PublicationTestType {
     pubType: string;
-    language: string;
     title: string;
     author: string;
     text: string;
+    language?: string;
     references?: Array<Reference>;
     coi?: string;
     funding?: string;
     fundingExtraDetails?: string;
     selfDeclaration?: string;
+    ethicalStatement?: string;
+    ethicalApprover?: string;
+    dataPermissionsStatement?: string;
+    dataCollectionApprover?: string;
+    dataAccessStatement?: string;
 }
 
 const problemPublication: PublicationTestType = {
@@ -282,12 +287,52 @@ const problemPublication2: PublicationTestType = {
 
 const hypothesisPublication: PublicationTestType = {
     pubType: 'Rationale / Hypothesis',
-    language: 'English',
     title: 'test title',
     author: Helpers.user1.fullName,
     text: 'main text',
     coi: 'details of conflict of interest',
     selfDeclaration: 'Data has not yet been collected to test this hypothesis (i.e. this is a preregistration)'
+};
+
+const methodPublication: PublicationTestType = {
+    pubType: 'Method',
+    title: 'test title',
+    author: Helpers.user1.fullName,
+    text: 'main text',
+    selfDeclaration: 'Data has not yet been collected according to this method/protocol.'
+};
+
+const resultsPublication: PublicationTestType = {
+    pubType: 'Results',
+    title: 'test title',
+    author: Helpers.user1.fullName,
+    text: 'main text',
+    ethicalStatement: 'The results in this publication involved human or animal subjects.',
+    ethicalApprover: 'the appropriate body',
+    dataPermissionsStatement: 'The results in this publication involved access to owned or copyrighted materials.',
+    dataCollectionApprover: 'the copyright owner',
+    dataAccessStatement: 'custom data access statement'
+};
+
+const analysisPublication: PublicationTestType = {
+    pubType: 'Analysis',
+    title: 'test title',
+    author: Helpers.user1.fullName,
+    text: 'main text'
+};
+
+const interpretationPublication: PublicationTestType = {
+    pubType: 'Interpretation',
+    title: 'test title',
+    author: Helpers.user1.fullName,
+    text: 'main text'
+};
+
+const realWorldApplicationPublication: PublicationTestType = {
+    pubType: 'Real World Application',
+    title: 'test title',
+    author: Helpers.user1.fullName,
+    text: 'main text'
 };
 
 const checkPublication = async (page: Page, publication: PublicationTestType, authors: Helpers.TestUser[]) => {
@@ -296,18 +341,25 @@ const checkPublication = async (page: Page, publication: PublicationTestType, au
 
     const publicationTemplate = (publication: PublicationTestType): string[] => [
         `aside span:has-text("${publication.pubType}")`,
-        `aside span:has-text("${publication.language}")`,
+        `aside span:has-text("${publication.language ? publication.language : 'English'}")`,
         `h1:has-text("${publication.title}")`,
+        ...authors.map((author) => `main > section > header > div >> a:has-text("${author.shortName}")`),
         ...(publication.references
-            ? [`text=${publication.references[1].text}`, `text=${publication.references[1].refURL}`]
+            ? [`text="${publication.references[1].text}"`, `text="${publication.references[1].refURL}"`]
             : []),
         ...(publication.coi
-            ? [`text=${publication.coi}`]
+            ? [`text="${publication.coi}"`]
             : [`text="This ${publication.pubType} does not have any specified conflicts of interest."`]),
-        ...(publication.funding ? [`text=${publication.funding}`] : []),
+        ...(publication.funding
+            ? [`text="${publication.funding}"`]
+            : [`text="No sources of funding have been specified for this ${publication.pubType}."`]),
         ...(publication.fundingExtraDetails ? [`article p:has-text("${publication.fundingExtraDetails}")`] : []),
-        ...(publication.selfDeclaration ? [`text=${publication.selfDeclaration}`] : []),
-        ...authors.map((author) => `main > section > header > div >> a:has-text("${author.shortName}")`)
+        ...(publication.selfDeclaration ? [`text="${publication.selfDeclaration}"`] : []),
+        ...(publication.ethicalStatement ? [`text="${publication.ethicalStatement}"`] : []),
+        ...(publication.ethicalApprover ? [`text="${publication.ethicalApprover}"`] : []),
+        ...(publication.dataPermissionsStatement ? [`text="${publication.dataPermissionsStatement}"`] : []),
+        ...(publication.dataCollectionApprover ? [`text="${publication.dataCollectionApprover}"`] : []),
+        ...(publication.dataAccessStatement ? [`text="${publication.dataAccessStatement}"`] : [])
     ];
 
     await Promise.all(publicationTemplate(publication).map((selector) => expect(page.locator(selector)).toBeVisible()));
@@ -380,6 +432,7 @@ test.describe('Publication flow', () => {
     // - Affiliations: selecting an affiliation
     // - Linked items: linking a hypothesis to a problem
     // - Conlict of interest: conflict of interest is true and details supplied
+    // Covers field interaction unique to hypotheses/methods:
     // - Research process: declare that this is a pre-registration
     test('Create a hypothesis (standard publication)', async ({ browser }) => {
         // Start up test
@@ -414,6 +467,174 @@ test.describe('Publication flow', () => {
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
         await checkPublication(page, hypothesisPublication, [Helpers.user1]);
+    });
+
+    // Covers field interaction unique to hypotheses/methods:
+    // - Research process: declare that this is a pre-registration
+    // (should produce different text to hypotheses when publication is viewed)
+    test('Create a method (standard publication)', async ({ browser }) => {
+        // Start up test
+        const page = await browser.newPage();
+
+        // Login
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        await createPublication(page, 'test title', 'PROTOCOL');
+        await completeKeyInformationTab(page);
+        await completeAffiliationsTab(page, false);
+        await completeLinkedItemsTab(page, 'a', 'Hypothesis of Improving the quality of life for sustainable');
+        await completeMainTextTabMinimally(page, 'main text');
+        await completeConflictOfInterestTab(page, false);
+
+        // Add self declaration
+        await (await page.waitForSelector("aside button:has-text('Research process')")).click();
+        await page.locator(PageModel.publish.researchProcess.selfDeclaration).click();
+
+        // Preview and check preview draft publication
+        await page.locator(PageModel.publish.previewButton).click();
+        await checkPublication(page, methodPublication, [Helpers.user1]);
+
+        // Publish and check live publication
+        await page.locator(PageModel.publish.draftEditButton).click();
+        await page.locator(PageModel.publish.publishButton).click();
+        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
+        await checkPublication(page, methodPublication, [Helpers.user1]);
+    });
+
+    // Covers field interactions unique to results:
+    // - Data statements: all fields
+    test('Create results (standard publication)', async ({ browser }) => {
+        // Start up test
+        const page = await browser.newPage();
+
+        // Login
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        await createPublication(page, 'test title', 'DATA');
+        await completeKeyInformationTab(page);
+        await completeAffiliationsTab(page, false);
+        await completeLinkedItemsTab(
+            page,
+            'a',
+            'Protocol of Improving the quality of life for sustainable development'
+        );
+        await completeMainTextTabMinimally(page, 'main text');
+        await completeConflictOfInterestTab(page, false);
+
+        // Add data statements
+        await (await page.waitForSelector("aside button:has-text('Data statements')")).click();
+        await page.locator(PageModel.publish.dataStatements.ethicalStatementTrue).click();
+        await page.locator(PageModel.publish.dataStatements.ethicalApprover).click();
+        await page.keyboard.type(resultsPublication.ethicalApprover);
+        await page.locator(PageModel.publish.dataStatements.dataPermissionsStatementTrue).click();
+        await page.locator(PageModel.publish.dataStatements.dataCollectionApprover).click();
+        await page.keyboard.type(resultsPublication.dataCollectionApprover);
+        await page.locator(PageModel.publish.dataStatements.dataAccessStatementOther).click();
+        await page.locator(PageModel.publish.dataStatements.dataAccessStatementFreeText).click();
+        await page.keyboard.type(resultsPublication.dataAccessStatement);
+
+        // Preview and check preview draft publication
+        await page.locator(PageModel.publish.previewButton).click();
+        await checkPublication(page, resultsPublication, [Helpers.user1]);
+
+        // Publish and check live publication
+        await page.locator(PageModel.publish.draftEditButton).click();
+        await page.locator(PageModel.publish.publishButton).click();
+        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
+        await checkPublication(page, resultsPublication, [Helpers.user1]);
+    });
+
+    // Analyses have no unique fields. Just test that we can make one successfully.
+    test('Create an analysis (standard publication)', async ({ browser }) => {
+        // Start up test
+        const page = await browser.newPage();
+
+        // Login
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        await createPublication(page, 'test title', 'ANALYSIS');
+        await completeKeyInformationTab(page);
+        await completeAffiliationsTab(page, false);
+        await completeLinkedItemsTab(
+            page,
+            'a',
+            'Data attached to Improving the quality of life for sustainable development'
+        );
+        await completeMainTextTabMinimally(page, 'main text');
+        await completeConflictOfInterestTab(page, false);
+
+        // Preview and check preview draft publication
+        await page.locator(PageModel.publish.previewButton).click();
+        await checkPublication(page, analysisPublication, [Helpers.user1]);
+
+        // Publish and check live publication
+        await page.locator(PageModel.publish.draftEditButton).click();
+
+        await page.locator(PageModel.publish.publishButton).click();
+        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
+        await checkPublication(page, analysisPublication, [Helpers.user1]);
+    });
+
+    // Interpretations have no unique fields. Just test that we can make one successfully.
+    test('Create an interpretation (standard publication)', async ({ browser }) => {
+        // Start up test
+        const page = await browser.newPage();
+
+        // Login
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        await createPublication(page, 'test title', 'INTERPRETATION');
+        await completeKeyInformationTab(page);
+        await completeAffiliationsTab(page, true);
+        await completeLinkedItemsTab(page, 'a', 'Analysis of Improving the quality of life for sustainable');
+        await completeMainTextTabMinimally(page, 'main text');
+        await completeConflictOfInterestTab(page, false);
+
+        // Preview and check preview draft publication
+        await page.locator(PageModel.publish.previewButton).click();
+        await checkPublication(page, interpretationPublication, [Helpers.user1]);
+
+        // Publish and check live publication
+        await page.locator(PageModel.publish.draftEditButton).click();
+        await page.locator(PageModel.publish.publishButton).click();
+        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
+        await checkPublication(page, interpretationPublication, [Helpers.user1]);
+    });
+
+    // Real world applications have no unique fields. Just test that we can make one successfully.
+    test('Create a real world application (standard publication)', async ({ browser }) => {
+        // Start up test
+        const page = await browser.newPage();
+
+        // Login
+        await page.goto(Helpers.UI_BASE);
+        await Helpers.login(page, browser);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(Helpers.user1.fullName);
+
+        await createPublication(page, 'test title', 'REAL_WORLD_APPLICATION');
+        await completeKeyInformationTab(page);
+        await completeAffiliationsTab(page, true);
+        await completeLinkedItemsTab(page, 'a', 'Interpretation of Improving the quality of life for sustainable');
+        await completeMainTextTabMinimally(page, 'main text');
+        await completeConflictOfInterestTab(page, false);
+
+        // Preview and check preview draft publication
+        await page.locator(PageModel.publish.previewButton).click();
+        await checkPublication(page, realWorldApplicationPublication, [Helpers.user1]);
+
+        // Publish and check live publication
+        await page.locator(PageModel.publish.draftEditButton).click();
+        await page.locator(PageModel.publish.publishButton).click();
+        await Promise.all([page.waitForNavigation(), page.locator(PageModel.publish.confirmPublishButton).click()]);
+        await checkPublication(page, realWorldApplicationPublication, [Helpers.user1]);
     });
 
     test('Create a problem and link it to a topic', async ({ browser }) => {
