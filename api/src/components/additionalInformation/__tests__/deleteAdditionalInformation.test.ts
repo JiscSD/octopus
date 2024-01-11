@@ -27,6 +27,17 @@ describe('Delete a piece of additional information', () => {
         expect(deleteAdditionalInformation.body.message).toEqual('This publication version does not exist.');
     });
 
+    test('User cannot delete non-existent additional information from an existing publication version', async () => {
+        const deleteAdditionalInformation = await testUtils.agent
+            .delete('/publication-versions/publication-problem-draft-v1/additional-information/made-up-id')
+            .query({ apiKey: '000000005' });
+
+        expect(deleteAdditionalInformation.status).toEqual(404);
+        expect(deleteAdditionalInformation.body.message).toEqual(
+            'This piece of additional information was not found on the publication version.'
+        );
+    });
+
     test('User cannot delete additional information from their LIVE publication version', async () => {
         const deleteAdditionalInformation = await testUtils.agent
             .delete(

@@ -68,6 +68,17 @@ export const deleteAdditionalInformation = async (
             });
         }
 
+        // Check that the additional information exists on this version
+        if (
+            !publicationVersion.additionalInformation.find(
+                (additionalInformation) => additionalInformation.id === event.pathParameters.additionalInformationId
+            )
+        ) {
+            return response.json(404, {
+                message: 'This piece of additional information was not found on the publication version.'
+            });
+        }
+
         // Ensure that the publication version is a draft
         if (publicationVersion.currentStatus !== 'DRAFT') {
             return response.json(400, {
