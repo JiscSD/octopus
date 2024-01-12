@@ -7,39 +7,10 @@ import * as Components from '@components';
 import * as Layouts from '@layouts';
 import * as Config from '@config';
 
-type PageSectionProps = {
-    children: React.ReactNode;
-};
-
-type TextProps = {
-    children: React.ReactNode;
-};
-
 type AuthorGuideSection = {
     title: string;
     id: string;
     content: React.ReactNode;
-};
-
-const PageSection: React.FC<PageSectionProps> = (props): React.ReactElement => {
-    return (
-        <Framer.motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ type: 'spring' }}
-        >
-            {props.children}
-        </Framer.motion.div>
-    );
-};
-
-const StandardText: React.FC<TextProps> = (props): React.ReactElement => {
-    return (
-        <span className="text-l mx-auto mb-5 block font-montserrat font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:text-xl">
-            {props.children}
-        </span>
-    );
 };
 
 const authorGuideSections: AuthorGuideSection[] = [
@@ -363,36 +334,30 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
         </Head>
 
         <Layouts.Standard fixedHeader={false}>
-            <PageSection>
-                <div className="container mx-auto px-8 pb-10 pt-10 lg:gap-4 lg:pt-20">
-                    <Components.PageTitle text="Author guide to publishing on Octopus." />
+            <div className="container mx-auto px-8 pb-10 pt-10 lg:gap-4 lg:pt-20">
+                <Components.PageTitle text="Author guide to publishing on Octopus." />
+            </div>
+            <div className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
+                <aside className="col-span-2 pt-2 lg:block">
+                    <Components.PageContentsSidebar
+                        jumpToList={authorGuideSections.map(({ title, id }) => ({ href: id, title }))}
+                    />
+                </aside>
+                <div className="pt-14 lg:col-span-6 lg:pt-0">
+                    {authorGuideSections.map((authorGuideSection) => (
+                        <div key={authorGuideSection.id} id={authorGuideSection.id} className="mx-auto pt-4 lg:w-10/12">
+                            <dl>
+                                <dt>
+                                    <Components.PublicationCreationStepTitle text={authorGuideSection.title} />
+                                </dt>
+                                <dd className="mb-14 pt-2 text-sm leading-6 text-grey-600 transition-colors duration-500 dark:text-grey-200">
+                                    {authorGuideSection.content}
+                                </dd>
+                            </dl>
+                        </div>
+                    ))}
                 </div>
-                <div className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
-                    <aside className="col-span-2 pt-2 lg:block">
-                        <Components.PageContentsSidebar
-                            jumpToList={authorGuideSections.map(({ title, id }) => ({ href: id, title }))}
-                        />
-                    </aside>
-                    <div className="pt-14 lg:col-span-6 lg:pt-0">
-                        {authorGuideSections.map((authorGuideSection) => (
-                            <div
-                                key={authorGuideSection.id}
-                                id={authorGuideSection.id}
-                                className="mx-auto pt-4 lg:w-10/12"
-                            >
-                                <dl>
-                                    <dt>
-                                        <Components.PublicationCreationStepTitle text={authorGuideSection.title} />
-                                    </dt>
-                                    <dd className="mb-14 pt-2 text-sm leading-6 text-grey-600 transition-colors duration-500 dark:text-grey-200">
-                                        {authorGuideSection.content}
-                                    </dd>
-                                </dl>
-                            </div>
-                        ))}
-                    </div>
-                </div>{' '}
-            </PageSection>
+            </div>
         </Layouts.Standard>
     </>
 );
