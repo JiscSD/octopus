@@ -586,8 +586,8 @@ export const htmlToText = (htmlString: string): string => {
     }
 };
 
-export const toKebabCase = (string: string): string => {
-    return string
+export const toKebabCase = (inputString: string): string => {
+    return inputString
         .toLowerCase() // Convert to lower case
         .replace(/[^\w\s\']|_/g, '') // Remove everything except alphanumeric characters and whitespace
         .replace(/\s+/g, ' ') // Condense longer whitespace down to one space
