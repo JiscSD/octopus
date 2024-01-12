@@ -334,10 +334,11 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
         </Head>
 
         <Layouts.Standard fixedHeader={false}>
-            <div className="container mx-auto px-8 pb-10 pt-10 lg:gap-4 lg:pt-20">
-                <Components.PageTitle text="Author guide to publishing on Octopus." />
-            </div>
-            <div className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
+            <article className="container grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
+                <Components.PageTitle
+                    text="Author guide to publishing on Octopus."
+                    className="col-span-1 mb-8 pt-10 lg:col-span-8 lg:pt-20"
+                />
                 <aside className="col-span-2 pt-2 lg:block">
                     <Components.PageContentsSidebar
                         jumpToList={authorGuideSections.map(({ title, id }) => ({ href: id, title }))}
@@ -345,19 +346,19 @@ const AuthorGuide: NextPage = (): React.ReactElement => (
                 </aside>
                 <div className="pt-14 lg:col-span-6 lg:pt-0">
                     {authorGuideSections.map((authorGuideSection) => (
-                        <div key={authorGuideSection.id} id={authorGuideSection.id} className="mx-auto pt-4 lg:w-10/12">
-                            <dl>
-                                <dt>
-                                    <Components.PublicationCreationStepTitle text={authorGuideSection.title} />
-                                </dt>
-                                <dd className="mb-14 pt-2 text-sm leading-6 text-grey-600 transition-colors duration-500 dark:text-grey-200">
-                                    {authorGuideSection.content}
-                                </dd>
-                            </dl>
-                        </div>
+                        <section
+                            key={authorGuideSection.id}
+                            id={authorGuideSection.id}
+                            className="mx-auto pt-4 lg:w-10/12"
+                        >
+                            <Components.PublicationCreationStepTitle text={authorGuideSection.title} />
+                            <div className="mb-14 pt-2 text-sm leading-6 text-grey-600 transition-colors duration-500 dark:text-grey-200">
+                                {authorGuideSection.content}
+                            </div>
+                        </section>
                     ))}
                 </div>
-            </div>
+            </article>
         </Layouts.Standard>
     </>
 );

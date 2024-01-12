@@ -159,11 +159,12 @@ const Faq: NextPage = (): JSX.Element => (
 
         <Layouts.Standard fixedHeader={false}>
             {/* Frequently asked questions section */}
-            <section className="container mx-auto px-8 pb-10 pt-10 lg:gap-4 lg:pt-20">
-                <Components.PageTitle text="Frequently asked questions" />
-            </section>
+            <article className="container grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
+                <Components.PageTitle
+                    text="Frequently asked questions"
+                    className="col-span-1 mb-8 pt-10 lg:col-span-8 lg:pt-20"
+                />
 
-            <section className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-8 lg:gap-16">
                 <aside className="col-span-2 pt-2 lg:block">
                     <Components.PageContentsSidebar
                         jumpToList={faqContents.map(({ href, title }) => ({ href, title }))}
@@ -171,19 +172,15 @@ const Faq: NextPage = (): JSX.Element => (
                 </aside>
                 <div className="pt-14 lg:col-span-6 lg:pt-0">
                     {faqContents.map((faqContent) => (
-                        <div key={faqContent.id} id={faqContent.id} className="mx-auto pt-4 lg:w-10/12">
-                            <dl>
-                                <dt>
-                                    <Components.PublicationCreationStepTitle text={faqContent.heading} />
-                                </dt>
-                                <dd className="mb-14 pt-2 text-sm leading-6 text-grey-600 transition-colors duration-500 dark:text-grey-200">
-                                    {parse(faqContent.content)}
-                                </dd>
-                            </dl>
-                        </div>
+                        <section key={faqContent.id} id={faqContent.id} className="mx-auto pt-4 lg:w-10/12">
+                            <Components.PublicationCreationStepTitle text={faqContent.heading} />
+                            <div className="mb-14 pt-2 text-sm leading-6 text-grey-600 transition-colors duration-500 dark:text-grey-200">
+                                {parse(faqContent.content)}
+                            </div>
+                        </section>
                     ))}
                 </div>
-            </section>
+            </article>
         </Layouts.Standard>
     </>
 );
