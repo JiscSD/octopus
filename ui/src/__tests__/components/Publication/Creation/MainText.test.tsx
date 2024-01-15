@@ -1,4 +1,4 @@
-import * as Components from '@components';
+import * as Components from '@/components';
 import { render, screen } from '@testing-library/react';
 
 describe('MainText tests', () => {

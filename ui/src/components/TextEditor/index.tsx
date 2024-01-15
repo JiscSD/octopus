@@ -3,11 +3,11 @@ import * as HeadlessUi from '@headlessui/react';
 import * as SolidIcon from '@heroicons/react/24/solid';
 import * as tiptap from '@tiptap/react';
 import * as FAIcons from 'react-icons/fa';
-import * as api from '@api';
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Interfaces from '@interfaces';
-import * as Stores from '@stores';
+import * as api from '@/api';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Interfaces from '@/interfaces';
+import * as Stores from '@/stores';
 
 import Mammoth from 'mammoth';
 import TipTapImage from '@tiptap/extension-image';

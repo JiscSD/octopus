@@ -5,13 +5,13 @@ import Head from 'next/head';
 import * as Router from 'next/router';
 import * as Framer from 'framer-motion';
 import * as SolidIcons from '@heroicons/react/24/solid';
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Helpers from '@helpers';
-import * as Layouts from '@layouts';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Helpers from '@/helpers';
+import * as Layouts from '@/layouts';
+import * as Config from '@/config';
+import * as Types from '@/types';
+import * as api from '@/api';
 
 /**
  *

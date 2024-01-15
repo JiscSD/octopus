@@ -2,16 +2,17 @@ import React, { useEffect, useMemo } from 'react';
 import Head from 'next/head';
 
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as api from '@api';
-import * as Assets from '@assets';
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Helpers from '@helpers';
-import * as Interfaces from '@interfaces';
-import * as Layouts from '@layouts';
-import * as Stores from '@stores';
-import * as Types from '@types';
 import useSWR from 'swr';
+
+import * as api from '@/api';
+import * as Assets from '@/assets';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Interfaces from '@/interfaces';
+import * as Layouts from '@/layouts';
+import * as Stores from '@/stores';
+import * as Types from '@/types';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const id = context.query.id;

@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import * as Components from '@components';
+import * as Components from '@/components';
 
 describe('Users Search Result', () => {
     const firstName = 'John';

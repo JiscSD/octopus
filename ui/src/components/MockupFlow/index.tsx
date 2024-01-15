@@ -1,7 +1,7 @@
 import React from 'react';
 
-import * as Components from '@components';
-import * as Assets from '@assets';
+import * as Components from '@/components';
+import * as Assets from '@/assets';
 
 const MockupFlow: React.FC = (): React.ReactElement => (
     <>

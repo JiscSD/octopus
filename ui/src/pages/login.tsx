@@ -2,14 +2,14 @@ import React, { useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import * as Helpers from '@helpers';
-import * as Assets from '@assets';
-import * as Stores from '@stores';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
-import * as Components from '@components';
-import * as Hooks from '@hooks';
+import * as Helpers from '@/helpers';
+import * as Assets from '@/assets';
+import * as Stores from '@/stores';
+import * as Config from '@/config';
+import * as Types from '@/types';
+import * as api from '@/api';
+import * as Components from '@/components';
+import * as Hooks from '@/hooks';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const homeUrl = encodeURIComponent(Config.urls.home.path);
