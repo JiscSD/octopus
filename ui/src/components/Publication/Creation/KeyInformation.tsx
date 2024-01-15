@@ -1,9 +1,9 @@
 import React from 'react';
 import * as Framer from 'framer-motion';
-import * as Components from '@components';
-import * as Stores from '@stores';
-import * as Config from '@config';
-import * as Types from '@types';
+import * as Components from '@/components';
+import * as Stores from '@/stores';
+import * as Config from '@/config';
+import * as Types from '@/types';
 
 /**
  * @description Edit title

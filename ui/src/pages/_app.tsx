@@ -4,13 +4,13 @@ import NextProgressBar from 'next-nprogress-bar';
 
 import * as SWR from 'swr';
 import * as Framer from 'framer-motion';
-import * as Components from '@components';
-import * as Stores from '@stores';
-import * as Types from '@types';
-import * as api from '@api';
-import * as Contexts from '@contexts';
-import * as Hooks from '@hooks';
-import * as Helpers from '@helpers';
+import * as Components from '@/components';
+import * as Stores from '@/stores';
+import * as Types from '@/types';
+import * as api from '@/api';
+import * as Contexts from '@/contexts';
+import * as Hooks from '@/hooks';
+import * as Helpers from '@/helpers';
 
 import '../styles/globals.css';
 

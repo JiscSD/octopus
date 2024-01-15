@@ -1,4 +1,4 @@
-import * as Components from '@components';
+import * as Components from '@/components';
 
 type Props = {
     fixedHeader?: boolean;

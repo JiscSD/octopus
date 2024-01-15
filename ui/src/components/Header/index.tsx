@@ -2,10 +2,10 @@ import React from 'react';
 
 import * as NextRouter from 'next/router';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as Components from '@components';
-import * as Assets from '@assets';
-import * as Config from '@config';
-import * as Stores from '@stores';
+import * as Components from '@/components';
+import * as Assets from '@/assets';
+import * as Config from '@/config';
+import * as Stores from '@/stores';
 
 type Props = {
     fixed?: boolean;

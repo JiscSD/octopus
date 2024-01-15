@@ -3,13 +3,13 @@ import useSWR from 'swr';
 import Head from 'next/head';
 
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Helpers from '@helpers';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
-import * as Interfaces from '@interfaces';
+import * as Components from '@/components';
+import * as Layouts from '@/layouts';
+import * as Helpers from '@/helpers';
+import * as Config from '@/config';
+import * as Types from '@/types';
+import * as api from '@/api';
+import * as Interfaces from '@/interfaces';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const swrKey = `/publication-versions?limit=5&orderBy=publishedDate&orderDirection=desc`;

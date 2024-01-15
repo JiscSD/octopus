@@ -1,4 +1,4 @@
-export default jest.mock('@api', () => ({
+export default jest.mock('@/api', () => ({
     get: jest.fn(),
     destroy: jest.fn(),
     patch: jest.fn(),

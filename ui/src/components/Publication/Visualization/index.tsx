@@ -2,11 +2,11 @@ import React, { useEffect, useMemo, useRef } from 'react';
 import Xarrow, { useXarrow, Xwrapper } from 'react-xarrows';
 import useSWR from 'swr';
 
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Helpers from '@helpers';
-import * as Interfaces from '@interfaces';
-import * as Types from '@types';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Interfaces from '@/interfaces';
+import * as Types from '@/types';
 import * as Framer from 'framer-motion';
 
 interface BoxEntry {

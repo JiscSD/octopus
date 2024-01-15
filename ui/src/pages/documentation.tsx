@@ -1,10 +1,10 @@
 import Head from 'next/head';
 
-import * as Components from '@components';
-// import * as Docs from '@documentation';
-import * as Layouts from '@layouts';
-import * as Config from '@config';
-import * as Types from '@types';
+import * as Components from '@/components';
+// import * as Docs from '@/documentation';
+import * as Layouts from '@/layouts';
+import * as Config from '@/config';
+import * as Types from '@/types';
 
 const Documentation: Types.NextPage = (): React.ReactElement => (
     <>

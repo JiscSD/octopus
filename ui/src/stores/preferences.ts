@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-import * as Config from '@config';
-import * as Types from '@types';
+import * as Config from '@/config';
+import * as Types from '@/types';
 
 const usePreferencesStore = create<Types.PreferencesStoreTypes>()(
     devtools(

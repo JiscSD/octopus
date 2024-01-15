@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import client from '@contentfulClient';
+import client from '@/contentfulClient';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { documentToReactComponents, Options } from '@contentful/rich-text-react-renderer';
@@ -8,11 +8,11 @@ import { BLOCKS, INLINES, MARKS, Block, Inline } from '@contentful/rich-text-typ
 import { Entry, EntrySkeletonType } from 'contentful';
 import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer';
 
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as Helpers from '@helpers';
+import * as Components from '@/components';
+import * as Layouts from '@/layouts';
+import * as Config from '@/config';
+import * as Types from '@/types';
+import * as Helpers from '@/helpers';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 
 /**

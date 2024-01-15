@@ -1,5 +1,5 @@
-import * as Interfaces from '@interfaces';
-import * as Types from '@types';
+import * as Interfaces from '@/interfaces';
+import * as Types from '@/types';
 
 export const publicationTypes: Types.PublicationType[] = [
     'PROBLEM',

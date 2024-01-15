@@ -2,9 +2,9 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import * as Framer from 'framer-motion';
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Config from '@config';
+import * as Components from '@/components';
+import * as Layouts from '@/layouts';
+import * as Config from '@/config';
 
 type PageSectionProps = {
     children: React.ReactNode;

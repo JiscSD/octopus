@@ -2,9 +2,9 @@ import React from 'react';
 import * as DropZone from 'react-dropzone';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Helpers from '@helpers';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Helpers from '@/helpers';
 
 type Props = {
     positiveActionCallback: (files: Interfaces.ImagePreview[]) => void;

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import useSWR from 'swr';
 import axios from 'axios';
-import * as Components from '@components';
-import * as Interfaces from '@interfaces';
+import * as Components from '@/components';
+import * as Interfaces from '@/interfaces';
 import * as HeadlessUI from '@headlessui/react';
-import * as Helpers from '@helpers';
-import * as Config from '@config';
-import * as api from '@api';
+import * as Helpers from '@/helpers';
+import * as Config from '@/config';
+import * as api from '@/api';
 
 type Props = {
     open: boolean;
