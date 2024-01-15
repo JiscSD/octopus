@@ -230,7 +230,8 @@ export const update = (id: string, data: Prisma.PublicationVersionUpdateInput) =
         where: {
             id
         },
-        data,
+        // Make sure updatedAt changes - only changing relations will not cause this otherwise.
+        data: { ...data, updatedAt: new Date().toISOString() },
         include: {
             publication: {
                 select: {

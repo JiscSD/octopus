@@ -168,6 +168,12 @@ Everyone interacting with this codebase should adhere to our [Code of Conduct](.
 
 ---
 
+## Historical code
+
+Some code has been removed that is no longer needed for the ongoing operation of octopus, but is logged here for future reference:
+
+- Seed data scripts that were used to process the initial data used to populate the database. They were last included in [this commit](https://github.com/JiscSD/octopus/tree/fdd0fc5e0f673a1fe42c4cec0b74fe126be2225b/seed-data-scripts).
+
 ## Licence
 
 Octopus is available under the [GNU General Public License version 3](https://opensource.org/licenses/GPL-3.0).  

@@ -8,7 +8,7 @@ export const PageModel = {
         publishButton: 'ul a:has-text("Publish")',
         myBookmarksButton: 'a[href="/my-bookmarks"]',
         myPublicationsButton: 'a[href="/account"]',
-        myProfileButton: 'a:has-text("My Account")'
+        myAccountButton: 'a:has-text("My Account")'
     },
     footer: {
         links: [
@@ -84,7 +84,7 @@ export const PageModel = {
             // content
             '#main-text >> text=How has life on earth evolved?',
             // problems above this
-            'text=Research problems above this in the hierarchy',
+            'text=Publications above this in the hierarchy',
             // problems below this
             'text=Research problems below this in the hierarchy',
             // funders
@@ -133,21 +133,22 @@ export const PageModel = {
         rejectCookies: '#onetrust-reject-all-handler'
     },
     confirmEmail: {},
-    myProfile: {
+    myAccount: {
         liveAuthorPageButton: 'a:has-text("View my public author page")',
         publicationHeader: 'h2:has-text("Publications")',
         editDraftButton: 'a:has-text("Edit Draft")',
         viewDraftButton: 'a:has-text("View Draft")',
         createDraftVersionButton: 'button:has-text("Create Draft Version")',
-        viewButton: 'a:has-text("View")'
+        viewButton: 'a:has-text("View")',
+        requestControlButton: 'button:has-text("Take over editing")'
     },
     myPublications: {
         liveAuthorPageButton: 'a:has-text("View my public author page")'
     },
     myBookmarks: {
         publicationBookmark: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
-        topicBookmark: 'a[href="/topics/test-topic-1"]',
-        removeTopicBookmark: 'a[href="/topics/test-topic-1"] + button[aria-label="Remove bookmark"]'
+        topicBookmark: 'a[href="/topics/test-topic-1b-1"]',
+        removeTopicBookmark: 'a[href="/topics/test-topic-1b-1"] + button[aria-label="Remove bookmark"]'
     },
     publish: {
         title: 'input[type="text"]',
@@ -220,6 +221,7 @@ export const PageModel = {
             manualAffiliationLink: 'input[placeholder="Link"]',
             affiliationDetails: 'textarea[placeholder="Enter any details"]'
         },
+        versionsAccordion: 'aside >> #versions-accordion',
         versionsAccordionButton: 'aside button[title="Versions"]'
     },
     coauthorApprove: {},
