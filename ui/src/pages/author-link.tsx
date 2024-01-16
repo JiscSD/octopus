@@ -9,18 +9,12 @@ import axios from 'axios';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let email: string | null = null;
-    let code: string | null = null;
+    let code: string | undefined | null = null;
     let approve = null;
     let publicationId: string | null = null;
     let versionId: string | null = null;
 
-    if (
-        !context.query.code ||
-        !context.query.email ||
-        !context.query.approve ||
-        !context.query.publicationId ||
-        !context.query.versionId
-    ) {
+    if (!context.query.email || !context.query.approve || !context.query.publicationId || !context.query.versionId) {
         return {
             props: {
                 message: 'Invalid link.'
