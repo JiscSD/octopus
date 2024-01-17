@@ -18,7 +18,7 @@ export const createDBReference = async (name: string, extension: I.ImageExtensio
 export const uploadToS3 = async (id: string, image: string, imageType: I.ImageExtension) => {
     const s3Image = await s3.client.send(
         new PutObjectCommand({
-            Bucket: `science-octopus-publishing-images-${process.env.STAGE}`,
+            Bucket: s3.buckets.images,
             Key: id,
             ContentType: `image/${imageType}`,
             ContentEncoding: 'base64',
