@@ -4,6 +4,7 @@ import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Components from '@/components';
 import * as Config from '@/config';
+import * as Helpers from '@/helpers';
 import * as Stores from '@/stores';
 
 const ethicalStatementOptions: string[] = [

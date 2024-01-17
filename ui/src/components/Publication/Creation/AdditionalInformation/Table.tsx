@@ -3,11 +3,11 @@ import React from 'react';
 import * as Framer from 'framer-motion';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 
-import * as api from '@api';
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Interfaces from '@interfaces';
-import * as Stores from '@stores';
+import * as api from '@/api';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Interfaces from '@/interfaces';
+import * as Stores from '@/stores';
 
 type RowProps = {
     item: Interfaces.AdditionalInformation;

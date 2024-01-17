@@ -3,12 +3,12 @@ import React from 'react';
 
 import * as ReactIconsFA from 'react-icons/fa';
 
-import * as api from '@api';
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Helpers from '@helpers';
-import * as Interfaces from '@interfaces';
-import * as Stores from '@stores';
+import * as api from '@/api';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Interfaces from '@/interfaces';
+import * as Stores from '@/stores';
 
 const Form: React.FC = () => {
     const { publicationVersion, updatePublicationVersion } = Stores.usePublicationCreationStore();
