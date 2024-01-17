@@ -101,49 +101,35 @@ export const initialDevSeed = async (): Promise<void> => {
     }
 
     if (process.env.STAGE === 'local') {
-        // create S3 bucket locally for image uploads
+        // Create local S3 buckets
+        for (const bucketNameSegment in s3.buckets) {
+            const bucketName = s3.buckets[bucketNameSegment];
 
-        try {
-            await s3.client.send(
-                new GetBucketAclCommand({
-                    Bucket: `science-octopus-publishing-images-${process.env.STAGE}`
-                })
-            );
-            console.log('Bucket already exists');
-        } catch (err) {
-            // Bucket does not exist, therefor create
-            await s3.client.send(
-                new CreateBucketCommand({
-                    Bucket: `science-octopus-publishing-images-${process.env.STAGE}`
-                })
-            );
-            console.log('Bucket created');
+            try {
+                await s3.client.send(
+                    new GetBucketAclCommand({
+                        Bucket: bucketName
+                    })
+                );
+                console.log(`${bucketNameSegment} bucket already exists`);
+            } catch (err) {
+                // Bucket does not exist, therefore create
+                await s3.client.send(
+                    new CreateBucketCommand({
+                        Bucket: bucketName
+                    })
+                );
+                console.log(`${bucketNameSegment} bucket created`);
+            }
         }
 
-        // create S3 bucket locally for PDF uploads
-        try {
-            await s3.client.send(
-                new GetBucketAclCommand({
-                    Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`
-                })
-            );
-            console.log('Bucket already exists');
-        } catch (err) {
-            // Bucket does not exist, therefor create
-            await s3.client.send(
-                new CreateBucketCommand({
-                    Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`
-                })
-            );
-            console.log('Bucket created');
-        }
-
+        // Create local PDF generation queue
         try {
             await sqs.getQueue(`science-octopus-pdf-queue-${process.env.STAGE}`);
-            console.log('Queue already exists');
+            console.log('PDF queue already exists');
         } catch (err) {
             await sqs.createQueue();
-            console.log('Queue created');
+            console.log('PDF queue created');
         }
     }
 };

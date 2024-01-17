@@ -548,3 +548,17 @@ functions:
         handler: src/components/event/routes.dailyEventCheck
         events:
             - schedule: cron(0 8 * * ? *) # Every day at 8 a.m.
+
+    # Sitemaps
+    generateSitemaps:
+        handler: src/components/sitemap/routes.generate
+        events:
+            - schedule: cron(0 5 ? * * *) # Every day at 5 a.m.
+
+    getSitemapPaths:
+        handler: src/components/sitemap/routes.getPaths
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/sitemaps/paths
+                  method: GET
+                  cors: true

@@ -34,8 +34,19 @@ resource "aws_s3_bucket_public_access_block" "pdf_bucket_allow_public" {
   block_public_policy = false
 }
 
+resource "aws_s3_bucket" "sitemap_bucket" {
+  bucket = "science-octopus-publishing-sitemaps-${var.environment}"
+}
+
+resource "aws_s3_bucket_public_access_block" "sitemap_bucket_allow_public" {
+  bucket = aws_s3_bucket.sitemap_bucket.id
+
+  block_public_acls   = true
+  block_public_policy = false
+}
+
 locals {
-  buckets = [aws_s3_bucket.pdf_bucket, aws_s3_bucket.image_bucket]
+  buckets = [aws_s3_bucket.pdf_bucket, aws_s3_bucket.image_bucket, aws_s3_bucket.sitemap_bucket]
 }
 
 data "aws_iam_policy_document" "allow_public_access" {
