@@ -818,7 +818,7 @@ const checkPublicationOnAccountPage = async (
             await expect(publicationContainer).toContainText('(Author)');
             await expect(publicationContainer).toContainText('Status: Pending your approval');
             await expect(publicationContainer.locator(PageModel.myAccount.viewDraftButton)).toBeVisible();
-            await expect(publicationContainer.locator(PageModel.myAccount.requestControlButton)).not.toBeVisible();
+            await expect(publicationContainer.locator(PageModel.myAccount.requestControlButton)).toBeVisible();
             break;
         case 'approved':
             await expect(publicationContainer).toContainText('Status: Ready to publish');
@@ -851,7 +851,7 @@ const checkPublicationOnAccountPage = async (
                 `${Helpers.user2.shortName} is working on a new draft version`
             );
             await expect(publicationContainer.locator(PageModel.myAccount.viewDraftButton)).toBeVisible();
-            await expect(publicationContainer.locator(PageModel.myAccount.requestControlButton)).not.toBeVisible();
+            await expect(publicationContainer.locator(PageModel.myAccount.requestControlButton)).toBeVisible();
             break;
     }
 };
