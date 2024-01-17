@@ -1,5 +1,5 @@
-import * as Config from '@config';
-import * as Types from '@types';
+import * as Config from '@/config';
+import * as Types from '@/types';
 
 const Sitemap = () => {
     return null;
