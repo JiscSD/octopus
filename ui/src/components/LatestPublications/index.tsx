@@ -1,7 +1,7 @@
 import React from 'react';
 
-import * as Components from '@components';
-import * as Interfaces from '@interfaces';
+import * as Components from '@/components';
+import * as Interfaces from '@/interfaces';
 
 type Props = {
     publicationVersions: Interfaces.PublicationVersion[];

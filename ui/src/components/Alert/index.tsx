@@ -2,8 +2,8 @@ import React from 'react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as SolidIcons from '@heroicons/react/24/solid';
 import * as Framer from 'framer-motion';
-import * as Components from '@components';
-import * as Types from '@types';
+import * as Components from '@/components';
+import * as Types from '@/types';
 
 type Props = {
     severity: Types.Severity;

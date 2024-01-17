@@ -3,9 +3,9 @@ import parse from 'html-react-parser';
 import Head from 'next/head';
 import { NextPage } from 'next';
 
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Config from '@config';
+import * as Components from '@/components';
+import * as Layouts from '@/layouts';
+import * as Config from '@/config';
 
 const faqContents = [
     {

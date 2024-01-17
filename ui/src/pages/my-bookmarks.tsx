@@ -1,13 +1,13 @@
 import React from 'react';
 import Head from 'next/head';
 
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Helpers from '@helpers';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Layouts from '@/layouts';
+import * as Helpers from '@/helpers';
+import * as Config from '@/config';
+import * as Types from '@/types';
+import * as api from '@/api';
 
 export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context) => {
     const token = Helpers.getJWT(context);

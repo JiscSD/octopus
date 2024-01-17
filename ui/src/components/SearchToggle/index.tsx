@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as Components from '@components';
+import * as Components from '@/components';
 
 const Search: React.FC = (): React.ReactElement => {
     return (

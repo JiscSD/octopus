@@ -1,9 +1,9 @@
 import React from 'react';
 
-import * as Components from '@components';
+import * as Components from '@/components';
 
-import * as Stores from '@stores';
-import * as Types from '@types';
+import * as Stores from '@/stores';
+import * as Types from '@/types';
 
 /**
  * @description Edit conflict of interest status

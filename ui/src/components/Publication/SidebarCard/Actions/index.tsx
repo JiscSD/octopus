@@ -3,14 +3,14 @@ import Image from 'next/image';
 import * as SWR from 'swr';
 import * as Router from 'next/router';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Helpers from '@helpers';
-import * as Stores from '@stores';
-import * as Config from '@config';
-import * as Assets from '@assets';
-import * as Types from '@types';
-import * as api from '@api';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Helpers from '@/helpers';
+import * as Stores from '@/stores';
+import * as Config from '@/config';
+import * as Assets from '@/assets';
+import * as Types from '@/types';
+import * as api from '@/api';
 
 import axios from 'axios';
 

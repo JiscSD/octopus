@@ -3,12 +3,12 @@ import axios from 'axios';
 
 import * as Framer from 'framer-motion';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as Components from '@components';
-import * as Stores from '@stores';
-import * as Config from '@config';
-import * as api from '@api';
-import * as Interfaces from '@interfaces';
-import * as Helpers from '@helpers';
+import * as Components from '@/components';
+import * as Stores from '@/stores';
+import * as Config from '@/config';
+import * as api from '@/api';
+import * as Interfaces from '@/interfaces';
+import * as Helpers from '@/helpers';
 
 type IconProps = {
     loading: boolean;

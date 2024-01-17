@@ -1,4 +1,4 @@
-import * as Helpers from '@helpers';
+import * as Helpers from '@/helpers';
 
 describe('Validate emails tests', () => {
     it('Valid emails', () => {

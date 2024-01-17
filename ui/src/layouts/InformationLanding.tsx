@@ -2,9 +2,9 @@ import * as OutlineIcons from '@heroicons/react/24/outline';
 import Head from 'next/head';
 import React from 'react';
 
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Layouts from '@layouts';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Layouts from '@/layouts';
 
 type Props = {
     title: string;

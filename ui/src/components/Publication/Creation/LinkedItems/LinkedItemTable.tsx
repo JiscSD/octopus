@@ -1,9 +1,9 @@
 import React from 'react';
 import * as Framer from 'framer-motion';
 
-import * as Components from '@components';
-import * as Interfaces from '@interfaces';
-import * as Types from '@types';
+import * as Components from '@/components';
+import * as Interfaces from '@/interfaces';
+import * as Types from '@/types';
 
 type LinkedEntityTableProps = {
     deleteLink: (id: string) => Promise<void>;

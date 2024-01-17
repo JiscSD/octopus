@@ -1,5 +1,5 @@
 import React, { createContext, PropsWithChildren, useCallback, useContext, useState } from 'react';
-import * as Components from '@components';
+import * as Components from '@/components';
 
 type ConfirmationModalContextType = (
     title: string,

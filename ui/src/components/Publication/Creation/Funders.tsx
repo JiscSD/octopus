@@ -1,7 +1,7 @@
 import React from 'react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 
-import * as Components from '@components';
+import * as Components from '@/components';
 
 const Funders: React.FC = (): React.ReactElement => {
     return (

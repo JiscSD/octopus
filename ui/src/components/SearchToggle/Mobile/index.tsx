@@ -1,7 +1,7 @@
 import React from 'react';
 import * as SolidIcon from '@heroicons/react/24/solid';
 import * as Router from 'next/router';
-import * as Config from '@config';
+import * as Config from '@/config';
 
 const Mobile: React.FC = (): React.ReactElement => {
     const router = Router.useRouter();

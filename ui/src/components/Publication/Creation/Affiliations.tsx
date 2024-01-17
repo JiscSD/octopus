@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import useSWR from 'swr';
-import * as Components from '@components';
-import * as Stores from '@stores';
-import * as Config from '@config';
-import * as Interfaces from '@interfaces';
-import * as api from '@api';
+import * as Components from '@/components';
+import * as Stores from '@/stores';
+import * as Config from '@/config';
+import * as Interfaces from '@/interfaces';
+import * as api from '@/api';
 
 /**
  * @description Edit affiliations

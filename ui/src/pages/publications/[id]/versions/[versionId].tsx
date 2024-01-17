@@ -5,16 +5,16 @@ import useSWR from 'swr';
 import axios from 'axios';
 import * as Framer from 'framer-motion';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as api from '@api';
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Helpers from '@helpers';
-import * as Interfaces from '@interfaces';
-import * as Layouts from '@layouts';
-import * as Stores from '@stores';
-import * as Types from '@types';
-import * as Assets from '@assets';
-import * as Contexts from '@contexts';
+import * as api from '@/api';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Interfaces from '@/interfaces';
+import * as Layouts from '@/layouts';
+import * as Stores from '@/stores';
+import * as Types from '@/types';
+import * as Assets from '@/assets';
+import * as Contexts from '@/contexts';
 
 import { useRouter } from 'next/router';
 

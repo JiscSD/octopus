@@ -1,7 +1,7 @@
 import React from 'react';
 import * as SolidIcons from '@heroicons/react/24/solid';
 import * as Framer from 'framer-motion';
-import * as Helpers from '@helpers';
+import * as Helpers from '@/helpers';
 
 const getButtonVisibility = () =>
     document.documentElement.scrollTop > 0 &&

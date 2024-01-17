@@ -2,9 +2,9 @@ import React from 'react';
 import parse from 'html-react-parser';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 
-import * as Components from '@components';
-import * as Stores from '@stores';
-import * as Config from '@config';
+import * as Components from '@/components';
+import * as Stores from '@/stores';
+import * as Config from '@/config';
 
 const ethicalStatementOptions: string[] = [
     'The results in this publication involved human or animal subjects.',

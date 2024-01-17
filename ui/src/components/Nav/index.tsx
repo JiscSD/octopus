@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo } from 'react';
 import ClickAwayListener from 'react-click-away-listener';
 
-import * as Components from '@components';
+import * as Components from '@/components';
 import * as Router from 'next/router';
-import * as Interfaces from '@interfaces';
-import * as Config from '@config';
-import * as Stores from '@stores';
-import * as Helpers from '@helpers';
+import * as Interfaces from '@/interfaces';
+import * as Config from '@/config';
+import * as Stores from '@/stores';
+import * as Helpers from '@/helpers';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as HeadlessUI from '@headlessui/react';
 import * as Framer from 'framer-motion';

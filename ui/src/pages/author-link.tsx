@@ -1,8 +1,8 @@
-import * as api from '@api';
-import * as Config from '@config';
-import * as Helpers from '@helpers';
-import * as Layouts from '@layouts';
-import * as Types from '@types';
+import * as api from '@/api';
+import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Layouts from '@/layouts';
+import * as Types from '@/types';
 import Head from 'next/head';
 import React from 'react';
 import axios from 'axios';
