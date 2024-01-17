@@ -3,15 +3,15 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { NextPage } from 'next';
 import useSWR from 'swr';
-import client from '@contentfulClient';
+import client from '@/contentfulClient';
 
 import * as Framer from 'framer-motion';
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as Assets from '@assets';
-import * as Helpers from '@helpers';
+import * as Components from '@/components';
+import * as Layouts from '@/layouts';
+import * as Config from '@/config';
+import * as Types from '@/types';
+import * as Assets from '@/assets';
+import * as Helpers from '@/helpers';
 
 const Blog: NextPage = (): JSX.Element => {
     const router = useRouter();

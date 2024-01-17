@@ -1,9 +1,9 @@
 import React from 'react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 
-import * as Components from '@components';
-import * as Interfaces from '@interfaces';
-import * as Config from '@config';
+import * as Components from '@/components';
+import * as Interfaces from '@/interfaces';
+import * as Config from '@/config';
 
 import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 

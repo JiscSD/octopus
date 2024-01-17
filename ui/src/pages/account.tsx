@@ -4,17 +4,17 @@ import Head from 'next/head';
 import axios from 'axios';
 import useSWR from 'swr';
 
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Helpers from '@helpers';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
-import * as Assets from '@assets';
-import * as Contexts from '@contexts';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Layouts from '@/layouts';
+import * as Helpers from '@/helpers';
+import * as Config from '@/config';
+import * as Types from '@/types';
+import * as api from '@/api';
+import * as Assets from '@/assets';
+import * as Contexts from '@/contexts';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as Stores from '@stores';
+import * as Stores from '@/stores';
 import * as Framer from 'framer-motion';
 
 export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context, currentUser) => {

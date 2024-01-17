@@ -2,10 +2,10 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import axios from 'axios';
 
-import * as Config from '@config';
-import * as Helpers from '@helpers';
-import * as Stores from '@stores';
-import * as api from '@api';
+import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Stores from '@/stores';
+import * as api from '@/api';
 
 const useAuthCheck = (protectedPage: boolean) => {
     const router = useRouter();

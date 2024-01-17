@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import axios from 'axios';
-import * as Config from '@config';
-import * as Contexts from '@contexts';
+import * as Config from '@/config';
+import * as Contexts from '@/contexts';
 import * as SWRConfig from 'swr';
 import * as FaIcons from 'react-icons/fa';
-import * as api from '@api';
-import * as Helpers from '@helpers';
+import * as api from '@/api';
+import * as Helpers from '@/helpers';
 
 const useControlRequest = (publicationId: string) => {
     const confirmation = Contexts.useConfirmationModal();

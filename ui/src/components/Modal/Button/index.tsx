@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as Assets from '@assets';
+import * as Assets from '@/assets';
 
 type Props = {
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;

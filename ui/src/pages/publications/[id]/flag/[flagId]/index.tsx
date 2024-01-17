@@ -6,14 +6,14 @@ import useSWR from 'swr';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as SolidIcons from '@heroicons/react/24/solid';
 import * as Router from 'next/router';
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Helpers from '@helpers';
-import * as Stores from '@stores';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Layouts from '@/layouts';
+import * as Helpers from '@/helpers';
+import * as Stores from '@/stores';
+import * as Config from '@/config';
+import * as Types from '@/types';
+import * as api from '@/api';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let error: string | null = null;

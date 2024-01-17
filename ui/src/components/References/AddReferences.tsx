@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import * as Components from '@components';
+import * as Components from '@/components';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as tiptap from '@tiptap/react';
-import * as Config from '@config';
+import * as Config from '@/config';
 
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';

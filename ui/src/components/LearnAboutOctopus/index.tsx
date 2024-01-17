@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Framer from 'framer-motion';
 
-import * as Components from '@components';
+import * as Components from '@/components';
 
 type GridItemProps = {
     title: string;

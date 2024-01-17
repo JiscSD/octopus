@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-import * as Components from '@components';
-import * as Interfaces from '@interfaces';
+import * as Components from '@/components';
+import * as Interfaces from '@/interfaces';
 import * as Outline from '@heroicons/react/24/outline';
-import * as Helpers from '@helpers';
+import * as Helpers from '@/helpers';
 
 type AuthorAffiliationsProps = {
     className?: string;

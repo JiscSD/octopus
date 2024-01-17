@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from 'axios';
 
-import * as Interfaces from '@interfaces';
-import * as Config from '@config';
-import * as Types from '@types';
+import * as Interfaces from '@/interfaces';
+import * as Config from '@/config';
+import * as Types from '@/types';
 
 export let baseURL: string;
 
