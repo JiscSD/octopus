@@ -57,6 +57,15 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
         </>
     );
 
+    const viewDraftButton = (
+        <Components.Button
+            href={`/publications/${props.publication.id}`}
+            endIcon={<OutlineIcons.EyeIcon className="h-4" />}
+            title="View Draft"
+            className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
+        />
+    );
+
     return (
         <li
             data-testid={`publication-${props.publication.id}`}
@@ -135,21 +144,12 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                         </Components.Link>{' '}
                                         is working on a new draft version
                                     </p>
-                                    <Components.Button
-                                        href={`/publications/${props.publication.id}`}
-                                        endIcon={<OutlineIcons.EyeIcon className="h-4" />}
-                                        title="View Draft"
-                                        className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
-                                    />
+                                    {viewDraftButton}
+                                    {requestControl}
                                 </>
                             )
                         ) : draftVersion.currentStatus === 'LOCKED' ? (
-                            <Components.Button
-                                href={`/publications/${props.publication.id}`}
-                                endIcon={<OutlineIcons.EyeIcon className="h-4" />}
-                                title="View Draft"
-                                className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
-                            />
+                            viewDraftButton
                         ) : (
                             <Components.Button
                                 href={`/publications/${props.publication.id}/edit?step=0`}
