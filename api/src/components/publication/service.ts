@@ -240,8 +240,11 @@ export const getOpenSearchPublications = async (filters: I.OpenSearchPublication
                   order: filters.orderDirection || 'asc'
               }
           }
-        : null;
-
+        : !filters.search && {
+              publishedDate: {
+                  order: filters.orderDirection || 'desc'
+              }
+          };
     const query = {
         index: 'publications',
         body: {
