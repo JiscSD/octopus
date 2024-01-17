@@ -24,7 +24,15 @@ const topicSeeds: Prisma.TopicCreateInput[] = [
                 },
                 {
                     id: 'test-topic-1b',
-                    title: 'Test sub-topic B'
+                    title: 'Test sub-topic B',
+                    children: {
+                        create: [
+                            {
+                                id: 'test-topic-1b-1',
+                                title: 'Test sub-topic B 1'
+                            }
+                        ]
+                    }
                 }
             ]
         }

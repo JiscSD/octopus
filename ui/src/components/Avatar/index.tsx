@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as Interfaces from '@interfaces';
+import * as Interfaces from '@/interfaces';
 
 type Props = {
     user: Pick<Interfaces.CoreUser, 'firstName' | 'lastName'>;

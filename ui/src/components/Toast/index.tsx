@@ -2,7 +2,7 @@ import React from 'react';
 import * as HeadlessUI from '@headlessui/react';
 import * as SolidIcons from '@heroicons/react/24/solid';
 
-import * as Stores from '@stores';
+import * as Stores from '@/stores';
 
 const Toast: React.FC = (): React.ReactElement => {
     const toast = Stores.useToastStore((state) => state.toast);

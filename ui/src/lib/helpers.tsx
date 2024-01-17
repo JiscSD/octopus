@@ -5,10 +5,10 @@ import JWT from 'jsonwebtoken';
 
 import * as cheerio from 'cheerio';
 import * as luxon from 'luxon';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
-import * as Interfaces from '@interfaces';
+import * as Config from '@/config';
+import * as Types from '@/types';
+import * as api from '@/api';
+import * as Interfaces from '@/interfaces';
 import { Middleware } from 'swr';
 
 /**

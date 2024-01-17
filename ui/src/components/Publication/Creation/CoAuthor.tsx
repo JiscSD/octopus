@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Framer from 'framer-motion';
-import * as api from '@api';
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Stores from '@stores';
-import * as Helpers from '@helpers';
-import * as I from '@interfaces';
+import * as api from '@/api';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Stores from '@/stores';
+import * as Helpers from '@/helpers';
+import * as I from '@/interfaces';
 
 import { DragDropContext, Droppable, Draggable, DropResult, DragStart } from 'react-beautiful-dnd';
 import { createId } from '@paralleldrive/cuid2';

@@ -1,7 +1,7 @@
 import * as testUtils from 'lib/testUtils';
 
 describe('Create a bookmark', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
         await testUtils.clearDB();
         await testUtils.testSeed();
     });
@@ -9,7 +9,7 @@ describe('Create a bookmark', () => {
     test('Create a bookmark', async () => {
         const bookmark = await testUtils.agent.post('/bookmarks').query({ apiKey: '000000003' }).send({
             type: 'TOPIC',
-            entityId: 'test-topic-1'
+            entityId: 'test-topic-1b-1'
         });
 
         expect(bookmark.status).toEqual(201);
@@ -25,9 +25,9 @@ describe('Create a bookmark', () => {
     });
 
     test('Cannot create a bookmark where one already exists', async () => {
-        const bookmark = await testUtils.agent.post('/bookmarks').query({ apiKey: '987654321' }).send({
+        const bookmark = await testUtils.agent.post('/bookmarks').query({ apiKey: '000000003' }).send({
             type: 'TOPIC',
-            entityId: 'test-topic-1'
+            entityId: 'test-topic-1b-1'
         });
 
         expect(bookmark.status).toEqual(400);
@@ -49,5 +49,23 @@ describe('Create a bookmark', () => {
         });
 
         expect(bookmark.status).toEqual(400);
+    });
+
+    test('Cannot create a bookmark against the god topic', async () => {
+        const bookmark = await testUtils.agent.post('/bookmarks').query({ apiKey: '000000003' }).send({
+            type: 'TOPIC',
+            entityId: 'test-topic-1'
+        });
+
+        expect(bookmark.status).toEqual(403);
+    });
+
+    test('Cannot create a bookmark against the first level topics under the god topic', async () => {
+        const bookmark = await testUtils.agent.post('/bookmarks').query({ apiKey: '000000003' }).send({
+            type: 'TOPIC',
+            entityId: 'test-topic-1b'
+        });
+
+        expect(bookmark.status).toEqual(403);
     });
 });

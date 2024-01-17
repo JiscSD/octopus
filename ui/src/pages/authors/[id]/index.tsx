@@ -3,14 +3,14 @@ import Head from 'next/head';
 import useSWRInfinite from 'swr/infinite';
 
 import * as Framer from 'framer-motion';
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as Assets from '@assets';
-import * as Helpers from '@helpers';
-import * as api from '@api';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Layouts from '@/layouts';
+import * as Config from '@/config';
+import * as Types from '@/types';
+import * as Assets from '@/assets';
+import * as Helpers from '@/helpers';
+import * as api from '@/api';
 
 const pageSize = 10;
 

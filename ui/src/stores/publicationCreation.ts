@@ -1,7 +1,7 @@
 import { StateCreator, create } from 'zustand';
 
-import * as Types from '@types';
-import * as Interfaces from '@interfaces';
+import * as Types from '@/types';
+import * as Interfaces from '@/interfaces';
 
 const initialPublicationVersion: Interfaces.PublicationVersion = {
     id: '',

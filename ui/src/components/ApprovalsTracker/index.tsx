@@ -1,16 +1,16 @@
 import React, { useMemo } from 'react';
 import axios from 'axios';
 
-import * as Interfaces from '@interfaces';
-import * as Stores from '@stores';
+import * as Interfaces from '@/interfaces';
+import * as Stores from '@/stores';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as FaIcons from 'react-icons/fa';
 import * as IoIcons from 'react-icons/io5';
-import * as Components from '@components';
-import * as Contexts from '@contexts';
-import * as Helpers from '@helpers';
-import * as Config from '@config';
-import * as api from '@api';
+import * as Components from '@/components';
+import * as Contexts from '@/contexts';
+import * as Helpers from '@/helpers';
+import * as Config from '@/config';
+import * as api from '@/api';
 
 import { KeyedMutator } from 'swr';
 import { createId } from '@paralleldrive/cuid2';

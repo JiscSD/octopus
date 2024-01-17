@@ -3,11 +3,11 @@ import * as HeadlessUI from '@headlessui/react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import useSWR from 'swr';
 
-import * as Components from '@components';
-import * as Interfaces from '@interfaces';
-import * as Stores from '@stores';
-import * as api from '@api';
-import * as Config from '@config';
+import * as Components from '@/components';
+import * as Interfaces from '@/interfaces';
+import * as Stores from '@/stores';
+import * as api from '@/api';
+import * as Config from '@/config';
 
 type LinkedTopicsComboboxProps = {
     setError: (error: string | null) => void;

@@ -1,14 +1,14 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import * as Components from '@components';
-import * as Helpers from '@helpers';
+import * as Components from '@/components';
+import * as Helpers from '@/helpers';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as Stores from '@stores';
-import * as Types from '@types';
-import * as Interfaces from '@interfaces';
+import * as Stores from '@/stores';
+import * as Types from '@/types';
+import * as Interfaces from '@/interfaces';
 import * as FAIcons from 'react-icons/fa';
-import * as Config from '@config';
-import * as Contexts from '@contexts';
+import * as Config from '@/config';
+import * as Contexts from '@/contexts';
 
 import { createId } from '@paralleldrive/cuid2';
 

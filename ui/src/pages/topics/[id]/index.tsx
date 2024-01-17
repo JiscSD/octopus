@@ -2,15 +2,17 @@ import React, { useEffect, useMemo } from 'react';
 import Head from 'next/head';
 
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as api from '@api';
-import * as Assets from '@assets';
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Helpers from '@helpers';
-import * as Interfaces from '@interfaces';
-import * as Layouts from '@layouts';
-import * as Stores from '@stores';
-import * as Types from '@types';
+import useSWR from 'swr';
+
+import * as api from '@/api';
+import * as Assets from '@/assets';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Interfaces from '@/interfaces';
+import * as Layouts from '@/layouts';
+import * as Stores from '@/stores';
+import * as Types from '@/types';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const id = context.query.id;
@@ -69,13 +71,15 @@ const Topic: Types.NextPage<Props> = (props): React.ReactElement => {
         setBookmarkId(props.bookmarkId);
     }, [props.bookmarkId, props.topic.id]);
 
-    const isBookmarkButtonVisible = useMemo(() => {
-        if (user && topic) {
-            return true;
-        } else {
-            return false;
-        }
-    }, [topic, user]);
+    // if current topic has only one parent, fetch the parent and check if it's the god topic
+    const { data: parentTopic } = useSWR<Interfaces.Topic>(
+        topic.parents.length === 1 ? `${Config.endpoints.topics}/${props.topic.parents[0].id}` : null
+    );
+
+    // cannot bookmark god topic and second level topics
+    const isBookmarkButtonVisible = Boolean(
+        user && ((topic && topic.parents.length > 1) || (parentTopic && parentTopic.parents.length))
+    );
 
     const onBookmarkHandler = async () => {
         if (isBookmarked) {

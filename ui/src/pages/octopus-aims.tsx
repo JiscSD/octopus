@@ -4,9 +4,9 @@ import Head from 'next/head';
 
 import parse from 'html-react-parser';
 
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Config from '@config';
+import * as Components from '@/components';
+import * as Layouts from '@/layouts';
+import * as Config from '@/config';
 
 type ItemProps = {
     header: string;
