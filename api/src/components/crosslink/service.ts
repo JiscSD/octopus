@@ -26,3 +26,19 @@ export const getByPublicationPair = async (publications: [string, string]) => {
         }
     });
 };
+
+export const deleteCrosslink = async (id: string) => {
+    return await client.prisma.crosslink.delete({
+        where: {
+            id
+        }
+    });
+};
+
+export const get = async (id: string) => {
+    return await client.prisma.crosslink.findUnique({
+        where: {
+            id
+        }
+    });
+};

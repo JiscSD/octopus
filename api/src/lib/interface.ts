@@ -912,3 +912,7 @@ export interface RequestControlEvent extends Record<string, unknown>, Omit<Event
 export interface CreateCrosslinkRequestBody {
     publications: [string, string];
 }
+
+export interface DeleteCrosslinkPathParams {
+    id: string;
+}

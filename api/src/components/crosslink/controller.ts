@@ -11,7 +11,7 @@ export const create = async (
         const publicationB = await publicationService.get(event.body.publications[1]);
 
         if (!(publicationA && publicationB)) {
-            return response.json(404, { message: 'One or both of the publications was not found' });
+            return response.json(404, { message: 'One or both of the publications was not found.' });
         }
 
         if (
@@ -20,18 +20,40 @@ export const create = async (
                 publicationB.versions.some((version) => version.currentStatus === 'LIVE')
             )
         ) {
-            return response.json(400, { message: 'Both publications in a crosslink must be published' });
+            return response.json(400, { message: 'Both publications in a crosslink must be published.' });
         }
 
         const existingCrosslink = await crosslinkService.getByPublicationPair(event.body.publications);
 
         if (existingCrosslink) {
-            return response.json(400, { message: 'A crosslink already exists between these publications' });
+            return response.json(400, { message: 'A crosslink already exists between these publications.' });
         }
 
         const crosslink = await crosslinkService.create(event.body.publications, event.user.id);
 
         return response.json(200, crosslink);
+    } catch {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const deleteCrosslink = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteCrosslinkPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const crosslink = await crosslinkService.get(event.pathParameters.id);
+
+        if (!crosslink) {
+            return response.json(404, { message: 'Crosslink not found.' });
+        }
+
+        if (event.user.id !== crosslink.createdBy) {
+            return response.json(403, { message: 'You do not have permission to delete this crosslink.' });
+        }
+
+        const deleteCrosslink = await crosslinkService.deleteCrosslink(event.pathParameters.id);
+
+        return response.json(200, deleteCrosslink);
     } catch {
         return response.json(500, { message: 'Unknown server error.' });
     }

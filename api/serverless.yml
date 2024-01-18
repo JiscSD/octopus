@@ -571,3 +571,10 @@ functions:
                   path: ${self:custom.versions.v1}/crosslinks
                   method: POST
                   cors: true
+    deleteCrosslink:
+        handler: src/components/crosslink/routes.deleteCrosslink
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/crosslinks/{id}
+                  method: DELETE
+                  cors: true

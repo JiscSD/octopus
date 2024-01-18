@@ -9,3 +9,8 @@ export const create = middy(crosslinkController.create)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())
     .use(middleware.validator(crosslinkSchema.createCrosslink, 'body'));
+
+export const deleteCrosslink = middy(crosslinkController.deleteCrosslink)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication());
