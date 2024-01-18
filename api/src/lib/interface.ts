@@ -908,3 +908,7 @@ export interface DummyEvent extends Record<string, unknown>, Omit<Event, 'data'>
 export interface RequestControlEvent extends Record<string, unknown>, Omit<Event, 'data'> {
     data: RequestControlData;
 }
+
+export interface CreateCrosslinkRequestBody {
+    publications: [string, string];
+}

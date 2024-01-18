@@ -562,3 +562,12 @@ functions:
                   path: ${self:custom.versions.v1}/sitemaps/paths
                   method: GET
                   cors: true
+
+    # Crosslinks
+    createCrosslink:
+        handler: src/components/crosslink/routes.create
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/crosslinks
+                  method: POST
+                  cors: true

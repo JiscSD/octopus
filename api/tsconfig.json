@@ -78,6 +78,9 @@
             "sitemap/*": [
                 "src/components/sitemap/*"
             ],
+            "crosslink/*": [
+                "src/components/crosslink/*"
+            ],
             "lib/*": [
                 "src/lib/*"
             ],

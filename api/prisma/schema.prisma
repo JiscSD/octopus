@@ -31,6 +31,8 @@ model User {
     Images               Images[]
     PublicationBookmarks PublicationBookmarks[]
     bookmarks            Bookmark[]
+    crosslinks           Crosslink[]
+    crosslinkVotes       CrosslinkVote[]
 }
 
 model Verification {
@@ -62,6 +64,12 @@ model Publication {
     linkedTo             Links[]                @relation("from")
     linkedFrom           Links[]                @relation("to")
     versions             PublicationVersion[]
+    // These reverse relations are needed by prisma, but we shouldn't use them in the application.
+    // Prisma doesn't allow symmetrical many-to-many self relations.
+    // There must be an "asymmetrical" relationship (e.g. from and to) in the schema. In practice, we will treat
+    // crosslink entities as having a pair of publications associated that are of equal importance.
+    crosslinksFrom       Crosslink[]            @relation("crosslinkFrom")
+    crosslinksTo         Crosslink[]            @relation("crosslinkTo")
 }
 
 model PublicationVersion {
@@ -226,14 +234,41 @@ model TopicTranslation {
 }
 
 model Event {
-    id        String   @id @default(cuid())
+    id        String    @id @default(cuid())
     type      EventType
-    createdAt DateTime @default(now())
+    createdAt DateTime  @default(now())
     data      Json
 }
 
+model Crosslink {
+    id                String          @id @default(cuid())
+    // In practice, the two publications involved in a crosslink will be considered equal.
+    // It won't matter which publication is "from" and which is "to"; this is just done to keep a valid prisma schema.
+    // Logic in controllers + services will ensure that what we store conforms to our model.
+    publicationFromId String
+    publicationFrom   Publication     @relation("crosslinkFrom", fields: [publicationFromId], references: [id], onDelete: Cascade)
+    publicationToId   String
+    publicationTo     Publication     @relation("crosslinkTo", fields: [publicationToId], references: [id], onDelete: Cascade)
+    createdBy         String
+    user              User            @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    votes             CrosslinkVote[]
+    createdAt         DateTime        @default(now())
+
+    @@unique([publicationFromId, publicationToId])
+}
+
+model CrosslinkVote {
+    crosslinkId String
+    crosslink   Crosslink @relation(fields: [crosslinkId], references: [id], onDelete: Cascade)
+    createdBy   String
+    user        User      @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    up          Boolean
+
+    @@unique([crosslinkId, createdBy])
+}
+
 enum EventType {
-    DUMMY  // for testing purpose
+    DUMMY // for testing purpose
     REQUEST_CONTROL
 }
 

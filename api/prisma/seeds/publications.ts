@@ -415,6 +415,12 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                     }
                 }
             }
+        },
+        crosslinksFrom: {
+            create: {
+                publicationToId: 'publication-problem-live',
+                createdBy: 'test-user-1'
+            }
         }
     },
     {
