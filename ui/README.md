@@ -28,6 +28,12 @@ To view any dynamic pages, you will also need to start the API. More information
 
 ---
 
+## Working with the UI
+
+If you add a new static page to the site, remember to add it to the array of static page names in the static pages sitemap at `src/pages/sitemaps/static.xml.tsx`.
+
+---
+
 ## Technologies
 
 ### Languages
@@ -74,7 +80,6 @@ You need the API and the UI to be running. To run the tests use:
 $ ~/ui $ npm run test:e2e
 
 ```
-
 
 ---
 
