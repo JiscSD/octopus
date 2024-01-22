@@ -37,7 +37,7 @@ export const create = async (
         // Ensure URL is valid
         if (!Helpers.validateURL(event.body.url)) {
             return response.json(403, {
-                message: 'You must supply a valid URL'
+                message: 'Please supply a valid URL starting with "http"'
             });
         }
 
