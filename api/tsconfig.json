@@ -78,6 +78,9 @@
             "additionalInformation/*": [
                 "src/components/additionalInformation/*"
             ],
+            "sitemap/*": [
+                "src/components/sitemap/*"
+            ],
             "lib/*": [
                 "src/lib/*"
             ],

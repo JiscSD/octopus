@@ -240,8 +240,11 @@ export const getOpenSearchPublications = async (filters: I.OpenSearchPublication
                   order: filters.orderDirection || 'asc'
               }
           }
-        : null;
-
+        : !filters.search && {
+              publishedDate: {
+                  order: filters.orderDirection || 'desc'
+              }
+          };
     const query = {
         index: 'publications',
         body: {
@@ -1047,7 +1050,7 @@ export const generatePDF = async (publicationVersion: I.PublicationVersion): Pro
         // upload pdf to S3
         await s3.client.send(
             new PutObjectCommand({
-                Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`,
+                Bucket: s3.buckets.pdfs,
                 Key: `${publicationVersion.versionOf}.pdf`,
                 ContentType: 'application/pdf',
                 Body: pdf
@@ -1056,7 +1059,7 @@ export const generatePDF = async (publicationVersion: I.PublicationVersion): Pro
 
         console.log('Successfully generated PDF for publicationId: ', publicationVersion.versionOf);
 
-        return `${s3.endpoint}/science-octopus-publishing-pdfs-${process.env.STAGE}/${publicationVersion.versionOf}.pdf`;
+        return `${s3.endpoint}/${s3.buckets.pdfs}/${publicationVersion.versionOf}.pdf`;
     } catch (err) {
         console.error(err);
 
