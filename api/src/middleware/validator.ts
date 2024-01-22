@@ -19,7 +19,7 @@ const validator = (schema: I.Schema, requestType: I.RequestType): middy.Middlewa
         const valid = validate(request.event[requestType] || {});
 
         if (!valid) {
-            return response.json(422, { message: validate.errors });
+            return response.json(400, { message: validate.errors });
         }
     };
 

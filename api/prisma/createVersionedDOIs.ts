@@ -84,6 +84,14 @@ const createVersionedDOIs = async (): Promise<number> => {
                     title: true,
                     createdAt: true
                 }
+            },
+            additionalInformation: {
+                select: {
+                    id: true,
+                    title: true,
+                    url: true,
+                    description: true
+                }
             }
         }
     });

@@ -278,14 +278,6 @@ export const formatKeywords = (keywordsAsString: string): string[] => {
     return formattedKeywords;
 };
 
-export const checkLinkIsValid = (text: string) => {
-    const lowerCaseText = text.toLowerCase();
-    const urlR = new RegExp(
-        /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
-    );
-    return urlR.test(lowerCaseText);
-};
-
 export const linkedPublicationTypes = {
     PROBLEM: ['PROBLEM', 'HYPOTHESIS'],
     HYPOTHESIS: ['PROBLEM', 'PROTOCOL'],
@@ -301,7 +293,7 @@ export const getURLsFromText = (text: string) =>
     text.match(/(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;\/~+#-]*[\w@?^=%&\/~+#-])/g) || [];
 
 export const validateURL = (value: string) =>
-    /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;\/~+#-]*[\w@?^=%&\/~+#-])/.test(value);
+    /(http|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;\/~+#-]*[\w@?^=%&\/~+#-])/.test(value);
 
 // extracts DOIs including ‘DOI: 10.’ / ‘DOI:10.’ / ‘DOI-10.’ / ‘DOI - 10.’ / ‘DOI 10.’ etc...
 export const getFullDOIsStrings = (text: string) =>
@@ -592,4 +584,12 @@ export const htmlToText = (htmlString: string): string => {
         $('table').remove();
         return $(':root').text() || '';
     }
+};
+
+export const toKebabCase = (inputString: string): string => {
+    return inputString
+        .toLowerCase() // Convert to lower case
+        .replace(/[^\w\s\']|_/g, '') // Remove everything except alphanumeric characters and whitespace
+        .replace(/\s+/g, ' ') // Condense longer whitespace down to one space
+        .replace(/\s/g, '-'); // Replace single spaces with hyphen
 };

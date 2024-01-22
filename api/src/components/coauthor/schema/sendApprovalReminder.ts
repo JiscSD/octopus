@@ -3,14 +3,14 @@ import * as I from 'interface';
 const sendApprovalReminder: I.JSONSchemaType<I.SendApprovalReminderPathParams> = {
     type: 'object',
     properties: {
-        coauthor: {
+        coauthorId: {
             type: 'string'
         },
-        id: {
+        publicationVersionId: {
             type: 'string'
         }
     },
-    required: ['coauthor', 'id']
+    required: ['coauthorId', 'publicationVersionId']
 };
 
 export default sendApprovalReminder;

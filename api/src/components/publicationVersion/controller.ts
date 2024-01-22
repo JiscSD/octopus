@@ -125,7 +125,7 @@ export const update = async (
         }
 
         if (publicationVersion.currentStatus !== 'DRAFT') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'A publication version that is not in DRAFT state cannot be updated.'
             });
         }
@@ -226,13 +226,13 @@ export const updateStatus = async (
         const currentStatus = publicationVersion.currentStatus;
 
         if (currentStatus === 'LIVE') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'A status of a publication that is not in DRAFT or LOCKED cannot be changed.'
             });
         }
 
         if (currentStatus === newStatus) {
-            return response.json(403, { message: `Publication status is already ${newStatus}.` });
+            return response.json(400, { message: `Publication status is already ${newStatus}.` });
         }
 
         if (currentStatus === 'DRAFT') {
@@ -389,7 +389,7 @@ export const deleteVersion = async (
             (publicationVersion.publicationStatus &&
                 !publicationVersion.publicationStatus.every((status) => status.status !== 'LIVE'))
         ) {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'A publication can only be deleted if it is currently a draft and has never been LIVE.'
             });
         }
@@ -431,7 +431,7 @@ export const create = async (
 
         // check if latest version is published
         if (latestPublicationVersion.currentStatus !== 'LIVE') {
-            return response.json(403, {
+            return response.json(400, {
                 message:
                     'You cannot create a new version while the latest version of this publication has not been published yet.'
             });
@@ -484,7 +484,7 @@ export const requestControl = async (
 
         // check version status
         if (publicationVersion.currentStatus === 'LIVE') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'You cannot request control over a published version.'
             });
         }

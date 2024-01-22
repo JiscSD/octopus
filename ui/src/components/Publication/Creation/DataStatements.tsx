@@ -3,8 +3,9 @@ import parse from 'html-react-parser';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Components from '@/components';
-import * as Stores from '@/stores';
 import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Stores from '@/stores';
 
 const ethicalStatementOptions: string[] = [
     'The results in this publication involved human or animal subjects.',
@@ -41,13 +42,13 @@ const DataStatements: React.FC = (): React.ReactElement => {
                     {ethicalStatementOptions.map((option) => (
                         <label
                             key={option}
-                            htmlFor={option}
+                            htmlFor={Helpers.toKebabCase(option)}
                             className="flex items-center space-x-2 hover:cursor-pointer"
                         >
                             <input
                                 type="radio"
                                 name={option}
-                                id={option}
+                                id={Helpers.toKebabCase(option)}
                                 checked={option === publicationVersion.ethicalStatement}
                                 onChange={() => {
                                     updatePublicationVersion({
@@ -104,13 +105,13 @@ const DataStatements: React.FC = (): React.ReactElement => {
                     {Config.values.dataPermissionsOptions.map((option) => (
                         <label
                             key={option}
-                            htmlFor={option}
+                            htmlFor={Helpers.toKebabCase(option)}
                             className="flex items-center space-x-2 hover:cursor-pointer"
                         >
                             <input
                                 type="radio"
                                 name={option}
-                                id={option}
+                                id={Helpers.toKebabCase(option)}
                                 checked={option === publicationVersion.dataPermissionsStatement}
                                 onChange={() => {
                                     updatePublicationVersion({
@@ -170,13 +171,13 @@ const DataStatements: React.FC = (): React.ReactElement => {
                     {dataAccessOptions.map((option) => (
                         <label
                             key={option}
-                            htmlFor={option}
+                            htmlFor={Helpers.toKebabCase(option)}
                             className="flex items-center space-x-2 hover:cursor-pointer"
                         >
                             <input
                                 type="radio"
                                 name={option}
-                                id={option}
+                                id={Helpers.toKebabCase(option)}
                                 checked={option === publicationVersion.dataAccessStatement}
                                 onChange={() => {
                                     setDataAccessStatementOther('');
