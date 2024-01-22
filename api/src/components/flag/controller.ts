@@ -20,10 +20,10 @@ export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByI
 };
 
 export const getPublicationFlags = async (
-    event: I.APIRequest<undefined, undefined, I.GetFlagsByPublicationID>
+    event: I.APIRequest<undefined, undefined, I.GetPublicationFlagsPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const flags = await flagService.getByPublicationID(event.pathParameters.id);
+        const flags = await flagService.getByPublicationID(event.pathParameters.publicationId);
 
         return response.json(200, flags);
     } catch (err) {
@@ -34,10 +34,10 @@ export const getPublicationFlags = async (
 };
 
 export const getUserFlags = async (
-    event: I.APIRequest<undefined, undefined, I.GetFlagsByUserID>
+    event: I.APIRequest<undefined, undefined, I.GetUserFlagsPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const flags = await flagService.getByUserID(event.pathParameters.id);
+        const flags = await flagService.getByUserID(event.pathParameters.userId);
 
         return response.json(200, flags);
     } catch (err) {
@@ -51,11 +51,17 @@ export const createFlag = async (
     event: I.AuthenticatedAPIRequest<I.CreateFlagRequestBody, undefined, I.CreateFlagPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event.pathParameters.id);
+        const publication = await publicationService.get(event.pathParameters.publicationId);
 
-        if (!publication || !publication.versions.some((version) => version.isLatestLiveVersion)) {
+        if (!publication) {
             return response.json(404, {
-                message: 'Cannot flag that a publication that does not exist, or is not LIVE'
+                message: 'Cannot flag that a publication that does not exist'
+            });
+        }
+
+        if (!publication.versions.some((version) => version.isLatestLiveVersion)) {
+            return response.json(400, {
+                message: 'Cannot flag a publication that has not gone live'
             });
         }
 
@@ -74,7 +80,7 @@ export const createFlag = async (
         }
 
         const doesDuplicateFlagExist = await publicationService.doesDuplicateFlagExist(
-            event.pathParameters.id,
+            event.pathParameters.publicationId,
             event.body.category,
             event.user.id
         );
@@ -86,7 +92,7 @@ export const createFlag = async (
         }
 
         const flag = await flagService.createFlag(
-            event.pathParameters.id,
+            event.pathParameters.publicationId,
             event.user.id,
             event.body.category,
             event.body.comment
@@ -156,7 +162,7 @@ export const createFlagComment = async (
         }
 
         if (flag.resolved) {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'You cannot comment on a flag that has already been resolved.'
             });
         }
@@ -243,7 +249,7 @@ export const resolveFlag = async (
         }
 
         if (flag.resolved) {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'This flag has already been resolved.'
             });
         }

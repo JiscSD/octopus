@@ -139,7 +139,7 @@ describe('update coAuthor affiliations per publication', () => {
                 isIndependent: false
             });
 
-        expect(updateAffiliationsResponse.status).toEqual(403);
+        expect(updateAffiliationsResponse.status).toEqual(400);
         expect(updateAffiliationsResponse.body.message).toEqual('You cannot add affiliations to a LIVE publication.');
     });
 

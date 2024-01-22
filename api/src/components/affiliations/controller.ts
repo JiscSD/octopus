@@ -14,7 +14,7 @@ export const updateAffiliations = async (
     try {
         const isIndependent = event.body.isIndependent;
         const affiliations = event.body.affiliations;
-        const publicationVersionId = event.pathParameters.id;
+        const publicationVersionId = event.pathParameters.publicationVersionId;
         // Get publication version
         const version = await publicationVersionService.getById(publicationVersionId);
 
@@ -27,7 +27,7 @@ export const updateAffiliations = async (
 
         // Check if version is LIVE
         if (version.currentStatus === 'LIVE') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'You cannot add affiliations to a LIVE publication.'
             });
         }

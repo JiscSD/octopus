@@ -48,7 +48,7 @@ describe('Create a bookmark', () => {
             entityId: 'publication-problem-draft'
         });
 
-        expect(bookmark.status).toEqual(403);
+        expect(bookmark.status).toEqual(400);
     });
 
     test('Cannot create a bookmark against the god topic', async () => {

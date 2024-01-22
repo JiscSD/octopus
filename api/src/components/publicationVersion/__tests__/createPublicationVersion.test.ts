@@ -55,7 +55,7 @@ describe('Create new publication versions', () => {
                 apiKey: '123456789'
             });
 
-        expect(newPublicationVersion.status).toEqual(403);
+        expect(newPublicationVersion.status).toEqual(400);
     });
 
     test('User cannot create a new publication version if they are not an author on the latest version.', async () => {
