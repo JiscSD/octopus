@@ -112,7 +112,7 @@ export interface OpenSearchPublication {
 }
 
 export interface GetPublicationPathParams {
-    id: string;
+    publicationId: string;
 }
 
 export interface GetPublicatonQueryParams {
@@ -120,7 +120,7 @@ export interface GetPublicatonQueryParams {
 }
 
 export interface GetPublicationLinksPathParams {
-    id: string;
+    publicationId: string;
 }
 
 export interface GetPublicationLinksQueryParams {
@@ -128,7 +128,7 @@ export interface GetPublicationLinksQueryParams {
 }
 
 export interface GetPublicationVersionPathParams {
-    id: string;
+    publicationId: string;
     version: string;
 }
 
@@ -141,11 +141,11 @@ export interface UpdatePublicationPathParams {
 }
 
 export interface UpdatePublicationVersionPathParams {
-    id: string;
+    publicationVersionId: string;
 }
 
 export interface UpdateStatusPathParams {
-    id: string;
+    publicationVersionId: string;
     status: 'LIVE' | 'DRAFT' | 'LOCKED';
 }
 
@@ -328,20 +328,20 @@ export interface UpdateUserInformation {
 }
 
 export interface DeletePublicationVersionPathParams {
-    id: string;
+    publicationVersionId: string;
 }
 
 export interface CreatePublicationVersionPathParams {
-    id: string;
+    publicationId: string;
 }
 
 export interface RequestControlPathParams {
-    id: string;
+    publicationId: string;
     version: string;
 }
 
 export interface ApproveControlRequestPathParams {
-    id: string;
+    publicationId: string;
     version: string;
 }
 
@@ -697,7 +697,7 @@ export interface DataCiteUser {
     affiliations: MappedOrcidAffiliation[];
 }
 export interface GeneratePDFPathParams {
-    id: string;
+    publicationId: string;
 }
 
 export interface GeneratePDFQueryParams {
