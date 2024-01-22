@@ -75,6 +75,9 @@
             "event/*": [
                 "src/components/event/*"
             ],
+            "sitemap/*": [
+                "src/components/sitemap/*"
+            ],
             "lib/*": [
                 "src/lib/*"
             ],

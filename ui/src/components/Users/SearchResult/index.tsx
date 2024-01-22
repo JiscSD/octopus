@@ -2,9 +2,9 @@ import React from 'react';
 
 import * as Framer from 'framer-motion';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Config from '@config';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Config from '@/config';
 
 type Props = {
     user: Interfaces.CoreUser;

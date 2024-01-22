@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as Interfaces from '@interfaces';
-import * as Types from '@types';
-import * as Components from '@components';
-import * as Stores from '@stores';
+import * as Interfaces from '@/interfaces';
+import * as Types from '@/types';
+import * as Components from '@/components';
 import * as Framer from 'framer-motion';
-import * as Hooks from '@hooks';
-import * as Config from '@config';
+import * as Hooks from '@/hooks';
+import * as Config from '@/config';
+import * as Stores from '@/stores';
 
 type Props = {
+    id?: string;
     versions: Types.PartialPublicationVersion[];
     selectedVersion: Interfaces.PublicationVersion;
     controlRequests: Interfaces.ControlRequest[];
@@ -44,8 +45,8 @@ const VersionsAccordion: React.FC<Props> = (props) => {
     return (
         <Framer.AnimatePresence>
             <Framer.motion.div
-                id="versions-accordion"
-                key="versions-accordion"
+                id={props.id}
+                key={props.id}
                 className="border-grey rounded shadow transition-colors duration-500 dark:bg-grey-900"
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
@@ -105,7 +106,9 @@ const VersionsAccordion: React.FC<Props> = (props) => {
                                 {canCreateNewVersion && (
                                     <Components.Link
                                         title="Create new version"
-                                        className="flex w-fit rounded border-transparent text-sm font-semibold capitalize text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
+                                        className={`flex w-fit rounded border-transparent text-sm font-semibold capitalize text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400 ${
+                                            loadingNewVersion ? 'cursor-not-allowed' : ''
+                                        }`}
                                         href="#"
                                         onClick={handleCreateNewVersion}
                                     >

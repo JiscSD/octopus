@@ -1,8 +1,8 @@
 import React from 'react';
 
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Assets from '@assets';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Assets from '@/assets';
 
 type Props = {
     currentPath: string;

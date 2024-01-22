@@ -5,16 +5,16 @@ import useSWR from 'swr';
 import axios from 'axios';
 import * as Framer from 'framer-motion';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as api from '@api';
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Helpers from '@helpers';
-import * as Interfaces from '@interfaces';
-import * as Layouts from '@layouts';
-import * as Stores from '@stores';
-import * as Types from '@types';
-import * as Assets from '@assets';
-import * as Contexts from '@contexts';
+import * as api from '@/api';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Interfaces from '@/interfaces';
+import * as Layouts from '@/layouts';
+import * as Stores from '@/stores';
+import * as Types from '@/types';
+import * as Assets from '@/assets';
+import * as Contexts from '@/contexts';
 
 import { useRouter } from 'next/router';
 
@@ -688,6 +688,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             {publication && !isLoadingControlRequests && (
                                 <div className="my-8">
                                     <Components.VersionsAccordion
+                                        id="mobile-versions-accordion"
                                         versions={publication.versions}
                                         selectedVersion={publicationVersion}
                                         controlRequests={controlRequests}
@@ -971,6 +972,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     <div className="sticky top-12 space-y-8">
                         {publication && !isLoadingControlRequests && (
                             <Components.VersionsAccordion
+                                id="desktop-versions-accordion"
                                 versions={publication.versions}
                                 selectedVersion={publicationVersion}
                                 controlRequests={controlRequests}

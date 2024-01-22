@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 
-import * as Components from '@components';
-import * as Helpers from '@helpers';
-import * as Stores from '@stores';
-import * as Types from '@types';
-import * as api from '@api';
-import * as Config from '@config';
+import * as Components from '@/components';
+import * as Helpers from '@/helpers';
+import * as Stores from '@/stores';
+import * as Types from '@/types';
+import * as api from '@/api';
+import * as Config from '@/config';
 import axios from 'axios';
 
 /**

@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Router from 'next/router';
-import * as Config from '@config';
+import * as Config from '@/config';
 
 const Desktop: React.FC = (): React.ReactElement => {
     const router = Router.useRouter();

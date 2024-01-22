@@ -1,10 +1,12 @@
 import React from 'react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as Interfaces from '@interfaces';
-import * as Helpers from '@helpers';
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Hooks from '@hooks';
+import * as Interfaces from '@/interfaces';
+import * as Helpers from '@/helpers';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Hooks from '@/hooks';
+
+import { useRouter } from 'next/router';
 
 type Props = {
     publication: Interfaces.Publication;
@@ -55,6 +57,15 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                 className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
             />
         </>
+    );
+
+    const viewDraftButton = (
+        <Components.Button
+            href={`/publications/${props.publication.id}`}
+            endIcon={<OutlineIcons.EyeIcon className="h-4" />}
+            title="View Draft"
+            className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
+        />
     );
 
     return (
@@ -112,15 +123,11 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                     </Components.Link>{' '}
                                     is working on a new draft version
                                 </p>
-                                {isAuthorOnLatestLive && requestControl}
+                                {viewDraftButton}
+                                {requestControl}
                             </>
                         ) : draftVersion.currentStatus === 'LOCKED' ? (
-                            <Components.Button
-                                href={`/publications/${props.publication.id}`}
-                                endIcon={<OutlineIcons.EyeIcon className="h-4" />}
-                                title="View Draft"
-                                className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
-                            />
+                            viewDraftButton
                         ) : (
                             <Components.Button
                                 href={`/publications/${props.publication.id}/edit?step=0`}

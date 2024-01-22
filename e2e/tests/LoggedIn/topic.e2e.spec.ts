@@ -7,12 +7,14 @@ test.describe.configure({ mode: 'serial' });
 // Recreate parameter controls the behaviour when a bookmark already exists.
 // If true, it will remove and recreate it; if false, it will leave it.
 const ensureBookmarkPresent = async (page: Page, recreate: boolean = false) => {
-    await page.goto(`${Helpers.UI_BASE}/topics/test-topic-1`, {
+    await page.goto(`${Helpers.UI_BASE}/topics/test-topic-1b-1`, {
         waitUntil: 'domcontentloaded'
     });
 
     // Bookmark topic
-    await expect(page.locator('h1')).toHaveText('Test topic');
+    await expect(page.locator('h1')).toHaveText('Test sub-topic B 1');
+
+    await page.waitForResponse((response) => response.url().includes('/topics') && response.ok());
 
     const isRemoveBookmarkVisible = await page.isVisible(PageModel.topic.removeBookmark);
     if (isRemoveBookmarkVisible) {
@@ -25,10 +27,9 @@ const ensureBookmarkPresent = async (page: Page, recreate: boolean = false) => {
         await expect(page.locator(PageModel.topic.addBookmark)).toBeVisible();
         await page.locator(PageModel.topic.addBookmark).click();
     }
-}
+};
 
 test.describe('Topic page', () => {
-
     test('Bookmark a topic', async ({ browser }) => {
         // Start up test
         const page = await browser.newPage();
@@ -40,11 +41,12 @@ test.describe('Topic page', () => {
 
         // Add bookmark
         await ensureBookmarkPresent(page, true);
-    
+
         // Confirm it is present on 'my bookmarks' page
         await page.locator(PageModel.header.usernameButton).click();
         await page.locator(PageModel.header.myBookmarksButton).click();
-    
+        await page.waitForURL('**/my-bookmarks');
+
         await expect(page.locator(PageModel.myBookmarks.topicBookmark)).toBeVisible();
     });
 

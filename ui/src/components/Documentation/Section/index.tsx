@@ -2,9 +2,9 @@ import React from 'react';
 // import * as CodeBlock from '@atlaskit/code';
 // import GlobalTheme from '@atlaskit/theme/components';
 
-import * as Interfaces from '@interfaces';
-import * as Stores from '@stores';
-import * as Types from '@types';
+import * as Interfaces from '@/interfaces';
+import * as Stores from '@/stores';
+import * as Types from '@/types';
 
 type SectionProps = {
     entry: Interfaces.DocumentationEntry;

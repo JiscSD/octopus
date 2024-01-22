@@ -139,15 +139,16 @@ export const PageModel = {
         editDraftButton: 'a:has-text("Edit Draft")',
         viewDraftButton: 'a:has-text("View Draft")',
         createDraftVersionButton: 'button:has-text("Create Draft Version")',
-        viewButton: 'a:has-text("View")'
+        viewButton: 'a:has-text("View")',
+        requestControlButton: 'button:has-text("Take over editing")'
     },
     myPublications: {
         liveAuthorPageButton: 'a:has-text("View my public author page")'
     },
     myBookmarks: {
         publicationBookmark: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
-        topicBookmark: 'a[href="/topics/test-topic-1"]',
-        removeTopicBookmark: 'a[href="/topics/test-topic-1"] + button[aria-label="Remove bookmark"]'
+        topicBookmark: 'a[href="/topics/test-topic-1b-1"]',
+        removeTopicBookmark: 'a[href="/topics/test-topic-1b-1"] + button[aria-label="Remove bookmark"]'
     },
     publish: {
         title: 'input[type="text"]',

@@ -6,13 +6,13 @@ import * as Router from 'next/router';
 import * as Framer from 'framer-motion';
 import * as SolidIcons from '@heroicons/react/24/solid';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
-import * as Helpers from '@helpers';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Layouts from '@/layouts';
+import * as Config from '@/config';
+import * as Types from '@/types';
+import * as api from '@/api';
+import * as Helpers from '@/helpers';
 
 const pageSizes = [5, 10, 15, 20, 50];
 
