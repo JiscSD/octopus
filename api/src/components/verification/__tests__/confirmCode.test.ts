@@ -16,7 +16,7 @@ describe('Confirm a verification code', () => {
 
         const confirm = await testUtils.agent.post('/verification/0000-0000-0000-0001').send({ code });
 
-        expect(confirm.status).toEqual(422);
+        expect(confirm.status).toEqual(400);
     });
 
     test('User receives not found on three incorrect code attempts', async () => {
@@ -30,8 +30,8 @@ describe('Confirm a verification code', () => {
         const attemptTwo = await testUtils.agent.post('/verification/0000-0000-0000-0002').send({ code });
         const attemptThree = await testUtils.agent.post('/verification/0000-0000-0000-0002').send({ code });
 
-        expect(attemptOne.status).toEqual(422);
-        expect(attemptTwo.status).toEqual(422);
+        expect(attemptOne.status).toEqual(400);
+        expect(attemptTwo.status).toEqual(400);
         expect(attemptThree.status).toEqual(404);
     });
 

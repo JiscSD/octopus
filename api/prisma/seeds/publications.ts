@@ -79,6 +79,13 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                             city: 'city',
                             link: 'https://example.com'
                         }
+                    },
+                    additionalInformation: {
+                        create: {
+                            id: 'publication-problem-live-additional-information',
+                            title: 'Relevant dataset',
+                            url: 'https://example.com/my-dataset.json'
+                        }
                     }
                 },
                 {
@@ -317,6 +324,13 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                         country: 'country',
                         city: 'city',
                         link: 'https://example.com'
+                    }
+                },
+                additionalInformation: {
+                    create: {
+                        id: 'publication-problem-draft-additional-information',
+                        title: 'Relevant dataset',
+                        url: 'https://example.com/my-dataset.json'
                     }
                 }
             }

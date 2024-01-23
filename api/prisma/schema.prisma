@@ -73,22 +73,22 @@ model Publication {
 }
 
 model PublicationVersion {
-    id                                 String                @id @default(cuid())
+    id                                 String                  @id @default(cuid())
     doi                                String?
     versionOf                          String
     versionNumber                      Int
-    isLatestVersion                    Boolean               @default(true)
-    isLatestLiveVersion                Boolean               @default(false)
-    publication                        Publication           @relation(fields: [versionOf], references: [id], onDelete: Cascade)
+    isLatestVersion                    Boolean                 @default(true)
+    isLatestLiveVersion                Boolean                 @default(false)
+    publication                        Publication             @relation(fields: [versionOf], references: [id], onDelete: Cascade)
     createdBy                          String
-    createdAt                          DateTime              @default(now())
-    updatedAt                          DateTime              @updatedAt
-    user                               User                  @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-    currentStatus                      PublicationStatusEnum @default(DRAFT)
+    createdAt                          DateTime                @default(now())
+    updatedAt                          DateTime                @updatedAt
+    user                               User                    @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    currentStatus                      PublicationStatusEnum   @default(DRAFT)
     publicationStatus                  PublicationStatus[]
     publishedDate                      DateTime?
     title                              String?
-    licence                            LicenceType           @default(CC_BY)
+    licence                            LicenceType             @default(CC_BY)
     conflictOfInterestStatus           Boolean?
     conflictOfInterestText             String?
     ethicalStatement                   String?
@@ -96,16 +96,17 @@ model PublicationVersion {
     dataPermissionsStatement           String?
     dataPermissionsStatementProvidedBy String?
     dataAccessStatement                String?
-    selfDeclaration                    Boolean?              @default(false)
+    selfDeclaration                    Boolean?                @default(false)
     description                        String?
     keywords                           String[]
     content                            String?
-    language                           Languages             @default(en)
+    language                           Languages               @default(en)
     coAuthors                          CoAuthors[]
     References                         References[]
     funders                            Funders[]
     fundersStatement                   String?
     topics                             Topic[]
+    additionalInformation              AdditionalInformation[]
 }
 
 model References {
@@ -265,6 +266,16 @@ model CrosslinkVote {
     up          Boolean
 
     @@unique([crosslinkId, createdBy])
+}
+
+model AdditionalInformation {
+    id                   String             @id @default(cuid())
+    title                String
+    url                  String
+    description          String?
+    createdAt            DateTime           @default(now())
+    publicationVersionId String
+    publicationVersion   PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
 }
 
 enum EventType {

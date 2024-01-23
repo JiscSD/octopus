@@ -52,7 +52,7 @@ describe('Update publication version status', () => {
                 apiKey: '123456789'
             });
 
-        expect(updatePublicationVersion.status).toEqual(403);
+        expect(updatePublicationVersion.status).toEqual(400);
     });
 
     test('User without permissions cannot update their publication to LIVE from DRAFT', async () => {
@@ -207,7 +207,7 @@ describe('Update publication version status', () => {
             apiKey: '987654321'
         });
 
-        expect(response.status).toEqual(403);
+        expect(response.status).toEqual(400);
         expect(response.body.message).toEqual('Publication status is already DRAFT.');
     });
 

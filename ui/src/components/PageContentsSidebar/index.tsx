@@ -10,20 +10,19 @@ type Props = {
     linkClassNames?: string;
 };
 
-const FaqSidebar: React.FC<Props> = (props): JSX.Element => (
-    <div className="sticky top-16 border-l border-l-teal-200 pl-4">
+const PageContentsSidebar: React.FC<Props> = (props): JSX.Element => (
+    <ul className="sticky top-16 border-l border-l-teal-200 pl-4">
         {props.jumpToList.map((jumpTo: JumpTo) => (
-            <a
+            <li
                 key={jumpTo.href}
-                href={`#${jumpTo.href}`}
                 className="border-transparen mb-2 block w-fit py-0.5 text-sm text-grey-800 outline-0 transition-colors duration-500 hover:text-teal-400 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-grey-100"
             >
-                <ul>
-                    <li>{jumpTo.title}</li>
-                </ul>
-            </a>
+                <a key={jumpTo.href} href={`#${jumpTo.href}`}>
+                    {jumpTo.title}
+                </a>
+            </li>
         ))}
-    </div>
+    </ul>
 );
 
-export default FaqSidebar;
+export default PageContentsSidebar;

@@ -33,7 +33,7 @@ describe('Create flags comments on a flag', () => {
 
     test('You cannot leave a comment on an resolved flag', async () => {
         const createFlagComment = await testUtils.agent
-            .post('/flags/publication-hypothesis-live/comment')
+            .post('/flags/publication-hypothesis-live-flag/comment')
             .query({
                 apiKey: '123456789'
             })
@@ -41,7 +41,7 @@ describe('Create flags comments on a flag', () => {
                 comment: 'Comments'
             });
 
-        expect(createFlagComment.status).toEqual(404);
+        expect(createFlagComment.status).toEqual(400);
     });
 
     test('You cannot leave a comment on an un-flagged publication', async () => {
@@ -79,6 +79,6 @@ describe('Create flags comments on a flag', () => {
             .send({
                 comments: 'Comments'
             });
-        expect(createFlagComment.status).toEqual(422);
+        expect(createFlagComment.status).toEqual(400);
     });
 });
