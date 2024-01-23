@@ -1392,3 +1392,6 @@ export const buildPartialResponse = <T extends object>(fieldsParam: string, data
 
     return partialResponse;
 };
+
+export const validateURL = (value: string): boolean =>
+    /(http|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;/~+#-]*[\w@?^=%&/~+#-])/.test(value);

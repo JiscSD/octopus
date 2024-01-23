@@ -13,10 +13,10 @@ import * as email from 'lib/email';
 export const get = async (
     event: I.APIRequest<undefined, undefined, I.GetPublicationVersionPathParams>
 ): Promise<I.JSONResponse> => {
-    const { id, version } = event.pathParameters;
+    const { publicationId, version } = event.pathParameters;
 
     try {
-        const publicationVersion = await publicationVersionService.get(id, version);
+        const publicationVersion = await publicationVersionService.get(publicationId, version);
 
         if (!publicationVersion) {
             return response.json(404, {
@@ -39,7 +39,7 @@ export const get = async (
             // if client requested the "latest" version but user doesn't have permissions to see it
             // return the latest published version instead, if exists
             if (version === 'latest' && publicationVersion.versionNumber > 1) {
-                const latestPublishedVersion = await publicationVersionService.get(id, 'latestLive');
+                const latestPublishedVersion = await publicationVersionService.get(publicationId, 'latestLive');
 
                 return response.json(200, latestPublishedVersion);
             }
@@ -53,7 +53,7 @@ export const get = async (
         let inheritedTopicIds: string[] = [];
 
         if (publicationVersion.versionNumber > 1) {
-            const latestPublishedVersion = await publicationVersionService.get(id, 'latestLive');
+            const latestPublishedVersion = await publicationVersionService.get(publicationId, 'latestLive');
 
             if (latestPublishedVersion) {
                 inheritedTopicIds = latestPublishedVersion.topics.map((topic) => topic.id);
@@ -110,7 +110,7 @@ export const update = async (
     >
 ): Promise<I.JSONResponse> => {
     try {
-        const publicationVersion = await publicationVersionService.getById(event.pathParameters.id);
+        const publicationVersion = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
 
         if (!publicationVersion) {
             return response.json(404, {
@@ -125,7 +125,7 @@ export const update = async (
         }
 
         if (publicationVersion.currentStatus !== 'DRAFT') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'A publication version that is not in DRAFT state cannot be updated.'
             });
         }
@@ -182,12 +182,14 @@ export const update = async (
             }
         }
 
-        await publicationVersionService.update(event.pathParameters.id, {
+        await publicationVersionService.update(event.pathParameters.publicationVersionId, {
             ...event.body,
             topics: topicIds ? { set: topicIds.map((topicId) => ({ id: topicId })) } : undefined
         });
 
-        const updatedPublicationVersion = await publicationVersionService.getById(event.pathParameters.id);
+        const updatedPublicationVersion = await publicationVersionService.getById(
+            event.pathParameters.publicationVersionId
+        );
 
         if (updatedPublicationVersion) {
             updatedPublicationVersion.topics = updatedPublicationVersion.topics.map((topic) => ({
@@ -208,7 +210,7 @@ export const updateStatus = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.UpdateStatusPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publicationVersion = await publicationVersionService.getById(event.pathParameters.id);
+        const publicationVersion = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
 
         if (!publicationVersion) {
             return response.json(404, {
@@ -226,13 +228,13 @@ export const updateStatus = async (
         const currentStatus = publicationVersion.currentStatus;
 
         if (currentStatus === 'LIVE') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'A status of a publication that is not in DRAFT or LOCKED cannot be changed.'
             });
         }
 
         if (currentStatus === newStatus) {
-            return response.json(403, { message: `Publication status is already ${newStatus}.` });
+            return response.json(400, { message: `Publication status is already ${newStatus}.` });
         }
 
         if (currentStatus === 'DRAFT') {
@@ -367,7 +369,7 @@ export const deleteVersion = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeletePublicationVersionPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publicationVersion = await publicationVersionService.getById(event.pathParameters.id);
+        const publicationVersion = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
 
         if (!publicationVersion) {
             return response.json(403, {
@@ -389,7 +391,7 @@ export const deleteVersion = async (
             (publicationVersion.publicationStatus &&
                 !publicationVersion.publicationStatus.every((status) => status.status !== 'LIVE'))
         ) {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'A publication can only be deleted if it is currently a draft and has never been LIVE.'
             });
         }
@@ -406,7 +408,9 @@ export const deleteVersion = async (
             }
         });
 
-        return response.json(200, { message: `Publication version ${event.pathParameters.id} has been deleted` });
+        return response.json(200, {
+            message: `Publication version ${event.pathParameters.publicationVersionId} has been deleted`
+        });
     } catch (err) {
         console.log(err);
 
@@ -417,7 +421,7 @@ export const deleteVersion = async (
 export const create = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreatePublicationVersionPathParams>
 ): Promise<I.JSONResponse> => {
-    const publicationId = event.pathParameters.id;
+    const publicationId = event.pathParameters.publicationId;
 
     try {
         // take the latest publication version
@@ -431,7 +435,7 @@ export const create = async (
 
         // check if latest version is published
         if (latestPublicationVersion.currentStatus !== 'LIVE') {
-            return response.json(403, {
+            return response.json(400, {
                 message:
                     'You cannot create a new version while the latest version of this publication has not been published yet.'
             });
@@ -463,7 +467,7 @@ export const create = async (
 export const requestControl = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.RequestControlPathParams>
 ): Promise<I.JSONResponse> => {
-    const { id: publicationId, version } = event.pathParameters;
+    const { publicationId, version } = event.pathParameters;
 
     try {
         // get publication version
@@ -484,7 +488,7 @@ export const requestControl = async (
 
         // check version status
         if (publicationVersion.currentStatus === 'LIVE') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'You cannot request control over a published version.'
             });
         }
@@ -563,7 +567,7 @@ export const requestControl = async (
 export const approveControlRequest = async (
     event: I.AuthenticatedAPIRequest<I.ApproveControlRequestBody, undefined, I.ApproveControlRequestPathParams>
 ): Promise<I.JSONResponse> => {
-    const { id: publicationId, version } = event.pathParameters;
+    const { publicationId, version } = event.pathParameters;
     const { approve, eventId } = event.body;
     const isApproved = approve === 'true';
 

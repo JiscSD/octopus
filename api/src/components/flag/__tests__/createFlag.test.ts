@@ -45,7 +45,7 @@ describe('Create flags on publications', () => {
                 category: 'INVALID_CATEGORY'
             });
 
-        expect(createFlag.status).toEqual(422);
+        expect(createFlag.status).toEqual(400);
     });
 
     test('User cannot create a duplicate flag for an unresolved flag', async () => {
@@ -85,7 +85,7 @@ describe('Create flags on publications', () => {
                 category: 'ETHICAL_ISSUES'
             });
 
-        expect(createFlag.status).toEqual(404);
+        expect(createFlag.status).toEqual(400);
     });
 
     test('User can create 2 differente flags for the same publication that they did not create', async () => {

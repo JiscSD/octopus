@@ -54,7 +54,7 @@ describe('update all references', () => {
                 }
             ]);
 
-        expect(reference.status).toEqual(403);
+        expect(reference.status).toEqual(400);
     });
 
     test('All of the references should be replaced with the new references ', async () => {

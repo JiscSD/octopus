@@ -80,7 +80,7 @@ export const confirmCode = async (
             return response.json(404, { message: 'Not found' });
         }
 
-        return response.json(422, { message: 'Incorrect code' });
+        return response.json(400, { message: 'Incorrect code' });
     } catch (err) {
         console.log(err);
 

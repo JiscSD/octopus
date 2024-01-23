@@ -8,7 +8,7 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.ImageSentBody>):
         const imageType = event.body.image.split(';')[0].split('/')[1];
 
         if (!I.ImageExtension[imageType]) {
-            return response.json(422, {
+            return response.json(400, {
                 message: `Failed to upload "${event.body.name}". The format is not supported.`
             });
         }

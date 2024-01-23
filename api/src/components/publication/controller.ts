@@ -10,7 +10,7 @@ export const get = async (
     event: I.APIRequest<undefined, I.GetPublicatonQueryParams, I.GetPublicationPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event.pathParameters.id);
+        const publication = await publicationService.get(event.pathParameters.publicationId);
         const fields = event.queryStringParameters?.fields;
 
         if (!publication) {
@@ -96,7 +96,7 @@ export const create = async (
 export const getLinksForPublication = async (
     event: I.APIRequest<undefined, I.GetPublicationLinksQueryParams, I.GetPublicationLinksPathParams>
 ): Promise<I.JSONResponse> => {
-    const publicationId = event.pathParameters.id;
+    const publicationId = event.pathParameters.publicationId;
     const directLinks = event.queryStringParameters?.direct === 'true';
     const user = event.user;
     let includeDraftVersion = false;
@@ -136,7 +136,7 @@ export const getPDF = async (
 ): Promise<I.JSONResponse> => {
     const generateNewPDF = event.queryStringParameters?.generateNewPDF === 'true';
     const redirectToPreview = event.queryStringParameters?.redirectToPreview === 'true';
-    const publicationId = event.pathParameters.id;
+    const publicationId = event.pathParameters.publicationId;
     const publication = await publicationService.get(publicationId);
 
     if (!publication) {

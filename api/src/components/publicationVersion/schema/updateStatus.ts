@@ -7,11 +7,11 @@ const updateStatusSchema: I.JSONSchemaType<I.UpdateStatusPathParams> = {
             type: 'string',
             enum: ['LIVE', 'DRAFT', 'LOCKED']
         },
-        id: {
+        publicationVersionId: {
             type: 'string'
         }
     },
-    required: ['status', 'id'],
+    required: ['status', 'publicationVersionId'],
     additionalProperties: false
 };
 

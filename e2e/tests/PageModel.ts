@@ -192,6 +192,13 @@ export const PageModel = {
         },
         text: {
             editor: '.ProseMirror >> nth=0',
+            additionalInformation: {
+                title: 'input[placeholder="Title*"]',
+                url: 'input[placeholder="URL*"]',
+                description: 'input[placeholder="Short description"]',
+                saveButton: 'button[aria-label="Save link"]',
+                table: 'table[aria-label="additional-information-table"]'
+            },
             language: 'select[name="language"]',
             references: '.ProseMirror >> nth=1',
             addReferencesButton: 'button[name="Add references"]',
@@ -200,7 +207,7 @@ export const PageModel = {
             continueModalButton: 'button[aria-label="Continue"]',
             saveReferenceModalButton: 'div[role=dialog] button[title="Save"]',
             deleteReferenceModalButton: 'div[role="dialog"] button[title="Delete"]',
-            deleteFirstReferenceButton: 'tr:first-of-type button[title="Delete"]',
+            deleteFirstReferenceButton: 'table[aria-label="references-table"] tr:first-of-type button[title="Delete"]',
             addReferenceButton: 'tr:first-of-type button[title="Add below"]',
             description:
                 'text=Short descriptionInclude a short description of your publication to aid discover >> textarea',
@@ -220,6 +227,18 @@ export const PageModel = {
             manualAffiliationCity: 'input[placeholder="City"]',
             manualAffiliationLink: 'input[placeholder="Link"]',
             affiliationDetails: 'textarea[placeholder="Enter any details"]'
+        },
+        researchProcess: {
+            selfDeclaration: '#self-declaration'
+        },
+        dataStatements: {
+            ethicalStatementTrue: 'input#the-results-in-this-publication-involved-human-or-animal-subjects',
+            ethicalApprover: 'textarea#freeText',
+            dataPermissionsStatementTrue:
+                'input#the-results-in-this-publication-involved-access-to-owned-or-copyrighted-materials',
+            dataCollectionApprover: 'textarea#dataPermissionsStatementProvidedBy',
+            dataAccessStatementOther: 'input#other',
+            dataAccessStatementFreeText: '#dataAccessStatementfreeText'
         },
         versionsAccordion: 'aside >> #versions-accordion',
         versionsAccordionButton: 'aside button[title="Versions"]'

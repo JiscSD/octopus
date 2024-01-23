@@ -1,4 +1,4 @@
-const createCoAuthorSchema = {
+const createFunderSchema = {
     type: 'object',
     properties: {
         name: {
@@ -21,4 +21,4 @@ const createCoAuthorSchema = {
     additionalProperties: false
 };
 
-export default createCoAuthorSchema;
+export default createFunderSchema;

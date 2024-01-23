@@ -8,7 +8,7 @@ export const get = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const version = await publicationVersionService.getById(event.pathParameters.id);
+        const version = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
 
         if (!version) {
             return response.json(404, {
@@ -47,7 +47,7 @@ export const updateAll = async (
     event: I.AuthenticatedAPIRequest<I.CoAuthor[], undefined, I.CreateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const version = await publicationVersionService.getById(event.pathParameters.id);
+        const version = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
 
         // Does the publication version exist?
         if (!version) {
@@ -65,7 +65,7 @@ export const updateAll = async (
 
         // Is the current version of the publication not live?
         if (version.currentStatus === 'LIVE') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'This publication version is LIVE and therefore cannot be edited.'
             });
         }
@@ -128,7 +128,7 @@ export const remove = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const version = await publicationVersionService.getById(event.pathParameters.id);
+        const version = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
 
         // Does the publication version exist?
         if (!version) {
@@ -146,24 +146,25 @@ export const remove = async (
 
         // Is the current version of the publication not live?
         if (version.currentStatus === 'LIVE') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'This publication version is LIVE and therefore cannot be edited.'
             });
         }
 
         // Is the coauthor actually a coauthor of this version of the publication
-        if (!version.coAuthors.some((coAuthor) => coAuthor.id === event.pathParameters.coauthor)) {
+        if (!version.coAuthors.some((coAuthor) => coAuthor.id === event.pathParameters.coauthorId)) {
             return response.json(404, {
                 message: 'This coauthor has not been added to this publication version.'
             });
         }
 
-        await coAuthorService.deleteCoAuthor(event.pathParameters.coauthor);
+        await coAuthorService.deleteCoAuthor(event.pathParameters.coauthorId);
 
         // notify co-author that they've been removed
         await email.notifyCoAuthorRemoval({
             coAuthor: {
-                email: version.coAuthors.find((coAuthor) => coAuthor.id === event.pathParameters.coauthor)?.email || ''
+                email:
+                    version.coAuthors.find((coAuthor) => coAuthor.id === event.pathParameters.coauthorId)?.email || ''
             },
             publication: {
                 title: version.title || ''
@@ -179,10 +180,10 @@ export const remove = async (
 };
 
 export const link = async (
-    event: I.OptionalAuthenticatedAPIRequest<I.ConfirmCoAuthorBody, undefined, I.ConfirmCoAuthorPathParams>
+    event: I.OptionalAuthenticatedAPIRequest<I.ConfirmCoAuthorBody, undefined, I.LinkCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const version = await publicationVersionService.getById(event.pathParameters.id);
+        const version = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
 
         if (!version) {
             return response.json(404, {
@@ -191,7 +192,7 @@ export const link = async (
         }
 
         if (version.currentStatus === 'LIVE') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'This publication version is LIVE and therefore cannot be edited.'
             });
         }
@@ -292,7 +293,7 @@ export const updateConfirmation = async (
     event: I.AuthenticatedAPIRequest<I.ChangeCoAuthorRequestBody, undefined, I.UpdateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const version = await publicationVersionService.getById(event.pathParameters.id);
+        const version = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
 
         // Does the publication version exist?
         if (!version) {
@@ -303,7 +304,7 @@ export const updateConfirmation = async (
 
         // Is the publication's current version in locked mode?
         if (version.currentStatus !== 'LOCKED') {
-            return response.json(403, {
+            return response.json(400, {
                 message:
                     version.currentStatus === 'LIVE'
                         ? 'You cannot approve a LIVE publication version'
@@ -369,7 +370,7 @@ export const requestApproval = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const versionId = event.pathParameters.id;
+        const versionId = event.pathParameters.publicationVersionId;
         const version = await publicationVersionService.getById(versionId);
 
         if (!version) {
@@ -377,7 +378,7 @@ export const requestApproval = async (
         }
 
         if (version.currentStatus === 'LIVE') {
-            return response.json(403, { message: 'Cannot request approvals for a LIVE publication version.' });
+            return response.json(400, { message: 'Cannot request approvals for a LIVE publication version.' });
         }
 
         // check if user is not the corresponding author
@@ -452,10 +453,10 @@ export const requestApproval = async (
 export const sendApprovalReminder = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.SendApprovalReminderPathParams>
 ): Promise<I.JSONResponse> => {
-    const { coauthor, id } = event.pathParameters;
+    const { coauthorId, publicationVersionId } = event.pathParameters;
 
-    const version = await publicationVersionService.getById(id);
-    const author = await coAuthorService.get(coauthor);
+    const version = await publicationVersionService.getById(publicationVersionId);
+    const author = await coAuthorService.get(coauthorId);
 
     if (!version) {
         return response.json(404, {
@@ -465,7 +466,7 @@ export const sendApprovalReminder = async (
 
     // Can only send reminder on publication versions that have been locked for review
     if (version.currentStatus !== 'LOCKED') {
-        return response.json(403, {
+        return response.json(400, {
             message: 'A reminder is not able to be sent unless approval is being requested'
         });
     }
@@ -519,7 +520,7 @@ export const sendApprovalReminder = async (
         });
 
         // update co-author reminderDate
-        await coAuthorService.update(coauthor, { reminderDate: new Date() });
+        await coAuthorService.update(coauthorId, { reminderDate: new Date() });
     } catch (error) {
         console.log(error);
 

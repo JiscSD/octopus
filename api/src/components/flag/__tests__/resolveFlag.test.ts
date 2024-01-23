@@ -43,7 +43,7 @@ describe('Resolve a flag', () => {
             apiKey: '987654321'
         });
 
-        expect(resolveFlag.status).toEqual(403);
+        expect(resolveFlag.status).toEqual(400);
     });
 
     test('You can only resolve a flag that exists', async () => {
