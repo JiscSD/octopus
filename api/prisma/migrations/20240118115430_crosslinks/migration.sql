@@ -13,7 +13,7 @@ CREATE TABLE "Crosslink" (
 CREATE TABLE "CrosslinkVote" (
     "crosslinkId" TEXT NOT NULL,
     "createdBy" TEXT NOT NULL,
-    "up" BOOLEAN NOT NULL
+    "vote" BOOLEAN NOT NULL
 );
 
 -- CreateIndex

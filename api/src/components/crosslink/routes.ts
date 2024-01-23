@@ -14,3 +14,14 @@ export const deleteCrosslink = middy(crosslinkController.deleteCrosslink)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication());
+
+export const setVote = middy(crosslinkController.setVote)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication())
+    .use(middleware.validator(crosslinkSchema.setVote, 'body'));
+
+export const resetVote = middy(crosslinkController.resetVote)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication());

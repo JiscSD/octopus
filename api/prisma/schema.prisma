@@ -263,7 +263,7 @@ model CrosslinkVote {
     crosslink   Crosslink @relation(fields: [crosslinkId], references: [id], onDelete: Cascade)
     createdBy   String
     user        User      @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-    up          Boolean
+    vote        Boolean
 
     @@unique([crosslinkId, createdBy])
 }

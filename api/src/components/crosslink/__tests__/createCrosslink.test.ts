@@ -1,3 +1,4 @@
+import * as client from 'lib/client';
 import * as testUtils from 'lib/testUtils';
 
 describe('Create a crosslink', () => {
@@ -15,6 +16,17 @@ describe('Create a crosslink', () => {
             });
 
         expect(addCrosslink.status).toEqual(200);
+
+        // Check that an up vote has been automatically created on the new crosslink
+        const checkVote = await client.prisma.crosslinkVote.findUnique({
+            where: {
+                crosslinkId_createdBy: {
+                    crosslinkId: addCrosslink.body.id,
+                    createdBy: 'test-user-1'
+                }
+            }
+        });
+        expect(checkVote?.vote).toEqual(true);
     });
 
     test('User cannot add a crosslink between two publications that are already crosslinked', async () => {
@@ -61,7 +73,7 @@ describe('Create a crosslink', () => {
                 publications: ['publication-problem-live']
             });
 
-        expect(addCrosslinkA.status).toEqual(422);
+        expect(addCrosslinkA.status).toEqual(400);
         expect(addCrosslinkA.body.message[0].keyword).toEqual('minItems');
 
         const addCrosslinkB = await testUtils.agent
@@ -71,7 +83,7 @@ describe('Create a crosslink', () => {
                 publications: ['publication-problem-live', 'publication-hypothesis-live', 'publication-data-live']
             });
 
-        expect(addCrosslinkB.status).toEqual(422);
+        expect(addCrosslinkB.status).toEqual(400);
         expect(addCrosslinkB.body.message[0].keyword).toEqual('maxItems');
     });
 
@@ -83,7 +95,7 @@ describe('Create a crosslink', () => {
                 publications: ['publication-problem-live', 'publication-problem-live']
             });
 
-        expect(addCrosslink.status).toEqual(422);
+        expect(addCrosslink.status).toEqual(400);
         expect(addCrosslink.body.message[0].keyword).toEqual('uniqueItems');
     });
 

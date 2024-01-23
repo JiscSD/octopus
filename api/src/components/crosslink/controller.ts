@@ -31,6 +31,9 @@ export const create = async (
 
         const crosslink = await crosslinkService.create(event.body.publications, event.user.id);
 
+        // Automatically add an up vote from the crosslink's creator.
+        await crosslinkService.setVote(crosslink.id, event.user.id, true);
+
         return response.json(200, crosslink);
     } catch {
         return response.json(500, { message: 'Unknown server error.' });
@@ -54,6 +57,48 @@ export const deleteCrosslink = async (
         const deleteCrosslink = await crosslinkService.deleteCrosslink(event.pathParameters.id);
 
         return response.json(200, deleteCrosslink);
+    } catch {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const setVote = async (
+    event: I.AuthenticatedAPIRequest<I.SetCrosslinkVoteRequestBody, undefined, I.SetCrosslinkVotePathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const crosslink = await crosslinkService.get(event.pathParameters.id);
+
+        if (!crosslink) {
+            return response.json(404, { message: 'Crosslink not found.' });
+        }
+
+        const vote = await crosslinkService.setVote(event.pathParameters.id, event.user.id, event.body.vote);
+
+        return response.json(200, vote);
+    } catch {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const resetVote = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.ResetCrosslinkVotePathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const crosslink = await crosslinkService.get(event.pathParameters.id);
+
+        if (!crosslink) {
+            return response.json(404, { message: 'Crosslink not found.' });
+        }
+
+        const vote = await crosslinkService.getVote(event.pathParameters.id, event.user.id);
+
+        if (!vote) {
+            return response.json(404, { message: 'You have not voted on this crosslink.' });
+        }
+
+        const reset = await crosslinkService.resetVote(event.pathParameters.id, event.user.id);
+
+        return response.json(200, reset);
     } catch {
         return response.json(500, { message: 'Unknown server error.' });
     }

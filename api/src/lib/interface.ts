@@ -908,6 +908,18 @@ export interface DeleteCrosslinkPathParams {
     id: string;
 }
 
+export interface SetCrosslinkVotePathParams {
+    id: string;
+}
+
+export interface SetCrosslinkVoteRequestBody {
+    vote: boolean;
+}
+
+export interface ResetCrosslinkVotePathParams {
+    id: string;
+}
+
 // Additional information
 export interface CreateAdditionalInformationPathParams {
     publicationVersionId: string;

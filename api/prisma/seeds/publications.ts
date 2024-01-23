@@ -434,7 +434,13 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
             create: {
                 id: 'hypothesis-problem-crosslink',
                 publicationToId: 'publication-problem-live',
-                createdBy: 'test-user-1'
+                createdBy: 'test-user-1',
+                votes: {
+                    create: {
+                        createdBy: 'test-user-5',
+                        vote: true
+                    }
+                }
             }
         }
     },
