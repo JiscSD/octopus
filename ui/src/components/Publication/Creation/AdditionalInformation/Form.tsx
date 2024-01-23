@@ -29,7 +29,7 @@ const Form: React.FC = () => {
         const isValidLink = Helpers.validateURL(url);
 
         if (!isValidLink) {
-            return setError('You must supply a valid URL');
+            return setError('Please supply a valid URL starting with "http"');
         }
 
         if (description.length > 255) {

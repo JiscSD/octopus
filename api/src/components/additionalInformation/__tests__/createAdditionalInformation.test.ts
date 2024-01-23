@@ -109,6 +109,6 @@ describe('Create a piece of additional information', () => {
             });
 
         expect(createAdditionalInformation.status).toEqual(403);
-        expect(createAdditionalInformation.body.message).toEqual('You must supply a valid URL');
+        expect(createAdditionalInformation.body.message).toEqual('Please supply a valid URL starting with "http"');
     });
 });

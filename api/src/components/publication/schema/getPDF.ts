@@ -3,11 +3,11 @@ import * as I from 'interface';
 const getPDF: I.JSONSchemaType<I.GeneratePDFPathParams> = {
     type: 'object',
     properties: {
-        id: {
+        publicationId: {
             type: 'string'
         }
     },
-    required: ['id'],
+    required: ['publicationId'],
     additionalProperties: false
 };
 
