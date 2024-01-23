@@ -14,7 +14,7 @@ describe('Request co-authors approvals', () => {
             )
             .query({ apiKey: '123456789' });
 
-        expect(livePublicationVersionResponse.status).toEqual(403);
+        expect(livePublicationVersionResponse.status).toEqual(400);
         expect(livePublicationVersionResponse.body.message).toEqual(
             'A reminder is not able to be sent unless approval is being requested'
         );
@@ -26,7 +26,7 @@ describe('Request co-authors approvals', () => {
             )
             .query({ apiKey: '000000005' });
 
-        expect(draftPublicationVersionResponse.status).toEqual(403);
+        expect(draftPublicationVersionResponse.status).toEqual(400);
         expect(draftPublicationVersionResponse.body.message).toEqual(
             'A reminder is not able to be sent unless approval is being requested'
         );

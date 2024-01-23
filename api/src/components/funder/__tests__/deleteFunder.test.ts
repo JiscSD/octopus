@@ -27,6 +27,6 @@ describe('delete a funder', () => {
             .delete('/publication-versions/publication-problem-live-v1/funders/publication-problem-live-funder')
             .query({ apiKey: '123456789' });
 
-        expect(funder.status).toEqual(403);
+        expect(funder.status).toEqual(400);
     });
 });

@@ -15,7 +15,7 @@ describe('Request control over a publication version', () => {
                 apiKey: '000000006'
             });
 
-        expect(response.status).toEqual(403);
+        expect(response.status).toEqual(400);
         expect(response.body.message).toEqual('You cannot request control over a published version.');
     });
 

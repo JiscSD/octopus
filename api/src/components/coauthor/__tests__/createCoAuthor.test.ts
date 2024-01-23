@@ -124,7 +124,7 @@ describe('create coauthor', () => {
                 }
             ]);
 
-        expect(coauthor.status).toEqual(403);
+        expect(coauthor.status).toEqual(400);
     });
 
     test('Co-author email is converted to lower case on save', async () => {

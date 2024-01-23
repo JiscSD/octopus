@@ -7,7 +7,7 @@ export const create = async (
     event: I.AuthenticatedAPIRequest<I.CreateFunderRequestBody, undefined, I.CreateFunderPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publicationVersion = await publicationVersionService.getById(event.pathParameters.id);
+        const publicationVersion = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
 
         //check that the publication exists
         if (!publicationVersion) {
@@ -16,16 +16,16 @@ export const create = async (
             });
         }
 
-        //check that the publication is live
-        if (publicationVersion.currentStatus !== 'DRAFT') {
-            return response.json(403, {
-                message: 'You can only add funding to a draft publication.'
-            });
-        }
-
         if (event.user.id !== publicationVersion.user.id) {
             return response.json(403, {
                 message: 'You do not have permissions to add a funder.'
+            });
+        }
+
+        //check that the publication is live
+        if (publicationVersion.currentStatus !== 'DRAFT') {
+            return response.json(400, {
+                message: 'You can only add funding to a draft publication.'
             });
         }
 
@@ -51,7 +51,7 @@ export const destroy = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteFunderPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publicationVersion = await publicationVersionService.getById(event.pathParameters.id);
+        const publicationVersion = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
 
         //check that the publication version exists
         if (!publicationVersion) {
@@ -62,7 +62,7 @@ export const destroy = async (
 
         //check that the publication is live
         if (publicationVersion.currentStatus !== 'DRAFT') {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'You cannot delete funding from a publication that is not a draft.'
             });
         }
@@ -73,7 +73,7 @@ export const destroy = async (
             });
         }
 
-        const funder = await funderService.destroy(publicationVersion.id, event.pathParameters.funder);
+        const funder = await funderService.destroy(publicationVersion.id, event.pathParameters.funderId);
 
         return response.json(200, funder);
     } catch (err) {

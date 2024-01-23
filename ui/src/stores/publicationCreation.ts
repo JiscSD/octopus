@@ -47,7 +47,8 @@ const initialPublicationVersion: Interfaces.PublicationVersion = {
         createdAt: '',
         updatedAt: ''
     },
-    topics: []
+    topics: [],
+    additionalInformation: []
 };
 
 const createPublicationVersionSlice: StateCreator<Types.PublicationVersionSlice> = (set) => ({

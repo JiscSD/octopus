@@ -32,10 +32,10 @@ describe('Delete co-author', () => {
 
     test('Cannot Delete a co-author record if the publication version is live', async () => {
         const deleteCoAuthor = await testUtils.agent
-            .delete('/publication-versions/publication-problem-draft-v1/coauthors/co-author-test-user-6-problem-live')
-            .query({ apiKey: '000000005' });
+            .delete('/publication-versions/publication-problem-live-v1/coauthors/co-author-test-user-6-problem-live')
+            .query({ apiKey: '123456789' });
 
-        expect(deleteCoAuthor.status).toEqual(404);
+        expect(deleteCoAuthor.status).toEqual(400);
     });
 
     test('Cannot Delete a co-author record on a publication version that does not exist', async () => {
