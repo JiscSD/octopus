@@ -158,7 +158,7 @@ functions:
         handler: src/components/publication/routes.get
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}
+                  path: ${self:custom.versions.v1}/publications/{publicationId}
                   method: GET
                   cors: true
     getSeedDataPublications:
@@ -179,7 +179,7 @@ functions:
         handler: src/components/publication/routes.getPublicationLinks
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/links
+                  path: ${self:custom.versions.v1}/publications/{publicationId}/links
                   method: GET
                   cors: true
     getPDF:
@@ -187,7 +187,7 @@ functions:
         memorySize: 2048 # https://github.com/alixaxel/chrome-aws-lambda#:~:text=You%20should%20allocate%20at%20least%20512%20MB%20of%20RAM%20to%20your%20Lambda%2C%20however%201600%20MB%20(or%20more)%20is%20recommended
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/pdf
+                  path: ${self:custom.versions.v1}/publications/{publicationId}/pdf
                   method: GET
                   cors: true
     # Publication Versions
@@ -195,14 +195,14 @@ functions:
         handler: src/components/publicationVersion/routes.create
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/publication-versions
+                  path: ${self:custom.versions.v1}/publications/{publicationId}/publication-versions
                   method: POST
                   cors: true
     getPublicationVersion:
         handler: src/components/publicationVersion/routes.get
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/publication-versions/{version} # {version} can be a version id, number, "latest" or "latestLive"
+                  path: ${self:custom.versions.v1}/publications/{publicationId}/publication-versions/{version} # {version} can be a version id, number, "latest" or "latestLive"
                   method: GET
                   cors: true
     getIndexedPublicationVersions:
@@ -216,35 +216,35 @@ functions:
         handler: src/components/publicationVersion/routes.update
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publication-versions/{id}
+                  path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}
                   method: PATCH
                   cors: true
     updateStatus:
         handler: src/components/publicationVersion/routes.updateStatus
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publication-versions/{id}/status/{status}
+                  path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/status/{status}
                   method: PUT
                   cors: true
     deleteVersion:
         handler: src/components/publicationVersion/routes.deleteVersion
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publication-versions/{id}
+                  path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}
                   method: DELETE
                   cors: true
     requestControl:
         handler: src/components/publicationVersion/routes.requestControl
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/publication-versions/{version}/request-control
+                  path: ${self:custom.versions.v1}/publications/{publicationId}/publication-versions/{version}/request-control
                   method: GET
                   cors: true
     approveControlRequest:
         handler: src/components/publicationVersion/routes.approveControlRequest
         events:
             - http:
-                  path: ${self:custom.versions.v1}/publications/{id}/publication-versions/{version}/approve-control-request
+                  path: ${self:custom.versions.v1}/publications/{publicationId}/publication-versions/{version}/approve-control-request
                   method: POST
                   cors: true
     # Users
