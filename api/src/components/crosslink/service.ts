@@ -72,10 +72,7 @@ export const get = async (id: string) => {
     // Simplify data.
     const crosslink = rawCrosslink
         ? {
-              publications: [rawCrosslink.publicationFrom, rawCrosslink.publicationTo].map((publication) => ({
-                  id: publication.id,
-                  title: publication.versions[0].title
-              })),
+              publications: [rawCrosslink.publicationFrom, rawCrosslink.publicationTo],
               upVotes: rawCrosslink.votes.filter((vote) => vote.vote).length,
               downVotes: rawCrosslink.votes.filter((vote) => !vote.vote).length,
               createdBy: rawCrosslink.createdBy,
@@ -182,11 +179,7 @@ export const getPublicationCrosslinks = async (publicationId: string, order?: I.
         const score = upCount - downCount;
 
         return {
-            linkedPublication: {
-                title: linkedPublication.versions[0].title,
-                publishedDate: linkedPublication.versions[0].publishedDate,
-                authorName: `${linkedPublication.versions[0].user.firstName[0]}. ${linkedPublication.versions[0].user.lastName}`
-            },
+            linkedPublication,
             score,
             createdBy: crosslink.createdBy,
             createdAt: crosslink.createdAt

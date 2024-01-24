@@ -13,11 +13,19 @@ describe('Get a crosslink', () => {
         expect(getCrosslink.body.publications).toEqual([
             {
                 id: 'publication-hypothesis-live',
-                title: 'Publication HYPOTHESIS-LIVE'
+                versions: [
+                    {
+                        title: 'Publication HYPOTHESIS-LIVE'
+                    }
+                ]
             },
             {
                 id: 'publication-problem-live',
-                title: 'Publication PROBLEM-LIVE v2'
+                versions: [
+                    {
+                        title: 'Publication PROBLEM-LIVE v2'
+                    }
+                ]
             }
         ]);
         expect(getCrosslink.body.upVotes).toEqual(4);
