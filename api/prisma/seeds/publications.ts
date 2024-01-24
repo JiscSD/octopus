@@ -436,9 +436,29 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 publicationToId: 'publication-problem-live',
                 createdBy: 'test-user-1',
                 votes: {
-                    create: {
-                        createdBy: 'test-user-5',
-                        vote: true
+                    createMany: {
+                        data: [
+                            {
+                                createdBy: 'test-user-1',
+                                vote: true
+                            },
+                            {
+                                createdBy: 'test-user-5',
+                                vote: true
+                            },
+                            {
+                                createdBy: 'test-user-6',
+                                vote: true
+                            },
+                            {
+                                createdBy: 'test-user-7',
+                                vote: true
+                            },
+                            {
+                                createdBy: 'test-user-8',
+                                vote: false
+                            }
+                        ]
                     }
                 }
             }

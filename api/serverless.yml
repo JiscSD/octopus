@@ -609,3 +609,17 @@ functions:
                   path: ${self:custom.versions.v1}/crosslinks/{id}/vote
                   method: DELETE
                   cors: true
+    getCrosslinkVote:
+        handler: src/components/crosslink/routes.getVote
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/crosslinks/{id}/vote
+                  method: GET
+                  cors: true
+    getCrosslink:
+        handler: src/components/crosslink/routes.get
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/crosslinks/{id}
+                  method: GET
+                  cors: true

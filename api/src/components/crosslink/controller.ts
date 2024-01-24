@@ -66,9 +66,9 @@ export const setVote = async (
     event: I.AuthenticatedAPIRequest<I.SetCrosslinkVoteRequestBody, undefined, I.SetCrosslinkVotePathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const crosslink = await crosslinkService.get(event.pathParameters.id);
+        const crosslinkExists = await crosslinkService.exists(event.pathParameters.id);
 
-        if (!crosslink) {
+        if (!crosslinkExists) {
             return response.json(404, { message: 'Crosslink not found.' });
         }
 
@@ -84,9 +84,9 @@ export const resetVote = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.ResetCrosslinkVotePathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const crosslink = await crosslinkService.get(event.pathParameters.id);
+        const crosslinkExists = await crosslinkService.exists(event.pathParameters.id);
 
-        if (!crosslink) {
+        if (!crosslinkExists) {
             return response.json(404, { message: 'Crosslink not found.' });
         }
 
@@ -99,6 +99,44 @@ export const resetVote = async (
         const reset = await crosslinkService.resetVote(event.pathParameters.id, event.user.id);
 
         return response.json(200, reset);
+    } catch {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const getVote = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.GetCrosslinkVotePathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const crosslinkExists = await crosslinkService.exists(event.pathParameters.id);
+
+        if (!crosslinkExists) {
+            return response.json(404, { message: 'Crosslink not found.' });
+        }
+
+        const vote = await crosslinkService.getVote(event.pathParameters.id, event.user.id);
+
+        if (!vote) {
+            return response.json(404, { message: 'You have not voted on this crosslink.' });
+        }
+
+        return response.json(200, vote);
+    } catch {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const get = async (
+    event: I.APIRequest<undefined, undefined, I.GetCrosslinkPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const crosslink = await crosslinkService.get(event.pathParameters.id);
+
+        if (!crosslink) {
+            return response.json(404, { message: 'Crosslink not found.' });
+        }
+
+        return response.json(200, crosslink);
     } catch {
         return response.json(500, { message: 'Unknown server error.' });
     }

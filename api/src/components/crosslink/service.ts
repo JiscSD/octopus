@@ -39,11 +39,65 @@ export const deleteCrosslink = async (id: string) => {
 };
 
 export const get = async (id: string) => {
-    return await client.prisma.crosslink.findUnique({
+    const rawCrosslink = await client.prisma.crosslink.findUnique({
         where: {
             id
+        },
+        include: {
+            publicationFrom: {
+                select: {
+                    id: true,
+                    versions: {
+                        where: {
+                            isLatestLiveVersion: true
+                        },
+                        select: {
+                            title: true
+                        }
+                    }
+                }
+            },
+            publicationTo: {
+                select: {
+                    id: true,
+                    versions: {
+                        where: {
+                            isLatestLiveVersion: true
+                        },
+                        select: {
+                            title: true
+                        }
+                    }
+                }
+            },
+            votes: {
+                select: {
+                    createdBy: true,
+                    vote: true
+                }
+            }
         }
     });
+
+    // Simplify data
+    const crosslink = rawCrosslink
+        ? {
+              publications: [rawCrosslink.publicationFrom, rawCrosslink.publicationTo].map((publication) => ({
+                  id: publication.id,
+                  title: publication.versions[0].title
+              })),
+              upVotes: rawCrosslink.votes.filter((vote) => vote.vote).length,
+              downVotes: rawCrosslink.votes.filter((vote) => !vote.vote).length,
+              createdBy: rawCrosslink.createdBy,
+              createdAt: rawCrosslink.createdAt
+          }
+        : null;
+
+    return crosslink;
+};
+
+export const exists = async (crosslinkId: string) => {
+    return Boolean(await client.prisma.crosslink.findUnique({ where: { id: crosslinkId } }));
 };
 
 export const setVote = async (crosslinkId: string, userId: string, vote: boolean) => {

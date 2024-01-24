@@ -920,6 +920,14 @@ export interface ResetCrosslinkVotePathParams {
     id: string;
 }
 
+export interface GetCrosslinkPathParams {
+    id: string;
+}
+
+export interface GetCrosslinkVotePathParams {
+    id: string;
+}
+
 // Additional information
 export interface CreateAdditionalInformationPathParams {
     publicationVersionId: string;
