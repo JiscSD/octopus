@@ -928,6 +928,15 @@ export interface GetCrosslinkVotePathParams {
     id: string;
 }
 
+export interface GetPublicationCrosslinksPathParams {
+    publicationId: string;
+}
+
+export type GetPublicationCrosslinksOrder = 'relevant' | 'mix';
+export interface GetPublicationCrosslinksQueryParams {
+    order?: GetPublicationCrosslinksOrder;
+}
+
 // Additional information
 export interface CreateAdditionalInformationPathParams {
     publicationVersionId: string;

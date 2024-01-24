@@ -623,3 +623,10 @@ functions:
                   path: ${self:custom.versions.v1}/crosslinks/{id}
                   method: GET
                   cors: true
+    getPublicationCrosslinks:
+        handler: src/components/crosslink/routes.getPublicationCrosslinks
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{publicationId}/crosslinks
+                  method: GET
+                  cors: true

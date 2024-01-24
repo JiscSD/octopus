@@ -34,3 +34,8 @@ export const getVote = middy(crosslinkController.getVote)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication());
+
+export const getPublicationCrosslinks = middy(crosslinkController.getPublicationCrosslinks)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.validator(crosslinkSchema.getPublicationCrosslinks, 'queryStringParameters'));

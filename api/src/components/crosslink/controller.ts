@@ -141,3 +141,24 @@ export const get = async (
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const getPublicationCrosslinks = async (
+    event: I.APIRequest<undefined, I.GetPublicationCrosslinksQueryParams, I.GetPublicationCrosslinksPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const publication = await publicationService.get(event.pathParameters.publicationId);
+
+        if (!publication) {
+            return response.json(404, { message: 'Publication not found.' });
+        }
+
+        const crosslinks = await crosslinkService.getPublicationCrosslinks(
+            event.pathParameters.publicationId,
+            event.queryStringParameters.order || undefined
+        );
+
+        return response.json(200, crosslinks);
+    } catch {
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};

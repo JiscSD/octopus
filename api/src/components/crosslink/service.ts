@@ -1,4 +1,5 @@
 import * as client from 'lib/client';
+import * as I from 'interface';
 
 export const create = async (publications: [string, string], userId: string) => {
     return await client.prisma.crosslink.create({
@@ -39,37 +40,26 @@ export const deleteCrosslink = async (id: string) => {
 };
 
 export const get = async (id: string) => {
+    const publicationInclude = {
+        select: {
+            id: true,
+            versions: {
+                where: {
+                    isLatestLiveVersion: true
+                },
+                select: {
+                    title: true
+                }
+            }
+        }
+    };
     const rawCrosslink = await client.prisma.crosslink.findUnique({
         where: {
             id
         },
         include: {
-            publicationFrom: {
-                select: {
-                    id: true,
-                    versions: {
-                        where: {
-                            isLatestLiveVersion: true
-                        },
-                        select: {
-                            title: true
-                        }
-                    }
-                }
-            },
-            publicationTo: {
-                select: {
-                    id: true,
-                    versions: {
-                        where: {
-                            isLatestLiveVersion: true
-                        },
-                        select: {
-                            title: true
-                        }
-                    }
-                }
-            },
+            publicationFrom: publicationInclude,
+            publicationTo: publicationInclude,
             votes: {
                 select: {
                     createdBy: true,
@@ -79,7 +69,7 @@ export const get = async (id: string) => {
         }
     });
 
-    // Simplify data
+    // Simplify data.
     const crosslink = rawCrosslink
         ? {
               publications: [rawCrosslink.publicationFrom, rawCrosslink.publicationTo].map((publication) => ({
@@ -139,4 +129,82 @@ export const getVote = async (crosslinkId: string, userId: string) => {
             }
         }
     });
+};
+
+export const getPublicationCrosslinks = async (publicationId: string, order?: I.GetPublicationCrosslinksOrder) => {
+    const publicationInclude = {
+        select: {
+            id: true,
+            versions: {
+                where: {
+                    isLatestLiveVersion: true
+                },
+                select: {
+                    title: true,
+                    publishedDate: true,
+                    user: {
+                        select: {
+                            firstName: true,
+                            lastName: true
+                        }
+                    }
+                }
+            }
+        }
+    };
+    const rawCrosslinks = await client.prisma.crosslink.findMany({
+        where: {
+            OR: [
+                {
+                    publicationFromId: publicationId
+                },
+                {
+                    publicationToId: publicationId
+                }
+            ]
+        },
+        include: {
+            publicationFrom: publicationInclude,
+            publicationTo: publicationInclude,
+            votes: true
+        },
+        orderBy: { createdAt: 'desc' }
+    });
+
+    // Simplify data.
+    const crosslinks = rawCrosslinks.map((crosslink) => {
+        // Only return the other publication's details; we already know about the one whose ID was passed.
+        const linkedPublication =
+            crosslink.publicationFromId === publicationId ? crosslink.publicationTo : crosslink.publicationFrom;
+        // Calculate score (up votes minus down votes).
+        const upCount = crosslink.votes.filter((vote) => vote.vote).length;
+        const downCount = crosslink.votes.filter((vote) => !vote.vote).length;
+        const score = upCount - downCount;
+
+        return {
+            linkedPublication: {
+                title: linkedPublication.versions[0].title,
+                publishedDate: linkedPublication.versions[0].publishedDate,
+                authorName: `${linkedPublication.versions[0].user.firstName[0]}. ${linkedPublication.versions[0].user.lastName}`
+            },
+            score,
+            createdBy: crosslink.createdBy,
+            createdAt: crosslink.createdAt
+        };
+    });
+
+    // Sort data.
+    const sortedCrosslinks =
+        // Relevant: order by score, descending.
+        order === 'relevant'
+            ? crosslinks.sort((a, b) => b.score - a.score)
+            : // Mix: promote 2 most recent, then order by score, descending.
+            order === 'mix'
+            ? crosslinks.length <= 2
+                ? crosslinks
+                : [crosslinks[0], crosslinks[1], ...crosslinks.slice(2).sort((a, b) => b.score - a.score)]
+            : // Default: order by created date, descending.
+              crosslinks;
+
+    return sortedCrosslinks;
 };
