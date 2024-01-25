@@ -726,7 +726,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         >
                             <div className="flex flex-col space-y-8">
                                 {publicationVersion.additionalInformation.map((additionalInfoEntry) => (
-                                    <Components.AdditionalInformationCard additionalInformation={additionalInfoEntry} />
+                                    <Components.AdditionalInformationCard
+                                        key={additionalInfoEntry.id}
+                                        additionalInformation={additionalInfoEntry}
+                                    />
                                 ))}
                             </div>
                         </Components.ContentSection>
