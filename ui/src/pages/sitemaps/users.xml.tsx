@@ -7,7 +7,7 @@ const Sitemap = () => {
 
 export const getServerSideProps: Types.GetServerSideProps = async ({ res }) => {
     // Get details of sitemaps hosted in S3 bucket.
-    const sitemapIndex = await Helpers.getSitemapIndexXML('publications');
+    const sitemapIndex = await Helpers.getSitemapIndexXML('users');
     res.setHeader('Content-Type', 'text/xml');
     res.write(sitemapIndex);
     res.end();
