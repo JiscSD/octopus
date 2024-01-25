@@ -1620,6 +1620,7 @@ test.describe('Publication flow + co-authors', () => {
 
         // Request approval on new version
         await page2.getByTestId(publicationContainerTestId).locator(PageModel.myAccount.editDraftButton).click();
+        await page2.waitForURL('**/edit?**');
         await expect(page2.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
         await page2.locator(PageModel.publish.requestApprovalButton).click();
         await page2.locator(PageModel.publish.confirmRequestApproval).click();
