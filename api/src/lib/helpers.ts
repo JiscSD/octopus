@@ -706,7 +706,8 @@ export const createPublicationHTMLTemplate = (
         dataPermissionsStatement,
         dataPermissionsStatementProvidedBy,
         dataAccessStatement,
-        selfDeclaration
+        selfDeclaration,
+        additionalInformation
     } = publicationVersion;
 
     // cheerio uses htmlparser2
@@ -871,6 +872,7 @@ export const createPublicationHTMLTemplate = (
                     margin-top: 5rem;
                     margin-bottom: 1rem;
                     font-weight: 600;
+                    font-size: 12pt;
                 }
 
                 #title {
@@ -1003,8 +1005,26 @@ export const createPublicationHTMLTemplate = (
                 ${mainText}
             </div>
 
+            ${
+                additionalInformation.length &&
+                '<div class="section"><h2 class="section-title">Additional parts of this work hosted elsewhere</h2><ul>' +
+                    additionalInformation
+                        .map(
+                            (additionalInfoEntry) =>
+                                `<li><h3><b>${additionalInfoEntry.title}</b></h3>${
+                                    additionalInfoEntry.description && `<p>${additionalInfoEntry.description}</p>`
+                                }
+                                <p><a href="${additionalInfoEntry.url}" aria-label="${
+                                    additionalInfoEntry.title
+                                }">Link to ${additionalInfoEntry.title}</a></p>
+                                </li>`
+                        )
+                        .join('') +
+                    '</ul></div>'
+            }
+
             <div class="section affiliations">
-                <h5 class="section-title">Affiliations</h5>
+                <h2 class="section-title">Affiliations</h2>
                 ${
                     affiliations.length
                         ? '<ol>' +
@@ -1024,7 +1044,7 @@ export const createPublicationHTMLTemplate = (
             </div>
 
             <div class="section references">
-                <h5 class="section-title">References</h5>
+                <h2 class="section-title">References</h2>
                 ${
                     references.length
                         ? references
@@ -1044,7 +1064,7 @@ export const createPublicationHTMLTemplate = (
             ${
                 linkedTo.length
                     ? ` <div class="section">
-                            <h5 class="section-title">Parent publications</h5>
+                            <h2 class="section-title">Parent publications</h2>
                             ${linkedTo
                                 .map(
                                     (link) =>
@@ -1058,7 +1078,7 @@ export const createPublicationHTMLTemplate = (
             ${
                 selfDeclaration && ['PROTOCOL', 'HYPOTHESIS'].includes(publicationVersion.publication.type)
                     ? ` <div class="section">
-                            <h5 class="section-title">Data access statement</h5>
+                            <h2 class="section-title">Data access statement</h2>
                             ${
                                 publicationVersion.publication.type === 'PROTOCOL'
                                     ? '<p>Data has not yet been collected according to this method/protocol.</p>'
@@ -1071,7 +1091,7 @@ export const createPublicationHTMLTemplate = (
             ${
                 ethicalStatement
                     ? ` <div class="section">
-                            <h5 class="section-title">Ethical statement</h5>
+                            <h2 class="section-title">Ethical statement</h2>
                             <p>${ethicalStatement}</p>
                             ${ethicalStatementFreeText ? `<p>${ethicalStatementFreeText}</p>` : ''}
                         </div>`
@@ -1081,7 +1101,7 @@ export const createPublicationHTMLTemplate = (
             ${
                 dataPermissionsStatement
                     ? ` <div class="section">
-                            <h5 class="section-title">Data permissions statement</h5>
+                            <h2 class="section-title">Data permissions statement</h2>
                             <p>${dataPermissionsStatement}</p>
                             ${dataPermissionsStatementProvidedBy ? `<p>${dataPermissionsStatementProvidedBy}</p>` : ''}
                         </div>`
@@ -1091,14 +1111,14 @@ export const createPublicationHTMLTemplate = (
             ${
                 dataAccessStatement
                     ? ` <div class="section">
-                            <h5 class="section-title">Data access statement</h5>
+                            <h2 class="section-title">Data access statement</h2>
                             <p>${dataAccessStatement}</p>
                         </div>`
                     : ''
             }
 
             <div class="section">
-                <h5 class="section-title">Funders</h5>
+                <h2 class="section-title">Funders</h2>
                 ${
                     funders.length
                         ? ` <div>
@@ -1116,7 +1136,7 @@ export const createPublicationHTMLTemplate = (
                 }
             </div>
             <div class="section">
-                <h5 class="section-title">Conflict of interest</h5>
+                <h2 class="section-title">Conflict of interest</h2>
                 ${
                     conflictOfInterestText
                         ? `<p>${conflictOfInterestText}</p>`

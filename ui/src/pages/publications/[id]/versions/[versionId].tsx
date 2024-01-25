@@ -215,6 +215,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const list = [];
 
+    const showAdditionalInformation = Boolean(publicationVersion?.additionalInformation.length);
     const showReferences = Boolean(references?.length);
     const showChildProblems = Boolean(childProblems.length);
     const showParentPublications = Boolean(parentPublications.length);
@@ -715,6 +716,21 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             <Components.ParseHTML content={publicationVersion.content ?? ''} />
                         </div>
                     </Components.ContentSection>
+
+                    {/** Additional information */}
+                    {showAdditionalInformation && (
+                        <Components.ContentSection
+                            id="additional-information"
+                            title="Additional parts of this work hosted elsewhere"
+                            hasBreak
+                        >
+                            <div className="flex flex-col space-y-8">
+                                {publicationVersion.additionalInformation.map((additionalInfoEntry) => (
+                                    <Components.AdditionalInformationCard additionalInformation={additionalInfoEntry} />
+                                ))}
+                            </div>
+                        </Components.ContentSection>
+                    )}
 
                     {/* References */}
                     {showReferences && (

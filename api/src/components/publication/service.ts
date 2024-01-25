@@ -87,6 +87,15 @@ export const get = async (id: string) => {
                             title: true,
                             createdAt: true
                         }
+                    },
+                    additionalInformation: {
+                        select: {
+                            id: true,
+                            title: true,
+                            url: true,
+                            description: true,
+                            createdAt: true
+                        }
                     }
                 },
                 orderBy: {
