@@ -875,6 +875,10 @@ export const createPublicationHTMLTemplate = (
                     font-size: 12pt;
                 }
 
+                .section-subtitle {
+                    font-size: 10pt;
+                }
+
                 #title {
                     font-family: 'Montserrat', sans-serif;
                     text-align: center;
@@ -1006,21 +1010,25 @@ export const createPublicationHTMLTemplate = (
             </div>
 
             ${
-                additionalInformation.length &&
-                '<div class="section"><h2 class="section-title">Additional parts of this work hosted elsewhere</h2><ul>' +
-                    additionalInformation
+                additionalInformation.length
+                    ? `<div class="section">
+                    <h2 class="section-title">Additional parts of this work hosted elsewhere</h2>
+                    <ul>
+                    ${additionalInformation
                         .map(
                             (additionalInfoEntry) =>
-                                `<li><h3><b>${additionalInfoEntry.title}</b></h3>${
-                                    additionalInfoEntry.description && `<p>${additionalInfoEntry.description}</p>`
-                                }
-                                <p><a href="${additionalInfoEntry.url}" aria-label="${
-                                    additionalInfoEntry.title
-                                }">Link to ${additionalInfoEntry.title}</a></p>
+                                `<li>
+                                    <h3 class="section-subtitle"><b>${additionalInfoEntry.title}</b></h3>
+                                    ${additionalInfoEntry.description && `<p>${additionalInfoEntry.description}</p>`}
+                                    <p><a href="${additionalInfoEntry.url}" aria-label="${additionalInfoEntry.title}">
+                                        Link to ${additionalInfoEntry.title}
+                                    </a></p>
                                 </li>`
                         )
-                        .join('') +
-                    '</ul></div>'
+                        .join('')}
+                    </ul>
+                </div>`
+                    : ''
             }
 
             <div class="section affiliations">
