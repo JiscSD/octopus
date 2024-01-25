@@ -259,6 +259,7 @@ interface PublicationTestType {
     dataPermissionsStatement?: string;
     dataCollectionApprover?: string;
     dataAccessStatement?: string;
+    additionalInformation?: AdditionalInformation;
 }
 
 const problemPublication: PublicationTestType = {
@@ -270,7 +271,8 @@ const problemPublication: PublicationTestType = {
     references: referencesList,
     coi: 'This Research Problem does not have any specified conflicts of interest.',
     funding: 'This Research Problem has the following sources of funding:',
-    fundingExtraDetails: 'extra details'
+    fundingExtraDetails: 'extra details',
+    additionalInformation: sampleAdditionalInformation
 };
 
 const problemPublication2: PublicationTestType = {
@@ -359,7 +361,8 @@ const checkPublication = async (page: Page, publication: PublicationTestType, au
         ...(publication.ethicalApprover ? [`text="${publication.ethicalApprover}"`] : []),
         ...(publication.dataPermissionsStatement ? [`text="${publication.dataPermissionsStatement}"`] : []),
         ...(publication.dataCollectionApprover ? [`text="${publication.dataCollectionApprover}"`] : []),
-        ...(publication.dataAccessStatement ? [`text="${publication.dataAccessStatement}"`] : [])
+        ...(publication.dataAccessStatement ? [`text="${publication.dataAccessStatement}"`] : []),
+        ...(publication.additionalInformation ? [`text="${publication.additionalInformation.title}"`] : [])
     ];
 
     await Promise.all(publicationTemplate(publication).map((selector) => expect(page.locator(selector)).toBeVisible()));
