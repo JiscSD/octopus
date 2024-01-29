@@ -42,3 +42,7 @@ variable "monitoring_interval" {
 variable "performance_insights_retention_period" {
   type = number
 }
+
+variable "vpc_cidr_block" {
+  type = string
+}

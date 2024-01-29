@@ -27,7 +27,7 @@ resource "aws_security_group" "elasticsearch" {
     to_port   = 443
     protocol  = "tcp"
 
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = [var.vpc_cidr_block]
   }
 }
 
@@ -91,7 +91,7 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
             "Action": "es:*",
             "Principal": "*",
             "Effect": "Allow",
-            "Resource": "arn:aws:es:eu-west-1:948306873545:domain/${var.environment}-octopus/*"
+            "Resource": "arn:aws:es:eu-west-1:${data.aws_caller_identity.current.account_id}:domain/${var.environment}-octopus/*"
         }
     ]
   }
