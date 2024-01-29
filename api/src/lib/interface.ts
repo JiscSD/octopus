@@ -491,8 +491,8 @@ export interface LinkCoAuthorPathParams {
 
 export interface ConfirmCoAuthorBody {
     email: string;
-    code: string;
     approve: boolean;
+    code?: string;
 }
 
 export interface ChangeCoAuthorRequestBody {
