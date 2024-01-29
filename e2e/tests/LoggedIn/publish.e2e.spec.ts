@@ -877,6 +877,7 @@ const unlockPublication = async (page: Page) => {
 
 type AccountPagePublicationState =
     | 'own first draft'
+    | 'unconfirmed coauthor'
     | 'pending coauthor approval'
     | 'pending your approval'
     | 'approved'
@@ -911,6 +912,14 @@ const checkPublicationOnAccountPage = async (
         case 'pending coauthor approval':
             await expect(publicationContainer).toContainText('Status: Pending author approval');
             await expect(publicationContainer.locator(PageModel.myAccount.viewDraftButton)).toBeVisible();
+            break;
+        case 'unconfirmed coauthor':
+            await expect(publicationContainer).toContainText('(Invited)');
+            await expect(publicationContainer).toContainText('Status: Pending author approval');
+            await expect(publicationContainer).toContainText(
+                `${Helpers.user1.shortName} has created a new draft version. You will need to confirm your involvement to access it.`
+            );
+            await expect(publicationContainer.locator(PageModel.myAccount.confirmInvolvementButton)).toBeVisible();
             break;
         case 'pending your approval':
             await expect(publicationContainer).toContainText('(Author)');
@@ -1576,9 +1585,14 @@ test.describe('Publication flow + co-authors', () => {
         // Check locked details
         await checkPublicationOnAccountPage(page, { id: publicationId }, 'pending coauthor approval', true);
 
-        // As co-author, confirm involvement without approving
+        // Check details as unconfirmed co-author
         const page2 = await browser.newPage();
-        await confirmInvolvement(browser, coAuthor, page2, true);
+        await page2.goto(Helpers.UI_BASE);
+        await Helpers.login(page2, browser, Helpers.user2);
+        await checkPublicationOnAccountPage(page2, { id: publicationId }, 'unconfirmed coauthor', true);
+
+        // As co-author, confirm involvement without approving
+        await confirmInvolvement(browser, coAuthor, page2);
 
         // Check details as co-author
         await checkPublicationOnAccountPage(page2, { id: publicationId }, 'pending your approval', true);
@@ -1614,25 +1628,20 @@ test.describe('Publication flow + co-authors', () => {
         );
         await page2.waitForURL('**/edit?**');
 
-        // Check details as co-author (new corresponding author)
-        await checkPublicationOnAccountPage(page2, { id: publicationId }, 'own new version', true);
-
-        // Check details as old corresponding author
-        await page.reload();
-        await checkPublicationOnAccountPage(page, { id: publicationId }, "coauthor's new version", false);
-
         // Request approval on new version
-        await page2.getByTestId(publicationContainerTestId).locator(PageModel.myAccount.editDraftButton).click();
-        await page2.waitForURL('**/edit?**');
         await expect(page2.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
         await page2.locator(PageModel.publish.requestApprovalButton).click();
         await page2.locator(PageModel.publish.confirmRequestApproval).click();
         await page2.waitForSelector(PageModel.publish.unlockButton);
 
+        // Check details as co-author (new corresponding author)
+        await checkPublicationOnAccountPage(page2, { id: publicationId }, 'own new version', true);
+
         // Confirm involvement on new version
         await confirmInvolvement(browser, Helpers.user1, page);
 
         // Unlock publication
+        await page2.getByTestId(publicationContainerTestId).locator(PageModel.myAccount.viewDraftButton).click();
         await unlockPublication(page2);
 
         // Check details as old author
@@ -1642,6 +1651,17 @@ test.describe('Publication flow + co-authors', () => {
             "coauthor's unlocked draft",
             true
         );
+
+        // Remove original author from coauthors and save
+        await page2.locator('aside button:has-text("Co-authors")').first().click();
+        await removeCoAuthor(page2, Helpers.user1);
+        await page2.locator('button[title="Save"]').first().click();
+        await page2.locator('div[role="dialog"] button[aria-label="Save"]').click();
+        await page2.waitForSelector('p:has-text("Publication successfully saved")');
+
+        // Check details as old corresponding author
+        await page.reload();
+        await checkPublicationOnAccountPage(page, { id: publicationId }, "coauthor's new version", false);
 
         await Promise.all([page.close(), page2.close()]);
     });
@@ -2433,13 +2453,17 @@ test.describe('Publication flow + co-authors', () => {
         // request control over the new version
         const publicationRow = page2.getByTestId(publicationTestId);
         await expect(publicationRow).toContainText(problemPublication2.title);
-        await publicationRow.locator('button[title="Take over editing"]').click();
+        await publicationRow.locator(PageModel.myAccount.confirmInvolvementButton).click();
+        await page2.waitForURL('**/versions/latest');
+        await page2.locator('#desktop-versions-accordion a[title="Take over editing"]').click();
         await page2.click('button[title="Request Control"]');
         await page2.waitForResponse((response) => response.url().includes('/request-control') && response.ok());
 
-        await expect(page2.getByTestId(publicationTestId)).toContainText(
-            'You have requested control over this publication version.'
-        );
+        // Uncomment when https://github.com/JiscSD/octopus/pull/571 has been merged
+        // and navigate to account page first to check this
+        // await expect(page2.getByTestId(publicationTestId)).toContainText(
+        //     'You have requested control over this publication version.'
+        // );
 
         // transfer ownership to user2
         await approveControlRequest(context, Helpers.user1, Helpers.user2.fullName, true);

@@ -204,6 +204,16 @@ export const link = async (
             return response.json(403, { message: 'You are not currently listed as an author on this draft' });
         }
 
+        // The requestor must either supply a code or log in as a verified user with the same email as the co-author record.
+        const emailMatch = event.user?.email === coAuthorByEmail.email;
+
+        if (!(emailMatch || event.body.code)) {
+            return response.json(400, {
+                message:
+                    'To confirm or deny your involvement, you must either provide a code or be authenticated as a user with a verified email matching the co-author record.'
+            });
+        }
+
         if (!event.body.approve) {
             // check if user has already been linked
             if (coAuthorByEmail.linkedUser) {
@@ -213,7 +223,7 @@ export const link = async (
                 });
             }
 
-            await coAuthorService.removeFromPublicationVersion(version.id, event.body.email, event.body.code);
+            await coAuthorService.removeFromPublicationVersion(version.id, event.body.email);
 
             // notify main author about rejection
             await email.notifyCoAuthorRejection({
@@ -270,12 +280,12 @@ export const link = async (
             });
         }
 
-        await coAuthorService.linkUser(event.user.id, version.id, event.body.email, event.body.code);
+        await coAuthorService.linkUser(event.user.id, version.id, event.body.email);
 
         // The email of the linked user may not match the email the invitation was sent to
         // (e.g. user manages their orcid account with a different email to their work email).
         // In this case, we need to update the coauthor's email field because it becomes outdated.
-        if (event.user.email !== coAuthorByEmail.email) {
+        if (!emailMatch) {
             // We already check that the logged in user's email is not already a coauthor on this version,
             // so this is safe.
             await coAuthorService.update(coAuthorByEmail.id, { email: event.user.email });

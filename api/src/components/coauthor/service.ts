@@ -130,12 +130,11 @@ export const deleteCoAuthorByEmail = async (publicationVersionId: string, email:
     return deleteCoAuthor;
 };
 
-export const linkUser = async (userId: string, publicationVersionId: string, email: string, code: string) => {
+export const linkUser = async (userId: string, publicationVersionId: string, email: string) => {
     const update = await client.prisma.coAuthors.updateMany({
         where: {
             publicationVersionId,
-            email,
-            code
+            email
         },
         data: {
             linkedUser: userId
@@ -148,12 +147,11 @@ export const linkUser = async (userId: string, publicationVersionId: string, ema
     return update;
 };
 
-export const removeFromPublicationVersion = async (publicationVersionId: string, email: string, code: string) => {
+export const removeFromPublicationVersion = async (publicationVersionId: string, email: string) => {
     const removeCoAuthor = client.prisma.coAuthors.deleteMany({
         where: {
             publicationVersionId,
-            email,
-            code
+            email
         }
     });
     await publicationVersionService.update(publicationVersionId, {
