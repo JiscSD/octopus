@@ -42,7 +42,7 @@ export const generateSitemaps = async (category: 'publications' | 'users'): Prom
     // Get IDs for first sitemap
     let queryResults =
         category === 'publications'
-            ? await client.prisma.publication.findMany(queryOptions )
+            ? await client.prisma.publication.findMany(queryOptions)
             : await client.prisma.user.findMany(queryOptions as Prisma.UserFindManyArgs);
     let sitemapCount = 0;
 
@@ -81,7 +81,7 @@ export const generateSitemaps = async (category: 'publications' | 'users'): Prom
                       cursor: {
                           id: queryResults[queryResults.length - 1].id
                       },
-                      ...(queryOptions )
+                      ...queryOptions
                   })
                 : await client.prisma.user.findMany({
                       skip: 1,
