@@ -140,8 +140,16 @@ export const getPublications = async (
 ) => {
     const { offset, limit } = params;
 
+    const user = await client.prisma.user.findUnique({
+        where: {
+            id
+        }
+    });
+
+    // Get publications where:
     const where: Prisma.PublicationWhereInput = {
         OR: [
+            // User is corresponding author on at least one version, or
             {
                 versions: {
                     some: {
@@ -149,6 +157,7 @@ export const getPublications = async (
                     }
                 }
             },
+            // User is a confirmed coauthor on at least one version, or
             {
                 versions: {
                     some: {
@@ -159,8 +168,26 @@ export const getPublications = async (
                         }
                     }
                 }
-            }
+            },
+            // User is an unconfirmed coauthor on at least one version
+            ...(user?.email
+                ? [
+                      {
+                          versions: {
+                              some: {
+                                  coAuthors: {
+                                      some: {
+                                          email: user.email
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  ]
+                : [])
         ],
+        // And, if the user is the account owner and filters have been provided,
+        // where there is a version with current status matching the given filters
         ...(isAccountOwner
             ? versionStatusArray
                 ? {
@@ -173,7 +200,8 @@ export const getPublications = async (
                       }
                   }
                 : {}
-            : { versions: { some: { isLatestLiveVersion: true } } })
+            : // But if the user is not the owner, get only publications that have a published version
+              { versions: { some: { isLatestLiveVersion: true } } })
     };
 
     const userPublications = await client.prisma.publication.findMany({
@@ -184,7 +212,8 @@ export const getPublications = async (
             versions: {
                 where: {
                     ...(isAccountOwner
-                        ? // The owner of the account gets all live versions, and the draft if they are an author on it
+                        ? // The owner of the account gets all live versions, and the draft
+                          // if they are an author on it (confirmed or unconfirmed)
                           {
                               OR: [
                                   { currentStatus: 'LIVE' },
@@ -197,7 +226,18 @@ export const getPublications = async (
                                               linkedUser: id
                                           }
                                       }
-                                  }
+                                  },
+                                  ...(user?.email
+                                      ? [
+                                            {
+                                                coAuthors: {
+                                                    some: {
+                                                        email: user.email
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                      : [])
                               ]
                           }
                         : // Other users viewing a user's profile just need the latest live version
@@ -217,6 +257,7 @@ export const getPublications = async (
                             id: true,
                             linkedUser: true,
                             confirmedCoAuthor: true,
+                            email: true,
                             user: {
                                 select: {
                                     orcid: true,
