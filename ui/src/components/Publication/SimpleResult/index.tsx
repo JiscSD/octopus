@@ -6,8 +6,6 @@ import * as Components from '@/components';
 import * as Config from '@/config';
 import * as Hooks from '@/hooks';
 
-import { useRouter } from 'next/router';
-
 type Props = {
     publication: Interfaces.Publication;
     user: Interfaces.User;
@@ -98,8 +96,10 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                         <span>
                             {latestVersion.user.id === props.user.id
                                 ? ' (Corresponding Author)'
-                                : latestVersion.coAuthors.find((coAuthor) => coAuthor.linkedUser === props.user.id) &&
-                                  ' (Author)'}
+                                : latestVersion.coAuthors.find((coAuthor) => coAuthor.linkedUser === props.user.id)
+                                ? ' (Author)'
+                                : latestVersion.coAuthors.find((coAuthor) => coAuthor.email === props.user.email) &&
+                                  ' (Invited)'}
                         </span>
                     )}
                 </p>
@@ -113,19 +113,41 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                             Status: {Helpers.getPublicationStatusByAuthor(draftVersion, props.user)}
                         </p>
                         {props.user.id !== draftVersion.user.id ? (
-                            <>
-                                <p>
-                                    <Components.Link
-                                        href={`${Config.urls.viewUser.path}/${draftVersion.user.id}`}
-                                        className="underline"
-                                    >
-                                        {draftVersion.user.firstName.substring(0, 1)}. {draftVersion.user.lastName}
-                                    </Components.Link>{' '}
-                                    is working on a new draft version
-                                </p>
-                                {viewDraftButton}
-                                {requestControl}
-                            </>
+                            draftVersion.coAuthors.some(
+                                (coAuthor) => coAuthor.email === props.user.email && !coAuthor.linkedUser
+                            ) ? (
+                                <>
+                                    <p>
+                                        <Components.Link
+                                            href={`${Config.urls.viewUser.path}/${draftVersion.user.id}`}
+                                            className="underline"
+                                        >
+                                            {draftVersion.user.firstName.substring(0, 1)}. {draftVersion.user.lastName}
+                                        </Components.Link>{' '}
+                                        has created a new draft version. You will need to confirm your involvement to
+                                        access it.
+                                    </p>
+                                    <Components.Button
+                                        href={`/author-link?email=${props.user.email}&publicationId=${props.publication.id}&versionId=${draftVersion.id}&approve=true`}
+                                        title="Confirm Involvement"
+                                        className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <p>
+                                        <Components.Link
+                                            href={`${Config.urls.viewUser.path}/${draftVersion.user.id}`}
+                                            className="underline"
+                                        >
+                                            {draftVersion.user.firstName.substring(0, 1)}. {draftVersion.user.lastName}
+                                        </Components.Link>{' '}
+                                        is working on a new draft version
+                                    </p>
+                                    {viewDraftButton}
+                                    {requestControl}
+                                </>
+                            )
                         ) : draftVersion.currentStatus === 'LOCKED' ? (
                             viewDraftButton
                         ) : (
