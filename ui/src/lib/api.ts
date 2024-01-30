@@ -22,7 +22,7 @@ const api = axios.create({
     baseURL
 });
 
-export const get = async (url: string, token: string | undefined): Promise<AxiosResponse> => {
+export const get = async (url: string, token?: string): Promise<AxiosResponse> => {
     const headers = {
         headers: {
             Authorization: `Bearer ${token}`

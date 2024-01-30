@@ -598,7 +598,7 @@ export const toKebabCase = (inputString: string): string => {
 export const getSitemapIndexXML = async (category: 'publications' | 'users'): Promise<string> => {
     let sitemapS3Keys: string[] = [];
     try {
-        const sitemapsRequest = await api.get('/sitemaps/paths', undefined);
+        const sitemapsRequest = await api.get('/sitemaps/paths');
         sitemapS3Keys = sitemapsRequest.data;
     } catch (error) {
         console.log(error);
