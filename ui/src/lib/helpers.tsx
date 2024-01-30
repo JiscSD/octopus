@@ -605,11 +605,8 @@ export const getSitemapIndexXML = async (category: 'publications' | 'users'): Pr
     }
     // Write an XML element for each applicable sitemap we have in S3
     const sitemapXMLElements = sitemapS3Keys
-        .flatMap((sitemapS3Key) =>
-            sitemapS3Key.startsWith(category + '/')
-                ? `<sitemap><loc>${Config.urls.baseUrl}/sitemaps/${sitemapS3Key}</loc></sitemap>`
-                : []
-        )
+        .filter((sitemapS3Key) => sitemapS3Key.startsWith(category + '/'))
+        .map((sitemapS3Key) => `<sitemap><loc>${Config.urls.baseUrl}/sitemaps/${sitemapS3Key}</loc></sitemap>`)
         .join('');
     return `<?xml version="1.0" encoding="UTF-8"?>
         <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
