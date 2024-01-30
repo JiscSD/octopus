@@ -106,4 +106,63 @@ describe('create a funder', () => {
 
         expect(funder.status).toEqual(400);
     });
+    test('User can create a duplicate funder if grant ID is different', async () => {
+        const funder = await testUtils.agent
+            .post('/publication-versions/publication-problem-draft-v1/funders')
+            .query({ apiKey: '000000005' })
+            .send({
+                name: 'name',
+                country: 'country',
+                city: 'city',
+                link: 'https://example.com',
+                grantId: 'new-grant-id'
+            });
+
+        expect(funder.status).toEqual(200);
+    });
+    test('User cannot create a duplicate funder if no grant ID is supplied', async () => {
+        const funder = await testUtils.agent
+            .post('/publication-versions/publication-problem-draft-v1/funders')
+            .query({ apiKey: '000000005' })
+            .send({
+                name: 'name',
+                country: 'country',
+                city: 'city',
+                link: 'https://example.com'
+            });
+
+        expect(funder.status).toEqual(400);
+        expect(funder.body.message).toEqual('This funder already exists on this publication version.');
+    });
+    test('User cannot create a duplicate funder if the existing funder has no grant ID', async () => {
+        const funder = await testUtils.agent
+            .post('/publication-versions/publication-problem-draft-v1/funders')
+            .query({ apiKey: '000000005' })
+            .send({
+                name: 'Example Funder',
+                country: 'United Kingdom',
+                city: 'London',
+                link: 'https://examplefunder.com'
+            });
+
+        expect(funder.status).toEqual(400);
+        expect(funder.body.message).toEqual('This funder already exists on this publication version.');
+    });
+    test('User cannot create a duplicate funder with the same grant ID', async () => {
+        const funder = await testUtils.agent
+            .post('/publication-versions/publication-problem-draft-v1/funders')
+            .query({ apiKey: '000000005' })
+            .send({
+                name: 'name',
+                country: 'country',
+                city: 'city',
+                link: 'https://example.com',
+                grantId: 'testing-co-12345'
+            });
+
+        expect(funder.status).toEqual(400);
+        expect(funder.body.message).toEqual(
+            'This funder and grant identifier already exist on this publication version.'
+        );
+    });
 });

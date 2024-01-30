@@ -5,12 +5,8 @@ import * as publicationVersionService from 'publicationVersion/service';
 export const create = async (publicationVersionId: string, data: I.CreateFunderRequestBody) => {
     const funder = await client.prisma.funders.create({
         data: {
-            city: data.city,
-            country: data.country,
-            ror: data.ror,
             publicationVersionId,
-            name: data.name,
-            link: data.link
+            ...data
         }
     });
     await publicationVersionService.update(publicationVersionId, {

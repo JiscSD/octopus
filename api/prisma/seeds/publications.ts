@@ -318,13 +318,23 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                     ]
                 },
                 funders: {
-                    create: {
-                        id: 'publication-problem-draft-funder',
-                        name: 'name',
-                        country: 'country',
-                        city: 'city',
-                        link: 'https://example.com'
-                    }
+                    create: [
+                        {
+                            id: 'publication-problem-draft-funder-1',
+                            name: 'name',
+                            country: 'country',
+                            city: 'city',
+                            link: 'https://example.com',
+                            grantId: 'testing-co-12345'
+                        },
+                        {
+                            id: 'publication-problem-draft-funder-2',
+                            name: 'Example Funder',
+                            country: 'United Kingdom',
+                            city: 'London',
+                            link: 'https://examplefunder.com'
+                        }
+                    ]
                 },
                 additionalInformation: {
                     create: {

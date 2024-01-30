@@ -619,6 +619,7 @@ export interface CreateFunderRequestBody {
     city: string;
     country: string;
     link: string;
+    grantId?: string;
 }
 
 export interface GetFlagByID {
