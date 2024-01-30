@@ -54,7 +54,8 @@ export const get = async (id: string) => {
                             country: true,
                             name: true,
                             link: true,
-                            ror: true
+                            ror: true,
+                            grantId: true
                         }
                     },
                     coAuthors: {

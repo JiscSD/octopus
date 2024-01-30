@@ -37,7 +37,8 @@ const updatePublicationDOIs = async (): Promise<void> => {
                     country: true,
                     name: true,
                     link: true,
-                    ror: true
+                    ror: true,
+                    grantId: true
                 }
             },
             coAuthors: {
