@@ -1,7 +1,24 @@
 data "aws_availability_zones" "available" {}
 
+data "aws_ssm_parameter" "vpc_cidr_block" {
+  name = "vpc_cidr_block_${var.environment}_${var.project_name}"
+}
+
+data "aws_ssm_parameter" "public_subnets" {
+  name = "vpc_public_subnets_${var.environment}_${var.project_name}"
+}
+
+data "aws_ssm_parameter" "private_subnets" {
+  name = "vpc_private_subnets_${var.environment}_${var.project_name}"
+}
+
+locals {
+  public_subnets_map  = jsondecode(data.aws_ssm_parameter.public_subnets.value)
+  private_subnets_map = jsondecode(data.aws_ssm_parameter.private_subnets.value)
+}
+
 resource "aws_vpc" "main" {
-  cidr_block           = var.cidr_block
+  cidr_block           = data.aws_ssm_parameter.vpc_cidr_block.value
   enable_dns_support   = true
   enable_dns_hostnames = true
 
@@ -24,7 +41,7 @@ resource "aws_internet_gateway" "igw" {
 # AZ 1
 resource "aws_subnet" "public_az1" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public_subnets[0]
+  cidr_block        = local.public_subnets_map[0]
   availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
@@ -33,7 +50,7 @@ resource "aws_subnet" "public_az1" {
 }
 resource "aws_subnet" "private_az1" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.private_subnets[0]
+  cidr_block        = local.private_subnets_map[0]
   availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
@@ -44,7 +61,7 @@ resource "aws_subnet" "private_az1" {
 # AZ 2
 resource "aws_subnet" "public_az2" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public_subnets[1]
+  cidr_block        = local.public_subnets_map[1]
   availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
@@ -53,7 +70,7 @@ resource "aws_subnet" "public_az2" {
 }
 resource "aws_subnet" "private_az2" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.private_subnets[1]
+  cidr_block        = local.private_subnets_map[1]
   availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
@@ -64,7 +81,7 @@ resource "aws_subnet" "private_az2" {
 # AZ 3
 resource "aws_subnet" "public_az3" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public_subnets[2]
+  cidr_block        = local.public_subnets_map[2]
   availability_zone = data.aws_availability_zones.available.names[2]
 
   tags = {
@@ -73,7 +90,7 @@ resource "aws_subnet" "public_az3" {
 }
 resource "aws_subnet" "private_az3" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.private_subnets[2]
+  cidr_block        = local.private_subnets_map[2]
   availability_zone = data.aws_availability_zones.available.names[2]
 
   tags = {
@@ -141,7 +158,7 @@ resource "aws_route_table_association" "private_az3" {
 
 # security group for serverless
 resource "aws_security_group" "sls_sg" {
-  name        = "sls_api_sg_dev"
+  name        = "${var.environment}_${var.project_name}_sls_api_sg"
   description = "Allow TLS inbound traffic from IPv4/6"
   vpc_id      = aws_vpc.main.id
 
@@ -168,7 +185,7 @@ resource "aws_security_group" "sls_sg" {
 # NAT
 
 resource "aws_eip" "nat_eip" {
-  vpc        = true
+  domain     = "vpc"
   depends_on = [aws_internet_gateway.igw]
 
   tags = {

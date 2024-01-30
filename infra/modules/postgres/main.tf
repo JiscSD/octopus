@@ -1,24 +1,24 @@
 resource "aws_db_subnet_group" "database_subnet" {
-  name       = "${var.project_name}_database_subnet_${var.environment}"
+  name       = "${var.project_name}_${var.environment}_database_subnet"
   subnet_ids = toset(var.private_subnet_ids)
 
   tags = {
-    Name        = "${var.project_name}_subnet_group_${var.environment}"
+    Name        = "${var.project_name}_${var.environment}_database_subnet"
     Environment = var.environment
   }
 }
 
 resource "aws_security_group" "database_security_group" {
-  name        = "${var.project_name}_database_security_group"
-  description = "${var.project_name}_database_security_group"
+  name        = "${var.project_name}_${var.environment}_database_security_group"
+  description = "${var.project_name}_${var.environment}_database_security_group"
   vpc_id      = var.vpc_id
 
   ingress {
-    description = "Access from VPN"
+    description = "Access from VPC"
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = [var.vpc_cidr_block]
   }
 
   tags = {

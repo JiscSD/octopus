@@ -185,6 +185,7 @@ const mapPublicationVersionToMetadata = (publicationVersion, pdfUrl) => {
   };
 
   const formattedPublicationDate = publicationVersion.createdAt.slice(0, 10);
+  const publication = publicationVersion.publication;
 
   return {
     provider: {
@@ -216,9 +217,10 @@ const mapPublicationVersionToMetadata = (publicationVersion, pdfUrl) => {
         identifier: [
           {
             type: "doi",
-            id: publicationVersion.publication.doi,
+            id: publication.doi,
           },
         ],
+        e_num: publication.id, // DOI suffix e.g. "abcd-efgh"
       },
       author: publicationVersion.coAuthors?.map((author) =>
         formatAuthor(author)
