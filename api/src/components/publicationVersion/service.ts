@@ -37,7 +37,8 @@ export const getById = (id: string) =>
                     country: true,
                     name: true,
                     link: true,
-                    ror: true
+                    ror: true,
+                    grantId: true
                 }
             },
             coAuthors: {
@@ -133,7 +134,8 @@ export const get = (publicationId: string, version: string | number) =>
                     country: true,
                     name: true,
                     link: true,
-                    ror: true
+                    ror: true,
+                    grantId: true
                 }
             },
             coAuthors: {
@@ -274,7 +276,8 @@ export const update = (id: string, data: Prisma.PublicationVersionUpdateInput) =
                     country: true,
                     name: true,
                     link: true,
-                    ror: true
+                    ror: true,
+                    grantId: true
                 }
             },
             coAuthors: {
@@ -615,7 +618,8 @@ export const create = async (previousVersion: I.PublicationVersion, user: I.User
                         city: funder.city,
                         country: funder.country,
                         link: funder.link,
-                        name: funder.name
+                        name: funder.name,
+                        grantId: funder.grantId
                     }))
                 }
             },
@@ -655,7 +659,8 @@ export const create = async (previousVersion: I.PublicationVersion, user: I.User
                     country: true,
                     name: true,
                     link: true,
-                    ror: true
+                    ror: true,
+                    grantId: true
                 }
             },
             coAuthors: {

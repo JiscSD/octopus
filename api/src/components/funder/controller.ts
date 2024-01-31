@@ -29,12 +29,22 @@ export const create = async (
             });
         }
 
+        // Duplicate funder (designated by ROR ID or funder link) is allowed if both funders have grant IDs and they are different.
+        const duplicateFunders = publicationVersion.funders.filter(
+            (funder) => funder.ror === event.body.ror || funder.link === event.body.link
+        );
+
         if (
-            publicationVersion.funders.some(
-                (funder) => funder.ror === event.body.ror || funder.link === event.body.link
-            )
+            (!event.body.grantId && duplicateFunders.length) ||
+            (event.body.grantId && duplicateFunders.some((funder) => !funder.grantId))
         ) {
             return response.json(400, { message: 'This funder already exists on this publication version.' });
+        } else {
+            if (duplicateFunders.some((funder) => funder.grantId === event.body.grantId)) {
+                return response.json(400, {
+                    message: 'This funder and grant identifier already exist on this publication version.'
+                });
+            }
         }
 
         const funder = await funderService.create(publicationVersion.id, event.body);

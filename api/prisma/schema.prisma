@@ -117,6 +117,7 @@ model Funders {
     city                 String
     link                 String
     ror                  String?
+    grantId              String?
     createdAt            DateTime           @default(now())
     publicationVersionId String
     publicationVersion   PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
