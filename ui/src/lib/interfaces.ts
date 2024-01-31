@@ -523,3 +523,12 @@ export interface AdditionalInformation {
     url: string;
     description: string;
 }
+
+export interface AuthorsPaginatedResults {
+    data: CoreUser[];
+    metadata: {
+        total: number;
+        limit: number;
+        offset: number;
+    };
+}

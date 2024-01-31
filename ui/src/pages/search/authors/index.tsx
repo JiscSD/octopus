@@ -20,15 +20,10 @@ import * as Helpers from '@/helpers';
  */
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    // defaults to possible query params
     const searchType: Types.SearchType = 'authors';
     let query: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
     let offset: number | string | string[] | null = null;
-
-    // defaults to results
-    let results: Interfaces.CoreUser[] | [] = [];
-    let metadata: Interfaces.SearchResultMeta | {} = {};
 
     // default error
     let error: string | null = null;
@@ -47,22 +42,22 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     limit && !Number.isNaN(parseInt(limit, 10)) ? (limit = parseInt(limit, 10)) : (limit = null);
     offset && !Number.isNaN(parseInt(offset, 10)) ? (offset = parseInt(offset, 10)) : (offset = null);
 
-    // ensure the value of the seach type is acceptable
-    // ensure the value of the search type is acceptable
+    const swrKey = `/users?search=${encodeURIComponent(query || '')}&limit=${limit || '10'}&offset=${offset || '0'}`;
+    let fallbackData: Interfaces.AuthorsPaginatedResults = {
+        data: [],
+        metadata: {
+            offset: 0,
+            limit: 10,
+            total: 0
+        }
+    };
 
     try {
-        const response = await api.search<Interfaces.User>(searchType, encodeURIComponent(query || ''), limit, offset);
-        results = response.data;
-        metadata = response.metadata;
-        error = null;
+        fallbackData = (await api.get(swrKey, undefined)).data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
     }
-
-    const swrKey = `/users?search=${encodeURIComponent((Array.isArray(query) ? query[0] : query) || '')}&limit=${
-        limit || '10'
-    }&offset=${offset || '0'}`;
 
     return {
         props: {
@@ -71,7 +66,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             limit,
             offset,
             fallback: {
-                [swrKey]: results
+                [swrKey]: fallbackData
             },
             error
         }
@@ -83,33 +78,42 @@ type Props = {
     query: string | null;
     limit: string | null;
     offset: string | null;
+    fallback: {
+        [swrKey: string]: Interfaces.CoreUser[];
+    };
     error: string | null;
 };
 
 const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
-    const searchInputRef = React.useRef<HTMLInputElement>(null);
-    // params
-    const [query, setQuery] = React.useState(props.query ? props.query : '');
-    // param for pagination
+    // Query params
+    const [query] = React.useState(props.query ? props.query : '');
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
 
-    // ugly complex swr key
-
     const swrKey = `/users?search=${encodeURIComponent(query || '')}&limit=${limit || '10'}&offset=${offset || '0'}`;
 
-    const { data: results = [], error, isValidating } = useSWR(swrKey);
+    const {
+        data: results,
+        error,
+        isValidating
+    } = useSWR<Interfaces.AuthorsPaginatedResults>(swrKey, {
+        fallback: props.fallback,
+        use: [Helpers.laggy]
+    });
 
     const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
-        const searchTerm = searchInputRef.current?.value || '';
-        setQuery(searchTerm);
-    };
+        const searchTerm = e.currentTarget.searchTerm.value;
+        const newQuery = { ...router.query, query: searchTerm };
 
-    React.useEffect(() => {
+        if (!searchTerm) {
+            delete newQuery.query; // remove query param from browser url
+        }
+
+        await router.push({ query: newQuery }, undefined, { shallow: true });
         setOffset(0);
-    }, [query, limit]);
+    };
 
     const pageTitle = Config.urls.search.title.replace('publications', 'authors');
 
@@ -142,10 +146,7 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                             <select
                                 name="search-type"
                                 id="search-type"
-                                onChange={(e) => {
-                                    const value: Types.SearchType = e.target.value as Types.SearchType;
-                                    router.push(`/search/${value}`);
-                                }}
+                                onChange={(e) => router.push(`/search/${e.target.value}`)}
                                 value={props.searchType}
                                 className="col-span-3 !mt-0 block w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
                                 disabled={isValidating}
@@ -156,16 +157,13 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                             </select>
                         </label>
 
-                        <label
-                            htmlFor="order-direction"
-                            className="relative col-span-4 block lg:col-span-2 xl:col-span-1"
-                        >
+                        <label htmlFor="pageSize" className="relative col-span-4 block lg:col-span-2 xl:col-span-1">
                             <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
                                 Showing
                             </span>
                             <select
-                                name="order-direction"
-                                id="order-direction"
+                                name="pageSize"
+                                id="pageSize"
                                 onChange={(e) => setLimit(parseInt(e.target.value, 10))}
                                 value={limit}
                                 className="w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
@@ -185,14 +183,13 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                             className="col-span-12 lg:col-span-7 xl:col-span-8"
                             onSubmit={handlerSearchFormSubmit}
                         >
-                            <label htmlFor="search-query" className="relative block w-full">
+                            <label htmlFor="searchTerm" className="relative block w-full">
                                 <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
                                     Quick search
                                 </span>
                                 <input
-                                    ref={searchInputRef}
-                                    name="query"
-                                    id="query"
+                                    name="searchTerm"
+                                    id="searchTerm"
                                     defaultValue={props.query ? props.query : ''}
                                     type="text"
                                     placeholder="Type here and press enter..."
@@ -261,7 +258,7 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 >
                                                     <div className="flex justify-between">
                                                         <button
-                                                            onClick={(e) => {
+                                                            onClick={() => {
                                                                 setOffset((prev) => prev - limit);
                                                                 Helpers.scrollTopSmooth();
                                                             }}
@@ -272,7 +269,7 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                                                         </button>
 
                                                         <button
-                                                            onClick={(e) => {
+                                                            onClick={() => {
                                                                 setOffset((prev) => prev + limit);
                                                                 Helpers.scrollTopSmooth();
                                                             }}
