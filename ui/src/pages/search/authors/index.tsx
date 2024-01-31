@@ -230,7 +230,7 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                                     />
                                 )}
 
-                                {!isValidating && results?.data?.length && (
+                                {results?.data?.length && (
                                     <>
                                         <div className="rounded">
                                             {results.data.map((result: any, index: number) => {
