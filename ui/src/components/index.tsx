@@ -1,5 +1,6 @@
 export { default as ActionBar } from './Publication/ActionBar';
 export { default as ActionCard } from './ActionCard';
+export { default as AdditionalInformationCard } from './AdditionalInformationCard';
 export { default as AdditionalInformationForm } from './Publication/Creation/AdditionalInformation/Form';
 export { default as AdditionalInformationTable } from './Publication/Creation/AdditionalInformation/Table';
 export { default as AddReferences } from './References/AddReferences';
