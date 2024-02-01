@@ -24,9 +24,9 @@ const AdditionalInformationCard: React.FC<Props> = ({
             href={url}
             title={title}
             aria-label={title}
-            className="block text-sm font-semibold uppercase text-teal-600 underline transition-colors duration-500 dark:text-teal-300"
+            className="block text-sm font-semibold text-teal-600 underline transition-colors duration-500 dark:text-teal-300"
         >
-            Link to {title}
+            {url}
         </a>
     </section>
 );
