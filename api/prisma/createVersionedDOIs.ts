@@ -40,7 +40,8 @@ const createVersionedDOIs = async (): Promise<number> => {
                     country: true,
                     name: true,
                     link: true,
-                    ror: true
+                    ror: true,
+                    grantId: true
                 }
             },
             coAuthors: {

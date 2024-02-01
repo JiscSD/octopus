@@ -15,6 +15,9 @@ const createFunderSchema = {
         },
         ror: {
             type: 'string'
+        },
+        grantId: {
+            type: 'string'
         }
     },
     required: ['name', 'country', 'city', 'link'],
