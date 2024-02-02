@@ -210,7 +210,8 @@ const mapPublicationVersionToMetadata = (publicationVersion, pdfUrl) => {
       },
       article: {
         title: publicationVersion.title,
-        type: publication.type,
+        abstract: publicationVersion.description,
+        type: publicationVersion.publication.type,
         version: "VOR",
         language: [publicationVersion.language],
         identifier: [
