@@ -349,6 +349,7 @@ export interface Funder {
     city: string;
     link: string;
     ror?: string;
+    grantId?: string;
     id: string;
 }
 

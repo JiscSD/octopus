@@ -30,9 +30,11 @@ export const create = async (
         }
 
         // Duplicate funder (designated by ROR ID or funder link) is allowed if both funders have grant IDs and they are different.
-        const duplicateFunders = publicationVersion.funders.filter(
-            (funder) => funder.ror === event.body.ror || funder.link === event.body.link
-        );
+        const duplicateFunders = event.body.ror
+            ? publicationVersion.funders.filter(
+                  (funder) => funder.ror === event.body.ror || funder.link === event.body.link
+              )
+            : publicationVersion.funders.filter((funder) => funder.link === event.body.link);
 
         if (
             (!event.body.grantId && duplicateFunders.length) ||

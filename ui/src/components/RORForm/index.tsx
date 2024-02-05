@@ -55,10 +55,13 @@ const TableRow: React.FC<RowProps> = (props): React.ReactElement => {
                     </Components.Link>
                 </td>
                 <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
-                    {props.item.city}, {props.item.country}
+                    {props.item.city + (props.item.country && ', ' + props.item.country)}
                 </td>
                 <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                     {props.item.ror}
+                </td>
+                <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+                    {props.item.grantId}
                 </td>
                 <td className="space-nowrap h-full items-center justify-center py-4 text-center">
                     {isLoading ? (
@@ -141,6 +144,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
 
     const [method, setMethod] = React.useState<'ror' | 'manual'>('ror');
     const [ror, setRor] = React.useState('');
+    const [grantId, setGrantId] = React.useState('');
     const [name, setName] = React.useState('');
     const [city, setCity] = React.useState('');
     const [country, setCountry] = React.useState('');
@@ -195,7 +199,8 @@ const RORForm: React.FC = (props): React.ReactElement => {
                     country,
                     city,
                     link,
-                    ror
+                    ror,
+                    grantId
                 },
                 user?.token
             );
@@ -210,6 +215,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
             setCity('');
             setLink('');
             setRor('');
+            setGrantId('');
         } catch (err) {
             setError(axios.isAxiosError(err) ? err.response?.data.message : (err as Error).message);
             setSubmitLoading(false);
@@ -233,36 +239,50 @@ const RORForm: React.FC = (props): React.ReactElement => {
                             htmlFor="ror"
                             className="text-gray-700 mb-2 ml-3 block text-sm font-medium dark:text-white-100"
                         >
-                            Enter ROR ID
+                            Enter organisation ROR ID e.g. 01rv9gx86
                         </label>
                     </div>
-                    <div className="relative mb-6">
-                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                            <RorIcon loading={rorLoading} error={rorError} ror={ror} />
+                    <div className="mb-6">
+                        <div className="relative mb-4">
+                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <RorIcon loading={rorLoading} error={rorError} ror={ror} />
+                            </div>
+                            <input
+                                disabled={method === 'manual'}
+                                name="ror"
+                                className={`w-1/2 rounded border border-grey-100 bg-white-50 p-2 pl-10 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400 ${
+                                    method === 'manual' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
+                                }`}
+                                placeholder="01rv9gx86 or https://ror.org/01rv9gx86"
+                                value={ror}
+                                onChange={(e) => getRorData(e.target.value)}
+                            />
                         </div>
-                        <input
-                            disabled={method === 'manual'}
-                            name="ror"
-                            className={`w-1/2 rounded border border-grey-100 bg-white-50 p-2 pl-10 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400 ${
-                                method === 'manual' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
-                            }`}
-                            placeholder="01rv9gx86 or https://ror.org/01rv9gx86"
-                            value={ror}
-                            onChange={(e) => getRorData(e.target.value)}
-                        />
-                        <Components.Button
-                            className="pl-5"
-                            title="Add funder"
-                            disabled={!ror || rorLoading || rorError}
-                            onClick={onSubmitHandler}
-                            endIcon={
-                                submitLoading ? (
-                                    <OutlineIcons.ArrowPathIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
-                                ) : (
-                                    <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
-                                )
-                            }
-                        />
+                        <div>
+                            <input
+                                disabled={method === 'manual'}
+                                name="grantId"
+                                className={`w-1/2 rounded border border-grey-100 bg-white-50 p-2 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400 ${
+                                    method === 'manual' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
+                                }`}
+                                placeholder="Grant Identifier"
+                                value={grantId}
+                                onChange={(e) => setGrantId(e.target.value)}
+                            />
+                            <Components.Button
+                                className="pl-5"
+                                title="Add funder"
+                                disabled={!ror || rorLoading || rorError}
+                                onClick={onSubmitHandler}
+                                endIcon={
+                                    submitLoading ? (
+                                        <OutlineIcons.ArrowPathIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                    ) : (
+                                        <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                    )
+                                }
+                            />
+                        </div>
                     </div>
                     <div className="mb-2 flex items-center">
                         <input
@@ -282,7 +302,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
                     </div>
                     <div className="mb-4">
                         <input
-                            placeholder="Name"
+                            placeholder="Name*"
                             disabled={method === 'ror'}
                             className={`w-1/2 rounded border border-grey-100  p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 ${
                                 method === 'ror' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
@@ -293,7 +313,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
                     </div>
                     <div className="mb-4">
                         <input
-                            placeholder="City"
+                            placeholder="City*"
                             disabled={method === 'ror'}
                             className={`w-1/2 rounded border border-grey-100  p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 ${
                                 method === 'ror' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
@@ -313,9 +333,9 @@ const RORForm: React.FC = (props): React.ReactElement => {
                             onChange={(e) => setCountry(e.target.value)}
                         />
                     </div>
-                    <div>
+                    <div className="mb-4">
                         <input
-                            placeholder="Link"
+                            placeholder="Link*"
                             disabled={method === 'ror'}
                             className={`w-1/2 rounded border border-grey-100  p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 ${
                                 method === 'ror' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
@@ -329,17 +349,29 @@ const RORForm: React.FC = (props): React.ReactElement => {
                                 }
                             }}
                         />
+                        {method === 'manual' && !isLinkValid ? (
+                            <Components.Alert
+                                severity="ERROR"
+                                title='Please enter a valid URL starting with "http".'
+                                className="mt-3 w-1/2"
+                            />
+                        ) : null}
+                    </div>
+                    <div>
+                        <input
+                            disabled={method === 'ror'}
+                            name="grantId"
+                            className={`w-1/2 rounded border border-grey-100 bg-white-50 p-2 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400 ${
+                                method === 'ror' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
+                            }`}
+                            placeholder="Grant Identifier"
+                            value={grantId}
+                            onChange={(e) => setGrantId(e.target.value)}
+                        />
                         <Components.Button
                             className="pl-5"
                             title="Add funder"
-                            disabled={
-                                method == 'ror' ||
-                                name == '' ||
-                                link == '' ||
-                                city == '' ||
-                                link == '' ||
-                                isLinkValid == false
-                            }
+                            disabled={method == 'ror' || name == '' || city == '' || link == '' || isLinkValid == false}
                             onClick={onSubmitHandler}
                             endIcon={
                                 submitLoading ? (
@@ -349,13 +381,6 @@ const RORForm: React.FC = (props): React.ReactElement => {
                                 )
                             }
                         />
-                        {method === 'manual' && !isLinkValid ? (
-                            <Components.Alert
-                                severity="ERROR"
-                                title='Please enter a valid URL starting with "http".'
-                                className="mt-3 w-1/2"
-                            />
-                        ) : null}
                     </div>
                 </fieldset>
             </div>
@@ -367,19 +392,22 @@ const RORForm: React.FC = (props): React.ReactElement => {
                                 <table className="min-w-full divide-y divide-grey-100  dark:divide-teal-300">
                                     <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
                                         <tr>
-                                            <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
+                                            <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
                                                 Name
                                             </th>
-                                            <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
+                                            <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
                                                 Link
                                             </th>
-                                            <th className='"whitespace-pre " py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6'>
+                                            <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
                                                 Location
                                             </th>
-                                            <th className='"whitespace-pre " py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6'>
+                                            <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
                                                 ROR
                                             </th>
-                                            <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
+                                            <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
+                                                Grant Identifier
+                                            </th>
+                                            <th className="whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
                                                 Delete
                                             </th>
                                         </tr>
