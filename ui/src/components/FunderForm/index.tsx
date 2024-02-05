@@ -137,7 +137,7 @@ const RorIcon: React.FC<IconProps> = (props): React.ReactElement => {
 
 let timeout: NodeJS.Timeout;
 
-const RORForm: React.FC = (props): React.ReactElement => {
+const FunderForm: React.FC = (): React.ReactElement => {
     const { publicationVersion, updatePublicationVersion, setError } = Stores.usePublicationCreationStore();
 
     const user = Stores.useAuthStore((state) => state.user);
@@ -250,6 +250,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
                             <input
                                 disabled={method === 'manual'}
                                 name="ror"
+                                title="ROR ID"
                                 className={`w-1/2 rounded border border-grey-100 bg-white-50 p-2 pl-10 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400 ${
                                     method === 'manual' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
                                 }`}
@@ -261,7 +262,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
                         <div>
                             <input
                                 disabled={method === 'manual'}
-                                name="grantId"
+                                name="grantIdRor"
                                 className={`w-1/2 rounded border border-grey-100 bg-white-50 p-2 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400 ${
                                     method === 'manual' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
                                 }`}
@@ -360,7 +361,7 @@ const RORForm: React.FC = (props): React.ReactElement => {
                     <div>
                         <input
                             disabled={method === 'ror'}
-                            name="grantId"
+                            name="grantIdManual"
                             className={`w-1/2 rounded border border-grey-100 bg-white-50 p-2 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400 ${
                                 method === 'ror' ? 'bg-grey-50 dark:bg-grey-400' : 'bg-white-50'
                             }`}
@@ -458,4 +459,4 @@ const RORForm: React.FC = (props): React.ReactElement => {
     );
 };
 
-export default RORForm;
+export default FunderForm;

@@ -62,24 +62,9 @@ If you add a new static page to the site, remember to add it to the array of sta
 
 ## Testing
 
-End-to-end tests use [Playwright](https://playwright.dev/).
+UI tests use [Jest](https://jestjs.io/) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
 
-To run the tests you need to set the following in the .env file to match a test ORCID account (it doesn't have to be the same account used for the NEXT_PUBLIC_ORCID_APP_ID):
-
-```
-ORCID_TEST_FIRST_NAME=<first name as defined in orchid account>
-ORCID_TEST_LAST_NAME=<last name as defined in orchid account>
-ORCID_TEST_USER=
-ORCID_TEST_PASS=
-
-```
-
-You need the API and the UI to be running. To run the tests use:
-
-```bash
-$ ~/ui $ npm run test:e2e
-
-```
+To run the tests, run the command `npm run test`.
 
 ---
 

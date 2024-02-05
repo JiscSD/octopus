@@ -1,4 +1,4 @@
-import './__mocks__/api';
+import '@/mocks';
 import Verify from '../../pages/verify';
 import { render, screen, fireEvent } from '@testing-library/react';
 
