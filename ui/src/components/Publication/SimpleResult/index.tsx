@@ -197,7 +197,9 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                         Helpers.formatDate(latestLiveVersion.publishedDate)}
                                 </time>
                             </p>
-                            {!isAuthorOnLatestLive && <p>You are not listed as an author on the latest version</p>}
+                            {!isAuthorOnLatestLive && (
+                                <p>You are not listed as an author on the latest published version</p>
+                            )}
                         </div>
                         <Components.Button
                             href={`/publications/${props.publication.id}`}
