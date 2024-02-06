@@ -224,9 +224,9 @@ export const PageModel = {
             rorID: 'input[name="ror"]',
             addAffiliationButton: 'button[aria-label="Add funder"]:enabled',
             manualAffiliationSelect: 'input#manual',
-            manualAffiliationName: 'input[placeholder="Name"]',
-            manualAffiliationCity: 'input[placeholder="City"]',
-            manualAffiliationLink: 'input[placeholder="Link"]',
+            manualAffiliationName: 'input[placeholder="Name*"]',
+            manualAffiliationCity: 'input[placeholder="City*"]',
+            manualAffiliationLink: 'input[placeholder="Link*"]',
             affiliationDetails: 'textarea[placeholder="Enter any details"]'
         },
         researchProcess: {
