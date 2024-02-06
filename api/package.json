@@ -32,7 +32,7 @@
         "lint:fix": "eslint --fix src/"
     },
     "dependencies": {
-        "@middy/core": "^4.6.2",
+        "@middy/core": "^4.7.0",
         "@middy/do-not-wait-for-empty-event-loop": "^4.6.2",
         "@middy/http-json-body-parser": "^4.6.2",
         "@opensearch-project/opensearch": "^2.3.1",
