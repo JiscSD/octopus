@@ -34,7 +34,7 @@
     "dependencies": {
         "@middy/core": "^4.6.2",
         "@middy/do-not-wait-for-empty-event-loop": "^4.6.2",
-        "@middy/http-json-body-parser": "^4.6.2",
+        "@middy/http-json-body-parser": "^4.7.0",
         "@opensearch-project/opensearch": "^2.3.1",
         "@paralleldrive/cuid2": "^2.2.2",
         "@prisma/client": "^4.16.2",
