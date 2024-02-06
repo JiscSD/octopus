@@ -235,12 +235,14 @@ const mapPublicationVersionToMetadata = (publicationVersion, pdfUrl) => {
       publication_status: "Published",
       funding: publicationVersion.funders?.map((funder) => ({
         name: funder.name,
-        identifier: [
-          {
-            type: "ror",
-            id: funder.ror,
-          },
-        ],
+        ...(funder.ror && {
+          identifier: [
+            {
+              type: "ror",
+              id: funder.ror,
+            },
+          ],
+        }),
       })),
       license_ref: [
         {
