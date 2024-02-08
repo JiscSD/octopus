@@ -179,6 +179,20 @@ export const createDOIPayload = async (
                 : mutatedReference;
         });
 
+    const additionalInformation = publicationVersion.additionalInformation.map((additionalInfoEntry) => ({
+        titles: [
+            {
+                title: additionalInfoEntry.title
+            }
+        ],
+        relationType: 'HasPart',
+        relatedItemType: 'Other',
+        relatedItemIdentifier: {
+            relatedItemIdentifier: additionalInfoEntry.url,
+            relatedItemIdentifierType: 'URL'
+        }
+    }));
+
     const payload = {
         data: {
             type: 'dois',
@@ -219,7 +233,7 @@ export const createDOIPayload = async (
                     resourceType: publicationVersion.publication.type
                 },
                 relatedIdentifiers: [...linkedPublicationDOIs, ...referenceDOIs],
-                relatedItems: otherReferences,
+                relatedItems: [...otherReferences, ...additionalInformation],
                 fundingReferences: publicationVersion.funders.map((funder) => ({
                     funderName: funder.name,
                     funderIdentifier: funder.ror || funder.link,
