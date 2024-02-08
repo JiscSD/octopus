@@ -4,7 +4,7 @@ import * as sitemapService from 'sitemap/service';
 
 export const generate = async (): Promise<void> => {
     try {
-        await sitemapService.generatePublicationSitemaps();
+        await Promise.all([sitemapService.generateSitemaps('publications'), sitemapService.generateSitemaps('users')]);
     } catch (err) {
         console.log(err);
     }
