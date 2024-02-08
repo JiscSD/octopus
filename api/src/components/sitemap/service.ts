@@ -16,19 +16,21 @@ const listSitemapBucket = async (): Promise<ListObjectsV2CommandOutput> => {
     );
 };
 
-export const generatePublicationSitemaps = async (): Promise<void> => {
+export const generateSitemaps = async (category: 'publications' | 'users'): Promise<void> => {
     // The maximum number of URLs per sitemap (the maximum google can take in one go)
     const URL_LIMIT = 50000;
-    const now = new Date().toISOString();
-    const queryOptions: Prisma.PublicationFindManyArgs = {
+    // DB query options - publications should only be live ones, users can be any.
+    const queryOptions: Prisma.PublicationFindManyArgs | Prisma.UserFindManyArgs = {
         take: URL_LIMIT,
-        where: {
-            versions: {
-                some: {
-                    currentStatus: 'LIVE'
+        ...(category === 'publications' && {
+            where: {
+                versions: {
+                    some: {
+                        currentStatus: 'LIVE'
+                    }
                 }
             }
-        },
+        }),
         select: {
             id: true
         },
@@ -36,11 +38,15 @@ export const generatePublicationSitemaps = async (): Promise<void> => {
             id: 'asc'
         }
     };
-    // Get publication IDs for first sitemap
-    let queryResults = await client.prisma.publication.findMany(queryOptions);
+
+    // Get IDs for first sitemap
+    let queryResults =
+        category === 'publications'
+            ? await client.prisma.publication.findMany(queryOptions)
+            : await client.prisma.user.findMany(queryOptions as Prisma.UserFindManyArgs);
     let sitemapCount = 0;
 
-    // Put sitemap into S3 and fetch next sitemap's worth of pulication IDs using a cursor
+    // Put sitemap into S3 and fetch next sitemap's worth of IDs using a cursor
     while (queryResults.length > 0) {
         const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
             <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -48,8 +54,9 @@ export const generatePublicationSitemaps = async (): Promise<void> => {
                     .map(
                         (result) => `
                             <url>
-                                <loc>${process.env.BASE_URL}/publications/${result.id}</loc>
-                                <lastmod>${now}</lastmod>
+                                <loc>${process.env.BASE_URL}/${category === 'users' ? 'authors' : category}/${
+                            result.id
+                        }</loc>
                                 <changefreq>daily</changefreq>
                                 <priority>1.0</priority>
                             </url>
@@ -62,18 +69,27 @@ export const generatePublicationSitemaps = async (): Promise<void> => {
         await s3.client.send(
             new PutObjectCommand({
                 Bucket: s3.buckets.sitemaps,
-                Key: `publications/${sitemapCount}.xml`,
+                Key: `${category}/${sitemapCount}.xml`,
                 ContentType: 'text/xml',
                 Body: sitemap
             })
         );
-        queryResults = await client.prisma.publication.findMany({
-            skip: 1,
-            cursor: {
-                id: queryResults[queryResults.length - 1].id
-            },
-            ...queryOptions
-        });
+        queryResults =
+            category === 'publications'
+                ? await client.prisma.publication.findMany({
+                      skip: 1,
+                      cursor: {
+                          id: queryResults[queryResults.length - 1].id
+                      },
+                      ...queryOptions
+                  })
+                : await client.prisma.user.findMany({
+                      skip: 1,
+                      cursor: {
+                          id: queryResults[queryResults.length - 1].id
+                      },
+                      ...(queryOptions as Prisma.UserFindManyArgs)
+                  });
     }
 
     // In case fewer sitemaps were generated than existed previously, clean up the old ones.
@@ -81,13 +97,14 @@ export const generatePublicationSitemaps = async (): Promise<void> => {
     const bucketFiles = await listSitemapBucket();
 
     if (bucketFiles.Contents) {
-        const publicationSitemapsInBucket = bucketFiles.Contents.filter(
-            (file) => file.Key?.slice(0, 13) === 'publications/'
+        const s3KeyPrefix = category + '/';
+        const applicableSitemapsInBucket = bucketFiles.Contents.filter(
+            (file) => file.Key?.slice(0, s3KeyPrefix.length) === s3KeyPrefix
         );
 
-        if (publicationSitemapsInBucket.length > sitemapCount) {
-            for (const file of publicationSitemapsInBucket) {
-                const fileNumber = Number(file.Key?.slice(13, -4));
+        if (applicableSitemapsInBucket.length > sitemapCount) {
+            for (const file of applicableSitemapsInBucket) {
+                const fileNumber = Number(file.Key?.slice(s3KeyPrefix.length, -4));
 
                 if (fileNumber > sitemapCount) {
                     await s3.client.send(
