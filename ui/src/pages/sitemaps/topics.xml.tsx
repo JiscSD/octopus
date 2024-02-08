@@ -13,7 +13,7 @@ export const getServerSideProps: Types.GetServerSideProps = async ({ res }) => {
     // Get URLs of topics from the API.
     let topicUrls: string[] = [];
     try {
-        const response = await api.get(Config.endpoints.topics, undefined);
+        const response = await api.get(Config.endpoints.topics);
         const data: Interfaces.TopicsPaginatedResults = response.data;
         if (data.results.length) {
             topicUrls = data.results.map((topic) => `${Config.urls.viewTopic.canonical}/${topic.id}`);

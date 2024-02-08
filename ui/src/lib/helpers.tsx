@@ -593,3 +593,24 @@ export const toKebabCase = (inputString: string): string => {
         .replace(/\s+/g, ' ') // Condense longer whitespace down to one space
         .replace(/\s/g, '-'); // Replace single spaces with hyphen
 };
+
+// Fetches sitemaps of a category from the sitemap S3 bucket and constructs a sitemap index of them.
+export const getSitemapIndexXML = async (category: 'publications' | 'users'): Promise<string> => {
+    let sitemapS3Keys: string[] = [];
+    try {
+        const sitemapsRequest = await api.get('/sitemaps/paths');
+        sitemapS3Keys = sitemapsRequest.data;
+    } catch (error) {
+        console.log(error);
+    }
+    // Write an XML element for each applicable sitemap we have in S3
+    const sitemapXMLElements = sitemapS3Keys
+        .filter((sitemapS3Key) => sitemapS3Key.startsWith(category + '/'))
+        .map((sitemapS3Key) => `<sitemap><loc>${Config.urls.baseUrl}/sitemaps/${sitemapS3Key}</loc></sitemap>`)
+        .join('');
+    return `<?xml version="1.0" encoding="UTF-8"?>
+        <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+            ${sitemapXMLElements}
+        </sitemapindex>
+    `;
+};
