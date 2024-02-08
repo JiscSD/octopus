@@ -6,7 +6,7 @@
             "@/config": ["./src/config"],
             "@/layouts": ["./src/layouts"],
             "@/assets": ["./src/assets"],
-            "@/mocks": ["./src/mocks"],
+            "@/mocks": ["./src/__tests__/mocks"],
             "@/hooks": ["./src/hooks"],
             "@/stores": ["./src/stores"],
             "@/templates": ["./src/templates"],
