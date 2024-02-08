@@ -11,8 +11,8 @@ export const get = (id: string) =>
         }
     });
 
-export const getAllByPublicationVersion = async (publicationVersionId: string) => {
-    const coAuthors = await client.prisma.coAuthors.findMany({
+export const getAllByPublicationVersion = (publicationVersionId: string) =>
+    client.prisma.coAuthors.findMany({
         where: {
             publicationVersionId
         },
@@ -37,9 +37,6 @@ export const getAllByPublicationVersion = async (publicationVersionId: string) =
             position: 'asc'
         }
     });
-
-    return coAuthors;
-};
 
 export const update = async (id: string, data: Prisma.CoAuthorsUpdateInput) => {
     const updateCoAuthor = await client.prisma.coAuthors.update({
@@ -209,8 +206,8 @@ export const resetCoAuthors = async (publicationVersionId: string) => {
     return resetCoAuthors;
 };
 
-export const getPendingApprovalForPublicationVersion = async (publicationVersionId: string) => {
-    const coAuthors = await client.prisma.coAuthors.findMany({
+export const getPendingApprovalForPublicationVersion = (publicationVersionId: string) =>
+    client.prisma.coAuthors.findMany({
         where: {
             confirmedCoAuthor: false,
             approvalRequested: false,
@@ -220,9 +217,6 @@ export const getPendingApprovalForPublicationVersion = async (publicationVersion
             position: 'asc'
         }
     });
-
-    return coAuthors;
-};
 
 export const updateRequestApprovalStatus = async (publicationVersionId: string, email: string) => {
     const coAuthors = await client.prisma.coAuthors.updateMany({

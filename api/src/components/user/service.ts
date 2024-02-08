@@ -4,8 +4,8 @@ import * as client from 'lib/client';
 import * as I from 'interface';
 import * as helpers from 'lib/helpers';
 
-export const upsertUser = async (orcid: string, updateUserInformation: I.UpdateUserInformation) => {
-    const user = await client.prisma.user.upsert({
+export const upsertUser = (orcid: string, updateUserInformation: I.UpdateUserInformation) =>
+    client.prisma.user.upsert({
         select: {
             email: true,
             id: true,
@@ -26,11 +26,8 @@ export const upsertUser = async (orcid: string, updateUserInformation: I.UpdateU
         }
     });
 
-    return user;
-};
-
-export const updateEmail = async (orcid: string, email: string) => {
-    const user = await client.prisma.user.update({
+export const updateEmail = (orcid: string, email: string) =>
+    client.prisma.user.update({
         select: {
             email: true,
             id: true,
@@ -48,9 +45,6 @@ export const updateEmail = async (orcid: string, email: string) => {
             orcid
         }
     });
-
-    return user;
-};
 
 export const getAll = async (filters: I.UserFilters) => {
     const query = {};
@@ -98,18 +92,15 @@ export const getAll = async (filters: I.UserFilters) => {
     };
 };
 
-export const getByApiKey = async (apiKey: string) => {
-    const user = await client.prisma.user.findFirst({
+export const getByApiKey = (apiKey: string) =>
+    client.prisma.user.findFirst({
         where: {
             apiKey
         }
     });
 
-    return user;
-};
-
-export const get = async (id: string, isAccountOwner = false) => {
-    const user = await client.prisma.user.findUnique({
+export const get = (id: string, isAccountOwner = false) =>
+    client.prisma.user.findUnique({
         where: {
             id
         },
@@ -128,9 +119,6 @@ export const get = async (id: string, isAccountOwner = false) => {
             orcidAccessToken: isAccountOwner ? true : false
         }
     });
-
-    return user;
-};
 
 export const getPublications = async (
     id: string,

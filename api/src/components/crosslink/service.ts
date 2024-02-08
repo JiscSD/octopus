@@ -1,8 +1,8 @@
 import * as client from 'lib/client';
 import * as I from 'interface';
 
-export const create = async (publications: [string, string], userId: string) => {
-    return await client.prisma.crosslink.create({
+export const create = (publications: [string, string], userId: string) =>
+    client.prisma.crosslink.create({
         data: {
             publicationFromId: publications[0],
             publicationToId: publications[1],
@@ -12,10 +12,9 @@ export const create = async (publications: [string, string], userId: string) => 
             id: true
         }
     });
-};
 
-export const getByPublicationPair = async (publications: [string, string]) => {
-    return await client.prisma.crosslink.findFirst({
+export const getByPublicationPair = (publications: [string, string]) =>
+    client.prisma.crosslink.findFirst({
         where: {
             OR: [
                 {
@@ -29,15 +28,13 @@ export const getByPublicationPair = async (publications: [string, string]) => {
             ]
         }
     });
-};
 
-export const deleteCrosslink = async (id: string) => {
-    return await client.prisma.crosslink.delete({
+export const deleteCrosslink = (id: string) =>
+    client.prisma.crosslink.delete({
         where: {
             id
         }
     });
-};
 
 export const get = async (id: string) => {
     const publicationInclude = {
@@ -87,8 +84,8 @@ export const exists = async (crosslinkId: string) => {
     return Boolean(await client.prisma.crosslink.findUnique({ where: { id: crosslinkId } }));
 };
 
-export const setVote = async (crosslinkId: string, userId: string, vote: boolean) => {
-    return await client.prisma.crosslinkVote.upsert({
+export const setVote = (crosslinkId: string, userId: string, vote: boolean) =>
+    client.prisma.crosslinkVote.upsert({
         where: {
             crosslinkId_createdBy: {
                 crosslinkId,
@@ -104,10 +101,9 @@ export const setVote = async (crosslinkId: string, userId: string, vote: boolean
             vote
         }
     });
-};
 
-export const resetVote = async (crosslinkId: string, userId: string) => {
-    return await client.prisma.crosslinkVote.delete({
+export const resetVote = (crosslinkId: string, userId: string) =>
+    client.prisma.crosslinkVote.delete({
         where: {
             crosslinkId_createdBy: {
                 crosslinkId,
@@ -115,10 +111,9 @@ export const resetVote = async (crosslinkId: string, userId: string) => {
             }
         }
     });
-};
 
-export const getVote = async (crosslinkId: string, userId: string) => {
-    return await client.prisma.crosslinkVote.findUnique({
+export const getVote = (crosslinkId: string, userId: string) =>
+    client.prisma.crosslinkVote.findUnique({
         where: {
             crosslinkId_createdBy: {
                 crosslinkId,
@@ -126,7 +121,6 @@ export const getVote = async (crosslinkId: string, userId: string) => {
             }
         }
     });
-};
 
 export const getPublicationCrosslinks = async (publicationId: string, order?: I.GetPublicationCrosslinksOrder) => {
     const publicationInclude = {

@@ -18,8 +18,8 @@ export const isIdInUse = async (id: string) => {
     return Boolean(publication);
 };
 
-export const get = async (id: string) => {
-    return await client.prisma.publication.findUnique({
+export const get = (id: string) =>
+    client.prisma.publication.findUnique({
         where: {
             id
         },
@@ -175,10 +175,9 @@ export const get = async (id: string) => {
             }
         }
     });
-};
 
-export const getSeedDataPublications = async (title: string) => {
-    const publications = await client.prisma.publication.findMany({
+export const getSeedDataPublications = (title: string) =>
+    client.prisma.publication.findMany({
         where: {
             versions: {
                 some: {
@@ -207,33 +206,24 @@ export const getSeedDataPublications = async (title: string) => {
         }
     });
 
-    return publications;
-};
-
-export const deletePublication = async (id: string) => {
-    const deletedPublication = await client.prisma.publication.delete({
+export const deletePublication = (id: string) =>
+    client.prisma.publication.delete({
         where: {
             id
         }
     });
 
-    return deletedPublication;
-};
-
-export const createOpenSearchRecord = async (data: I.OpenSearchPublication) => {
-    const publication = await client.search.create({
+export const createOpenSearchRecord = (data: I.OpenSearchPublication) =>
+    client.search.create({
         index: 'publications',
         id: data.id,
         body: data
     });
 
-    return publication;
-};
-
 export const deleteOpenSearchRecord = (publicationId: string) =>
     client.search.delete({ index: 'publications', id: publicationId });
 
-export const getOpenSearchPublications = async (filters: I.OpenSearchPublicationFilters) => {
+export const getOpenSearchPublications = (filters: I.OpenSearchPublicationFilters) => {
     const orderBy = filters.orderBy
         ? {
               [filters.orderBy]: {
@@ -313,13 +303,11 @@ export const getOpenSearchPublications = async (filters: I.OpenSearchPublication
         };
     }
 
-    const publications = await client.search.search(query);
-
-    return publications;
+    return client.search.search(query);
 };
 
-export const create = async (e: I.CreatePublicationRequestBody, user: I.User, doiResponse: I.DOIResponse) => {
-    const publication = await client.prisma.publication.create({
+export const create = (e: I.CreatePublicationRequestBody, user: I.User, doiResponse: I.DOIResponse) =>
+    client.prisma.publication.create({
         data: {
             id: doiResponse.data.attributes.suffix,
             doi: doiResponse.data.attributes.doi,
@@ -384,11 +372,8 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
         }
     });
 
-    return publication;
-};
-
-export const doesDuplicateFlagExist = async (publication, category, user) => {
-    const flag = await client.prisma.publicationFlags.findFirst({
+export const doesDuplicateFlagExist = (publication, category, user) =>
+    client.prisma.publicationFlags.findFirst({
         where: {
             publicationId: publication,
             createdBy: user,
@@ -396,9 +381,6 @@ export const doesDuplicateFlagExist = async (publication, category, user) => {
             resolved: false
         }
     });
-
-    return flag;
-};
 
 const sortPublicationsByPublicationDate = (publications: I.LinkedPublication[]) => {
     return publications.sort((a, b) => new Date(b.publishedDate).valueOf() - new Date(a.publishedDate).valueOf());
