@@ -241,6 +241,7 @@ const mapPublicationVersionToMetadata = (publicationVersion, pdfUrl) => {
             id: funder.ror,
           },
         ],
+        ...(funder.grantId && { grant_numbers: [funder.grantId] }),
       })),
       license_ref: [
         {
