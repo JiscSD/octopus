@@ -70,6 +70,7 @@
         "@lhci/cli": "^0.12.0",
         "@tailwindcss/line-clamp": "^0.4.4",
         "@tailwindcss/typography": "^0.5.9",
+        "@testing-library/dom": "^9.3.4",
         "@testing-library/jest-dom": "^5.17.0",
         "@testing-library/react": "^14.0.0",
         "@testing-library/user-event": "^14.5.2",
