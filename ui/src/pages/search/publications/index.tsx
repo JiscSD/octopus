@@ -336,7 +336,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                             className="col-span-12 lg:col-span-7 xl:col-span-8"
                             onSubmit={handlerSearchFormSubmit}
                         >
-                            <label htmlFor="search-query" className="relative block w-full">
+                            <label htmlFor="query" className="relative block w-full">
                                 <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
                                     Quick search
                                 </span>
@@ -568,7 +568,10 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                                                             Next
                                                         </button>
                                                     </div>
-                                                    <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                                    <span
+                                                        data-testid="baz"
+                                                        className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50"
+                                                    >
                                                         Showing {offset + 1} -{' '}
                                                         {limit + offset > response.metadata.total
                                                             ? response.metadata.total
