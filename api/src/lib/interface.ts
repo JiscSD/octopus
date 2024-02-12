@@ -900,6 +900,44 @@ export interface RequestControlEvent extends Record<string, unknown>, Omit<Event
     data: RequestControlData;
 }
 
+// Crosslinking
+export interface CreateCrosslinkRequestBody {
+    publications: [string, string];
+}
+
+export interface DeleteCrosslinkPathParams {
+    id: string;
+}
+
+export interface SetCrosslinkVotePathParams {
+    id: string;
+}
+
+export interface SetCrosslinkVoteRequestBody {
+    vote: boolean;
+}
+
+export interface ResetCrosslinkVotePathParams {
+    id: string;
+}
+
+export interface GetCrosslinkPathParams {
+    id: string;
+}
+
+export interface GetCrosslinkVotePathParams {
+    id: string;
+}
+
+export interface GetPublicationCrosslinksPathParams {
+    publicationId: string;
+}
+
+export type GetPublicationCrosslinksOrder = 'relevant' | 'mix';
+export interface GetPublicationCrosslinksQueryParams {
+    order?: GetPublicationCrosslinksOrder;
+}
+
 // Additional information
 export interface CreateAdditionalInformationPathParams {
     publicationVersionId: string;

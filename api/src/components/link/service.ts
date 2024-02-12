@@ -20,16 +20,13 @@ export const create = async (fromPublicationId: string, toPublicationId: string)
     return link;
 };
 
-export const doesLinkExist = async (fromPublicationId: string, toPublicationId: string) => {
-    const link = await client.prisma.links.findFirst({
+export const doesLinkExist = (fromPublicationId: string, toPublicationId: string) =>
+    client.prisma.links.findFirst({
         where: {
             publicationFrom: fromPublicationId,
             publicationTo: toPublicationId
         }
     });
-
-    return link;
-};
 
 export const deleteLink = async (id: string) => {
     const link = await client.prisma.links.findFirst({
@@ -63,8 +60,8 @@ export const deleteLink = async (id: string) => {
     return deletedLink;
 };
 
-export const get = async (id: string) => {
-    const link = await client.prisma.links.findFirst({
+export const get = (id: string) =>
+    client.prisma.links.findFirst({
         include: {
             publicationFromRef: {
                 select: {
@@ -97,9 +94,6 @@ export const get = async (id: string) => {
             id
         }
     });
-
-    return link;
-};
 
 export const canLinkBeCreatedBetweenPublicationTypes = (fromType, toType) => {
     const publicationTypes = [
