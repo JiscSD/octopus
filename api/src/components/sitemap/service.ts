@@ -8,13 +8,12 @@ import {
 } from '@aws-sdk/client-s3';
 import { Prisma } from '@prisma/client';
 
-const listSitemapBucket = async (): Promise<ListObjectsV2CommandOutput> => {
-    return await s3.client.send(
+const listSitemapBucket = (): Promise<ListObjectsV2CommandOutput> =>
+    s3.client.send(
         new ListObjectsCommand({
             Bucket: s3.buckets.sitemaps
         })
     );
-};
 
 export const generateSitemaps = async (category: 'publications' | 'users'): Promise<void> => {
     // The maximum number of URLs per sitemap (the maximum google can take in one go)
