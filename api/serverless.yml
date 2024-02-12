@@ -579,3 +579,54 @@ functions:
                   path: ${self:custom.versions.v1}/sitemaps/paths
                   method: GET
                   cors: true
+
+    # Crosslinks
+    createCrosslink:
+        handler: src/components/crosslink/routes.create
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/crosslinks
+                  method: POST
+                  cors: true
+    deleteCrosslink:
+        handler: src/components/crosslink/routes.deleteCrosslink
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/crosslinks/{id}
+                  method: DELETE
+                  cors: true
+    setCrosslinkVote:
+        handler: src/components/crosslink/routes.setVote
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/crosslinks/{id}/vote
+                  method: PUT
+                  cors: true
+    resetCrosslinkVote:
+        handler: src/components/crosslink/routes.resetVote
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/crosslinks/{id}/vote
+                  method: DELETE
+                  cors: true
+    getCrosslinkVote:
+        handler: src/components/crosslink/routes.getVote
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/crosslinks/{id}/vote
+                  method: GET
+                  cors: true
+    getCrosslink:
+        handler: src/components/crosslink/routes.get
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/crosslinks/{id}
+                  method: GET
+                  cors: true
+    getPublicationCrosslinks:
+        handler: src/components/crosslink/routes.getPublicationCrosslinks
+        events:
+            - http:
+                  path: ${self:custom.versions.v1}/publications/{publicationId}/crosslinks
+                  method: GET
+                  cors: true

@@ -1,8 +1,8 @@
 import * as client from 'lib/client';
 import * as I from 'interface';
 
-export const create = async (type: I.BookmarkType, entityId: string, userId: string) => {
-    const create = await client.prisma.bookmark.create({
+export const create = (type: I.BookmarkType, entityId: string, userId: string) =>
+    client.prisma.bookmark.create({
         data: {
             type,
             entityId,
@@ -16,11 +16,8 @@ export const create = async (type: I.BookmarkType, entityId: string, userId: str
         }
     });
 
-    return create;
-};
-
-export const get = async (id: string) => {
-    const bookmark = await client.prisma.bookmark.findUnique({
+export const get = (id: string) =>
+    client.prisma.bookmark.findUnique({
         where: {
             id
         },
@@ -32,11 +29,8 @@ export const get = async (id: string) => {
         }
     });
 
-    return bookmark;
-};
-
-export const getByFields = async (type: I.BookmarkType, entityId: string, userId: string) => {
-    const bookmark = await client.prisma.bookmark.findFirst({
+export const getByFields = (type: I.BookmarkType, entityId: string, userId: string) =>
+    client.prisma.bookmark.findFirst({
         where: {
             type,
             entityId,
@@ -50,18 +44,12 @@ export const getByFields = async (type: I.BookmarkType, entityId: string, userId
         }
     });
 
-    return bookmark;
-};
-
-export const deleteBookmark = async (id: string) => {
-    const bookmark = await client.prisma.bookmark.delete({
+export const deleteBookmark = (id: string) =>
+    client.prisma.bookmark.delete({
         where: {
             id
         }
     });
-
-    return bookmark;
-};
 
 export const getMany = async (
     userId: string,
