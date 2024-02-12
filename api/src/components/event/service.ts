@@ -6,12 +6,12 @@ import * as userService from 'user/service';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as coAuthorService from 'coauthor/service';
 
-export const getMany = async (where: Prisma.EventWhereInput = {}) =>
+export const getMany = (where: Prisma.EventWhereInput = {}) =>
     client.prisma.event.findMany({
         where
     });
 
-export const deleteEvent = async (id: string) =>
+export const deleteEvent = (id: string) =>
     client.prisma.event.delete({
         where: { id }
     });

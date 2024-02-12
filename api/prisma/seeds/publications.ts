@@ -439,6 +439,40 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                     }
                 }
             }
+        },
+        crosslinksFrom: {
+            create: {
+                id: 'hypothesis-problem-crosslink',
+                publicationToId: 'publication-problem-live',
+                createdBy: 'test-user-1',
+                createdAt: '2024-01-22T10:00:00.000Z',
+                votes: {
+                    createMany: {
+                        data: [
+                            {
+                                createdBy: 'test-user-1',
+                                vote: true
+                            },
+                            {
+                                createdBy: 'test-user-5',
+                                vote: true
+                            },
+                            {
+                                createdBy: 'test-user-6',
+                                vote: true
+                            },
+                            {
+                                createdBy: 'test-user-7',
+                                vote: true
+                            },
+                            {
+                                createdBy: 'test-user-8',
+                                vote: false
+                            }
+                        ]
+                    }
+                }
+            }
         }
     },
     {
@@ -495,6 +529,40 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                         { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
                         { status: 'LIVE', createdAt: '2022-01-22T15:51:42.523Z' }
                     ]
+                }
+            }
+        },
+        crosslinksFrom: {
+            create: {
+                id: 'protocol-hypothesis-crosslink',
+                publicationToId: 'publication-hypothesis-live',
+                createdBy: 'test-user-2',
+                createdAt: '2024-01-22T11:00:00.000Z',
+                votes: {
+                    createMany: {
+                        data: [
+                            {
+                                createdBy: 'test-user-2',
+                                vote: true
+                            },
+                            {
+                                createdBy: 'test-user-5',
+                                vote: false
+                            },
+                            {
+                                createdBy: 'test-user-6',
+                                vote: false
+                            },
+                            {
+                                createdBy: 'test-user-7',
+                                vote: false
+                            },
+                            {
+                                createdBy: 'test-user-8',
+                                vote: false
+                            }
+                        ]
+                    }
                 }
             }
         }
@@ -560,6 +628,40 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                     ]
                 }
             }
+        },
+        crosslinksFrom: {
+            create: {
+                id: 'data-hypothesis-crosslink',
+                publicationToId: 'publication-hypothesis-live',
+                createdBy: 'test-user-3',
+                createdAt: '2024-01-22T12:00:00.000Z',
+                votes: {
+                    createMany: {
+                        data: [
+                            {
+                                createdBy: 'test-user-3',
+                                vote: true
+                            },
+                            {
+                                createdBy: 'test-user-5',
+                                vote: true
+                            },
+                            {
+                                createdBy: 'test-user-6',
+                                vote: true
+                            },
+                            {
+                                createdBy: 'test-user-7',
+                                vote: false
+                            },
+                            {
+                                createdBy: 'test-user-8',
+                                vote: false
+                            }
+                        ]
+                    }
+                }
+            }
         }
     },
     {
@@ -598,6 +700,40 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                         { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
                         { status: 'LIVE', createdAt: '2022-01-22T15:51:42.523Z' }
                     ]
+                }
+            }
+        },
+        crosslinksFrom: {
+            create: {
+                id: 'analysis-hypothesis-crosslink',
+                publicationToId: 'publication-hypothesis-live',
+                createdBy: 'test-user-4',
+                createdAt: '2024-01-22T13:00:00.000Z',
+                votes: {
+                    createMany: {
+                        data: [
+                            {
+                                createdBy: 'test-user-4',
+                                vote: true
+                            },
+                            {
+                                createdBy: 'test-user-5',
+                                vote: true
+                            },
+                            {
+                                createdBy: 'test-user-6',
+                                vote: false
+                            },
+                            {
+                                createdBy: 'test-user-7',
+                                vote: false
+                            },
+                            {
+                                createdBy: 'test-user-8',
+                                vote: false
+                            }
+                        ]
+                    }
                 }
             }
         }

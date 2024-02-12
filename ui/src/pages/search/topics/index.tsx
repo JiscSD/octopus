@@ -30,7 +30,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const topicsUrl = `${Config.endpoints.topics}?offset=${fallbackData.offset}&limit=${fallbackData.limit}&search=${query}`;
 
     try {
-        fallbackData = (await api.get(topicsUrl, undefined)).data;
+        fallbackData = (await api.get(topicsUrl)).data;
     } catch (error) {
         const { message } = error as Interfaces.JSONResponseError;
         error = message;

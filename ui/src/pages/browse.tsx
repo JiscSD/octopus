@@ -17,7 +17,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let latest: unknown = [];
     let metadata: unknown = {};
     try {
-        const latestResponse = await api.get(swrKey, undefined);
+        const latestResponse = await api.get(swrKey);
         latest = latestResponse.data.data;
         metadata = latestResponse.data.metadata;
     } catch (error) {

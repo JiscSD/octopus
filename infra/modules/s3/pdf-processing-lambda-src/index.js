@@ -243,6 +243,7 @@ const mapPublicationVersionToMetadata = (publicationVersion, pdfUrl) => {
             },
           ],
         }),
+        ...(funder.grantId && { grant_numbers: [funder.grantId] }),
       })),
       license_ref: [
         {

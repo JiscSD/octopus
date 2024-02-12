@@ -7,7 +7,7 @@ const Sitemap = () => {
 
 // Return a sitemap index file that refers to the rest of our sitemaps.
 export const getServerSideProps: Types.GetServerSideProps = async ({ res }) => {
-    const sitemaps = ['static', 'blog', 'topics', 'publications']
+    const sitemaps = ['static', 'blog', 'topics', 'publications', 'users']
         .map((resourceName) => `<sitemap><loc>${Config.urls.baseUrl}/sitemaps/${resourceName}.xml</loc></sitemap>`)
         .join('');
     const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>

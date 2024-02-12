@@ -2,8 +2,8 @@ import * as client from 'lib/client';
 import * as I from 'interface';
 import { Prisma } from '@prisma/client';
 
-export const create = async (e: I.CreateTopicRequestBody) => {
-    const topic = await client.prisma.topic.create({
+export const create = (e: I.CreateTopicRequestBody) =>
+    client.prisma.topic.create({
         data: {
             title: e.title,
             language: e.language,
@@ -28,9 +28,6 @@ export const create = async (e: I.CreateTopicRequestBody) => {
             translations: true
         }
     });
-
-    return topic;
-};
 
 export const get = (id: string) =>
     client.prisma.topic.findFirst({
