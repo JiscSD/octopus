@@ -10,11 +10,11 @@ describe('Page title', () => {
     });
 
     it('Renders a first-level heading', () => {
-        expect(screen.getByRole('heading', { level: 1 }));
+        expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
     });
 
     it('Displays title', () => {
-        expect(screen.getByText(text));
+        expect(screen.getByText(text)).toBeInTheDocument();
     });
 
     it('Adds className to classes', () => {
