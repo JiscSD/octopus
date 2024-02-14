@@ -46,7 +46,7 @@
         "copy-webpack-plugin": "^11.0.0",
         "html-to-text": "^8.2.1",
         "jsonwebtoken": "^9.0.2",
-        "luxon": "^3.4.3",
+        "luxon": "^3.4.4",
         "nodemailer": "^6.9.9",
         "puppeteer-core": "^20.9.0",
         "supertest": "^6.3.3"
