@@ -38,7 +38,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr0000es6i7dy46y67',
         doi: '10.82259/cl3fz14dr0000es6i7dy46y67',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'why', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'why', draft: false }] } },
         versions: {
             create: [
                 {
@@ -75,7 +75,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr0001es6i5ji51rq4',
         doi: '10.82259/cl3fz14dr0001es6i5ji51rq4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0000es6i7dy46y67', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0000es6i7dy46y67', draft: false }] } },
         versions: {
             create: [
                 {
@@ -112,7 +112,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr0002es6i6r7t2mpv',
         doi: '10.82259/cl3fz14dr0002es6i6r7t2mpv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'why', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'why', draft: false }] } },
         versions: {
             create: [
                 {
@@ -149,7 +149,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr0003es6idqm4au2v',
         doi: '10.82259/cl3fz14dr0003es6idqm4au2v',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'why', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'why', draft: false }] } },
         versions: {
             create: [
                 {
@@ -186,7 +186,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr0004es6i6dmo0fpq',
         doi: '10.82259/cl3fz14dr0004es6i6dmo0fpq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0003es6idqm4au2v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0003es6idqm4au2v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -223,7 +223,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr0005es6ibev2gv3n',
         doi: '10.82259/cl3fz14dr0005es6ibev2gv3n',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'why', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'why', draft: false }] } },
         versions: {
             create: [
                 {
@@ -260,7 +260,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr0006es6i27b5fiic',
         doi: '10.82259/cl3fz14dr0006es6i27b5fiic',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0000es6i7dy46y67', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0000es6i7dy46y67', draft: false }] } },
         versions: {
             create: [
                 {
@@ -297,7 +297,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr0007es6i9juifoql',
         doi: '10.82259/cl3fz14dr0007es6i9juifoql',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -334,7 +334,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr0008es6i4uvfdis7',
         doi: '10.82259/cl3fz14dr0008es6i4uvfdis7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -371,7 +371,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr0009es6i04880p8w',
         doi: '10.82259/cl3fz14dr0009es6i04880p8w',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -408,7 +408,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000aes6iedmfcc1o',
         doi: '10.82259/cl3fz14dr000aes6iedmfcc1o',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -447,7 +447,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000bes6i5ki2anrc',
         doi: '10.82259/cl3fz14dr000bes6i5ki2anrc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'why', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'why', draft: false }] } },
         versions: {
             create: [
                 {
@@ -486,7 +486,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000ces6ih5lg82y5',
         doi: '10.82259/cl3fz14dr000ces6ih5lg82y5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -523,7 +523,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000des6i95zc9iri',
         doi: '10.82259/cl3fz14dr000des6i95zc9iri',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -562,7 +562,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000ees6i06eh7253',
         doi: '10.82259/cl3fz14dr000ees6i06eh7253',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'why', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'why', draft: false }] } },
         versions: {
             create: [
                 {
@@ -599,7 +599,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000fes6i6aowacj6',
         doi: '10.82259/cl3fz14dr000fes6i6aowacj6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -638,7 +638,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000ges6i0s8m2838',
         doi: '10.82259/cl3fz14dr000ges6i0s8m2838',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -676,7 +676,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000hes6iaq8w4d09',
         doi: '10.82259/cl3fz14dr000hes6iaq8w4d09',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -716,8 +716,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false },
-                    { publicationTo: 'cl3fz14dr000des6i95zc9iri', draft: false }
+                    { publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false },
+                    { publicationToId: 'cl3fz14dr000des6i95zc9iri', draft: false }
                 ]
             }
         },
@@ -759,7 +759,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000jes6i0rb14e0p',
         doi: '10.82259/cl3fz14dr000jes6i0rb14e0p',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -798,7 +798,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000kes6i5r7u71qh',
         doi: '10.82259/cl3fz14dr000kes6i5r7u71qh',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000des6i95zc9iri', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000des6i95zc9iri', draft: false }] } },
         versions: {
             create: [
                 {
@@ -835,7 +835,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000les6i1ftkgvjo',
         doi: '10.82259/cl3fz14dr000les6i1ftkgvjo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -874,7 +874,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000mes6icrlg58mi',
         doi: '10.82259/cl3fz14dr000mes6icrlg58mi',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -911,7 +911,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000nes6i7rnb9g08',
         doi: '10.82259/cl3fz14dr000nes6i7rnb9g08',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -950,7 +950,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000oes6i04zzar3n',
         doi: '10.82259/cl3fz14dr000oes6i04zzar3n',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000des6i95zc9iri', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000des6i95zc9iri', draft: false }] } },
         versions: {
             create: [
                 {
@@ -989,7 +989,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000pes6i3bq388zh',
         doi: '10.82259/cl3fz14dr000pes6i3bq388zh',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1028,7 +1028,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000qes6ifcvnca43',
         doi: '10.82259/cl3fz14dr000qes6ifcvnca43',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000des6i95zc9iri', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000des6i95zc9iri', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1065,7 +1065,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000res6igk5j7qaf',
         doi: '10.82259/cl3fz14dr000res6igk5j7qaf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1104,7 +1104,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000ses6ihwrk6umk',
         doi: '10.82259/cl3fz14dr000ses6ihwrk6umk',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1143,7 +1143,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000tes6ie58oa5nl',
         doi: '10.82259/cl3fz14dr000tes6ie58oa5nl',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1182,7 +1182,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000ues6if1wafsb9',
         doi: '10.82259/cl3fz14dr000ues6if1wafsb9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1221,7 +1221,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000ves6i60x1a9rq',
         doi: '10.82259/cl3fz14dr000ves6i60x1a9rq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1260,7 +1260,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000wes6i3mlj9tzu',
         doi: '10.82259/cl3fz14dr000wes6i3mlj9tzu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1299,7 +1299,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000xes6ie7ii1bl5',
         doi: '10.82259/cl3fz14dr000xes6ie7ii1bl5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1338,7 +1338,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dr000yes6i9vlw17lw',
         doi: '10.82259/cl3fz14dr000yes6i9vlw17lw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1377,7 +1377,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds000zes6ifj37escn',
         doi: '10.82259/cl3fz14ds000zes6ifj37escn',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1414,7 +1414,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0010es6ibfw29ycg',
         doi: '10.82259/cl3fz14ds0010es6ibfw29ycg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1453,7 +1453,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0011es6ihmxq0976',
         doi: '10.82259/cl3fz14ds0011es6ihmxq0976',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1492,7 +1492,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0012es6i48li8b2v',
         doi: '10.82259/cl3fz14ds0012es6i48li8b2v',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1531,7 +1531,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0013es6igsi6budb',
         doi: '10.82259/cl3fz14ds0013es6igsi6budb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1570,7 +1570,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0014es6i6b4kh82v',
         doi: '10.82259/cl3fz14ds0014es6i6b4kh82v',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1609,7 +1609,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0015es6i6zpb2byb',
         doi: '10.82259/cl3fz14ds0015es6i6zpb2byb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1648,7 +1648,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0016es6i5n41b81n',
         doi: '10.82259/cl3fz14ds0016es6i5n41b81n',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1687,7 +1687,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0017es6ih8tehm28',
         doi: '10.82259/cl3fz14ds0017es6ih8tehm28',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1725,7 +1725,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0018es6i5t3d227y',
         doi: '10.82259/cl3fz14ds0018es6i5t3d227y',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1764,7 +1764,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0019es6idy7p8vo1',
         doi: '10.82259/cl3fz14ds0019es6idy7p8vo1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1803,7 +1803,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001aes6i24c1bpkt',
         doi: '10.82259/cl3fz14ds001aes6i24c1bpkt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1842,7 +1842,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001bes6i7jx76q3n',
         doi: '10.82259/cl3fz14ds001bes6i7jx76q3n',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1881,7 +1881,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001ces6ib721hff9',
         doi: '10.82259/cl3fz14ds001ces6ib721hff9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1920,7 +1920,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001des6iceri3onz',
         doi: '10.82259/cl3fz14ds001des6iceri3onz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1959,7 +1959,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001ees6i7n7igotk',
         doi: '10.82259/cl3fz14ds001ees6i7n7igotk',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -1998,7 +1998,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001fes6i2uqv0zhu',
         doi: '10.82259/cl3fz14ds001fes6i2uqv0zhu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2037,7 +2037,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001ges6i71z4h2g0',
         doi: '10.82259/cl3fz14ds001ges6i71z4h2g0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2076,7 +2076,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001hes6i3ghjensw',
         doi: '10.82259/cl3fz14ds001hes6i3ghjensw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2115,7 +2115,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001ies6i5ac949l1',
         doi: '10.82259/cl3fz14ds001ies6i5ac949l1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2154,7 +2154,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001jes6ihw7v8rda',
         doi: '10.82259/cl3fz14ds001jes6ihw7v8rda',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2193,7 +2193,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001kes6ici9d0qir',
         doi: '10.82259/cl3fz14ds001kes6ici9d0qir',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2232,7 +2232,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001les6icjnh4qz0',
         doi: '10.82259/cl3fz14ds001les6icjnh4qz0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2271,7 +2271,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001mes6i73yd31uq',
         doi: '10.82259/cl3fz14ds001mes6i73yd31uq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2310,7 +2310,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001nes6i75vh29ql',
         doi: '10.82259/cl3fz14ds001nes6i75vh29ql',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2349,7 +2349,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001oes6iez6jb4p6',
         doi: '10.82259/cl3fz14ds001oes6iez6jb4p6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2388,7 +2388,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001pes6i16lubpez',
         doi: '10.82259/cl3fz14ds001pes6i16lubpez',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2425,7 +2425,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001qes6ie47zbf7t',
         doi: '10.82259/cl3fz14ds001qes6ie47zbf7t',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2464,7 +2464,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001res6i8k3hb42v',
         doi: '10.82259/cl3fz14ds001res6i8k3hb42v',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2503,7 +2503,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001ses6i46hb5ryt',
         doi: '10.82259/cl3fz14ds001ses6i46hb5ryt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2542,7 +2542,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001tes6i17dzd6g4',
         doi: '10.82259/cl3fz14ds001tes6i17dzd6g4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2579,7 +2579,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001ues6i1aczfuw8',
         doi: '10.82259/cl3fz14ds001ues6i1aczfuw8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2618,7 +2618,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001ves6ihglfestl',
         doi: '10.82259/cl3fz14ds001ves6ihglfestl',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2657,7 +2657,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001wes6i3azs8knp',
         doi: '10.82259/cl3fz14ds001wes6i3azs8knp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2696,7 +2696,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001xes6ihpkm087u',
         doi: '10.82259/cl3fz14ds001xes6ihpkm087u',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2735,7 +2735,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001yes6i4w0g95cb',
         doi: '10.82259/cl3fz14ds001yes6i4w0g95cb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2774,7 +2774,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds001zes6iey2wfmo7',
         doi: '10.82259/cl3fz14ds001zes6iey2wfmo7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2813,7 +2813,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0020es6ib6v5ce2d',
         doi: '10.82259/cl3fz14ds0020es6ib6v5ce2d',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2852,7 +2852,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0021es6i31twefry',
         doi: '10.82259/cl3fz14ds0021es6i31twefry',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2889,7 +2889,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0022es6i6eobcmt8',
         doi: '10.82259/cl3fz14ds0022es6i6eobcmt8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2928,7 +2928,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0023es6i2iwmaiqy',
         doi: '10.82259/cl3fz14ds0023es6i2iwmaiqy',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -2967,7 +2967,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0024es6ie3ou8yxu',
         doi: '10.82259/cl3fz14ds0024es6ie3ou8yxu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3006,7 +3006,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0025es6iexis1awo',
         doi: '10.82259/cl3fz14ds0025es6iexis1awo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3045,7 +3045,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0026es6i9uwuh0yk',
         doi: '10.82259/cl3fz14ds0026es6i9uwuh0yk',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3084,7 +3084,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0027es6i7rozfxpv',
         doi: '10.82259/cl3fz14ds0027es6i7rozfxpv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3123,7 +3123,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0028es6i60pk54vk',
         doi: '10.82259/cl3fz14ds0028es6i60pk54vk',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3160,7 +3160,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds0029es6i4n0c12ac',
         doi: '10.82259/cl3fz14ds0029es6i4n0c12ac',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3199,7 +3199,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002aes6ihvmc24so',
         doi: '10.82259/cl3fz14ds002aes6ihvmc24so',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3238,7 +3238,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002bes6i8asd9alv',
         doi: '10.82259/cl3fz14ds002bes6i8asd9alv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3275,7 +3275,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002ces6iebamdxoy',
         doi: '10.82259/cl3fz14ds002ces6iebamdxoy',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3314,7 +3314,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002des6i7r5aeja4',
         doi: '10.82259/cl3fz14ds002des6i7r5aeja4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3353,7 +3353,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002ees6i35901rdk',
         doi: '10.82259/cl3fz14ds002ees6i35901rdk',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3390,7 +3390,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002fes6i8zmh6lwl',
         doi: '10.82259/cl3fz14ds002fes6i8zmh6lwl',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3429,7 +3429,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002ges6iaddhgbmm',
         doi: '10.82259/cl3fz14ds002ges6iaddhgbmm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000kes6i5r7u71qh', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000kes6i5r7u71qh', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3468,7 +3468,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002hes6ib6a169fm',
         doi: '10.82259/cl3fz14ds002hes6ib6a169fm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3507,7 +3507,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002ies6ifhwygjto',
         doi: '10.82259/cl3fz14ds002ies6ifhwygjto',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3546,7 +3546,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002jes6i74qwgmus',
         doi: '10.82259/cl3fz14ds002jes6i74qwgmus',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3585,7 +3585,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002kes6i32ardw43',
         doi: '10.82259/cl3fz14ds002kes6i32ardw43',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3624,7 +3624,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002les6ifxp19zpi',
         doi: '10.82259/cl3fz14ds002les6ifxp19zpi',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3663,7 +3663,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002mes6iazz4cy1w',
         doi: '10.82259/cl3fz14ds002mes6iazz4cy1w',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3702,7 +3702,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002nes6ia60ccvko',
         doi: '10.82259/cl3fz14ds002nes6ia60ccvko',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3741,7 +3741,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002oes6i6x1q3zfp',
         doi: '10.82259/cl3fz14ds002oes6i6x1q3zfp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3780,7 +3780,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002pes6ihpxk4qh3',
         doi: '10.82259/cl3fz14ds002pes6ihpxk4qh3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3819,7 +3819,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002qes6ibs9j0r82',
         doi: '10.82259/cl3fz14ds002qes6ibs9j0r82',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3858,7 +3858,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ds002res6i94dz2034',
         doi: '10.82259/cl3fz14ds002res6i94dz2034',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3897,7 +3897,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt002ses6ie5mvgmiv',
         doi: '10.82259/cl3fz14dt002ses6ie5mvgmiv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3936,7 +3936,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt002tes6ie2h28qdm',
         doi: '10.82259/cl3fz14dt002tes6ie2h28qdm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -3975,7 +3975,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt002ues6ifgcbaees',
         doi: '10.82259/cl3fz14dt002ues6ifgcbaees',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4014,7 +4014,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt002ves6ibrzb57o7',
         doi: '10.82259/cl3fz14dt002ves6ibrzb57o7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4051,7 +4051,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt002wes6i13xs3c0s',
         doi: '10.82259/cl3fz14dt002wes6i13xs3c0s',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4090,7 +4090,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt002xes6i2r7i275a',
         doi: '10.82259/cl3fz14dt002xes6i2r7i275a',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4129,7 +4129,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt002yes6i6gmabvd2',
         doi: '10.82259/cl3fz14dt002yes6i6gmabvd2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4166,7 +4166,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt002zes6ieqmy7i7z',
         doi: '10.82259/cl3fz14dt002zes6ieqmy7i7z',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4205,7 +4205,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0030es6ic4f3g0ov',
         doi: '10.82259/cl3fz14dt0030es6ic4f3g0ov',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4244,7 +4244,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0031es6igbfqf8rq',
         doi: '10.82259/cl3fz14dt0031es6igbfqf8rq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4283,7 +4283,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0032es6i8vafal85',
         doi: '10.82259/cl3fz14dt0032es6i8vafal85',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4322,7 +4322,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0033es6icmptbznj',
         doi: '10.82259/cl3fz14dt0033es6icmptbznj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4361,7 +4361,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0034es6iff8ne2nd',
         doi: '10.82259/cl3fz14dt0034es6iff8ne2nd',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4400,7 +4400,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0035es6ia63a18x4',
         doi: '10.82259/cl3fz14dt0035es6ia63a18x4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4439,7 +4439,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0036es6ia6t8f6xi',
         doi: '10.82259/cl3fz14dt0036es6ia6t8f6xi',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4478,7 +4478,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0037es6i1k725cyn',
         doi: '10.82259/cl3fz14dt0037es6i1k725cyn',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4517,7 +4517,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0038es6ig2bpbtvs',
         doi: '10.82259/cl3fz14dt0038es6ig2bpbtvs',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4556,7 +4556,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0039es6i2rm9bp10',
         doi: '10.82259/cl3fz14dt0039es6i2rm9bp10',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4595,7 +4595,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003aes6ia7suh9o0',
         doi: '10.82259/cl3fz14dt003aes6ia7suh9o0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4634,7 +4634,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003bes6ibwc74nvp',
         doi: '10.82259/cl3fz14dt003bes6ibwc74nvp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4673,7 +4673,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003ces6i6ru69bfj',
         doi: '10.82259/cl3fz14dt003ces6i6ru69bfj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4712,7 +4712,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003des6if2cu5ywc',
         doi: '10.82259/cl3fz14dt003des6if2cu5ywc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4751,7 +4751,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003ees6ifgj5cn48',
         doi: '10.82259/cl3fz14dt003ees6ifgj5cn48',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4789,7 +4789,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003fes6ig8wu1h27',
         doi: '10.82259/cl3fz14dt003fes6ig8wu1h27',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4828,7 +4828,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003ges6i9ykh8v9d',
         doi: '10.82259/cl3fz14dt003ges6i9ykh8v9d',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4867,7 +4867,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003hes6i0x14fdpg',
         doi: '10.82259/cl3fz14dt003hes6i0x14fdpg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4906,7 +4906,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003ies6i0ftcaa97',
         doi: '10.82259/cl3fz14dt003ies6i0ftcaa97',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4945,7 +4945,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003jes6i3cwghfiw',
         doi: '10.82259/cl3fz14dt003jes6i3cwghfiw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -4984,7 +4984,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003kes6i8jlbf61o',
         doi: '10.82259/cl3fz14dt003kes6i8jlbf61o',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5023,7 +5023,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003les6i1x0d7u8f',
         doi: '10.82259/cl3fz14dt003les6i1x0d7u8f',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5062,7 +5062,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003mes6i89pz4lt6',
         doi: '10.82259/cl3fz14dt003mes6i89pz4lt6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5101,7 +5101,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003nes6ic4tndz3m',
         doi: '10.82259/cl3fz14dt003nes6ic4tndz3m',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5140,7 +5140,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003oes6i2kvabyr8',
         doi: '10.82259/cl3fz14dt003oes6i2kvabyr8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5177,7 +5177,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003pes6icnk0fis3',
         doi: '10.82259/cl3fz14dt003pes6icnk0fis3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5216,7 +5216,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003qes6if3p53o0w',
         doi: '10.82259/cl3fz14dt003qes6if3p53o0w',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5255,7 +5255,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003res6ihrmcglss',
         doi: '10.82259/cl3fz14dt003res6ihrmcglss',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5294,7 +5294,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003ses6id9wnhae7',
         doi: '10.82259/cl3fz14dt003ses6id9wnhae7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5333,7 +5333,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003tes6i1nmpbub9',
         doi: '10.82259/cl3fz14dt003tes6i1nmpbub9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5372,7 +5372,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003ues6i8apl9zcg',
         doi: '10.82259/cl3fz14dt003ues6i8apl9zcg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5411,7 +5411,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003ves6i4byb4i0q',
         doi: '10.82259/cl3fz14dt003ves6i4byb4i0q',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5450,7 +5450,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003wes6i6zvvgamq',
         doi: '10.82259/cl3fz14dt003wes6i6zvvgamq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5489,7 +5489,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003xes6i1its86s5',
         doi: '10.82259/cl3fz14dt003xes6i1its86s5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5528,7 +5528,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003yes6igr0yexvr',
         doi: '10.82259/cl3fz14dt003yes6igr0yexvr',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5567,7 +5567,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt003zes6i4c6q25e9',
         doi: '10.82259/cl3fz14dt003zes6i4c6q25e9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5606,7 +5606,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0040es6if2839jn7',
         doi: '10.82259/cl3fz14dt0040es6if2839jn7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5645,7 +5645,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0041es6i1gvb930e',
         doi: '10.82259/cl3fz14dt0041es6i1gvb930e',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5684,7 +5684,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0042es6i5jjlejpx',
         doi: '10.82259/cl3fz14dt0042es6i5jjlejpx',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5723,7 +5723,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0043es6i2mgc0rlg',
         doi: '10.82259/cl3fz14dt0043es6i2mgc0rlg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5762,7 +5762,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0044es6ihsmncilf',
         doi: '10.82259/cl3fz14dt0044es6ihsmncilf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5801,7 +5801,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0045es6i9ujd00mc',
         doi: '10.82259/cl3fz14dt0045es6i9ujd00mc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5840,7 +5840,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0046es6i1odbetja',
         doi: '10.82259/cl3fz14dt0046es6i1odbetja',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5879,7 +5879,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0047es6ier2y5t04',
         doi: '10.82259/cl3fz14dt0047es6ier2y5t04',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -5921,8 +5921,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false },
-                    { publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }
+                    { publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false },
+                    { publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }
                 ]
             }
         },
@@ -5964,7 +5964,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt0049es6i03za75il',
         doi: '10.82259/cl3fz14dt0049es6i03za75il',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6003,7 +6003,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004aes6i95dg38m0',
         doi: '10.82259/cl3fz14dt004aes6i95dg38m0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6042,7 +6042,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004bes6i6nw1hkci',
         doi: '10.82259/cl3fz14dt004bes6i6nw1hkci',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6081,7 +6081,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004ces6i5d94ezur',
         doi: '10.82259/cl3fz14dt004ces6i5d94ezur',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6120,7 +6120,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004des6ian2vbdr7',
         doi: '10.82259/cl3fz14dt004des6ian2vbdr7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6159,7 +6159,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004ees6i5fol9e9x',
         doi: '10.82259/cl3fz14dt004ees6i5fol9e9x',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6198,7 +6198,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004fes6i2awx46io',
         doi: '10.82259/cl3fz14dt004fes6i2awx46io',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6237,7 +6237,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004ges6i4kid72hw',
         doi: '10.82259/cl3fz14dt004ges6i4kid72hw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6276,7 +6276,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004hes6i832l6n68',
         doi: '10.82259/cl3fz14dt004hes6i832l6n68',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6315,7 +6315,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004ies6i2rxueanp',
         doi: '10.82259/cl3fz14dt004ies6i2rxueanp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6354,7 +6354,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004jes6icrri5ryw',
         doi: '10.82259/cl3fz14dt004jes6icrri5ryw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6393,7 +6393,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004kes6i9gyc4kiu',
         doi: '10.82259/cl3fz14dt004kes6i9gyc4kiu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6432,7 +6432,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004les6ibbkq5dpx',
         doi: '10.82259/cl3fz14dt004les6ibbkq5dpx',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6471,7 +6471,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004mes6iam2k2m70',
         doi: '10.82259/cl3fz14dt004mes6iam2k2m70',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6510,7 +6510,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004nes6i10km0qb7',
         doi: '10.82259/cl3fz14dt004nes6i10km0qb7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6549,7 +6549,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004oes6i6w54f68s',
         doi: '10.82259/cl3fz14dt004oes6i6w54f68s',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6588,7 +6588,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004pes6ib3org4lc',
         doi: '10.82259/cl3fz14dt004pes6ib3org4lc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6625,7 +6625,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004qes6i9evv6nmf',
         doi: '10.82259/cl3fz14dt004qes6i9evv6nmf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6664,7 +6664,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dt004res6iefujgkde',
         doi: '10.82259/cl3fz14dt004res6iefujgkde',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6703,7 +6703,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du004ses6ieqpc5tiu',
         doi: '10.82259/cl3fz14du004ses6ieqpc5tiu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6742,7 +6742,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du004tes6i04vi2huw',
         doi: '10.82259/cl3fz14du004tes6i04vi2huw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6781,7 +6781,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du004ues6icva83nma',
         doi: '10.82259/cl3fz14du004ues6icva83nma',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6820,7 +6820,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du004ves6i38g0017w',
         doi: '10.82259/cl3fz14du004ves6i38g0017w',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6859,7 +6859,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du004wes6ig4s5al2r',
         doi: '10.82259/cl3fz14du004wes6ig4s5al2r',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6898,7 +6898,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du004xes6i59vgbc8m',
         doi: '10.82259/cl3fz14du004xes6i59vgbc8m',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6937,7 +6937,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du004yes6i35q4dard',
         doi: '10.82259/cl3fz14du004yes6i35q4dard',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -6976,7 +6976,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du004zes6i31dhdqhm',
         doi: '10.82259/cl3fz14du004zes6i31dhdqhm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7015,7 +7015,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0050es6ifcwe8kjt',
         doi: '10.82259/cl3fz14du0050es6ifcwe8kjt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7054,7 +7054,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0051es6i70hv6deh',
         doi: '10.82259/cl3fz14du0051es6i70hv6deh',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7093,7 +7093,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0052es6i3a1a5p5z',
         doi: '10.82259/cl3fz14du0052es6i3a1a5p5z',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7132,7 +7132,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0053es6id8i1c7ug',
         doi: '10.82259/cl3fz14du0053es6id8i1c7ug',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7171,7 +7171,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0054es6i7x6o4fs3',
         doi: '10.82259/cl3fz14du0054es6i7x6o4fs3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7210,7 +7210,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0055es6igds39ryv',
         doi: '10.82259/cl3fz14du0055es6igds39ryv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7249,7 +7249,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0056es6i7tekegg8',
         doi: '10.82259/cl3fz14du0056es6i7tekegg8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7288,7 +7288,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0057es6i2u9natle',
         doi: '10.82259/cl3fz14du0057es6i2u9natle',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7327,7 +7327,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0058es6i58iz3wer',
         doi: '10.82259/cl3fz14du0058es6i58iz3wer',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7366,7 +7366,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0059es6i2ojbem58',
         doi: '10.82259/cl3fz14du0059es6i2ojbem58',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7405,7 +7405,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005aes6idfqa17sj',
         doi: '10.82259/cl3fz14du005aes6idfqa17sj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7444,7 +7444,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005bes6ihlwyhmni',
         doi: '10.82259/cl3fz14du005bes6ihlwyhmni',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7483,7 +7483,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005ces6i34uc41je',
         doi: '10.82259/cl3fz14du005ces6i34uc41je',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7522,7 +7522,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005des6i8f7dfupa',
         doi: '10.82259/cl3fz14du005des6i8f7dfupa',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7561,7 +7561,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005ees6ibt2f59r4',
         doi: '10.82259/cl3fz14du005ees6ibt2f59r4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7600,7 +7600,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005fes6ier6h4qlr',
         doi: '10.82259/cl3fz14du005fes6ier6h4qlr',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7639,7 +7639,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005ges6ihqjhbc2c',
         doi: '10.82259/cl3fz14du005ges6ihqjhbc2c',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7678,7 +7678,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005hes6i5bve9j2e',
         doi: '10.82259/cl3fz14du005hes6i5bve9j2e',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7717,7 +7717,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005ies6i71ln8sqe',
         doi: '10.82259/cl3fz14du005ies6i71ln8sqe',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7756,7 +7756,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005jes6i68w13vpd',
         doi: '10.82259/cl3fz14du005jes6i68w13vpd',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7793,7 +7793,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005kes6ia380039j',
         doi: '10.82259/cl3fz14du005kes6ia380039j',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7832,7 +7832,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005les6ifbgn2yxw',
         doi: '10.82259/cl3fz14du005les6ifbgn2yxw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7871,7 +7871,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005mes6iecy97rda',
         doi: '10.82259/cl3fz14du005mes6iecy97rda',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7910,7 +7910,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005nes6i30mw75yp',
         doi: '10.82259/cl3fz14du005nes6i30mw75yp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7949,7 +7949,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005oes6idi6eg1jx',
         doi: '10.82259/cl3fz14du005oes6idi6eg1jx',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -7988,7 +7988,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005pes6if6h96ie5',
         doi: '10.82259/cl3fz14du005pes6if6h96ie5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8027,7 +8027,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005qes6ifc8jb6xm',
         doi: '10.82259/cl3fz14du005qes6ifc8jb6xm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8066,7 +8066,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005res6icw0k1yeu',
         doi: '10.82259/cl3fz14du005res6icw0k1yeu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8105,7 +8105,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005ses6i3n0jd5cq',
         doi: '10.82259/cl3fz14du005ses6i3n0jd5cq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8144,7 +8144,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005tes6iaqsj4p4z',
         doi: '10.82259/cl3fz14du005tes6iaqsj4p4z',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8183,7 +8183,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005ues6ignovcml7',
         doi: '10.82259/cl3fz14du005ues6ignovcml7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8222,7 +8222,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005ves6i46vtc4em',
         doi: '10.82259/cl3fz14du005ves6i46vtc4em',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000fes6i6aowacj6', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000fes6i6aowacj6', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8261,7 +8261,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005wes6i4fuj1xts',
         doi: '10.82259/cl3fz14du005wes6i4fuj1xts',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8300,7 +8300,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005xes6i13debe0g',
         doi: '10.82259/cl3fz14du005xes6i13debe0g',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8339,7 +8339,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005yes6i8vpfdftz',
         doi: '10.82259/cl3fz14du005yes6i8vpfdftz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8378,7 +8378,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du005zes6i00zwfqmh',
         doi: '10.82259/cl3fz14du005zes6i00zwfqmh',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8417,7 +8417,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0060es6i51z01ppw',
         doi: '10.82259/cl3fz14du0060es6i51z01ppw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8456,7 +8456,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0061es6i97zb3k1k',
         doi: '10.82259/cl3fz14du0061es6i97zb3k1k',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8495,7 +8495,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0062es6i9yzn98vf',
         doi: '10.82259/cl3fz14du0062es6i9yzn98vf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8534,7 +8534,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0063es6iho7x8u3a',
         doi: '10.82259/cl3fz14du0063es6iho7x8u3a',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8573,7 +8573,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0064es6i84ds1tb5',
         doi: '10.82259/cl3fz14du0064es6i84ds1tb5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8612,7 +8612,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0065es6i46kr6yfg',
         doi: '10.82259/cl3fz14du0065es6i46kr6yfg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8651,7 +8651,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0066es6i3ami9s62',
         doi: '10.82259/cl3fz14du0066es6i3ami9s62',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8688,7 +8688,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0067es6ib6m9hbjq',
         doi: '10.82259/cl3fz14du0067es6ib6m9hbjq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8727,7 +8727,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0068es6if2f3czt7',
         doi: '10.82259/cl3fz14du0068es6if2f3czt7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8766,7 +8766,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du0069es6i2hji7ycw',
         doi: '10.82259/cl3fz14du0069es6i2hji7ycw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8805,7 +8805,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006aes6igjcf1vb0',
         doi: '10.82259/cl3fz14du006aes6igjcf1vb0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8842,7 +8842,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006bes6i5duget6e',
         doi: '10.82259/cl3fz14du006bes6i5duget6e',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8881,7 +8881,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006ces6i7smk3zje',
         doi: '10.82259/cl3fz14du006ces6i7smk3zje',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8918,7 +8918,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006des6i3u1i7tw4',
         doi: '10.82259/cl3fz14du006des6i3u1i7tw4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8957,7 +8957,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006ees6icvzy5x9g',
         doi: '10.82259/cl3fz14du006ees6icvzy5x9g',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -8996,7 +8996,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006fes6ibd1z4qtc',
         doi: '10.82259/cl3fz14du006fes6ibd1z4qtc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9035,7 +9035,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006ges6i7wqb3qda',
         doi: '10.82259/cl3fz14du006ges6i7wqb3qda',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9072,7 +9072,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006hes6i3v1wgvun',
         doi: '10.82259/cl3fz14du006hes6i3v1wgvun',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9111,7 +9111,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006ies6idnr2fjj9',
         doi: '10.82259/cl3fz14du006ies6idnr2fjj9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9150,7 +9150,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006jes6i1tuq2es0',
         doi: '10.82259/cl3fz14du006jes6i1tuq2es0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9189,7 +9189,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006kes6ih14z4bzo',
         doi: '10.82259/cl3fz14du006kes6ih14z4bzo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9228,7 +9228,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006les6i6s5a2zge',
         doi: '10.82259/cl3fz14du006les6i6s5a2zge',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9267,7 +9267,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006mes6i78xsf7i4',
         doi: '10.82259/cl3fz14du006mes6i78xsf7i4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9306,7 +9306,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006nes6i646z7hf6',
         doi: '10.82259/cl3fz14du006nes6i646z7hf6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9345,7 +9345,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006oes6ihy66455f',
         doi: '10.82259/cl3fz14du006oes6ihy66455f',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9384,7 +9384,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006pes6idhg681q7',
         doi: '10.82259/cl3fz14du006pes6idhg681q7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9423,7 +9423,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006qes6ic7lz1q10',
         doi: '10.82259/cl3fz14du006qes6ic7lz1q10',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9462,7 +9462,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006res6i0gwah13p',
         doi: '10.82259/cl3fz14du006res6i0gwah13p',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9501,7 +9501,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14du006ses6id67b91ku',
         doi: '10.82259/cl3fz14du006ses6id67b91ku',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9540,7 +9540,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv006tes6i2zv1am6s',
         doi: '10.82259/cl3fz14dv006tes6i2zv1am6s',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9577,7 +9577,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv006ues6i12uu7szv',
         doi: '10.82259/cl3fz14dv006ues6i12uu7szv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9614,7 +9614,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv006ves6i7mznc6fz',
         doi: '10.82259/cl3fz14dv006ves6i7mznc6fz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9653,7 +9653,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv006wes6i74emchve',
         doi: '10.82259/cl3fz14dv006wes6i74emchve',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9692,7 +9692,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv006xes6i07tvhqvj',
         doi: '10.82259/cl3fz14dv006xes6i07tvhqvj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9731,7 +9731,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv006yes6iaf3w7o48',
         doi: '10.82259/cl3fz14dv006yes6iaf3w7o48',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9770,7 +9770,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv006zes6i9g9i0t4w',
         doi: '10.82259/cl3fz14dv006zes6i9g9i0t4w',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9809,7 +9809,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv0070es6i48viab37',
         doi: '10.82259/cl3fz14dv0070es6i48viab37',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9848,7 +9848,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv0071es6i451w2iqz',
         doi: '10.82259/cl3fz14dv0071es6i451w2iqz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9885,7 +9885,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv0072es6i0z4l2g00',
         doi: '10.82259/cl3fz14dv0072es6i0z4l2g00',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9924,7 +9924,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv0073es6i9rf5azv5',
         doi: '10.82259/cl3fz14dv0073es6i9rf5azv5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -9963,7 +9963,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv0074es6ifyt04i0g',
         doi: '10.82259/cl3fz14dv0074es6ifyt04i0g',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10002,7 +10002,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv0075es6i1tji9fg9',
         doi: '10.82259/cl3fz14dv0075es6i1tji9fg9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10041,7 +10041,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv0076es6i58rkgtmp',
         doi: '10.82259/cl3fz14dv0076es6i58rkgtmp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10080,7 +10080,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv0077es6iee2pe0hx',
         doi: '10.82259/cl3fz14dv0077es6iee2pe0hx',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10119,7 +10119,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv0078es6i790a3ooh',
         doi: '10.82259/cl3fz14dv0078es6i790a3ooh',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10158,7 +10158,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv0079es6i85wtdk4h',
         doi: '10.82259/cl3fz14dv0079es6i85wtdk4h',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10197,7 +10197,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dv007aes6ig2a3coyc',
         doi: '10.82259/cl3fz14dv007aes6ig2a3coyc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10236,7 +10236,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007bes6ickyh3ttm',
         doi: '10.82259/cl3fz14dw007bes6ickyh3ttm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10275,7 +10275,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007ces6ig9z5dkcg',
         doi: '10.82259/cl3fz14dw007ces6ig9z5dkcg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10314,7 +10314,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007des6i9unah8yc',
         doi: '10.82259/cl3fz14dw007des6i9unah8yc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10353,7 +10353,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007ees6iari24lah',
         doi: '10.82259/cl3fz14dw007ees6iari24lah',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10392,7 +10392,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007fes6i16dgfmer',
         doi: '10.82259/cl3fz14dw007fes6i16dgfmer',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10431,7 +10431,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007ges6ib8nq9j0r',
         doi: '10.82259/cl3fz14dw007ges6ib8nq9j0r',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10470,7 +10470,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007hes6i2hemgzyl',
         doi: '10.82259/cl3fz14dw007hes6i2hemgzyl',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10509,7 +10509,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007ies6ibrpqe9cu',
         doi: '10.82259/cl3fz14dw007ies6ibrpqe9cu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10548,7 +10548,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007jes6igufc4qk3',
         doi: '10.82259/cl3fz14dw007jes6igufc4qk3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10585,7 +10585,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007kes6i6t8hhk68',
         doi: '10.82259/cl3fz14dw007kes6i6t8hhk68',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10624,7 +10624,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007les6i358z3f1a',
         doi: '10.82259/cl3fz14dw007les6i358z3f1a',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10661,7 +10661,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007mes6i90plch8x',
         doi: '10.82259/cl3fz14dw007mes6i90plch8x',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10700,7 +10700,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007nes6ie2zs3dj6',
         doi: '10.82259/cl3fz14dw007nes6ie2zs3dj6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10739,7 +10739,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007oes6i2tu6dcj8',
         doi: '10.82259/cl3fz14dw007oes6i2tu6dcj8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10778,7 +10778,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007pes6i09fm1v1u',
         doi: '10.82259/cl3fz14dw007pes6i09fm1v1u',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10815,7 +10815,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007qes6i6ab1d7v0',
         doi: '10.82259/cl3fz14dw007qes6i6ab1d7v0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10854,7 +10854,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007res6i3anbdc1c',
         doi: '10.82259/cl3fz14dw007res6i3anbdc1c',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10893,7 +10893,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007ses6i2uwn27q5',
         doi: '10.82259/cl3fz14dw007ses6i2uwn27q5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10932,7 +10932,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007tes6i5qeo0xi0',
         doi: '10.82259/cl3fz14dw007tes6i5qeo0xi0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -10971,7 +10971,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007ues6i45zkd9z4',
         doi: '10.82259/cl3fz14dw007ues6i45zkd9z4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11008,7 +11008,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007ves6ifht424jq',
         doi: '10.82259/cl3fz14dw007ves6ifht424jq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11047,7 +11047,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007wes6i4fm056lg',
         doi: '10.82259/cl3fz14dw007wes6i4fm056lg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11086,7 +11086,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007xes6ibfjk5g3z',
         doi: '10.82259/cl3fz14dw007xes6ibfjk5g3z',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11125,7 +11125,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007yes6iblwd279j',
         doi: '10.82259/cl3fz14dw007yes6iblwd279j',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11164,7 +11164,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw007zes6ib1mj7aq4',
         doi: '10.82259/cl3fz14dw007zes6ib1mj7aq4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11203,7 +11203,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw0080es6ifquhgo9o',
         doi: '10.82259/cl3fz14dw0080es6ifquhgo9o',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11242,7 +11242,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw0081es6ibwv99j1b',
         doi: '10.82259/cl3fz14dw0081es6ibwv99j1b',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11281,7 +11281,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw0082es6i8zydayig',
         doi: '10.82259/cl3fz14dw0082es6i8zydayig',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11318,7 +11318,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw0083es6i2boa6m57',
         doi: '10.82259/cl3fz14dw0083es6i2boa6m57',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11357,7 +11357,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw0084es6i102r9mwh',
         doi: '10.82259/cl3fz14dw0084es6i102r9mwh',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11396,7 +11396,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw0085es6ibq3h45s7',
         doi: '10.82259/cl3fz14dw0085es6ibq3h45s7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11435,7 +11435,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw0086es6ih430bwxs',
         doi: '10.82259/cl3fz14dw0086es6ih430bwxs',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11474,7 +11474,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw0087es6i81854gim',
         doi: '10.82259/cl3fz14dw0087es6i81854gim',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11513,7 +11513,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw0088es6i4zsf184x',
         doi: '10.82259/cl3fz14dw0088es6i4zsf184x',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11552,7 +11552,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw0089es6i3xx916yy',
         doi: '10.82259/cl3fz14dw0089es6i3xx916yy',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11591,7 +11591,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw008aes6ihcp47y88',
         doi: '10.82259/cl3fz14dw008aes6ihcp47y88',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11630,7 +11630,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw008bes6i0ex01lui',
         doi: '10.82259/cl3fz14dw008bes6i0ex01lui',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11669,7 +11669,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw008ces6i1w9q458r',
         doi: '10.82259/cl3fz14dw008ces6i1w9q458r',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11706,7 +11706,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw008des6i6nmr35um',
         doi: '10.82259/cl3fz14dw008des6i6nmr35um',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11745,7 +11745,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw008ees6i0xf96zdt',
         doi: '10.82259/cl3fz14dw008ees6i0xf96zdt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11784,7 +11784,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dw008fes6i19wcezon',
         doi: '10.82259/cl3fz14dw008fes6i19wcezon',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11823,7 +11823,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008ges6ibzol98kk',
         doi: '10.82259/cl3fz14dx008ges6ibzol98kk',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11862,7 +11862,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008hes6i7f5ohdxs',
         doi: '10.82259/cl3fz14dx008hes6i7f5ohdxs',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11901,7 +11901,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008ies6i2oajccmi',
         doi: '10.82259/cl3fz14dx008ies6i2oajccmi',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -11943,8 +11943,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false },
-                    { publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }
+                    { publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false },
+                    { publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }
                 ]
             }
         },
@@ -11986,7 +11986,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008kes6i16on132b',
         doi: '10.82259/cl3fz14dx008kes6i16on132b',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12025,7 +12025,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008les6iefbh4wdo',
         doi: '10.82259/cl3fz14dx008les6iefbh4wdo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12064,7 +12064,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008mes6ihaeqgis1',
         doi: '10.82259/cl3fz14dx008mes6ihaeqgis1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12101,7 +12101,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008nes6i2fdgctm9',
         doi: '10.82259/cl3fz14dx008nes6i2fdgctm9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12140,7 +12140,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008oes6icumxd4xt',
         doi: '10.82259/cl3fz14dx008oes6icumxd4xt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12179,7 +12179,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008pes6ifie9b400',
         doi: '10.82259/cl3fz14dx008pes6ifie9b400',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12218,7 +12218,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008qes6i0un80g64',
         doi: '10.82259/cl3fz14dx008qes6i0un80g64',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12257,7 +12257,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008res6i3mfladql',
         doi: '10.82259/cl3fz14dx008res6i3mfladql',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12296,7 +12296,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008ses6i9w071ys3',
         doi: '10.82259/cl3fz14dx008ses6i9w071ys3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12335,7 +12335,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008tes6if8rhhfqh',
         doi: '10.82259/cl3fz14dx008tes6if8rhhfqh',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12374,7 +12374,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008ues6igt5hbwb3',
         doi: '10.82259/cl3fz14dx008ues6igt5hbwb3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12413,7 +12413,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008ves6ih5hd6h1n',
         doi: '10.82259/cl3fz14dx008ves6ih5hd6h1n',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12450,7 +12450,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008wes6i1u982ycs',
         doi: '10.82259/cl3fz14dx008wes6i1u982ycs',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12487,7 +12487,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008xes6i0w4i30xe',
         doi: '10.82259/cl3fz14dx008xes6i0w4i30xe',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12526,7 +12526,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008yes6i5nkshfk5',
         doi: '10.82259/cl3fz14dx008yes6i5nkshfk5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12565,7 +12565,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx008zes6ih6u20ho2',
         doi: '10.82259/cl3fz14dx008zes6ih6u20ho2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12604,7 +12604,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx0090es6i0pev1l0t',
         doi: '10.82259/cl3fz14dx0090es6i0pev1l0t',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12643,7 +12643,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx0091es6i4zxt2rze',
         doi: '10.82259/cl3fz14dx0091es6i4zxt2rze',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12682,7 +12682,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx0092es6ieeco0ldg',
         doi: '10.82259/cl3fz14dx0092es6ieeco0ldg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12721,7 +12721,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx0093es6i38uy5jnq',
         doi: '10.82259/cl3fz14dx0093es6i38uy5jnq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12760,7 +12760,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx0094es6i48vfdja6',
         doi: '10.82259/cl3fz14dx0094es6i48vfdja6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12799,7 +12799,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx0095es6i3l2324o6',
         doi: '10.82259/cl3fz14dx0095es6i3l2324o6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12836,7 +12836,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx0096es6i292x4ik0',
         doi: '10.82259/cl3fz14dx0096es6i292x4ik0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12875,7 +12875,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx0097es6i5jl4haim',
         doi: '10.82259/cl3fz14dx0097es6i5jl4haim',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12914,7 +12914,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx0098es6ihg4tbknp',
         doi: '10.82259/cl3fz14dx0098es6ihg4tbknp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12953,7 +12953,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx0099es6i0basbd11',
         doi: '10.82259/cl3fz14dx0099es6i0basbd11',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -12992,7 +12992,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009aes6iaxi99lia',
         doi: '10.82259/cl3fz14dx009aes6iaxi99lia',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13031,7 +13031,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009bes6i6cw40h07',
         doi: '10.82259/cl3fz14dx009bes6i6cw40h07',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13070,7 +13070,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009ces6id2ct7ulo',
         doi: '10.82259/cl3fz14dx009ces6id2ct7ulo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13109,7 +13109,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009des6i1ow96fs4',
         doi: '10.82259/cl3fz14dx009des6i1ow96fs4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13148,7 +13148,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009ees6i47in4ew3',
         doi: '10.82259/cl3fz14dx009ees6i47in4ew3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13187,7 +13187,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009fes6i7xnd88by',
         doi: '10.82259/cl3fz14dx009fes6i7xnd88by',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13226,7 +13226,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009ges6i07hj1pya',
         doi: '10.82259/cl3fz14dx009ges6i07hj1pya',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13265,7 +13265,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009hes6iavl48rab',
         doi: '10.82259/cl3fz14dx009hes6iavl48rab',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13304,7 +13304,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009ies6ic53p10vb',
         doi: '10.82259/cl3fz14dx009ies6ic53p10vb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13343,7 +13343,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009jes6iajwr8mhu',
         doi: '10.82259/cl3fz14dx009jes6iajwr8mhu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13382,7 +13382,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009kes6i1lofgyah',
         doi: '10.82259/cl3fz14dx009kes6i1lofgyah',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13421,7 +13421,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009les6icdcscvne',
         doi: '10.82259/cl3fz14dx009les6icdcscvne',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13460,7 +13460,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009mes6i1dzqf2ly',
         doi: '10.82259/cl3fz14dx009mes6i1dzqf2ly',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13499,7 +13499,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009nes6ig1zj20gh',
         doi: '10.82259/cl3fz14dx009nes6ig1zj20gh',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13538,7 +13538,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009oes6idbw56hlx',
         doi: '10.82259/cl3fz14dx009oes6idbw56hlx',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13577,7 +13577,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009pes6igojo64jh',
         doi: '10.82259/cl3fz14dx009pes6igojo64jh',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0003es6idqm4au2v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0003es6idqm4au2v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13616,7 +13616,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009qes6iak3oasqz',
         doi: '10.82259/cl3fz14dx009qes6iak3oasqz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13655,7 +13655,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009res6i1kuye168',
         doi: '10.82259/cl3fz14dx009res6i1kuye168',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13694,7 +13694,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009ses6i3jm18e8h',
         doi: '10.82259/cl3fz14dx009ses6i3jm18e8h',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13733,7 +13733,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009tes6i4okz0lo2',
         doi: '10.82259/cl3fz14dx009tes6i4okz0lo2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13772,7 +13772,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009ues6icv2s35le',
         doi: '10.82259/cl3fz14dx009ues6icv2s35le',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13809,7 +13809,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009ves6iew2307d2',
         doi: '10.82259/cl3fz14dx009ves6iew2307d2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0002es6i6r7t2mpv', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0002es6i6r7t2mpv', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13848,7 +13848,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009wes6ibma5datj',
         doi: '10.82259/cl3fz14dx009wes6ibma5datj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13887,7 +13887,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009xes6ie24v3lrq',
         doi: '10.82259/cl3fz14dx009xes6ie24v3lrq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13926,7 +13926,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009yes6ihxtk1xrp',
         doi: '10.82259/cl3fz14dx009yes6ihxtk1xrp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -13965,7 +13965,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx009zes6ifdbg8736',
         doi: '10.82259/cl3fz14dx009zes6ifdbg8736',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14004,7 +14004,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00a0es6i1nb0321a',
         doi: '10.82259/cl3fz14dx00a0es6i1nb0321a',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14041,7 +14041,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00a1es6i8k380zij',
         doi: '10.82259/cl3fz14dx00a1es6i8k380zij',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14079,7 +14079,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00a2es6i8b3l1hs9',
         doi: '10.82259/cl3fz14dx00a2es6i8b3l1hs9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14118,7 +14118,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00a3es6icowe2m78',
         doi: '10.82259/cl3fz14dx00a3es6icowe2m78',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14155,7 +14155,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00a4es6iayic8cdu',
         doi: '10.82259/cl3fz14dx00a4es6iayic8cdu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14194,7 +14194,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00a5es6ihdp167r2',
         doi: '10.82259/cl3fz14dx00a5es6ihdp167r2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14233,7 +14233,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00a6es6igdqkh5q7',
         doi: '10.82259/cl3fz14dx00a6es6igdqkh5q7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14272,7 +14272,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00a7es6ia3jz7hfw',
         doi: '10.82259/cl3fz14dx00a7es6ia3jz7hfw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14311,7 +14311,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00a8es6i6mo7cf8c',
         doi: '10.82259/cl3fz14dx00a8es6i6mo7cf8c',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14348,7 +14348,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00a9es6i1o0ueomr',
         doi: '10.82259/cl3fz14dx00a9es6i1o0ueomr',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14387,7 +14387,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00aaes6i2up7g80l',
         doi: '10.82259/cl3fz14dx00aaes6i2up7g80l',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14426,7 +14426,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00abes6i8w03apwn',
         doi: '10.82259/cl3fz14dx00abes6i8w03apwn',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14465,7 +14465,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00aces6i2y0tefwr',
         doi: '10.82259/cl3fz14dx00aces6i2y0tefwr',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14504,7 +14504,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00ades6i87rm4foo',
         doi: '10.82259/cl3fz14dx00ades6i87rm4foo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0004es6i6dmo0fpq', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0004es6i6dmo0fpq', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14543,7 +14543,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00aees6i0fd89phr',
         doi: '10.82259/cl3fz14dx00aees6i0fd89phr',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14582,7 +14582,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00afes6i369wevjn',
         doi: '10.82259/cl3fz14dx00afes6i369wevjn',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14621,7 +14621,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00ages6i1v5vggx1',
         doi: '10.82259/cl3fz14dx00ages6i1v5vggx1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14658,7 +14658,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00ahes6i30y4fqn4',
         doi: '10.82259/cl3fz14dx00ahes6i30y4fqn4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14697,7 +14697,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dx00aies6i8345ah1u',
         doi: '10.82259/cl3fz14dx00aies6i8345ah1u',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14735,7 +14735,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00ajes6igv6ialm0',
         doi: '10.82259/cl3fz14dy00ajes6igv6ialm0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14774,7 +14774,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00akes6i0yyd120a',
         doi: '10.82259/cl3fz14dy00akes6i0yyd120a',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14813,7 +14813,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00ales6ibx5ve35b',
         doi: '10.82259/cl3fz14dy00ales6ibx5ve35b',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14852,7 +14852,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00ames6i1aoj4owv',
         doi: '10.82259/cl3fz14dy00ames6i1aoj4owv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14891,7 +14891,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00anes6i1xer2pmg',
         doi: '10.82259/cl3fz14dy00anes6i1xer2pmg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14930,7 +14930,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00aoes6ih7f86cad',
         doi: '10.82259/cl3fz14dy00aoes6ih7f86cad',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -14969,7 +14969,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00apes6i9qio79vs',
         doi: '10.82259/cl3fz14dy00apes6i9qio79vs',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15006,7 +15006,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00aqes6i6w3i2xl1',
         doi: '10.82259/cl3fz14dy00aqes6i6w3i2xl1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000fes6i6aowacj6', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000fes6i6aowacj6', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15045,7 +15045,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00ares6i2gi6cidn',
         doi: '10.82259/cl3fz14dy00ares6i2gi6cidn',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15084,7 +15084,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00ases6i0bz6buae',
         doi: '10.82259/cl3fz14dy00ases6i0bz6buae',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15123,7 +15123,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00ates6i3q2733gg',
         doi: '10.82259/cl3fz14dy00ates6i3q2733gg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15162,7 +15162,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00aues6idr5ga38r',
         doi: '10.82259/cl3fz14dy00aues6idr5ga38r',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15201,7 +15201,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00aves6i7d0i1i7g',
         doi: '10.82259/cl3fz14dy00aves6i7d0i1i7g',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15238,7 +15238,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00awes6ia8824ahd',
         doi: '10.82259/cl3fz14dy00awes6ia8824ahd',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15277,7 +15277,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00axes6ihijh3r90',
         doi: '10.82259/cl3fz14dy00axes6ihijh3r90',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15316,7 +15316,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00ayes6ia6u54tw0',
         doi: '10.82259/cl3fz14dy00ayes6ia6u54tw0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15355,7 +15355,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00azes6ig1b53azr',
         doi: '10.82259/cl3fz14dy00azes6ig1b53azr',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15394,7 +15394,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00b0es6i9namcw0s',
         doi: '10.82259/cl3fz14dy00b0es6i9namcw0s',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15433,7 +15433,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00b1es6ie66r7je7',
         doi: '10.82259/cl3fz14dy00b1es6ie66r7je7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15472,7 +15472,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00b2es6i8w6xgclb',
         doi: '10.82259/cl3fz14dy00b2es6i8w6xgclb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15511,7 +15511,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00b3es6i6ow1bbwk',
         doi: '10.82259/cl3fz14dy00b3es6i6ow1bbwk',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15548,7 +15548,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00b4es6i3ezggxwv',
         doi: '10.82259/cl3fz14dy00b4es6i3ezggxwv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15587,7 +15587,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00b5es6ibpwj8wb5',
         doi: '10.82259/cl3fz14dy00b5es6ibpwj8wb5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15626,7 +15626,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00b6es6i5z3h1pgc',
         doi: '10.82259/cl3fz14dy00b6es6i5z3h1pgc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15664,7 +15664,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00b7es6iaf21gwku',
         doi: '10.82259/cl3fz14dy00b7es6iaf21gwku',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15703,7 +15703,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00b8es6ih658aqvh',
         doi: '10.82259/cl3fz14dy00b8es6ih658aqvh',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15742,7 +15742,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00b9es6i0bfpcd9z',
         doi: '10.82259/cl3fz14dy00b9es6i0bfpcd9z',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15781,7 +15781,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00baes6i6jh936hn',
         doi: '10.82259/cl3fz14dy00baes6i6jh936hn',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15820,7 +15820,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bbes6i01mghugf',
         doi: '10.82259/cl3fz14dy00bbes6i01mghugf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0008es6i4uvfdis7', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0008es6i4uvfdis7', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15859,7 +15859,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bces6i4eio36bz',
         doi: '10.82259/cl3fz14dy00bces6i4eio36bz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15896,7 +15896,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bdes6iegz455vc',
         doi: '10.82259/cl3fz14dy00bdes6iegz455vc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15935,7 +15935,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bees6i0wd21e92',
         doi: '10.82259/cl3fz14dy00bees6i0wd21e92',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -15974,7 +15974,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bfes6iadjtd8l4',
         doi: '10.82259/cl3fz14dy00bfes6iadjtd8l4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16013,7 +16013,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bges6if25g9xu3',
         doi: '10.82259/cl3fz14dy00bges6if25g9xu3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16052,7 +16052,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bhes6ie6at1bn0',
         doi: '10.82259/cl3fz14dy00bhes6ie6at1bn0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16091,7 +16091,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bies6ic7zwdp19',
         doi: '10.82259/cl3fz14dy00bies6ic7zwdp19',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16130,7 +16130,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bjes6idmlw9rfn',
         doi: '10.82259/cl3fz14dy00bjes6idmlw9rfn',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16169,7 +16169,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bkes6i7jlw935p',
         doi: '10.82259/cl3fz14dy00bkes6i7jlw935p',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16208,7 +16208,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bles6ibl070yy6',
         doi: '10.82259/cl3fz14dy00bles6ibl070yy6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16247,7 +16247,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bmes6i1ff4c9vn',
         doi: '10.82259/cl3fz14dy00bmes6i1ff4c9vn',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16284,7 +16284,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bnes6i5rkf4ykt',
         doi: '10.82259/cl3fz14dy00bnes6i5rkf4ykt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16326,8 +16326,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false },
-                    { publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }
+                    { publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false },
+                    { publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }
                 ]
             }
         },
@@ -16369,7 +16369,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bpes6i48nf4awk',
         doi: '10.82259/cl3fz14dy00bpes6i48nf4awk',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16408,7 +16408,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bqes6i9wuq5u48',
         doi: '10.82259/cl3fz14dy00bqes6i9wuq5u48',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16447,7 +16447,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bres6i3n6o9nvz',
         doi: '10.82259/cl3fz14dy00bres6i3n6o9nvz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16486,7 +16486,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bses6i9c2y9ucq',
         doi: '10.82259/cl3fz14dy00bses6i9c2y9ucq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16525,7 +16525,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00btes6i9d3i2bnm',
         doi: '10.82259/cl3fz14dy00btes6i9d3i2bnm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16564,7 +16564,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bues6iazlsargu',
         doi: '10.82259/cl3fz14dy00bues6iazlsargu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16603,7 +16603,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bves6ifu4u7uup',
         doi: '10.82259/cl3fz14dy00bves6ifu4u7uup',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16642,7 +16642,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bwes6i82710kqg',
         doi: '10.82259/cl3fz14dy00bwes6i82710kqg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0003es6idqm4au2v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0003es6idqm4au2v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16681,7 +16681,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bxes6ifzpt9w9p',
         doi: '10.82259/cl3fz14dy00bxes6ifzpt9w9p',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16720,7 +16720,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00byes6ibozyfmaw',
         doi: '10.82259/cl3fz14dy00byes6ibozyfmaw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16757,7 +16757,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00bzes6ia74m41jt',
         doi: '10.82259/cl3fz14dy00bzes6ia74m41jt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16796,7 +16796,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00c0es6i7d4eajjp',
         doi: '10.82259/cl3fz14dy00c0es6i7d4eajjp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16835,7 +16835,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00c1es6i4i3v0pf9',
         doi: '10.82259/cl3fz14dy00c1es6i4i3v0pf9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16874,7 +16874,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00c2es6idsfd2d0q',
         doi: '10.82259/cl3fz14dy00c2es6idsfd2d0q',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16913,7 +16913,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00c3es6i6u0ga52b',
         doi: '10.82259/cl3fz14dy00c3es6i6u0ga52b',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16950,7 +16950,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00c4es6i5ked76ud',
         doi: '10.82259/cl3fz14dy00c4es6i5ked76ud',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -16989,7 +16989,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00c5es6i1pr4308l',
         doi: '10.82259/cl3fz14dy00c5es6i1pr4308l',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17028,7 +17028,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00c6es6i4zax3n89',
         doi: '10.82259/cl3fz14dy00c6es6i4zax3n89',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17067,7 +17067,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00c7es6igxbf23de',
         doi: '10.82259/cl3fz14dy00c7es6igxbf23de',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17104,7 +17104,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00c8es6i3a51auvp',
         doi: '10.82259/cl3fz14dy00c8es6i3a51auvp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17143,7 +17143,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00c9es6i556i4whf',
         doi: '10.82259/cl3fz14dy00c9es6i556i4whf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17182,7 +17182,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00caes6igpkm1mj0',
         doi: '10.82259/cl3fz14dy00caes6igpkm1mj0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17221,7 +17221,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00cbes6i9bcvc429',
         doi: '10.82259/cl3fz14dy00cbes6i9bcvc429',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0005es6ibev2gv3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0005es6ibev2gv3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17260,7 +17260,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00cces6i3at1ac3w',
         doi: '10.82259/cl3fz14dy00cces6i3at1ac3w',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17299,7 +17299,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00cdes6ieiw3ehk7',
         doi: '10.82259/cl3fz14dy00cdes6ieiw3ehk7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000kes6i5r7u71qh', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000kes6i5r7u71qh', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17341,8 +17341,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false },
-                    { publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }
+                    { publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false },
+                    { publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }
                 ]
             }
         },
@@ -17384,7 +17384,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00cfes6i2rmfdu7w',
         doi: '10.82259/cl3fz14dy00cfes6i2rmfdu7w',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17421,7 +17421,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00cges6i3vu430z8',
         doi: '10.82259/cl3fz14dy00cges6i3vu430z8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17460,7 +17460,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00ches6i8m4ge67d',
         doi: '10.82259/cl3fz14dy00ches6i8m4ge67d',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17499,7 +17499,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00cies6i89h1ghcw',
         doi: '10.82259/cl3fz14dy00cies6i89h1ghcw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17538,7 +17538,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00cjes6i16c7659d',
         doi: '10.82259/cl3fz14dy00cjes6i16c7659d',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17577,7 +17577,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00ckes6ihtkp9km8',
         doi: '10.82259/cl3fz14dy00ckes6ihtkp9km8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17616,7 +17616,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dy00cles6ifawz6qik',
         doi: '10.82259/cl3fz14dy00cles6ifawz6qik',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17655,7 +17655,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00cmes6i54pz5gmq',
         doi: '10.82259/cl3fz14dz00cmes6i54pz5gmq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17694,7 +17694,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00cnes6ie0dceelz',
         doi: '10.82259/cl3fz14dz00cnes6ie0dceelz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17736,8 +17736,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false },
-                    { publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }
+                    { publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false },
+                    { publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }
                 ]
             }
         },
@@ -17779,7 +17779,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00cpes6i6kgk8dnj',
         doi: '10.82259/cl3fz14dz00cpes6i6kgk8dnj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17818,7 +17818,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00cqes6i3h5z9swf',
         doi: '10.82259/cl3fz14dz00cqes6i3h5z9swf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17857,7 +17857,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00cres6icjhs65nu',
         doi: '10.82259/cl3fz14dz00cres6icjhs65nu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17896,7 +17896,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00cses6i8y393bib',
         doi: '10.82259/cl3fz14dz00cses6i8y393bib',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17935,7 +17935,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00ctes6i11jfars5',
         doi: '10.82259/cl3fz14dz00ctes6i11jfars5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -17974,7 +17974,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00cues6i4rigfg5y',
         doi: '10.82259/cl3fz14dz00cues6i4rigfg5y',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18013,7 +18013,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00cves6i64oz2o73',
         doi: '10.82259/cl3fz14dz00cves6i64oz2o73',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18052,7 +18052,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00cwes6i9uuba748',
         doi: '10.82259/cl3fz14dz00cwes6i9uuba748',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18091,7 +18091,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00cxes6i9moa13mk',
         doi: '10.82259/cl3fz14dz00cxes6i9moa13mk',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18130,7 +18130,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00cyes6i3icb7gqw',
         doi: '10.82259/cl3fz14dz00cyes6i3icb7gqw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18169,7 +18169,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00czes6i8tdxgqez',
         doi: '10.82259/cl3fz14dz00czes6i8tdxgqez',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18208,7 +18208,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00d0es6i41pmao80',
         doi: '10.82259/cl3fz14dz00d0es6i41pmao80',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18247,7 +18247,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00d1es6i6wmx9gvj',
         doi: '10.82259/cl3fz14dz00d1es6i6wmx9gvj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18286,7 +18286,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00d2es6i2q1wfo92',
         doi: '10.82259/cl3fz14dz00d2es6i2q1wfo92',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18325,7 +18325,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00d3es6i24iiaba8',
         doi: '10.82259/cl3fz14dz00d3es6i24iiaba8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18362,7 +18362,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00d4es6iaffmfwfm',
         doi: '10.82259/cl3fz14dz00d4es6iaffmfwfm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18401,7 +18401,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00d5es6i6xfybhzv',
         doi: '10.82259/cl3fz14dz00d5es6i6xfybhzv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000res6igk5j7qaf', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000res6igk5j7qaf', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18440,7 +18440,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00d6es6i0ria3f7i',
         doi: '10.82259/cl3fz14dz00d6es6i0ria3f7i',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18477,7 +18477,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00d7es6i7ksu8sjv',
         doi: '10.82259/cl3fz14dz00d7es6i7ksu8sjv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18516,7 +18516,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00d8es6idma8gtke',
         doi: '10.82259/cl3fz14dz00d8es6idma8gtke',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18555,7 +18555,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00d9es6ic0d4auj9',
         doi: '10.82259/cl3fz14dz00d9es6ic0d4auj9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18594,7 +18594,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00daes6i1m26ghbw',
         doi: '10.82259/cl3fz14dz00daes6i1m26ghbw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18633,7 +18633,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dbes6i4m1ub67m',
         doi: '10.82259/cl3fz14dz00dbes6i4m1ub67m',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18672,7 +18672,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dces6ighfc7fes',
         doi: '10.82259/cl3fz14dz00dces6ighfc7fes',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18711,7 +18711,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00ddes6ifo6d1skd',
         doi: '10.82259/cl3fz14dz00ddes6ifo6d1skd',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18750,7 +18750,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dees6i57zvaqwt',
         doi: '10.82259/cl3fz14dz00dees6i57zvaqwt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18788,7 +18788,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dfes6i1j7090jd',
         doi: '10.82259/cl3fz14dz00dfes6i1j7090jd',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18827,7 +18827,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dges6i96h1eiyi',
         doi: '10.82259/cl3fz14dz00dges6i96h1eiyi',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18866,7 +18866,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dhes6i5463aor0',
         doi: '10.82259/cl3fz14dz00dhes6i5463aor0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18905,7 +18905,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dies6i3qci7f3i',
         doi: '10.82259/cl3fz14dz00dies6i3qci7f3i',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18944,7 +18944,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00djes6iesn6fei8',
         doi: '10.82259/cl3fz14dz00djes6iesn6fei8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
         versions: {
             create: [
                 {
@@ -18983,7 +18983,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dkes6i3zji8ja7',
         doi: '10.82259/cl3fz14dz00dkes6i3zji8ja7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19022,7 +19022,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dles6ib49ua96k',
         doi: '10.82259/cl3fz14dz00dles6ib49ua96k',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000fes6i6aowacj6', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000fes6i6aowacj6', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19059,7 +19059,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dmes6iax8m2mda',
         doi: '10.82259/cl3fz14dz00dmes6iax8m2mda',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19098,7 +19098,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dnes6i4qw49q9a',
         doi: '10.82259/cl3fz14dz00dnes6i4qw49q9a',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19137,7 +19137,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00does6i2zkm3qb9',
         doi: '10.82259/cl3fz14dz00does6i2zkm3qb9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19174,7 +19174,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dpes6ih7218upo',
         doi: '10.82259/cl3fz14dz00dpes6ih7218upo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19213,7 +19213,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dqes6icp87cotw',
         doi: '10.82259/cl3fz14dz00dqes6icp87cotw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19252,7 +19252,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dres6i3vg73x7a',
         doi: '10.82259/cl3fz14dz00dres6i3vg73x7a',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19291,7 +19291,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dses6ifpcsbn4c',
         doi: '10.82259/cl3fz14dz00dses6ifpcsbn4c',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19330,7 +19330,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dtes6i0az82kqv',
         doi: '10.82259/cl3fz14dz00dtes6i0az82kqv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19369,7 +19369,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dues6i1xdcgkr7',
         doi: '10.82259/cl3fz14dz00dues6i1xdcgkr7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19408,7 +19408,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dves6ih8lhgpea',
         doi: '10.82259/cl3fz14dz00dves6ih8lhgpea',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19447,7 +19447,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dwes6id9i6hmwq',
         doi: '10.82259/cl3fz14dz00dwes6id9i6hmwq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19484,7 +19484,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dxes6i2vpw80kw',
         doi: '10.82259/cl3fz14dz00dxes6i2vpw80kw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19523,7 +19523,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dyes6ievly0sdr',
         doi: '10.82259/cl3fz14dz00dyes6ievly0sdr',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19562,7 +19562,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00dzes6ih5zc4k2l',
         doi: '10.82259/cl3fz14dz00dzes6ih5zc4k2l',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19601,7 +19601,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00e0es6i84jcgmyf',
         doi: '10.82259/cl3fz14dz00e0es6i84jcgmyf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19640,7 +19640,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00e1es6ihfkh92yp',
         doi: '10.82259/cl3fz14dz00e1es6ihfkh92yp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19679,7 +19679,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00e2es6iaqx8ek8t',
         doi: '10.82259/cl3fz14dz00e2es6iaqx8ek8t',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19718,7 +19718,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00e3es6id4lp5m56',
         doi: '10.82259/cl3fz14dz00e3es6id4lp5m56',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19757,7 +19757,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00e4es6i263cgrs6',
         doi: '10.82259/cl3fz14dz00e4es6i263cgrs6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19796,7 +19796,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00e5es6i8xsnfk0q',
         doi: '10.82259/cl3fz14dz00e5es6i8xsnfk0q',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19835,7 +19835,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00e6es6iapq64rcw',
         doi: '10.82259/cl3fz14dz00e6es6iapq64rcw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19877,8 +19877,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false },
-                    { publicationTo: 'cl3fz14dr000res6igk5j7qaf', draft: false }
+                    { publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false },
+                    { publicationToId: 'cl3fz14dr000res6igk5j7qaf', draft: false }
                 ]
             }
         },
@@ -19920,7 +19920,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00e8es6i92lqadz7',
         doi: '10.82259/cl3fz14dz00e8es6i92lqadz7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19959,7 +19959,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00e9es6i0gykcjna',
         doi: '10.82259/cl3fz14dz00e9es6i0gykcjna',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -19996,7 +19996,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00eaes6iadppfck3',
         doi: '10.82259/cl3fz14dz00eaes6iadppfck3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20035,7 +20035,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00ebes6iby2jcq1j',
         doi: '10.82259/cl3fz14dz00ebes6iby2jcq1j',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20074,7 +20074,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00eces6ia7uqggyx',
         doi: '10.82259/cl3fz14dz00eces6ia7uqggyx',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20111,7 +20111,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00edes6idj895n23',
         doi: '10.82259/cl3fz14dz00edes6idj895n23',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20150,7 +20150,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14dz00eees6i09y88c29',
         doi: '10.82259/cl3fz14dz00eees6i09y88c29',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20189,7 +20189,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000efes6iecsmftoy',
         doi: '10.82259/cl3fz14e000efes6iecsmftoy',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20228,7 +20228,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000eges6i5z220nj9',
         doi: '10.82259/cl3fz14e000eges6i5z220nj9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20269,8 +20269,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false },
-                    { publicationTo: 'cl3fz14dr000res6igk5j7qaf', draft: false }
+                    { publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false },
+                    { publicationToId: 'cl3fz14dr000res6igk5j7qaf', draft: false }
                 ]
             }
         },
@@ -20312,7 +20312,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000eies6i2xzf00hq',
         doi: '10.82259/cl3fz14e000eies6i2xzf00hq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20351,7 +20351,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000ejes6i7tvee54f',
         doi: '10.82259/cl3fz14e000ejes6i7tvee54f',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20390,7 +20390,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000ekes6id9akge3o',
         doi: '10.82259/cl3fz14e000ekes6id9akge3o',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20429,7 +20429,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000eles6igtev8ne7',
         doi: '10.82259/cl3fz14e000eles6igtev8ne7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20468,7 +20468,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000emes6i36afbsl7',
         doi: '10.82259/cl3fz14e000emes6i36afbsl7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000kes6i5r7u71qh', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000kes6i5r7u71qh', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20506,7 +20506,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000enes6i02fth71x',
         doi: '10.82259/cl3fz14e000enes6i02fth71x',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20545,7 +20545,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000eoes6i0cma9ubu',
         doi: '10.82259/cl3fz14e000eoes6i0cma9ubu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20582,7 +20582,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000epes6i88wvcjrg',
         doi: '10.82259/cl3fz14e000epes6i88wvcjrg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20621,7 +20621,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000eqes6ifef8aeyz',
         doi: '10.82259/cl3fz14e000eqes6ifef8aeyz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20660,7 +20660,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000eres6ic3mq3uzg',
         doi: '10.82259/cl3fz14e000eres6ic3mq3uzg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20699,7 +20699,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000eses6ifvrbdwns',
         doi: '10.82259/cl3fz14e000eses6ifvrbdwns',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20738,7 +20738,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000etes6i305w784d',
         doi: '10.82259/cl3fz14e000etes6i305w784d',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20777,7 +20777,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000eues6iawv5fgru',
         doi: '10.82259/cl3fz14e000eues6iawv5fgru',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20814,7 +20814,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000eves6i0vl95rh4',
         doi: '10.82259/cl3fz14e000eves6i0vl95rh4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20853,7 +20853,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000ewes6i5ji4cbs0',
         doi: '10.82259/cl3fz14e000ewes6i5ji4cbs0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20892,7 +20892,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000exes6ieaf2fagm',
         doi: '10.82259/cl3fz14e000exes6ieaf2fagm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20931,7 +20931,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000eyes6ig1ishsuq',
         doi: '10.82259/cl3fz14e000eyes6ig1ishsuq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -20970,7 +20970,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000ezes6i9yesd73x',
         doi: '10.82259/cl3fz14e000ezes6i9yesd73x',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21012,8 +21012,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000res6igk5j7qaf', draft: false },
-                    { publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }
+                    { publicationToId: 'cl3fz14dr000res6igk5j7qaf', draft: false },
+                    { publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }
                 ]
             }
         },
@@ -21055,7 +21055,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000f1es6i2o2u9g2k',
         doi: '10.82259/cl3fz14e000f1es6i2o2u9g2k',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21094,7 +21094,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000f2es6ib0djfupu',
         doi: '10.82259/cl3fz14e000f2es6ib0djfupu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21131,7 +21131,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000f3es6if9tn57mb',
         doi: '10.82259/cl3fz14e000f3es6if9tn57mb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21168,7 +21168,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000f4es6iha2j68se',
         doi: '10.82259/cl3fz14e000f4es6iha2j68se',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21207,7 +21207,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000f5es6i7s2s4647',
         doi: '10.82259/cl3fz14e000f5es6i7s2s4647',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21246,7 +21246,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000f6es6i7n1qa32j',
         doi: '10.82259/cl3fz14e000f6es6i7n1qa32j',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21285,7 +21285,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000f7es6iebj3f0kq',
         doi: '10.82259/cl3fz14e000f7es6iebj3f0kq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21324,7 +21324,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000f8es6i2ffmedb1',
         doi: '10.82259/cl3fz14e000f8es6i2ffmedb1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21363,7 +21363,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000f9es6i8dim9uyb',
         doi: '10.82259/cl3fz14e000f9es6i8dim9uyb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21402,7 +21402,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000faes6i58wg0stb',
         doi: '10.82259/cl3fz14e000faes6i58wg0stb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21441,7 +21441,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fbes6i6eos7jo3',
         doi: '10.82259/cl3fz14e000fbes6i6eos7jo3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000fes6i6aowacj6', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000fes6i6aowacj6', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21478,7 +21478,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fces6idzfgfx15',
         doi: '10.82259/cl3fz14e000fces6idzfgfx15',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21517,7 +21517,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fdes6i7nbb7azl',
         doi: '10.82259/cl3fz14e000fdes6i7nbb7azl',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21556,7 +21556,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fees6ic9skbcga',
         doi: '10.82259/cl3fz14e000fees6ic9skbcga',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21595,7 +21595,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000ffes6i5twvdvdb',
         doi: '10.82259/cl3fz14e000ffes6i5twvdvdb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000res6igk5j7qaf', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000res6igk5j7qaf', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21634,7 +21634,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fges6i0prz37ah',
         doi: '10.82259/cl3fz14e000fges6i0prz37ah',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21671,7 +21671,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fhes6iakg87e9w',
         doi: '10.82259/cl3fz14e000fhes6iakg87e9w',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21710,7 +21710,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fies6i0xbh3ear',
         doi: '10.82259/cl3fz14e000fies6i0xbh3ear',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21747,7 +21747,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fjes6i4533dl3q',
         doi: '10.82259/cl3fz14e000fjes6i4533dl3q',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21786,7 +21786,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fkes6icjc5fdlu',
         doi: '10.82259/cl3fz14e000fkes6icjc5fdlu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000mes6icrlg58mi', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000mes6icrlg58mi', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21823,7 +21823,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fles6i4e053n4w',
         doi: '10.82259/cl3fz14e000fles6i4e053n4w',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21862,7 +21862,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fmes6iazys5py5',
         doi: '10.82259/cl3fz14e000fmes6iazys5py5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21899,7 +21899,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fnes6i4yee062g',
         doi: '10.82259/cl3fz14e000fnes6i4yee062g',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21938,7 +21938,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000foes6iett8b35o',
         doi: '10.82259/cl3fz14e000foes6iett8b35o',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -21977,7 +21977,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fpes6i7px29upo',
         doi: '10.82259/cl3fz14e000fpes6i7px29upo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22014,7 +22014,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fqes6i2c46eu6f',
         doi: '10.82259/cl3fz14e000fqes6i2c46eu6f',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22053,7 +22053,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fres6ib9lq3v0e',
         doi: '10.82259/cl3fz14e000fres6ib9lq3v0e',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22092,7 +22092,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fses6i2lzyhc5e',
         doi: '10.82259/cl3fz14e000fses6i2lzyhc5e',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22134,8 +22134,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false },
-                    { publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }
+                    { publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false },
+                    { publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }
                 ]
             }
         },
@@ -22175,7 +22175,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fues6i9cpz5dtb',
         doi: '10.82259/cl3fz14e000fues6i9cpz5dtb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22214,7 +22214,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fves6i392o74od',
         doi: '10.82259/cl3fz14e000fves6i392o74od',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22253,7 +22253,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fwes6i4vv540bf',
         doi: '10.82259/cl3fz14e000fwes6i4vv540bf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22292,7 +22292,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fxes6ieqmj3h5u',
         doi: '10.82259/cl3fz14e000fxes6ieqmj3h5u',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22334,8 +22334,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false },
-                    { publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }
+                    { publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false },
+                    { publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }
                 ]
             }
         },
@@ -22377,7 +22377,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000fzes6i18yz7m7u',
         doi: '10.82259/cl3fz14e000fzes6i18yz7m7u',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22416,7 +22416,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000g0es6i99dq752q',
         doi: '10.82259/cl3fz14e000g0es6i99dq752q',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22455,7 +22455,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000g1es6iaz9270c5',
         doi: '10.82259/cl3fz14e000g1es6iaz9270c5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22494,7 +22494,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000g2es6i1hyadg8g',
         doi: '10.82259/cl3fz14e000g2es6i1hyadg8g',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22533,7 +22533,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000g3es6i1u6af85s',
         doi: '10.82259/cl3fz14e000g3es6i1u6af85s',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22572,7 +22572,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000g4es6idial3he9',
         doi: '10.82259/cl3fz14e000g4es6idial3he9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22611,7 +22611,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000g5es6i8jc6hx6v',
         doi: '10.82259/cl3fz14e000g5es6i8jc6hx6v',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22648,7 +22648,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e000g6es6i12kc7usa',
         doi: '10.82259/cl3fz14e000g6es6i12kc7usa',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22687,7 +22687,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100g7es6iegm41dn6',
         doi: '10.82259/cl3fz14e100g7es6iegm41dn6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22726,7 +22726,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100g8es6ic43xgsy4',
         doi: '10.82259/cl3fz14e100g8es6ic43xgsy4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22765,7 +22765,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100g9es6i5swg82ok',
         doi: '10.82259/cl3fz14e100g9es6i5swg82ok',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22804,7 +22804,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gaes6ia9qra6s2',
         doi: '10.82259/cl3fz14e100gaes6ia9qra6s2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22841,7 +22841,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gbes6idtz2cl6t',
         doi: '10.82259/cl3fz14e100gbes6idtz2cl6t',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22878,7 +22878,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gces6idq3qd99x',
         doi: '10.82259/cl3fz14e100gces6idq3qd99x',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22915,7 +22915,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gdes6ib8ogcefd',
         doi: '10.82259/cl3fz14e100gdes6ib8ogcefd',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22954,7 +22954,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gees6i6ulc73n4',
         doi: '10.82259/cl3fz14e100gees6i6ulc73n4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -22993,7 +22993,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gfes6i7yc11tbc',
         doi: '10.82259/cl3fz14e100gfes6i7yc11tbc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23032,7 +23032,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gges6igpipbjrc',
         doi: '10.82259/cl3fz14e100gges6igpipbjrc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23069,7 +23069,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100ghes6i790t5rs1',
         doi: '10.82259/cl3fz14e100ghes6i790t5rs1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23106,7 +23106,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gies6ib7f27btf',
         doi: '10.82259/cl3fz14e100gies6ib7f27btf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23145,7 +23145,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gjes6idsty3y58',
         doi: '10.82259/cl3fz14e100gjes6idsty3y58',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23182,7 +23182,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gkes6igh591zqv',
         doi: '10.82259/cl3fz14e100gkes6igh591zqv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23219,7 +23219,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gles6i2g4b5xzv',
         doi: '10.82259/cl3fz14e100gles6i2g4b5xzv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23258,7 +23258,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gmes6i7mtd7nf7',
         doi: '10.82259/cl3fz14e100gmes6i7mtd7nf7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23297,7 +23297,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gnes6id4at9pxw',
         doi: '10.82259/cl3fz14e100gnes6id4at9pxw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23336,7 +23336,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100goes6iduwddom4',
         doi: '10.82259/cl3fz14e100goes6iduwddom4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23375,7 +23375,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gpes6i5t9r473f',
         doi: '10.82259/cl3fz14e100gpes6i5t9r473f',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23412,7 +23412,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gqes6i9l55d7t2',
         doi: '10.82259/cl3fz14e100gqes6i9l55d7t2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23451,7 +23451,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gres6i2qpw2hw2',
         doi: '10.82259/cl3fz14e100gres6i2qpw2hw2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23490,7 +23490,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gses6i2esfdvhw',
         doi: '10.82259/cl3fz14e100gses6i2esfdvhw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23529,7 +23529,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gtes6iau1097io',
         doi: '10.82259/cl3fz14e100gtes6iau1097io',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0003es6idqm4au2v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0003es6idqm4au2v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23568,7 +23568,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gues6ifd43ga7z',
         doi: '10.82259/cl3fz14e100gues6ifd43ga7z',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23607,7 +23607,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gves6ibpllepbr',
         doi: '10.82259/cl3fz14e100gves6ibpllepbr',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23646,7 +23646,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gwes6idp2w3lx7',
         doi: '10.82259/cl3fz14e100gwes6idp2w3lx7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23685,7 +23685,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gxes6idpg0ca9d',
         doi: '10.82259/cl3fz14e100gxes6idpg0ca9d',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23724,7 +23724,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gyes6i92x78w6b',
         doi: '10.82259/cl3fz14e100gyes6i92x78w6b',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23763,7 +23763,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100gzes6i9xcd9tla',
         doi: '10.82259/cl3fz14e100gzes6i9xcd9tla',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23801,7 +23801,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100h0es6ih1huh188',
         doi: '10.82259/cl3fz14e100h0es6ih1huh188',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23840,7 +23840,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100h1es6ihezlespm',
         doi: '10.82259/cl3fz14e100h1es6ihezlespm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23877,7 +23877,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100h2es6i7dql3b22',
         doi: '10.82259/cl3fz14e100h2es6i7dql3b22',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23916,7 +23916,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100h3es6i5b97fhaj',
         doi: '10.82259/cl3fz14e100h3es6i5b97fhaj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23955,7 +23955,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100h4es6i5uif13wd',
         doi: '10.82259/cl3fz14e100h4es6i5uif13wd',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -23994,7 +23994,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100h5es6id7om887u',
         doi: '10.82259/cl3fz14e100h5es6id7om887u',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24033,7 +24033,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100h6es6ifyaz9mq7',
         doi: '10.82259/cl3fz14e100h6es6ifyaz9mq7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24072,7 +24072,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100h7es6i5lavgynp',
         doi: '10.82259/cl3fz14e100h7es6i5lavgynp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24111,7 +24111,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100h8es6ihnrfbmc7',
         doi: '10.82259/cl3fz14e100h8es6ihnrfbmc7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24150,7 +24150,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100h9es6ih1133uk0',
         doi: '10.82259/cl3fz14e100h9es6ih1133uk0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24189,7 +24189,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100haes6iait8eg0s',
         doi: '10.82259/cl3fz14e100haes6iait8eg0s',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24228,7 +24228,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hbes6i1e389eqf',
         doi: '10.82259/cl3fz14e100hbes6i1e389eqf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24267,7 +24267,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hces6ifclw76vb',
         doi: '10.82259/cl3fz14e100hces6ifclw76vb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24309,8 +24309,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr0001es6i5ji51rq4', draft: false },
-                    { publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }
+                    { publicationToId: 'cl3fz14dr0001es6i5ji51rq4', draft: false },
+                    { publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }
                 ]
             }
         },
@@ -24352,7 +24352,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hees6ihvl9b4sr',
         doi: '10.82259/cl3fz14e100hees6ihvl9b4sr',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24389,7 +24389,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hfes6i8941ehs4',
         doi: '10.82259/cl3fz14e100hfes6i8941ehs4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24428,7 +24428,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hges6ih0duccwm',
         doi: '10.82259/cl3fz14e100hges6ih0duccwm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24467,7 +24467,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hhes6ihzng6ffx',
         doi: '10.82259/cl3fz14e100hhes6ihzng6ffx',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24506,7 +24506,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hies6i9hx30gkn',
         doi: '10.82259/cl3fz14e100hies6i9hx30gkn',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24545,7 +24545,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hjes6i9lz3cnvg',
         doi: '10.82259/cl3fz14e100hjes6i9lz3cnvg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24584,7 +24584,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hkes6iaqmyh2rs',
         doi: '10.82259/cl3fz14e100hkes6iaqmyh2rs',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24623,7 +24623,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hles6icpa9hyjo',
         doi: '10.82259/cl3fz14e100hles6icpa9hyjo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24662,7 +24662,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hmes6iczm281h9',
         doi: '10.82259/cl3fz14e100hmes6iczm281h9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24701,7 +24701,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hnes6idgrx7uea',
         doi: '10.82259/cl3fz14e100hnes6idgrx7uea',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24740,7 +24740,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hoes6iewj92b3c',
         doi: '10.82259/cl3fz14e100hoes6iewj92b3c',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24778,7 +24778,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hpes6iemhvhdaz',
         doi: '10.82259/cl3fz14e100hpes6iemhvhdaz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24817,7 +24817,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hqes6i4p72bare',
         doi: '10.82259/cl3fz14e100hqes6i4p72bare',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24854,7 +24854,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hres6iddqfcn22',
         doi: '10.82259/cl3fz14e100hres6iddqfcn22',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24893,7 +24893,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hses6icnxu1uxp',
         doi: '10.82259/cl3fz14e100hses6icnxu1uxp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24932,7 +24932,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100htes6i1g9u9uu0',
         doi: '10.82259/cl3fz14e100htes6i1g9u9uu0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -24969,7 +24969,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hues6ib1r822ax',
         doi: '10.82259/cl3fz14e100hues6ib1r822ax',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0007es6i9juifoql', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0007es6i9juifoql', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25008,7 +25008,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hves6i8dsb2z91',
         doi: '10.82259/cl3fz14e100hves6i8dsb2z91',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25047,7 +25047,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hwes6i24hm6clt',
         doi: '10.82259/cl3fz14e100hwes6i24hm6clt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25086,7 +25086,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hxes6ihrtvgf0u',
         doi: '10.82259/cl3fz14e100hxes6ihrtvgf0u',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25125,7 +25125,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hyes6i7tvxds7t',
         doi: '10.82259/cl3fz14e100hyes6i7tvxds7t',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25164,7 +25164,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100hzes6i44cq4t4z',
         doi: '10.82259/cl3fz14e100hzes6i44cq4t4z',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25203,7 +25203,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100i0es6icxh1femm',
         doi: '10.82259/cl3fz14e100i0es6icxh1femm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25242,7 +25242,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e100i1es6i3het3xqa',
         doi: '10.82259/cl3fz14e100i1es6i3het3xqa',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25281,7 +25281,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200i2es6ibiqy8gex',
         doi: '10.82259/cl3fz14e200i2es6ibiqy8gex',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25320,7 +25320,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200i3es6i501qb2h1',
         doi: '10.82259/cl3fz14e200i3es6i501qb2h1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25359,7 +25359,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200i4es6iff7i81p1',
         doi: '10.82259/cl3fz14e200i4es6iff7i81p1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25398,7 +25398,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200i5es6iguxaf8y0',
         doi: '10.82259/cl3fz14e200i5es6iguxaf8y0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25437,7 +25437,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200i6es6iehiycxyt',
         doi: '10.82259/cl3fz14e200i6es6iehiycxyt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25476,7 +25476,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200i7es6i60x5c5e9',
         doi: '10.82259/cl3fz14e200i7es6i60x5c5e9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25513,7 +25513,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200i8es6ic1n8b912',
         doi: '10.82259/cl3fz14e200i8es6ic1n8b912',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25552,7 +25552,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200i9es6igtji605t',
         doi: '10.82259/cl3fz14e200i9es6igtji605t',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25591,7 +25591,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200iaes6ihacp19b7',
         doi: '10.82259/cl3fz14e200iaes6ihacp19b7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25630,7 +25630,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200ibes6ia2hb3quo',
         doi: '10.82259/cl3fz14e200ibes6ia2hb3quo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25669,7 +25669,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200ices6i4l5c7thv',
         doi: '10.82259/cl3fz14e200ices6i4l5c7thv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25708,7 +25708,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200ides6i203y37xs',
         doi: '10.82259/cl3fz14e200ides6i203y37xs',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25747,7 +25747,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200iees6i9pza2rwd',
         doi: '10.82259/cl3fz14e200iees6i9pza2rwd',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25786,7 +25786,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200ifes6idgmg4zg0',
         doi: '10.82259/cl3fz14e200ifes6idgmg4zg0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000kes6i5r7u71qh', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000kes6i5r7u71qh', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25825,7 +25825,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200iges6ibum022l1',
         doi: '10.82259/cl3fz14e200iges6ibum022l1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25864,7 +25864,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200ihes6i5l12cw8j',
         doi: '10.82259/cl3fz14e200ihes6i5l12cw8j',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25903,7 +25903,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200iies6i92tghh6e',
         doi: '10.82259/cl3fz14e200iies6i92tghh6e',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25942,7 +25942,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200ijes6i4op9a4v0',
         doi: '10.82259/cl3fz14e200ijes6i4op9a4v0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -25981,7 +25981,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200ikes6ieqs06hiv',
         doi: '10.82259/cl3fz14e200ikes6ieqs06hiv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26020,7 +26020,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200iles6i70tacqvv',
         doi: '10.82259/cl3fz14e200iles6i70tacqvv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26059,7 +26059,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200imes6i0vt07y73',
         doi: '10.82259/cl3fz14e200imes6i0vt07y73',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26096,7 +26096,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200ines6i84m61pla',
         doi: '10.82259/cl3fz14e200ines6i84m61pla',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26138,8 +26138,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000res6igk5j7qaf', draft: false },
-                    { publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }
+                    { publicationToId: 'cl3fz14dr000res6igk5j7qaf', draft: false },
+                    { publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }
                 ]
             }
         },
@@ -26181,7 +26181,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200ipes6i7kh731zo',
         doi: '10.82259/cl3fz14e200ipes6i7kh731zo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26220,7 +26220,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200iqes6idydr2he0',
         doi: '10.82259/cl3fz14e200iqes6idydr2he0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000fes6i6aowacj6', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000fes6i6aowacj6', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26259,7 +26259,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200ires6i8reghvj8',
         doi: '10.82259/cl3fz14e200ires6i8reghvj8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26298,7 +26298,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200ises6ic99wbif3',
         doi: '10.82259/cl3fz14e200ises6ic99wbif3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000tes6ie58oa5nl', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000tes6ie58oa5nl', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26337,7 +26337,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200ites6i99swc4ta',
         doi: '10.82259/cl3fz14e200ites6i99swc4ta',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26376,7 +26376,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200iues6ibkdnfuf9',
         doi: '10.82259/cl3fz14e200iues6ibkdnfuf9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26415,7 +26415,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200ives6i8hbc6446',
         doi: '10.82259/cl3fz14e200ives6i8hbc6446',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26454,7 +26454,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200iwes6ib7jn3xum',
         doi: '10.82259/cl3fz14e200iwes6ib7jn3xum',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26493,7 +26493,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200ixes6i3sjnblc6',
         doi: '10.82259/cl3fz14e200ixes6i3sjnblc6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26532,7 +26532,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200iyes6i2vmscmpz',
         doi: '10.82259/cl3fz14e200iyes6i2vmscmpz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26571,7 +26571,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200izes6ici656muh',
         doi: '10.82259/cl3fz14e200izes6ici656muh',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26610,7 +26610,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200j0es6iamht456r',
         doi: '10.82259/cl3fz14e200j0es6iamht456r',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26649,7 +26649,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200j1es6idwp2ho0g',
         doi: '10.82259/cl3fz14e200j1es6idwp2ho0g',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26688,7 +26688,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200j2es6i5l9f5z9f',
         doi: '10.82259/cl3fz14e200j2es6i5l9f5z9f',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000res6igk5j7qaf', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000res6igk5j7qaf', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26727,7 +26727,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200j3es6igeyf3q3h',
         doi: '10.82259/cl3fz14e200j3es6igeyf3q3h',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26766,7 +26766,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200j4es6i17cf1obe',
         doi: '10.82259/cl3fz14e200j4es6i17cf1obe',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26805,7 +26805,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200j5es6i62hiagtm',
         doi: '10.82259/cl3fz14e200j5es6i62hiagtm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26844,7 +26844,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200j6es6idbmaa0yj',
         doi: '10.82259/cl3fz14e200j6es6idbmaa0yj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26883,7 +26883,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200j7es6i440xarhy',
         doi: '10.82259/cl3fz14e200j7es6i440xarhy',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26922,7 +26922,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200j8es6idi2k78mb',
         doi: '10.82259/cl3fz14e200j8es6idi2k78mb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -26961,7 +26961,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200j9es6i6z6a6km5',
         doi: '10.82259/cl3fz14e200j9es6i6z6a6km5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27000,7 +27000,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200jaes6igpeya7qi',
         doi: '10.82259/cl3fz14e200jaes6igpeya7qi',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27039,7 +27039,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200jbes6igivb89vf',
         doi: '10.82259/cl3fz14e200jbes6igivb89vf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27078,7 +27078,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200jces6i592p64zx',
         doi: '10.82259/cl3fz14e200jces6i592p64zx',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27117,7 +27117,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200jdes6i28scbhgy',
         doi: '10.82259/cl3fz14e200jdes6i28scbhgy',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27159,8 +27159,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false },
-                    { publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }
+                    { publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false },
+                    { publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }
                 ]
             }
         },
@@ -27202,7 +27202,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200jfes6ibuva8ax2',
         doi: '10.82259/cl3fz14e200jfes6ibuva8ax2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27241,7 +27241,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200jges6i5u3s8hl3',
         doi: '10.82259/cl3fz14e200jges6i5u3s8hl3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27280,7 +27280,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200jhes6i57n2eezm',
         doi: '10.82259/cl3fz14e200jhes6i57n2eezm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27317,7 +27317,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200jies6ia19n6oz8',
         doi: '10.82259/cl3fz14e200jies6ia19n6oz8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27356,7 +27356,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200jjes6i3f7qbupu',
         doi: '10.82259/cl3fz14e200jjes6i3f7qbupu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27395,7 +27395,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200jkes6i2zeihw4u',
         doi: '10.82259/cl3fz14e200jkes6i2zeihw4u',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27434,7 +27434,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200jles6iftuc9243',
         doi: '10.82259/cl3fz14e200jles6iftuc9243',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27473,7 +27473,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e200jmes6idtee9590',
         doi: '10.82259/cl3fz14e200jmes6idtee9590',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27512,7 +27512,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300jnes6i8vye06tl',
         doi: '10.82259/cl3fz14e300jnes6i8vye06tl',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27551,7 +27551,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300joes6igb497upw',
         doi: '10.82259/cl3fz14e300joes6igb497upw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27590,7 +27590,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300jpes6i00pp23x3',
         doi: '10.82259/cl3fz14e300jpes6i00pp23x3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27628,7 +27628,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300jqes6i93krfxx4',
         doi: '10.82259/cl3fz14e300jqes6i93krfxx4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27667,7 +27667,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300jres6id3kkatmf',
         doi: '10.82259/cl3fz14e300jres6id3kkatmf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27706,7 +27706,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300jses6ieohaf6m9',
         doi: '10.82259/cl3fz14e300jses6ieohaf6m9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27745,7 +27745,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300jtes6i4mtbcn5s',
         doi: '10.82259/cl3fz14e300jtes6i4mtbcn5s',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27784,7 +27784,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300jues6ic2ee4rz8',
         doi: '10.82259/cl3fz14e300jues6ic2ee4rz8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27823,7 +27823,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300jves6i970zdwbj',
         doi: '10.82259/cl3fz14e300jves6i970zdwbj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27862,7 +27862,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300jwes6i4vg11d2q',
         doi: '10.82259/cl3fz14e300jwes6i4vg11d2q',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27901,7 +27901,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300jxes6icvzt23il',
         doi: '10.82259/cl3fz14e300jxes6icvzt23il',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27940,7 +27940,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300jyes6i6lml1erv',
         doi: '10.82259/cl3fz14e300jyes6i6lml1erv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -27977,7 +27977,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300jzes6i6oriad1h',
         doi: '10.82259/cl3fz14e300jzes6i6oriad1h',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28016,7 +28016,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300k0es6i8ogye6db',
         doi: '10.82259/cl3fz14e300k0es6i8ogye6db',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28053,7 +28053,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300k1es6i8v86d54v',
         doi: '10.82259/cl3fz14e300k1es6i8v86d54v',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28092,7 +28092,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300k2es6i32a7gkw8',
         doi: '10.82259/cl3fz14e300k2es6i32a7gkw8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000tes6ie58oa5nl', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000tes6ie58oa5nl', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28131,7 +28131,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300k3es6ibrkh4rk9',
         doi: '10.82259/cl3fz14e300k3es6ibrkh4rk9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28168,7 +28168,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300k4es6i52noh4di',
         doi: '10.82259/cl3fz14e300k4es6i52noh4di',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28207,7 +28207,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300k5es6i2ird6qeb',
         doi: '10.82259/cl3fz14e300k5es6i2ird6qeb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000fes6i6aowacj6', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000fes6i6aowacj6', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28246,7 +28246,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300k6es6icml80ld8',
         doi: '10.82259/cl3fz14e300k6es6icml80ld8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28285,7 +28285,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300k7es6i9f76cio0',
         doi: '10.82259/cl3fz14e300k7es6i9f76cio0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28322,7 +28322,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300k8es6ia2qxhoi6',
         doi: '10.82259/cl3fz14e300k8es6ia2qxhoi6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28361,7 +28361,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300k9es6ieckzes2r',
         doi: '10.82259/cl3fz14e300k9es6ieckzes2r',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28400,7 +28400,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300kaes6ihnjzaxuj',
         doi: '10.82259/cl3fz14e300kaes6ihnjzaxuj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000fes6i6aowacj6', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000fes6i6aowacj6', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28439,7 +28439,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300kbes6ic10bf2ux',
         doi: '10.82259/cl3fz14e300kbes6ic10bf2ux',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28478,7 +28478,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300kces6iehn0guzf',
         doi: '10.82259/cl3fz14e300kces6iehn0guzf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28517,7 +28517,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300kdes6ie6oo57xd',
         doi: '10.82259/cl3fz14e300kdes6ie6oo57xd',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28556,7 +28556,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300kees6icomq9oxw',
         doi: '10.82259/cl3fz14e300kees6icomq9oxw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28595,7 +28595,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300kfes6i0izq0fjt',
         doi: '10.82259/cl3fz14e300kfes6i0izq0fjt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28634,7 +28634,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300kges6ihe5hdosb',
         doi: '10.82259/cl3fz14e300kges6ihe5hdosb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28676,8 +28676,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false },
-                    { publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }
+                    { publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false },
+                    { publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }
                 ]
             }
         },
@@ -28719,7 +28719,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300kies6ihkz47n5b',
         doi: '10.82259/cl3fz14e300kies6ihkz47n5b',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28756,7 +28756,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e300kjes6i0ni85e8p',
         doi: '10.82259/cl3fz14e300kjes6i0ni85e8p',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28798,8 +28798,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false },
-                    { publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }
+                    { publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false },
+                    { publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }
                 ]
             }
         },
@@ -28841,7 +28841,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400kles6icx7hecy0',
         doi: '10.82259/cl3fz14e400kles6icx7hecy0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28880,7 +28880,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400kmes6iafvhafoi',
         doi: '10.82259/cl3fz14e400kmes6iafvhafoi',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28919,7 +28919,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400knes6i4zbe1td0',
         doi: '10.82259/cl3fz14e400knes6i4zbe1td0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28956,7 +28956,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400koes6i4iqlcrlz',
         doi: '10.82259/cl3fz14e400koes6i4iqlcrlz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -28995,7 +28995,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400kpes6i52ql2bk0',
         doi: '10.82259/cl3fz14e400kpes6i52ql2bk0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29034,7 +29034,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400kqes6i50n12tw5',
         doi: '10.82259/cl3fz14e400kqes6i50n12tw5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29073,7 +29073,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400kres6i37740rx7',
         doi: '10.82259/cl3fz14e400kres6i37740rx7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29112,7 +29112,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400kses6i768j0vwp',
         doi: '10.82259/cl3fz14e400kses6i768j0vwp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29151,7 +29151,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400ktes6ih1uk89oy',
         doi: '10.82259/cl3fz14e400ktes6ih1uk89oy',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29190,7 +29190,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400kues6i2h1m5opj',
         doi: '10.82259/cl3fz14e400kues6i2h1m5opj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29227,7 +29227,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400kves6i4qw9gtv2',
         doi: '10.82259/cl3fz14e400kves6i4qw9gtv2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29266,7 +29266,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400kwes6ih9ff8bhu',
         doi: '10.82259/cl3fz14e400kwes6ih9ff8bhu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29305,7 +29305,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400kxes6i5agd0w5q',
         doi: '10.82259/cl3fz14e400kxes6i5agd0w5q',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29342,7 +29342,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400kyes6i7jwhfo0m',
         doi: '10.82259/cl3fz14e400kyes6i7jwhfo0m',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29384,8 +29384,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr0009es6i04880p8w', draft: false },
-                    { publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }
+                    { publicationToId: 'cl3fz14dr0009es6i04880p8w', draft: false },
+                    { publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }
                 ]
             }
         },
@@ -29427,7 +29427,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400l0es6ie31687zu',
         doi: '10.82259/cl3fz14e400l0es6ie31687zu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29466,7 +29466,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400l1es6i8byhfvxp',
         doi: '10.82259/cl3fz14e400l1es6i8byhfvxp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29505,7 +29505,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400l2es6i4kqbapqi',
         doi: '10.82259/cl3fz14e400l2es6i4kqbapqi',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29544,7 +29544,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400l3es6ic3aw33y7',
         doi: '10.82259/cl3fz14e400l3es6ic3aw33y7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29583,7 +29583,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400l4es6i4fhh49ec',
         doi: '10.82259/cl3fz14e400l4es6i4fhh49ec',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29622,7 +29622,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400l5es6i7soq00wt',
         doi: '10.82259/cl3fz14e400l5es6i7soq00wt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29661,7 +29661,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400l6es6idqzigpla',
         doi: '10.82259/cl3fz14e400l6es6idqzigpla',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29698,7 +29698,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400l7es6i31mtcvdq',
         doi: '10.82259/cl3fz14e400l7es6i31mtcvdq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29737,7 +29737,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400l8es6idbadameg',
         doi: '10.82259/cl3fz14e400l8es6idbadameg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29776,7 +29776,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400l9es6ic2i3b5ny',
         doi: '10.82259/cl3fz14e400l9es6ic2i3b5ny',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29815,7 +29815,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400laes6i7qhf9esi',
         doi: '10.82259/cl3fz14e400laes6i7qhf9esi',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29854,7 +29854,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400lbes6ib87zd1cw',
         doi: '10.82259/cl3fz14e400lbes6ib87zd1cw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29893,7 +29893,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400lces6i31x2gjsq',
         doi: '10.82259/cl3fz14e400lces6i31x2gjsq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29932,7 +29932,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400ldes6if6fya6ue',
         doi: '10.82259/cl3fz14e400ldes6if6fya6ue',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000mes6icrlg58mi', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000mes6icrlg58mi', draft: false }] } },
         versions: {
             create: [
                 {
@@ -29974,8 +29974,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false },
-                    { publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }
+                    { publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false },
+                    { publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }
                 ]
             }
         },
@@ -30017,7 +30017,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400lfes6i7lep4dre',
         doi: '10.82259/cl3fz14e400lfes6i7lep4dre',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30054,7 +30054,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400lges6i3k902d4a',
         doi: '10.82259/cl3fz14e400lges6i3k902d4a',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30094,8 +30094,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000fes6i6aowacj6', draft: false },
-                    { publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }
+                    { publicationToId: 'cl3fz14dr000fes6i6aowacj6', draft: false },
+                    { publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }
                 ]
             }
         },
@@ -30137,7 +30137,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400lies6i4l8khrxk',
         doi: '10.82259/cl3fz14e400lies6i4l8khrxk',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30176,7 +30176,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400ljes6i3avxd9d0',
         doi: '10.82259/cl3fz14e400ljes6i3avxd9d0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30218,8 +30218,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false },
-                    { publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }
+                    { publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false },
+                    { publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }
                 ]
             }
         },
@@ -30261,7 +30261,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400lles6i1j225iko',
         doi: '10.82259/cl3fz14e400lles6i1j225iko',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30300,7 +30300,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400lmes6i0ydxf3c5',
         doi: '10.82259/cl3fz14e400lmes6i0ydxf3c5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30339,7 +30339,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400lnes6i4met69cr',
         doi: '10.82259/cl3fz14e400lnes6i4met69cr',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30378,7 +30378,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400loes6i0eel291x',
         doi: '10.82259/cl3fz14e400loes6i0eel291x',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30417,7 +30417,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400lpes6i2si2hhla',
         doi: '10.82259/cl3fz14e400lpes6i2si2hhla',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30456,7 +30456,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400lqes6i080v3ors',
         doi: '10.82259/cl3fz14e400lqes6i080v3ors',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30495,7 +30495,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400lres6iaing0rm3',
         doi: '10.82259/cl3fz14e400lres6iaing0rm3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30534,7 +30534,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e400lses6i0nduc6iz',
         doi: '10.82259/cl3fz14e400lses6i0nduc6iz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30572,7 +30572,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e500ltes6ia0os2ua7',
         doi: '10.82259/cl3fz14e500ltes6ia0os2ua7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30611,7 +30611,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e500lues6i6k0kg8q0',
         doi: '10.82259/cl3fz14e500lues6i6k0kg8q0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30650,7 +30650,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e500lves6i62xc7v6q',
         doi: '10.82259/cl3fz14e500lves6i62xc7v6q',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30687,7 +30687,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e500lwes6ia5r745k1',
         doi: '10.82259/cl3fz14e500lwes6ia5r745k1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30726,7 +30726,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e500lxes6idn5t6qfy',
         doi: '10.82259/cl3fz14e500lxes6idn5t6qfy',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30765,7 +30765,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e500lyes6i1beqhkn2',
         doi: '10.82259/cl3fz14e500lyes6i1beqhkn2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30804,7 +30804,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e500lzes6icqxqejkn',
         doi: '10.82259/cl3fz14e500lzes6icqxqejkn',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30841,7 +30841,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e500m0es6i3knb03ee',
         doi: '10.82259/cl3fz14e500m0es6i3knb03ee',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30880,7 +30880,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e500m1es6icnpv0rut',
         doi: '10.82259/cl3fz14e500m1es6icnpv0rut',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30919,7 +30919,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600m2es6i0hux89jc',
         doi: '10.82259/cl3fz14e600m2es6i0hux89jc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000kes6i5r7u71qh', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000kes6i5r7u71qh', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30958,7 +30958,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600m3es6ic2y4go4g',
         doi: '10.82259/cl3fz14e600m3es6ic2y4go4g',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -30997,7 +30997,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600m4es6i85pg6v1q',
         doi: '10.82259/cl3fz14e600m4es6i85pg6v1q',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31036,7 +31036,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600m5es6ihck50kvv',
         doi: '10.82259/cl3fz14e600m5es6ihck50kvv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31075,7 +31075,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600m6es6ie93h2gvi',
         doi: '10.82259/cl3fz14e600m6es6ie93h2gvi',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31114,7 +31114,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600m7es6i96etd2jc',
         doi: '10.82259/cl3fz14e600m7es6i96etd2jc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31153,7 +31153,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600m8es6ibq1s142s',
         doi: '10.82259/cl3fz14e600m8es6ibq1s142s',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31192,7 +31192,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600m9es6id29ob5q7',
         doi: '10.82259/cl3fz14e600m9es6id29ob5q7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31231,7 +31231,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600maes6ie9jqci1r',
         doi: '10.82259/cl3fz14e600maes6ie9jqci1r',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31270,7 +31270,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mbes6i26qv3327',
         doi: '10.82259/cl3fz14e600mbes6i26qv3327',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31309,7 +31309,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mces6igw4l8ps7',
         doi: '10.82259/cl3fz14e600mces6igw4l8ps7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31348,7 +31348,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mdes6i20y73x8m',
         doi: '10.82259/cl3fz14e600mdes6i20y73x8m',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31387,7 +31387,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mees6iah8s3vkd',
         doi: '10.82259/cl3fz14e600mees6iah8s3vkd',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31426,7 +31426,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mfes6i1o104jwy',
         doi: '10.82259/cl3fz14e600mfes6i1o104jwy',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31463,7 +31463,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mges6ibr7lgklj',
         doi: '10.82259/cl3fz14e600mges6ibr7lgklj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31502,7 +31502,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mhes6i7vis48yj',
         doi: '10.82259/cl3fz14e600mhes6i7vis48yj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31541,7 +31541,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mies6ih55r86jd',
         doi: '10.82259/cl3fz14e600mies6ih55r86jd',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31580,7 +31580,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mjes6i04nhcx53',
         doi: '10.82259/cl3fz14e600mjes6i04nhcx53',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31619,7 +31619,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mkes6ibzsm6r7f',
         doi: '10.82259/cl3fz14e600mkes6ibzsm6r7f',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31658,7 +31658,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mles6i7olo7fge',
         doi: '10.82259/cl3fz14e600mles6i7olo7fge',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31697,7 +31697,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mmes6i4d2rb28u',
         doi: '10.82259/cl3fz14e600mmes6i4d2rb28u',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31736,7 +31736,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mnes6idnpt9jo5',
         doi: '10.82259/cl3fz14e600mnes6idnpt9jo5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31775,7 +31775,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600moes6i7ajy782g',
         doi: '10.82259/cl3fz14e600moes6i7ajy782g',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31814,7 +31814,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mpes6i049s56z4',
         doi: '10.82259/cl3fz14e600mpes6i049s56z4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31853,7 +31853,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mqes6id4hr9tcd',
         doi: '10.82259/cl3fz14e600mqes6id4hr9tcd',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31892,7 +31892,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mres6i71bl0lnf',
         doi: '10.82259/cl3fz14e600mres6i71bl0lnf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31931,7 +31931,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mses6ia3f89mti',
         doi: '10.82259/cl3fz14e600mses6ia3f89mti',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0005es6ibev2gv3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0005es6ibev2gv3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -31968,7 +31968,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e600mtes6ig2g4ehpg',
         doi: '10.82259/cl3fz14e600mtes6ig2g4ehpg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32005,7 +32005,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e700mues6idwrpak49',
         doi: '10.82259/cl3fz14e700mues6idwrpak49',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32042,7 +32042,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900mves6ibv1qdyhw',
         doi: '10.82259/cl3fz14e900mves6ibv1qdyhw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32081,7 +32081,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900mwes6i3509hdvb',
         doi: '10.82259/cl3fz14e900mwes6i3509hdvb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32120,7 +32120,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900mxes6i53g904ja',
         doi: '10.82259/cl3fz14e900mxes6i53g904ja',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32159,7 +32159,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900myes6i1lbddd3d',
         doi: '10.82259/cl3fz14e900myes6i1lbddd3d',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32198,7 +32198,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900mzes6i9imj9ejx',
         doi: '10.82259/cl3fz14e900mzes6i9imj9ejx',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32237,7 +32237,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900n0es6i01m02o59',
         doi: '10.82259/cl3fz14e900n0es6i01m02o59',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32276,7 +32276,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900n1es6i65i32n9r',
         doi: '10.82259/cl3fz14e900n1es6i65i32n9r',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32315,7 +32315,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900n2es6iboote2w0',
         doi: '10.82259/cl3fz14e900n2es6iboote2w0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32354,7 +32354,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900n3es6i6age250d',
         doi: '10.82259/cl3fz14e900n3es6i6age250d',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32393,7 +32393,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900n4es6idy7j3o0p',
         doi: '10.82259/cl3fz14e900n4es6idy7j3o0p',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32432,7 +32432,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900n5es6i5cnp0262',
         doi: '10.82259/cl3fz14e900n5es6i5cnp0262',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32471,7 +32471,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900n6es6i2sfndl1a',
         doi: '10.82259/cl3fz14e900n6es6i2sfndl1a',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32513,8 +32513,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000fes6i6aowacj6', draft: false },
-                    { publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }
+                    { publicationToId: 'cl3fz14dr000fes6i6aowacj6', draft: false },
+                    { publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }
                 ]
             }
         },
@@ -32554,7 +32554,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900n8es6id3fyenau',
         doi: '10.82259/cl3fz14e900n8es6id3fyenau',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32593,7 +32593,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900n9es6ig5a22x5y',
         doi: '10.82259/cl3fz14e900n9es6ig5a22x5y',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32632,7 +32632,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900naes6igjsm5qop',
         doi: '10.82259/cl3fz14e900naes6igjsm5qop',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32671,7 +32671,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nbes6idbl47leo',
         doi: '10.82259/cl3fz14e900nbes6idbl47leo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32710,7 +32710,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nces6i31861mxy',
         doi: '10.82259/cl3fz14e900nces6i31861mxy',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32749,7 +32749,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900ndes6i8diufnba',
         doi: '10.82259/cl3fz14e900ndes6i8diufnba',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32788,7 +32788,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nees6i2h6xfy3h',
         doi: '10.82259/cl3fz14e900nees6i2h6xfy3h',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32827,7 +32827,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nfes6ifhtf72t6',
         doi: '10.82259/cl3fz14e900nfes6ifhtf72t6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32866,7 +32866,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nges6ieztd3j2x',
         doi: '10.82259/cl3fz14e900nges6ieztd3j2x',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32905,7 +32905,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nhes6ia82d8u4f',
         doi: '10.82259/cl3fz14e900nhes6ia82d8u4f',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32944,7 +32944,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nies6ia5ezcb78',
         doi: '10.82259/cl3fz14e900nies6ia5ezcb78',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -32983,7 +32983,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900njes6i2iid7jdv',
         doi: '10.82259/cl3fz14e900njes6i2iid7jdv',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33022,7 +33022,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nkes6i3kjg9sdb',
         doi: '10.82259/cl3fz14e900nkes6i3kjg9sdb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33061,7 +33061,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nles6i6zn18zt7',
         doi: '10.82259/cl3fz14e900nles6i6zn18zt7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33100,7 +33100,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nmes6i5240a8yc',
         doi: '10.82259/cl3fz14e900nmes6i5240a8yc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33137,7 +33137,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nnes6i3eswhbe2',
         doi: '10.82259/cl3fz14e900nnes6i3eswhbe2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33174,7 +33174,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900noes6ibr54covw',
         doi: '10.82259/cl3fz14e900noes6ibr54covw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ses6ihwrk6umk', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33213,7 +33213,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900npes6igxvj02ea',
         doi: '10.82259/cl3fz14e900npes6igxvj02ea',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33252,7 +33252,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nqes6ifl27802g',
         doi: '10.82259/cl3fz14e900nqes6ifl27802g',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33291,7 +33291,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nres6ica8s3voo',
         doi: '10.82259/cl3fz14e900nres6ica8s3voo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33330,7 +33330,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nses6i8kiqbmxd',
         doi: '10.82259/cl3fz14e900nses6i8kiqbmxd',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33367,7 +33367,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900ntes6i87nier0a',
         doi: '10.82259/cl3fz14e900ntes6i87nier0a',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33406,7 +33406,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nues6i8idq1g0g',
         doi: '10.82259/cl3fz14e900nues6i8idq1g0g',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33445,7 +33445,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nves6ie3u6bnug',
         doi: '10.82259/cl3fz14e900nves6ie3u6bnug',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33484,7 +33484,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nwes6icukn4at2',
         doi: '10.82259/cl3fz14e900nwes6icukn4at2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33523,7 +33523,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nxes6igiar8lrw',
         doi: '10.82259/cl3fz14e900nxes6igiar8lrw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33562,7 +33562,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nyes6icst7h4xa',
         doi: '10.82259/cl3fz14e900nyes6icst7h4xa',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33599,7 +33599,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900nzes6igqyv5d3d',
         doi: '10.82259/cl3fz14e900nzes6igqyv5d3d',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33638,7 +33638,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900o0es6i76x999vt',
         doi: '10.82259/cl3fz14e900o0es6i76x999vt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33677,7 +33677,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900o1es6i2df472s1',
         doi: '10.82259/cl3fz14e900o1es6i2df472s1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33714,7 +33714,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900o2es6ib6flalb0',
         doi: '10.82259/cl3fz14e900o2es6ib6flalb0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33753,7 +33753,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14e900o3es6i8o1f627a',
         doi: '10.82259/cl3fz14e900o3es6i8o1f627a',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33792,7 +33792,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00o4es6idfd4bjbt',
         doi: '10.82259/cl3fz14ea00o4es6idfd4bjbt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33831,7 +33831,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00o5es6igxbuab19',
         doi: '10.82259/cl3fz14ea00o5es6igxbuab19',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33870,7 +33870,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00o6es6i2zw44kfb',
         doi: '10.82259/cl3fz14ea00o6es6i2zw44kfb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33909,7 +33909,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00o7es6i8en50tbj',
         doi: '10.82259/cl3fz14ea00o7es6i8en50tbj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33946,7 +33946,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00o8es6i7e6scd5p',
         doi: '10.82259/cl3fz14ea00o8es6i7e6scd5p',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -33985,7 +33985,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00o9es6ic50x7br3',
         doi: '10.82259/cl3fz14ea00o9es6ic50x7br3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34024,7 +34024,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00oaes6i38rhd8gd',
         doi: '10.82259/cl3fz14ea00oaes6i38rhd8gd',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34063,7 +34063,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00obes6i3u9fg1d6',
         doi: '10.82259/cl3fz14ea00obes6i3u9fg1d6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34102,7 +34102,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00oces6icieg17h7',
         doi: '10.82259/cl3fz14ea00oces6icieg17h7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34141,7 +34141,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00odes6ic41y4si5',
         doi: '10.82259/cl3fz14ea00odes6ic41y4si5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34180,7 +34180,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00oees6i1kfq09ny',
         doi: '10.82259/cl3fz14ea00oees6i1kfq09ny',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34219,7 +34219,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00ofes6i2qz38c6g',
         doi: '10.82259/cl3fz14ea00ofes6i2qz38c6g',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34258,7 +34258,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00oges6iarut67kc',
         doi: '10.82259/cl3fz14ea00oges6iarut67kc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0005es6ibev2gv3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0005es6ibev2gv3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34297,7 +34297,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00ohes6if29udbi0',
         doi: '10.82259/cl3fz14ea00ohes6if29udbi0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34336,7 +34336,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00oies6i3f9v94zr',
         doi: '10.82259/cl3fz14ea00oies6i3f9v94zr',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34375,7 +34375,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00ojes6i70d9d5pi',
         doi: '10.82259/cl3fz14ea00ojes6i70d9d5pi',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34414,7 +34414,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00okes6ialb48l2j',
         doi: '10.82259/cl3fz14ea00okes6ialb48l2j',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34453,7 +34453,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00oles6i3cjs46qu',
         doi: '10.82259/cl3fz14ea00oles6i3cjs46qu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34492,7 +34492,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00omes6ig2hb8cnz',
         doi: '10.82259/cl3fz14ea00omes6ig2hb8cnz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34529,7 +34529,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00ones6i3h515mxu',
         doi: '10.82259/cl3fz14ea00ones6i3h515mxu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34568,7 +34568,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00ooes6i4fpz6fur',
         doi: '10.82259/cl3fz14ea00ooes6i4fpz6fur',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34607,7 +34607,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00opes6ibbz1fmtm',
         doi: '10.82259/cl3fz14ea00opes6ibbz1fmtm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34646,7 +34646,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00oqes6iecqjhnq6',
         doi: '10.82259/cl3fz14ea00oqes6iecqjhnq6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34685,7 +34685,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00ores6ibfoa236f',
         doi: '10.82259/cl3fz14ea00ores6ibfoa236f',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34724,7 +34724,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00oses6i83nd2pjw',
         doi: '10.82259/cl3fz14ea00oses6i83nd2pjw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34763,7 +34763,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00otes6iduy2a6f1',
         doi: '10.82259/cl3fz14ea00otes6iduy2a6f1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34800,7 +34800,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00oues6ibatl993e',
         doi: '10.82259/cl3fz14ea00oues6ibatl993e',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34839,7 +34839,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00oves6ibsf9hkr7',
         doi: '10.82259/cl3fz14ea00oves6ibsf9hkr7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34876,7 +34876,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00owes6ihrz2dfbt',
         doi: '10.82259/cl3fz14ea00owes6ihrz2dfbt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34915,7 +34915,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00oxes6iaob93mci',
         doi: '10.82259/cl3fz14ea00oxes6iaob93mci',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34954,7 +34954,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00oyes6iea4phzbq',
         doi: '10.82259/cl3fz14ea00oyes6iea4phzbq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -34993,7 +34993,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00ozes6i2s35a4el',
         doi: '10.82259/cl3fz14ea00ozes6i2s35a4el',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0004es6i6dmo0fpq', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0004es6i6dmo0fpq', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35032,7 +35032,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00p0es6i9zt3fv8y',
         doi: '10.82259/cl3fz14ea00p0es6i9zt3fv8y',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35071,7 +35071,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00p1es6icdow336h',
         doi: '10.82259/cl3fz14ea00p1es6icdow336h',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35110,7 +35110,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00p2es6ibl011ejo',
         doi: '10.82259/cl3fz14ea00p2es6ibl011ejo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35149,7 +35149,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00p3es6ig75k6eel',
         doi: '10.82259/cl3fz14ea00p3es6ig75k6eel',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35191,8 +35191,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false },
-                    { publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }
+                    { publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false },
+                    { publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }
                 ]
             }
         },
@@ -35237,8 +35237,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false },
-                    { publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }
+                    { publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false },
+                    { publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }
                 ]
             }
         },
@@ -35278,7 +35278,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00p6es6i5m6ncg6r',
         doi: '10.82259/cl3fz14ea00p6es6i5m6ncg6r',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35317,7 +35317,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00p7es6igvrda8fw',
         doi: '10.82259/cl3fz14ea00p7es6igvrda8fw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35356,7 +35356,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00p8es6icr7chwmo',
         doi: '10.82259/cl3fz14ea00p8es6icr7chwmo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35395,7 +35395,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00p9es6igbkd0415',
         doi: '10.82259/cl3fz14ea00p9es6igbkd0415',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35434,7 +35434,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00paes6ib7za78ah',
         doi: '10.82259/cl3fz14ea00paes6ib7za78ah',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35473,7 +35473,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00pbes6iao7d0ocg',
         doi: '10.82259/cl3fz14ea00pbes6iao7d0ocg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35512,7 +35512,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00pces6ib7a5227q',
         doi: '10.82259/cl3fz14ea00pces6ib7a5227q',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35551,7 +35551,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00pdes6i27ysgecn',
         doi: '10.82259/cl3fz14ea00pdes6i27ysgecn',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35590,7 +35590,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00pees6iga5r07zz',
         doi: '10.82259/cl3fz14ea00pees6iga5r07zz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35629,7 +35629,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00pfes6iaau6br3f',
         doi: '10.82259/cl3fz14ea00pfes6iaau6br3f',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35668,7 +35668,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00pges6iez441wg1',
         doi: '10.82259/cl3fz14ea00pges6iez441wg1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35707,7 +35707,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00phes6i86847dwz',
         doi: '10.82259/cl3fz14ea00phes6i86847dwz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35744,7 +35744,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00pies6id597e9ib',
         doi: '10.82259/cl3fz14ea00pies6id597e9ib',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35783,7 +35783,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00pjes6if4cw7j2u',
         doi: '10.82259/cl3fz14ea00pjes6if4cw7j2u',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35822,7 +35822,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00pkes6if09g8xl5',
         doi: '10.82259/cl3fz14ea00pkes6if09g8xl5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35861,7 +35861,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00ples6iajas8lbe',
         doi: '10.82259/cl3fz14ea00ples6iajas8lbe',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35900,7 +35900,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00pmes6idffj169e',
         doi: '10.82259/cl3fz14ea00pmes6idffj169e',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35939,7 +35939,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00pnes6i2uke65fn',
         doi: '10.82259/cl3fz14ea00pnes6i2uke65fn',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -35978,7 +35978,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00poes6ic9lpdmid',
         doi: '10.82259/cl3fz14ea00poes6ic9lpdmid',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36017,7 +36017,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00ppes6ieh6p4i0s',
         doi: '10.82259/cl3fz14ea00ppes6ieh6p4i0s',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36056,7 +36056,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00pqes6i10dc1h5m',
         doi: '10.82259/cl3fz14ea00pqes6i10dc1h5m',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36095,7 +36095,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00pres6idtj9e8z9',
         doi: '10.82259/cl3fz14ea00pres6idtj9e8z9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36134,7 +36134,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ea00pses6idrxxezm3',
         doi: '10.82259/cl3fz14ea00pses6idrxxezm3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000mes6icrlg58mi', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000mes6icrlg58mi', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36173,7 +36173,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00ptes6i8fpz1ec7',
         doi: '10.82259/cl3fz14eb00ptes6i8fpz1ec7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36212,7 +36212,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00pues6ig9tb3iva',
         doi: '10.82259/cl3fz14eb00pues6ig9tb3iva',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36251,7 +36251,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00pves6i4goehof3',
         doi: '10.82259/cl3fz14eb00pves6i4goehof3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36288,7 +36288,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00pwes6ifilsdjqh',
         doi: '10.82259/cl3fz14eb00pwes6ifilsdjqh',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36327,7 +36327,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00pxes6i2sr40vsu',
         doi: '10.82259/cl3fz14eb00pxes6i2sr40vsu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36364,7 +36364,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00pyes6ifmyneu5g',
         doi: '10.82259/cl3fz14eb00pyes6ifmyneu5g',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36403,7 +36403,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00pzes6ifz9payhe',
         doi: '10.82259/cl3fz14eb00pzes6ifz9payhe',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36442,7 +36442,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00q0es6i6lujax5i',
         doi: '10.82259/cl3fz14eb00q0es6i6lujax5i',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36479,7 +36479,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00q1es6i8l4996i5',
         doi: '10.82259/cl3fz14eb00q1es6i8l4996i5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36518,7 +36518,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00q2es6if0oae1x6',
         doi: '10.82259/cl3fz14eb00q2es6if0oae1x6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36557,7 +36557,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00q3es6ia7ljc32q',
         doi: '10.82259/cl3fz14eb00q3es6ia7ljc32q',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36594,7 +36594,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00q4es6i0enshzvb',
         doi: '10.82259/cl3fz14eb00q4es6i0enshzvb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36633,7 +36633,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00q5es6ig3sc5fje',
         doi: '10.82259/cl3fz14eb00q5es6ig3sc5fje',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36672,7 +36672,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00q6es6i14lu4p0s',
         doi: '10.82259/cl3fz14eb00q6es6i14lu4p0s',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36711,7 +36711,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00q7es6i0v7q13p0',
         doi: '10.82259/cl3fz14eb00q7es6i0v7q13p0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36750,7 +36750,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00q8es6i9u1hes4j',
         doi: '10.82259/cl3fz14eb00q8es6i9u1hes4j',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36789,7 +36789,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00q9es6ialfh8rfz',
         doi: '10.82259/cl3fz14eb00q9es6ialfh8rfz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36828,7 +36828,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qaes6i7alic24j',
         doi: '10.82259/cl3fz14eb00qaes6i7alic24j',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36865,7 +36865,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qbes6iepnr5fpa',
         doi: '10.82259/cl3fz14eb00qbes6iepnr5fpa',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36904,7 +36904,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qces6i7753c7mw',
         doi: '10.82259/cl3fz14eb00qces6i7753c7mw',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36943,7 +36943,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qdes6i3186d7my',
         doi: '10.82259/cl3fz14eb00qdes6i3186d7my',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -36982,7 +36982,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qees6ic05cfrnf',
         doi: '10.82259/cl3fz14eb00qees6ic05cfrnf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37021,7 +37021,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qfes6idodndq61',
         doi: '10.82259/cl3fz14eb00qfes6idodndq61',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37060,7 +37060,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qges6iff7h2muu',
         doi: '10.82259/cl3fz14eb00qges6iff7h2muu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0003es6idqm4au2v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0003es6idqm4au2v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37099,7 +37099,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qhes6i6256dhm4',
         doi: '10.82259/cl3fz14eb00qhes6i6256dhm4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37138,7 +37138,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qies6ibd1k4b51',
         doi: '10.82259/cl3fz14eb00qies6ibd1k4b51',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37175,7 +37175,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qjes6igh38f1zh',
         doi: '10.82259/cl3fz14eb00qjes6igh38f1zh',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37214,7 +37214,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qkes6i7p8sbp6q',
         doi: '10.82259/cl3fz14eb00qkes6i7p8sbp6q',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37253,7 +37253,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qles6i3if7cfgb',
         doi: '10.82259/cl3fz14eb00qles6i3if7cfgb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37292,7 +37292,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qmes6i6lws5sg3',
         doi: '10.82259/cl3fz14eb00qmes6i6lws5sg3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37331,7 +37331,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qnes6igrn69hny',
         doi: '10.82259/cl3fz14eb00qnes6igrn69hny',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37370,7 +37370,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qoes6i0ylw4vru',
         doi: '10.82259/cl3fz14eb00qoes6i0ylw4vru',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37409,7 +37409,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qpes6i6n82ciym',
         doi: '10.82259/cl3fz14eb00qpes6i6n82ciym',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37448,7 +37448,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qqes6i37g2btgz',
         doi: '10.82259/cl3fz14eb00qqes6i37g2btgz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37487,7 +37487,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qres6ibxtg5rwb',
         doi: '10.82259/cl3fz14eb00qres6ibxtg5rwb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000les6i1ftkgvjo', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37526,7 +37526,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qses6ifitrgejk',
         doi: '10.82259/cl3fz14eb00qses6ifitrgejk',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37565,7 +37565,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qtes6i1u26c04g',
         doi: '10.82259/cl3fz14eb00qtes6i1u26c04g',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37604,7 +37604,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00ques6i95ctfizf',
         doi: '10.82259/cl3fz14eb00ques6i95ctfizf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000oes6i04zzar3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37643,7 +37643,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qves6ih19902do',
         doi: '10.82259/cl3fz14eb00qves6ih19902do',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37682,7 +37682,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qwes6ihd9i0zr6',
         doi: '10.82259/cl3fz14eb00qwes6ihd9i0zr6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37721,7 +37721,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qxes6i5yia1c2m',
         doi: '10.82259/cl3fz14eb00qxes6i5yia1c2m',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37760,7 +37760,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qyes6i96902co5',
         doi: '10.82259/cl3fz14eb00qyes6i96902co5',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37799,7 +37799,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00qzes6i5zgc83i3',
         doi: '10.82259/cl3fz14eb00qzes6i5zgc83i3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37838,7 +37838,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00r0es6i8qlugmd2',
         doi: '10.82259/cl3fz14eb00r0es6i8qlugmd2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37877,7 +37877,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00r1es6i6pmu3jr0',
         doi: '10.82259/cl3fz14eb00r1es6i6pmu3jr0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37914,7 +37914,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00r2es6i0mx53he6',
         doi: '10.82259/cl3fz14eb00r2es6i0mx53he6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37951,7 +37951,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00r3es6icy0fbrkt',
         doi: '10.82259/cl3fz14eb00r3es6icy0fbrkt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -37990,7 +37990,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00r4es6i83z8f8gl',
         doi: '10.82259/cl3fz14eb00r4es6i83z8f8gl',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38029,7 +38029,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00r5es6i9t04f0y8',
         doi: '10.82259/cl3fz14eb00r5es6i9t04f0y8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38068,7 +38068,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00r6es6i3edu9crh',
         doi: '10.82259/cl3fz14eb00r6es6i3edu9crh',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38105,7 +38105,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00r7es6i2w1re726',
         doi: '10.82259/cl3fz14eb00r7es6i2w1re726',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38144,7 +38144,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00r8es6ibu81hf8f',
         doi: '10.82259/cl3fz14eb00r8es6ibu81hf8f',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38183,7 +38183,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00r9es6ih12g24e6',
         doi: '10.82259/cl3fz14eb00r9es6ih12g24e6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38222,7 +38222,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00raes6idflh3zss',
         doi: '10.82259/cl3fz14eb00raes6idflh3zss',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38261,7 +38261,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00rbes6i58p9hxej',
         doi: '10.82259/cl3fz14eb00rbes6i58p9hxej',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38300,7 +38300,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00rces6i067b7noc',
         doi: '10.82259/cl3fz14eb00rces6i067b7noc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38339,7 +38339,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00rdes6ic7hsbb4p',
         doi: '10.82259/cl3fz14eb00rdes6ic7hsbb4p',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38378,7 +38378,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00rees6ia0qv58l4',
         doi: '10.82259/cl3fz14eb00rees6ia0qv58l4',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38417,7 +38417,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14eb00rfes6i9ax04581',
         doi: '10.82259/cl3fz14eb00rfes6i9ax04581',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38456,7 +38456,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rges6i7dzz07mt',
         doi: '10.82259/cl3fz14ec00rges6i7dzz07mt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38495,7 +38495,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rhes6i0rqa3uxq',
         doi: '10.82259/cl3fz14ec00rhes6i0rqa3uxq',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38534,7 +38534,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00ries6ibuhm81ez',
         doi: '10.82259/cl3fz14ec00ries6ibuhm81ez',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38573,7 +38573,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rjes6ihh35h29o',
         doi: '10.82259/cl3fz14ec00rjes6ihh35h29o',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38612,7 +38612,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rkes6i8gsi1o5h',
         doi: '10.82259/cl3fz14ec00rkes6i8gsi1o5h',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38651,7 +38651,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rles6ihiinfnin',
         doi: '10.82259/cl3fz14ec00rles6ihiinfnin',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38690,7 +38690,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rmes6ib3ce3u9j',
         doi: '10.82259/cl3fz14ec00rmes6ib3ce3u9j',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38729,7 +38729,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rnes6i8uu379vz',
         doi: '10.82259/cl3fz14ec00rnes6i8uu379vz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38768,7 +38768,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00roes6i51nke72r',
         doi: '10.82259/cl3fz14ec00roes6i51nke72r',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38805,7 +38805,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rpes6iagqpdwqf',
         doi: '10.82259/cl3fz14ec00rpes6iagqpdwqf',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38844,7 +38844,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rqes6ia8250w36',
         doi: '10.82259/cl3fz14ec00rqes6ia8250w36',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38883,7 +38883,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rres6idm7s10r3',
         doi: '10.82259/cl3fz14ec00rres6idm7s10r3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38922,7 +38922,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rses6i0lx13jhl',
         doi: '10.82259/cl3fz14ec00rses6i0lx13jhl',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38961,7 +38961,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rtes6i03uxdsx9',
         doi: '10.82259/cl3fz14ec00rtes6i03uxdsx9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -38998,7 +38998,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rues6i42dcfcgo',
         doi: '10.82259/cl3fz14ec00rues6i42dcfcgo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39037,7 +39037,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rves6i0ssq3aas',
         doi: '10.82259/cl3fz14ec00rves6i0ssq3aas',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39075,7 +39075,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rwes6ic5ztbx42',
         doi: '10.82259/cl3fz14ec00rwes6ic5ztbx42',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39114,7 +39114,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rxes6ig72sc6ru',
         doi: '10.82259/cl3fz14ec00rxes6ig72sc6ru',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39153,7 +39153,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00ryes6i21fs2hlc',
         doi: '10.82259/cl3fz14ec00ryes6i21fs2hlc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39190,7 +39190,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00rzes6i2ufhhurh',
         doi: '10.82259/cl3fz14ec00rzes6i2ufhhurh',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39228,7 +39228,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00s0es6i192p9jr8',
         doi: '10.82259/cl3fz14ec00s0es6i192p9jr8',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39267,7 +39267,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00s1es6ifyvc08cg',
         doi: '10.82259/cl3fz14ec00s1es6ifyvc08cg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0003es6idqm4au2v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0003es6idqm4au2v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39306,7 +39306,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00s2es6i3rs29twt',
         doi: '10.82259/cl3fz14ec00s2es6i3rs29twt',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39345,7 +39345,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00s3es6i6pwjhfhg',
         doi: '10.82259/cl3fz14ec00s3es6i6pwjhfhg',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39387,8 +39387,8 @@ const problems: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    { publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false },
-                    { publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }
+                    { publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false },
+                    { publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }
                 ]
             }
         },
@@ -39430,7 +39430,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00s5es6i1d5z4sa6',
         doi: '10.82259/cl3fz14ec00s5es6i1d5z4sa6',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39469,7 +39469,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00s6es6ibrbcaty9',
         doi: '10.82259/cl3fz14ec00s6es6ibrbcaty9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39508,7 +39508,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00s7es6i5apyfddp',
         doi: '10.82259/cl3fz14ec00s7es6i5apyfddp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39547,7 +39547,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00s8es6i3eh3063z',
         doi: '10.82259/cl3fz14ec00s8es6i3eh3063z',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39586,7 +39586,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00s9es6ihd7u3i0z',
         doi: '10.82259/cl3fz14ec00s9es6ihd7u3i0z',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39625,7 +39625,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00saes6if4og2tc9',
         doi: '10.82259/cl3fz14ec00saes6if4og2tc9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39664,7 +39664,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00sbes6iguq1eroz',
         doi: '10.82259/cl3fz14ec00sbes6iguq1eroz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39701,7 +39701,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00sces6i5vogb6jb',
         doi: '10.82259/cl3fz14ec00sces6i5vogb6jb',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39740,7 +39740,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00sdes6i5t8u0at9',
         doi: '10.82259/cl3fz14ec00sdes6i5t8u0at9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39779,7 +39779,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00sees6i6g8kdg2d',
         doi: '10.82259/cl3fz14ec00sees6i6g8kdg2d',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39818,7 +39818,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00sfes6i7xergecm',
         doi: '10.82259/cl3fz14ec00sfes6i7xergecm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39857,7 +39857,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00sges6i3qt3dls9',
         doi: '10.82259/cl3fz14ec00sges6i3qt3dls9',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39896,7 +39896,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00shes6i3j367duk',
         doi: '10.82259/cl3fz14ec00shes6i3j367duk',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39935,7 +39935,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00sies6ihtpcaoo3',
         doi: '10.82259/cl3fz14ec00sies6ihtpcaoo3',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -39974,7 +39974,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00sjes6icyye4zjo',
         doi: '10.82259/cl3fz14ec00sjes6icyye4zjo',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40013,7 +40013,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00skes6i19idenvl',
         doi: '10.82259/cl3fz14ec00skes6i19idenvl',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ees6i06eh7253', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40052,7 +40052,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00sles6icigk70r2',
         doi: '10.82259/cl3fz14ec00sles6icigk70r2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40089,7 +40089,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00smes6i24319xwn',
         doi: '10.82259/cl3fz14ec00smes6i24319xwn',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40128,7 +40128,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00snes6i89toeusl',
         doi: '10.82259/cl3fz14ec00snes6i89toeusl',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40167,7 +40167,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00soes6ie4tkhmvj',
         doi: '10.82259/cl3fz14ec00soes6ie4tkhmvj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40206,7 +40206,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00spes6i818e2wcp',
         doi: '10.82259/cl3fz14ec00spes6i818e2wcp',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40243,7 +40243,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00sqes6i6mn33ofn',
         doi: '10.82259/cl3fz14ec00sqes6i6mn33ofn',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000hes6iaq8w4d09', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40282,7 +40282,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00sres6i5r1k89wc',
         doi: '10.82259/cl3fz14ec00sres6i5r1k89wc',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40321,7 +40321,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00sses6i84m55uau',
         doi: '10.82259/cl3fz14ec00sses6i84m55uau',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40360,7 +40360,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00stes6iednb8nla',
         doi: '10.82259/cl3fz14ec00stes6iednb8nla',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0005es6ibev2gv3n', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0005es6ibev2gv3n', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40397,7 +40397,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00sues6i6j7zeu4z',
         doi: '10.82259/cl3fz14ec00sues6i6j7zeu4z',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40436,7 +40436,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00sves6ih7jj3omj',
         doi: '10.82259/cl3fz14ec00sves6ih7jj3omj',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40475,7 +40475,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00swes6i2tx52hkm',
         doi: '10.82259/cl3fz14ec00swes6i2tx52hkm',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40514,7 +40514,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00sxes6i7i1wh0ss',
         doi: '10.82259/cl3fz14ec00sxes6i7i1wh0ss',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40553,7 +40553,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00syes6i23ls6jsy',
         doi: '10.82259/cl3fz14ec00syes6i23ls6jsy',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40592,7 +40592,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00szes6ieqme4zt1',
         doi: '10.82259/cl3fz14ec00szes6ieqme4zt1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40631,7 +40631,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00t0es6igty1bygu',
         doi: '10.82259/cl3fz14ec00t0es6igty1bygu',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000bes6i5ki2anrc', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40670,7 +40670,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00t1es6i6c0ufij7',
         doi: '10.82259/cl3fz14ec00t1es6i6c0ufij7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40709,7 +40709,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00t2es6ibt8i9lqd',
         doi: '10.82259/cl3fz14ec00t2es6ibt8i9lqd',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40748,7 +40748,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00t3es6ibfqvayb7',
         doi: '10.82259/cl3fz14ec00t3es6ibfqvayb7',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr0006es6i27b5fiic', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40787,7 +40787,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00t4es6i7a9pcw3s',
         doi: '10.82259/cl3fz14ec00t4es6i7a9pcw3s',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40826,7 +40826,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ec00t5es6i1uv56woy',
         doi: '10.82259/cl3fz14ec00t5es6i1uv56woy',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000mes6icrlg58mi', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000mes6icrlg58mi', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40865,7 +40865,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ed00t6es6i0juh3lpi',
         doi: '10.82259/cl3fz14ed00t6es6i0juh3lpi',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40904,7 +40904,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ed00t7es6iblqmhub1',
         doi: '10.82259/cl3fz14ed00t7es6iblqmhub1',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000nes6i7rnb9g08', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40943,7 +40943,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ed00t8es6i607p9aip',
         doi: '10.82259/cl3fz14ed00t8es6i607p9aip',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -40982,7 +40982,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ed00t9es6i0m6s0wxz',
         doi: '10.82259/cl3fz14ed00t9es6i0m6s0wxz',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ces6ih5lg82y5', draft: false }] } },
         versions: {
             create: [
                 {
@@ -41021,7 +41021,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ed00taes6icv3chfgy',
         doi: '10.82259/cl3fz14ed00taes6icv3chfgy',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -41058,7 +41058,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ed00tbes6i1rcu6d8s',
         doi: '10.82259/cl3fz14ed00tbes6i1rcu6d8s',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -41097,7 +41097,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ed00tces6icse7few0',
         doi: '10.82259/cl3fz14ed00tces6icse7few0',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000jes6i0rb14e0p', draft: false }] } },
         versions: {
             create: [
                 {
@@ -41136,7 +41136,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ed00tdes6icehz5z1u',
         doi: '10.82259/cl3fz14ed00tdes6icehz5z1u',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ies6i8x4h404v', draft: false }] } },
         versions: {
             create: [
                 {
@@ -41175,7 +41175,7 @@ const problems: Prisma.PublicationCreateInput[] = [
         id: 'cl3fz14ed00tees6iewhvhpk2',
         doi: '10.82259/cl3fz14ed00tees6iewhvhpk2',
         type: 'PROBLEM',
-        linkedTo: { createMany: { data: [{ publicationTo: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
+        linkedTo: { createMany: { data: [{ publicationToId: 'cl3fz14dr000ges6i0s8m2838', draft: false }] } },
         versions: {
             create: [
                 {

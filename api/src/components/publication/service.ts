@@ -125,7 +125,7 @@ export const get = (id: string) =>
             },
             linkedTo: {
                 where: {
-                    publicationToRef: {
+                    publicationTo: {
                         versions: {
                             some: {
                                 isLatestLiveVersion: true
@@ -135,7 +135,7 @@ export const get = (id: string) =>
                 },
                 select: {
                     id: true,
-                    publicationToRef: {
+                    publicationTo: {
                         select: {
                             id: true,
                             type: true,
@@ -155,7 +155,7 @@ export const get = (id: string) =>
             },
             linkedFrom: {
                 where: {
-                    publicationFromRef: {
+                    publicationFrom: {
                         versions: {
                             some: {
                                 isLatestLiveVersion: true
@@ -165,7 +165,7 @@ export const get = (id: string) =>
                 },
                 select: {
                     id: true,
-                    publicationFromRef: {
+                    publicationFrom: {
                         select: {
                             id: true,
                             type: true,
@@ -200,7 +200,7 @@ export const getSeedDataPublications = (title: string) =>
         include: {
             linkedTo: {
                 where: {
-                    publicationToRef: {
+                    publicationTo: {
                         versions: {
                             some: {
                                 isLatestLiveVersion: true
@@ -210,7 +210,7 @@ export const getSeedDataPublications = (title: string) =>
                 },
                 select: {
                     id: true,
-                    publicationTo: true
+                    publicationToId: true
                 }
             }
         }
@@ -480,8 +480,8 @@ export const getLinksForPublication = async (
     const linkedTo = await client.prisma.$queryRaw<I.LinkedToPublication[]>`
         WITH RECURSIVE to_left AS (
             SELECT "Links"."id" "linkId",
-                   "Links"."publicationFrom" "childPublication",
-                   "Links"."publicationTo" "id",
+                   "Links"."publicationFromId" "childPublication",
+                   "Links"."publicationToId" "id",
                    "Links".draft,
                    "pfrom".type "childPublicationType",
                    "pto".type,
@@ -495,10 +495,10 @@ export const getLinksForPublication = async (
 
               FROM "Links"
               LEFT JOIN "Publication" AS pfrom
-              ON "pfrom".id = "Links"."publicationFrom"
+              ON "pfrom".id = "Links"."publicationFromId"
 
               LEFT JOIN "Publication" AS pto
-              ON "pto".id = "Links"."publicationTo"
+              ON "pto".id = "Links"."publicationToId"
 
               LEFT JOIN "PublicationVersion" AS pto_version
               ON "pto".id = "pto_version"."versionOf"
@@ -507,13 +507,13 @@ export const getLinksForPublication = async (
               LEFT JOIN "User" AS pto_user
               ON "pto_version"."createdBy" = "pto_user"."id"
 
-            WHERE "Links"."publicationFrom" = ${id}
+            WHERE "Links"."publicationFromId" = ${id}
 
             UNION ALL
 
             SELECT l."id" "linkId",
-                   l."publicationFrom" "childPublication",
-                   l."publicationTo" "id",
+                   l."publicationFromId" "childPublication",
+                   l."publicationToId" "id",
                    l."draft",
                    "pfrom".type "childPublicationType",
                    "pto".type,
@@ -527,13 +527,13 @@ export const getLinksForPublication = async (
 
               FROM "Links" l
               JOIN to_left
-              ON to_left."id" = l."publicationFrom"
+              ON to_left."id" = l."publicationFromId"
 
               LEFT JOIN "Publication" AS pfrom
-              ON "pfrom".id = "l"."publicationFrom"
+              ON "pfrom".id = "l"."publicationFromId"
 
               LEFT JOIN "Publication" AS pto
-              ON "pto".id = "l"."publicationTo"
+              ON "pto".id = "l"."publicationToId"
 
               LEFT JOIN "PublicationVersion" AS pto_version
               ON "pto".id = "pto_version"."versionOf"
@@ -552,8 +552,8 @@ export const getLinksForPublication = async (
     const linkedFrom = await client.prisma.$queryRaw<I.LinkedFromPublication[]>`
         WITH RECURSIVE to_right AS (
             SELECT "Links"."id" "linkId",
-                   "Links"."publicationFrom" "id",
-                   "Links"."publicationTo" "parentPublication",
+                   "Links"."publicationFromId" "id",
+                   "Links"."publicationToId" "parentPublication",
                    "Links".draft,
                    "pfrom".type,
                    "pfrom"."doi",
@@ -567,25 +567,25 @@ export const getLinksForPublication = async (
 
               FROM "Links"
               LEFT JOIN "Publication" AS pfrom
-              ON "pfrom".id = "Links"."publicationFrom"
+              ON "pfrom".id = "Links"."publicationFromId"
 
               LEFT JOIN "PublicationVersion" AS pfrom_version
               ON "pfrom".id = "pfrom_version"."versionOf"
               AND "pfrom_version"."isLatestLiveVersion" = TRUE
 
               LEFT JOIN "Publication" AS pto
-              ON "pto".id = "Links"."publicationTo"
+              ON "pto".id = "Links"."publicationToId"
 
               LEFT JOIN "User" AS pfrom_user
               ON "pfrom_version"."createdBy" = "pfrom_user"."id"
 
-            WHERE "Links"."publicationTo" = ${id}
+            WHERE "Links"."publicationToId" = ${id}
 
             UNION ALL
 
             SELECT l."id" "linkId",
-                   l."publicationFrom" "id",
-                   l."publicationTo" "parentPublication",
+                   l."publicationFromId" "id",
+                   l."publicationToId" "parentPublication",
                    l."draft",
                    "pfrom".type,
                    "pfrom"."doi",
@@ -598,17 +598,17 @@ export const getLinksForPublication = async (
                    "pfrom_user"."lastName" "authorLastName"
               FROM "Links" l
               JOIN to_right
-              ON to_right."id" = l."publicationTo"
+              ON to_right."id" = l."publicationToId"
 
               LEFT JOIN "Publication" AS pfrom
-              ON "pfrom".id = "l"."publicationFrom"
+              ON "pfrom".id = "l"."publicationFromId"
 
               LEFT JOIN "PublicationVersion" AS pfrom_version
               ON "pfrom".id = "pfrom_version"."versionOf"
               AND "pfrom_version"."isLatestLiveVersion" = TRUE
 
               LEFT JOIN "Publication" AS pto
-              ON "pto".id = "l"."publicationTo"
+              ON "pto".id = "l"."publicationToId"
 
               LEFT JOIN "User" AS pfrom_user
               ON "pfrom_version"."createdBy" = "pfrom_user"."id"
@@ -798,7 +798,7 @@ export const getDirectLinksForPublication = async (
             linkedTo: {
                 where: {
                     draft: includeDraftVersion ? undefined : includeDraftVersion,
-                    publicationToRef: {
+                    publicationTo: {
                         versions: {
                             some: {
                                 isLatestLiveVersion: true
@@ -809,7 +809,7 @@ export const getDirectLinksForPublication = async (
                 select: {
                     id: true,
                     draft: true,
-                    publicationToRef: {
+                    publicationTo: {
                         select: {
                             id: true,
                             doi: true,
@@ -829,7 +829,7 @@ export const getDirectLinksForPublication = async (
             linkedFrom: {
                 where: {
                     draft: includeDraftVersion ? undefined : includeDraftVersion,
-                    publicationFromRef: {
+                    publicationFrom: {
                         versions: {
                             some: {
                                 isLatestLiveVersion: true
@@ -840,7 +840,7 @@ export const getDirectLinksForPublication = async (
                 select: {
                     id: true,
                     draft: true,
-                    publicationFromRef: {
+                    publicationFrom: {
                         select: {
                             id: true,
                             doi: true,
@@ -879,8 +879,8 @@ export const getDirectLinksForPublication = async (
     }
 
     const linkedTo: I.LinkedToPublication[] = publication.linkedTo.map((link) => {
-        const { id: linkId, publicationToRef, draft } = link;
-        const { id, type, versions, doi } = publicationToRef;
+        const { id: linkId, publicationTo, draft } = link;
+        const { id, type, versions, doi } = publicationTo;
         const { createdBy, user, currentStatus, publishedDate, title } = versions[0];
 
         return {
@@ -902,8 +902,8 @@ export const getDirectLinksForPublication = async (
     });
 
     const linkedFrom: I.LinkedFromPublication[] = publication.linkedFrom.map((link) => {
-        const { id: linkId, publicationFromRef, draft } = link;
-        const { id, type, versions, doi } = publicationFromRef;
+        const { id: linkId, publicationFrom, draft } = link;
+        const { id, type, versions, doi } = publicationFrom;
         const { createdBy, user, currentStatus, publishedDate, title } = versions[0];
 
         return {
