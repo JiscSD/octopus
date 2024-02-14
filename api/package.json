@@ -23,7 +23,6 @@
         "test:watch": "npm run test:local -- --watch",
         "reindex": "ts-node prisma/reindex.ts",
         "insertDummyEvent": "ts-node -r tsconfig-paths/register prisma/insertDummyEvent.ts",
-        "setLinkToVersions": "ts-node -r tsconfig-paths/register prisma/setLinkToVersions.ts",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",
         "lint:check": "eslint src/",
