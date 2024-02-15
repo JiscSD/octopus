@@ -292,6 +292,8 @@ export const updateStatus = async (
             }
         }
 
+        // Publication version is being made LIVE
+
         let previousPublicationVersion: I.PublicationVersion | null = null;
 
         if (publicationVersion.versionNumber > 1) {
