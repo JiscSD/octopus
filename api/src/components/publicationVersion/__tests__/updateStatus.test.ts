@@ -1,4 +1,5 @@
 import * as testUtils from 'lib/testUtils';
+import * as client from 'lib/client';
 
 beforeEach(async () => {
     await testUtils.clearDB();
@@ -280,5 +281,49 @@ describe('Update publication version status', () => {
         expect(typeof newestPublishedVersion.body.doi).toBe('string');
         expect(newestPublishedVersion.body.versionNumber).toEqual(2); // version 2 published
         expect(newestPublishedVersion.body.isLatestLiveVersion).toBe(true);
+    });
+
+    test("Links from peer reviews are updated to point to latest live version of 'to publication' when peer review is published", async () => {
+        await testUtils.openSearchSeed();
+        // PR already has link to publication-problem-live-2-v1
+        await testUtils.agent.put(`/publication-versions/publication-problem-live-2-v2/status/LIVE`).query({
+            apiKey: '123456789'
+        });
+        await testUtils.agent.put('/publication-versions/publication-peer-review-draft-v1/status/LIVE').query({
+            apiKey: '123456789'
+        });
+        const link = await client.prisma.links.findFirst({
+            where: {
+                publicationFromId: 'publication-peer-review-draft',
+                publicationToId: 'publication-problem-live-2'
+            },
+            select: {
+                versionToId: true
+            }
+        });
+        expect(link?.versionToId).toEqual('publication-problem-live-2-v2');
+    });
+
+    test("Links from non-peer reviews do not change versionTo when 'from publication' is published", async () => {
+        await testUtils.openSearchSeed();
+        // Publication already has link to publication-problem-live-2-v1
+        await testUtils.agent.put(`/publication-versions/publication-problem-live-2-v2/status/LIVE`).query({
+            apiKey: '123456789'
+        });
+        await testUtils.agent
+            .put('/publication-versions/publication-real-world-application-draft-v1/status/LIVE')
+            .query({
+                apiKey: '123456789'
+            });
+        const link = await client.prisma.links.findFirst({
+            where: {
+                publicationFromId: 'publication-real-world-application-draft',
+                publicationToId: 'publication-problem-live-2'
+            },
+            select: {
+                versionToId: true
+            }
+        });
+        expect(link?.versionToId).toEqual('publication-problem-live-2-v1');
     });
 });

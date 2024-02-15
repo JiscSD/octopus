@@ -845,15 +845,37 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-real-world-application-draft',
         doi: '10.82259/cty5-2g16',
         type: 'REAL_WORLD_APPLICATION',
+        linkedTo: {
+            create: {
+                publicationToId: 'publication-problem-live-2',
+                versionToId: 'publication-problem-live-2-v1'
+            }
+        },
         versions: {
             create: {
                 id: 'publication-real-world-application-draft-v1',
+                doi: '10.82259/cty5-2g16',
                 versionNumber: 1,
                 title: 'Publication REAL_WORLD_APPLICATION-DRAFT',
                 content: 'Publication REAL_WORLD_APPLICATION-DRAFT',
+                conflictOfInterestStatus: false,
+                isLatestVersion: true,
                 currentStatus: 'DRAFT',
                 user: { connect: { id: 'test-user-1' } },
-                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] },
+                coAuthors: {
+                    create: [
+                        {
+                            id: 'coauthor-test-user-1-real-world-application-draft',
+                            email: 'test-user-1@jisc.ac.uk',
+                            code: 'test-code-user-1',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            affiliations: [],
+                            isIndependent: true
+                        }
+                    ]
+                }
             }
         }
     },
@@ -1035,6 +1057,44 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
                         { status: 'LIVE', createdAt: '2022-01-20T15:51:42.523Z' }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        id: 'publication-peer-review-draft',
+        doi: '10.82259/01x8-yb57',
+        type: 'PEER_REVIEW',
+        linkedTo: {
+            create: {
+                publicationToId: 'publication-problem-live-2',
+                versionToId: 'publication-problem-live-2-v1'
+            }
+        },
+        versions: {
+            create: {
+                id: 'publication-peer-review-draft-v1',
+                doi: '10.82259/01x8-yb57',
+                versionNumber: 1,
+                title: 'Peer review draft',
+                content: 'Peer review draft content',
+                conflictOfInterestStatus: false,
+                isLatestVersion: true,
+                currentStatus: 'DRAFT',
+                user: { connect: { id: 'test-user-1' } },
+                publicationStatus: { create: { status: 'DRAFT' } },
+                coAuthors: {
+                    create: [
+                        {
+                            id: 'coauthor-test-user-1-peer-review-draft',
+                            email: 'test-user-1@jisc.ac.uk',
+                            code: 'test-code-user-1',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            affiliations: [],
+                            isIndependent: true
+                        }
                     ]
                 }
             }
