@@ -161,7 +161,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                             Download:
                         </span>
                         <button
-                            aria-label="Print"
+                            aria-label="Download PDF"
                             onClick={() => {
                                 window.open(
                                     `${Config.endpoints.publications}/${props.publicationVersion.versionOf}/pdf?redirectToPreview=true`,

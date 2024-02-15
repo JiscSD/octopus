@@ -24,7 +24,10 @@ export const testBookmarking = async (page: Page, id: string) => {
     await page.locator(PageModel.header.myBookmarksButton).click();
 
     await page.waitForSelector(PageModel.myBookmarks.publicationBookmark);
-    await expect(page.locator(PageModel.myBookmarks.publicationBookmark)).toHaveAttribute('href', `/publications/${id}`);
+    await expect(page.locator(PageModel.myBookmarks.publicationBookmark)).toHaveAttribute(
+        'href',
+        `/publications/${id}`
+    );
 
     // Remove bookmark
     await page.locator(PageModel.myBookmarks.publicationBookmark).click();
@@ -127,16 +130,28 @@ test.describe('Live Publication', () => {
         await expect(page.locator(PageModel.authorInfo.result)).toBeVisible();
     });
 
-    test.skip('Download pdf/json', async ({ browser }) => {
-        // test TODO
-        // Start up test
+    test('Download pdf/json', async ({ browser, headless }) => {
         const page = await browser.newPage();
-
-        // Login
         await page.goto(Helpers.UI_BASE);
         await Helpers.login(page, browser);
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
         await page.goto(`${Helpers.UI_BASE}/publications/cl3fz14dr0001es6i5ji51rq4`, { waitUntil: 'domcontentloaded' });
+
+        // Behaviour is different depending on whether test is running headless or not.
+        if (headless) {
+            // Download PDF
+            const downloadPromise = page.waitForEvent('download');
+            await page.locator('aside').getByLabel('Download PDF').click();
+            const download = await downloadPromise;
+            expect(download.suggestedFilename()).toEqual('cl3fz14dr0001es6i5ji51rq4.pdf');
+        } else {
+            // Open PDF in new tab
+            const newTabPromise = page.waitForEvent('popup');
+            await page.locator('aside').getByLabel('Download PDF').click();
+            const newTab = await newTabPromise;
+            await newTab.waitForLoadState();
+            await expect(newTab).toHaveURL(/.*\/cl3fz14dr0001es6i5ji51rq4.pdf/);
+        }
     });
     test.skip('Write a review for this pub', async ({ browser }) => {});
 });
