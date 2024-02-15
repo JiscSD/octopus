@@ -533,3 +533,7 @@ export interface AuthorsPaginatedResults {
         offset: number;
     };
 }
+
+export interface AuthorSearchQuery extends ParsedUrlQuery {
+    query?: string;
+}
