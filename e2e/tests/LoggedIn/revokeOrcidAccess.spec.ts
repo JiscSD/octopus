@@ -7,7 +7,7 @@ test.describe.configure({ mode: 'serial' });
 test.describe('Revoke ORCID access', () => {
     test('Can revoke access from ORCID', async ({ browser }) => {
         const page = await browser.newPage();
-        await page.goto(Helpers.UI_BASE);
+        await page.goto('/');
 
         // login into Octopus - this process will log the user into ORCID as well
         await Helpers.login(page, browser, Helpers.user4);
@@ -50,7 +50,7 @@ test.describe('Revoke ORCID access', () => {
         await expect(trustedOrganizationsRow).not.toBeVisible();
 
         // navigate back to Octopus
-        await page.goto(Helpers.UI_BASE);
+        await page.goto('/');
 
         // user should be logged out and the login button should be visible
         await page.waitForLoadState('networkidle');
@@ -61,7 +61,7 @@ test.describe('Revoke ORCID access', () => {
 
     test('Can revoke ORCID access from Octopus', async ({ browser }) => {
         const page = await browser.newPage();
-        await page.goto(Helpers.UI_BASE);
+        await page.goto('/');
         await Helpers.login(page, browser, Helpers.user4);
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user4.fullName}`);
 

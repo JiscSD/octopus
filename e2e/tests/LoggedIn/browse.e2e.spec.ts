@@ -4,12 +4,8 @@ import { PageModel } from '../PageModel';
 
 test.describe('Browse', () => {
     test('Browse contents', async ({ browser }) => {
-        // Start up test
-        const page = await browser.newPage();
-
-        // Login
-        await page.goto(Helpers.UI_BASE);
-        await Helpers.login(page, browser, Helpers.user2);
+        const page = await Helpers.getPageAsUser(browser, Helpers.user2);
+        await page.goto('/');
         await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user2.fullName}`);
 
         // Navigate to browse page

@@ -1,8 +1,9 @@
 import { Browser, expect, Locator, Page } from '@playwright/test';
 import { PageModel } from './PageModel';
 
-export const UI_BASE = process.env.UI_BASE;
 export const MAIL_HOG = process.env.MAIL_HOG;
+
+export const STORAGE_STATE_BASE = 'playwright/.auth/';
 
 const requiredEnvVariables = [
     'ORCID_TEST_USER',
@@ -72,12 +73,13 @@ export const user4: TestUser = {
     fullName: `${process.env.ORCID_TEST_FIRST_NAME4} ${process.env.ORCID_TEST_LAST_NAME4}`
 };
 
-export const login = async (page: Page, browser: Browser, user = user1) => {
+export const login = async (page: Page, browser: Browser, user: TestUser) => {
+    await page.goto('/');
     await page.waitForSelector(PageModel.header.loginButton);
     await Promise.all([page.waitForNavigation(), page.click(PageModel.header.loginButton)]);
 
     // If necessary, reject cookies
-    const cookieCheck = await page.locator(PageModel.login.rejectCookies);
+    const cookieCheck = await page.locator(PageModel.login.rejectCookies).isVisible();
     if (cookieCheck) {
         await page.click(PageModel.login.rejectCookies);
     }
@@ -129,7 +131,11 @@ export const login = async (page: Page, browser: Browser, user = user1) => {
             page.click('button[title="Verify code"]')
         ]);
     }
+
+    await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${user.fullName}`);
 };
+
+export const users = [user1, user2, user3, user4];
 
 export const logout = async (page: Page) => {
     await page.click(PageModel.header.usernameButton);
@@ -139,7 +145,7 @@ export const logout = async (page: Page) => {
 };
 
 export const selectFirstPublication = async (page: Page, type: string = 'PROBLEM') => {
-    await page.goto(`${UI_BASE}/search?for=publications&type=${type}`);
+    await page.goto(`/search?for=publications&type=${type}`);
     await page.locator(`article`).first().click();
 };
 
@@ -160,7 +166,7 @@ export const search = async (page: Page, searchTerm: string, publicationSearchRe
 
 export const checkLivePublicationLayout = async (page: Page, id: string, loggedIn?: boolean) => {
     // Go to live publication page
-    await page.goto(`${UI_BASE}/publications/${id}`, {
+    await page.goto(`/publications/${id}`, {
         waitUntil: 'networkidle'
     });
     await expect(page.locator('h1')).toBeVisible();
@@ -179,7 +185,7 @@ export const checkLivePublicationLayout = async (page: Page, id: string, loggedI
     if (loggedIn) {
         // Confirm review link
         await page.locator(PageModel.livePublication.writeReview).locator('visible=true').click();
-        await expect(page).toHaveURL(`${UI_BASE}/create?for=${id}&type=PEER_REVIEW`);
+        await expect(page).toHaveURL(`/create?for=${id}&type=PEER_REVIEW`);
     }
 };
 
@@ -189,7 +195,7 @@ export const clickFirstPublication = async (page: Page): Promise<void> => {
     await firstPublication.click();
 
     // expect URL to contain publication path
-    await expect(page).toHaveURL(`${UI_BASE}${firstPublicationPath}/versions/latest`);
+    await expect(page).toHaveURL(`${firstPublicationPath}/versions/latest`);
 };
 
 export const testDateInput = async (page: Page, dateFromInput: Locator, dateToInput: Locator): Promise<void> => {
@@ -203,4 +209,9 @@ export const testDateInput = async (page: Page, dateFromInput: Locator, dateToIn
 export const openFileImportModal = async (page: Page, filePath: string) => {
     await page.locator(PageModel.publish.fileImportButtonModal).click();
     await page.locator(PageModel.publish.fileImportButton).setInputFiles(filePath);
+};
+
+export const getPageAsUser = async (browser: Browser, user: TestUser = user1): Promise<Page> => {
+    const userContext = await browser.newContext({ storageState: `playwright/.auth/user${users.indexOf(user)}.json` });
+    return await userContext.newPage();
 };
