@@ -28,8 +28,8 @@ You can use the playwright command line tools to run specific tests, or use othe
 
 If it is your first time using playwright, you might need to install some further dependencies so that it can do things such as launch browsers correctly. You can attempt to run the tests and playwright will suggest what you need to install in the output of failed tests, or you can install what you need in advance:
 
-- `npx playwright install`
-- `npx playwright install-deps`
+-   `npx playwright install`
+-   `npx playwright install-deps`
 
 ### Running via VSCode
 
@@ -64,7 +64,9 @@ staticPages.e2e.spec.ts
 
 ### Logged In
 
-These test areas of the site that do require authentication. They are split into respective parts of the site:
+These test areas of the site that do require authentication. Note that these tests have a setup dependency; this will run first, log in all the test users and store the browser state in a file that is reused by the LoggedIn tests. This saves us having to repeatedly log in in each separate test that needs it.
+
+They are split into respective parts of the site:
 
 ```
 browse.e2e.spec.ts
