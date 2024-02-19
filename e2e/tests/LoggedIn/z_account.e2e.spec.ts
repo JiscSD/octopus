@@ -7,21 +7,11 @@ import { PageModel } from '../PageModel';
  */
 
 test.describe('My account page', () => {
-    let context: BrowserContext;
     let page: Page;
 
     test.beforeAll(async ({ browser }) => {
-        context = await browser.newContext();
-        page = await context.newPage();
-        // navigate to homepage
-        await page.goto(Helpers.UI_BASE, { waitUntil: 'domcontentloaded' });
-
-        // login
-        await Helpers.login(page, browser);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
-
-        // go to '/account' page
-        await page.goto(`${Helpers.UI_BASE}/account`);
+        page = await Helpers.getPageAsUser(browser);
+        await page.goto(`/account`);
     });
 
     test.afterAll(async () => {

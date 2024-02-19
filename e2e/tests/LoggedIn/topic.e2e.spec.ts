@@ -7,7 +7,7 @@ test.describe.configure({ mode: 'serial' });
 // Recreate parameter controls the behaviour when a bookmark already exists.
 // If true, it will remove and recreate it; if false, it will leave it.
 const ensureBookmarkPresent = async (page: Page, recreate: boolean = false) => {
-    await page.goto(`${Helpers.UI_BASE}/topics/test-topic-1b-1`, {
+    await page.goto(`/topics/test-topic-1b-1`, {
         waitUntil: 'domcontentloaded'
     });
 
@@ -31,13 +31,7 @@ const ensureBookmarkPresent = async (page: Page, recreate: boolean = false) => {
 
 test.describe('Topic page', () => {
     test('Bookmark a topic', async ({ browser }) => {
-        // Start up test
-        const page = await browser.newPage();
-
-        // Login
-        await page.goto(Helpers.UI_BASE);
-        await Helpers.login(page, browser);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
+        const page = await Helpers.getPageAsUser(browser);
 
         // Add bookmark
         await ensureBookmarkPresent(page, true);
@@ -51,13 +45,7 @@ test.describe('Topic page', () => {
     });
 
     test('Remove a topic bookmark from topic page', async ({ browser }) => {
-        // Start up test
-        const page = await browser.newPage();
-
-        // Login
-        await page.goto(Helpers.UI_BASE);
-        await Helpers.login(page, browser);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
+        const page = await Helpers.getPageAsUser(browser);
 
         await ensureBookmarkPresent(page);
 
@@ -73,13 +61,7 @@ test.describe('Topic page', () => {
     });
 
     test('Remove a topic bookmark from My Bookmarks page', async ({ browser }) => {
-        // Start up test
-        const page = await browser.newPage();
-
-        // Login
-        await page.goto(Helpers.UI_BASE);
-        await Helpers.login(page, browser);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
+        const page = await Helpers.getPageAsUser(browser);
 
         await ensureBookmarkPresent(page);
 
