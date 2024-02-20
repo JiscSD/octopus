@@ -8,7 +8,7 @@ test.describe('Science Octopus profile', () => {
     test.beforeAll(async ({ browser }) => {
         page = await browser.newPage();
         // navigate to Science Octopus profile page
-        await page.goto(`${Helpers.UI_BASE}/authors/octopus`, {
+        await page.goto(`/authors/octopus`, {
             waitUntil: 'domcontentloaded'
         });
         await expect(page).toHaveTitle('Author: XXXX-XXXX-XXXX-XXXX - Octopus | Built for Researchers');

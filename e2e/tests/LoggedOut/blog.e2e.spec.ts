@@ -31,7 +31,7 @@ test.describe('Blog', () => {
 
     test('Blogs are paginated', async () => {
         // Navigate to blog page
-        await page.goto(`${Helpers.UI_BASE}/blog`);
+        await page.goto(`/blog`);
 
         // check page title and description
         await expect(page.locator(PageModel.blog.pageTitle)).toBeVisible();

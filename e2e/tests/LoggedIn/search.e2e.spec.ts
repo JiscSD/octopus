@@ -5,12 +5,8 @@ import { PageModel } from '../PageModel';
 test.describe('Search', () => {
     test('Full publication title search', async ({ browser }) => {
         // Start up test
-        const page = await browser.newPage();
-
-        // Login
-        await page.goto(Helpers.UI_BASE);
-        await Helpers.login(page, browser);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
+        const page = await Helpers.getPageAsUser(browser);
+        await page.goto('/');
 
         // search and check result
         await Helpers.search(page, 'How has life on earth evolved?', PageModel.search.publicationSearchResult);
@@ -25,7 +21,7 @@ test.describe('Search term is persisted in URL query string', () => {
     test('Partial search term search', async ({ browser }) => {
         // Start up test
         const page = await browser.newPage();
-        await page.goto(Helpers.UI_BASE);
+        await page.goto('/');
 
         // search and expect URL query string to contain search text
         await Helpers.search(page, PageModel.search.searchTerm);
@@ -43,7 +39,7 @@ test.describe('dateTo and dateFrom fields are persisted in URL query string', ()
     test('dateTo and dateFrom in query string', async ({ browser }) => {
         // Start up test
         const page = await browser.newPage();
-        await page.goto(Helpers.UI_BASE);
+        await page.goto('/');
         await page.locator(PageModel.header.searchButton).click();
 
         //select dateFrom & dateTo

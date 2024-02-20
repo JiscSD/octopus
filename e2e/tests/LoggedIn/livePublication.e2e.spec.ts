@@ -5,7 +5,7 @@ import { PageModel } from '../PageModel';
 test.describe.configure({ mode: 'serial' });
 
 export const testBookmarking = async (page: Page, id: string) => {
-    await page.goto(`${Helpers.UI_BASE}/publications/${id}`, {
+    await page.goto(`/publications/${id}`, {
         waitUntil: 'domcontentloaded'
     });
 
@@ -37,7 +37,7 @@ export const testBookmarking = async (page: Page, id: string) => {
 };
 
 export const testFlagging = async (page: Page, id: string, redFlagContent: string) => {
-    await page.goto(`${Helpers.UI_BASE}/publications/${id}`, {
+    await page.goto(`/publications/${id}`, {
         waitUntil: 'domcontentloaded'
     });
 
@@ -68,53 +68,27 @@ export const testFlagging = async (page: Page, id: string, redFlagContent: strin
 
 test.describe('Live Publication', () => {
     test('Live Publication page contents', async ({ browser }) => {
-        // Start up test
-        const page = await browser.newPage();
-
-        // Login
-        await page.goto(Helpers.UI_BASE);
-        await Helpers.login(page, browser);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
-
+        const page = await Helpers.getPageAsUser(browser);
         await Helpers.checkLivePublicationLayout(page, 'cl3fz14dr0001es6i5ji51rq4', true);
     });
 
     test('Bookmarking a publication', async ({ browser }) => {
-        // Start up test
-        const page = await browser.newPage();
-
-        // Login
-        await page.goto(Helpers.UI_BASE);
-        await Helpers.login(page, browser);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
-
+        const page = await Helpers.getPageAsUser(browser);
         await testBookmarking(page, 'cl3fz14dr0001es6i5ji51rq4');
     });
 
     test('Flagging a publication', async ({ browser }) => {
-        // Start up test
-        const page = await browser.newPage();
-
-        // Login
-        await page.goto(Helpers.UI_BASE);
-        await Helpers.login(page, browser);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
-
+        const page = await Helpers.getPageAsUser(browser);
         await testFlagging(page, 'cl3fz14dr0001es6i5ji51rq4', 'testing the flagging functionality');
     });
 
     test('Author profile', async ({ browser }) => {
-        // Start up test
-        const page = await browser.newPage();
-
-        // Login
-        await page.goto(Helpers.UI_BASE);
-        await Helpers.login(page, browser);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
-        await page.goto(`${Helpers.UI_BASE}/publications/cl3fz14dr0001es6i5ji51rq4`, { waitUntil: 'domcontentloaded' });
+        const page = await Helpers.getPageAsUser(browser);
+        await page.goto(`/publications/cl3fz14dr0001es6i5ji51rq4`, { waitUntil: 'domcontentloaded' });
 
         // Check and click author link
         await page.locator(PageModel.livePublication.authorLink).click();
+        await page.waitForResponse((response) => response.url().includes('/authors/') && response.ok());
 
         // Check name
         await expect(page.locator(PageModel.authorInfo.name)).toBeVisible();
@@ -131,11 +105,8 @@ test.describe('Live Publication', () => {
     });
 
     test('Download pdf/json', async ({ browser, headless }) => {
-        const page = await browser.newPage();
-        await page.goto(Helpers.UI_BASE);
-        await Helpers.login(page, browser);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
-        await page.goto(`${Helpers.UI_BASE}/publications/cl3fz14dr0001es6i5ji51rq4`, { waitUntil: 'domcontentloaded' });
+        const page = await Helpers.getPageAsUser(browser);
+        await page.goto(`/publications/cl3fz14dr0001es6i5ji51rq4`, { waitUntil: 'domcontentloaded' });
 
         // Behaviour is different depending on whether test is running headless or not.
         if (headless) {
