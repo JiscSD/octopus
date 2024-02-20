@@ -18,15 +18,19 @@ import * as api from '@/api';
 // sets time to start or end of day as appropriate,
 // and returns it as an ISO string for the API.
 const formatDateForAPI = (rawDate: string, type: 'to' | 'from'): string | null => {
-    const jsDate = new Date(rawDate);
-    if (jsDate.toString() === 'Invalid Date') {
+    const date = new Date(rawDate);
+
+    if (isNaN(date.getTime())) {
         return null;
     }
-    const isoTime = new Date(rawDate).toISOString();
-    const luxonTime = DateTime.fromISO(isoTime);
-    // Pin time to start of day if "from", or end of day if "to", so that date ranges are inclusive.
-    const pinnedTime = type === 'from' ? luxonTime.startOf('day') : luxonTime.endOf('day');
-    return pinnedTime.toUTC().toISO();
+
+    if (type === 'from') {
+        date.setHours(0, 0, 0);
+    } else {
+        date.setHours(23, 59, 59);
+    }
+
+    return date.toISOString();
 };
 
 /**
