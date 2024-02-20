@@ -1,12 +1,13 @@
 import * as client from 'lib/client';
 import * as publicationVersionService from 'publicationVersion/service';
 
-export const create = async (fromPublicationId: string, toPublicationId: string, toVersionId: string) => {
+export const create = async (fromPublicationId: string, toPublicationId: string) => {
+    const latestLiveVersionTo = await publicationVersionService.get(toPublicationId, 'latestLive');
     const link = await client.prisma.links.create({
         data: {
             publicationFromId: fromPublicationId,
             publicationToId: toPublicationId,
-            versionToId: toVersionId
+            versionToId: latestLiveVersionTo?.id
         }
     });
 

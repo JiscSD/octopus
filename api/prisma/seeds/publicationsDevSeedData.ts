@@ -54,12 +54,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-1-problem-2-draft',
         doi: '10.82259/publication-user-1-problem-2-draft',
         type: 'PROBLEM',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-problem-1-live',
-                versionToId: 'publication-user-1-problem-1-live-v1'
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-problem-1-live' } },
         versions: {
             create: {
                 id: 'publication-user-1-problem-2-draft-v1',
@@ -96,13 +91,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-1-hypothesis-1-live',
         doi: '10.82259/publication-user-1-hypothesis-1-live',
         type: 'HYPOTHESIS',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-problem-1-live',
-                versionToId: 'publication-user-1-problem-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-problem-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-1-hypothesis-1-live-v1',
@@ -133,12 +122,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-1-hypothesis-2-draft',
         doi: '10.82259/publication-user-1-hypothesis-2-draft',
         type: 'HYPOTHESIS',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-problem-1-live',
-                versionToId: 'publication-user-1-problem-1-live-v1'
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-problem-1-live' } },
         versions: {
             create: {
                 id: 'publication-user-1-hypothesis-2-draft-v1',
@@ -173,13 +157,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-1-protocol-1-live',
         doi: '10.82259/publication-user-1-protocol-1-live',
         type: 'PROTOCOL',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-hypothesis-1-live',
-                versionToId: 'publication-user-1-hypothesis-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-hypothesis-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-1-protocol-1-live-v1',
@@ -224,13 +202,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-1-data-1-live',
         doi: '10.82259/publication-user-1-data-1-live',
         type: 'DATA',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-protocol-1-live',
-                versionToId: 'publication-user-1-protocol-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-protocol-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-1-data-1-live-v1',
@@ -272,13 +244,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-1-analysis-1-live',
         doi: '10.82259/publication-user-1-analysis-1-live',
         type: 'ANALYSIS',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-data-1-live',
-                versionToId: 'publication-user-1-data-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-data-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-1-analysis-1-live-v1',
@@ -320,13 +286,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-1-interpretation-1-live',
         doi: '10.82259/publication-user-1-interpretation-1-live',
         type: 'INTERPRETATION',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-analysis-1-live',
-                versionToId: 'publication-user-1-analysis-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-analysis-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-1-interpretation-1-live-v1',
@@ -371,13 +331,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-1-real-world-application-1-live',
         doi: '10.82259/publication-user-1-real-world-application-1-live',
         type: 'REAL_WORLD_APPLICATION',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-interpretation-1-live',
-                versionToId: 'publication-user-1-interpretation-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-interpretation-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-1-real-world-application-1-live-v1',
@@ -420,13 +374,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-2-problem-1-live',
         doi: '10.82259/publication-user-2-problem-1-live',
         type: 'PROBLEM',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-problem-1-live',
-                versionToId: 'publication-user-1-problem-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-problem-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-2-problem-1-live-v1',
@@ -468,13 +416,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-2-hypothesis-1-live',
         doi: '10.82259/publication-user-2-hypothesis-1-live',
         type: 'HYPOTHESIS',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-problem-1-live',
-                versionToId: 'publication-user-2-problem-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-problem-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-2-hypothesis-1-live-v1',
@@ -499,12 +441,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-2-hypothesis-2-draft',
         doi: '10.82259/publication-user-2-hypothesis-2-draft',
         type: 'HYPOTHESIS',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-problem-1-live',
-                versionToId: 'publication-user-2-problem-1-live-v1'
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-problem-1-live' } },
         versions: {
             create: {
                 id: 'publication-user-2-hypothesis-2-draft-v1',
@@ -520,13 +457,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-2-protocol-1-live',
         doi: '10.82259/publication-user-2-protocol-1-live',
         type: 'PROTOCOL',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-hypothesis-1-live',
-                versionToId: 'publication-user-2-hypothesis-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-hypothesis-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-2-protocol-1-live-v1',
@@ -553,12 +484,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-2-protocol-2-draft',
         doi: '10.82259/publication-user-2-protocol-2-draft',
         type: 'PROTOCOL',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-hypothesis-1-live',
-                versionToId: 'publication-user-2-hypothesis-1-live-v1'
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-hypothesis-1-live' } },
         versions: {
             create: {
                 id: 'publication-user-2-protocol-2-draft-v1',
@@ -574,13 +500,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-2-data-1-live',
         doi: '10.82259/publication-user-2-data-1-live',
         type: 'DATA',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-protocol-1-live',
-                versionToId: 'publication-user-2-protocol-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-protocol-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-2-data-1-live-v1',
@@ -605,12 +525,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-2-data-2-draft',
         doi: '10.82259/publication-user-2-data-2-draft',
         type: 'DATA',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-protocol-1-live',
-                versionToId: 'publication-user-2-protocol-1-live-v1'
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-protocol-1-live' } },
         versions: {
             create: {
                 id: 'publication-user-2-data-2-draft-v1',
@@ -627,13 +542,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-2-analysis-1-live',
         doi: '10.82259/publication-user-2-analysis-1-live',
         type: 'ANALYSIS',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-data-1-live',
-                versionToId: 'publication-user-2-data-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-data-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-2-analysis-1-live-v1',
@@ -661,12 +570,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-2-analysis-2-draft',
         doi: '10.82259/publication-user-2-analysis-2-draft',
         type: 'ANALYSIS',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-data-1-live',
-                versionToId: 'publication-user-2-data-1-live-v1'
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-data-1-live' } },
         versions: {
             create: {
                 id: 'publication-user-2-analysis-2-draft-v1',
@@ -682,13 +586,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-2-interpretation-1-live',
         doi: '10.82259/publication-user-2-interpretation-1-live',
         type: 'INTERPRETATION',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-analysis-1-live',
-                versionToId: 'publication-user-2-analysis-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-analysis-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-2-interpretation-1-live-v1',
@@ -713,12 +611,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-2-interpretation-2-draft',
         doi: '10.82259/publication-user-2-interpretation-2-draft',
         type: 'INTERPRETATION',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-analysis-1-live',
-                versionToId: 'publication-user-2-analysis-1-live-v1'
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-analysis-1-live' } },
         versions: {
             create: {
                 id: 'publication-user-2-interpretation-2-draft-v1',
@@ -734,13 +627,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-2-real-world-application-1-live',
         doi: '10.82259/publication-user-2-real-world-application-1-live',
         type: 'REAL_WORLD_APPLICATION',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-interpretation-1-live',
-                versionToId: 'publication-user-2-interpretation-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-interpretation-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-2-real-world-application-1-live-v1',
@@ -765,12 +652,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-2-real-world-application-2-draft',
         doi: '10.82259/publication-user-2-real-world-application-2-draft',
         type: 'REAL_WORLD_APPLICATION',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-interpretation-1-live',
-                versionToId: 'publication-user-2-interpretation-1-live-v1'
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-interpretation-1-live' } },
         versions: {
             create: {
                 id: 'publication-user-2-real-world-application-2-draft-v1',
@@ -786,13 +668,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-4-protocol-1-live',
         doi: '10.82259/publication-user-4-protocol-1-live',
         type: 'PROTOCOL',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-hypothesis-1-live',
-                versionToId: 'publication-user-1-hypothesis-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-hypothesis-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-4-protocol-1-live-v1',
@@ -822,13 +698,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-4-data-1-live',
         doi: '10.82259/publication-user-4-data-1-live',
         type: 'DATA',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-4-protocol-1-live',
-                versionToId: 'publication-user-4-protocol-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-4-protocol-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-4-data-1-live-v1',
@@ -855,13 +725,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-4-real-world-application-1-live',
         doi: '10.82259/publication-user-4-real-world-application-1-live',
         type: 'REAL_WORLD_APPLICATION',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-interpretation-1-live',
-                versionToId: 'publication-user-1-interpretation-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-interpretation-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-4-real-world-application-1-live-v1',
@@ -889,16 +753,8 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    {
-                        publicationToId: 'publication-user-1-protocol-1-live',
-                        versionToId: 'publication-user-1-protocol-1-live-v1',
-                        draft: false
-                    },
-                    {
-                        publicationToId: 'publication-user-2-protocol-1-live',
-                        versionToId: 'publication-user-2-protocol-1-live-v1',
-                        draft: false
-                    }
+                    { publicationToId: 'publication-user-1-protocol-1-live', draft: false },
+                    { publicationToId: 'publication-user-2-protocol-1-live', draft: false }
                 ]
             }
         },
@@ -931,21 +787,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    {
-                        publicationToId: 'publication-user-5-data-1-live',
-                        versionToId: 'publication-user-5-data-1-live-v1',
-                        draft: false
-                    },
-                    {
-                        publicationToId: 'publication-user-1-data-1-live',
-                        versionToId: 'publication-user-1-data-1-live-v1',
-                        draft: false
-                    },
-                    {
-                        publicationToId: 'publication-user-2-data-1-live',
-                        versionToId: 'publication-user-2-data-1-live-v1',
-                        draft: false
-                    }
+                    { publicationToId: 'publication-user-5-data-1-live', draft: false },
+                    { publicationToId: 'publication-user-1-data-1-live', draft: false },
+                    { publicationToId: 'publication-user-2-data-1-live', draft: false }
                 ]
             }
         },
@@ -975,13 +819,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-6-hypothesis-1-live',
         doi: '10.82259/publication-user-6-hypothesis-1-live',
         type: 'HYPOTHESIS',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-problem-1-live',
-                versionToId: 'publication-user-1-problem-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-problem-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-6-hypothesis-1-live-v1',
@@ -1008,12 +846,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-6-hypothesis-2-draft',
         doi: '10.82259/publication-user-6-hypothesis-2-draft',
         type: 'HYPOTHESIS',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-problem-1-live',
-                versionToId: 'publication-user-1-problem-1-live-v1'
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-problem-1-live' } },
         versions: {
             create: {
                 id: 'publication-user-6-hypothesis-2-draft-v1',
@@ -1036,36 +869,12 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             createMany: {
                 data: [
-                    {
-                        publicationToId: 'publication-user-1-problem-1-live',
-                        versionToId: 'publication-user-1-problem-1-live-v1',
-                        draft: false
-                    },
-                    {
-                        publicationToId: 'publication-user-1-hypothesis-1-live',
-                        versionToId: 'publication-user-1-hypothesis-1-live-v1',
-                        draft: false
-                    },
-                    {
-                        publicationToId: 'publication-user-1-protocol-1-live',
-                        versionToId: 'publication-user-1-protocol-1-live-v1',
-                        draft: false
-                    },
-                    {
-                        publicationToId: 'publication-user-1-data-1-live',
-                        versionToId: 'publication-user-1-data-1-live-v1',
-                        draft: false
-                    },
-                    {
-                        publicationToId: 'publication-user-1-analysis-1-live',
-                        versionToId: 'publication-user-1-analysis-1-live-v1',
-                        draft: false
-                    },
-                    {
-                        publicationToId: 'publication-user-1-interpretation-1-live',
-                        versionToId: 'publication-user-1-interpretation-1-live-v1',
-                        draft: false
-                    }
+                    { publicationToId: 'publication-user-1-problem-1-live', draft: false },
+                    { publicationToId: 'publication-user-1-hypothesis-1-live', draft: false },
+                    { publicationToId: 'publication-user-1-protocol-1-live', draft: false },
+                    { publicationToId: 'publication-user-1-data-1-live', draft: false },
+                    { publicationToId: 'publication-user-1-analysis-1-live', draft: false },
+                    { publicationToId: 'publication-user-1-interpretation-1-live', draft: false }
                 ]
             }
         },
@@ -1097,13 +906,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-7-peer-review-1-live',
         doi: '10.82259/publication-user-7-peer-review-1-live',
         type: 'PEER_REVIEW',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-analysis-1-live',
-                versionToId: 'publication-user-2-analysis-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-analysis-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-7-peer-review-1-live-v1',
@@ -1128,12 +931,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-7-peer-review-2-draft',
         doi: '10.82259/publication-user-7-peer-review-2-draft',
         type: 'PEER_REVIEW',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-analysis-1-live',
-                versionToId: 'publication-user-2-analysis-1-live-v1'
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-analysis-1-live' } },
         versions: {
             create: {
                 id: 'publication-user-7-peer-review-2-draft-v1',
@@ -1152,13 +950,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-7-peer-review-3-live',
         doi: '10.82259/publication-user-7-peer-review-3-live',
         type: 'PEER_REVIEW',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-5-analysis-1-live',
-                versionToId: 'publication-user-5-analysis-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-5-analysis-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-7-peer-review-3-live-v1',
@@ -1185,13 +977,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-3-peer-review-1-live',
         doi: '10.82259/publication-user-3-peer-review-1-live',
         type: 'PEER_REVIEW',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-real-world-application-1-live',
-                versionToId: 'publication-user-2-real-world-application-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-real-world-application-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-3-peer-review-1-live-v1',
@@ -1216,13 +1002,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-3-peer-review-2-live',
         doi: '10.82259/publication-user-3-peer-review-2-live',
         type: 'PEER_REVIEW',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-hypothesis-1-live',
-                versionToId: 'publication-user-1-hypothesis-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-hypothesis-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-3-peer-review-2-live-v1',
@@ -1247,13 +1027,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-3-peer-review-3-live',
         doi: '10.82259/publication-user-3-peer-review-3-live',
         type: 'PEER_REVIEW',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-data-1-live',
-                versionToId: 'publication-user-1-data-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-data-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-3-peer-review-3-live-v1',
@@ -1277,13 +1051,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-3-peer-review-4-live',
         doi: '10.82259/publication-user-3-peer-review-4-live',
         type: 'PEER_REVIEW',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-interpretation-1-live',
-                versionToId: 'publication-user-1-interpretation-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-interpretation-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-3-peer-review-4-live-v1',
@@ -1308,13 +1076,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-3-peer-review-5-live',
         doi: '10.82259/publication-user-3-peer-review-5-live',
         type: 'PEER_REVIEW',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-hypothesis-1-live',
-                versionToId: 'publication-user-2-hypothesis-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-hypothesis-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-3-peer-review-5-live-v1',
@@ -1339,13 +1101,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-3-peer-review-6-live',
         doi: '10.82259/publication-user-3-peer-review-6-live',
         type: 'PEER_REVIEW',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-protocol-1-live',
-                versionToId: 'publication-user-2-protocol-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-protocol-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-3-peer-review-6-live-v1',
@@ -1370,13 +1126,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-3-peer-review-7-live',
         doi: '10.82259/publication-user-3-peer-review-7-live',
         type: 'PEER_REVIEW',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-analysis-1-live',
-                versionToId: 'publication-user-2-analysis-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-analysis-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-3-peer-review-7-live-v1',
@@ -1401,13 +1151,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-3-peer-review-8-live',
         doi: '10.82259/publication-user-3-peer-review-8-live',
         type: 'PEER_REVIEW',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-4-protocol-1-live',
-                versionToId: 'publication-user-4-protocol-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-4-protocol-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-3-peer-review-8-live-v1',
@@ -1431,13 +1175,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-3-peer-review-9-live',
         doi: '10.82259/publication-user-3-peer-review-9-live',
         type: 'PEER_REVIEW',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-4-real-world-application-1-live',
-                versionToId: 'publication-user-4-real-world-application-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-4-real-world-application-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-3-peer-review-9-live-v1',
@@ -1461,12 +1199,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-3-peer-review-10-draft',
         doi: '10.82259/publication-user-3-peer-review-10-draft',
         type: 'PEER_REVIEW',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-2-interpretation-1-live',
-                versionToId: 'publication-user-2-interpretation-1-live-v1'
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-2-interpretation-1-live' } },
         versions: {
             create: {
                 id: 'publication-user-3-peer-review-10-draft-v1',
@@ -1482,13 +1215,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-user-3-peer-review-11-live',
         doi: '10.82259/publication-user-3-peer-review-11-live',
         type: 'PEER_REVIEW',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-user-1-problem-1-live',
-                versionToId: 'publication-user-1-problem-1-live-v1',
-                draft: false
-            }
-        },
+        linkedTo: { create: { publicationToId: 'publication-user-1-problem-1-live', draft: false } },
         versions: {
             create: {
                 id: 'publication-user-3-peer-review-11-live-v1',
