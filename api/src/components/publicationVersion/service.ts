@@ -352,43 +352,36 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum) 
         }
     });
 
-    const publication = await client.prisma.publication.findUnique({
-        where: { id: updatedVersion.versionOf },
-        select: { type: true }
-    });
-
     if (status === 'LIVE') {
-        if (publication?.type === 'PEER_REVIEW') {
-            // Check if any links created from this version have had the TO publication get a new live version since link creation.
-            // If so, alter the link to point to this new latest live version.
-            const outdatedDraftLinks = await client.prisma.links.findMany({
+        // Check if any links created from this version have had the TO publication get a new live version since link creation.
+        // If so, alter the link to point to this new latest live version.
+        const outdatedDraftLinks = await client.prisma.links.findMany({
+            where: {
+                publicationFromId: updatedVersion.versionOf,
+                draft: true,
+                versionTo: {
+                    isLatestLiveVersion: false
+                }
+            }
+        });
+
+        for (const outdatedDraftLink of outdatedDraftLinks) {
+            const latestVersionTo = await client.prisma.publicationVersion.findFirst({
                 where: {
-                    publicationFromId: updatedVersion.versionOf,
-                    draft: true,
-                    versionTo: {
-                        isLatestLiveVersion: false
-                    }
+                    versionOf: outdatedDraftLink.publicationToId,
+                    isLatestLiveVersion: true
                 }
             });
 
-            for (const outdatedDraftLink of outdatedDraftLinks) {
-                const latestVersionTo = await client.prisma.publicationVersion.findFirst({
+            if (latestVersionTo) {
+                await client.prisma.links.update({
                     where: {
-                        versionOf: outdatedDraftLink.publicationToId,
-                        isLatestLiveVersion: true
+                        id: outdatedDraftLink.id
+                    },
+                    data: {
+                        versionToId: latestVersionTo.id
                     }
                 });
-
-                if (latestVersionTo) {
-                    await client.prisma.links.update({
-                        where: {
-                            id: outdatedDraftLink.id
-                        },
-                        data: {
-                            versionToId: latestVersionTo.id
-                        }
-                    });
-                }
             }
         }
 

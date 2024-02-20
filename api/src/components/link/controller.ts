@@ -47,9 +47,7 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
         }
 
         // Check if publication to be linked to has a live version
-        const toLatestLiveVersion = toPublication.versions.find((version) => version.isLatestLiveVersion);
-
-        if (!toLatestLiveVersion) {
+        if (!toPublication.versions.some((version) => version.isLatestLiveVersion)) {
             return response.json(403, {
                 message: `Publication with id ${event.body.to} is not LIVE.`
             });
@@ -73,7 +71,7 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
             return response.json(404, { message: 'Link already exists.' });
         }
 
-        const link = await linkService.create(event.body.from, event.body.to, toLatestLiveVersion.id);
+        const link = await linkService.create(event.body.from, event.body.to);
 
         return response.json(200, link);
     } catch (err) {
