@@ -11,6 +11,8 @@
   - Added the required column `publicationToId` to the `Links` table without a default value. This is not possible if the table is not empty.
 
 */
+BEGIN;
+
 -- DropForeignKey
 ALTER TABLE "Links" DROP CONSTRAINT "Links_publicationFrom_fkey";
 
@@ -36,3 +38,5 @@ ALTER TABLE "Links" ADD CONSTRAINT "Links_publicationToId_fkey" FOREIGN KEY ("pu
 
 -- AddForeignKey
 ALTER TABLE "Links" ADD CONSTRAINT "Links_versionToId_fkey" FOREIGN KEY ("versionToId") REFERENCES "PublicationVersion"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+COMMIT;
