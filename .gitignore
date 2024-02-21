@@ -19,3 +19,4 @@ coverage
 # VSC settings
 .vscode
 .env
+.code-workspace
