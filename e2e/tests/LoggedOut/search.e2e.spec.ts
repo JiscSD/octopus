@@ -6,7 +6,7 @@ test.describe('Publication search', () => {
     test('Full publication title search', async ({ browser }) => {
         // Start up test
         const page = await browser.newPage();
-        await page.goto(Helpers.UI_BASE);
+        await page.goto('/');
 
         // search and check result
         await Helpers.search(page, 'How has life on earth evolved?', PageModel.search.publicationSearchResult);
@@ -19,7 +19,7 @@ test.describe('Publication search', () => {
     test('Partial publication title search', async ({ browser }) => {
         // Start up test
         const page = await browser.newPage();
-        await page.goto(Helpers.UI_BASE);
+        await page.goto('/');
 
         // search and check result
         await Helpers.search(page, 'life evolved', PageModel.search.publicationSearchResult);
@@ -32,7 +32,7 @@ test.describe('Publication search', () => {
     test('No results search checking error', async ({ browser }) => {
         // Start up test
         const page = await browser.newPage();
-        await page.goto(Helpers.UI_BASE);
+        await page.goto('/');
 
         // search and check error
         await Helpers.search(page, 'thisShouldProduceNoResults', PageModel.search.noPublicationsFound);
@@ -42,7 +42,7 @@ test.describe('Publication search', () => {
         // test TODO
         // Start up test
         const page = await browser.newPage();
-        await page.goto(Helpers.UI_BASE);
+        await page.goto('/');
 
         // Navigate to search page
         await page.locator(PageModel.header.searchButton).click();
@@ -62,7 +62,7 @@ test.describe('Topics search', () => {
         const context = await browser.newContext();
         const page = await context.newPage();
 
-        await page.goto(`${Helpers.UI_BASE}/search/topics`);
+        await page.goto(`/search/topics`);
         await page.waitForResponse((response) => response.url().includes('/topics') && response.ok());
         await expect(page.locator('#pagination-info')).toContainText(/Showing \d+ - \d+ of \d+/);
         await expect(page.getByText('Previous')).toBeVisible();
@@ -74,7 +74,7 @@ test.describe('Topics search', () => {
     test('Can search for topics using the quick search input field', async ({ browser }) => {
         const context = await browser.newContext();
         const page = await context.newPage();
-        await page.goto(`${Helpers.UI_BASE}/search/topics`);
+        await page.goto(`/search/topics`);
 
         await search(page, 'no-results');
 
@@ -96,7 +96,7 @@ test.describe('Topics search', () => {
         const page = await context.newPage();
         const searchTerm = 'test';
 
-        await page.goto(`${Helpers.UI_BASE}/search/topics?query=${searchTerm}`);
+        await page.goto(`/search/topics?query=${searchTerm}`);
         await page.waitForResponse((response) => response.url().includes('/topics') && response.ok());
 
         // quick search input value should equal 'test'

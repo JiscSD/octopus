@@ -1,11 +1,6 @@
-import chromium from '@sparticuz/chromium';
-import * as s3 from 'lib/s3';
 import * as I from 'interface';
 import * as client from 'lib/client';
-import * as referenceService from 'reference/service';
 import * as Helpers from 'lib/helpers';
-import { Browser, launch } from 'puppeteer-core';
-import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { Prisma } from '@prisma/client';
 
 export const isIdInUse = async (id: string) => {
@@ -18,8 +13,8 @@ export const isIdInUse = async (id: string) => {
     return Boolean(publication);
 };
 
-export const get = async (id: string) => {
-    return await client.prisma.publication.findUnique({
+export const get = (id: string) =>
+    client.prisma.publication.findUnique({
         where: {
             id
         },
@@ -185,10 +180,9 @@ export const get = async (id: string) => {
             }
         }
     });
-};
 
-export const getSeedDataPublications = async (title: string) => {
-    const publications = await client.prisma.publication.findMany({
+export const getSeedDataPublications = (title: string) =>
+    client.prisma.publication.findMany({
         where: {
             versions: {
                 some: {
@@ -217,33 +211,24 @@ export const getSeedDataPublications = async (title: string) => {
         }
     });
 
-    return publications;
-};
-
-export const deletePublication = async (id: string) => {
-    const deletedPublication = await client.prisma.publication.delete({
+export const deletePublication = (id: string) =>
+    client.prisma.publication.delete({
         where: {
             id
         }
     });
 
-    return deletedPublication;
-};
-
-export const createOpenSearchRecord = async (data: I.OpenSearchPublication) => {
-    const publication = await client.search.create({
+export const createOpenSearchRecord = (data: I.OpenSearchPublication) =>
+    client.search.create({
         index: 'publications',
         id: data.id,
         body: data
     });
 
-    return publication;
-};
-
 export const deleteOpenSearchRecord = (publicationId: string) =>
     client.search.delete({ index: 'publications', id: publicationId });
 
-export const getOpenSearchPublications = async (filters: I.OpenSearchPublicationFilters) => {
+export const getOpenSearchPublications = (filters: I.OpenSearchPublicationFilters) => {
     const orderBy = filters.orderBy
         ? {
               [filters.orderBy]: {
@@ -323,13 +308,11 @@ export const getOpenSearchPublications = async (filters: I.OpenSearchPublication
         };
     }
 
-    const publications = await client.search.search(query);
-
-    return publications;
+    return client.search.search(query);
 };
 
-export const create = async (e: I.CreatePublicationRequestBody, user: I.User, doiResponse: I.DOIResponse) => {
-    const publication = await client.prisma.publication.create({
+export const create = (e: I.CreatePublicationRequestBody, user: I.User, doiResponse: I.DOIResponse) =>
+    client.prisma.publication.create({
         data: {
             id: doiResponse.data.attributes.suffix,
             doi: doiResponse.data.attributes.doi,
@@ -394,11 +377,8 @@ export const create = async (e: I.CreatePublicationRequestBody, user: I.User, do
         }
     });
 
-    return publication;
-};
-
-export const doesDuplicateFlagExist = async (publication, category, user) => {
-    const flag = await client.prisma.publicationFlags.findFirst({
+export const doesDuplicateFlagExist = (publication, category, user) =>
+    client.prisma.publicationFlags.findFirst({
         where: {
             publicationId: publication,
             createdBy: user,
@@ -406,9 +386,6 @@ export const doesDuplicateFlagExist = async (publication, category, user) => {
             resolved: false
         }
     });
-
-    return flag;
-};
 
 const sortPublicationsByPublicationDate = (publications: I.LinkedPublication[]) => {
     return publications.sort((a, b) => new Date(b.publishedDate).valueOf() - new Date(a.publishedDate).valueOf());
@@ -1015,75 +992,4 @@ export const getDirectLinksForPublication = async (
         linkedTo,
         linkedFrom
     };
-};
-
-/**
- *
- * @TODO - move the PDF service to the publication versions when we start implementing creation of new versions
- */
-
-// AWS Lambda + Puppeteer walkthrough -  https://medium.com/@keshavkumaresan/generating-pdf-documents-within-aws-lambda-with-nodejs-and-puppeteer-46ac7ca299bf
-export const generatePDF = async (publicationVersion: I.PublicationVersion): Promise<string | null> => {
-    const references = await referenceService.getAllByPublicationVersion(publicationVersion.id);
-    const { linkedTo } = await getDirectLinksForPublication(publicationVersion.versionOf);
-    const htmlTemplate = Helpers.createPublicationHTMLTemplate(publicationVersion, references, linkedTo);
-    const isLocal = process.env.STAGE === 'local';
-
-    let browser: Browser | null = null;
-
-    try {
-        chromium.setGraphicsMode = false;
-
-        browser = await launch({
-            args: [...chromium.args, '--font-render-hinting=none'],
-            executablePath: isLocal ? (await import('puppeteer')).executablePath() : await chromium.executablePath(),
-            headless: chromium.headless
-        });
-
-        console.log('Browser opened!');
-
-        const page = await browser.newPage();
-        await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 2 });
-        await page.setContent(htmlTemplate, {
-            waitUntil: htmlTemplate.includes('<img') ? ['load', 'networkidle0'] : undefined
-        });
-
-        const pdf = await page.pdf({
-            format: 'a4',
-            preferCSSPageSize: true,
-            printBackground: true,
-            displayHeaderFooter: true,
-            headerTemplate: Helpers.createPublicationHeaderTemplate(publicationVersion),
-            footerTemplate: Helpers.createPublicationFooterTemplate(publicationVersion)
-        });
-
-        // upload pdf to S3
-        await s3.client.send(
-            new PutObjectCommand({
-                Bucket: s3.buckets.pdfs,
-                Key: `${publicationVersion.versionOf}.pdf`,
-                ContentType: 'application/pdf',
-                Body: pdf
-            })
-        );
-
-        console.log('Successfully generated PDF for publicationId: ', publicationVersion.versionOf);
-
-        return `${s3.endpoint}/${s3.buckets.pdfs}/${publicationVersion.versionOf}.pdf`;
-    } catch (err) {
-        console.error(err);
-
-        return null;
-    } finally {
-        if (browser) {
-            // close all pages
-            for (const page of await browser.pages()) {
-                await page.close();
-            }
-
-            // close browser
-            await browser.close();
-            console.log('Browser closed!');
-        }
-    }
 };

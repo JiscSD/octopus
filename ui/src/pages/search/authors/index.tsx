@@ -87,7 +87,7 @@ type Props = {
 const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
     // Query params
-    const [query] = React.useState(props.query ? props.query : '');
+    const { query = '' } = router.query as Interfaces.AuthorSearchQuery;
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
 

@@ -212,7 +212,7 @@ const mapPublicationVersionToMetadata = (publicationVersion, pdfUrl) => {
         title: publicationVersion.title,
         abstract: publicationVersion.description,
         type: publicationVersion.publication.type,
-        version: "VOR",
+        version: "SMUR",
         language: [publicationVersion.language],
         identifier: [
           {
@@ -235,12 +235,15 @@ const mapPublicationVersionToMetadata = (publicationVersion, pdfUrl) => {
       publication_status: "Published",
       funding: publicationVersion.funders?.map((funder) => ({
         name: funder.name,
-        identifier: [
-          {
-            type: "ror",
-            id: funder.ror,
-          },
-        ],
+        ...(funder.ror && {
+          identifier: [
+            {
+              type: "ror",
+              id: funder.ror,
+            },
+          ],
+        }),
+        ...(funder.grantId && { grant_numbers: [funder.grantId] }),
       })),
       license_ref: [
         {

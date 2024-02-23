@@ -167,8 +167,8 @@ export const getPDF = async (
         }
     }
 
-    if (!pdfUrl) {
-        // generate new PDF
+    if (!pdfUrl || generateNewPDF) {
+        // Generate new PDF (overwrites if there is an existing one).
         try {
             // We know the publication has at least one LIVE version.
             const latestPublishedVersion = await publicationVersionService.get(publication.id, 'latestLive');
@@ -177,7 +177,7 @@ export const getPDF = async (
                 throw Error('Unable to get latest published version from supplied object');
             }
 
-            const newPDFUrl = await publicationService.generatePDF(latestPublishedVersion);
+            const newPDFUrl = await publicationVersionService.generatePDF(latestPublishedVersion);
 
             if (!newPDFUrl) {
                 throw Error('Failed to generate PDF');

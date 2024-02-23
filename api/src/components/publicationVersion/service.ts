@@ -1,10 +1,14 @@
+import chromium from '@sparticuz/chromium';
 import { Prisma } from '@prisma/client';
 import { createId } from '@paralleldrive/cuid2';
+import { Browser, launch } from 'puppeteer-core';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
 import * as I from 'interface';
 import * as client from 'lib/client';
+import * as Helpers from 'lib/helpers';
+import * as s3 from 'lib/s3';
 import * as publicationService from 'publication/service';
 import * as referenceService from 'reference/service';
-import * as Helpers from 'lib/helpers';
 
 export const getById = (id: string) =>
     client.prisma.publicationVersion.findFirst({
@@ -757,3 +761,69 @@ export const transferOwnership = (publicationVersionId: string, requesterId: str
             }
         }
     });
+
+// AWS Lambda + Puppeteer walkthrough -  https://medium.com/@keshavkumaresan/generating-pdf-documents-within-aws-lambda-with-nodejs-and-puppeteer-46ac7ca299bf
+export const generatePDF = async (publicationVersion: I.PublicationVersion): Promise<string | null> => {
+    const references = await referenceService.getAllByPublicationVersion(publicationVersion.id);
+    const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf);
+    const htmlTemplate = Helpers.createPublicationHTMLTemplate(publicationVersion, references, linkedTo);
+    const isLocal = process.env.STAGE === 'local';
+
+    let browser: Browser | null = null;
+
+    try {
+        chromium.setGraphicsMode = false;
+
+        browser = await launch({
+            args: [...chromium.args, '--font-render-hinting=none'],
+            executablePath: isLocal ? (await import('puppeteer')).executablePath() : await chromium.executablePath(),
+            headless: chromium.headless
+        });
+
+        console.log('Browser opened!');
+
+        const page = await browser.newPage();
+        await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 2 });
+        await page.setContent(htmlTemplate, {
+            waitUntil: htmlTemplate.includes('<img') ? ['load', 'networkidle0'] : undefined
+        });
+
+        const pdf = await page.pdf({
+            format: 'a4',
+            preferCSSPageSize: true,
+            printBackground: true,
+            displayHeaderFooter: true,
+            headerTemplate: Helpers.createPublicationHeaderTemplate(publicationVersion),
+            footerTemplate: Helpers.createPublicationFooterTemplate(publicationVersion)
+        });
+
+        // upload pdf to S3
+        await s3.client.send(
+            new PutObjectCommand({
+                Bucket: s3.buckets.pdfs,
+                Key: `${publicationVersion.versionOf}.pdf`,
+                ContentType: 'application/pdf',
+                Body: pdf
+            })
+        );
+
+        console.log('Successfully generated PDF for publicationId: ', publicationVersion.versionOf);
+
+        return `${s3.endpoint}/${s3.buckets.pdfs}/${publicationVersion.versionOf}.pdf`;
+    } catch (err) {
+        console.error(err);
+
+        return null;
+    } finally {
+        if (browser) {
+            // close all pages
+            for (const page of await browser.pages()) {
+                await page.close();
+            }
+
+            // close browser
+            await browser.close();
+            console.log('Browser closed!');
+        }
+    }
+};
