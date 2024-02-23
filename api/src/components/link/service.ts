@@ -1,11 +1,12 @@
 import * as client from 'lib/client';
 import * as publicationVersionService from 'publicationVersion/service';
 
-export const create = async (fromPublicationId: string, toPublicationId: string) => {
+export const create = async (fromPublicationId: string, toPublicationId: string, toVersionId: string) => {
     const link = await client.prisma.links.create({
         data: {
-            publicationFrom: fromPublicationId,
-            publicationTo: toPublicationId
+            publicationFromId: fromPublicationId,
+            publicationToId: toPublicationId,
+            versionToId: toVersionId
         }
     });
 
@@ -20,11 +21,11 @@ export const create = async (fromPublicationId: string, toPublicationId: string)
     return link;
 };
 
-export const doesLinkExist = (fromPublicationId: string, toPublicationId: string) =>
+export const doesLinkExist = (publicationFromId: string, publicationToId: string) =>
     client.prisma.links.findFirst({
         where: {
-            publicationFrom: fromPublicationId,
-            publicationTo: toPublicationId
+            publicationFromId,
+            publicationToId
         }
     });
 
@@ -34,11 +35,7 @@ export const deleteLink = async (id: string) => {
             id
         },
         select: {
-            publicationFromRef: {
-                select: {
-                    id: true
-                }
-            }
+            publicationFromId: true
         }
     });
     const deletedLink = await client.prisma.links.delete({
@@ -48,7 +45,7 @@ export const deleteLink = async (id: string) => {
     });
 
     if (link) {
-        const latestVersionFrom = await publicationVersionService.get(link.publicationFromRef.id, 'latest');
+        const latestVersionFrom = await publicationVersionService.get(link.publicationFromId, 'latest');
 
         if (latestVersionFrom) {
             await publicationVersionService.update(latestVersionFrom.id, {
@@ -63,7 +60,7 @@ export const deleteLink = async (id: string) => {
 export const get = (id: string) =>
     client.prisma.links.findFirst({
         include: {
-            publicationFromRef: {
+            publicationFrom: {
                 select: {
                     id: true,
                     versions: {
@@ -76,7 +73,7 @@ export const get = (id: string) =>
                     }
                 }
             },
-            publicationToRef: {
+            publicationTo: {
                 select: {
                     id: true,
                     versions: {

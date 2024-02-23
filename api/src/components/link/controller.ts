@@ -6,14 +6,11 @@ import * as I from 'interface';
 
 export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>): Promise<I.JSONResponse> => {
     try {
-        // function checks if the user has permission to see it in DRAFT mode
         const fromPublication = await publicationService.get(event.body.from);
 
-        // the publication does not exist, is
-        // publications that are live cannot have links created.
         if (!fromPublication) {
             return response.json(404, {
-                message: `Publication with id ${event.body.from} is either LIVE or does not exist.`
+                message: `Publication with id ${event.body.from} not found.`
             });
         }
 
@@ -31,20 +28,18 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
             });
         }
 
-        // the authenticated user is not the owner of the publication
+        // The authenticated user is not the owner of the publication
         if (fromLatestVersion.user.id !== event.user.id) {
             return response.json(401, { message: 'You do not have permission to create publication links' });
         }
 
-        // peer reviews can only linkTo one thing
+        // Peer reviews can only be linked to one thing
         if (fromPublication.type === 'PEER_REVIEW' && fromPublication.linkedTo.length !== 0) {
             return response.json(403, { message: 'Peer reviews can only have 1 link.' });
         }
 
-        // since we are not passing in a user, this should only return a publication if it is LIVE
         const toPublication = await publicationService.get(event.body.to);
 
-        // toPublication does not exist in a LIVE state
         if (!toPublication) {
             return response.json(404, {
                 message: `Publication with id ${event.body.to} does not exist.`
@@ -52,7 +47,9 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
         }
 
         // Check if publication to be linked to has a live version
-        if (!toPublication.versions.some((version) => version.isLatestLiveVersion)) {
+        const toLatestLiveVersion = toPublication.versions.find((version) => version.isLatestLiveVersion);
+
+        if (!toLatestLiveVersion) {
             return response.json(403, {
                 message: `Publication with id ${event.body.to} is not LIVE.`
             });
@@ -76,7 +73,7 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
             return response.json(404, { message: 'Link already exists.' });
         }
 
-        const link = await linkService.create(event.body.from, event.body.to);
+        const link = await linkService.create(event.body.from, event.body.to, toLatestLiveVersion.id);
 
         return response.json(200, link);
     } catch (err) {
@@ -100,7 +97,7 @@ export const deleteLink = async (
             return response.json(403, { message: 'You are not allowed to delete inherited Links.' });
         }
 
-        const fromCurrentVersion = link.publicationFromRef.versions.find((version) => version.isLatestVersion);
+        const fromCurrentVersion = link.publicationFrom.versions.find((version) => version.isLatestVersion);
 
         if (
             fromCurrentVersion?.currentStatus !== 'DRAFT' ||
