@@ -13,6 +13,7 @@ type PageSectionProps = {
 
 type TextProps = {
     children: React.ReactNode;
+    asDiv?: Boolean; // Render as a div to prevent hydration errors due to <ul>, <div> etc. nested in <p>.
 };
 
 const PageSection: React.FC<PageSectionProps> = (props): React.ReactElement => {
@@ -29,11 +30,13 @@ const PageSection: React.FC<PageSectionProps> = (props): React.ReactElement => {
     );
 };
 
+const standardTextClasses =
+    'mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100';
 const StandardText: React.FC<TextProps> = (props): React.ReactElement => {
-    return (
-        <p className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
-            {props.children}
-        </p>
+    return props.asDiv ? (
+        <div className={standardTextClasses}>{props.children}</div>
+    ) : (
+        <p className={standardTextClasses}>{props.children}</p>
     );
 };
 
@@ -78,7 +81,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                             </>
                         </StandardText>
                         <Components.PageSubTitle text="SECTION 1: GENERAL" className="mt-8" />
-                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                        <StandardText asDiv={true}>
                             <ul className="ml-8 list-disc">
                                 <li className="mb-6">
                                     <span className="font-bold">About the service:</span> To see more information on the
@@ -159,7 +162,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     protection software.
                                 </li>
                             </ul>
-                        </div>
+                        </StandardText>
                         <Components.PageSubTitle text="SECTION 2: USERS" className="mt-8" />
                         <StandardText>
                             <>
@@ -168,7 +171,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 types of Users:
                             </>
                         </StandardText>
-                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                        <StandardText asDiv={true}>
                             <ul className="ml-8 mt-6 list-disc">
                                 <li className="mb-6">
                                     An <span className="font-bold">Ordinary User </span> is a user anywhere in the world
@@ -186,7 +189,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     can use all of the resources on the Service website in accordance with these Terms.
                                 </li>
                             </ul>
-                        </div>
+                        </StandardText>
                         <Components.PageSubTitle text="SECTION 3: BECOMING A REGISTERED USER" className="mt-8" />
                         <StandardText>
                             <>
@@ -292,12 +295,12 @@ const UserTerms: NextPage = (): React.ReactElement => (
                         <StandardText>
                             <span className="font-bold">All Users shall:</span>
                         </StandardText>
-                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                        <StandardText asDiv={true}>
                             <ul className="ml-8 list-disc">
                                 <li className="mb-6">only access and use the Service on these Terms</li>
                             </ul>
-                        </div>
-                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                        </StandardText>
+                        <StandardText asDiv={true}>
                             <span className="font-bold">Users shall not:</span>
                             <ul className="ml-8 list-disc">
                                 <li className="mb-6">
@@ -350,14 +353,14 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     use the Service or the Service website unlawfully or fraudulently at any time.
                                 </li>
                             </ul>
-                        </div>
+                        </StandardText>
                         <Components.PageSubTitle text="SECTION 8: BREACH OF THESE TERMS" className="mt-8" />
                         <StandardText>
                             Where Jisc reasonably believes or suspects that a User is in breach of these Terms (or any
                             other terms reference herein), Jisc may take such action as it deems appropriate (at its
                             discretion), including:
                         </StandardText>
-                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                        <StandardText asDiv={true}>
                             <ul className="ml-8 list-disc">
                                 <li className="mb-6">issuing a warning;</li>
                                 <li className="mb-6">
@@ -375,7 +378,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     necessary.
                                 </li>
                             </ul>
-                        </div>
+                        </StandardText>
                         <Components.PageSubTitle text="SECTION 9: OTHER JISC MATERIAL" className="mt-8" />
                         <StandardText>
                             <>
@@ -442,7 +445,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                             guidance and resources made available on it, whether express or implied. In particular, Jisc
                             excludes all conditions, warranties, representations or other terms:
                         </StandardText>
-                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                        <StandardText asDiv={true}>
                             <ul className="ml-8 list-disc">
                                 <li className="mb-6">
                                     that any User Content, guidance or resource will be of satisfactory quality or fit
@@ -473,7 +476,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 </li>
                                 <li className="mb-6">that defects in Service or Service website will be corrected</li>
                             </ul>
-                        </div>
+                        </StandardText>
                         <StandardText>
                             <>
                                 If Jisc is liable to you in relation to your use of the Service for any cause whatever,
@@ -526,7 +529,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                             </>
                         </StandardText>
                         <Components.PageSubTitle text="SECTION 15: MISCELLANEOUS" className="mt-8" />
-                        <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                        <StandardText asDiv={true}>
                             <ul className="ml-8 list-disc">
                                 <li className="mb-6">
                                     <span className="font-bold">No partnership: </span> Users acknowledge that these
@@ -605,12 +608,12 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     these Terms or use of the Service and/or Service website
                                 </li>
                             </ul>
-                        </div>
+                        </StandardText>
                         <h1 className="my-12 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-4xl">
                             OCTOPUS PLATFORM USER TERMS: SCHEDULE 1 - DATA PROCESSING
                         </h1>
                         <Components.PageSubTitle text="1. DEFINITIONS AND INTERPRETATION" />
-                        <StandardText>
+                        <StandardText asDiv={true}>
                             <div className="grid grid-cols-12">
                                 <div className="col-span-1">1.1</div>{' '}
                                 <div className="col-span-11">
@@ -664,7 +667,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                     <br />
                                     means, in relation to any Processing under these Terms:
                                     <br />
-                                    <div className="mx-auto mb-5 block font-montserrat text-lg font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                                    <StandardText asDiv={true}>
                                         <ol className="list-none">
                                             <li className="ml-6">
                                                 (a) the subject matter and duration of the Processing;
@@ -787,307 +790,299 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                         has the meaning as set out in Section 5 of the Terms;
                                         <br />
                                         <br />
-                                    </div>
+                                    </StandardText>
                                 </div>
                             </div>
                         </StandardText>
-                        <StandardText>
-                            <>
-                                <Components.PageSubTitle text="2. DATA PROTECTION ARRANGEMENTS" className="my-8" />
-                                <div className="grid grid-cols-12">
-                                    <div className="col-span-1">2.1</div>
-                                    <div className="col-span-11 mb-6">
-                                        Both you and we acknowledge that the factual arrangements in respect of the
-                                        processing of Personal Data dictates the classification of each party in respect
-                                        of the Data Protection Legislation. Notwithstanding the foregoing, it is
-                                        anticipated and agreed that you shall act as a Controller and Jisc shall act as
-                                        a Processor in respect of Processing of any Personal Data in your User Content
-                                        that you make available in connection with your use of the Service.
-                                    </div>
-                                    <div className="col-span-1">2.2</div>
-                                    <div className="col-span-11 mb-6">
-                                        Both you and we acknowledge and agree that Annex A contains an accurate
-                                        description of the Data Protection Particulars.
-                                    </div>
-                                    <div className="col-span-1">3</div>
-                                    <div className="col-span-11 mb-6 font-bold">CONTROLLER OBLIGATIONS</div>
-                                    <div className="col-span-1">3.1</div>
-                                    <div className="col-span-11 mb-6 ">
-                                        You, in your capacity as Controller in respect of the Processing of the Personal
-                                        Data in your User Content, shall:
-                                    </div>
-                                    <div className="col-span-2"> </div>
-                                    <div className="col-span-10 mb-6 ">
-                                        <ul>
-                                            <li className="mb-6">
-                                                (a) comply with your obligations as Controller under the Data Protection
-                                                Legislation;
-                                            </li>
-                                            <li className="mb-6">
-                                                (b) ensure that you are not subject to any prohibition or restriction
-                                                which would:
-                                                <ul className="ml-6 mt-6">
-                                                    <li className="mb-6">
-                                                        (i) prevent or restrict you from disclosing or transferring the
-                                                        Personal Data to Jisc, as required under these Terms or
-                                                    </li>
-                                                    <li>
-                                                        (ii) prevent or restrict you from granting Jisc access to the
-                                                        Personal Data, as required under these Terms;
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li className="mb-8">
-                                                (c) ensure that all fair processing notices have been given (and/or, as
-                                                applicable, consents obtained) and are sufficient in scope to enable
-                                                each Jisc to Process the Personal Data as required in order to obtain
-                                                the benefit of its rights and to fulfil its obligations under these
-                                                Terms accordance with the Data Protection Legislation; and
-                                            </li>
-                                            <li>
-                                                (d) notify Jisc promptly (and in any event within forty-eight (48)
-                                                hours) following its receipt of any Regulator Correspondence.
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div className="col-span-1">4.</div>
-                                    <div className="col-span-11 mb-6 font-bold"> PROCESSOR OBLIGATIONS</div>
-                                    <div className="col-span-1">4.1</div>
-                                    <div className="col-span-11 mb-6">
-                                        Jisc, as a Processor in relation to any Personal Data Processed on your behalf
-                                        pursuant to these Terms undertakes that it shall:
-                                    </div>
-                                    <div className="col-span-2">4.1.1</div>
-                                    <div className="col-span-10 mb-6 ">
-                                        process the Personal Data for and on your behalf in connection with the
-                                        Permitted Purpose only and for no other purpose in accordance with these Terms,
-                                        and any instructions from you;
-                                    </div>
-                                    <div className="col-span-2">4.1.2</div>
-                                    <div className="col-span-10 mb-6 ">
-                                        unless prohibited by law, promptly notify you (and in any event within
-                                        forty-eight (48) hours of becoming aware of the same) if it considers, in its
-                                        opinion (acting reasonably) that it is required by Applicable Law to act other
-                                        than in accordance with your instructions, including where it believes that any
-                                        of your instructions under Clause 4.1.1 infringes any of the Data Protection
-                                        Legislation;
-                                    </div>
-                                    <div className="col-span-2">4.1.3</div>
-                                    <div className="col-span-10 mb-6 ">
-                                        implement and maintain appropriate technical and organisational security
-                                        measures to comply with at least the obligations imposed on a Controller by the
-                                        Security Requirements;
-                                    </div>
-                                    <div className="col-span-2">4.1.4</div>
-                                    <div className="col-span-10 mb-6 ">
-                                        take all reasonable steps to ensure the reliability and integrity of any of the
-                                        Personnel who shall have access to the Personal Data, and ensure that each
-                                        member of Personnel shall have entered into appropriate contractually-binding
-                                        confidentiality undertakings;
-                                    </div>
-                                    <div className="col-span-2">4.1.5</div>
-                                    <div className="col-span-10 mb-6 ">
-                                        notify you promptly, and in any event within forty-eight (48) hours, upon
-                                        becoming aware of any actual or suspected, threatened or &apos;near miss&apos;
-                                        Personal Data Breach, and:
-                                    </div>
-                                    <div className="col-span-3"></div>
-                                    <div className="col-span-9 mb-6 ">
-                                        (a) implement any measures necessary to restore the security of compromised
-                                        Personal Data
-                                    </div>
-                                    <div className="col-span-3"></div>
-                                    <div className="col-span-9 mb-6 ">
-                                        (b) assist you to make any notifications to the ICO and affected Data Subjects
-                                    </div>
-                                    <div className="col-span-2">4.1.6</div>
-                                    <div className="col-span-10 mb-6 ">
-                                        notify you promptly (and in any event within forty-eight (48) hours) following
-                                        its receipt of any Data Subject Request or Regulator Correspondence and shall:
-                                    </div>
-
-                                    <div className="col-span-3"></div>
-                                    <div className="col-span-9 mb-6 ">
-                                        (a) not disclose any of the Personal Data in response to any Data Subject
-                                        Request or Regulator Correspondence without your prior written consent; and
-                                    </div>
-                                    <div className="col-span-3"></div>
-                                    <div className="col-span-9 mb-6 ">
-                                        (b) provide you with all reasonable co-operation and assistance you require in
-                                        relation to any such Data Subject Request or Regulator Correspondence;
-                                    </div>
-
-                                    <div className="col-span-2">4.1.7</div>
-                                    <div className="col-span-10 mb-6 ">
-                                        not disclose the Personal Data to a third party in any circumstances without
-                                        your prior written consent, other than:
-                                    </div>
-                                    <div className="col-span-3"></div>
-                                    <div className="col-span-9 mb-6 ">
-                                        (a) in relation to Third Party Requests where Jisc is required by law to make
-                                        such a disclosure, in which case it shall use reasonable endeavours to advise
-                                        you in advance of such disclosure and in any event as soon as practicable
-                                        thereafter, unless prohibited by law or regulation from notifying you;
-                                    </div>
-                                    <div className="col-span-3"></div>
-                                    <div className="col-span-9 mb-6 ">
-                                        (b) to Jisc&apos;s employees, officers, representatives and advisers who need to
-                                        know such information for the purposes of Jisc performing its obligations under
-                                        these Terms and in this respect Jisc shall ensure that its employees, officers,
-                                        representatives and advisers to whom it discloses the Personal Data are made
-                                        aware of their obligations with regard to the use and security of Personal Data
-                                        under these Terms; and
-                                    </div>
-                                    <div className="col-span-3"></div>
-                                    <div className="col-span-9 mb-6 ">(c) to an Appointed Sub-contractor;</div>
-                                    <div className="col-span-2">4.1.8</div>
-                                    <div className="col-span-10 mb-6 ">
-                                        not Process or transfer the Personal Data outside of a Permitted Country without
-                                        putting in place measures to ensure compliance with Data Protection Legislation;
-                                    </div>
-                                    <div className="col-span-2">4.1.9</div>
-                                    <div className="col-span-10 mb-6 ">
-                                        on the written request from you, allow you or your representatives to audit Jisc
-                                        in order to ascertain compliance with the terms of this Clause 4.1 and/ or to
-                                        provide the you with reasonable information to demonstrate compliance with the
-                                        requirements of this Clause 4.1, provided that:
-                                    </div>
-                                    <div className="col-span-3"></div>
-                                    <div className="col-span-9 mb-6 ">
-                                        (a) you shall only be permitted to exercise your rights under this Clause 4.1.9
-                                        no more frequently than once in any 12 month period (other than where an audit
-                                        is being undertaken in connection with an actual or &apos;near miss&apos;
-                                        Personal Data Breach, in which case, an additional audit may be undertaken
-                                        within thirty (30) days of us having notified you of actual or &apos;near
-                                        miss&apos; Personal Data Breach);
-                                    </div>
-                                    <div className="col-span-3"></div>
-                                    <div className="col-span-9 mb-6 ">
-                                        (b) each such audit shall be performed at your sole expense;
-                                    </div>
-                                    <div className="col-span-3"></div>
-                                    <div className="col-span-9 mb-6 ">
-                                        (c) you shall not, in your performance of each such audit, unreasonably disrupt
-                                        the business operations of Jisc;
-                                    </div>
-                                    <div className="col-span-3"></div>
-                                    <div className="col-span-9 mb-6 ">
-                                        (d) you shall comply with Jisc&apos;s health and safety, security, conduct and
-                                        other rules, procedures and requirements in relation to Jisc&apos;s property and
-                                        systems which have been notified by Jisc to you in advance; and
-                                    </div>
-                                    <div className="col-span-3"></div>
-                                    <div className="col-span-9 mb-6 ">
-                                        (e) in no case shall you be permitted to access any data, information or records
-                                        relating to any other customer of Jisc;
-                                    </div>
-                                    <div className="col-span-2">4.1.10</div>
-                                    <div className="col-span-10 mb-6 ">
-                                        except to the extent required by Applicable Law, on the earlier of:
-                                    </div>
-                                    <div className="col-span-3"></div>
-                                    <div className="col-span-9 mb-6 ">
-                                        (a) the date of termination or expiry of these Terms (as applicable); and/or
-                                    </div>
-                                    <div className="col-span-2"></div>
-                                    <div className="col-span-10 mb-6 ">
-                                        cease Processing any of the Personal Data and, within sixty (60) days of the
-                                        date being applicable under this Clause 4.1.10, return or destroy (as directed,
-                                        in writing, by you) the Personal Data belonging to, or under your control and
-                                        ensure that all such data is securely and permanently deleted from its systems,
-                                        provided that Jisc shall be entitled to retain copies of the Personal Data for
-                                        evidential purposes and to comply with legal and/or regulatory requirements;
-                                    </div>
-                                    <div className="col-span-2">4.1.11</div>
-                                    <div className="col-span-10 mb-6 ">
-                                        comply with the obligations imposed upon a Processor under the Data Protection
-                                        Legislation; and
-                                    </div>
-                                    <div className="col-span-1">4.2</div>
-                                    <div className="col-span-11 mb-6 ">
-                                        Notwithstanding anything in these Terms to the contrary, this Clause 4 shall
-                                        continue in full force and effect for so long as Jisc Processes the Personal
-                                        Data in your User Content.
-                                    </div>
+                        <StandardText asDiv={true}>
+                            <Components.PageSubTitle text="2. DATA PROTECTION ARRANGEMENTS" className="my-8" />
+                            <div className="grid grid-cols-12">
+                                <div className="col-span-1">2.1</div>
+                                <div className="col-span-11 mb-6">
+                                    Both you and we acknowledge that the factual arrangements in respect of the
+                                    processing of Personal Data dictates the classification of each party in respect of
+                                    the Data Protection Legislation. Notwithstanding the foregoing, it is anticipated
+                                    and agreed that you shall act as a Controller and Jisc shall act as a Processor in
+                                    respect of Processing of any Personal Data in your User Content that you make
+                                    available in connection with your use of the Service.
                                 </div>
-                            </>
+                                <div className="col-span-1">2.2</div>
+                                <div className="col-span-11 mb-6">
+                                    Both you and we acknowledge and agree that Annex A contains an accurate description
+                                    of the Data Protection Particulars.
+                                </div>
+                                <div className="col-span-1">3</div>
+                                <div className="col-span-11 mb-6 font-bold">CONTROLLER OBLIGATIONS</div>
+                                <div className="col-span-1">3.1</div>
+                                <div className="col-span-11 mb-6 ">
+                                    You, in your capacity as Controller in respect of the Processing of the Personal
+                                    Data in your User Content, shall:
+                                </div>
+                                <div className="col-span-2"> </div>
+                                <div className="col-span-10 mb-6 ">
+                                    <ul>
+                                        <li className="mb-6">
+                                            (a) comply with your obligations as Controller under the Data Protection
+                                            Legislation;
+                                        </li>
+                                        <li className="mb-6">
+                                            (b) ensure that you are not subject to any prohibition or restriction which
+                                            would:
+                                            <ul className="ml-6 mt-6">
+                                                <li className="mb-6">
+                                                    (i) prevent or restrict you from disclosing or transferring the
+                                                    Personal Data to Jisc, as required under these Terms or
+                                                </li>
+                                                <li>
+                                                    (ii) prevent or restrict you from granting Jisc access to the
+                                                    Personal Data, as required under these Terms;
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li className="mb-8">
+                                            (c) ensure that all fair processing notices have been given (and/or, as
+                                            applicable, consents obtained) and are sufficient in scope to enable each
+                                            Jisc to Process the Personal Data as required in order to obtain the benefit
+                                            of its rights and to fulfil its obligations under these Terms accordance
+                                            with the Data Protection Legislation; and
+                                        </li>
+                                        <li>
+                                            (d) notify Jisc promptly (and in any event within forty-eight (48) hours)
+                                            following its receipt of any Regulator Correspondence.
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div className="col-span-1">4.</div>
+                                <div className="col-span-11 mb-6 font-bold"> PROCESSOR OBLIGATIONS</div>
+                                <div className="col-span-1">4.1</div>
+                                <div className="col-span-11 mb-6">
+                                    Jisc, as a Processor in relation to any Personal Data Processed on your behalf
+                                    pursuant to these Terms undertakes that it shall:
+                                </div>
+                                <div className="col-span-2">4.1.1</div>
+                                <div className="col-span-10 mb-6 ">
+                                    process the Personal Data for and on your behalf in connection with the Permitted
+                                    Purpose only and for no other purpose in accordance with these Terms, and any
+                                    instructions from you;
+                                </div>
+                                <div className="col-span-2">4.1.2</div>
+                                <div className="col-span-10 mb-6 ">
+                                    unless prohibited by law, promptly notify you (and in any event within forty-eight
+                                    (48) hours of becoming aware of the same) if it considers, in its opinion (acting
+                                    reasonably) that it is required by Applicable Law to act other than in accordance
+                                    with your instructions, including where it believes that any of your instructions
+                                    under Clause 4.1.1 infringes any of the Data Protection Legislation;
+                                </div>
+                                <div className="col-span-2">4.1.3</div>
+                                <div className="col-span-10 mb-6 ">
+                                    implement and maintain appropriate technical and organisational security measures to
+                                    comply with at least the obligations imposed on a Controller by the Security
+                                    Requirements;
+                                </div>
+                                <div className="col-span-2">4.1.4</div>
+                                <div className="col-span-10 mb-6 ">
+                                    take all reasonable steps to ensure the reliability and integrity of any of the
+                                    Personnel who shall have access to the Personal Data, and ensure that each member of
+                                    Personnel shall have entered into appropriate contractually-binding confidentiality
+                                    undertakings;
+                                </div>
+                                <div className="col-span-2">4.1.5</div>
+                                <div className="col-span-10 mb-6 ">
+                                    notify you promptly, and in any event within forty-eight (48) hours, upon becoming
+                                    aware of any actual or suspected, threatened or &apos;near miss&apos; Personal Data
+                                    Breach, and:
+                                </div>
+                                <div className="col-span-3"></div>
+                                <div className="col-span-9 mb-6 ">
+                                    (a) implement any measures necessary to restore the security of compromised Personal
+                                    Data
+                                </div>
+                                <div className="col-span-3"></div>
+                                <div className="col-span-9 mb-6 ">
+                                    (b) assist you to make any notifications to the ICO and affected Data Subjects
+                                </div>
+                                <div className="col-span-2">4.1.6</div>
+                                <div className="col-span-10 mb-6 ">
+                                    notify you promptly (and in any event within forty-eight (48) hours) following its
+                                    receipt of any Data Subject Request or Regulator Correspondence and shall:
+                                </div>
+
+                                <div className="col-span-3"></div>
+                                <div className="col-span-9 mb-6 ">
+                                    (a) not disclose any of the Personal Data in response to any Data Subject Request or
+                                    Regulator Correspondence without your prior written consent; and
+                                </div>
+                                <div className="col-span-3"></div>
+                                <div className="col-span-9 mb-6 ">
+                                    (b) provide you with all reasonable co-operation and assistance you require in
+                                    relation to any such Data Subject Request or Regulator Correspondence;
+                                </div>
+
+                                <div className="col-span-2">4.1.7</div>
+                                <div className="col-span-10 mb-6 ">
+                                    not disclose the Personal Data to a third party in any circumstances without your
+                                    prior written consent, other than:
+                                </div>
+                                <div className="col-span-3"></div>
+                                <div className="col-span-9 mb-6 ">
+                                    (a) in relation to Third Party Requests where Jisc is required by law to make such a
+                                    disclosure, in which case it shall use reasonable endeavours to advise you in
+                                    advance of such disclosure and in any event as soon as practicable thereafter,
+                                    unless prohibited by law or regulation from notifying you;
+                                </div>
+                                <div className="col-span-3"></div>
+                                <div className="col-span-9 mb-6 ">
+                                    (b) to Jisc&apos;s employees, officers, representatives and advisers who need to
+                                    know such information for the purposes of Jisc performing its obligations under
+                                    these Terms and in this respect Jisc shall ensure that its employees, officers,
+                                    representatives and advisers to whom it discloses the Personal Data are made aware
+                                    of their obligations with regard to the use and security of Personal Data under
+                                    these Terms; and
+                                </div>
+                                <div className="col-span-3"></div>
+                                <div className="col-span-9 mb-6 ">(c) to an Appointed Sub-contractor;</div>
+                                <div className="col-span-2">4.1.8</div>
+                                <div className="col-span-10 mb-6 ">
+                                    not Process or transfer the Personal Data outside of a Permitted Country without
+                                    putting in place measures to ensure compliance with Data Protection Legislation;
+                                </div>
+                                <div className="col-span-2">4.1.9</div>
+                                <div className="col-span-10 mb-6 ">
+                                    on the written request from you, allow you or your representatives to audit Jisc in
+                                    order to ascertain compliance with the terms of this Clause 4.1 and/ or to provide
+                                    the you with reasonable information to demonstrate compliance with the requirements
+                                    of this Clause 4.1, provided that:
+                                </div>
+                                <div className="col-span-3"></div>
+                                <div className="col-span-9 mb-6 ">
+                                    (a) you shall only be permitted to exercise your rights under this Clause 4.1.9 no
+                                    more frequently than once in any 12 month period (other than where an audit is being
+                                    undertaken in connection with an actual or &apos;near miss&apos; Personal Data
+                                    Breach, in which case, an additional audit may be undertaken within thirty (30) days
+                                    of us having notified you of actual or &apos;near miss&apos; Personal Data Breach);
+                                </div>
+                                <div className="col-span-3"></div>
+                                <div className="col-span-9 mb-6 ">
+                                    (b) each such audit shall be performed at your sole expense;
+                                </div>
+                                <div className="col-span-3"></div>
+                                <div className="col-span-9 mb-6 ">
+                                    (c) you shall not, in your performance of each such audit, unreasonably disrupt the
+                                    business operations of Jisc;
+                                </div>
+                                <div className="col-span-3"></div>
+                                <div className="col-span-9 mb-6 ">
+                                    (d) you shall comply with Jisc&apos;s health and safety, security, conduct and other
+                                    rules, procedures and requirements in relation to Jisc&apos;s property and systems
+                                    which have been notified by Jisc to you in advance; and
+                                </div>
+                                <div className="col-span-3"></div>
+                                <div className="col-span-9 mb-6 ">
+                                    (e) in no case shall you be permitted to access any data, information or records
+                                    relating to any other customer of Jisc;
+                                </div>
+                                <div className="col-span-2">4.1.10</div>
+                                <div className="col-span-10 mb-6 ">
+                                    except to the extent required by Applicable Law, on the earlier of:
+                                </div>
+                                <div className="col-span-3"></div>
+                                <div className="col-span-9 mb-6 ">
+                                    (a) the date of termination or expiry of these Terms (as applicable); and/or
+                                </div>
+                                <div className="col-span-2"></div>
+                                <div className="col-span-10 mb-6 ">
+                                    cease Processing any of the Personal Data and, within sixty (60) days of the date
+                                    being applicable under this Clause 4.1.10, return or destroy (as directed, in
+                                    writing, by you) the Personal Data belonging to, or under your control and ensure
+                                    that all such data is securely and permanently deleted from its systems, provided
+                                    that Jisc shall be entitled to retain copies of the Personal Data for evidential
+                                    purposes and to comply with legal and/or regulatory requirements;
+                                </div>
+                                <div className="col-span-2">4.1.11</div>
+                                <div className="col-span-10 mb-6 ">
+                                    comply with the obligations imposed upon a Processor under the Data Protection
+                                    Legislation; and
+                                </div>
+                                <div className="col-span-1">4.2</div>
+                                <div className="col-span-11 mb-6 ">
+                                    Notwithstanding anything in these Terms to the contrary, this Clause 4 shall
+                                    continue in full force and effect for so long as Jisc Processes the Personal Data in
+                                    your User Content.
+                                </div>
+                            </div>
                         </StandardText>
                         <h1 className="my-12 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-4xl">
                             OCTOPUS PLATFORM USER TERMS SCHEDULE 1: ANNEX A
                         </h1>
-                        <StandardText>
-                            <>
-                                <span className="font-bold">Purpose of Processing</span>
-                                <br /> To provide the Service <br />
-                                <br />
-                                <Components.PageSubTitle text="Data Protection Particulars" />
-                                <span className="font-bold">The subject matter and duration of the Processing</span>
-                                <br />
-                                The Octopus platform provides a primary research record for recording and appraising
-                                research &apos;as it happens&apos;. It breaks down the publication of scientific
-                                research into eight elements.
-                                <br />
-                                <br />
-                                The eight elements are:
-                                <ul className="ml-8 mt-2 list-disc">
-                                    <li className="mb-2">Research Problem</li>
-                                    <li className="mb-2">Rationale/Hypothesis</li>
-                                    <li className="mb-2">Method</li>
-                                    <li className="mb-2">Results</li>
-                                    <li className="mb-2">Analysis</li>
-                                    <li className="mb-2">Interpretation</li>
-                                    <li className="mb-2">Real World Application</li>
-                                    <li className="mb-2">Peer Review</li>
-                                </ul>
-                                <span className="font-bold">The nature and purpose of the Processing</span>
-                                <br />
-                                To provide the Octopus Service.
-                                <br />
-                                <br />
-                                <span className="font-bold">The type of Personal Data being Processed</span>
-                                <br />
-                                Any Personal Data that the Registered Users includes in their User Content
-                                <br />
-                                <br />
-                                <span className="font-bold">The categories of Data Subjects</span>
-                                <br />
-                                We expect this to be academics (staff and students)
-                                <br />
-                                <br />
-                            </>
+                        <StandardText asDiv={true}>
+                            <span className="font-bold">Purpose of Processing</span>
+                            <br /> To provide the Service <br />
+                            <br />
+                            <Components.PageSubTitle text="Data Protection Particulars" />
+                            <span className="font-bold">The subject matter and duration of the Processing</span>
+                            <br />
+                            The Octopus platform provides a primary research record for recording and appraising
+                            research &apos;as it happens&apos;. It breaks down the publication of scientific research
+                            into eight elements.
+                            <br />
+                            <br />
+                            The eight elements are:
+                            <ul className="ml-8 mt-2 list-disc">
+                                <li className="mb-2">Research Problem</li>
+                                <li className="mb-2">Rationale/Hypothesis</li>
+                                <li className="mb-2">Method</li>
+                                <li className="mb-2">Results</li>
+                                <li className="mb-2">Analysis</li>
+                                <li className="mb-2">Interpretation</li>
+                                <li className="mb-2">Real World Application</li>
+                                <li className="mb-2">Peer Review</li>
+                            </ul>
+                            <span className="font-bold">The nature and purpose of the Processing</span>
+                            <br />
+                            To provide the Octopus Service.
+                            <br />
+                            <br />
+                            <span className="font-bold">The type of Personal Data being Processed</span>
+                            <br />
+                            Any Personal Data that the Registered Users includes in their User Content
+                            <br />
+                            <br />
+                            <span className="font-bold">The categories of Data Subjects</span>
+                            <br />
+                            We expect this to be academics (staff and students)
+                            <br />
+                            <br />
                         </StandardText>
                         <h1 className="my-12 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-4xl">
                             OCTOPUS PLATFORM USER TERMS SCHEDULE 1: ANNEX B
                         </h1>
                         <Components.PageSubTitle text="Appointed Sub-contractors" />
-                        <StandardText>
-                            <>
-                                <span className="font-bold">Current list of Jisc Appointed Sub-contractors</span>
-                                <ul className="ml-8 mt-3 list-disc">
-                                    <li className="mb-3">Amazon Web Services</li>
-                                    <li className="mb-3">Octopus Publishing CIC</li>
-                                    <li className="mb-3">
-                                        DataCite:{' '}
-                                        <Components.Link
-                                            href="https://datacite.org/"
-                                            openNew={true}
-                                            className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
-                                        >
-                                            https://datacite.org/
-                                        </Components.Link>
-                                    </li>
-                                    <li className="mb-3">
-                                        ORCID:{' '}
-                                        <Components.Link
-                                            href="https://orcid.org/"
-                                            openNew={true}
-                                            className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
-                                        >
-                                            https://orcid.org/
-                                        </Components.Link>
-                                    </li>
-                                </ul>
-                            </>
+                        <StandardText asDiv={true}>
+                            <span className="font-bold">Current list of Jisc Appointed Sub-contractors</span>
+                            <ul className="ml-8 mt-3 list-disc">
+                                <li className="mb-3">Amazon Web Services</li>
+                                <li className="mb-3">Octopus Publishing CIC</li>
+                                <li className="mb-3">
+                                    DataCite:{' '}
+                                    <Components.Link
+                                        href="https://datacite.org/"
+                                        openNew={true}
+                                        className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
+                                    >
+                                        https://datacite.org/
+                                    </Components.Link>
+                                </li>
+                                <li className="mb-3">
+                                    ORCID:{' '}
+                                    <Components.Link
+                                        href="https://orcid.org/"
+                                        openNew={true}
+                                        className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
+                                    >
+                                        https://orcid.org/
+                                    </Components.Link>
+                                </li>
+                            </ul>
                         </StandardText>
                     </div>
                 </>
