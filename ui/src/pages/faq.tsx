@@ -158,10 +158,10 @@ const faqContents = [
         `
     },
     {
-        title: 'Why would I write a public review?',
+        title: 'Why would I write an open peer review?',
         href: 'public_review_octopus',
         id: 'public_review_octopus',
-        heading: 'Why would I write a public review?',
+        heading: 'Why would I write an open peer review?',
         content: `
             <p className='mb-2'>Reviewing is critical to good research, and encouraging good research is at the heart of Octopus.</p>
             <p className='mb-2'>All reviews are publicly available on Octopus. This enriches the research record, allowing readers to see the views and opinions raised by other experts and learn from varied perspectives on a topic. It is also a resource for those just beginning to participate in research, providing ways of thinking about a subject, and guiding good research practice. The authors of the publication being reviewed have the option to reversion their work taking into account major points raised by reviewers, and might even choose to invite those reviewers as co-authors on the new version.</p>

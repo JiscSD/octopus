@@ -67,6 +67,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 <br /> These Terms form a legal agreement between the User, as applicable (
                                 <span className="font-bold">you and your</span>), and Jisc (
                                 <span className="font-bold">Jisc, us, we and our</span>) as the provider of the Service.
+                                See section 1 for details about Jisc.
                                 <br />
                                 <br />
                                 By using the Service in any way, you agree to be bound by these Terms. Use of the
