@@ -16,7 +16,8 @@
             "@/api": ["./src/lib/api"],
             "@/documentation": ["./src/lib/documentation"],
             "@/contexts": ["./src/contexts"],
-            "@/contentfulClient": ["./src/lib/contentfulClient"]
+            "@/contentfulClient": ["./src/lib/contentfulClient"],
+            "@/testUtils": ["./src/__tests__/testUtils"]
         }
     }
 }
