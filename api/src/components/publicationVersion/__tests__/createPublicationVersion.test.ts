@@ -94,4 +94,15 @@ describe('Create new publication versions', () => {
         expect(previousPublicationVersion.status).toEqual(200);
         expect(previousPublicationVersion.body.isLatestVersion).toEqual(false);
     });
+
+    test('Peer reviews cannot be reversioned', async () => {
+        const newPublicationVersion = await testUtils.agent
+            .post('/publications/publication-peer-review-live/publication-versions')
+            .query({
+                apiKey: '000000010'
+            });
+
+        expect(newPublicationVersion.status).toEqual(400);
+        expect(newPublicationVersion.body.message).toEqual('Peer reviews cannot be reversioned.');
+    });
 });

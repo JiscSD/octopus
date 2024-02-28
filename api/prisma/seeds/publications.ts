@@ -1099,6 +1099,35 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 }
             }
         }
+    },
+    {
+        id: 'publication-peer-review-live',
+        doi: '10.82259/01x8-yb58',
+        type: 'PEER_REVIEW',
+        linkedTo: {
+            create: {
+                publicationToId: 'publication-problem-live-2',
+                versionToId: 'publication-problem-live-2-v1'
+            }
+        },
+        versions: {
+            create: {
+                id: 'publication-peer-review-live-v1',
+                versionNumber: 1,
+                title: 'Live peer review',
+                content: 'This publication is very good, well done.',
+                currentStatus: 'LIVE',
+                isLatestLiveVersion: true,
+                publishedDate: '2024-02-27T10:50:00.000Z',
+                user: { connect: { id: 'test-user-10' } },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2024-02-27T09:50:00.000Z' },
+                        { status: 'LIVE', createdAt: '2024-02-27T10:50:00.000Z' }
+                    ]
+                }
+            }
+        }
     }
 ];
 
