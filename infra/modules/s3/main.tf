@@ -74,13 +74,19 @@ resource "aws_s3_bucket_policy" "allow_public_access" {
   policy   = data.aws_iam_policy_document.allow_public_access[each.key].json
 }
 
+data "archive_file" "pdf_processing_lambda_code" {
+  type        = "zip"
+  source_dir  = "${path.module}/pdf-processing-lambda-src"
+  output_path = "${path.module}/pdf-processing-lambda.zip"
+}
+
 resource "aws_lambda_function" "pdf_processing_lambda" {
-  filename         = "${path.module}/pdf-processing-lambda.zip"
+  filename         = data.archive_file.pdf_processing_lambda_code.output_path
+  source_code_hash = data.archive_file.pdf_processing_lambda_code.output_base64sha256
   function_name    = "octopus-api-${var.environment}-pdfProcessingLambda"
   role             = aws_iam_role.pdf_processing_lambda_role.arn
   handler          = "index.handler"
   runtime          = "nodejs18.x"
-  source_code_hash = filebase64sha256("${path.module}/pdf-processing-lambda.zip")
   timeout          = 10 // if a retry is needed, this function can hit the 3 second default timeout
 
   environment {
