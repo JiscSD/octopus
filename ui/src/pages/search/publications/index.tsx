@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import React from 'react';
 import useSWR from 'swr';
 import Head from 'next/head';
@@ -12,6 +13,25 @@ import * as Layouts from '@/layouts';
 import * as Config from '@/config';
 import * as Types from '@/types';
 import * as api from '@/api';
+
+// Takes an input date from context or form controls,
+// sets time to start or end of day as appropriate,
+// and returns it as an ISO string for the API.
+const formatDateForAPI = (rawDate: string, type: 'to' | 'from'): string | null => {
+    const date = new Date(rawDate);
+
+    if (isNaN(date.getTime())) {
+        return null;
+    }
+
+    if (type === 'from') {
+        date.setHours(0, 0, 0);
+    } else {
+        date.setHours(23, 59, 59);
+    }
+
+    return date.toISOString();
+};
 
 /**
  *
@@ -88,14 +108,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         error = message;
     }
 
-    const dateFromFormatted = new Date(dateFrom || '');
-    const dateToFormatted = new Date(dateTo || '');
+    const dateFromFormatted = formatDateForAPI(dateFrom || '', 'from');
+    const dateToFormatted = formatDateForAPI(dateTo || '', 'to');
 
     const swrKey = `/${searchType}?search=${encodeURIComponent(
         (Array.isArray(query) ? query[0] : query) || ''
     )}&type=${publicationTypes}&limit=${limit || '10'}&offset=${offset || '0'}${
-        dateFromFormatted.toString() !== 'Invalid Date' ? `&dateFrom=${dateFromFormatted.toISOString()}` : ''
-    }${dateToFormatted.toString() !== 'Invalid Date' ? `&dateTo=${dateToFormatted.toISOString()}` : ''}`;
+        dateFromFormatted ? `&dateFrom=${dateFromFormatted}` : ''
+    }${dateToFormatted ? `&dateTo=${dateToFormatted}` : ''}`;
 
     return {
         props: {
@@ -138,14 +158,14 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
 
-    const dateFromFormatted = new Date(dateFrom || '');
-    const dateToFormatted = new Date(dateTo || '');
+    const dateFromFormatted = formatDateForAPI(dateFrom, 'from');
+    const dateToFormatted = formatDateForAPI(dateTo, 'to');
 
     const swrKey = `/${props.searchType}?search=${encodeURIComponent(query || '')}&type=${
         publicationTypes || Config.values.publicationTypes.join(',')
-    }&limit=${limit || '10'}&offset=${offset || '0'}${
-        dateFromFormatted.toString() !== 'Invalid Date' ? `&dateFrom=${dateFromFormatted.toISOString()}` : ''
-    }${dateToFormatted.toString() !== 'Invalid Date' ? `&dateTo=${dateToFormatted.toISOString()}` : ''}`;
+    }&limit=${limit || '10'}&offset=${offset || '0'}${dateFromFormatted ? `&dateFrom=${dateFromFormatted}` : ''}${
+        dateToFormatted ? `&dateTo=${dateToFormatted}` : ''
+    }`;
 
     const {
         data: response,
@@ -176,7 +196,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
         setQuery(searchTerm);
     };
 
-    const handlerDateFormSubmit = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+    const handleDateFormSubmit = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
         e.preventDefault();
         const newDate = e.target.value;
 
@@ -320,7 +340,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                             className="col-span-12 lg:col-span-7 xl:col-span-8"
                             onSubmit={handlerSearchFormSubmit}
                         >
-                            <label htmlFor="search-query" className="relative block w-full">
+                            <label htmlFor="query" className="relative block w-full">
                                 <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
                                     Quick search
                                 </span>
@@ -446,7 +466,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                                 disabled={isValidating}
                                                 value={dateFrom}
-                                                onChange={(e) => handlerDateFormSubmit(e)}
+                                                onChange={(e) => handleDateFormSubmit(e)}
                                             />
                                         </label>
                                         <label htmlFor="date-to" className="relative block w-full">
@@ -461,7 +481,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                                 disabled={isValidating}
                                                 value={dateTo}
-                                                onChange={(e) => handlerDateFormSubmit(e)}
+                                                onChange={(e) => handleDateFormSubmit(e)}
                                             />
                                         </label>
                                     </Framer.motion.form>
@@ -552,7 +572,10 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                                                             Next
                                                         </button>
                                                     </div>
-                                                    <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                                    <span
+                                                        data-testid="baz"
+                                                        className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50"
+                                                    >
                                                         Showing {offset + 1} -{' '}
                                                         {limit + offset > response.metadata.total
                                                             ? response.metadata.total
