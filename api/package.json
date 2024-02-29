@@ -42,6 +42,7 @@
         "cheerio": "^1.0.0-rc.12",
         "copy-webpack-plugin": "^11.0.0",
         "html-to-text": "^8.2.1",
+        "isomorphic-dompurify": "^2.4.0",
         "jsonwebtoken": "^9.0.2",
         "luxon": "^3.4.3",
         "nodemailer": "^6.9.9",
