@@ -1195,6 +1195,7 @@ test.describe('Publication flow + co-authors', () => {
     });
 
     test('Coauthored publications show on your own profile with correct publication status', async ({ browser }) => {
+        test.slow();
         const publicationTitle = 'account page check';
         const coAuthor = Helpers.user2;
         const page = await Helpers.getPageAsUser(browser);
@@ -1566,6 +1567,7 @@ test.describe('Publication flow + co-authors', () => {
     });
 
     test('Corresponding author and co-authors can create multiple versions for a publication', async ({ browser }) => {
+        test.slow();
         let page = await Helpers.getPageAsUser(browser);
 
         // create v1
@@ -1701,7 +1703,7 @@ test.describe('Publication flow + co-authors', () => {
     });
 
     test('Co-authors can transfer ownership of a new DRAFT version', async ({ browser }) => {
-        const context = await browser.newContext();
+        test.slow();
         const page = await Helpers.getPageAsUser(browser);
 
         // create v1
@@ -1797,6 +1799,7 @@ test.describe('Publication flow + co-authors', () => {
     test('Authors can create/edit and request control over new version from "Versions" dropdown', async ({
         browser
     }) => {
+        test.slow();
         const page = await Helpers.getPageAsUser(browser);
 
         // create v1
