@@ -9,14 +9,11 @@ import * as Helpers from '../helpers';
 setup('Log in users', async ({ browser }) => {
     await Promise.all(
         Helpers.users.map(async (user, idx) => {
-            const storageStatePath = `${Helpers.STORAGE_STATE_BASE}user${idx}.json`;
-            if (!existsSync(storageStatePath)) {
-                const page = await browser.newPage();
-                await Helpers.login(page, browser, user);
-                // Minimise feedback popup
-                await page.getByLabel('Open Close icon').click();
-                await page.context().storageState({ path: storageStatePath });
-            }
+            const page = await browser.newPage();
+            await Helpers.login(page, browser, user);
+            // Minimise feedback popup
+            await page.getByLabel('Open Close icon').click();
+            await page.context().storageState({ path: `${Helpers.STORAGE_STATE_BASE}user${idx}.json` });
         })
     );
 });
