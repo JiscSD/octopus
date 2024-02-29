@@ -555,6 +555,44 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         />
                     )}
 
+                    {
+                        // Show details of publication version Peer Review is linked to.
+                        publication?.type === 'PEER_REVIEW' &&
+                            linkedTo.length === 1 &&
+                            (linkedTo[0].parentVersionIsLatestLive ? (
+                                <Components.Alert severity="INFO" className="mb-4 text-white-100  dark:text-grey-50">
+                                    This is a peer review of the latest version of the following publication:{' '}
+                                    <Components.Link
+                                        href={`/publications/${linkedTo[0].id}`}
+                                        className="underline decoration-white-100 dark:decoration-grey-50"
+                                    >
+                                        {linkedTo[0].title}
+                                    </Components.Link>
+                                </Components.Alert>
+                            ) : (
+                                linkedTo[0].parentVersionNumber &&
+                                linkedTo[0].parentVersionId && (
+                                    <Components.Alert
+                                        severity="INFO"
+                                        className="mb-4 text-white-100  dark:text-grey-50"
+                                        details={[
+                                            'This peer review covers content that has been replaced by a newer version, and is therefore potentially outdated.'
+                                        ]}
+                                    >
+                                        This is a peer review of version {linkedTo[0].parentVersionNumber} of the
+                                        following publication:{' '}
+                                        <Components.Link
+                                            href={`/publications/${linkedTo[0].id}/versions/${linkedTo[0].parentVersionId}`}
+                                            className="underline decoration-white-100 dark:decoration-grey-50"
+                                        >
+                                            {linkedTo[0].title}
+                                        </Components.Link>
+                                        .
+                                    </Components.Alert>
+                                )
+                            ))
+                    }
+
                     {showApprovalsTracker && (
                         <Components.ActionBar
                             publicationVersion={publicationVersion}
