@@ -1731,10 +1731,8 @@ test.describe('Publication flow + co-authors', () => {
         // publish v1
         await page.reload();
         await page.locator(PageModel.publish.publishButtonTracker).click();
-        await Promise.all([
-            page.waitForNavigation(),
-            page.locator(PageModel.publish.confirmPublishButtonTracker).click()
-        ]);
+        await page.locator(PageModel.publish.confirmPublishButtonTracker).click();
+        await page.waitForURL('**/versions/latest');
 
         // get publication id from url and deduct canonical DOI
         const publicationId = page.url().split('/').slice(-3)[0];
@@ -1770,11 +1768,10 @@ test.describe('Publication flow + co-authors', () => {
         await page2.click('button[title="Request Control"]');
         await page2.waitForResponse((response) => response.url().includes('/request-control') && response.ok());
 
-        // Uncomment when https://github.com/JiscSD/octopus/pull/571 has been merged
-        // and navigate to account page first to check this
-        // await expect(page2.getByTestId(publicationTestId)).toContainText(
-        //     'You have requested control over this publication version.'
-        // );
+        await page2.goto('/account');
+        await expect(page2.getByTestId(publicationTestId)).toContainText(
+            'You have requested control over this publication version.'
+        );
 
         // transfer ownership to user2
         await approveControlRequest(browser, Helpers.user1, Helpers.user2.fullName, true);
