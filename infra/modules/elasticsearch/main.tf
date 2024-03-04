@@ -1,6 +1,6 @@
 data "aws_caller_identity" "current" {}
 
-resource "random_string" "db_master_pass" {
+resource "random_password" "db_master_pass" {
   length           = 40
   special          = true
   min_numeric      = 1
@@ -79,7 +79,7 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
 
     master_user_options {
       master_user_name     = "octopus_admin"
-      master_user_password = random_string.db_master_pass.result
+      master_user_password = random_password.db_master_pass.result
     }
   }
 
@@ -130,6 +130,6 @@ resource "aws_ssm_parameter" "elasticsearch_user" {
 resource "aws_ssm_parameter" "elasticsearch_password" {
   name      = "elasticsearch_password_${var.environment}_octopus"
   type      = "String"
-  value     = random_string.db_master_pass.result
+  value     = random_password.db_master_pass.result
   overwrite = true
 }

@@ -224,6 +224,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const showEthicalStatement =
         publicationVersion?.publication.type === 'DATA' && Boolean(publicationVersion.ethicalStatement);
     const showRedFlags = !!flags.length;
+    const showVersionsAccordion = publication && publication.type !== 'PEER_REVIEW' && !isLoadingControlRequests;
 
     if (showReferences) list.push({ title: 'References', href: 'references' });
     if (showChildProblems || showParentPublications)
@@ -686,7 +687,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         </Framer.AnimatePresence>
 
                         <div className="block lg:hidden">
-                            {publication && !isLoadingControlRequests && (
+                            {showVersionsAccordion && (
                                 <div className="my-8">
                                     <Components.VersionsAccordion
                                         id="mobile-versions-accordion"
@@ -989,7 +990,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 </section>
                 <aside className="relative hidden lg:col-span-4 lg:block xl:col-span-3">
                     <div className="sticky top-12 space-y-8">
-                        {publication && !isLoadingControlRequests && (
+                        {showVersionsAccordion && (
                             <Components.VersionsAccordion
                                 id="desktop-versions-accordion"
                                 versions={publication.versions}

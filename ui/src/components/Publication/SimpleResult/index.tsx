@@ -159,6 +159,8 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                             />
                         )}
                     </div>
+                ) : props.publication.type === 'PEER_REVIEW' ? (
+                    <p>Peer reviews cannot be reversioned</p>
                 ) : isAuthorOnLatestLive ? (
                     draftExistsWithoutPermission ? (
                         <div className="flex h-full flex-col justify-between">
