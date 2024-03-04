@@ -27,7 +27,7 @@ resource "aws_security_group" "database_security_group" {
   }
 }
 
-resource "random_string" "db_master_pass" {
+resource "random_password" "db_master_pass" {
   length  = 40
   special = false
   keepers = {
@@ -43,7 +43,7 @@ resource "aws_db_instance" "rds" {
   instance_class          = var.instance
   identifier              = "${var.project_name}-${var.environment}"
   username                = "postgres"
-  password                = random_string.db_master_pass.result
+  password                = random_password.db_master_pass.result
   skip_final_snapshot     = true
   backup_retention_period = var.backup_retention_period
   vpc_security_group_ids  = [aws_security_group.database_security_group.id]
@@ -97,7 +97,7 @@ data "aws_iam_policy_document" "rds_enhanced_monitoring" {
 resource "aws_ssm_parameter" "db_connection_string" {
   name  = "db_connection_string_${var.environment}_${var.project_name}"
   type  = "String"
-  value = "postgresql://${aws_db_instance.rds.username}:${random_string.db_master_pass.result}@${aws_db_instance.rds.address}:5432/postgres"
+  value = "postgresql://${aws_db_instance.rds.username}:${random_password.db_master_pass.result}@${aws_db_instance.rds.address}:5432/postgres"
 }
 
 resource "aws_ssm_parameter" "db_user" {
@@ -109,7 +109,7 @@ resource "aws_ssm_parameter" "db_user" {
 resource "aws_ssm_parameter" "db_password" {
   name  = "db_password_${var.environment}_${var.project_name}"
   type  = "String"
-  value = random_string.db_master_pass.result
+  value = random_password.db_master_pass.result
 }
 
 resource "aws_ssm_parameter" "db_hostname" {
