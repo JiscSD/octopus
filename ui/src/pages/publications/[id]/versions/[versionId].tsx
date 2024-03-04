@@ -150,7 +150,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const [bookmarkId, setBookmarkId] = React.useState(props.bookmarkId);
     const isBookmarked = bookmarkId ? true : false;
     const [isPublishing, setPublishing] = React.useState<boolean>(false);
-    const [approvalError, setApprovalError] = React.useState('');
     const [serverError, setServerError] = React.useState('');
     const [isEditingAffiliations, setIsEditingAffiliations] = React.useState(false);
     const [isUnlocking, setIsUnlocking] = React.useState(false);
@@ -268,7 +267,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const updateCoAuthor = React.useCallback(
         async (confirm: boolean) => {
-            setApprovalError('');
+            setServerError('');
             try {
                 await api.patch(
                     `/publication-versions/${publicationVersion?.id}/coauthor-confirmation`,
@@ -278,7 +277,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     user?.token
                 );
             } catch (err) {
-                setApprovalError(axios.isAxiosError(err) ? err.response?.data?.message : (err as Error).message);
+                setServerError(axios.isAxiosError(err) ? err.response?.data?.message : (err as Error).message);
             }
         },
         [publicationVersion?.id, user?.token]
@@ -483,6 +482,112 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const pageTitle = publicationVersion ? `${publicationVersion.title} - ${Config.urls.viewPublication.title}` : '';
     const contentText = publicationVersion?.content ? Helpers.htmlToText(publicationVersion.content) : '';
 
+    // Collate all alerts that might be shown.
+    const generateAlertComponents = (): React.ReactElement[] | null => {
+        if (!publicationVersion) {
+            return null;
+        }
+        let alerts: React.ReactElement[] = [];
+
+        // Provide info about DRAFT publication status
+        if (publicationVersion.currentStatus === 'DRAFT') {
+            const draftBanner = isCorrespondingAuthor ? (
+                <Components.Alert
+                    className="mb-4"
+                    severity={alertSeverity}
+                    title={`This is a draft publication only visible to authors. ${
+                        showApprovalsTracker
+                            ? isReadyForPublish
+                                ? 'All authors have approved this publication.'
+                                : 'All authors must approve this draft before it can be published.'
+                            : ''
+                    }`}
+                >
+                    <Components.Link
+                        openNew={false}
+                        title="Edit publication"
+                        href={`${Config.urls.viewPublication.path}/${publicationVersion.publication.id}/edit?step=0`}
+                        className="mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline"
+                    >
+                        <OutlineIcons.PencilSquareIcon className="w-4" />
+                        <span>Edit Draft Publication</span>
+                    </Components.Link>
+                </Components.Alert>
+            ) : (
+                <Components.Alert
+                    className="mb-4"
+                    severity={alertSeverity}
+                    title="This publication is currently being edited."
+                >
+                    <p className="mt-2 text-sm text-grey-800">
+                        Once the corresponding author has made their changes, you will be notified to approve the draft
+                        before it is published.
+                    </p>
+                </Components.Alert>
+            );
+            alerts.push(draftBanner);
+        }
+
+        // Indicate where control has been requested
+        if (hasAlreadyRequestedControl) {
+            alerts.push(
+                <Components.Alert
+                    severity="INFO"
+                    title="You have requested control over this publication version."
+                    className="mb-4"
+                />
+            );
+        }
+
+        // For Peer Reviews, show details of the reviewed publication (there must only be one)
+        if (publication?.type === 'PEER_REVIEW' && linkedTo.length === 1) {
+            // Peer review is of current live version
+            if (linkedTo[0].parentVersionIsLatestLive) {
+                alerts.push(
+                    <Components.Alert severity="INFO" className="mb-4 text-white-100  dark:text-grey-50">
+                        This is a peer review of the latest version of the following publication:{' '}
+                        <Components.Link
+                            href={`/publications/${linkedTo[0].id}`}
+                            className="underline decoration-white-100 dark:decoration-grey-50"
+                        >
+                            {linkedTo[0].title}
+                        </Components.Link>
+                    </Components.Alert>
+                );
+            }
+            // Peer review is of outdated version - render alert if we have all details
+            else if (linkedTo[0].parentVersionNumber && linkedTo[0].parentVersionId) {
+                alerts.push(
+                    <Components.Alert
+                        severity="INFO"
+                        className="mb-4 text-white-100  dark:text-grey-50"
+                        details={[
+                            'This peer review covers content that has been replaced by a newer version, and is therefore potentially outdated.'
+                        ]}
+                    >
+                        This is a peer review of version {linkedTo[0].parentVersionNumber} of the following publication:{' '}
+                        <Components.Link
+                            href={`/publications/${linkedTo[0].id}/versions/${linkedTo[0].parentVersionId}`}
+                            className="underline decoration-white-100 dark:decoration-grey-50"
+                        >
+                            {linkedTo[0].title}
+                        </Components.Link>
+                        .
+                    </Components.Alert>
+                );
+            }
+        }
+
+        // General API error
+        if (serverError) {
+            alerts.push(<Components.Alert severity="ERROR" className="mb-4" title={serverError} />);
+        }
+
+        return alerts;
+    };
+
+    const alerts = generateAlertComponents();
+
     return publicationVersion ? (
         <>
             <Head>
@@ -506,93 +611,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 }
             >
                 <section className="col-span-12 lg:col-span-8 xl:col-span-9">
-                    {approvalError && <Components.Alert className="mb-4" severity="ERROR" title={approvalError} />}
-                    {publicationVersion.currentStatus === 'DRAFT' && (
-                        <>
-                            {!isCorrespondingAuthor && (
-                                <Components.Alert
-                                    className="mb-4"
-                                    severity={alertSeverity}
-                                    title="This publication is currently being edited."
-                                >
-                                    <p className="mt-2 text-sm text-grey-800">
-                                        Once the corresponding author has made their changes, you will be notified to
-                                        approve the draft before it is published.
-                                    </p>
-                                </Components.Alert>
-                            )}
-                            {isCorrespondingAuthor && (
-                                <Components.Alert
-                                    className="mb-4"
-                                    severity={alertSeverity}
-                                    title={`This is a draft publication only visible to authors. ${
-                                        showApprovalsTracker
-                                            ? isReadyForPublish
-                                                ? 'All authors have approved this publication.'
-                                                : 'All authors must approve this draft before it can be published.'
-                                            : ''
-                                    }`}
-                                >
-                                    <Components.Link
-                                        openNew={false}
-                                        title="Edit publication"
-                                        href={`${Config.urls.viewPublication.path}/${publicationVersion.publication.id}/edit?step=0`}
-                                        className="mt-2 flex w-fit items-center space-x-2 text-sm text-white-50 underline"
-                                    >
-                                        <OutlineIcons.PencilSquareIcon className="w-4" />
-                                        <span>Edit Draft Publication</span>
-                                    </Components.Link>
-                                </Components.Alert>
-                            )}
-                        </>
-                    )}
-
-                    {hasAlreadyRequestedControl && (
-                        <Components.Alert
-                            severity="INFO"
-                            title="You have requested control over this publication version."
-                            className="mb-4"
-                        />
-                    )}
-
-                    {
-                        // Show details of publication version Peer Review is linked to.
-                        publication?.type === 'PEER_REVIEW' &&
-                            linkedTo.length === 1 &&
-                            (linkedTo[0].parentVersionIsLatestLive ? (
-                                <Components.Alert severity="INFO" className="mb-4 text-white-100  dark:text-grey-50">
-                                    This is a peer review of the latest version of the following publication:{' '}
-                                    <Components.Link
-                                        href={`/publications/${linkedTo[0].id}`}
-                                        className="underline decoration-white-100 dark:decoration-grey-50"
-                                    >
-                                        {linkedTo[0].title}
-                                    </Components.Link>
-                                </Components.Alert>
-                            ) : (
-                                linkedTo[0].parentVersionNumber &&
-                                linkedTo[0].parentVersionId && (
-                                    <Components.Alert
-                                        severity="INFO"
-                                        className="mb-4 text-white-100  dark:text-grey-50"
-                                        details={[
-                                            'This peer review covers content that has been replaced by a newer version, and is therefore potentially outdated.'
-                                        ]}
-                                    >
-                                        This is a peer review of version {linkedTo[0].parentVersionNumber} of the
-                                        following publication:{' '}
-                                        <Components.Link
-                                            href={`/publications/${linkedTo[0].id}/versions/${linkedTo[0].parentVersionId}`}
-                                            className="underline decoration-white-100 dark:decoration-grey-50"
-                                        >
-                                            {linkedTo[0].title}
-                                        </Components.Link>
-                                        .
-                                    </Components.Alert>
-                                )
-                            ))
-                    }
-
+                    {alerts}
                     {showApprovalsTracker && (
                         <Components.ActionBar
                             publicationVersion={publicationVersion}
@@ -606,8 +625,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             onEditAffiliations={handleOpenAffiliationsModal}
                         />
                     )}
-
-                    {serverError && <Components.Alert severity="ERROR" className="mb-4" title={serverError} />}
 
                     {showApprovalsTracker && (
                         <div className="pb-16">
