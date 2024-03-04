@@ -804,6 +804,13 @@ export const getDirectLinksForPublication = async (
                 select: {
                     id: true,
                     draft: true,
+                    versionTo: {
+                        select: {
+                            id: true,
+                            isLatestLiveVersion: true,
+                            versionNumber: true
+                        }
+                    },
                     publicationTo: {
                         select: {
                             id: true,
@@ -874,7 +881,7 @@ export const getDirectLinksForPublication = async (
     }
 
     const linkedTo: I.LinkedToPublication[] = publication.linkedTo.map((link) => {
-        const { id: linkId, publicationTo, draft } = link;
+        const { id: linkId, publicationTo, versionTo, draft } = link;
         const { id, type, versions, doi } = publicationTo;
         const { createdBy, user, currentStatus, publishedDate, title } = versions[0];
 
@@ -886,6 +893,9 @@ export const getDirectLinksForPublication = async (
             doi,
             childPublication: publication.id,
             childPublicationType: publication.type,
+            parentVersionId: versionTo.id,
+            parentVersionNumber: versionTo.versionNumber,
+            parentVersionIsLatestLive: versionTo.isLatestLiveVersion,
             title: title || '',
             createdBy,
             authorFirstName: user.firstName,
