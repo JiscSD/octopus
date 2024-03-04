@@ -126,6 +126,11 @@ export interface LinkedToPublication extends LinkedPublication {
     draft: boolean;
     childPublication: string;
     childPublicationType: Types.PublicationType;
+    // Only returned with ?direct=true on the getPublicationLinks endpoint.
+    // Just used at present to show, and link to, the version a Peer Review was created against.
+    parentVersionId?: string;
+    parentVersionNumber?: number;
+    parentVersionIsLatestLive?: boolean;
 }
 
 export interface LinkedFromPublication extends LinkedPublication {
