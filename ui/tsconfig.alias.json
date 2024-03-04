@@ -17,6 +17,7 @@
             "@/mocks": ["./src/__tests__/mocks"],
             "@/stores": ["./src/stores"],
             "@/templates": ["./src/templates"],
+            "@/testUtils": ["./src/__tests__/testUtils"],
             "@/types": ["./src/lib/types"]
         }
     }

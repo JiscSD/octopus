@@ -23,7 +23,8 @@ const customJestConfig = {
         '^@/api(.*)$': '<rootDir>/src/lib/api$1',
         '^@/interfaces(.*)$': '<rootDir>/src/lib/interfaces$1',
         '^@/types(.*)$': '<rootDir>/src/lib/types$1',
-        '^@/documentation(.*)$': '<rootDir>/src/lib/documentation$1'
+        '^@/documentation(.*)$': '<rootDir>/src/lib/documentation$1',
+        '^@/testUtils(.*)$': '<rootDir>/src/__tests__/testUtils$1'
     },
     testEnvironment: 'jest-environment-jsdom'
 };
