@@ -435,6 +435,12 @@ export const create = async (
             });
         }
 
+        if (latestPublicationVersion.publication.type === 'PEER_REVIEW') {
+            return response.json(400, {
+                message: 'Peer reviews cannot be reversioned.'
+            });
+        }
+
         // check if latest version is published
         if (latestPublicationVersion.currentStatus !== 'LIVE') {
             return response.json(400, {
