@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import fs from 'fs';
 import * as cheerio from 'cheerio';
+import * as DOMPurify from 'isomorphic-dompurify';
 import * as I from 'interface';
 import * as referenceService from 'reference/service';
 import * as publicationService from 'publication/service';
@@ -27,13 +28,17 @@ export const isHTMLSafe = (content: string): boolean => {
 };
 
 export const getSafeHTML = (content: string): string => {
+    // Remove all classes and styles
     const $ = cheerio.load(content, null, false);
 
     $('*').map((_, element) => {
         return $(element).removeAttr('class').removeAttr('style');
     });
 
-    return $.html();
+    const htmlToBeSanitized = $.html();
+
+    // Sanitize against XSS
+    return DOMPurify.sanitize(htmlToBeSanitized);
 };
 
 export const createEmptyDOI = async (): Promise<I.DOIResponse> => {

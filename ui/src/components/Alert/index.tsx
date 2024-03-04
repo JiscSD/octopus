@@ -132,6 +132,7 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                                         type="button"
                                         onClick={() => setShow(false)}
                                         className="rounded bg-grey-700 px-2 py-1 text-sm font-semibold text-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                                        aria-label="Dismiss alert"
                                     >
                                         Dismiss
                                     </button>

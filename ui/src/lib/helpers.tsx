@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import JWT from 'jsonwebtoken';
 
 import * as cheerio from 'cheerio';
@@ -9,6 +8,7 @@ import * as Config from '@/config';
 import * as Types from '@/types';
 import * as api from '@/api';
 import * as Interfaces from '@/interfaces';
+import Cookies from '@/cookies';
 import { Middleware } from 'swr';
 
 /**
