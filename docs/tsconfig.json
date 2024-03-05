@@ -1,0 +1,10 @@
+{
+  "extends": "@docusaurus/tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/interfaces": ["./src/lib/interfaces"],
+      "@/types": ["./src/lib/types"]
+    }
+  }
+}
