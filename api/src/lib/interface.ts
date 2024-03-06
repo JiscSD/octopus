@@ -204,6 +204,11 @@ export interface LinkedPublication {
     authorFirstName: string;
     authorLastName: string;
     authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'user'>[];
+    // Only returned with ?direct=true on the getPublicationLinks endpoint.
+    // Just used at present to show, and link to, the version a Peer Review was created against.
+    parentVersionId?: string;
+    parentVersionNumber?: number;
+    parentVersionIsLatestLive?: boolean;
 }
 
 export interface LinkedToPublication extends LinkedPublication {
@@ -211,11 +216,6 @@ export interface LinkedToPublication extends LinkedPublication {
     draft: boolean;
     childPublication: string;
     childPublicationType: PublicationType;
-    // Only returned with ?direct=true on the getPublicationLinks endpoint.
-    // Just used at present to show, and link to, the version a Peer Review was created against.
-    parentVersionId?: string;
-    parentVersionNumber?: number;
-    parentVersionIsLatestLive?: boolean;
 }
 
 export interface LinkedFromPublication extends LinkedPublication {
