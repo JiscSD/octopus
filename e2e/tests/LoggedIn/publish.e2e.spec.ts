@@ -41,7 +41,10 @@ const completeLinkedItemsTab = async (page: Page, linkedPubSearchTerm: string, l
     await page.locator(PageModel.publish.linkedItems.publicationInput).click();
     await page.keyboard.type(linkedPubSearchTerm);
     await page.locator(`[role="option"]:has-text("${linkedPubTitle}")`).click();
-    await page.locator(PageModel.publish.linkedItems.addLink).click();
+    await Promise.all([
+        page.waitForResponse((response) => response.url().includes('/links') && response.ok()),
+        page.locator(PageModel.publish.linkedItems.addLink).click()
+    ]);
     await expect(page.locator(PageModel.publish.linkedItems.deletePublicationLink)).toBeVisible();
 
     await page.locator(PageModel.publish.nextButton).click();
@@ -800,6 +803,7 @@ const verifyLastEmailNotification = async (browser: Browser, user: Helpers.TestU
 const unlockPublication = async (page: Page) => {
     await page.locator(PageModel.publish.unlockButton).click();
     await page.locator(PageModel.publish.confirmUnlockButton).click();
+    await page.waitForURL('**/edit?**');
 };
 
 type AccountPagePublicationState =
