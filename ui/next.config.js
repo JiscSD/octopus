@@ -8,6 +8,11 @@ const nextConfig = {
                 source: '/search',
                 destination: '/search/publications/',
                 permanent: true
+            },
+            {
+                source: '/documentation/api',
+                destination: 'https://jiscsd.github.io/octopus',
+                permanent: true
             }
         ];
     }
