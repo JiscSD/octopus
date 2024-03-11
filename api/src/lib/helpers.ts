@@ -318,23 +318,27 @@ export const createDOIPayload = async (
             // canonical
             const { oldPublicationVersionDOIs } = data;
 
-            const publicationVersionDOIs = [...oldPublicationVersionDOIs, publicationVersion.doi].map((doi) => ({
-                relatedIdentifier: doi,
-                relatedIdentifierType: 'DOI',
-                relationType: 'HasVersion',
-                resourceTypeGeneral: payload.data.attributes.types.resourceTypeGeneral
-            }));
+            // It's possible there will be no versioned DOIs at all.
+            // Peer reviews only get a canonical DOI. In this case, skip this part.
+            if (oldPublicationVersionDOIs.length || publicationVersion.doi) {
+                const publicationVersionDOIs = [...oldPublicationVersionDOIs, publicationVersion.doi].map((doi) => ({
+                    relatedIdentifier: doi,
+                    relatedIdentifierType: 'DOI',
+                    relationType: 'HasVersion',
+                    resourceTypeGeneral: payload.data.attributes.types.resourceTypeGeneral
+                }));
 
-            Object.assign(payload.data.attributes, {
-                doi: data.doi,
-                identifiers: [
-                    {
-                        identifier: `https://doi.org/${data.doi}`,
-                        identifierType: 'DOI'
-                    }
-                ],
-                relatedIdentifiers: [...payload.data.attributes.relatedIdentifiers, ...publicationVersionDOIs]
-            });
+                Object.assign(payload.data.attributes, {
+                    doi: data.doi,
+                    identifiers: [
+                        {
+                            identifier: `https://doi.org/${data.doi}`,
+                            identifierType: 'DOI'
+                        }
+                    ],
+                    relatedIdentifiers: [...payload.data.attributes.relatedIdentifiers, ...publicationVersionDOIs]
+                });
+            }
         }
     }
 
@@ -365,7 +369,9 @@ export const updatePublicationDOI = async (
         throw Error('Supplied version is not current');
     }
 
-    if (!latestPublicationVersion.doi) {
+    // Unless this is a peer review (which doesn't get versioned DOIs, as they only have 1 version)
+    // we need to have the DOI of the version so we can reference it in the canonical DOI's metadata.
+    if (!latestPublicationVersion.doi && latestPublicationVersion.publication.type !== 'PEER_REVIEW') {
         throw Error("Supplied version doesn't have a valid DOI.");
     }
 
