@@ -68,13 +68,13 @@ export const handler = async (event) => {
       // Retry once
       console.log("First attempt failed; retrying");
       const retry = await postToPubrouter(pdfMetadata, validate);
-      const retryJSON = await retry.json();
       if (retry.ok) {
         return baseJSONResponse(
           200,
           "Successfully submitted to publication router"
         );
       } else {
+        const retryJSON = await retry.json();
         await sendFailureEmail(JSON.stringify(retryJSON), event, publicationId);
         return baseJSONResponse(500, "Failed to submit to publication router");
       }
