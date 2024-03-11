@@ -2,7 +2,7 @@ profile = "octopus-dev"
 
 rds_allocated_storage                     = 50
 rds_max_allocated_storage                 = 100
-rds_instance                              = "db.m5.large"
+rds_instance                              = "db.t4g.medium"
 rds_db_version                            = "14.8"
 rds_backup_retention_period               = 35
 rds_monitoring_interval                   = 60
