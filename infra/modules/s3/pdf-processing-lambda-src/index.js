@@ -15,7 +15,7 @@ export const handler = async (event) => {
   const key = event.Records[0].s3.object.key;
 
   // Whether we are validating our metadata (using the pubrouter validate endpoint), as opposed to sending it for real.
-  const validate = true;
+  const validate = false;
 
   const pdfUrl = `https://${bucket}.s3.amazonaws.com/${key}`;
 
