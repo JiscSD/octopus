@@ -159,7 +159,6 @@ const FunderForm: React.FC = (): React.ReactElement => {
         error === 'This funder and grant identifier already exist on this publication version.';
 
     const unsetErrorIfDuplicate = () => {
-        console.log(error);
         if (duplicateFunderError) {
             setError(null);
         }
