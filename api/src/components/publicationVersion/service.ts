@@ -132,7 +132,24 @@ export const getAllByPublicationIds = async (ids: string[]) => {
                     id: true,
                     type: true,
                     doi: true,
-                    url_slug: true
+                    url_slug: true,
+                    linkedFrom: {
+                        where: {
+                            publicationFrom: {
+                                type: 'PEER_REVIEW',
+                                versions: {
+                                    some: {
+                                        isLatestLiveVersion: true
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    publicationFlags: {
+                        where: {
+                            resolved: false
+                        }
+                    }
                 }
             },
             user: {
@@ -166,7 +183,22 @@ export const getAllByPublicationIds = async (ids: string[]) => {
         throw Error('Unable to find all latest versions for all requested publications.');
     }
 
-    return latestVersions;
+    // Provide counts
+    const mappedResults = latestVersions.map((version) => {
+        // Remove linkedFrom and flags from return
+        const { linkedFrom, publicationFlags, ...rest } = version.publication;
+
+        return {
+            ...version,
+            publication: {
+                ...rest,
+                flagCount: version.publication.publicationFlags.length,
+                peerReviewCount: version.publication.linkedFrom.length
+            }
+        };
+    });
+
+    return mappedResults;
 };
 
 export const update = (id: string, data: Prisma.PublicationVersionUpdateInput) =>
@@ -425,7 +457,7 @@ export const create = async (previousVersion: I.PublicationVersion, user: I.User
                   linkedUser: user.id,
                   confirmedCoAuthor: true,
                   approvalRequested: false,
-                  affiliations: coAuthor.affiliations,
+                  affiliations: coAuthor.affiliations as unknown[] as Prisma.InputJsonValue[],
                   isIndependent: coAuthor.isIndependent,
                   position: index
               }
