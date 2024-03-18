@@ -37,6 +37,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
     const publishedVersionCount = props.publication.versions.filter(
         (version) => version.currentStatus === 'LIVE'
     ).length;
+    const { flagCount, peerReviewCount } = props.publication;
 
     const requestControl = hasAlreadyRequestedControl ? (
         <Components.Alert
@@ -203,12 +204,15 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                 <p>You are not listed as an author on the latest published version</p>
                             )}
                         </div>
-                        <Components.Button
-                            href={`/publications/${props.publication.id}`}
-                            endIcon={<OutlineIcons.ArrowTopRightOnSquareIcon className="h-4" />}
-                            title="View"
-                            className="mt-5 bg-teal-500 px-3 text-white-50 children:border-none children:text-white-50"
-                        />
+                        <div className="mt-5 flex w-full justify-between">
+                            <Components.Button
+                                href={`/publications/${props.publication.id}`}
+                                endIcon={<OutlineIcons.ArrowTopRightOnSquareIcon className="h-4" />}
+                                title="View"
+                                className="bg-teal-500 px-3 text-white-50 children:border-none children:text-white-50"
+                            />
+                            <Components.EngagementCounts flagCount={flagCount} peerReviewCount={peerReviewCount} />
+                        </div>
                     </>
                 ) : (
                     <p>Never published</p>

@@ -19,6 +19,8 @@ interface BoxEntry {
     publishedDate: string;
     authors: Interfaces.LinkedPublication['authors'];
     pointers: string[];
+    flagCount: number;
+    peerReviewCount: number;
 }
 
 type BoxProps = BoxEntry & {
@@ -54,6 +56,10 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
         return authors[0];
     }, [props.authorFirstName, props.authorLastName, props.authors, props.createdBy]);
 
+    const { flagCount, peerReviewCount } = props;
+    const hasFlagAndPeerReview = flagCount && peerReviewCount;
+    const hasOneOfFlagOrPeerReview = flagCount || peerReviewCount;
+
     return (
         <Framer.motion.div id={props.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative">
             <Components.Link
@@ -67,18 +73,22 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
              relative z-20 block overflow-hidden rounded-md border-2 px-3 py-2 text-grey-800 shadow transition-colors duration-500 dark:text-white-100
             `}
             >
-                <>
+                <div
+                    className={`mb-2 line-clamp-3 text-xs leading-snug xl:min-h-[50px] 2xl:min-h-[60px] 2xl:text-sm ${
+                        props.isSelected ? 'font-semibold' : 'font-medium'
+                    }`}
+                    title={props.title}
+                    role="complementary"
+                    aria-label={props.title}
+                >
+                    <span>{props.title}</span>
+                </div>
+                <div className="flex">
                     <div
-                        className={`mb-2 line-clamp-3 text-xs leading-snug xl:min-h-[50px] 2xl:min-h-[60px] 2xl:text-sm ${
-                            props.isSelected ? 'font-semibold' : 'font-medium'
-                        }`}
-                        title={props.title}
-                        role="complementary"
-                        aria-label={props.title}
+                        className={`${
+                            hasFlagAndPeerReview ? 'w-1/2' : hasOneOfFlagOrPeerReview ? 'w-3/4' : 'w-full'
+                        }  space-y-1`}
                     >
-                        <span>{props.title}</span>
-                    </div>
-                    <div className="space-y-1">
                         <span
                             className={`${
                                 props.isSelected
@@ -88,7 +98,6 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                         >
                             {`${mainAuthor.firstName ? `${mainAuthor.firstName[0]}. ` : ''}${mainAuthor.lastName}`}
                         </span>
-
                         <time
                             className={`${
                                 props.isSelected ? 'text-teal-50' : 'text-grey-600'
@@ -98,7 +107,18 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                             {Helpers.formatDate(props.publishedDate, 'short')}
                         </time>
                     </div>
-                </>
+                    <Components.EngagementCounts
+                        flagCount={props.flagCount}
+                        peerReviewCount={props.peerReviewCount}
+                        narrow={true}
+                        className={hasFlagAndPeerReview ? 'w-1/2' : 'w-1/4'}
+                        childClasses={
+                            props.isSelected
+                                ? 'font-medium text-teal-100'
+                                : 'text-grey-600 dark:font-medium dark:text-teal-50'
+                        }
+                    />
+                </div>
             </Components.Link>
             {props.pointers.map((pointer, index) => (
                 <Xarrow
@@ -142,7 +162,9 @@ const getPublicationsByType = (data: Interfaces.PublicationWithLinks, type: stri
                             linkedPublication.type !== 'PEER_REVIEW' &&
                             linkedPublication.parentPublication === publication.id
                     )
-                    .map((publication) => publication.id) // get the ids of all direct child publications
+                    .map((publication) => publication.id), // get the ids of all direct child publications
+                flagCount: publication.flagCount,
+                peerReviewCount: publication.peerReviewCount
             }
         ];
     }
@@ -169,7 +191,9 @@ const getPublicationsByType = (data: Interfaces.PublicationWithLinks, type: stri
                             (publication) =>
                                 publication.type !== 'PEER_REVIEW' && publication.id === linkedPublication.id
                         )
-                        .map((publication) => publication.childPublication) // get the ids of all direct child publications
+                        .map((publication) => publication.childPublication), // get the ids of all direct child publications
+                    flagCount: linkedPublication.flagCount,
+                    peerReviewCount: linkedPublication.peerReviewCount
                 });
             }
         }
@@ -198,7 +222,9 @@ const getPublicationsByType = (data: Interfaces.PublicationWithLinks, type: stri
                                 publication.type !== 'PEER_REVIEW' &&
                                 publication.parentPublication === linkedPublication.id
                         )
-                        .map((publication) => publication.id) // get the ids of all direct child publications
+                        .map((publication) => publication.id), // get the ids of all direct child publications
+                    flagCount: linkedPublication.flagCount,
+                    peerReviewCount: linkedPublication.peerReviewCount
                 });
             }
         }

@@ -54,6 +54,8 @@ export interface CorePublication {
     type: Types.PublicationType;
     doi: string | null;
     url_slug: string;
+    flagCount?: number;
+    peerReviewCount?: number;
 }
 
 export interface PublicationVersionUser {
@@ -119,6 +121,8 @@ export interface LinkedPublication {
     authorFirstName: string;
     authorLastName: string;
     authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationVersionId' | 'user'>[];
+    flagCount: number;
+    peerReviewCount: number;
 }
 
 export interface LinkedToPublication extends LinkedPublication {
