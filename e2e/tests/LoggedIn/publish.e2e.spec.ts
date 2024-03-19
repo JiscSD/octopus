@@ -1,5 +1,5 @@
 import * as Helpers from '../helpers';
-import { expect, test, Page, Browser, BrowserContext } from '@playwright/test';
+import { expect, test, Page, Browser } from '@playwright/test';
 import { PageModel } from '../PageModel';
 import cuid2 from '@paralleldrive/cuid2';
 
@@ -41,7 +41,10 @@ const completeLinkedItemsTab = async (page: Page, linkedPubSearchTerm: string, l
     await page.locator(PageModel.publish.linkedItems.publicationInput).click();
     await page.keyboard.type(linkedPubSearchTerm);
     await page.locator(`[role="option"]:has-text("${linkedPubTitle}")`).click();
-    await page.locator(PageModel.publish.linkedItems.addLink).click();
+    await Promise.all([
+        page.waitForResponse((response) => response.url().includes('/links') && response.ok()),
+        page.locator(PageModel.publish.linkedItems.addLink).click()
+    ]);
     await expect(page.locator(PageModel.publish.linkedItems.deletePublicationLink)).toBeVisible();
 
     await page.locator(PageModel.publish.nextButton).click();
@@ -663,6 +666,9 @@ const requestApproval = async (page: Page) => {
     await page.locator(PageModel.publish.requestApprovalButton).click();
     await page.locator(PageModel.publish.confirmRequestApproval).click();
     await page.waitForResponse((response) => response.url().includes('/request-approval') && response.ok());
+    // Wait for new data to be fetched on the publication page.
+    const publicationFieldsRegex = /\/publications\/[0-9a-zA-Z\-]+\?fields=/;
+    await page.waitForResponse((response) => publicationFieldsRegex.test(response.url()) && response.ok());
 };
 
 const confirmInvolvement = async (browser: Browser, user: Helpers.TestUser, page: Page) => {
@@ -800,6 +806,7 @@ const verifyLastEmailNotification = async (browser: Browser, user: Helpers.TestU
 const unlockPublication = async (page: Page) => {
     await page.locator(PageModel.publish.unlockButton).click();
     await page.locator(PageModel.publish.confirmUnlockButton).click();
+    await page.waitForURL('**/edit?**');
 };
 
 type AccountPagePublicationState =
@@ -1607,7 +1614,7 @@ test.describe('Publication flow + co-authors', () => {
 
         // change title
         let newTitle = problemPublication.title + ' v2';
-        const titleInputLocator = 'input[aria-labelledby="title-label"]';
+        const titleInputLocator = 'input[aria-label="Title"]';
         await page.fill(titleInputLocator, newTitle);
 
         // invite a co-author
