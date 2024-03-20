@@ -10,92 +10,94 @@ import * as s3 from 'lib/s3';
 import * as publicationService from 'publication/service';
 import * as referenceService from 'reference/service';
 
+const defaultPublicationVersionInclude = {
+    publication: {
+        select: {
+            id: true,
+            type: true,
+            doi: true,
+            url_slug: true
+        }
+    },
+    publicationStatus: {
+        select: {
+            status: true,
+            createdAt: true,
+            id: true
+        },
+        orderBy: {
+            createdAt: 'desc'
+        }
+    },
+    funders: {
+        select: {
+            id: true,
+            city: true,
+            country: true,
+            name: true,
+            link: true,
+            ror: true,
+            grantId: true
+        }
+    },
+    coAuthors: {
+        select: {
+            id: true,
+            email: true,
+            linkedUser: true,
+            publicationVersionId: true,
+            confirmedCoAuthor: true,
+            approvalRequested: true,
+            createdAt: true,
+            reminderDate: true,
+            isIndependent: true,
+            affiliations: true,
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    orcid: true
+                }
+            }
+        },
+        orderBy: {
+            position: 'asc'
+        }
+    },
+    user: {
+        select: {
+            id: true,
+            orcid: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            createdAt: true,
+            updatedAt: true
+        }
+    },
+    topics: {
+        select: {
+            id: true,
+            title: true,
+            createdAt: true
+        }
+    },
+    additionalInformation: {
+        select: {
+            id: true,
+            title: true,
+            url: true,
+            description: true
+        }
+    }
+} satisfies Prisma.PublicationVersionInclude;
+
 export const getById = (id: string) =>
     client.prisma.publicationVersion.findFirst({
         where: {
             id
         },
-        include: {
-            publication: {
-                select: {
-                    id: true,
-                    type: true,
-                    doi: true,
-                    url_slug: true
-                }
-            },
-            publicationStatus: {
-                select: {
-                    status: true,
-                    createdAt: true,
-                    id: true
-                },
-                orderBy: {
-                    createdAt: 'desc'
-                }
-            },
-            funders: {
-                select: {
-                    id: true,
-                    city: true,
-                    country: true,
-                    name: true,
-                    link: true,
-                    ror: true,
-                    grantId: true
-                }
-            },
-            coAuthors: {
-                select: {
-                    id: true,
-                    email: true,
-                    linkedUser: true,
-                    publicationVersionId: true,
-                    confirmedCoAuthor: true,
-                    approvalRequested: true,
-                    createdAt: true,
-                    reminderDate: true,
-                    isIndependent: true,
-                    affiliations: true,
-                    user: {
-                        select: {
-                            firstName: true,
-                            lastName: true,
-                            orcid: true
-                        }
-                    }
-                },
-                orderBy: {
-                    position: 'asc'
-                }
-            },
-            user: {
-                select: {
-                    id: true,
-                    orcid: true,
-                    firstName: true,
-                    lastName: true,
-                    email: true,
-                    createdAt: true,
-                    updatedAt: true
-                }
-            },
-            topics: {
-                select: {
-                    id: true,
-                    title: true,
-                    createdAt: true
-                }
-            },
-            additionalInformation: {
-                select: {
-                    id: true,
-                    title: true,
-                    url: true,
-                    description: true
-                }
-            }
-        }
+        include: defaultPublicationVersionInclude
     });
 
 export const get = (publicationId: string, version: string | number) =>
@@ -112,87 +114,7 @@ export const get = (publicationId: string, version: string | number) =>
                   }
                 : { id: version })
         },
-        include: {
-            publication: {
-                select: {
-                    id: true,
-                    type: true,
-                    doi: true,
-                    url_slug: true
-                }
-            },
-            publicationStatus: {
-                select: {
-                    status: true,
-                    createdAt: true,
-                    id: true
-                },
-                orderBy: {
-                    createdAt: 'desc'
-                }
-            },
-            funders: {
-                select: {
-                    id: true,
-                    city: true,
-                    country: true,
-                    name: true,
-                    link: true,
-                    ror: true,
-                    grantId: true
-                }
-            },
-            coAuthors: {
-                select: {
-                    id: true,
-                    email: true,
-                    linkedUser: true,
-                    publicationVersionId: true,
-                    confirmedCoAuthor: true,
-                    approvalRequested: true,
-                    createdAt: true,
-                    reminderDate: true,
-                    isIndependent: true,
-                    affiliations: true,
-                    user: {
-                        select: {
-                            firstName: true,
-                            lastName: true,
-                            orcid: true
-                        }
-                    }
-                },
-                orderBy: {
-                    position: 'asc'
-                }
-            },
-            user: {
-                select: {
-                    id: true,
-                    orcid: true,
-                    firstName: true,
-                    lastName: true,
-                    email: true,
-                    createdAt: true,
-                    updatedAt: true
-                }
-            },
-            topics: {
-                select: {
-                    id: true,
-                    title: true,
-                    createdAt: true
-                }
-            },
-            additionalInformation: {
-                select: {
-                    id: true,
-                    title: true,
-                    url: true,
-                    description: true
-                }
-            }
-        }
+        include: defaultPublicationVersionInclude
     });
 
 export const getAllByPublicationIds = async (ids: string[]) => {
@@ -254,87 +176,7 @@ export const update = (id: string, data: Prisma.PublicationVersionUpdateInput) =
         },
         // Make sure updatedAt changes - only changing relations will not cause this otherwise.
         data: { ...data, updatedAt: new Date().toISOString() },
-        include: {
-            publication: {
-                select: {
-                    id: true,
-                    type: true,
-                    doi: true,
-                    url_slug: true
-                }
-            },
-            publicationStatus: {
-                select: {
-                    status: true,
-                    createdAt: true,
-                    id: true
-                },
-                orderBy: {
-                    createdAt: 'desc'
-                }
-            },
-            funders: {
-                select: {
-                    id: true,
-                    city: true,
-                    country: true,
-                    name: true,
-                    link: true,
-                    ror: true,
-                    grantId: true
-                }
-            },
-            coAuthors: {
-                select: {
-                    id: true,
-                    email: true,
-                    linkedUser: true,
-                    publicationVersionId: true,
-                    confirmedCoAuthor: true,
-                    approvalRequested: true,
-                    createdAt: true,
-                    reminderDate: true,
-                    isIndependent: true,
-                    affiliations: true,
-                    user: {
-                        select: {
-                            firstName: true,
-                            lastName: true,
-                            orcid: true
-                        }
-                    }
-                },
-                orderBy: {
-                    position: 'asc'
-                }
-            },
-            user: {
-                select: {
-                    id: true,
-                    orcid: true,
-                    firstName: true,
-                    lastName: true,
-                    email: true,
-                    createdAt: true,
-                    updatedAt: true
-                }
-            },
-            topics: {
-                select: {
-                    id: true,
-                    title: true,
-                    createdAt: true
-                }
-            },
-            additionalInformation: {
-                select: {
-                    id: true,
-                    title: true,
-                    url: true,
-                    description: true
-                }
-            }
-        }
+        include: defaultPublicationVersionInclude
     });
 
 export const updateStatus = async (id: string, status: I.PublicationStatusEnum) => {
@@ -353,7 +195,8 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum) 
                 publishedDate: new Date().toISOString(),
                 isLatestLiveVersion: true
             })
-        }
+        },
+        include: defaultPublicationVersionInclude
     });
 
     const publication = await client.prisma.publication.findUnique({
@@ -420,6 +263,8 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum) 
             });
         }
     }
+
+    return updatedVersion;
 };
 
 export const validateConflictOfInterest = (version: I.PublicationVersion) => {
@@ -676,87 +521,7 @@ export const create = async (previousVersion: I.PublicationVersion, user: I.User
                 }
             }
         },
-        include: {
-            publication: {
-                select: {
-                    id: true,
-                    type: true,
-                    doi: true,
-                    url_slug: true
-                }
-            },
-            publicationStatus: {
-                select: {
-                    status: true,
-                    createdAt: true,
-                    id: true
-                },
-                orderBy: {
-                    createdAt: 'desc'
-                }
-            },
-            funders: {
-                select: {
-                    id: true,
-                    city: true,
-                    country: true,
-                    name: true,
-                    link: true,
-                    ror: true,
-                    grantId: true
-                }
-            },
-            coAuthors: {
-                select: {
-                    id: true,
-                    email: true,
-                    linkedUser: true,
-                    publicationVersionId: true,
-                    confirmedCoAuthor: true,
-                    approvalRequested: true,
-                    createdAt: true,
-                    reminderDate: true,
-                    isIndependent: true,
-                    affiliations: true,
-                    user: {
-                        select: {
-                            firstName: true,
-                            lastName: true,
-                            orcid: true
-                        }
-                    }
-                },
-                orderBy: {
-                    position: 'asc'
-                }
-            },
-            user: {
-                select: {
-                    id: true,
-                    orcid: true,
-                    firstName: true,
-                    lastName: true,
-                    email: true,
-                    createdAt: true,
-                    updatedAt: true
-                }
-            },
-            topics: {
-                select: {
-                    id: true,
-                    title: true,
-                    createdAt: true
-                }
-            },
-            additionalInformation: {
-                select: {
-                    id: true,
-                    title: true,
-                    url: true,
-                    description: true
-                }
-            }
-        }
+        include: defaultPublicationVersionInclude
     });
 
     // change previous version "isLatestVersion" to false
