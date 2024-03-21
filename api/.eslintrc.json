@@ -13,7 +13,8 @@
     },
     "ignorePatterns": [
         "webpack.config.js",
-        "jest.config.ts"
+        "jest.config.ts",
+        "docs"
     ],
     "plugins": [
         "@typescript-eslint"

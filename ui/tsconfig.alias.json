@@ -9,7 +9,6 @@
             "@/contentfulClient": ["./src/lib/contentfulClient"],
             "@/contexts": ["./src/contexts"],
             "@/cookies": ["./src/lib/cookies"],
-            "@/documentation": ["./src/lib/documentation"],
             "@/helpers": ["./src/lib/helpers"],
             "@/hooks": ["./src/hooks"],
             "@/interfaces": ["./src/lib/interfaces"],

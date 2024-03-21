@@ -191,13 +191,6 @@ const urls = {
         ],
         canonical: `${base.host}/faq`
     },
-    documentation: {
-        path: '/documentation',
-        title: `API documentation - ${base.title}`,
-        description: 'Find out more about the Octopus API through this documentation page.',
-        keywords: ['open source', 'api', 'documentation', 'publishing platform'],
-        canonical: `${base.host}/documentation`
-    },
     accessibility: {
         path: '/accessibility',
         title: `Accessibility - ${base.title}`,
