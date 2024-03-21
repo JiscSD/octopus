@@ -267,7 +267,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     /**
      * @title Requesting to publish
      * @description When requesting to go live, we carry out a few checks.
-     *              The api will tell us is we cannot go live, but prior to request
+     *              The api will tell us if we cannot go live, but prior to request
      *              we can do some ui level checks & direct the author to the
      *              correct step if a field is missing.
      */
