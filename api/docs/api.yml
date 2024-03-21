@@ -4,9 +4,6 @@ info:
   title: Octopus
   description: Open research publishing platform
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/FINLAYBIRNIE/Octopus/1
   - url: https://prod.api.octopus.ac/v1
     description: Octopus live environment
 tags:
