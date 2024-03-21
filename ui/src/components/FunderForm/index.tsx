@@ -138,7 +138,7 @@ const RorIcon: React.FC<IconProps> = (props): React.ReactElement => {
 let timeout: NodeJS.Timeout;
 
 const FunderForm: React.FC = (): React.ReactElement => {
-    const { publicationVersion, updatePublicationVersion, setError } = Stores.usePublicationCreationStore();
+    const { publicationVersion, updatePublicationVersion, error, setError } = Stores.usePublicationCreationStore();
 
     const user = Stores.useAuthStore((state) => state.user);
 
@@ -153,6 +153,16 @@ const FunderForm: React.FC = (): React.ReactElement => {
     const [submitLoading, setSubmitLoading] = React.useState(false);
     const [rorLoading, setRorLoading] = React.useState(false);
     const [rorError, setRorError] = React.useState(false);
+
+    const duplicateFunderError =
+        error === 'This funder already exists on this publication version.' ||
+        error === 'This funder and grant identifier already exist on this publication version.';
+
+    const unsetErrorIfDuplicate = () => {
+        if (duplicateFunderError) {
+            setError(null);
+        }
+    };
 
     const getRorData = React.useCallback(async (value: string) => {
         const actualRor = value.split('/')[value.split('/').length - 1];
@@ -256,7 +266,10 @@ const FunderForm: React.FC = (): React.ReactElement => {
                                 }`}
                                 placeholder="01rv9gx86 or https://ror.org/01rv9gx86"
                                 value={ror}
-                                onChange={(e) => getRorData(e.target.value)}
+                                onChange={(e) => {
+                                    unsetErrorIfDuplicate();
+                                    getRorData(e.target.value);
+                                }}
                             />
                         </div>
                         <div>
@@ -268,7 +281,10 @@ const FunderForm: React.FC = (): React.ReactElement => {
                                 }`}
                                 placeholder="Grant Identifier"
                                 value={grantId}
-                                onChange={(e) => setGrantId(e.target.value)}
+                                onChange={(e) => {
+                                    unsetErrorIfDuplicate();
+                                    setGrantId(e.target.value);
+                                }}
                             />
                             <Components.Button
                                 className="pl-5"
@@ -344,6 +360,7 @@ const FunderForm: React.FC = (): React.ReactElement => {
                             type="url"
                             value={link}
                             onChange={(e) => {
+                                unsetErrorIfDuplicate();
                                 setLink(e.target.value);
                                 if (!isLinkValid) {
                                     setIsLinkValid(true);
@@ -367,7 +384,10 @@ const FunderForm: React.FC = (): React.ReactElement => {
                             }`}
                             placeholder="Grant Identifier"
                             value={grantId}
-                            onChange={(e) => setGrantId(e.target.value)}
+                            onChange={(e) => {
+                                unsetErrorIfDuplicate();
+                                setGrantId(e.target.value);
+                            }}
                         />
                         <Components.Button
                             className="pl-5"
