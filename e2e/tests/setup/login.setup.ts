@@ -1,4 +1,3 @@
-import { existsSync } from 'fs';
 import { test as setup } from '@playwright/test';
 import * as Helpers from '../helpers';
 
