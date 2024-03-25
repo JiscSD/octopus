@@ -202,7 +202,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         (request) => request.data.publicationVersion.versionOf === props.publicationId
     );
 
-    const peerReviews = linkedFrom.filter((link) => link.type === 'PEER_REVIEW') || [];
+    const thisVersionPeerReviews =
+        linkedFrom.filter(
+            (link) => link.type === 'PEER_REVIEW' && link.parentVersionId === props.publicationVersion.id
+        ) || [];
 
     // Publications this publication is linked to (only shown on problems)
     const parentPublications = publicationVersion?.publication.type === 'PROBLEM' ? linkedTo : [];
@@ -219,7 +222,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const showChildProblems = Boolean(childProblems.length);
     const showParentPublications = Boolean(parentPublications.length);
     const showTopics = Boolean(publicationVersion?.topics?.length);
-    const showPeerReviews = Boolean(peerReviews?.length);
+    const showPeerReviews = Boolean(thisVersionPeerReviews.length);
     const showEthicalStatement =
         publicationVersion?.publication.type === 'DATA' && Boolean(publicationVersion.ethicalStatement);
     const showRedFlags = !!flags.length;
@@ -553,6 +556,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         >
                             {linkedTo[0].title}
                         </Components.Link>
+                        .
                     </Components.Alert>
                 );
             }
@@ -877,13 +881,13 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {!!showPeerReviews && (
                         <Components.ContentSection
                             id="peer-reviews"
-                            title={`Peer reviews created from this ${Helpers.formatPublicationType(
+                            title={`Peer reviews created from this version of this ${Helpers.formatPublicationType(
                                 publicationVersion.publication.type
                             )}`}
                             hasBreak
                         >
                             <Components.List ordered={false}>
-                                {peerReviews.map((link) => (
+                                {thisVersionPeerReviews.map((link) => (
                                     <Components.ListItem
                                         key={link.id}
                                         className="flex items-center font-semibold leading-3"
