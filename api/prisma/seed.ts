@@ -1,4 +1,4 @@
-import htmlToText from 'html-to-text';
+import { convert } from 'html-to-text';
 import * as s3 from '../src/lib/s3';
 import * as sqs from '../src/lib/sqs';
 import * as SeedData from './seeds';
@@ -51,7 +51,7 @@ export const initialDevSeed = async (): Promise<void> => {
                     language: 'en',
                     currentStatus: latestVersion.currentStatus,
                     publishedDate: latestVersion.publishedDate,
-                    cleanContent: htmlToText.convert(latestVersion.content)
+                    cleanContent: convert(latestVersion.content)
                 }
             });
         }
@@ -94,7 +94,7 @@ export const initialDevSeed = async (): Promise<void> => {
                     language: 'en',
                     currentStatus: latestVersion.currentStatus,
                     publishedDate: latestVersion.publishedDate,
-                    cleanContent: htmlToText.convert(latestVersion.content)
+                    cleanContent: convert(latestVersion.content)
                 }
             });
         }
@@ -179,7 +179,7 @@ export const initialProdSeed = async (): Promise<void> => {
                     language: 'en',
                     currentStatus: latestVersion.currentStatus,
                     publishedDate: latestVersion.publishedDate,
-                    cleanContent: htmlToText.convert(latestVersion.content)
+                    cleanContent: convert(latestVersion.content)
                 }
             });
         }
