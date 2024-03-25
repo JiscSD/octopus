@@ -1,5 +1,5 @@
 import supertest from 'supertest';
-import htmlToText from 'html-to-text';
+import { convert } from 'html-to-text';
 import axios from 'axios';
 
 import * as client from 'lib/client';
@@ -82,7 +82,7 @@ export const openSearchSeed = async (): Promise<void> => {
                 language: 'en',
                 currentStatus: latestLiveVersion.currentStatus,
                 publishedDate: latestLiveVersion.publishedDate,
-                cleanContent: htmlToText.convert(latestLiveVersion.content)
+                cleanContent: convert(latestLiveVersion.content)
             }
         });
     }

@@ -1,4 +1,4 @@
-import htmlToText from 'html-to-text';
+import { convert } from 'html-to-text';
 
 import * as client from '../src/lib/client';
 
@@ -50,7 +50,7 @@ const reindex = async (): Promise<void> => {
                     language: 'en',
                     currentStatus: latestLiveVersion.currentStatus,
                     publishedDate: latestLiveVersion.publishedDate,
-                    cleanContent: htmlToText.convert(latestLiveVersion.content)
+                    cleanContent: convert(latestLiveVersion.content)
                 }
             });
         }
