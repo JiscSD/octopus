@@ -117,9 +117,8 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
             .catch((error) => console.log(error))
     ];
 
-    const [directLinks = { publication: null, linkedTo: [], linkedFrom: [] }, references = []] = await Promise.all(
-        promises
-    );
+    const [directLinks = { publication: null, linkedTo: [], linkedFrom: [] }, references = []] =
+        await Promise.all(promises);
 
     return {
         props: {

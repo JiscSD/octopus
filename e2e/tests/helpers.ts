@@ -76,7 +76,7 @@ export const user4: TestUser = {
 export const login = async (page: Page, browser: Browser, user: TestUser) => {
     await page.goto('/');
     await page.waitForSelector(PageModel.header.loginButton);
-    await Promise.all([page.waitForNavigation(), page.click(PageModel.header.loginButton)]);
+    await Promise.all([page.waitForURL(/signin\?client_id/), page.click(PageModel.header.loginButton)]);
 
     // If necessary, reject cookies
     const cookieCheck = await page.locator(PageModel.login.rejectCookies).isVisible();

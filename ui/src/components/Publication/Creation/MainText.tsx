@@ -158,14 +158,12 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div data-testid="main-text-select">
-                <label htmlFor="language-label" id="language-label">
-                    <Components.PublicationCreationStepTitle text="Language" required />
-                </label>
+                <Components.PublicationCreationStepTitle text="Language" required />
                 <select
                     data-testid="main-text-select-element"
                     name="language"
                     id="language"
-                    aria-labelledby="language-label"
+                    aria-label="Language"
                     onChange={(e) =>
                         updatePublicationVersion({ ...publicationVersion, language: e.target.value as Types.Languages })
                     }
@@ -357,15 +355,13 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div>
-                <label htmlFor="short-description-label" id="short-description-label">
-                    <Components.PublicationCreationStepTitle text="Short description" />
-                </label>
+                <Components.PublicationCreationStepTitle text="Short description" />
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Include a short description of your publication to aid discovery. This can be no more than 160
                     characters in length.
                 </span>
                 <textarea
-                    aria-labelledby="short-description-label"
+                    aria-label="Short description"
                     title="Short description"
                     required
                     rows={3}
@@ -383,15 +379,13 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div>
-                <label htmlFor="keywords-label" id="keywords-label">
-                    <Components.PublicationCreationStepTitle text="Keywords" />
-                </label>
+                <Components.PublicationCreationStepTitle text="Keywords" />
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Include up to 10 keywords relating to your content. These can be comma-separated and/or line
                     separated.
                 </span>
                 <textarea
-                    aria-labelledby="keywords-label"
+                    aria-label="Keywords"
                     title="Keywords"
                     required
                     rows={5}
