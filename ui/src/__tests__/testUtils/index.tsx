@@ -107,7 +107,9 @@ export const testLinkedPublication: Interfaces.LinkedPublication = {
     createdBy: testUser.id,
     authorFirstName: testUser.firstName,
     authorLastName: testUser.lastName,
-    authors: []
+    authors: [],
+    flagCount: 0,
+    peerReviewCount: 0
 };
 
 export const testLinkedFromPublication: Interfaces.LinkedFromPublication = {
