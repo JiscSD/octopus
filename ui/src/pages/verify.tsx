@@ -145,8 +145,8 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                     <p className="mb-6 block text-grey-700 transition-colors duration-500 dark:text-grey-50 lg:w-3/4">
                         {props.newUser && (
                             <>
-                                Your Octopus account has been created, and is linked to your ORCID® iD. To complete your
-                                account setup, please verify your email address.
+                                Your Octopus account has been created, and is linked to your ORCID® iD. To complete
+                                your account setup, please verify your email address.
                                 <br />
                                 <br />
                             </>

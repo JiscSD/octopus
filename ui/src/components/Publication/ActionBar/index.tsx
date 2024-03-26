@@ -112,8 +112,8 @@ const ActionBar: React.FC<Props> = (props) => {
                                                           {index < sortedAffiliationNames.length - 1
                                                               ? ','
                                                               : index > 0
-                                                              ? '.'
-                                                              : ''}
+                                                                ? '.'
+                                                                : ''}
                                                       </p>
                                                   ))}
                                         </div>
