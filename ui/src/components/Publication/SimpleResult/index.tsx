@@ -97,9 +97,9 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                             {latestVersion.user.id === props.user.id
                                 ? ' (Corresponding Author)'
                                 : latestVersion.coAuthors.find((coAuthor) => coAuthor.linkedUser === props.user.id)
-                                ? ' (Author)'
-                                : latestVersion.coAuthors.find((coAuthor) => coAuthor.email === props.user.email) &&
-                                  ' (Invited)'}
+                                  ? ' (Author)'
+                                  : latestVersion.coAuthors.find((coAuthor) => coAuthor.email === props.user.email) &&
+                                    ' (Invited)'}
                         </span>
                     )}
                 </p>

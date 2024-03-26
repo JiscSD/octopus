@@ -14,14 +14,12 @@ const KeyInformation: React.FC = (): React.ReactElement => {
     return (
         <div className="space-y-12 2xl:space-y-16">
             <div>
-                <label htmlFor="title-label" id="title-label">
-                    <Components.PublicationCreationStepTitle text="Title" required />
-                </label>
+                <Components.PublicationCreationStepTitle text="Title" required />
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                     Titles should be concise, specific, and informative to help others find your work.
                 </span>
                 <input
-                    aria-labelledby="title-label"
+                    aria-label="Title"
                     required
                     type="text"
                     value={publicationVersion.title}
@@ -30,9 +28,7 @@ const KeyInformation: React.FC = (): React.ReactElement => {
                 />
             </div>
             <div>
-                <label htmlFor="cc-licence-label" id="cc-licence-label">
-                    <Components.PublicationCreationStepTitle text="Creative commons licence" />
-                </label>
+                <Components.PublicationCreationStepTitle text="Creative commons licence" />
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                     Your publication will use a CC BY 4.0 licence by default. Contact the Octopus team at{' '}
                     <Components.Link

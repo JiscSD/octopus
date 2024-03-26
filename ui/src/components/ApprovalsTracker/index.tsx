@@ -293,8 +293,8 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                                                                   {index < affiliations.length - 1
                                                                       ? ','
                                                                       : index > 0
-                                                                      ? '.'
-                                                                      : ''}
+                                                                        ? '.'
+                                                                        : ''}
                                                               </p>
                                                           ))}
                                                 </div>
