@@ -15,7 +15,7 @@ export const handler = async (event) => {
   const key = event.Records[0].s3.object.key;
 
   // Whether we are validating our metadata (using the pubrouter validate endpoint), as opposed to sending it for real.
-  const validate = true;
+  const validate = false;
 
   const pdfUrl = `https://${bucket}.s3.amazonaws.com/${key}`;
 
@@ -50,14 +50,15 @@ export const handler = async (event) => {
     console.log("PDF metadata: ", JSON.stringify(pdfMetadata));
 
     const apiResponse = await postToPubrouter(pdfMetadata, validate);
+    const apiResponseJSON = await apiResponse.json();
 
-    console.log("Pubrouter response: ", apiResponse);
+    console.log("Pubrouter response JSON: ", apiResponseJSON);
 
     // Check the API response and handle failures
     // If validating, don't retry on a validation failure.
     if (
-      apiResponse.status === "success" ||
-      (validate && apiResponse.summary.startsWith("Validation failed"))
+      apiResponse.ok ||
+      (validate && apiResponseJSON.summary.startsWith("Validation failed"))
     ) {
       return baseJSONResponse(
         200,
@@ -67,13 +68,14 @@ export const handler = async (event) => {
       // Retry once
       console.log("First attempt failed; retrying");
       const retry = await postToPubrouter(pdfMetadata, validate);
-      if (retry.status === "success") {
+      if (retry.ok) {
         return baseJSONResponse(
           200,
           "Successfully submitted to publication router"
         );
       } else {
-        await sendFailureEmail(JSON.stringify(retry), event, publicationId);
+        const retryJSON = await retry.json();
+        await sendFailureEmail(JSON.stringify(retryJSON), event, publicationId);
         return baseJSONResponse(500, "Failed to submit to publication router");
       }
     }
@@ -106,7 +108,7 @@ const postToPubrouter = async (pdfMetadata, validate = false) => {
       body: JSON.stringify(pdfMetadata),
     });
 
-    return response.json();
+    return response;
   }
 };
 

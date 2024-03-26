@@ -14,7 +14,11 @@ type Props = {
 };
 
 const General: React.FC<Props> = (props): React.ReactElement => {
-    const peerReviewCount = props.linkedFrom.filter((publication) => publication.type === 'PEER_REVIEW').length;
+    const multipleVersions = !props.publicationVersion.isLatestVersion || props.publicationVersion.versionNumber > 1;
+    const peerReviews = props.linkedFrom.filter((publication) => publication.type === 'PEER_REVIEW');
+    const thisVersionPeerReviewCount = peerReviews.filter(
+        (peerReview) => peerReview.parentVersionId === props.publicationVersion.id
+    ).length;
 
     const activeFlags = React.useMemo(() => props.flags.filter((flag) => !flag.resolved), [props.flags]);
 
@@ -66,7 +70,7 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                 </span>
                 <Components.Link
                     href={Config.values.octopusInformation.licences[props.publicationVersion.licence].link}
-                    title="licence"
+                    title="Licence"
                     openNew={true}
                     className=" text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                 >
@@ -109,11 +113,20 @@ const General: React.FC<Props> = (props): React.ReactElement => {
             </div>
 
             {props.publicationVersion.publication.type !== 'PEER_REVIEW' && (
-                <div className="flex">
-                    <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                        Peer reviews: ({peerReviewCount})
-                    </span>
-                </div>
+                <>
+                    <div className="flex">
+                        <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                            Peer Reviews (This Version): ({thisVersionPeerReviewCount})
+                        </span>
+                    </div>
+                    {multipleVersions && (
+                        <div className="flex">
+                            <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                Peer Reviews (All Versions): ({peerReviews.length})
+                            </span>
+                        </div>
+                    )}
+                </>
             )}
             {!!activeFlags && (
                 <div className="flex">
