@@ -123,6 +123,11 @@ export interface LinkedPublication {
     authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationVersionId' | 'user'>[];
     flagCount: number;
     peerReviewCount: number;
+    // Only returned with ?direct=true on the getPublicationLinks endpoint.
+    // Just used at present to show, and link to, the version a Peer Review was created against.
+    parentVersionId?: string;
+    parentVersionNumber?: number;
+    parentVersionIsLatestLive?: boolean;
 }
 
 export interface LinkedToPublication extends LinkedPublication {
@@ -130,11 +135,6 @@ export interface LinkedToPublication extends LinkedPublication {
     draft: boolean;
     childPublication: string;
     childPublicationType: Types.PublicationType;
-    // Only returned with ?direct=true on the getPublicationLinks endpoint.
-    // Just used at present to show, and link to, the version a Peer Review was created against.
-    parentVersionId?: string;
-    parentVersionNumber?: number;
-    parentVersionIsLatestLive?: boolean;
 }
 
 export interface LinkedFromPublication extends LinkedPublication {
@@ -242,23 +242,6 @@ export interface SearchQueryParams {
     offset?: string;
     orderBy?: string;
     orderDirection?: string;
-}
-
-export interface DocumentationEntry {
-    method: string;
-    endpoint: string;
-    id: string;
-    description: string;
-    exampleResponse: unknown;
-    exampleUse: string;
-    queryParameters: DocumentationEntryQueryParams[];
-}
-
-export interface DocumentationEntryQueryParams {
-    name: string;
-    optional: boolean;
-    enums?: Array<string>;
-    description: string;
 }
 
 export interface LicenceTypeShape {

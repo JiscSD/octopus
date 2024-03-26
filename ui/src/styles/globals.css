@@ -22,14 +22,6 @@
         @apply rounded-lg bg-teal-500;
     }
 
-    /* Atlassian codeblock on documentation page */
-    .jisc-code-block > span {
-        @apply !max-h-96 !overflow-y-scroll rounded-t-none border-2 border-t-0 border-solid border-teal-200 bg-grey-50 !transition-colors !duration-500 dark:border-grey-600 dark:bg-grey-700;
-    }
-    .jisc-code-block code {
-        @apply !px-3;
-    }
-
     .custom-table table {
         @apply table-fixed;
     }

@@ -267,7 +267,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     /**
      * @title Requesting to publish
      * @description When requesting to go live, we carry out a few checks.
-     *              The api will tell us is we cannot go live, but prior to request
+     *              The api will tell us if we cannot go live, but prior to request
      *              we can do some ui level checks & direct the author to the
      *              correct step if a field is missing.
      */
@@ -446,6 +446,31 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const hasUnconfirmedCoAuthors = !store.publicationVersion?.coAuthors.every(
         (coAuthor) => coAuthor.confirmedCoAuthor
     );
+
+    // Collate all alerts that might be shown.
+    const generateAlertComponents = (): React.ReactElement[] | null => {
+        let alerts: React.ReactElement[] = [];
+        if (
+            props.publicationVersion.publication.type === 'PEER_REVIEW' &&
+            store.linkedTo.length === 1 &&
+            store.linkedTo[0].parentVersionIsLatestLive === false
+        ) {
+            alerts.push(
+                <Components.Alert
+                    severity="INFO"
+                    className="mb-12"
+                    allowDismiss={true}
+                    title="A new version of the publication you are reviewing has been released since you started writing this peer review."
+                    details={['Your review will be recorded against the latest version.']}
+                ></Components.Alert>
+            );
+        }
+        if (!!store.error) {
+            alerts.push(<Components.Alert severity="ERROR" title={store.error} className="mb-12 w-fit" />);
+        }
+        return alerts;
+    };
+    const alerts = generateAlertComponents();
 
     return (
         <>
@@ -718,7 +743,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             </div>
                         </div>
                     </div>
-                    {!!store.error && <Components.Alert severity="ERROR" title={store.error} className="mb-12 w-fit" />}
+                    {alerts}
                     <div>
                         <p className="text-md mb-6 block font-semibold text-grey-700 transition-colors duration-500 dark:text-white-100">
                             Remember to save this draft before navigating away from the publication form.
