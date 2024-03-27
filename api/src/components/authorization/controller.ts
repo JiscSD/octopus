@@ -87,9 +87,12 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
             console.log(error);
         }
 
+        const existingUser = await userService.getByOrcid(orcidUserId);
+
+        // If names aren't visible on orcid record and we have previously saved values, keep those.
         const user = await userService.upsertUser(orcidUserId, {
-            firstName: userInformation?.person?.name?.['given-names']?.value || '',
-            lastName: userInformation?.person?.name?.['family-name']?.value || '',
+            firstName: userInformation?.person?.name?.['given-names']?.value || existingUser?.firstName || '',
+            lastName: userInformation?.person?.name?.['family-name']?.value || existingUser?.lastName || '',
             employment,
             education,
             works,

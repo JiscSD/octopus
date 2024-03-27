@@ -40,6 +40,8 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
     const [success, setSuccess] = React.useState(false);
     const [emailValidated, setEmailValidated] = React.useState(true);
 
+    const missingNames = !user?.firstName && !user?.lastName;
+
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setEmailValidated(true);
         setEmail(event.target.value);
@@ -164,11 +166,26 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                         no longer wish to hold an account. You can update your email address at any time from your user
                         account page.
                     </p>
+                    {missingNames && (
+                        <Components.Alert
+                            severity="ERROR"
+                            title="Names are not visible on ORCiD account"
+                            details={[
+                                'Please set your name visibility to "Everyone" or "Trusted parties" on your ORCiD account, log out of Octopus, then log back in again to continue.'
+                            ]}
+                            supportLink={{
+                                text: 'ORCiD account page',
+                                url: Config.urls.orcidAccountPage.path,
+                                external: true
+                            }}
+                            className="mb-6"
+                        />
+                    )}
                     <form className="flex-column gap-4 space-y-6" data-testid="update-email-form">
                         {!!error && <Components.Alert severity="ERROR" title={error} />}
                         <label htmlFor="fullName" className="flex flex-col gap-1">
-                            <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                <SolidIcons.CheckBadgeIcon className="h-5 w-5 text-green-400" />
+                            <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-700 transition-colors duration-500 dark:text-grey-300">
+                                <SolidIcons.CheckBadgeIcon className="h-5 w-5 text-green-600 dark:text-green-400" />
                                 Your ORCID iD
                             </span>
                             <input
@@ -181,7 +198,11 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                         </label>
                         <label htmlFor="fullName" className="flex flex-col gap-1">
                             <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-700 transition-colors duration-500 dark:text-grey-300">
-                                <SolidIcons.CheckBadgeIcon className="h-5 w-5 text-green-400" />
+                                {missingNames ? (
+                                    <SolidIcons.ExclamationCircleIcon className="h-5 w-5 text-red-600 dark:text-red-400" />
+                                ) : (
+                                    <SolidIcons.CheckBadgeIcon className="h-5 w-5 text-green-600 dark:text-green-400" />
+                                )}
                                 Your name
                             </span>
                             <input
@@ -202,7 +223,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                             leaveTo="opacity-0"
                         >
                             <label htmlFor="email" className="mb-4 flex flex-col gap-1">
-                                <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-700 transition-colors duration-500 dark:text-grey-100">
+                                <span className="mb-1 flex items-center gap-1 text-xxs font-bold uppercase tracking-widest text-grey-700 transition-colors duration-500 dark:text-grey-300">
                                     <SolidIcons.QuestionMarkCircleIcon className="h-5 w-5 text-teal-700 dark:text-teal-400" />
                                     Your{!props.newUser && ' new'} email address
                                 </span>
@@ -215,7 +236,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                                     onChange={handleEmailChange}
                                     disabled={loading}
                                 />
-                                <span className="mt-1 flex items-center gap-1 text-xs font-semibold tracking-widest text-grey-500 transition-colors duration-500 dark:text-grey-300">
+                                <span className="mt-1 flex items-center gap-1 text-xs font-semibold tracking-widest text-grey-700 transition-colors duration-500 dark:text-grey-300">
                                     Please confirm your{!props.newUser && ' new'} email address.
                                 </span>
                                 {!emailValidated && (
@@ -291,7 +312,7 @@ const Verify: Types.NextPage<Props> = (props): React.ReactElement => {
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                    <OutlineIcons.CheckBadgeIcon className="h-5 w-5 text-green-400 transition-colors duration-500" />
+                                    <OutlineIcons.CheckBadgeIcon className="h-5 w-5 text-green-600 transition-colors duration-500 dark:text-green-400" />
                                 </HeadlessUI.Transition>
                             </span>
                             <div className="mt-4 text-xs font-medium leading-relaxed text-grey-500 transition-colors duration-500 dark:text-grey-300">

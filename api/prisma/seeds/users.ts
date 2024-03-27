@@ -100,6 +100,15 @@ const userSeeds: Prisma.UserCreateInput[] = [
         email: 'test-user-10@jisc.ac.uk',
         locked: false,
         apiKey: '000000010'
+    },
+    {
+        id: 'test-user-11',
+        orcid: '0000-0000-0000-0011',
+        firstName: '',
+        lastName: '',
+        email: 'test-user-11@jisc.ac.uk',
+        locked: false,
+        apiKey: '000000011'
     }
 ];
 

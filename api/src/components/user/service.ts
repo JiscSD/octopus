@@ -47,12 +47,11 @@ export const updateEmail = (orcid: string, email: string) =>
     });
 
 export const getAll = async (filters: I.UserFilters) => {
-    const query = {};
+    let where: Prisma.UserWhereInput = {};
 
     if (filters.search) {
         const searchQuery = helpers.sanitizeSearchQuery(filters.search);
-        // @ts-ignore
-        query.where = {
+        where = {
             firstName: {
                 search: searchQuery
             },
@@ -60,16 +59,24 @@ export const getAll = async (filters: I.UserFilters) => {
                 search: searchQuery
             }
         };
+    } else {
+        where = {
+            firstName: {
+                not: ''
+            },
+            lastName: {
+                not: ''
+            }
+        };
     }
 
-    // @ts-ignore
     const users = await client.prisma.user.findMany({
         take: Number(filters.limit) || 10,
         skip: Number(filters.offset) || 0,
         orderBy: {
             [filters.orderBy || 'updatedAt']: filters.orderDirection || 'desc'
         },
-        ...query,
+        where,
         select: {
             id: true,
             firstName: true,
@@ -79,8 +86,7 @@ export const getAll = async (filters: I.UserFilters) => {
         }
     });
 
-    // @ts-ignore
-    const totalUsers = await client.prisma.user.count(query);
+    const totalUsers = await client.prisma.user.count({ where });
 
     return {
         data: users,
@@ -96,6 +102,13 @@ export const getByApiKey = (apiKey: string) =>
     client.prisma.user.findFirst({
         where: {
             apiKey
+        }
+    });
+
+export const getByOrcid = (orcid: string) =>
+    client.prisma.user.findFirst({
+        where: {
+            orcid
         }
     });
 

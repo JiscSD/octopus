@@ -18,13 +18,13 @@ export const deleteCrosslink = middy(crosslinkController.deleteCrosslink)
 export const setVote = middy(crosslinkController.setVote)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
-    .use(middleware.authentication())
+    .use(middleware.authentication(false, false))
     .use(middleware.validator(crosslinkSchema.setVote, 'body'));
 
 export const resetVote = middy(crosslinkController.resetVote)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
-    .use(middleware.authentication());
+    .use(middleware.authentication(false, false));
 
 export const get = middy(crosslinkController.get)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
@@ -33,7 +33,7 @@ export const get = middy(crosslinkController.get)
 export const getVote = middy(crosslinkController.getVote)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
-    .use(middleware.authentication());
+    .use(middleware.authentication(false, false));
 
 export const getPublicationCrosslinks = middy(crosslinkController.getPublicationCrosslinks)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))

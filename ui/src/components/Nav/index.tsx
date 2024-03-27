@@ -103,7 +103,7 @@ const Nav: React.FC = (): React.ReactElement => {
 
         if (user) {
             menuItems.push({
-                label: `${user?.firstName} ${user?.lastName}`,
+                label: user.firstName || user.lastName ? `${user?.firstName} ${user?.lastName}` : 'Anonymous User',
                 value: `${Config.urls.viewUser.path}/${user.id}`,
                 dataTestId: 'username-button',
                 subItems: [
