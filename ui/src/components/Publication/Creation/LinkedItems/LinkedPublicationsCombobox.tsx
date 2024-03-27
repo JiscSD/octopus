@@ -152,8 +152,8 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
                                                     hasFlagAndPeerReview
                                                         ? 'sm:w-1/2'
                                                         : hasOneOfFlagOrPeerReview
-                                                        ? 'sm:w-3/4'
-                                                        : ''
+                                                          ? 'sm:w-3/4'
+                                                          : ''
                                                 }`}
                                             >
                                                 <span className="text-xs leading-none text-grey-700">
