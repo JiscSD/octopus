@@ -29,7 +29,7 @@ const config: PlaywrightTestConfig = {
     /* Give failing tests one retry attempt */
     retries: 1,
     /* Running tests in parallel speeds up overall testing time but it also increases the chance of failing tests eg: one or more tests are manipulating the same DB resource */
-    workers: 3,
+    workers: !!process.env.CI ? 3 : 1,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
     reporter: 'html',
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */

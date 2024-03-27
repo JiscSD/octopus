@@ -45,6 +45,10 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
         [authors]
     );
 
+    const { flagCount, peerReviewCount } = props.publicationVersion.publication;
+    const hasFlagAndPeerReview = flagCount && peerReviewCount;
+    const hasOneOfFlagOrPeerReview = flagCount || peerReviewCount;
+
     return (
         <div className="rounded-md shadow">
             <div
@@ -58,28 +62,41 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
                 <span className="mb-4 block font-montserrat text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
                     <div className="overflow-hidden text-ellipsis whitespace-nowrap" title={authorNames}>
                         {authors.map((author, index) => (
-                            <span key={author.id}>
-                                <Components.Link href={`${Config.urls.viewUser.path}/${author.linkedUser}`}>
-                                    <>
-                                        {author.user?.firstName[0]}. {author.user?.lastName}
-                                    </>
-                                </Components.Link>
-                                {author.linkedUser !== 'octopus' && (
-                                    <>
-                                        &nbsp;
-                                        <a
-                                            href={`https://${
-                                                process.env.NEXT_PUBLIC_STAGE === 'local' ? 'sandbox.' : ''
-                                            }orcid.org/${author.user?.orcid}`}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                        >
-                                            <Assets.OrcidLogoIcon width={16} className="inline align-middle" />
-                                        </a>
-                                    </>
-                                )}
-                                {index < authors.length - 1 ? ', ' : ''}
-                            </span>
+                            <div key={author.id} className="flex">
+                                <span
+                                    className={`${
+                                        hasFlagAndPeerReview ? 'w-1/2' : hasOneOfFlagOrPeerReview ? 'w-3/4' : ''
+                                    } truncate`}
+                                >
+                                    <Components.Link href={`${Config.urls.viewUser.path}/${author.linkedUser}`}>
+                                        <>
+                                            {author.user?.firstName[0]}. {author.user?.lastName}
+                                        </>
+                                    </Components.Link>
+                                    {author.linkedUser !== 'octopus' && (
+                                        <>
+                                            &nbsp;
+                                            <a
+                                                href={`https://${
+                                                    process.env.NEXT_PUBLIC_STAGE === 'local' ? 'sandbox.' : ''
+                                                }orcid.org/${author.user?.orcid}`}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            >
+                                                <Assets.OrcidLogoIcon width={16} className="inline align-middle" />
+                                            </a>
+                                        </>
+                                    )}
+                                    {index < authors.length - 1 ? ', ' : ''}
+                                </span>
+                                <Components.EngagementCounts
+                                    className={`justify-end ${
+                                        hasFlagAndPeerReview ? 'w-1/2' : hasOneOfFlagOrPeerReview ? 'w-1/4' : ''
+                                    }`}
+                                    flagCount={flagCount}
+                                    peerReviewCount={peerReviewCount}
+                                />
+                            </div>
                         ))}
                     </div>
                 </span>
