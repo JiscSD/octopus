@@ -5,7 +5,7 @@ import * as response from 'lib/response';
 import * as userService from 'user/service';
 import * as authorizationService from 'authorization/service';
 
-const authentication = (optional = false): middy.MiddlewareObj => {
+const authentication = (optional = false, requiresName = true): middy.MiddlewareObj => {
     const before: middy.MiddlewareFn<I.APIGatewayProxyEventV2> = async (request): Promise<I.JSONResponse | void> => {
         try {
             let user: null | I.User = null;
@@ -19,9 +19,19 @@ const authentication = (optional = false): middy.MiddlewareObj => {
                 user = authorizationService.validateJWT(bearerToken.split(' ')[1]);
             }
 
-            // if there's no user account, and authentication is *not* optional, then the request is blocked.
-            if (!user && !optional) {
-                return response.json(401, { message: 'Please enter either a valid apiKey or bearer token.' });
+            if (!optional) {
+                // If there's no user account, and authentication is *not* optional, then the request is blocked.
+                if (!user) {
+                    return response.json(401, { message: 'Please enter either a valid apiKey or bearer token.' });
+                }
+
+                // If the user hasn't made their name visible in ORCiD, we want to disallow them from doing most actions.
+                if (!user?.firstName && !user?.lastName && requiresName) {
+                    return response.json(403, {
+                        message:
+                            'No name detected. Please ensure your name visibility is set to "Everyone" or "Trusted parties" on your ORCiD account, then re-authorize at /authorization.'
+                    });
+                }
             }
 
             Object.assign(request.event, { user });
