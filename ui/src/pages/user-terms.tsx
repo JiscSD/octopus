@@ -55,7 +55,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
             <PageSection>
                 <>
                     <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">
-                        <h1 className="mb-10 mt-5 block text-center font-montserrat text-3xl font-bold !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl">
+                        <h1 className="mb-10 mt-5 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl">
                             Octopus platform user terms
                         </h1>
                         <StandardText>
@@ -610,7 +610,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 </li>
                             </ul>
                         </StandardText>
-                        <h1 className="my-12 block text-center font-montserrat text-3xl font-bold !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-4xl">
+                        <h1 className="my-12 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-4xl">
                             OCTOPUS PLATFORM USER TERMS: SCHEDULE 1 - DATA PROCESSING
                         </h1>
                         <Components.PageSubTitle text="1. DEFINITIONS AND INTERPRETATION" />
@@ -1012,7 +1012,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 </div>
                             </div>
                         </StandardText>
-                        <h1 className="my-12 block text-center font-montserrat text-3xl font-bold !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-4xl">
+                        <h1 className="my-12 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-4xl">
                             OCTOPUS PLATFORM USER TERMS SCHEDULE 1: ANNEX A
                         </h1>
                         <StandardText asDiv={true}>
@@ -1054,7 +1054,7 @@ const UserTerms: NextPage = (): React.ReactElement => (
                             <br />
                             <br />
                         </StandardText>
-                        <h1 className="my-12 block text-center font-montserrat text-3xl font-bold !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-4xl">
+                        <h1 className="my-12 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-4xl">
                             OCTOPUS PLATFORM USER TERMS SCHEDULE 1: ANNEX B
                         </h1>
                         <Components.PageSubTitle text="Appointed Sub-contractors" />
