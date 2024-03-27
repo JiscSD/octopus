@@ -54,7 +54,7 @@ const GetInvolved: NextPage = (): React.ReactElement => (
             <PageSection>
                 <>
                     <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">
-                        <h1 className="mb-8 block text-center font-montserrat text-3xl font-bold !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl">
+                        <h1 className="mb-8 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl">
                             Get involved with Octopus
                         </h1>
                         <article className="mt-10">

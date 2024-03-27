@@ -20,31 +20,18 @@ const Home: Types.NextPage = (props): React.ReactElement => {
             <Layouts.Standard fixedHeader={false}>
                 <section className="container mx-auto px-8 pt-8 lg:pt-24">
                     <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:max-w-5xl">
-                        <h1 className="mb-8 block text-center font-montserrat text-2xl font-bold !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl ">
-                            Free, fast and fair
+                        <h1 className="mb-8 block text-center font-montserrat text-2xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl ">
+                            Free, fast and fair: the global primary research record where researchers publish their work
+                            in full detail
                         </h1>
-                        <p className="mx-auto mb-4 block text-center font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:w-10/12 lg:text-lg">
-                            The place for researchers to publish their work in full detail. Funded by UKRI – the UK
+                        <p className="mx-auto mb-10 block text-center font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:w-8/12 lg:text-lg">
+                            Octopus is a new publishing platform for scholarly research. Funded by UKRI – the UK
                             government research funder.
                         </p>
-                        <p className="mx-auto mb-4 block text-center font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:w-10/12 lg:text-lg">
-                            Octopus is a free scholarly publication platform designed to make it easier to share work of
-                            all kinds. A place for open peer review, quality assessment, and collaboration.
-                        </p>
-                        <p className="mx-auto mb-4 block text-center font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:w-10/12 lg:text-lg">
-                            Work on Octopus is not published as ‘papers’ or ‘monographs’ but in smaller units which are
-                            linked together.
-                        </p>
-                        <p className="mx-auto mb-12 block text-center font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:w-10/12 lg:text-lg">
-                            To see an example chain of Octopus publications have a look at{' '}
-                            <a
-                                className="underline"
-                                target="_blank"
-                                href="https://www.octopus.ac/publications/axc8-vs07/versions/latest"
-                            >
-                                this one
-                            </a>
-                            , which looks at the current research culture.
+                        <p className="mx-auto mb-10 block text-center font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:w-8/12 lg:text-lg">
+                            Here researchers can publish all their work for free, in full detail, enabling peer review
+                            and quality assessment, gaining credit for what they have done, and allowing the research
+                            community to build upon it.
                         </p>
                         <div className="mx-auto flex w-full flex-wrap gap-6 sm:w-fit sm:justify-between">
                             <Components.Link
@@ -75,58 +62,7 @@ const Home: Types.NextPage = (props): React.ReactElement => {
                         </div>
                     </div>
                 </section>
-                <section className="container mx-auto px-8 pt-20">
-                    <table className="mx-auto border-separate rounded-lg border-2 border-solid border-teal-800 bg-white-50 text-center text-grey-800 dark:bg-grey-700 dark:text-white-50 lg:w-10/12">
-                        <thead>
-                            <tr>
-                                <th className="px-4 py-8 text-xl font-normal">
-                                    Octopus <span className="font-bold">is</span>...
-                                </th>
-                                <th className="px-4 py-8 text-xl font-normal">
-                                    <span className="font-bold">But</span> is different because...
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td className="px-4 pb-4 lg:px-8">
-                                    like a preprint server: publish here quickly and easily, submit to a journal later
-                                </td>
-                                <td className="px-4 pb-4 lg:px-8">
-                                    you don’t publish ‘papers’ but smaller, linked publications
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="px-4 pb-4 lg:px-8">
-                                    like GitHub: ‘fork’ a chain of publications, take a branch in the direction you want
-                                </td>
-                                <td className="px-4 pb-4 lg:px-8">
-                                    you publish ‘final versions’ of work, rather than day-to-day working
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="px-4 pb-4 lg:px-8">
-                                    like a preregistration platform: publish your research problem, hypotheses, methods
-                                    before you collect data
-                                </td>
-                                <td className="px-4 pb-4 lg:px-8">
-                                    every publication is linked to another to form a chain, making work findable and
-                                    useful
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="px-4 pb-8 pt-4 lg:px-8">
-                                    a bit like a repository or OSF: free to publish work of all kinds, each with their
-                                    own DOI
-                                </td>
-                                <td className="px-4 pb-8 pt-4 lg:px-8">
-                                    you can then get peer review on publications before you collect data
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
-                <section className="container mx-auto px-8 pt-20 text-center">
+                <section className="container mx-auto px-8 py-20 text-center">
                     <h2 className="mb-8 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-100 lg:text-3xl">
                         Research Culture Report
                     </h2>
@@ -148,7 +84,7 @@ const Home: Types.NextPage = (props): React.ReactElement => {
                         </span>
                     </Components.Link>
                 </section>
-                <section className="container mx-auto px-8 pt-20">
+                <section className="container mx-auto px-8">
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 2xl:grid-cols-3">
                         <Components.ActionCard
                             title="Publish your work"
