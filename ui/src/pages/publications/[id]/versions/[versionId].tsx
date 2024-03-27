@@ -154,6 +154,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const [isEditingAffiliations, setIsEditingAffiliations] = React.useState(false);
     const [isUnlocking, setIsUnlocking] = React.useState(false);
 
+    const isVerifiedWithName = user?.email && (user.firstName || user.lastName);
+
     useEffect(() => {
         setBookmarkId(props.bookmarkId);
     }, [props.bookmarkId, props.publicationId]);
@@ -195,7 +197,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 
     const { data: controlRequests = [], isLoading: isLoadingControlRequests } = useSWR<Interfaces.ControlRequest[]>(
-        user ? `${Config.endpoints.users}/me/control-requests` : null
+        // Only bother fetching if user is verified
+        isVerifiedWithName ? `${Config.endpoints.users}/me/control-requests` : null
     );
 
     const hasAlreadyRequestedControl = controlRequests.some(
@@ -213,7 +216,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     // Problems linked from this publication (shown on any type)
     const childProblems = linkedFrom.filter((link) => link.type === 'PROBLEM');
 
-    const isBookmarkButtonVisible = user && publicationVersion?.currentStatus === 'LIVE';
+    const isBookmarkButtonVisible = isVerifiedWithName && publicationVersion?.currentStatus === 'LIVE';
 
     const list = [];
 

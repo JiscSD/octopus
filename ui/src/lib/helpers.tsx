@@ -523,15 +523,25 @@ export const withServerSession = (
             };
         }
 
-        const { email } = decodedToken;
+        const { email, firstName, lastName } = decodedToken;
         const isVerifyEmailPage = resolvedUrl.startsWith(Config.urls.verify.path);
+        const isHomePage = context.req.url === '/';
 
-        // Only allow users with a verified email to access protected routes
+        // Only allow users with a verified email and visible name to access protected routes
         if (!email && !isVerifyEmailPage) {
             // redirect to /verify page
             return {
                 redirect: {
                     destination: `${Config.urls.verify.path}?state=${encodeURIComponent(resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+        if (!(firstName || lastName) && !isHomePage) {
+            // redirect to home page
+            return {
+                redirect: {
+                    destination: `${Config.urls.home.path}`,
                     permanent: false
                 }
             };
