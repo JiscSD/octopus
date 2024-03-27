@@ -59,7 +59,7 @@ const About: NextPage = (): React.ReactElement => (
             <PageSection>
                 <>
                     <div className="mx-auto block lg:w-9/12 xl:w-10/12 2xl:w-7/12">
-                        <h1 className="mb-5 mt-5 block text-center font-montserrat text-3xl font-black !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl">
+                        <h1 className="mb-5 mt-5 block text-center font-montserrat text-3xl font-bold !leading-tight tracking-tight text-grey-700 transition-colors duration-500 dark:text-white-50 lg:text-5xl">
                             Learn about Octopus.
                         </h1>
                         <h2 className="text-l mx-auto mb-5 block text-center font-montserrat font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:text-xl">
