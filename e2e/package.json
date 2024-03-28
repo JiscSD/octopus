@@ -19,6 +19,6 @@
     },
     "dependencies": {
         "@paralleldrive/cuid2": "^2.2.1",
-        "dotenv": "^16.3.1"
+        "dotenv": "^16.4.0"
     }
 }
