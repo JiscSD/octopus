@@ -101,6 +101,7 @@ custom:
                 - '@aws-sdk/client-ses'
                 - '@aws-sdk/client-sqs'
                 - 'puppeteer'
+                - 'prisma'
         packager: 'npm'
     versions:
         v1: v1
