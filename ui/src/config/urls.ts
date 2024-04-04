@@ -246,6 +246,9 @@ const urls = {
         keywords: '',
         canonical: `${base.host}/login`
     },
+    orcidAccountPage: {
+        path: 'https://orcid.org/my-orcid'
+    },
     orcidLogin: {
         path: `${orcidAuthUrl}/authorize?client_id=${orcidAppId}&response_type=code&scope=openid%20/read-limited&prompt=login&redirect_uri=${base.host}/login`
     },

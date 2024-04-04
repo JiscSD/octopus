@@ -55,7 +55,7 @@ describe('Verify email tests', () => {
     });
 
     it('Error alert is not rendered initially', () => {
-        expect(screen.queryByTestId('alert-box')).not.toBeInTheDocument();
+        expect(screen.queryByText('Please enter a valid email address')).not.toBeInTheDocument();
     });
 
     it('Error alert appears when invalid email is entered into input field', () => {
@@ -63,7 +63,7 @@ describe('Verify email tests', () => {
         const sendInviteButton = screen.getByTitle('Send code');
         fireEvent.change(emailInput, { target: { value: 'invalidemail.com' } });
         fireEvent.click(sendInviteButton);
-        expect(screen.getByTestId('alert-box')).toBeInTheDocument();
+        expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
     });
 
     it('Alert is removed on invalid email when input is changed', () => {
@@ -71,9 +71,9 @@ describe('Verify email tests', () => {
         const sendInviteButton = screen.getByTitle('Send code');
         fireEvent.change(emailInput, { target: { value: 'invalidemail.com' } });
         fireEvent.click(sendInviteButton);
-        expect(screen.getByTestId('alert-box')).toBeInTheDocument();
+        expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
 
         fireEvent.change(emailInput, { target: { value: 'valid@email.com' } });
-        expect(screen.queryByTestId('alert-box')).not.toBeInTheDocument();
+        expect(screen.queryByText('Please enter a valid email address')).not.toBeInTheDocument();
     });
 });
