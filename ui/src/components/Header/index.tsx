@@ -37,7 +37,7 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
                     help@jisc.ac.uk
                 </Components.Link>
             </Components.Banner>
-            {/* Confirm email banner */}
+            {/* Missing info banner */}
             {(showConfirmEmailBanner || showMissingNamesBanner) && (
                 <div className="bg-yellow-200 text-sm text-grey-800 dark:bg-yellow-500">
                     <div className="container mx-auto flex items-center gap-2 px-8 py-3">
@@ -47,9 +47,11 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
                             className="w-fit underline underline-offset-4"
                             openNew={true}
                         >
-                            {showConfirmEmailBanner
-                                ? 'Please confirm your email address to be able to publish content.'
-                                : 'Your name is not visible on your ORCiD account. Please change this setting to "Everyone" or "Trusted parties" to be able to publish content.'}
+                            {showConfirmEmailBanner && showMissingNamesBanner
+                                ? 'Please set your name to be visible on your ORCiD profile, then return to Octopus to verify your email to be able to publish content.'
+                                : showConfirmEmailBanner
+                                  ? 'Please confirm your email address to be able to publish content.'
+                                  : 'Your name is not visible on your ORCiD account. Please change this setting to "Everyone" or "Trusted parties" to be able to publish content.'}
                         </Components.Link>
                     </div>
                 </div>
