@@ -204,7 +204,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                 <p>You are not listed as an author on the latest published version</p>
                             )}
                         </div>
-                        <div className="mt-5 flex w-full justify-between">
+                        <div className="mt-5 flex w-full justify-between space-x-4">
                             <Components.Button
                                 href={`/publications/${props.publication.id}`}
                                 endIcon={<OutlineIcons.ArrowTopRightOnSquareIcon className="h-4" />}
