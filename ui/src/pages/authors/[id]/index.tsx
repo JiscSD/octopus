@@ -212,7 +212,9 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                                         id: publication.id,
                                         type: publication.type,
                                         doi: publication.doi,
-                                        url_slug: publication.url_slug
+                                        url_slug: publication.url_slug,
+                                        flagCount: publication.flagCount,
+                                        peerReviewCount: publication.peerReviewCount
                                     };
 
                                     return (
