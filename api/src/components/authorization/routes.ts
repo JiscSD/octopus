@@ -12,12 +12,12 @@ export const authorize = middy(authorizationController.authorize)
 
 export const getDecodedUserToken = middy(authorizationController.getDecodedUserToken)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
-    .use(middleware.authentication());
+    .use(middleware.authentication(false, false));
 
 export const verifyOrcidAccess = middy(authorizationController.verifyOrcidAccess)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
-    .use(middleware.authentication());
+    .use(middleware.authentication(false, false));
 
 export const revokeOrcidAccess = middy(authorizationController.revokeOrcidAccess)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
-    .use(middleware.authentication());
+    .use(middleware.authentication(false, false));
