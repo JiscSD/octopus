@@ -71,7 +71,7 @@ export const updateAffiliations = async (
 
         // update affiliations for this author
         await coAuthorService.update(coAuthor.id, {
-            affiliations: isIndependent ? [] : (affiliations as unknown[] as Prisma.JsonArray), // we can safely remove author affiliations if they declared they are independent
+            affiliations: isIndependent ? [] : (affiliations as unknown[] as Prisma.InputJsonValue[]), // we can safely remove author affiliations if they declared they are independent
             isIndependent
         });
 

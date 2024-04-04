@@ -119,42 +119,69 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
             >
                 <HeadlessUI.Combobox.Options className="absolute z-10 mt-2 max-h-96 overflow-scroll rounded bg-white-50 shadow-xl">
                     {!isValidating &&
-                        results.data.map((publicationVersion: Interfaces.PublicationVersion, index: number) => (
-                            <HeadlessUI.Combobox.Option
-                                key={publicationVersion.id}
-                                className={({ active }) =>
-                                    `relative cursor-default select-none p-2 text-teal-900 ${
-                                        active && 'ring-2 ring-inset ring-yellow-400'
-                                    } ${index === 0 && 'rounded-t'} ${index === results.length - 1 && 'rounded-b'}`
-                                }
-                                value={publicationVersion}
-                                title={
-                                    publicationVersion.content
-                                        ? Helpers.truncateString(Helpers.htmlToText(publicationVersion.content), 220)
-                                        : ''
-                                }
-                            >
-                                <div className="space-y-2">
-                                    <span className="font-montserrat text-sm font-medium text-teal-600">
-                                        {Helpers.formatPublicationType(publicationVersion.publication.type)}
-                                    </span>
-                                    <p className="text-grey-800">{publicationVersion.title}</p>
-                                    <div className="flex items-center space-x-2">
-                                        <span className="text-xs text-grey-700">
-                                            {publicationVersion.publishedDate && (
-                                                <time suppressHydrationWarning>
-                                                    {Helpers.formatDate(publicationVersion.publishedDate)}
-                                                </time>
-                                            )}
-                                            ,
+                        results.data.map((publicationVersion: Interfaces.PublicationVersion, index: number) => {
+                            const { flagCount, peerReviewCount } = publicationVersion.publication;
+                            const hasFlagAndPeerReview = flagCount && peerReviewCount;
+                            const hasOneOfFlagOrPeerReview = flagCount || peerReviewCount;
+                            return (
+                                <HeadlessUI.Combobox.Option
+                                    key={publicationVersion.id}
+                                    className={({ active }) =>
+                                        `relative cursor-default select-none p-2 text-teal-900 ${
+                                            active && 'ring-2 ring-inset ring-yellow-400'
+                                        } ${index === 0 && 'rounded-t'} ${index === results.length - 1 && 'rounded-b'}`
+                                    }
+                                    value={publicationVersion}
+                                    title={
+                                        publicationVersion.content
+                                            ? Helpers.truncateString(
+                                                  Helpers.htmlToText(publicationVersion.content),
+                                                  220
+                                              )
+                                            : ''
+                                    }
+                                >
+                                    <div className="space-y-2">
+                                        <span className="font-montserrat text-sm font-medium text-teal-600">
+                                            {Helpers.formatPublicationType(publicationVersion.publication.type)}
                                         </span>
-                                        <span className="text-sm text-grey-700">
-                                            {publicationVersion.user.firstName[0]}. {publicationVersion.user.lastName}
-                                        </span>
+                                        <p className="text-grey-800">{publicationVersion.title}</p>
+                                        <div className="flex flex-col space-y-2 sm:flex-row">
+                                            <div
+                                                className={`flex items-end space-x-2 ${
+                                                    hasFlagAndPeerReview
+                                                        ? 'sm:w-1/2'
+                                                        : hasOneOfFlagOrPeerReview
+                                                          ? 'sm:w-3/4'
+                                                          : ''
+                                                }`}
+                                            >
+                                                <span className="text-xs leading-none text-grey-700">
+                                                    {publicationVersion.publishedDate && (
+                                                        <time suppressHydrationWarning>
+                                                            {Helpers.formatDate(publicationVersion.publishedDate)}
+                                                        </time>
+                                                    )}
+                                                    ,
+                                                </span>
+                                                <span className="text-xs leading-none text-grey-700">
+                                                    {publicationVersion.user.firstName[0]}.{' '}
+                                                    {publicationVersion.user.lastName}
+                                                </span>
+                                            </div>
+                                            <Components.EngagementCounts
+                                                flagCount={flagCount}
+                                                peerReviewCount={peerReviewCount}
+                                                className={`justify-start text-sm sm:justify-end ${
+                                                    hasFlagAndPeerReview ? 'w-1/2' : 'w-1/4'
+                                                }`}
+                                                childClasses="text-grey-700 dark:text-grey-700"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                            </HeadlessUI.Combobox.Option>
-                        ))}
+                                </HeadlessUI.Combobox.Option>
+                            );
+                        })}
                 </HeadlessUI.Combobox.Options>
             </HeadlessUI.Transition>
         </HeadlessUI.Combobox>

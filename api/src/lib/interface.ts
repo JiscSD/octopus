@@ -77,7 +77,7 @@ export interface JSONResponse {
  * @description Publications
  */
 
-const prismaGeneratedPublicationType = Prisma.validator<Prisma.PublicationArgs>()({});
+const prismaGeneratedPublicationType = Prisma.validator<Prisma.PublicationDefaultArgs>()({});
 export type Publication = Prisma.PublicationGetPayload<typeof prismaGeneratedPublicationType>;
 
 export interface CreatePublicationRequestBody {
@@ -188,6 +188,10 @@ export type PublicationVersion = Exclude<Prisma.PromiseReturnType<typeof publica
 /**
  * @description Links
  */
+
+const prismaGeneratedLinkType = Prisma.validator<Prisma.LinksDefaultArgs>()({});
+export type Link = Prisma.LinksGetPayload<typeof prismaGeneratedLinkType>;
+
 export interface CreateLinkBody {
     to: string;
     from: string;
@@ -204,6 +208,8 @@ export interface LinkedPublication {
     authorFirstName: string;
     authorLastName: string;
     authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'user'>[];
+    flagCount: number;
+    peerReviewCount: number;
     // Only returned with ?direct=true on the getPublicationLinks endpoint.
     // Just used at present to show, and link to, the version a Peer Review was created against.
     parentVersionId?: string;
@@ -278,6 +284,9 @@ export interface ConfirmVerificationCodeBody {
 /**
  * @description Flags
  */
+
+const prismaGeneratedFlagType = Prisma.validator<Prisma.PublicationFlagsDefaultArgs>()({});
+export type Flag = Prisma.PublicationFlagsGetPayload<typeof prismaGeneratedFlagType>;
 
 export type FlagCategory =
     | 'PLAGIARISM'

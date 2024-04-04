@@ -13,8 +13,8 @@ export const isIdInUse = async (id: string) => {
     return Boolean(publication);
 };
 
-export const get = (id: string) =>
-    client.prisma.publication.findUnique({
+export const get = async (id: string) => {
+    const publication = await client.prisma.publication.findUnique({
         where: {
             id
         },
@@ -180,6 +180,17 @@ export const get = (id: string) =>
             }
         }
     });
+
+    // Provide counts
+    return publication
+        ? {
+              ...publication,
+              flagCount: publication.publicationFlags.filter((flag) => !flag.resolved).length,
+              peerReviewCount: publication.linkedFrom.filter((child) => child.publicationFrom.type === 'PEER_REVIEW')
+                  .length
+          }
+        : publication;
+};
 
 export const getSeedDataPublications = (title: string) =>
     client.prisma.publication.findMany({
@@ -619,7 +630,7 @@ export const getLinksForPublication = async (
 
     const publicationIds = linkedTo.map((link) => link.id).concat(linkedFrom.map((link) => link.id));
 
-    // get coAuthors for each latest LIVE version of each publication
+    // Get extra details for linked publications
     const versions = await client.prisma.publicationVersion.findMany({
         where: {
             isLatestLiveVersion: true,
@@ -644,25 +655,50 @@ export const getLinksForPublication = async (
                 orderBy: {
                     position: 'asc'
                 }
+            },
+            publication: {
+                select: {
+                    publicationFlags: {
+                        where: {
+                            resolved: false
+                        }
+                    },
+                    linkedFrom: {
+                        where: {
+                            publicationFrom: {
+                                type: 'PEER_REVIEW',
+                                versions: {
+                                    some: {
+                                        isLatestLiveVersion: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     });
 
-    // add authors to 'linkedTo' publications
+    // Add authors and counts to 'linkedTo' publications
     linkedTo.forEach((link) => {
-        const authors = versions.find((version) => version.versionOf === link.id)?.coAuthors || [];
+        const latestVersion = versions.find((version) => version.versionOf === link.id);
 
         Object.assign(link, {
-            authors
+            authors: latestVersion?.coAuthors || [],
+            flagCount: latestVersion?.publication.publicationFlags.length || 0,
+            peerReviewCount: latestVersion?.publication.linkedFrom.length || 0
         });
     });
 
-    // add authors to 'linkedFrom' publications
+    // Add authors and counts to 'linkedFrom' publications
     linkedFrom.forEach((link) => {
-        const authors = versions.find((version) => version.versionOf === link.id)?.coAuthors || [];
+        const latestVersion = versions.find((version) => version.versionOf === link.id);
 
         Object.assign(link, {
-            authors
+            authors: latestVersion?.coAuthors || [],
+            flagCount: latestVersion?.publication.publicationFlags.length || 0,
+            peerReviewCount: latestVersion?.publication.linkedFrom.length || 0
         });
     });
 
@@ -757,7 +793,9 @@ export const getLinksForPublication = async (
                     firstName: author.user?.firstName || '',
                     lastName: author.user?.lastName || ''
                 }
-            }))
+            })),
+            flagCount: publication.flagCount,
+            peerReviewCount: publication.peerReviewCount
         },
         linkedTo: orderedParents,
         linkedFrom: orderedChildren
@@ -823,6 +861,23 @@ export const getDirectLinksForPublication = async (
                                 include: {
                                     user: true
                                 }
+                            },
+                            publicationFlags: {
+                                where: {
+                                    resolved: false
+                                }
+                            },
+                            linkedFrom: {
+                                where: {
+                                    publicationFrom: {
+                                        type: 'PEER_REVIEW',
+                                        versions: {
+                                            some: {
+                                                isLatestLiveVersion: true
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -861,9 +916,31 @@ export const getDirectLinksForPublication = async (
                                 include: {
                                     user: true
                                 }
+                            },
+                            publicationFlags: {
+                                where: {
+                                    resolved: false
+                                }
+                            },
+                            linkedFrom: {
+                                where: {
+                                    publicationFrom: {
+                                        type: 'PEER_REVIEW',
+                                        versions: {
+                                            some: {
+                                                isLatestLiveVersion: true
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
+                }
+            },
+            publicationFlags: {
+                where: {
+                    resolved: false
                 }
             }
         }
@@ -909,7 +986,9 @@ export const getDirectLinksForPublication = async (
             authorLastName: user.lastName || '',
             currentStatus,
             publishedDate: publishedDate?.toISOString() || '',
-            authors: []
+            authors: [],
+            flagCount: link.publicationTo.publicationFlags.length,
+            peerReviewCount: link.publicationTo.linkedFrom.length
         };
     });
 
@@ -935,7 +1014,9 @@ export const getDirectLinksForPublication = async (
             authorLastName: user.lastName || '',
             currentStatus,
             publishedDate: publishedDate?.toISOString() || '',
-            authors: []
+            authors: [],
+            flagCount: link.publicationFrom.publicationFlags.length,
+            peerReviewCount: link.publicationFrom.linkedFrom.length
         };
     });
 
@@ -1007,7 +1088,10 @@ export const getDirectLinksForPublication = async (
                     firstName: author.user?.firstName || '',
                     lastName: author.user?.lastName || ''
                 }
-            }))
+            })),
+            flagCount: publication.publicationFlags.length,
+            peerReviewCount: publication.linkedFrom.filter((child) => child.publicationFrom.type === 'PEER_REVIEW')
+                .length
         },
         linkedTo,
         linkedFrom

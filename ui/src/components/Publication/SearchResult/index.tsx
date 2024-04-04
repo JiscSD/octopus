@@ -30,6 +30,8 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => {
         return authors.join(', ');
     }, [props.publicationVersion.coAuthors, props.publicationVersion.user]);
 
+    const { flagCount, peerReviewCount } = props.publicationVersion.publication;
+
     return (
         <Framer.motion.div
             initial={{ opacity: 0 }}
@@ -69,30 +71,35 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => {
             `}
             >
                 <div className="z-10 col-span-11 w-full">
-                    <span className="leading-0 mb-2 block font-montserrat text-xs font-semibold tracking-wide text-teal-400 dark:text-teal-200">
-                        {Helpers.formatPublicationType(props.publicationVersion.publication.type)}
-                    </span>
-                    <h2 className="col-span-7 mb-2 leading-6 text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        {props.publicationVersion.title}
-                    </h2>
+                    <div className="col-span-11">
+                        <span className="leading-0 mb-2 block font-montserrat text-xs font-semibold tracking-wide text-teal-400 dark:text-teal-200">
+                            {Helpers.formatPublicationType(props.publicationVersion.publication.type)}
+                        </span>
+                        <h2 className="col-span-7 mb-2 leading-6 text-grey-800 transition-colors duration-500 dark:text-white-50">
+                            {props.publicationVersion.title}
+                        </h2>
 
-                    <div className="mb-4 block text-xs text-grey-700 transition-colors duration-500 dark:text-grey-50">
-                        {props.publicationVersion.description ? (
-                            <p>{props.publicationVersion.description}</p>
-                        ) : props.publicationVersion.content ? (
-                            parse(Helpers.truncateString(props.publicationVersion.content, 370))
-                        ) : null}
+                        <div className="mb-4 block text-xs text-grey-700 transition-colors duration-500 dark:text-grey-50">
+                            {props.publicationVersion.description ? (
+                                <p>{props.publicationVersion.description}</p>
+                            ) : props.publicationVersion.content ? (
+                                parse(Helpers.truncateString(props.publicationVersion.content, 370))
+                            ) : null}
+                        </div>
                     </div>
 
-                    <span
-                        className="block overflow-hidden text-ellipsis whitespace-nowrap text-xs tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100"
-                        title={authors}
-                    >
-                        {props.publicationVersion.publishedDate
-                            ? `Published ${Helpers.relativeDate(props.publicationVersion.publishedDate)}`
-                            : 'Draft'}
-                        , by {authors}
-                    </span>
+                    <div className="flex justify-between">
+                        <span
+                            className="block overflow-hidden text-ellipsis whitespace-nowrap text-xs tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100"
+                            title={authors}
+                        >
+                            {props.publicationVersion.publishedDate
+                                ? `Published ${Helpers.relativeDate(props.publicationVersion.publishedDate)}`
+                                : 'Draft'}
+                            , by {authors}
+                        </span>
+                        <Components.EngagementCounts flagCount={flagCount} peerReviewCount={peerReviewCount} />
+                    </div>
                 </div>
 
                 <div className="lg: col-span-1 mt-4 hidden h-full w-full items-center justify-end lg:mt-0 lg:flex">

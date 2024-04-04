@@ -259,15 +259,44 @@ export const getPublications = async (
                         }
                     }
                 }
+            },
+            linkedFrom: {
+                where: {
+                    publicationFrom: {
+                        type: 'PEER_REVIEW',
+                        versions: {
+                            some: {
+                                isLatestLiveVersion: true
+                            }
+                        }
+                    }
+                }
+            },
+            publicationFlags: {
+                where: {
+                    resolved: false
+                }
             }
         }
     });
 
     const totalUserPublications = await client.prisma.publication.count({ where });
 
+    // Provide counts
+    const mappedPublications = userPublications.map((publication) => {
+        // Remove linkedFrom and flags from return
+        const { linkedFrom, publicationFlags, ...rest } = publication;
+
+        return {
+            ...rest,
+            flagCount: publication.publicationFlags.length,
+            peerReviewCount: publication.linkedFrom.length
+        };
+    });
+
     // Because the sorting is conditional on the publication state of a publication's versions, we can't do it in prisma.
     const sortedPublications = isAccountOwner // If account owner, put publications with an active draft first (sub-sorted by updated time descending), then others (sub-sorted by published date descending)
-        ? userPublications.sort((a, b) => {
+        ? mappedPublications.sort((a, b) => {
               const aLatest = a.versions.find((version) => version.isLatestVersion);
               const bLatest = b.versions.find((version) => version.isLatestVersion);
 
@@ -291,7 +320,7 @@ export const getPublications = async (
                   return bLatest.updatedAt.getTime() - aLatest.updatedAt.getTime();
               }
           }) // If not account owner, we only have latest live publications - sort by published date descending
-        : userPublications.sort((a, b) => {
+        : mappedPublications.sort((a, b) => {
               const aLatestLive = a.versions.find((version) => version.isLatestLiveVersion);
               const bLatestLive = b.versions.find((version) => version.isLatestLiveVersion);
 

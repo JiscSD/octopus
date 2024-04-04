@@ -19,6 +19,7 @@ export { default as Delay } from './Delay';
 export { default as EditAffiliationsModal } from './EditAffiliationsModal';
 export { default as EditReferenceModal } from './References/EditReferenceModal';
 export { default as EnableDarkMode } from './EnableDarkMode';
+export { default as EngagementCounts } from './Publication/EngagementCounts';
 export { default as ExtendedLink } from './ExtendedLink';
 export { default as FileUpload } from './FileUpload';
 export { default as FlagComment } from './Flag/Comment';

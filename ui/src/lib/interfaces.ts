@@ -54,6 +54,8 @@ export interface CorePublication {
     type: Types.PublicationType;
     doi: string | null;
     url_slug: string;
+    flagCount?: number;
+    peerReviewCount?: number;
 }
 
 export interface PublicationVersionUser {
@@ -119,6 +121,8 @@ export interface LinkedPublication {
     authorFirstName: string;
     authorLastName: string;
     authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationVersionId' | 'user'>[];
+    flagCount: number;
+    peerReviewCount: number;
     // Only returned with ?direct=true on the getPublicationLinks endpoint.
     // Just used at present to show, and link to, the version a Peer Review was created against.
     parentVersionId?: string;
