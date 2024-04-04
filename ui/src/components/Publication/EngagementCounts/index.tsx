@@ -21,6 +21,7 @@ const EngagementCounts: React.FC<Props> = (props): React.ReactElement => {
                     <SolidIcons.FlagIcon
                         className={`${props.narrow ? 'mr-1 md:mr-2' : 'mr-2 md:mr-4'} h-4 w-4 text-red-500`}
                         title="Red flag count"
+                        aria-hidden="false"
                     />
                     {flagCount}
                 </span>
@@ -34,6 +35,7 @@ const EngagementCounts: React.FC<Props> = (props): React.ReactElement => {
                     <SolidIcons.PencilIcon
                         className={`${props.narrow ? 'mr-1 md:mr-2' : 'mr-2 md:mr-4'} h-4 w-4`}
                         title="Peer review count"
+                        aria-hidden="false"
                     />
                     {peerReviewCount}
                 </span>
