@@ -89,6 +89,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     );
 
+    const missingNames = !props.user.firstName && !props.user.lastName;
     const userPublications = useMemo(() => data?.map((data) => data.results).flat() || [], [data]);
 
     const pageTitle = `Author: ${props.user.orcid} - ${Config.urls.viewUser.title}`;
@@ -107,7 +108,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                     <div className="mb-8 flex items-center">
                         <Components.Avatar user={props.user} className="text-xl lg:h-16 lg:w-16" />
                         <h1 className="ml-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-tight">
-                            {props.user.firstName} {props.user.lastName}
+                            {missingNames ? 'Anonymous User' : `${props.user.firstName} ${props.user.lastName}`}
                         </h1>
                     </div>
                     <div className="font-montserrat text-lg font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">

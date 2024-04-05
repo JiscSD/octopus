@@ -17,6 +17,10 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
     const isDarkMode = Stores.usePreferencesStore((state) => state.darkMode);
     const router = NextRouter.useRouter();
 
+    const showConfirmEmailBanner = user && !user?.email && router.pathname !== Config.urls.verify.path;
+    const showMissingNamesBanner =
+        user && !user?.firstName && !user?.lastName && router.pathname !== Config.urls.verify.path;
+
     return (
         <>
             <Components.Banner>
@@ -33,16 +37,21 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
                     help@jisc.ac.uk
                 </Components.Link>
             </Components.Banner>
-            {/* Confirm email banner */}
-            {user && !user?.email && router.pathname !== Config.urls.verify.path && (
+            {/* Missing info banner */}
+            {(showConfirmEmailBanner || showMissingNamesBanner) && (
                 <div className="bg-yellow-200 text-sm text-grey-800 dark:bg-yellow-500">
                     <div className="container mx-auto flex items-center gap-2 px-8 py-3">
                         <OutlineIcons.ExclamationCircleIcon className="h-5 w-5 text-grey-800" />
                         <Components.Link
-                            href={`${Config.urls.verify.path}`}
-                            className="w-fit underline decoration-2 underline-offset-4"
+                            href={showConfirmEmailBanner ? Config.urls.verify.path : Config.urls.orcidAccountPage.path}
+                            className="w-fit underline underline-offset-4"
+                            openNew={true}
                         >
-                            Please confirm your email address to publish content
+                            {showConfirmEmailBanner && showMissingNamesBanner
+                                ? 'Please set your name to be visible on your ORCiD profile, then return to Octopus to verify your email to be able to publish content.'
+                                : showConfirmEmailBanner
+                                  ? 'Please confirm your email address to be able to publish content.'
+                                  : 'Your name is not visible on your ORCiD account. Please change this setting to "Everyone" or "Trusted parties" to be able to publish content.'}
                         </Components.Link>
                     </div>
                 </div>

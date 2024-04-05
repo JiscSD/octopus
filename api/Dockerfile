@@ -1,8 +1,8 @@
-FROM node:18
+FROM node:18-alpine
 
-RUN apt-get update
+RUN apk update
 
-RUN apt-get install -y \
+RUN apk add \
     ca-certificates \
     curl \
     gnupg \
