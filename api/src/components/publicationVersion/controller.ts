@@ -1,4 +1,4 @@
-import htmlToText from 'html-to-text';
+import { convert } from 'html-to-text';
 import * as I from 'interface';
 import * as response from 'lib/response';
 import * as publicationVersionService from 'publicationVersion/service';
@@ -347,7 +347,7 @@ export const updateStatus = async (
             keywords: upToDateVersion.keywords,
             content: upToDateVersion.content,
             publishedDate: upToDateVersion.publishedDate,
-            cleanContent: htmlToText.convert(upToDateVersion.content)
+            cleanContent: convert(upToDateVersion.content)
         });
 
         // delete all pending request control events for this publication version
