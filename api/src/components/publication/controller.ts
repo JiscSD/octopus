@@ -81,6 +81,10 @@ export const create = async (
             });
         }
 
+        if (event.body.content) {
+            event.body.content = helpers.getSafeHTML(event.body.content);
+        }
+
         const doi = await helpers.createEmptyDOI();
 
         const publication = await publicationService.create(event.body, event.user, doi);
