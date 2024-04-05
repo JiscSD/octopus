@@ -713,6 +713,8 @@ export const formatAffiliationName = (affiliation: I.MappedOrcidAffiliation): st
     }${organization.address.country}`;
 };
 
+const doiLinkBase = `https://doi.org/`;
+
 export const createPublicationHTMLTemplate = (
     publicationVersion: I.PublicationVersion,
     references: I.Reference[],
@@ -1025,7 +1027,7 @@ export const createPublicationHTMLTemplate = (
             </p>
             <p class="metadata">
                 <strong>DOI:</strong> 
-                <a href="${process.env.BASE_URL}/publications/${publicationVersion.publication.id}">
+                <a href="${doiLinkBase + publicationVersion.publication.doi}">
                     ${publicationVersion.publication.doi}
                 </a>
             </p>
@@ -1101,7 +1103,9 @@ export const createPublicationHTMLTemplate = (
                             ${linkedTo
                                 .map(
                                     (link) =>
-                                        `<p style="margin-bottom: 1rem"><a href="${process.env.BASE_URL}/publications/${link.id}">${link.title}</a></p>`
+                                        `<p style="margin-bottom: 1rem"><a href="${doiLinkBase + link.doi}">${
+                                            link.title
+                                        }</a></p>`
                                 )
                                 .join('')}
                         </div>`
@@ -1301,14 +1305,18 @@ export const createPublicationFooterTemplate = (publicationVersion: I.Publicatio
     </style>
     <div class="footer">            
         <div>
-            <span>DOI: <a href="${process.env.BASE_URL}/publications/${publicationVersion.publication.id}">${publicationVersion.publication.doi}</a></span>
+            <span>DOI: <a href="${doiLinkBase + publicationVersion.publication.doi}">${
+        publicationVersion.publication.doi
+    }</a></span>
         </div>
         <div>
             Page <span class="pageNumber"></span> of <span class="totalPages"></span>
         </div>        
         <div>
             Published on <a href="${process.env.BASE_URL}">Octopus.ac</a>
-            <a href="${process.env.BASE_URL}"><img id="octopus-logo" src="data:image/svg+xml;base64,${base64OctopusLogo}"/></a>
+            <a href="${
+                process.env.BASE_URL
+            }"><img id="octopus-logo" src="data:image/svg+xml;base64,${base64OctopusLogo}"/></a>
         </div>
     </div>`;
 };
