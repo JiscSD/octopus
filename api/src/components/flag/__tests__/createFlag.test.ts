@@ -34,7 +34,7 @@ describe('Create flags on publications', () => {
         expect(createFlag.status).toEqual(403);
     });
 
-    test('User cannot create a invalid flag on LIVE publication they did not create', async () => {
+    test('User cannot create an invalid flag on LIVE publication they did not create', async () => {
         const createFlag = await testUtils.agent
             .post('/publications/publication-interpretation-live/flags')
             .query({
@@ -88,7 +88,7 @@ describe('Create flags on publications', () => {
         expect(createFlag.status).toEqual(400);
     });
 
-    test('User can create 2 differente flags for the same publication that they did not create', async () => {
+    test('User can create 2 different flags for the same publication that they did not create', async () => {
         const createFlag = await testUtils.agent
             .post('/publications/publication-interpretation-live/flags')
             .query({
@@ -112,5 +112,20 @@ describe('Create flags on publications', () => {
             });
 
         expect(createFlagAttempt2.status).toEqual(200);
+    });
+
+    test('Organisational account cannot raise a flag', async () => {
+        const createFlag = await testUtils.agent
+            .post('/publications/publication-interpretation-live/flags')
+            .query({
+                apiKey: '000000012'
+            })
+            .send({
+                comment: 'Comments',
+                category: 'ETHICAL_ISSUES'
+            });
+
+        expect(createFlag.status).toEqual(403);
+        expect(createFlag.body.message).toEqual('Organisational accounts cannot flag publications.');
     });
 });

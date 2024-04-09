@@ -59,6 +59,12 @@ export const create = async (
     event: I.AuthenticatedAPIRequest<I.CreatePublicationRequestBody>
 ): Promise<I.JSONResponse> => {
     try {
+        if (event.body.type !== 'PROBLEM' && event.user.role === 'ORGANISATION') {
+            return response.json(403, {
+                message: 'Organisational accounts can only create Research Problems'
+            });
+        }
+
         if (
             event.body.selfDeclaration !== undefined &&
             event.body.type !== 'PROTOCOL' &&

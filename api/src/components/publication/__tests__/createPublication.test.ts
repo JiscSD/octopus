@@ -276,4 +276,35 @@ describe('Create publication', () => {
         expect(createPublicationRequest.status).toEqual(201);
         expect(createPublicationRequest.body.versions[0].topics[0].title).toEqual('Test topic');
     });
+
+    test('Organisational accounts can create problems', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '000000012'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: 'Problem by an organisational account'
+            });
+
+        expect(createPublicationRequest.status).toEqual(201);
+    });
+
+    test('Organisational accounts cannot create types other than problems', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '000000012'
+            })
+            .send({
+                type: 'HYPOTHESIS',
+                title: 'Hypothesis by an organisational account'
+            });
+
+        expect(createPublicationRequest.status).toEqual(403);
+        expect(createPublicationRequest.body.message).toEqual(
+            'Organisational accounts can only create Research Problems'
+        );
+    });
 });
