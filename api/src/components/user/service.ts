@@ -61,12 +61,18 @@ export const getAll = async (filters: I.UserFilters) => {
         };
     } else {
         where = {
-            firstName: {
-                not: ''
-            },
-            lastName: {
-                not: ''
-            }
+            OR: [
+                {
+                    firstName: {
+                        not: ''
+                    }
+                },
+                {
+                    lastName: {
+                        not: ''
+                    }
+                }
+            ]
         };
     }
 
@@ -353,14 +359,16 @@ export const getUserList = async () => {
             email: true,
             firstName: true,
             lastName: true,
+            role: true,
             createdAt: true,
             employment: true
         }
     });
 
-    return users.map(({ firstName, lastName, email, createdAt, employment }) => ({
+    return users.map(({ firstName, lastName, role, email, createdAt, employment }) => ({
         firstName,
         lastName,
+        role,
         email,
         createdAt: createdAt.toLocaleDateString('en-GB', { dateStyle: 'short' }),
         currentEmployer: (employment as unknown as I.UserEmployment[])

@@ -210,7 +210,7 @@ export interface CoreUser {
     firstName: string;
     lastName: string;
     email: string | null;
-    role: string;
+    role: Types.UserRole;
     createdAt: string;
     updatedAt: string;
     orcid: string;

@@ -41,7 +41,7 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
     }, [props.publicationVersion]);
 
     const authorNames = React.useMemo(
-        () => authors.map((author) => `${author.user?.firstName[0]}. ${author.user?.lastName}`).join(', '),
+        () => authors.map((author) => Helpers.abbreviateUserName(author.user)).join(', '),
         [authors]
     );
 
@@ -69,11 +69,9 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
                                     } truncate`}
                                 >
                                     <Components.Link href={`${Config.urls.viewUser.path}/${author.linkedUser}`}>
-                                        <>
-                                            {author.user?.firstName[0]}. {author.user?.lastName}
-                                        </>
+                                        {Helpers.abbreviateUserName(author.user)}
                                     </Components.Link>
-                                    {author.linkedUser !== 'octopus' && (
+                                    {author.linkedUser !== 'octopus' && author.user && author.user.orcid && (
                                         <>
                                             &nbsp;
                                             <a

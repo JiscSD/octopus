@@ -43,8 +43,8 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
 
         const authors = props.authors.map((author) => ({
             id: author.linkedUser,
-            firstName: author.user?.firstName,
-            lastName: author.user?.lastName
+            firstName: author.user?.firstName || '',
+            lastName: author.user?.lastName || ''
         }));
 
         // check if corresponding author is part of authors list
@@ -96,7 +96,7 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                                     : 'text-grey-600 dark:font-medium dark:text-teal-50'
                             } block overflow-hidden text-ellipsis whitespace-nowrap text-xxs transition-colors duration-500 2xl:text-xs`}
                         >
-                            {`${mainAuthor.firstName ? `${mainAuthor.firstName[0]}. ` : ''}${mainAuthor.lastName}`}
+                            {Helpers.abbreviateUserName(mainAuthor)}
                         </span>
                         <time
                             className={`${

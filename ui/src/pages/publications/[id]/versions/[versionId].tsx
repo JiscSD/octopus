@@ -712,19 +712,19 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                         href={`${Config.urls.viewUser.path}/${author.linkedUser}`}
                                         className="w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                                     >
-                                        <span className="author-name">
-                                            {author.user?.firstName[0]}. {author.user?.lastName}
-                                        </span>
+                                        <span className="author-name">{Helpers.abbreviateUserName(author.user)}</span>
                                     </Components.Link>
-                                    <Components.Link
-                                        className="ml-2 flex w-fit items-center"
-                                        href={`https://${
-                                            process.env.NEXT_PUBLIC_STAGE === 'local' ? 'sandbox.' : ''
-                                        }orcid.org/${author.user?.orcid}`}
-                                        openNew={true}
-                                    >
-                                        <Assets.OrcidLogoIcon width={24} />
-                                    </Components.Link>
+                                    {author.user && author.user.orcid && (
+                                        <Components.Link
+                                            className="ml-2 flex w-fit items-center"
+                                            href={`https://${
+                                                process.env.NEXT_PUBLIC_STAGE === 'local' ? 'sandbox.' : ''
+                                            }orcid.org/${author.user?.orcid}`}
+                                            openNew={true}
+                                        >
+                                            <Assets.OrcidLogoIcon width={24} />
+                                        </Components.Link>
+                                    )}
                                     {index < confirmedAuthors.length - 1 && (
                                         <span className="leading-relaxed text-teal-600 transition-colors duration-500 dark:text-teal-400">
                                             ,
