@@ -90,6 +90,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 
     const missingNames = !props.user.firstName && !props.user.lastName;
+    const isOrganisationalAccount = props.user.role === 'ORGANISATION';
     const userPublications = useMemo(() => data?.map((data) => data.results).flat() || [], [data]);
 
     const pageTitle = `Author: ${props.user.role === 'ORGANISATION' ? props.user.firstName : props.user.orcid} - ${Config.urls.viewUser.title}`;
@@ -113,8 +114,8 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                                 : `${props.user.firstName}${props.user.lastName ? ' ' + props.user.lastName : ''}`}
                         </h1>
                     </div>
-                    <div className="font-montserrat text-lg font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        {props.user.id === 'octopus' ? null : (
+                    {!isOrganisationalAccount && props.user.id !== 'octopus' && (
+                        <div className="font-montserrat text-lg font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
                             <Components.Link
                                 title="ORCID profile"
                                 className="flex w-fit items-center gap-2"
@@ -124,63 +125,67 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                                 <Assets.OrcidLogoIcon width={24} />
                                 <span className="font-semibold text-teal-500">{props.user.orcid}</span>
                             </Components.Link>
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </header>
 
-                <section className="container mx-auto px-8 pb-12 lg:pb-24">
-                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
-                        Employment
-                    </h2>
-                    <div className="2xl:w-2/3">
-                        {props.user.employment.length ? (
-                            <Components.UserHistoryTable
-                                heads={['Organisation', 'Role', 'Department', 'Start date', 'End date']}
-                                records={props.user.employment}
-                            />
-                        ) : (
-                            <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                No history available.
-                            </p>
-                        )}
-                    </div>
-                </section>
+                {!isOrganisationalAccount && (
+                    <>
+                        <section className="container mx-auto px-8 pb-12 lg:pb-24">
+                            <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
+                                Employment
+                            </h2>
+                            <div className="2xl:w-2/3">
+                                {props.user.employment.length ? (
+                                    <Components.UserHistoryTable
+                                        heads={['Organisation', 'Role', 'Department', 'Start date', 'End date']}
+                                        records={props.user.employment}
+                                    />
+                                ) : (
+                                    <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                        No history available.
+                                    </p>
+                                )}
+                            </div>
+                        </section>
 
-                <section className="container mx-auto px-8 pb-12 lg:pb-24">
-                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
-                        Education
-                    </h2>
-                    <div className="2xl:w-2/3">
-                        {props.user.education.length ? (
-                            <Components.UserHistoryTable
-                                heads={['Organisation', 'Degree/title', 'Department', 'Start date', 'End date']}
-                                records={props.user.education}
-                            />
-                        ) : (
-                            <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                No history available.
-                            </p>
-                        )}
-                    </div>
-                </section>
+                        <section className="container mx-auto px-8 pb-12 lg:pb-24">
+                            <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
+                                Education
+                            </h2>
+                            <div className="2xl:w-2/3">
+                                {props.user.education.length ? (
+                                    <Components.UserHistoryTable
+                                        heads={['Organisation', 'Degree/title', 'Department', 'Start date', 'End date']}
+                                        records={props.user.education}
+                                    />
+                                ) : (
+                                    <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                        No history available.
+                                    </p>
+                                )}
+                            </div>
+                        </section>
 
-                <section className="container mx-auto px-8 pb-12 lg:pb-24">
-                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
-                        Works
-                    </h2>
-                    <div className="2xl:w-2/3">
-                        {props.user.works.length ? (
-                            <Components.UserWorksTable
-                                heads={['Title', 'DOI', 'Published date']}
-                                records={props.user.works}
-                            />
-                        ) : (
-                            <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                No works available.
-                            </p>
-                        )}
-                    </div>
-                </section>
+                        <section className="container mx-auto px-8 pb-12 lg:pb-24">
+                            <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
+                                Works
+                            </h2>
+                            <div className="2xl:w-2/3">
+                                {props.user.works.length ? (
+                                    <Components.UserWorksTable
+                                        heads={['Title', 'DOI', 'Published date']}
+                                        records={props.user.works}
+                                    />
+                                ) : (
+                                    <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                        No works available.
+                                    </p>
+                                )}
+                            </div>
+                        </section>
+                    </>
+                )}
 
                 <section className="container mx-auto mb-16 px-8">
                     <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
@@ -208,7 +213,8 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                                         firstName: props.user.firstName,
                                         lastName: props.user.lastName,
                                         orcid: props.user.orcid,
-                                        updatedAt: props.user.updatedAt
+                                        updatedAt: props.user.updatedAt,
+                                        role: props.user.role
                                     };
 
                                     version.publication = {

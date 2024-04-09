@@ -33,7 +33,8 @@ export const testPublicationVersion: Interfaces.PublicationVersion = {
         lastName: 'Doe',
         email: 'john_doe@mailinator.com',
         createdAt: '2023-02-27T09:50:00.000Z',
-        updatedAt: '2023-02-27T09:50:00.000Z'
+        updatedAt: '2023-02-27T09:50:00.000Z',
+        role: 'USER'
     },
     publicationStatus: [
         {

@@ -29,7 +29,9 @@ export const get = async (id: string) => {
                             lastName: true,
                             email: true,
                             createdAt: true,
-                            updatedAt: true
+                            updatedAt: true,
+                            role: true,
+                            url: true
                         }
                     },
                     publicationStatus: {
@@ -69,7 +71,9 @@ export const get = async (id: string) => {
                                 select: {
                                     firstName: true,
                                     lastName: true,
-                                    orcid: true
+                                    orcid: true,
+                                    role: true,
+                                    url: true
                                 }
                             }
                         },
@@ -791,7 +795,9 @@ export const getLinksForPublication = async (
                 user: {
                     orcid: author.user?.orcid || '',
                     firstName: author.user?.firstName || '',
-                    lastName: author.user?.lastName || ''
+                    lastName: author.user?.lastName || '',
+                    role: author.user?.role || 'USER',
+                    url: author.user?.url || ''
                 }
             })),
             flagCount: publication.flagCount,
@@ -1086,7 +1092,9 @@ export const getDirectLinksForPublication = async (
                 user: {
                     orcid: author.user?.orcid || '',
                     firstName: author.user?.firstName || '',
-                    lastName: author.user?.lastName || ''
+                    lastName: author.user?.lastName || '',
+                    role: author.user?.role || 'USER',
+                    url: author.user?.url || ''
                 }
             })),
             flagCount: publication.publicationFlags.length,

@@ -56,7 +56,9 @@ const defaultPublicationVersionInclude = {
                 select: {
                     firstName: true,
                     lastName: true,
-                    orcid: true
+                    orcid: true,
+                    role: true,
+                    url: true
                 }
             }
         },
@@ -72,7 +74,9 @@ const defaultPublicationVersionInclude = {
             lastName: true,
             email: true,
             createdAt: true,
-            updatedAt: true
+            updatedAt: true,
+            role: true,
+            url: true
         }
     },
     topics: {

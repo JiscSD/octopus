@@ -498,6 +498,8 @@ export interface CoAuthor {
         firstName: string;
         lastName: string;
         orcid: string;
+        role: Role;
+        url?: string;
     };
 }
 

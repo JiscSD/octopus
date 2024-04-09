@@ -32,7 +32,9 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
                 user: {
                     orcid: correspondingUser.orcid,
                     firstName: correspondingUser.firstName,
-                    lastName: correspondingUser.lastName
+                    lastName: correspondingUser.lastName,
+                    role: correspondingUser.role,
+                    url: correspondingUser.url
                 }
             });
         }
