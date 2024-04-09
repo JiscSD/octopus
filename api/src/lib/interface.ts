@@ -247,7 +247,7 @@ export interface User {
     firstName: string;
     lastName: string | null;
     locked: boolean;
-    orcid: string;
+    orcid: string | null;
     role: Role;
 }
 
@@ -261,6 +261,21 @@ export interface UserFilters {
 
 export interface GetUserParameters {
     id: string;
+}
+
+export interface CreateOrganisationalAccountInput {
+    name: string;
+    email?: string;
+    ror?: string;
+    url?: string;
+}
+
+export interface UpdateOrganisationalAccountInput {
+    name?: string;
+    email?: string;
+    ror?: string;
+    url?: string;
+    defaultPublicationId?: string;
 }
 
 /**
@@ -708,7 +723,7 @@ export interface DataCiteCreatorNameIdentifiers {
 export interface DataCiteUser {
     firstName: string | undefined;
     lastName: string | null;
-    orcid: string;
+    orcid: string | null;
     affiliations: MappedOrcidAffiliation[];
 }
 export interface GeneratePDFPathParams {

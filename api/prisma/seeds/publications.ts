@@ -1128,6 +1128,29 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 }
             }
         }
+    },
+    {
+        id: 'organisational-account-publication-1',
+        doi: '10.82259/01x8-yb59',
+        type: 'PROBLEM',
+        versions: {
+            create: {
+                id: 'organisational-account-publication-1-v1',
+                versionNumber: 1,
+                title: 'Organisational account publication 1',
+                content: 'Owned by an organisational account',
+                currentStatus: 'LIVE',
+                isLatestLiveVersion: true,
+                publishedDate: '2024-04-09T10:45:00.000Z',
+                user: { connect: { id: 'test-organisational-account-1' } },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2024-04-09T09:45:00.000Z' },
+                        { status: 'LIVE', createdAt: '2024-04-09T10:45:00.000Z' }
+                    ]
+                }
+            }
+        }
     }
 ];
 

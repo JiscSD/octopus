@@ -372,3 +372,16 @@ export const getUserList = async () => {
             .join(', ')
     }));
 };
+
+export const createManyUsers = async (users: Prisma.UserCreateInput[]) =>
+    // Use this abstraction in order to return the created users.
+    // Using createMany only returns { count: X }.
+    await client.prisma.$transaction(users.map((user) => client.prisma.user.create({ data: user })));
+
+export const updateUser = async (id: string, data: Prisma.UserUpdateInput) =>
+    await client.prisma.user.update({
+        data,
+        where: {
+            id
+        }
+    });

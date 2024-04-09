@@ -114,6 +114,10 @@ export const getDecodedUserToken = async (event: I.AuthenticatedAPIRequest): Pro
 };
 
 export const verifyOrcidAccess = async (event: I.AuthenticatedAPIRequest): Promise<I.JSONResponse> => {
+    if (!event.user.orcid) {
+        return response.json(400, 'User does not have an ORCiD ID');
+    }
+
     try {
         await authorizationService.verifyOrcidAccess(event.user.orcid);
     } catch (error) {
@@ -124,6 +128,10 @@ export const verifyOrcidAccess = async (event: I.AuthenticatedAPIRequest): Promi
 };
 
 export const revokeOrcidAccess = async (event: I.AuthenticatedAPIRequest): Promise<I.JSONResponse> => {
+    if (!event.user.orcid) {
+        return response.json(400, 'User does not have an ORCiD ID');
+    }
+
     try {
         await authorizationService.revokeOrcidAccess(event.user.orcid);
     } catch (error) {
