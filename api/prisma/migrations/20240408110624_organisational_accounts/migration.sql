@@ -3,6 +3,9 @@
 
   - The values [FUNDER] on the enum `Role` will be removed. If these variants are still used in the database, this will fail.
 
+  NOTE: confirmed that as of 08/04/24, when this was written, only USER values exist for this enum in deployed environments' databases.
+  Decided to remove FUNDER because it is unused and could be confused with ORGANISATION.
+
 */
 -- AlterEnum
 BEGIN;

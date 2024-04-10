@@ -170,7 +170,7 @@ export const updateOrganisationalAccount = async (
             return 'Default publication not found.';
         }
 
-        if (!defaultPublication.versions.some((version) => version.user.id === id)) {
+        if (!defaultPublication.versions.some((version) => version.isLatestVersion && version.user.id === id)) {
             return 'Default publication is not owned by this user.';
         }
     }

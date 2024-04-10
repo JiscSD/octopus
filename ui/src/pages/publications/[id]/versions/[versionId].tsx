@@ -6,7 +6,6 @@ import React, { useEffect, useMemo } from 'react';
 import useSWR from 'swr';
 import * as Framer from 'framer-motion';
 import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as SolidIcons from '@heroicons/react/24/solid';
 
 import * as api from '@/api';
 import * as Assets from '@/assets';
@@ -599,60 +598,6 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const alerts = generateAlertComponents();
 
-    const authorList = confirmedAuthors.map((author, index) => {
-        // A link to visit the author's page.
-        const visitLink =
-            author.user &&
-            // If the user is an organisational account and they have a URL, link there. Otherwise just show an icon.
-            (author.user.role === 'ORGANISATION' ? (
-                author.user.url ? (
-                    <Components.Link
-                        className="flex ml-2 w-fit"
-                        href={author.user.url}
-                        title="Visit organisation's site"
-                        openNew={true}
-                    >
-                        <SolidIcons.BuildingOfficeIcon
-                            className="w-4 text-grey-800 dark:text-grey-100"
-                            title="Organisational account icon"
-                        />
-                    </Components.Link>
-                ) : (
-                    <SolidIcons.BuildingOfficeIcon
-                        className="w-4 ml-2 text-grey-800 dark:text-grey-100"
-                        title="Organisational account icon"
-                    />
-                )
-            ) : (
-                <Components.Link
-                    className="ml-2 flex w-fit items-center"
-                    href={`https://${
-                        process.env.NEXT_PUBLIC_STAGE === 'local' ? 'sandbox.' : ''
-                    }orcid.org/${author.user?.orcid}`}
-                    title="Visit ORCiD profile"
-                    openNew={true}
-                >
-                    <Assets.OrcidLogoIcon width={24} />
-                </Components.Link>
-            ));
-        return (
-            <div key={author.id} className="flex w-fit items-center">
-                <Components.Link
-                    href={`${Config.urls.viewUser.path}/${author.linkedUser}`}
-                    className="w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
-                >
-                    <span className="author-name">{Helpers.abbreviateUserName(author.user)}</span>
-                </Components.Link>
-                {visitLink}
-                {index < confirmedAuthors.length - 1 && (
-                    <span className="leading-relaxed text-teal-600 transition-colors duration-500 dark:text-teal-400">
-                        ,
-                    </span>
-                )}
-            </div>
-        );
-    });
-
     return publicationVersion ? (
         <>
             <Head>
@@ -762,7 +707,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             )}
                         </div>
 
-                        <div className="mb-4 flex flex-wrap items-center gap-2">{authorList}</div>
+                        <Components.AuthorList className="mb-4" authors={confirmedAuthors} />
+
                         <Framer.AnimatePresence>
                             {/** API will only return versions that the current user has permission to see */}
                             {publication && publication.versions.length !== publicationVersion.versionNumber && (

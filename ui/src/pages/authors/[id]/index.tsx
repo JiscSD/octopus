@@ -93,7 +93,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
     const isOrganisationalAccount = props.user.role === 'ORGANISATION';
     const userPublications = useMemo(() => data?.map((data) => data.results).flat() || [], [data]);
 
-    const pageTitle = `Author: ${props.user.role === 'ORGANISATION' ? props.user.firstName : props.user.orcid} - ${Config.urls.viewUser.title}`;
+    const pageTitle = `Author: ${isOrganisationalAccount ? props.user.firstName : props.user.orcid} - ${Config.urls.viewUser.title}`;
 
     return (
         <>

@@ -1,7 +1,7 @@
 import * as testUtils from 'lib/testUtils';
 import * as userController from 'user/controller';
 
-describe('Create organisational accounts', () => {
+describe('Update organisational account', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
         await testUtils.testSeed();

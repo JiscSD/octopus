@@ -61,7 +61,7 @@ export const create = async (
     try {
         if (event.body.type !== 'PROBLEM' && event.user.role === 'ORGANISATION') {
             return response.json(403, {
-                message: 'Organisational accounts can only create Research Problems'
+                message: 'Organisational accounts can only create Research Problems.'
             });
         }
 
@@ -71,7 +71,8 @@ export const create = async (
             event.body.type !== 'HYPOTHESIS'
         ) {
             return response.json(400, {
-                message: 'You can not declare a self declaration for a publication that is not a protocol or hypothesis'
+                message:
+                    'You can not declare a self declaration for a publication that is not a protocol or hypothesis.'
             });
         }
 

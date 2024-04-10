@@ -304,7 +304,7 @@ describe('Create publication', () => {
 
         expect(createPublicationRequest.status).toEqual(403);
         expect(createPublicationRequest.body.message).toEqual(
-            'Organisational accounts can only create Research Problems'
+            'Organisational accounts can only create Research Problems.'
         );
     });
 });
