@@ -78,7 +78,7 @@ describe('Standard account', () => {
     it('ORCiD link is present', () => {
         expect(screen.getByRole('link', { name: 'Visit ORCiD profile' })).toHaveAttribute(
             'href',
-            'https://sandbox.orcid.org/test'
+            `https://${process.env.NEXT_PUBLIC_STAGE === 'local' ? 'sandbox.' : ''}orcid.org/test`
         );
     });
 });
