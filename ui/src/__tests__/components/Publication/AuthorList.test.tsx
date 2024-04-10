@@ -6,7 +6,7 @@ import * as Helpers from '@/helpers';
 import * as Types from '@/types';
 
 const organisationalAccountWithoutUrl = {
-    id: 'test',
+    id: 'test1',
     linkedUser: 'test',
     confirmedCoAuthor: true,
     approvalRequested: true,
@@ -19,11 +19,13 @@ const organisationalAccountWithoutUrl = {
 
 const organisationalAccountWithUrl = {
     ...organisationalAccountWithoutUrl,
+    id: 'test2',
     user: { ...organisationalAccountWithoutUrl.user, url: 'https://test.org' }
 };
 
 const standardAccount = {
     ...organisationalAccountWithoutUrl,
+    id: 'test3',
     user: {
         firstName: 'John',
         lastName: 'Doe',
