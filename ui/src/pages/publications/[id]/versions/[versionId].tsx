@@ -53,7 +53,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         >,
         Promise<Interfaces.BookmarkedEntityData[] | void>,
         Promise<Interfaces.PublicationWithLinks | void>,
-        Promise<Interfaces.Flag[] | void>
+        Promise<Interfaces.Flag[] | void>,
+        Promise<Interfaces.MixedCrosslinks | void>
     ] = [
         api
             .get(`${Config.endpoints.publications}/${requestedId}/publication-versions/${versionId}`, token)
@@ -86,6 +87,10 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         api
             .get(`${Config.endpoints.publications}/${requestedId}/flags`, token)
             .then((res) => res.data)
+            .catch((error) => console.log(error)),
+        api
+            .get(`${Config.endpoints.publications}/${requestedId}/crosslinks?order=mix`, token)
+            .then((res) => res.data)
             .catch((error) => console.log(error))
     ];
 
@@ -94,7 +99,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         bookmarks = [],
         directLinks = { publication: null, linkedTo: [], linkedFrom: [] },
         flags = [],
-        topics = []
+        crosslinks = []
     ] = await Promise.all(promises);
 
     if (versionRequestError) {
@@ -117,13 +122,12 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         return {
             props: {
                 publicationVersion,
-                userToken: token || '',
                 bookmarkId: bookmarks.length ? bookmarks[0].id : null,
                 publicationId: publicationVersion.publication.id,
                 protectedPage: ['LOCKED', 'DRAFT'].includes(publicationVersion.currentStatus),
                 directLinks,
                 flags,
-                topics
+                crosslinks
             }
         };
     } else {
@@ -137,10 +141,9 @@ type Props = {
     publicationVersion: Interfaces.PublicationVersion;
     publicationId: string;
     bookmarkId: string | null;
-    userToken: string;
     directLinks: Interfaces.PublicationWithLinks;
     flags: Interfaces.Flag[];
-    topics: Interfaces.BaseTopic[];
+    crosslinks: Interfaces.MixedCrosslinks;
 };
 
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
@@ -748,18 +751,16 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             )}
                         </Framer.AnimatePresence>
 
-                        <div className="block lg:hidden">
+                        <div className="block space-y-8 lg:hidden">
                             {showVersionsAccordion && (
-                                <div className="my-8">
-                                    <Components.VersionsAccordion
-                                        id="mobile-versions-accordion"
-                                        versions={publication.versions}
-                                        selectedVersion={publicationVersion}
-                                        controlRequests={controlRequests}
-                                        onServerError={setServerError}
-                                        onUnlockPublication={handleUnlock}
-                                    />
-                                </div>
+                                <Components.VersionsAccordion
+                                    id="mobile-versions-accordion"
+                                    versions={publication.versions}
+                                    selectedVersion={publicationVersion}
+                                    controlRequests={controlRequests}
+                                    onServerError={setServerError}
+                                    onUnlockPublication={handleUnlock}
+                                />
                             )}
 
                             {publicationVersion && (
@@ -770,6 +771,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     flags={flags}
                                 />
                             )}
+
+                            <Components.RelatedPublications
+                                id="mobile-related-publications"
+                                crosslinks={props.crosslinks}
+                            />
                         </div>
                     </header>
 
@@ -1067,6 +1073,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             linkedFrom={linkedFrom}
                             sectionList={sectionList}
                             flags={flags}
+                        />
+                        <Components.RelatedPublications
+                            id="desktop-related-publications"
+                            crosslinks={props.crosslinks}
                         />
                     </div>
                 </aside>
