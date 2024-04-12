@@ -862,6 +862,20 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 draft: false
             }
         },
+        crosslinksFrom: {
+            create: {
+                id: 'user-1-problem-1-crosslink-1',
+                publicationToId: 'publication-user-1-problem-1-live',
+                createdBy: users.user6,
+                createdAt: '2024-04-10T13:35:00.000Z',
+                votes: {
+                    create: {
+                        createdBy: users.user6,
+                        vote: true
+                    }
+                }
+            }
+        },
         versions: {
             create: {
                 id: 'publication-user-4-real-world-application-1-live-v1',
@@ -900,6 +914,20 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                         draft: false
                     }
                 ]
+            }
+        },
+        crosslinksFrom: {
+            create: {
+                id: 'user-1-problem-1-crosslink-2',
+                publicationToId: 'publication-user-1-problem-1-live',
+                createdBy: users.user6,
+                createdAt: '2024-04-10T13:34:00.000Z',
+                votes: {
+                    create: {
+                        createdBy: users.user6,
+                        vote: true
+                    }
+                }
             }
         },
         versions: {
@@ -949,6 +977,40 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 ]
             }
         },
+        crosslinksFrom: {
+            create: {
+                id: 'user-1-problem-1-crosslink-3',
+                publicationToId: 'publication-user-1-problem-1-live',
+                createdBy: users.user6,
+                createdAt: '2024-04-10T13:33:00.000Z',
+                votes: {
+                    createMany: {
+                        data: [
+                            {
+                                createdBy: users.user6,
+                                vote: true
+                            },
+                            {
+                                createdBy: users.user1,
+                                vote: false
+                            },
+                            {
+                                createdBy: users.user2,
+                                vote: false
+                            },
+                            {
+                                createdBy: users.user3,
+                                vote: false
+                            },
+                            {
+                                createdBy: users.user4,
+                                vote: false
+                            }
+                        ]
+                    }
+                }
+            }
+        },
         versions: {
             create: {
                 id: 'publication-user-5-analysis-1-live-v1',
@@ -980,6 +1042,40 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 publicationToId: 'publication-user-1-problem-1-live',
                 versionToId: 'publication-user-1-problem-1-live-v1',
                 draft: false
+            }
+        },
+        crosslinksFrom: {
+            create: {
+                id: 'user-1-problem-1-crosslink-4',
+                publicationToId: 'publication-user-1-problem-1-live',
+                createdBy: users.user1,
+                createdAt: '2024-04-10T13:32:00.000Z',
+                votes: {
+                    createMany: {
+                        data: [
+                            {
+                                createdBy: users.user1,
+                                vote: true
+                            },
+                            {
+                                createdBy: users.user2,
+                                vote: true
+                            },
+                            {
+                                createdBy: users.user3,
+                                vote: true
+                            },
+                            {
+                                createdBy: users.user4,
+                                vote: false
+                            },
+                            {
+                                createdBy: users.user5,
+                                vote: false
+                            }
+                        ]
+                    }
+                }
             }
         },
         versions: {
@@ -1067,6 +1163,40 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                         draft: false
                     }
                 ]
+            }
+        },
+        crosslinksFrom: {
+            create: {
+                id: 'user-1-problem-1-crosslink-5',
+                publicationToId: 'publication-user-1-problem-1-live',
+                createdBy: users.user1,
+                createdAt: '2024-04-10T13:31:00.000Z',
+                votes: {
+                    createMany: {
+                        data: [
+                            {
+                                createdBy: users.user1,
+                                vote: true
+                            },
+                            {
+                                createdBy: users.user2,
+                                vote: true
+                            },
+                            {
+                                createdBy: users.user3,
+                                vote: true
+                            },
+                            {
+                                createdBy: users.user4,
+                                vote: true
+                            },
+                            {
+                                createdBy: users.user5,
+                                vote: true
+                            }
+                        ]
+                    }
+                }
             }
         },
         versions: {
