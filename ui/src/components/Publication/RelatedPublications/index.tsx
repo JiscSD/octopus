@@ -28,7 +28,7 @@ const RelatedPublications: React.FC<Props> = (props) => {
                     </section>
                 )}
                 {!!relevant.length && (
-                    <section className="flex flex-col gap-2 border-grey-200 border-t pt-4">
+                    <section className="flex flex-col border-grey-200 border-t pt-4">
                         {!!recent.length && (
                             <span className="uppercase leading-0 block font-montserrat text-xs font-bold tracking-wide text-teal-400 dark:text-teal-200">
                                 Most relevant
