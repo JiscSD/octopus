@@ -92,7 +92,7 @@ export const PageModel = {
             // coi
             'h2:has-text("Conflict of interest")'
         ],
-        doiLink: 'aside [aria-label="DOI link: https://doi.org/10.82259/cl3fz14dr0001es6i5ji51rq4"]',
+        doiLink: 'aside [aria-label="DOI link: https://handle.test.datacite.org/10.82259/cl3fz14dr0001es6i5ji51rq4"]',
         authorLink: 'a[href="/authors/octopus"]:has-text("S. Octopus")',
         signInForMoreButton: 'text=Sign in for more actions',
         verifyEmailForMoreButton: 'text=Verify your email for more actions',
