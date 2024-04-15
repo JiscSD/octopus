@@ -83,7 +83,7 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => {
                             {props.publicationVersion.description ? (
                                 <p>{props.publicationVersion.description}</p>
                             ) : props.publicationVersion.content ? (
-                                parse(Helpers.truncateString(props.publicationVersion.content, 370))
+                                Helpers.truncateString(Helpers.htmlToText(props.publicationVersion.content), 370)
                             ) : null}
                         </div>
                     </div>

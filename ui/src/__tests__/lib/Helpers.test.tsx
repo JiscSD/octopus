@@ -43,3 +43,12 @@ describe('Validate emails tests', () => {
         });
     });
 });
+
+describe('HTML to text', () => {
+    it('Table tags are removed', () => {
+        const text = Helpers.htmlToText(
+            '<div><table><tr><td>Text in table cell</td></tr></table><p>Text outside table cell</p></div>'
+        );
+        expect(text).toEqual('Text outside table cell');
+    });
+});
