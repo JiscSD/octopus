@@ -8,6 +8,8 @@ const baseJSONResponse = (statusCode, body) => ({
   statusCode,
 });
 
+const publicationTypePrefix = "Octopus article; ";
+
 // When a PDF is put into the S3 bucket, take the publication ID from the PDF filename, get the latest live
 // version of that publication, and format its metadata into a specific JSON format before sending that to pubrouter.
 export const handler = async (event) => {
@@ -15,7 +17,8 @@ export const handler = async (event) => {
   const key = event.Records[0].s3.object.key;
 
   // Whether we are validating our metadata (using the pubrouter validate endpoint), as opposed to sending it for real.
-  const validate = false;
+  // Currently we are using the validate endpoint everywhere except the int environment.
+  const validate = process.env.ENVIRONMENT !== "int";
 
   const pdfUrl = `https://${bucket}.s3.amazonaws.com/${key}`;
 
@@ -87,14 +90,18 @@ export const handler = async (event) => {
 };
 
 const postToPubrouter = async (pdfMetadata, validate = false) => {
+  const publicationType = pdfMetadata.metadata.article.type.replace(
+    publicationTypePrefix,
+    ""
+  );
   // We use a different API key per publication type.
   const apiKeys = JSON.parse(process.env.PUBROUTER_API_KEYS);
-  if (!Object.keys(apiKeys).includes(pdfMetadata.metadata.article.type)) {
+  if (!Object.keys(apiKeys).includes(publicationType)) {
     throw new Error(
-      `Publication type "${pdfMetadata.metadata.article.type}" not found in API keys object`
+      `Publication type "${publicationType}" not found in API keys object`
     );
   } else {
-    const apiKey = apiKeys[pdfMetadata.metadata.article.type];
+    const apiKey = apiKeys[publicationType];
     // Temporarily using the validation endpoint, instead of the notification one
     const apiEndpoint = validate
       ? `https://uat.pubrouter.jisc.ac.uk/api/v4/validate?api_key=${apiKey}`
@@ -213,7 +220,7 @@ const mapPublicationVersionToMetadata = (publicationVersion, pdfUrl) => {
       article: {
         title: publicationVersion.title,
         abstract: publicationVersion.description,
-        type: publicationVersion.publication.type,
+        type: `${publicationTypePrefix}${publicationVersion.publication.type}`,
         version: "SMUR",
         language: [publicationVersion.language],
         identifier: [
