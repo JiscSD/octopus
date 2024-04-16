@@ -20,12 +20,14 @@ export type PreferencesStoreTypes = {
     toggleFeedback: () => void;
 };
 
+export type UserRole = 'USER' | 'ORGANISATION' | 'SUPER_USER';
+
 export type UserType = {
     id: string;
     firstName: string;
     lastName: string;
     email: string | null;
-    role: string;
+    role: UserRole;
     createdAt: string;
     updatedAt: string;
     orcid: string;

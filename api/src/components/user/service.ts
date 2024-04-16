@@ -61,12 +61,18 @@ export const getAll = async (filters: I.UserFilters) => {
         };
     } else {
         where = {
-            firstName: {
-                not: ''
-            },
-            lastName: {
-                not: ''
-            }
+            OR: [
+                {
+                    firstName: {
+                        not: ''
+                    }
+                },
+                {
+                    lastName: {
+                        not: ''
+                    }
+                }
+            ]
         };
     }
 
@@ -353,14 +359,16 @@ export const getUserList = async () => {
             email: true,
             firstName: true,
             lastName: true,
+            role: true,
             createdAt: true,
             employment: true
         }
     });
 
-    return users.map(({ firstName, lastName, email, createdAt, employment }) => ({
+    return users.map(({ firstName, lastName, role, email, createdAt, employment }) => ({
         firstName,
         lastName,
+        role,
         email,
         createdAt: createdAt.toLocaleDateString('en-GB', { dateStyle: 'short' }),
         currentEmployer: (employment as unknown as I.UserEmployment[])
@@ -372,3 +380,16 @@ export const getUserList = async () => {
             .join(', ')
     }));
 };
+
+export const createManyUsers = async (users: Prisma.UserCreateInput[]) =>
+    // Use this abstraction in order to return the created users.
+    // Using createMany only returns { count: X }.
+    await client.prisma.$transaction(users.map((user) => client.prisma.user.create({ data: user })));
+
+export const updateUser = async (id: string, data: Prisma.UserUpdateInput) =>
+    await client.prisma.user.update({
+        data,
+        where: {
+            id
+        }
+    });

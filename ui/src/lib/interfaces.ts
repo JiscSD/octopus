@@ -66,6 +66,8 @@ export interface PublicationVersionUser {
     email: string;
     createdAt: string;
     updatedAt: string;
+    role: Types.UserRole;
+    url?: string;
 }
 export interface PublicationVersion {
     id: string;
@@ -175,6 +177,8 @@ export interface CoAuthor {
         firstName: string;
         lastName: string;
         orcid: string;
+        role: Types.UserRole;
+        url?: string;
     };
 }
 
@@ -210,7 +214,7 @@ export interface CoreUser {
     firstName: string;
     lastName: string;
     email: string | null;
-    role: string;
+    role: Types.UserRole;
     createdAt: string;
     updatedAt: string;
     orcid: string;

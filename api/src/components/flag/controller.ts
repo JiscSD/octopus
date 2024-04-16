@@ -51,17 +51,23 @@ export const createFlag = async (
     event: I.AuthenticatedAPIRequest<I.CreateFlagRequestBody, undefined, I.CreateFlagPathParams>
 ): Promise<I.JSONResponse> => {
     try {
+        if (event.user.role === 'ORGANISATION') {
+            return response.json(403, {
+                message: 'Organisational accounts cannot flag publications.'
+            });
+        }
+
         const publication = await publicationService.get(event.pathParameters.publicationId);
 
         if (!publication) {
             return response.json(404, {
-                message: 'Cannot flag that a publication that does not exist'
+                message: 'Cannot flag that a publication that does not exist.'
             });
         }
 
         if (!publication.versions.some((version) => version.isLatestLiveVersion)) {
             return response.json(400, {
-                message: 'Cannot flag a publication that has not gone live'
+                message: 'Cannot flag a publication that has not gone live.'
             });
         }
 
@@ -70,12 +76,12 @@ export const createFlag = async (
         const latestPublishedVersion = publication.versions.find((version) => version.isLatestLiveVersion);
 
         if (!latestPublishedVersion) {
-            throw Error('Unable to find latest published version');
+            throw Error('Unable to find latest published version.');
         }
 
         if (latestPublishedVersion.user.id === event.user.id) {
             return response.json(403, {
-                message: 'Cannot flag your own publication'
+                message: 'Cannot flag your own publication.'
             });
         }
 

@@ -57,7 +57,9 @@ const updatePublicationDOIs = async (): Promise<void> => {
                         select: {
                             firstName: true,
                             lastName: true,
-                            orcid: true
+                            orcid: true,
+                            role: true,
+                            url: true
                         }
                     }
                 },
@@ -73,7 +75,9 @@ const updatePublicationDOIs = async (): Promise<void> => {
                     lastName: true,
                     email: true,
                     createdAt: true,
-                    updatedAt: true
+                    updatedAt: true,
+                    role: true,
+                    url: true
                 }
             },
             topics: {
