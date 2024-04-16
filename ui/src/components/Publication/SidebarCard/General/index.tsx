@@ -22,7 +22,9 @@ const General: React.FC<Props> = (props): React.ReactElement => {
 
     const activeFlags = React.useMemo(() => props.flags.filter((flag) => !flag.resolved), [props.flags]);
 
-    const showVersionDOI = props.publicationVersion.doi && props.publicationVersion.publication.type !== 'PEER_REVIEW';
+    const showVersionDoi = props.publicationVersion.doi && props.publicationVersion.publication.type !== 'PEER_REVIEW';
+    const versionDoiUrl = Config.values.doiBaseUrl + props.publicationVersion.doi;
+    const versionlessDoiUrl = Config.values.doiBaseUrl + props.publicationVersion.publication.doi;
 
     const uniqueRedFlagCategoryList = React.useMemo(
         () => Array.from(new Set(activeFlags.map((flag) => flag.category))),
@@ -80,18 +82,18 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                     </div>
                 </Components.Link>
             </div>
-            {showVersionDOI && (
+            {showVersionDoi && (
                 <div className="flex w-full flex-wrap whitespace-normal">
                     <span className="mr-2 whitespace-nowrap text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
                         DOI (This Version):
                     </span>
                     <Components.Link
-                        href={`https://doi.org/${props.publicationVersion.doi}`}
-                        ariaLabel={`DOI link: https://doi.org/${props.publicationVersion.doi}`}
+                        href={versionDoiUrl}
+                        ariaLabel={`DOI link: ${versionDoiUrl}`}
                         className="flex items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                         openNew={true}
                     >
-                        <p className="break-words break-all">https://doi.org/{props.publicationVersion.doi}</p>
+                        <p className="break-words break-all">{versionDoiUrl}</p>
                         <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4 flex-shrink-0" />
                     </Components.Link>
                 </div>
@@ -99,15 +101,15 @@ const General: React.FC<Props> = (props): React.ReactElement => {
 
             <div className={`flex w-full ${props.publicationVersion.doi ? 'flex-wrap' : ''} whitespace-normal`}>
                 <span className="mr-2 whitespace-nowrap text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                    {showVersionDOI ? 'DOI (All Versions):' : 'DOI:'}
+                    {showVersionDoi ? 'DOI (All Versions):' : 'DOI:'}
                 </span>
                 <Components.Link
-                    href={`https://doi.org/${props.publicationVersion.publication.doi}`}
-                    ariaLabel={`DOI link: https://doi.org/${props.publicationVersion.publication.doi}`}
+                    href={versionlessDoiUrl}
+                    ariaLabel={`DOI link: ${versionlessDoiUrl}`}
                     className="flex items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                     openNew={true}
                 >
-                    <p className="break-words break-all">https://doi.org/{props.publicationVersion.publication.doi}</p>
+                    <p className="break-words break-all">{versionlessDoiUrl}</p>
                     <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4 flex-shrink-0" />
                 </Components.Link>
             </div>

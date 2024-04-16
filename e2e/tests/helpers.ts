@@ -179,7 +179,7 @@ export const checkLivePublicationLayout = async (page: Page, id: string, loggedI
     // Expect DOI link
     await expect(page.locator(PageModel.livePublication.doiLink)).toHaveAttribute(
         'href',
-        `https://doi.org/10.82259/${id}`
+        `https://handle.test.datacite.org/10.82259/${id}`
     );
 
     if (loggedIn) {

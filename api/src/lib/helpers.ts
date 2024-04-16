@@ -713,7 +713,7 @@ export const formatAffiliationName = (affiliation: I.MappedOrcidAffiliation): st
     }${organization.address.country}`;
 };
 
-const doiLinkBase = `https://doi.org/`;
+const doiLinkBase = `https://${process.env.STAGE === 'prod' ? 'doi.org' : 'handle.test.datacite.org'}/`;
 
 export const createPublicationHTMLTemplate = (
     publicationVersion: I.PublicationVersion,
