@@ -43,7 +43,7 @@ const getTransformedReference = (reference: Interfaces.Reference, textContent: s
                     ...reference,
                     type: 'DOI',
                     text: reference.text.replace(lastDoiString, ''), // remove DOI string
-                    location: `https://doi.org/${doi}` // convert to DOI url
+                    location: Config.values.doiBaseUrl + doi // convert to DOI url
                 };
             }
         }
