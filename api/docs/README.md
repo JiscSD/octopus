@@ -15,7 +15,7 @@ The page is deployed using [github pages](https://pages.github.com/).
 
 To change the actual content of the documentation, edit the `api.yml` (OpenAPI spec) file. The Swagger UI files will take this file and generate the page you see on our deployed site.
 
-This can be done however you like, but a good option is to use the editor in [SwaggerHub](https://app.swaggerhub.com/). The API spec file can be imported and edited in the browser with a live preview of how the eventual page will look.
+This can be done however you like, but a good option is to use the editor in [SwaggerHub](https://app.swaggerhub.com/). The API spec file can be imported and edited in the browser with a live preview of how the eventual page will look. To export it in the format we use, hit Export -> Download API -> YAML Unresolved.
 
 ### Updating the Swagger UI version
 

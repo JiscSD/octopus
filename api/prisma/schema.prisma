@@ -11,7 +11,7 @@ datasource db {
 
 model User {
     id                   String                 @id @default(cuid())
-    orcid                String                 @unique
+    orcid                String?                @unique
     orcidAccessToken     String?
     firstName            String
     lastName             String?
@@ -19,6 +19,8 @@ model User {
     role                 Role                   @default(USER)
     locked               Boolean                @default(false)
     apiKey               String                 @unique @default(uuid())
+    ror                  String?
+    url                  String?
     createdAt            DateTime               @default(now())
     updatedAt            DateTime               @updatedAt
     employment           Json[]
@@ -33,6 +35,8 @@ model User {
     bookmarks            Bookmark[]
     crosslinks           Crosslink[]
     crosslinkVotes       CrosslinkVote[]
+    defaultPublicationId String?
+    defaultPublication   Publication?           @relation(fields: [defaultPublicationId], references: [id])
 }
 
 model Verification {
@@ -70,6 +74,8 @@ model Publication {
     // crosslink entities as having a pair of publications associated that are of equal importance.
     crosslinksFrom       Crosslink[]            @relation("crosslinkFrom")
     crosslinksTo         Crosslink[]            @relation("crosslinkTo")
+    // Not the author, but a back reference to an organisational user whose default publication is this one.
+    User                 User[]
 }
 
 model PublicationVersion {
@@ -299,8 +305,8 @@ enum ImageExtension {
 
 enum Role {
     SUPER_USER
-    FUNDER
     USER
+    ORGANISATION
 }
 
 enum PublicationStatusEnum {
