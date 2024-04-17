@@ -77,7 +77,7 @@ provider:
           Resource: 'arn:aws:s3:::science-octopus-publishing-sitemaps-${self:provider.stage}'
           Action: 's3:ListBucket'
         - Effect: 'Allow'
-          Resource: 'arn:aws:sqs:eu-west-1:948306873545:science-octopus-pdf-queue-${self:provider.stage}'
+          Resource: 'arn:aws:sqs:${aws:region}:${aws:accountId}:science-octopus-pdf-queue-${self:provider.stage}'
           Action:
               - 'lambda:CreateEventSourceMapping'
               - 'lambda:ListEventSourceMappings'
@@ -98,6 +98,7 @@ custom:
         certificateName: '*.api.octopus.ac'
         stage: ${self:provider.stage}
         createRoute53Record: true
+        route53Profile: 'octopus-dev'
     webpack:
         webpackConfig: ./webpack.config.js
         includeModules:
@@ -149,7 +150,7 @@ functions:
     generatePDFsFromQueue:
         handler: src/components/sqs/handler.generatePDFs
         events:
-            - sqs: 'arn:aws:sqs:eu-west-1:948306873545:science-octopus-pdf-queue-${self:provider.stage}'
+            - sqs: 'arn:aws:sqs:${aws:region}:${aws:accountId}:science-octopus-pdf-queue-${self:provider.stage}'
     healthcheck:
         handler: src/components/application/routes.healthcheck
         events:
