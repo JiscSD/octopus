@@ -329,6 +329,8 @@ paths:
                                   $ref: "#/components/schemas/BaseTopicResponse"
         '400':
           $ref: "#/components/responses/BadRequest"
+        '403':
+          $ref: "#/components/responses/Forbidden"
   /publications/{publicationId}:
     get:
       summary: Get a full publication with its versions and other relations
@@ -1248,6 +1250,10 @@ components:
           $ref: "#/components/schemas/UserLastName"
         orcid:
           $ref: "#/components/schemas/UserOrcid"
+        role:
+          $ref: "#/components/schemas/UserRole"
+        url:
+          $ref: "#/components/schemas/UserUrl"
     FullFunderResponse:
       allOf:
         - $ref: "#/components/schemas/BaseFunderResponse"
@@ -1458,7 +1464,8 @@ components:
       description: User's last name.
     UserOrcid:
       type: string
-      description: ORCiD ID.
+      description: ORCiD ID. Not used for organisational accounts.
+      nullable: true
     UserResponse:
       type: object
       properties:
@@ -1478,6 +1485,18 @@ components:
         updatedAt:
           type: string
           format: date-time
+        role:
+          $ref: "#/components/schemas/UserRole"
+        url:
+          $ref: "#/components/schemas/UserUrl"
+    UserRole:
+      type: string
+      enum: [USER, ORGANISATION, SUPER_USER]
+      description: The type of account held by a user.
+    UserUrl:
+      type: string
+      description: Used by organisational accounts to record their website address.
+      nullable: true
   securitySchemes:
     ApiKey:
       type: apiKey

@@ -165,8 +165,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
                                                     ,
                                                 </span>
                                                 <span className="text-xs leading-none text-grey-700">
-                                                    {publicationVersion.user.firstName[0]}.{' '}
-                                                    {publicationVersion.user.lastName}
+                                                    {Helpers.abbreviateUserName(publicationVersion.user)}
                                                 </span>
                                             </div>
                                             <Components.EngagementCounts

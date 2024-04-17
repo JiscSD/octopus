@@ -15,16 +15,13 @@ type Props = {
 
 const SearchResult: React.FC<Props> = (props): React.ReactElement => {
     const authors = React.useMemo(() => {
-        const authors = props.publicationVersion.coAuthors.map(
-            (author) => `${author.user?.firstName[0]}. ${author.user?.lastName}`
-        );
+        const authors = props.publicationVersion.coAuthors.map((author) => Helpers.abbreviateUserName(author.user));
 
         // make sure authors list include the corresponding author
         if (
             !props.publicationVersion.coAuthors.find((author) => author.linkedUser === props.publicationVersion.user.id)
         ) {
-            const { firstName, lastName } = props.publicationVersion.user;
-            authors.unshift(`${firstName[0]}. ${lastName}`);
+            authors.unshift(Helpers.abbreviateUserName(props.publicationVersion.user));
         }
 
         return authors.join(', ');
