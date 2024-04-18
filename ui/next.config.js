@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const CSPDirectives = [
     "default-src 'none';",
-    `script-src 'self' ${process.env.NODE_ENV === 'development' ? "'unsafe-eval'" : ''};`,
+    `script-src 'self' ${process.env.NODE_ENV === 'development' ? "'unsafe-eval'" : ''} https://live.matomo.jisc.ac.uk;`,
     "style-src 'self' 'unsafe-inline';",
     `connect-src 'self' https://*.api.octopus.ac http://127.0.0.1:4003 https://api.octopus.ac https://api.ror.org https://cdn.contentful.com;`,
     'img-src https: data:;',
