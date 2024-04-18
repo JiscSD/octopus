@@ -51,7 +51,7 @@ Workspaces currently in use:
 Location: `~/infra/create-app`
 
 The `create-app` Terraform sets up the main project's int & prod environments on AWS. Details can be found in `~/infra/create-app/main.tf` which contains the used modules and the information passed to those modules.
-As this project uses workspaces, there one tfvars file per environment. This way, the environments are 1:1 and their only differences are value related - i.e the technology behind stays the same, just the values are different. An example of this may be that the int environment has a smaller allocated size for the database, whereas production would be larger.
+As this project uses workspaces, there is one tfvars file per environment. This way, the environments are 1:1 and their only differences are value related - i.e the technology behind stays the same, just the values are different. An example of this may be that the int environment has a smaller allocated size for the database, whereas production would be larger.
 
 To run this Terraform, follow the below:
 
