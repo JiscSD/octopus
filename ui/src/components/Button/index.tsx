@@ -3,6 +3,7 @@ import React from 'react';
 import * as Components from '@/components';
 
 type CommonProps = {
+    id?: string;
     title: string;
     endIcon?: React.ReactElement;
     startIcon?: React.ReactElement;
@@ -12,6 +13,10 @@ type CommonProps = {
     textSize?: string;
     padding?: string;
     children?: React.ReactNode;
+    accordionConfig?: {
+        contentElementId: string;
+        expanded: Boolean;
+    };
 };
 
 type ConditionalProps = { href: string; openNew?: boolean } | { href?: never; openNew?: never };
@@ -54,6 +59,7 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
 
     return props.href ? (
         <Components.Link
+            id={props.id}
             href={props.href}
             title={props.title}
             ariaLabel={props.title}
@@ -69,6 +75,7 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
         </Components.Link>
     ) : (
         <button
+            id={props.id}
             type="button"
             title={props.title}
             name={props.title}
@@ -76,6 +83,12 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             onClick={props.onClick}
             disabled={props.disabled}
             className={`rounded border-transparent capitalize outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${parentStyles}`}
+            {...(props.accordionConfig
+                ? {
+                      'aria-expanded': !!props.accordionConfig.expanded,
+                      'aria-controls': props.accordionConfig.contentElementId
+                  }
+                : {})}
         >
             {props.startIcon}
             <span className={childStyles}>{props.children || props.title}</span>
