@@ -3,7 +3,7 @@ const CSPDirectives = [
     "default-src 'none';",
     `script-src 'self' ${process.env.NODE_ENV === 'development' ? "'unsafe-eval'" : ''} https://live.matomo.jisc.ac.uk;`,
     "style-src 'self' 'unsafe-inline';",
-    `connect-src 'self' https://*.api.octopus.ac http://127.0.0.1:4003 https://api.octopus.ac https://api.ror.org https://cdn.contentful.com;`,
+    `connect-src 'self' https://*.api.octopus.ac http://127.0.0.1:4003 https://api.octopus.ac https://api.ror.org https://cdn.contentful.com https://live.matomo.jisc.ac.uk;`,
     'img-src https: data:;',
     'media-src https://octopus-promo-video.s3.eu-west-1.amazonaws.com https://www.youtube.com;',
     "font-src 'self';",
