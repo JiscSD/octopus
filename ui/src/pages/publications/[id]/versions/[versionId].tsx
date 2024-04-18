@@ -1,22 +1,22 @@
-import React, { useEffect, useMemo } from 'react';
+import axios from 'axios';
 import parse from 'html-react-parser';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import React, { useEffect, useMemo } from 'react';
 import useSWR from 'swr';
-import axios from 'axios';
 import * as Framer from 'framer-motion';
 import * as OutlineIcons from '@heroicons/react/24/outline';
+
 import * as api from '@/api';
+import * as Assets from '@/assets';
 import * as Components from '@/components';
 import * as Config from '@/config';
+import * as Contexts from '@/contexts';
 import * as Helpers from '@/helpers';
 import * as Interfaces from '@/interfaces';
 import * as Layouts from '@/layouts';
 import * as Stores from '@/stores';
 import * as Types from '@/types';
-import * as Assets from '@/assets';
-import * as Contexts from '@/contexts';
-
-import { useRouter } from 'next/router';
 
 type SidebarCardProps = {
     publicationVersion: Interfaces.PublicationVersion;
@@ -453,7 +453,9 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 user: {
                     orcid: correspondingUser.orcid,
                     firstName: correspondingUser.firstName,
-                    lastName: correspondingUser.lastName
+                    lastName: correspondingUser.lastName,
+                    role: correspondingUser.role,
+                    url: correspondingUser.url
                 }
             });
         }
@@ -705,34 +707,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             )}
                         </div>
 
-                        <div className="mb-4 flex flex-wrap items-center gap-2">
-                            {confirmedAuthors.map((author, index) => (
-                                <div key={author.id} className="flex w-fit items-center">
-                                    <Components.Link
-                                        href={`${Config.urls.viewUser.path}/${author.linkedUser}`}
-                                        className="w-fit rounded leading-relaxed text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
-                                    >
-                                        <span className="author-name">
-                                            {author.user?.firstName[0]}. {author.user?.lastName}
-                                        </span>
-                                    </Components.Link>
-                                    <Components.Link
-                                        className="ml-2 flex w-fit items-center"
-                                        href={`https://${
-                                            process.env.NEXT_PUBLIC_STAGE === 'local' ? 'sandbox.' : ''
-                                        }orcid.org/${author.user?.orcid}`}
-                                        openNew={true}
-                                    >
-                                        <Assets.OrcidLogoIcon width={24} />
-                                    </Components.Link>
-                                    {index < confirmedAuthors.length - 1 && (
-                                        <span className="leading-relaxed text-teal-600 transition-colors duration-500 dark:text-teal-400">
-                                            ,
-                                        </span>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
+                        <Components.AuthorList className="mb-4" authors={confirmedAuthors} />
+
                         <Framer.AnimatePresence>
                             {/** API will only return versions that the current user has permission to see */}
                             {publication && publication.versions.length !== publicationVersion.versionNumber && (

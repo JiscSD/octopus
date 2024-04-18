@@ -1,10 +1,11 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
+import { render, screen } from '@testing-library/react';
 
 import * as Components from '@/components';
 import * as Config from '@/config';
 import * as Helpers from '@/helpers';
 import * as TestUtils from '@/testUtils';
+
+const versionlessDoiUrl = Config.values.doiBaseUrl + TestUtils.testPublicationVersion.publication.doi;
 
 describe('Basic tests', () => {
     beforeEach(() => {
@@ -42,9 +43,9 @@ describe('Basic tests', () => {
         expect(screen.getByText('DOI:')).toBeInTheDocument();
         expect(
             screen.getByRole('link', {
-                name: `DOI link: https://doi.org/${TestUtils.testPublicationVersion.publication.doi}`
+                name: `DOI link: ${versionlessDoiUrl}`
             })
-        ).toHaveAttribute('href', `https://doi.org/${TestUtils.testPublicationVersion.publication.doi}`);
+        ).toHaveAttribute('href', `${versionlessDoiUrl}`);
     });
     it('Shows no peer reviews', () => {
         expect(screen.getByText('Peer Reviews (This Version): (0)')).toBeInTheDocument();
@@ -57,6 +58,9 @@ describe('Basic tests', () => {
     });
 });
 
+const versionDoi = 'testversiondoi';
+const versionDoiUrl = Config.values.doiBaseUrl + versionDoi;
+
 describe('Multi-version publication with Peer Reviews, Flags and version DOI', () => {
     beforeEach(() => {
         render(
@@ -64,7 +68,7 @@ describe('Multi-version publication with Peer Reviews, Flags and version DOI', (
                 publicationVersion={{
                     ...TestUtils.testPublicationVersion,
                     versionNumber: 2,
-                    doi: 'testversiondoi'
+                    doi: versionDoi
                 }}
                 linkedFrom={[
                     {
@@ -92,17 +96,17 @@ describe('Multi-version publication with Peer Reviews, Flags and version DOI', (
         expect(screen.getByText('DOI (This Version):')).toBeInTheDocument();
         expect(
             screen.getByRole('link', {
-                name: `DOI link: https://doi.org/testversiondoi`
+                name: `DOI link: ${versionDoiUrl}`
             })
-        ).toHaveAttribute('href', `https://doi.org/testversiondoi`);
+        ).toHaveAttribute('href', versionDoiUrl);
     });
     it('Shows "versionless" DOI link', () => {
         expect(screen.getByText('DOI (All Versions):')).toBeInTheDocument();
         expect(
             screen.getByRole('link', {
-                name: `DOI link: https://doi.org/${TestUtils.testPublicationVersion.publication.doi}`
+                name: `DOI link: ${versionlessDoiUrl}`
             })
-        ).toHaveAttribute('href', `https://doi.org/${TestUtils.testPublicationVersion.publication.doi}`);
+        ).toHaveAttribute('href', versionlessDoiUrl);
     });
     it('Shows 1 peer review for this version', () => {
         expect(screen.getByText('Peer Reviews (This Version): (1)')).toBeInTheDocument();

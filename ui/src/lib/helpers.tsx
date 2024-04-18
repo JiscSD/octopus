@@ -625,3 +625,20 @@ export const getSitemapIndexXML = async (category: 'publications' | 'users'): Pr
         </sitemapindex>
     `;
 };
+
+export const abbreviateUserName = <
+    T extends { firstName: string; lastName: string; role?: Types.UserRole } | undefined
+>(
+    user: T
+): string => {
+    // Should not occur, but just in case, better to present something than nothing.
+    if (!user || (!user.firstName && !user.lastName)) {
+        return 'Anon. User';
+    }
+    // Majority of cases: user is not an organisational account, and has requisite data for default abbreviation.
+    if (!(user.role === 'ORGANISATION') && user.firstName.length && user.lastName) {
+        return `${user.firstName[0]}. ${user.lastName}`;
+    }
+    // Default for organisational accounts and general fallback.
+    return user.firstName;
+};
