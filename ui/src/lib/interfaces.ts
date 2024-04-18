@@ -533,3 +533,21 @@ export interface AuthorsPaginatedResults {
 export interface AuthorSearchQuery extends ParsedUrlQuery {
     query?: string;
 }
+
+// Crosslinking
+export interface Crosslink {
+    linkedPublication: {
+        id: string;
+        latestLiveVersion: Pick<PublicationVersion, 'title' | 'publishedDate'> & {
+            user: Pick<PublicationVersionUser, 'firstName' | 'lastName'>;
+        };
+    };
+    score: number;
+    createdBy: string;
+    createdAt: string;
+}
+
+export interface MixedCrosslinks {
+    recent: Crosslink[];
+    relevant: Crosslink[];
+}

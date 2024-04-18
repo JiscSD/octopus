@@ -37,10 +37,10 @@ describe('Get crosslinks of a publication', () => {
 
         expect(getCrosslinks.status).toEqual(200);
         // First 2 results have most recent crosslink created date, then others sorted by score.
-        expect(getCrosslinks.body[0].createdAt).toEqual('2024-01-22T13:00:00.000Z');
-        expect(getCrosslinks.body[1].createdAt).toEqual('2024-01-22T12:00:00.000Z');
-        expect(getCrosslinks.body[2].score).toEqual(3);
-        expect(getCrosslinks.body[3].score).toEqual(-3);
+        expect(getCrosslinks.body.recent[0].createdAt).toEqual('2024-01-22T13:00:00.000Z');
+        expect(getCrosslinks.body.recent[1].createdAt).toEqual('2024-01-22T12:00:00.000Z');
+        expect(getCrosslinks.body.relevant[0].score).toEqual(3);
+        expect(getCrosslinks.body.relevant[1].score).toEqual(-3);
     });
 
     test('User must supply a recognised sort order', async () => {
