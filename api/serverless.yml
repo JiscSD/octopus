@@ -11,6 +11,7 @@ plugins:
     - serverless-webpack
     - serverless-webpack-prisma
     - serverless-prune-plugin
+    - serverless-plugin-split-stacks
 
 provider:
     name: aws
@@ -86,6 +87,10 @@ provider:
               - 'sqs:ReceiveMessage'
               - 'sqs:SendMessage'
 custom:
+    splitStacks:
+        perFunction: true
+        perType: false
+        perGroupFunction: false
     customDomain:
         domainName: '${self:provider.stage}.api.octopus.ac'
         basePath: ''

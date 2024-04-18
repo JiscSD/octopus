@@ -6,7 +6,6 @@ import * as Config from '@/config';
 import * as Types from '@/types';
 
 const Home: Types.NextPage = (props): React.ReactElement => {
-    console.log({ branch: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF });
     return (
         <>
             <Head>

@@ -10,22 +10,22 @@ describe('Get Users', () => {
     test('Get all users', async () => {
         const response = await testUtils.agent.get('/users?limit=100');
         expect(response.status).toEqual(200);
-        expect(response.body.data.length).toEqual(11);
-        expect(response.body.metadata.total).toEqual(11);
+        expect(response.body.data.length).toEqual(12);
+        expect(response.body.metadata.total).toEqual(12);
     });
 
     test('Get first 10 users if "limit" param is not provided', async () => {
         const response = await testUtils.agent.get('/users');
         expect(response.status).toEqual(200);
         expect(response.body.data.length).toEqual(10); // default limit is 10
-        expect(response.body.metadata.total).toEqual(11);
+        expect(response.body.metadata.total).toEqual(12);
     });
 
     test('Get first 2 users', async () => {
         const response = await testUtils.agent.get('/users?limit=2');
         expect(response.status).toEqual(200);
         expect(response.body.data.length).toEqual(2);
-        expect(response.body.metadata.total).toEqual(11);
+        expect(response.body.metadata.total).toEqual(12);
     });
 
     test('Get first 2 users which have their first or last name "Test"', async () => {

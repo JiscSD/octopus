@@ -713,7 +713,7 @@ export const formatAffiliationName = (affiliation: I.MappedOrcidAffiliation): st
     }${organization.address.country}`;
 };
 
-const doiLinkBase = `https://doi.org/`;
+const doiLinkBase = `https://${process.env.STAGE === 'prod' ? 'doi.org' : 'handle.test.datacite.org'}/`;
 
 export const createPublicationHTMLTemplate = (
     publicationVersion: I.PublicationVersion,
@@ -1456,3 +1456,9 @@ export const buildPartialResponse = <T extends object>(fieldsParam: string, data
 
 export const validateURL = (value: string): boolean =>
     /(http|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;/~+#-]*[\w@?^=%&/~+#-])/.test(value);
+
+export const validateEmail = (email: string): boolean => {
+    const regex = /^([\w+-]+\.)*[\w+-]+@[a-zA-Z][\w.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z.]*[a-zA-Z]$/;
+
+    return regex.test(email);
+};

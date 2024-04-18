@@ -9,6 +9,7 @@ export { default as AffiliationCard } from './Publication/AffiliationCard';
 export { default as Alert } from './Alert';
 export { default as ApprovalsTracker } from './ApprovalsTracker';
 export { default as AuthorAffiliations } from './Publication/AuthorAffiliations';
+export { default as AuthorList } from './Publication/AuthorList';
 export { default as Avatar } from './Avatar';
 export { default as Banner } from './Banner';
 export { default as BlogCard } from './BlogCard';

@@ -1632,6 +1632,36 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 publicationStatus: { create: [{ status: 'LIVE', createdAt: '2022-01-21T10:00:42.523Z' }] }
             }
         }
+    },
+    {
+        id: 'organisational-account-1-problem-1-live',
+        doi: '10.82259/organisational-account-1-problem-1-live',
+        type: 'PROBLEM',
+        linkedTo: {
+            create: {
+                publicationToId: 'publication-user-1-problem-1-live',
+                versionToId: 'publication-user-1-problem-1-live-v1',
+                draft: false
+            }
+        },
+        versions: {
+            create: {
+                id: 'organisational-account-1-problem-1-live-v1',
+                versionNumber: 1,
+                title: 'Organisational account publication 1',
+                content: '<p>This publication was created by an organisational account.</p>',
+                currentStatus: 'LIVE',
+                isLatestLiveVersion: true,
+                publishedDate: '2024-04-09T13:54:00.000Z',
+                user: { connect: { id: 'test-organisational-account-1' } },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2024-04-09T12:54:00.000Z' },
+                        { status: 'LIVE', createdAt: '2024-04-09T13:54:00.000Z' }
+                    ]
+                }
+            }
+        }
     }
 ];
 

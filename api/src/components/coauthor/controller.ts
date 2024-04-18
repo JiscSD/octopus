@@ -30,7 +30,9 @@ export const get = async (
                 user: {
                     firstName: version.user.firstName,
                     lastName: version.user.lastName,
-                    orcid: version.user.orcid
+                    orcid: version.user.orcid,
+                    role: version.user.role,
+                    url: version.user.url
                 }
             });
         }
