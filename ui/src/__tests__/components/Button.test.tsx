@@ -62,9 +62,10 @@ describe('Button test suite with disabled button stating "click me"', () => {
 });
 
 describe('Button Icon', () => {
+    const iconId = 'SVG_ICON';
+    const buttonTitle = 'Click me';
+
     it('should render with an icon before text', () => {
-        const iconId = 'SVG_ICON';
-        const buttonTitle = 'Click me';
         const { container } = render(
             <Components.Button
                 className="children:border-0"
@@ -76,15 +77,12 @@ describe('Button Icon', () => {
                 title={buttonTitle}
             />
         );
-
         expect(container.querySelector(`#${iconId}`)).toBeInTheDocument();
         expect(container.querySelector('button')?.children[0].id).toBe('SVG_ICON');
         expect(container.querySelector('button')?.children[1].textContent).toBe(buttonTitle);
     });
 
     it('should render with an icon after text', () => {
-        const iconId = 'SVG_ICON';
-        const buttonTitle = 'Click me';
         const { container } = render(
             <Components.Button
                 className="children:border-0"
@@ -96,7 +94,6 @@ describe('Button Icon', () => {
                 title={buttonTitle}
             />
         );
-
         expect(container.querySelector('button')?.children[0].textContent).toBe(buttonTitle);
         expect(container.querySelector(`#${iconId}`)).toBeInTheDocument();
         expect(container.querySelector('button')?.children[1].id).toBe('SVG_ICON');
@@ -104,19 +101,35 @@ describe('Button Icon', () => {
 });
 
 describe('Button as a Link', () => {
-    it('should be a link when href prop is provided', () => {
-        const title = 'I will render as link';
-        const href = '/test-link';
-        const { container } = render(<Components.Button title={title} href={href} />);
+    const title = 'I will render as link';
+    const href = '/test-link';
 
-        expect(container.querySelector('a')?.getAttribute('href')).toBe(href);
+    it('should be a link when href prop is provided', () => {
+        render(<Components.Button title={title} href={href} />);
+        expect(screen.getByRole('link')).toHaveAttribute('href', href);
     });
 
     it('should have "target=_blank" attribute when "openNew" prop is provided', () => {
-        const title = 'I will render as link';
-        const href = '/test-link';
         const { container } = render(<Components.Button title={title} href={href} openNew />);
+        expect(screen.getByRole('link')).toHaveAttribute('target', '_blank'); // opens the link in a new tab
+    });
+});
 
-        expect(container.querySelector('a')?.getAttribute('target')).toBe('_blank'); // opens the link in a new tab
+describe('Accordion toggle button', () => {
+    beforeEach(() => {
+        render(
+            <Components.Button
+                title="Accordion toggle"
+                accordionConfig={{ contentElementId: 'accordion-contents', expanded: true }}
+            />
+        );
+    });
+
+    it('Button has aria-expanded set to expanded prop value', () => {
+        expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'true');
+    });
+
+    it('Button has aria-controls set to contentElementId prop value', () => {
+        expect(screen.getByRole('button')).toHaveAttribute('aria-controls', 'accordion-contents');
     });
 });

@@ -1,3 +1,4 @@
+export { default as AccordionSection } from './AccordionSection';
 export { default as ActionBar } from './Publication/ActionBar';
 export { default as ActionCard } from './ActionCard';
 export { default as AdditionalInformationCard } from './AdditionalInformationCard';
@@ -80,6 +81,8 @@ export { default as PublicationSidebarCardSections } from './Publication/Sidebar
 export { default as PublicationSimpleResult } from './Publication/SimpleResult';
 export { default as PublicationSkeleton } from './Publication/Skeleton';
 export { default as PublicationVisualization } from './Publication/Visualization';
+export { default as RelatedPublications } from './Publication/RelatedPublications';
+export { default as RelatedPublicationsCard } from './Publication/RelatedPublications/Card';
 export { default as RequiredIndicator } from './RequiredIndicator';
 export { default as ScrollToTop } from './ScrollToTop';
 export { default as Search } from './SearchToggle';
