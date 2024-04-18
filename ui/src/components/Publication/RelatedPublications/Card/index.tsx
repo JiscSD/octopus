@@ -22,11 +22,7 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
                 </p>
                 <div className="flex">
                     <span className="w-1/2 text-xs font-medium tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100 pr-2">
-                        By{' '}
-                        {
-                            // TODO: This should use the abbreviate user name helper function which is not in main yet
-                            `${version.user.firstName[0]}. ${version.user.lastName}`
-                        }
+                        By {Helpers.abbreviateUserName(version.user)}
                     </span>
 
                     {version.publishedDate && (

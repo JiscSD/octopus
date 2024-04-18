@@ -8,7 +8,6 @@ import * as Framer from 'framer-motion';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as api from '@/api';
-import * as Assets from '@/assets';
 import * as Components from '@/components';
 import * as Config from '@/config';
 import * as Contexts from '@/contexts';

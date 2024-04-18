@@ -49,9 +49,9 @@ const VersionsAccordion: React.FC<Props> = (props) => {
                             title="Edit Draft"
                             className="flex w-fit rounded border-transparent text-sm font-semibold text-teal-600 outline-0 transition-colors duration-500 hover:underline focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 dark:text-teal-400"
                             href={`${Config.urls.viewPublication.path}/${props.selectedVersion.versionOf}/edit?step=0`}
-                            onClick={async (e) => {
+                            onClick={(e) => {
                                 e.preventDefault();
-                                await props.onUnlockPublication();
+                                return props.onUnlockPublication();
                             }}
                         >
                             Edit Draft &nbsp;
