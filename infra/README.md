@@ -29,7 +29,7 @@ projects. This project has set up its modules so that they never have to be chan
 
 ## Workspaces
 
-We use [Terraform workspaces](https://learn.hashicorp.com/tutorials/terraform/organize-configuration?in=terraform/modules) to separate our environments. The reason for this is because the infrastructure composition between environments doesn't change, but some attributes may - e.g. RDS instance size. This is handled by having a separate variables file per environment - e.g. `int.tfvars` - and passing that in as a flag when we `terraform apply` within a particular workspace. 
+We use [Terraform workspaces](https://learn.hashicorp.com/tutorials/terraform/organize-configuration?in=terraform/modules) to separate our environments. The reason for this is because the infrastructure composition between environments doesn't change, but some attributes may - e.g. RDS instance size. This is handled by having a separate variables file per environment - e.g. `int.tfvars` - and passing that in as a flag when we `terraform apply` within a particular workspace.
 
 The infrastructure is created/updated by simply switching to the correct workspace and applying, passing in the correct variables file:
 
@@ -40,8 +40,9 @@ $ terraform apply --var-file=int.tfvars
 
 Workspaces currently in use:
 
--   **`int`**
--   **`prod`**
+- **`int`**
+- **`prod`**
+- **`new-int`** (temporarily until int environment has finished being moved to its own account)
 
 ## Create application
 
@@ -50,7 +51,7 @@ Workspaces currently in use:
 Location: `~/infra/create-app`
 
 The `create-app` Terraform sets up the main project's int & prod environments on AWS. Details can be found in `~/infra/create-app/main.tf` which contains the used modules and the information passed to those modules.
-As this project uses workspaces, there are **two** tfvars files, one per environment. This way, the environments are 1:1 and their only differences are value related - i.e the technology behind stays the same, just the values are different. An example of this may be that the int environment has a smaller allocated size for the database, whereas production would be larger.
+As this project uses workspaces, there is one tfvars file per environment. This way, the environments are 1:1 and their only differences are value related - i.e the technology behind stays the same, just the values are different. An example of this may be that the int environment has a smaller allocated size for the database, whereas production would be larger.
 
 To run this Terraform, follow the below:
 
@@ -67,13 +68,17 @@ There are some parts of this project's infrastructure that are **not** managed/c
 
 - An `AWS S3 Bucket`, for hosting the Terraform State file **(octopus-tfstate)**.
 - Configuration to increase the limit of allowed VPCs for a single region (default 5) to 50.
-- Most Route 53 config
+- Most Route 53 config, including certificates in Certificate Manager
 - AWS Amplify config
 
-## Migration to prod AWS account
-We are in the process of moving the prod environment to a separate AWS account. Until this is done, there are the following additional things to note:
-- There is a new workspace called `new-prod` with its own `.tfvars` file. We will remove this after the migration. For now, it allows us to provision prod-like resources in parallel to the currently running prod environment.
+## Migration to separate int AWS account
+
+We are in the process of moving the int environment to a separate AWS account. Until this is done, there are the following additional things to note:
+
+- There is a new workspace called `new-int` with its own `.tfvars` file. We will remove this after the migration. For now, it allows us to provision int-like resources in parallel to the currently running int environment.
 - Terraform will expect a number of profiles to be defined in your `~/.aws/credentials` file when running commands, depending on the account you're working with:
-    - `octopus-tfstate`: a separate account to store terraform state for all environments, and other centralised things TBD
-    - `octopus-prod`: the account for the prod environment (where new-prod currently lives, and where prod will eventually live)
-    - `octopus-dev`: the account for the int environment (where prod and int currently live, and eventually will only contain int)
+  - `octopus-tfstate`: a separate account to store terraform state for all environments, and other centralised things TBD
+  - `octopus-int`: the account for the int environment (where new-int currently lives, and where int will eventually live)
+    - Please note that on the AWS sign-in page, this account was provisioned with the name OctopusProjectProd, which unfortunately can't be changed.
+  - `octopus-dev`: the account for the prod environment (where prod and int currently live, and eventually will only contain prod)
+    - This profile name will likely be changed to `octopus-prod` when the migration is done.
