@@ -2,10 +2,10 @@
 const isLocal = process.env.NODE_ENV === 'development';
 const CSPDirectives = [
     "default-src 'none';",
-    `script-src 'self' ${isLocal && "'unsafe-eval'"};`,
+    `script-src 'self' https://live.matomo.jisc.ac.uk ${isLocal ? "'unsafe-eval'" : ''};`,
     "style-src 'self' 'unsafe-inline';",
-    `connect-src 'self' https://*.api.octopus.ac http://127.0.0.1:4003 https://api.octopus.ac https://api.ror.org https://cdn.contentful.com;`,
-    `img-src https: data: ${isLocal && 'http:'};`,
+    `connect-src 'self' https://*.api.octopus.ac http://127.0.0.1:4003 https://api.octopus.ac https://api.ror.org https://cdn.contentful.com https://live.matomo.jisc.ac.uk;`,
+    `img-src https: data: ${isLocal ? 'http:' : ''};`,
     'media-src https://octopus-promo-video.s3.eu-west-1.amazonaws.com https://www.youtube.com;',
     "font-src 'self';",
     "object-src 'none';",

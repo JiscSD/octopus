@@ -116,7 +116,7 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
             </div>
             <Components.Link
                 href={`${Config.urls.viewPublication.path}/${props.publicationVersion.publication.id}`}
-                className={`flex w-full items-center justify-center rounded-b-lg bg-white-50 p-4 font-montserrat font-medium tracking-tight outline-0 transition-colors duration-500 hover:bg-grey-50 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600 print:hidden ${props.buttonClassName}`}
+                className={`flex w-full items-center justify-center rounded-b-lg rounded-t-none bg-white-50 p-4 font-montserrat font-medium tracking-tight outline-0 transition-colors duration-500 hover:bg-grey-50 focus:ring-2 focus:ring-yellow-400 dark:bg-grey-700 dark:hover:bg-grey-600 print:hidden ${props.buttonClassName}`}
             >
                 <span className="mr-4 text-sm text-teal-600 dark:text-teal-300">View this publication</span>
                 <SolidIcons.EyeIcon className="h-5 w-5 text-teal-500" />

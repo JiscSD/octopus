@@ -167,13 +167,18 @@ export const getPublicationCrosslinks = async (publicationId: string, order?: I.
         // Only return the other publication's details; we already know about the one whose ID was passed.
         const linkedPublication =
             crosslink.publicationFromId === publicationId ? crosslink.publicationTo : crosslink.publicationFrom;
+        const { versions, ...linkedPublicationRest } = linkedPublication;
+        const linkedPublicationWithSquashedVersion = {
+            ...linkedPublicationRest,
+            latestLiveVersion: versions[0] // Only the latest live version comes from the query.
+        };
         // Calculate score (up votes minus down votes).
         const upCount = crosslink.votes.filter((vote) => vote.vote).length;
         const downCount = crosslink.votes.filter((vote) => !vote.vote).length;
         const score = upCount - downCount;
 
         return {
-            linkedPublication,
+            linkedPublication: linkedPublicationWithSquashedVersion,
             score,
             createdBy: crosslink.createdBy,
             createdAt: crosslink.createdAt
@@ -188,8 +193,14 @@ export const getPublicationCrosslinks = async (publicationId: string, order?: I.
             : // Mix: promote 2 most recent, then order by score, descending.
             order === 'mix'
             ? crosslinks.length <= 2
-                ? crosslinks
-                : [crosslinks[0], crosslinks[1], ...crosslinks.slice(2).sort((a, b) => b.score - a.score)]
+                ? {
+                      recent: crosslinks,
+                      relevant: []
+                  }
+                : {
+                      recent: [crosslinks[0], crosslinks[1]],
+                      relevant: [...crosslinks.slice(2).sort((a, b) => b.score - a.score)]
+                  }
             : // Default: order by created date, descending.
               crosslinks;
 
