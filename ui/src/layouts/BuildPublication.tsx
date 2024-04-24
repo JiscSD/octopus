@@ -9,7 +9,6 @@ import * as Helpers from '@/helpers';
 import * as Stores from '@/stores';
 import * as Config from '@/config';
 import * as api from '@/api';
-import * as Hooks from '@/hooks';
 
 import ClickAwayListener from 'react-click-away-listener';
 import axios from 'axios';
@@ -45,8 +44,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const [deleteModalVisibility, setDeleteModalVisibility] = React.useState(false);
     const [deleteModalLoading, setDeleteModalLoading] = React.useState(false);
     const [showSideBar, setShowSideBar] = useState(false);
-    const xl = Hooks.useMediaQuery('(min-width: 1280px)');
-    const lg = Hooks.useMediaQuery('(min-width: 1024px)');
+    const [navigationAnnouncement, setNavigationAnnouncement] = useState('');
 
     // Reset the store when navigating away from the publication flow, this is why we have the save feature
     // If I save a publication then go to create a new, my old data is still in the store, we dont want this
@@ -472,6 +470,19 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     };
     const alerts = generateAlertComponents();
 
+    // When the user hits the prev/next buttons.
+    const sectionNavigate = (forward: boolean): void => {
+        const newStep = props.currentStep + (forward ? 1 : -1);
+        props.setStep(newStep);
+        Helpers.scrollTopSmooth();
+        setNavigationAnnouncement(`Navigated to ${props.steps[newStep].title} section and scrolled to top of section.`);
+    };
+
+    const topPrevButtonXlId = 'top-previous-button-xl-displays';
+    const topNextButtonXlId = 'top-next-button-xl-displays';
+    const topPrevButtonSmallId = 'top-previous-button-small-displays';
+    const topNextButtonSmallId = 'top-next-button-small-displays';
+
     return (
         <>
             <Components.Modal
@@ -625,6 +636,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             {store.publicationVersion &&
                                 Helpers.formatPublicationType(store.publicationVersion.publication.type)}
                         </span>
+                        <div aria-live="polite" className="sr-only">
+                            {navigationAnnouncement}
+                        </div>
                         <div className="hidden items-center justify-end gap-8 xl:flex xl:w-full xl:justify-between 2xl:w-auto 2xl:justify-end">
                             <div className="flex gap-4">
                                 <Components.Button
@@ -675,16 +689,18 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     className="children:border-0"
                                     disabled={props.currentStep <= 0}
                                     startIcon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
-                                    onClick={() => props.setStep((prevState: number) => prevState - 1)}
+                                    onClick={() => sectionNavigate(false)}
                                     title="Previous"
+                                    id={topPrevButtonXlId}
                                 />
 
                                 <Components.Button
                                     className="children:border-0"
                                     disabled={props.currentStep >= props.steps.length - 1}
                                     endIcon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
-                                    onClick={() => props.setStep((prevState: number) => prevState + 1)}
+                                    onClick={() => sectionNavigate(true)}
                                     title="Next"
+                                    id={topNextButtonXlId}
                                 />
                             </div>
                         </div>
@@ -732,13 +748,15 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     title="Previous"
                                     icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-500" />}
                                     disabled={props.currentStep <= 0}
-                                    onClick={() => props.setStep((prevState: number) => prevState - 1)}
+                                    onClick={() => sectionNavigate(false)}
+                                    id={topPrevButtonSmallId}
                                 />
                                 <Components.IconButton
                                     title="Next"
                                     icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500" />}
                                     disabled={props.currentStep >= props.steps.length - 1}
-                                    onClick={() => props.setStep((prevState: number) => prevState + 1)}
+                                    onClick={() => sectionNavigate(true)}
+                                    id={topNextButtonSmallId}
                                 />
                             </div>
                         </div>
@@ -763,7 +781,10 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 className="children:border-0"
                                 disabled={props.currentStep <= 0}
                                 startIcon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4 text-teal-600" />}
-                                onClick={() => props.setStep((prevState: number) => prevState - 1)}
+                                onClick={() => {
+                                    sectionNavigate(false);
+                                    document.getElementById(topPrevButtonXlId)?.focus();
+                                }}
                                 title="Previous"
                             />
                             {props.steps.length - 1 === props.currentStep && (
@@ -816,7 +837,10 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                 disabled={props.currentStep <= 0}
                                 icon={<OutlineIcons.ArrowLeftIcon className="h-4 w-4" />}
                                 title="Previous"
-                                onClick={() => props.setStep((prevState: number) => prevState - 1)}
+                                onClick={() => {
+                                    sectionNavigate(false);
+                                    document.getElementById(topPrevButtonSmallId)?.focus();
+                                }}
                             />
                             {props.steps.length - 1 === props.currentStep && (
                                 <>
@@ -858,8 +882,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     endIcon={<OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-600" />}
                                     title="Next"
                                     onClick={() => {
-                                        props.setStep((prevState: number) => prevState + 1);
-                                        Helpers.scrollTopSmooth();
+                                        sectionNavigate(true);
+                                        document.getElementById(topNextButtonXlId)?.focus();
                                     }}
                                 />
 
@@ -869,8 +893,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     icon={<OutlineIcons.ArrowRightIcon className="h-4 w-4" />}
                                     title="Next"
                                     onClick={() => {
-                                        props.setStep((prevState: number) => prevState + 1);
-                                        Helpers.scrollTopSmooth();
+                                        sectionNavigate(true);
+                                        document.getElementById(topNextButtonSmallId)?.focus();
                                     }}
                                 />
                             </>
