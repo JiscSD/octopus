@@ -1,0 +1,494 @@
+service: octopus-api
+
+frameworkVersion: '3'
+
+useDotenv: true
+
+functions:
+    # App
+    healthcheck:
+        handler: src/components/application/routes.healthcheck
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/healthcheck
+                method: GET
+                cors: true
+    seedOpenSearch:
+        handler: src/lib/testUtils.openSearchSeed
+    # Publications
+    getPublication:
+        handler: src/components/publication/routes.get
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publications/{publicationId}
+                method: GET
+                cors: true
+    getSeedDataPublications:
+        handler: src/components/publication/routes.getSeedDataPublications
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publications/seed-data-publications
+                method: GET
+                cors: true
+    createPublication:
+        handler: src/components/publication/routes.create
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publications
+                method: POST
+                cors: true
+    getPublicationLinks:
+        handler: src/components/publication/routes.getPublicationLinks
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publications/{publicationId}/links
+                method: GET
+                cors: true
+    getPDF:
+        handler: src/components/publication/routes.getPDF
+        memorySize: 2048 # https://github.com/alixaxel/chrome-aws-lambda#:~:text=You%20should%20allocate%20at%20least%20512%20MB%20of%20RAM%20to%20your%20Lambda%2C%20however%201600%20MB%20(or%20more)%20is%20recommended
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publications/{publicationId}/pdf
+                method: GET
+                cors: true
+    # Publication Versions
+    createPublicationVersion:
+        handler: src/components/publicationVersion/routes.create
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publications/{publicationId}/publication-versions
+                method: POST
+                cors: true
+    getPublicationVersion:
+        handler: src/components/publicationVersion/routes.get
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publications/{publicationId}/publication-versions/{version} # {version} can be a version id, number, "latest" or "latestLive"
+                method: GET
+                cors: true
+    getIndexedPublicationVersions:
+        handler: src/components/publicationVersion/routes.getAll
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions
+                method: GET
+                cors: true
+    updatePublicationVersion:
+        handler: src/components/publicationVersion/routes.update
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}
+                method: PATCH
+                cors: true
+    updateStatus:
+        handler: src/components/publicationVersion/routes.updateStatus
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/status/{status}
+                method: PUT
+                cors: true
+    deleteVersion:
+        handler: src/components/publicationVersion/routes.deleteVersion
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}
+                method: DELETE
+                cors: true
+    requestControl:
+        handler: src/components/publicationVersion/routes.requestControl
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publications/{publicationId}/publication-versions/{version}/request-control
+                method: GET
+                cors: true
+    approveControlRequest:
+        handler: src/components/publicationVersion/routes.approveControlRequest
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publications/{publicationId}/publication-versions/{version}/approve-control-request
+                method: POST
+                cors: true
+    # Users
+    getUsers:
+        handler: src/components/user/routes.getAll
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/users
+                method: GET
+                cors: true
+    getUser:
+        handler: src/components/user/routes.get
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/users/{id}
+                method: GET
+                cors: true
+    getUserPublications:
+        handler: src/components/user/routes.getPublications
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/users/{id}/publications
+                method: GET
+                cors: true
+    getUserList:
+        handler: src/components/user/routes.getUserList
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/user-list
+                method: GET
+                cors: true
+    getUserControlRequests:
+        handler: src/components/user/routes.getUserControlRequests
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/users/me/control-requests
+                method: GET
+                cors: true
+    # Auth
+    authorization:
+        handler: src/components/authorization/routes.authorize
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/authorization
+                method: POST
+                cors: true
+    getDecodedUserToken:
+        handler: src/components/authorization/routes.getDecodedUserToken
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/decode-user-token
+                method: GET
+                cors: true
+    verifyOrcidAccess:
+        handler: src/components/authorization/routes.verifyOrcidAccess
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/verify-orcid-access
+                method: GET
+                cors: true
+    revokeOrcidAccess:
+        handler: src/components/authorization/routes.revokeOrcidAccess
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/revoke-orcid-access
+                method: DELETE
+                cors: true
+    # Links
+    createLink:
+        handler: src/components/link/routes.create
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/links
+                method: POST
+                cors: true
+    deleteLink:
+        handler: src/components/link/routes.deleteLink
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/links/{id}
+                method: DELETE
+                cors: true
+    # CoAuthors
+    getCoAuthors:
+        handler: src/components/coauthor/routes.get
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors
+                method: GET
+                cors: true
+    updateAll:
+        handler: src/components/coauthor/routes.updateAll
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors
+                method: PUT
+                cors: true
+    deleteCoAuthor:
+        handler: src/components/coauthor/routes.remove
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors/{coauthorId}
+                method: DELETE
+                cors: true
+    linkCoAuthor:
+        handler: src/components/coauthor/routes.link
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/link-coauthor
+                method: PATCH
+                cors: true
+    updateCoAuthorConfirmation:
+        handler: src/components/coauthor/routes.updateConfirmation
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthor-confirmation
+                method: PATCH
+                cors: true
+    requestApproval:
+        handler: src/components/coauthor/routes.requestApproval
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors/request-approval
+                method: PUT
+                cors: true
+    sendApprovalReminder:
+        handler: src/components/coauthor/routes.sendApprovalReminder
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors/{coauthorId}/approval-reminder
+                method: POST
+                cors: true
+    # Flags
+    getFlag:
+        handler: src/components/flag/routes.get
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/flags/{id}
+                method: GET
+                cors: true
+    createFlag:
+        handler: src/components/flag/routes.createFlag
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publications/{publicationId}/flags
+                method: POST
+                cors: true
+    createFlagComment:
+        handler: src/components/flag/routes.createFlagComment
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/flags/{id}/comment
+                method: POST
+                cors: true
+    resolveFlag:
+        handler: src/components/flag/routes.resolveFlag
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/flags/{id}/resolve
+                method: POST
+                cors: true
+    getPublicationFlags:
+        handler: src/components/flag/routes.getPublicationFlags
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publications/{publicationId}/flags
+                method: GET
+                cors: true
+    getUserFlags:
+        handler: src/components/flag/routes.getUserFlags
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/user/{userId}/flags
+                method: GET
+                cors: true
+    # Images
+    createImage:
+        handler: src/components/image/routes.create
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/images
+                method: POST
+                cors: true
+    deleteImage:
+        handler: src/components/image/routes.destroy
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/images/{id}
+                method: DELETE
+                cors: true
+    getAllImages:
+        handler: src/components/image/routes.getAll
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/images
+                method: GET
+                cors: true
+    # Bookmarks
+    createBookmark:
+        handler: src/components/bookmark/routes.create
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/bookmarks
+                method: POST
+                cors: true
+    deleteBookmark:
+        handler: src/components/bookmark/routes.deleteBookmark
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/bookmarks/{id}
+                method: DELETE
+                cors: true
+    getAllBookmarks:
+        handler: src/components/bookmark/routes.getAll
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/bookmarks
+                method: GET
+                cors: true
+    # Verification
+    requestVerification:
+        handler: src/components/verification/routes.requestCode
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/verification/{id}
+                method: GET
+                cors: true
+    confirmVerification:
+        handler: src/components/verification/routes.confirmCode
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/verification/{id}
+                method: POST
+                cors: true
+    # Funders
+    createFunder:
+        handler: src/components/funder/routes.create
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/funders
+                method: POST
+                cors: true
+    deleteFunder:
+        handler: src/components/funder/routes.destroy
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/funders/{funderId}
+                method: DELETE
+                cors: true
+    # References
+    getReferences:
+        handler: src/components/reference/routes.get
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/references
+                method: get
+                cors: true
+    updateAllReference:
+        handler: src/components/reference/routes.updateAll
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/references
+                method: put
+                cors: true
+    # Affiliations
+    updateAffiliations:
+        handler: src/components/affiliations/routes.updateAffiliations
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/my-affiliations
+                method: PUT
+                cors: true
+    getORCIDAffiliations:
+        handler: src/components/affiliations/routes.getORCIDAffiliations
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/orcid-affiliations
+                method: GET
+                cors: true
+    # Topics
+    createTopic:
+        handler: src/components/topic/routes.create
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/topics
+                method: POST
+                cors: true
+    getTopic:
+        handler: src/components/topic/routes.get
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/topics/{id}
+                method: GET
+                cors: true
+    getTopics:
+        handler: src/components/topic/routes.getTopics
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/topics
+                method: GET
+                cors: true
+    # Events
+    dailyEventCheck:
+        handler: src/components/event/routes.dailyEventCheck
+        events:
+            - schedule: cron(0 8 * * ? *) # Every day at 8 a.m.
+    # Additional Information
+    createAdditionalInformation:
+        handler: src/components/additionalInformation/routes.create
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/additional-information
+                method: POST
+                cors: true
+    deleteAdditionalInformation:
+        handler: src/components/additionalInformation/routes.deleteAdditionalInformation
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/additional-information/{additionalInformationId}
+                method: DELETE
+                cors: true
+    # Sitemaps
+    generateSitemaps:
+        handler: src/components/sitemap/routes.generate
+        events:
+            - schedule: cron(0 5 ? * * *) # Every day at 5 a.m.
+
+    getSitemapPaths:
+        handler: src/components/sitemap/routes.getPaths
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/sitemaps/paths
+                method: GET
+                cors: true
+
+    # Crosslinks
+    createCrosslink:
+        handler: src/components/crosslink/routes.create
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/crosslinks
+                method: POST
+                cors: true
+    deleteCrosslink:
+        handler: src/components/crosslink/routes.deleteCrosslink
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/crosslinks/{id}
+                method: DELETE
+                cors: true
+    setCrosslinkVote:
+        handler: src/components/crosslink/routes.setVote
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/crosslinks/{id}/vote
+                method: PUT
+                cors: true
+    resetCrosslinkVote:
+        handler: src/components/crosslink/routes.resetVote
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/crosslinks/{id}/vote
+                method: DELETE
+                cors: true
+    getCrosslinkVote:
+        handler: src/components/crosslink/routes.getVote
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/crosslinks/{id}/vote
+                method: GET
+                cors: true
+    getCrosslink:
+        handler: src/components/crosslink/routes.get
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/crosslinks/{id}
+                method: GET
+                cors: true
+    getPublicationCrosslinks:
+        handler: src/components/crosslink/routes.getPublicationCrosslinks
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publications/{publicationId}/crosslinks
+                method: GET
+                cors: true
