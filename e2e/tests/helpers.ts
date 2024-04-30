@@ -1,7 +1,7 @@
 import { Browser, expect, Locator, Page } from '@playwright/test';
 import { PageModel } from './PageModel';
 
-export const MAIL_HOG = process.env.MAIL_HOG;
+export const MAILPIT = process.env.MAILPIT;
 
 export const STORAGE_STATE_BASE = 'playwright/.auth/';
 
@@ -22,7 +22,7 @@ const requiredEnvVariables = [
     'ORCID_TEST_PASS4',
     'ORCID_TEST_FIRST_NAME4',
     'ORCID_TEST_LAST_NAME4',
-    'MAIL_HOG',
+    'MAILPIT',
     'UI_BASE'
 ];
 
@@ -113,10 +113,10 @@ export const login = async (page: Page, browser: Browser, user: TestUser) => {
         const context = await browser.newContext();
         const [newPage] = await Promise.all([context.waitForEvent('page'), context.newPage()]);
 
-        // navigate to MailHog and take the last verification code sent to this user
-        await newPage.goto(MAIL_HOG);
+        // navigate to Mailpit and take the last verification code sent to this user
+        await newPage.goto(MAILPIT);
         await newPage
-            .locator(`.msglist-message:has-text("${user.email}")`, { hasText: 'Verify your Octopus account' })
+            .locator(`.message:has-text("${user.email}")`, { hasText: 'Verify your Octopus account' })
             .first()
             .click();
         const verificationCode = await newPage.frameLocator('iframe').locator('#verification-code').textContent();
