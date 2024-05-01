@@ -1,5 +1,4 @@
 import * as testUtils from 'lib/testUtils';
-import * as cheerio from 'cheerio';
 
 describe('Confirm a verification code', () => {
     beforeEach(async () => {
@@ -36,16 +35,14 @@ describe('Confirm a verification code', () => {
     });
 
     test('User can confirm a correct verification code', async () => {
-        const email = 'example@domain.com';
+        const address = 'example@domain.com';
 
-        await testUtils.agent.get('/verification/0000-0000-0000-0001').query({ apiKey: 123456789, email });
+        await testUtils.agent.get('/verification/0000-0000-0000-0001').query({ apiKey: 123456789, email: address });
 
-        const inbox = await testUtils.getEmails(email);
-        const emailContent = inbox.items[0].Content.Body.replace(/3D"/g, '"'); // get rid of email encoding "3D"
-
-        // get verification code using cheerio
-        const $ = cheerio.load(emailContent);
-        const code = $('p[id="verification-code"]').text();
+        const emails = await testUtils.getEmails(address);
+        const emailId = emails.messages[0].ID;
+        const email = await testUtils.getEmail(emailId);
+        const code = email.Text.slice(-7); // Get code from end of email text body.
 
         const confirm = await testUtils.agent.post('/verification/0000-0000-0000-0001').send({ code });
 
