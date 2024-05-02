@@ -175,13 +175,13 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     const stepsToUse = Helpers.getTabCompleteness(stepsByType, store);
 
     // Choose which step to land the page on
-    let defaultStep = React.useMemo(() => {
-        let defaultStep = props.step ? parseInt(props.step) : 0;
-        defaultStep = defaultStep <= stepsToUse.length - 1 && defaultStep >= 0 ? defaultStep : 0;
-        return defaultStep;
+    let defaultStepIdx = React.useMemo(() => {
+        let defaultStepIdx = props.step ? parseInt(props.step) : 0;
+        defaultStepIdx = defaultStepIdx <= stepsToUse.length - 1 && defaultStepIdx >= 0 ? defaultStepIdx : 0;
+        return defaultStepIdx;
     }, [props.step, stepsToUse.length]);
 
-    const [currentStep, setCurrentStep] = React.useState(defaultStep);
+    const [currentStepIdx, setCurrentStepIdx] = React.useState(defaultStepIdx);
     const [publicationVersion] = React.useState(props.publicationVersion);
 
     React.useEffect(() => {
@@ -199,12 +199,14 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
     React.useEffect(() => {
         router.push(
             {
-                query: { ...router.query, step: currentStep }
+                query: { ...router.query, step: currentStepIdx }
             },
             undefined,
             { shallow: true }
         );
-    }, [currentStep]);
+    }, [currentStepIdx]);
+
+    const currentStep = stepsToUse.find((step, index) => index === currentStepIdx);
 
     return (
         <>
@@ -217,24 +219,21 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
 
             <Layouts.BuildPublication
                 steps={stepsToUse}
-                currentStep={currentStep}
-                setStep={setCurrentStep}
+                currentStep={currentStepIdx}
+                setStep={setCurrentStepIdx}
                 publicationVersion={publicationVersion}
                 token={props.token}
             >
                 {publicationVersion
-                    ? stepsToUse.map(
-                          (step, index) =>
-                              index === currentStep && (
-                                  <Framer.motion.section
-                                      key={index}
-                                      initial={{ opacity: 0 }}
-                                      animate={{ opacity: 1 }}
-                                      transition={{ duration: 0.35 }}
-                                  >
-                                      {step.component}
-                                  </Framer.motion.section>
-                              )
+                    ? currentStep && (
+                          <Framer.motion.section
+                              key={currentStepIdx}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ duration: 0.35 }}
+                          >
+                              {currentStep.component}
+                          </Framer.motion.section>
                       )
                     : null}
             </Layouts.BuildPublication>
