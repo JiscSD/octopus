@@ -50,6 +50,7 @@ provider:
         QUEUE_URL: ${ssm:/queue_url_${self:provider.stage}_octopus}
         SQS_ENDPOINT: ${ssm:/sqs_endpoint_${self:provider.stage}_octopus}
         MAIL_SERVER: ${ssm:/mail_server_${self:provider.stage}_octopus}
+        SLACK_CHANNEL_EMAIL: ${ssm:/slack_channel_email_${self:provider.stage}_octopus}
     deploymentBucket:
         tags:
             Project: Octopus
