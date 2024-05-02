@@ -1,8 +1,6 @@
-version: "3.2"
-
 services:
   db:
-    image: postgres:14.5
+    image: postgres:14.11-alpine
     command: postgres -c 'max_connections=1000'
     restart: always
     environment:
@@ -12,20 +10,12 @@ services:
     ports:
       - "5435:5432"
 
-  adminer:
-    image: adminer
+  mailpit:
+    image: axllent/mailpit:latest
     restart: always
     ports:
-      - 8080:8080
-    depends_on:
-      - db
-
-  mailhog:
-    image: mailhog/mailhog:latest
-    restart: always
-    ports:
-      - 1025:1025
-      - 8025:8025
+      - "1025:1025"
+      - "8025:8025"
 
   localstack:
     image: localstack/localstack:${LOCALSTACK_IMAGE_VERSION:-latest}
@@ -34,15 +24,15 @@ services:
       - "4510-4559:4510-4559"
       - "4566:4566"
     environment:
-      - SERVICES=s3
+      - SERVICES=s3,sqs
       - DEBUG=1
       - DATA_DIR=/tmp/localstack/data
     volumes:
-      - "./.localstack:/tmp/localstack"
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
 
   opensearch-node1: # This is also the hostname of the container within the Docker network (i.e. https://opensearch-node1/)
-    image: opensearchproject/opensearch:2.7.0
+    image: opensearchproject/opensearch:2.13.0
     restart: always
     container_name: opensearch-node1
     environment:
@@ -61,26 +51,24 @@ services:
         soft: 65536 # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
         hard: 65536
     ports:
-      - 9200:9200 # REST API
-      - 9600:9600 # Performance Analyzer
+      - "9200:9200" # REST API
+      - "9600:9600" # Performance Analyzer
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9200"]
       interval: 30s
       timeout: 10s
       retries: 5
     networks:
-      - opensearch-net # All of the containers will join the same Docker bridge network
+      - opensearch-net
 
   opensearch-dashboards:
-    image: opensearchproject/opensearch-dashboards:2.7.0
+    image: opensearchproject/opensearch-dashboards:2.13.0
     restart: always
     container_name: opensearch-dashboards
     depends_on:
       - opensearch-node1
     ports:
-      - 5601:5601 # Map host port 5601 to container port 5601
-    expose:
-      - "5601" # Expose port 5601 for web access to OpenSearch Dashboards
+      - "5601:5601" # Map host port 5601 to container port 5601
     environment:
       - 'OPENSEARCH_HOSTS=["http://opensearch-node1:9200"]' # Define the OpenSearch nodes that OpenSearch Dashboards will query
       - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true" # disables security dashboards plugin in OpenSearch Dashboards

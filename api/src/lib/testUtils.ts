@@ -116,24 +116,69 @@ export const clearDB = async (): Promise<void> => {
     }
 };
 
-interface Inbox {
-    items: {
-        Content: {
-            Headers: {
-                Subject: string;
-            };
-            Body: string;
-        };
-    };
+interface MailpitEmailAddress {
+    Name: string;
+    Address: string;
+}
+interface MailpitEmailSearchResponse {
+    total: number;
+    unread: number;
+    count: number;
+    messages_count: number;
+    start: number;
+    tags: string[];
+    messages: {
+        ID: string;
+        MessageID: string;
+        Read: boolean;
+        From: MailpitEmailAddress;
+        To: MailpitEmailAddress[];
+        Cc: MailpitEmailAddress[];
+        Bcc: MailpitEmailAddress[];
+        ReplyTo: MailpitEmailAddress[];
+        Subject: string;
+        Created: string;
+        Tags: string[];
+        Size: number;
+        Attachments: number;
+        Snippet: string;
+    }[];
 }
 
-export const getEmails = async (query: string): Promise<Inbox> => {
-    const emails = await axios.get(`http://${process.env.MAIL_SERVER}:8025/api/v2/search`, {
+export const getEmails = async (query: string): Promise<MailpitEmailSearchResponse> => {
+    const emails = await axios.get(`http://${process.env.MAIL_SERVER}:8025/api/v1/search`, {
         params: {
-            kind: 'to',
             query
         }
     });
 
-    return emails?.data as Inbox;
+    return emails?.data as MailpitEmailSearchResponse;
+};
+
+interface MailpitEmailResponse {
+    ID: string;
+    MessageID: string;
+    From: MailpitEmailAddress;
+    To: MailpitEmailAddress[];
+    Cc: MailpitEmailAddress[];
+    Bcc: MailpitEmailAddress[];
+    ReplyTo: MailpitEmailAddress[];
+    Subject: string;
+    ListUnsubscribe: {
+        Header: string;
+        Links: string[];
+        Errors: string;
+        HeaderPost: string;
+    };
+    Date: string;
+    Tags: string[];
+    Text: string;
+    HTML: string;
+    Size: number;
+}
+
+export const getEmail = async (id = 'latest'): Promise<MailpitEmailResponse> => {
+    const email = await axios.get(`http://${process.env.MAIL_SERVER}:8025/api/v1/message/${id}`);
+
+    return email?.data as MailpitEmailResponse;
 };
