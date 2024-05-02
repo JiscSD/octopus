@@ -1,7 +1,7 @@
 services:
     db:
         container_name: api-test-db
-        image: postgres:14.11
+        image: postgres:14.11-alpine
         command: postgres -c 'max_connections=1000'
         restart: always
         environment:
