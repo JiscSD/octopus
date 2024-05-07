@@ -83,6 +83,7 @@ export { default as PublicationSkeleton } from './Publication/Skeleton';
 export { default as PublicationVisualization } from './Publication/Visualization';
 export { default as RelatedPublications } from './Publication/RelatedPublications';
 export { default as RelatedPublicationsCard } from './Publication/RelatedPublications/Card';
+export { default as RelatedPublicationsModal } from './Publication/RelatedPublications/Modal';
 export { default as RequiredIndicator } from './RequiredIndicator';
 export { default as ScrollToTop } from './ScrollToTop';
 export { default as Search } from './SearchToggle';

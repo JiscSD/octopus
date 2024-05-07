@@ -9,8 +9,11 @@ type Props = {
 
 const RelatedPublications: React.FC<Props> = (props) => {
     const { recent, relevant } = props.crosslinks;
-    return recent.length || relevant.length ? (
+    const totalCrosslinks = recent.length + relevant.length;
+    const showShowAllButton = totalCrosslinks > 5;
+    return totalCrosslinks ? (
         <Components.AccordionSection id={props.id} title={'Related Publications'}>
+            <Components.RelatedPublicationsModal />
             <div className="space-y-4 px-6 py-4">
                 {!!recent.length && (
                     <section className="flex flex-col">
@@ -41,6 +44,12 @@ const RelatedPublications: React.FC<Props> = (props) => {
                             />
                         ))}
                     </section>
+                )}
+                {showShowAllButton && (
+                    <Components.Button
+                        title="Show All"
+                        className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
+                    />
                 )}
             </div>
         </Components.AccordionSection>
