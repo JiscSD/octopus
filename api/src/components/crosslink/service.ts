@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client';
+
 import * as client from 'lib/client';
 import * as I from 'interface';
 
@@ -122,7 +124,8 @@ export const getVote = (crosslinkId: string, userId: string) =>
         }
     });
 
-export const getPublicationCrosslinks = async (publicationId: string, order?: I.GetPublicationCrosslinksOrder) => {
+export const getPublicationCrosslinks = async (publicationId: string, options?: I.GetPublicationCrosslinksOptions) => {
+    const { order, search, limit, offset, userIdFilter } = options || {};
     const publicationInclude = {
         select: {
             id: true,
@@ -143,23 +146,64 @@ export const getPublicationCrosslinks = async (publicationId: string, order?: I.
             }
         }
     };
+
+    // If a query term is supplied, match against the latest live title of the
+    // crosslinked publication, i.e. not the one whose publicationId was supplied.
+    const where: Prisma.CrosslinkWhereInput = {
+        ...(search
+            ? {
+                  OR: [
+                      {
+                          publicationFromId: publicationId,
+                          publicationTo: {
+                              versions: {
+                                  some: {
+                                      isLatestLiveVersion: true,
+                                      title: {
+                                          search
+                                      }
+                                  }
+                              }
+                          }
+                      },
+                      {
+                          publicationToId: publicationId,
+                          publicationFrom: {
+                              versions: {
+                                  some: {
+                                      isLatestLiveVersion: true,
+                                      title: {
+                                          search
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  ]
+              }
+            : {
+                  OR: [
+                      {
+                          publicationFromId: publicationId
+                      },
+                      {
+                          publicationToId: publicationId
+                      }
+                  ]
+              }),
+        ...(userIdFilter ? { createdBy: userIdFilter } : {})
+    };
+
     const rawCrosslinks = await client.prisma.crosslink.findMany({
-        where: {
-            OR: [
-                {
-                    publicationFromId: publicationId
-                },
-                {
-                    publicationToId: publicationId
-                }
-            ]
-        },
+        where,
         include: {
             publicationFrom: publicationInclude,
             publicationTo: publicationInclude,
             votes: true
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
+        take: limit,
+        skip: offset
     });
 
     // Simplify data.
@@ -204,5 +248,15 @@ export const getPublicationCrosslinks = async (publicationId: string, order?: I.
             : // Default: order by created date, descending.
               crosslinks;
 
-    return sortedCrosslinks;
+    // Get total count.
+    const totalCrosslinks = await client.prisma.crosslink.count({ where });
+
+    return {
+        data: sortedCrosslinks,
+        metadata: {
+            total: totalCrosslinks,
+            limit,
+            offset
+        }
+    };
 };

@@ -1,4 +1,5 @@
 import * as crosslinkService from 'crosslink/service';
+import * as helpers from 'lib/helpers';
 import * as I from 'interface';
 import * as publicationService from 'publication/service';
 import * as response from 'lib/response';
@@ -143,7 +144,11 @@ export const get = async (
 };
 
 export const getPublicationCrosslinks = async (
-    event: I.APIRequest<undefined, I.GetPublicationCrosslinksQueryParams, I.GetPublicationCrosslinksPathParams>
+    event: I.OptionalAuthenticatedAPIRequest<
+        undefined,
+        I.GetPublicationCrosslinksQueryParams,
+        I.GetPublicationCrosslinksPathParams
+    >
 ): Promise<I.JSONResponse> => {
     try {
         const publication = await publicationService.get(event.pathParameters.publicationId);
@@ -152,10 +157,28 @@ export const getPublicationCrosslinks = async (
             return response.json(404, { message: 'Publication not found.' });
         }
 
-        const crosslinks = await crosslinkService.getPublicationCrosslinks(
-            event.pathParameters.publicationId,
-            event.queryStringParameters.order || undefined
-        );
+        const ownLinks = event.queryStringParameters.own === 'true';
+
+        if (ownLinks && !event.user) {
+            return response.json(400, {
+                message: 'Cannot filter to your own items when the request is not authenticated.'
+            });
+        }
+
+        const search = event.queryStringParameters?.search
+            ? helpers.sanitizeSearchQuery(event.queryStringParameters.search)
+            : '';
+        const limit = event.queryStringParameters?.limit || 10;
+        const offset = event.queryStringParameters?.offset || 0;
+        const userIdFilter = ownLinks && event.user?.id ? event.user.id : undefined;
+
+        const crosslinks = await crosslinkService.getPublicationCrosslinks(event.pathParameters.publicationId, {
+            order: event.queryStringParameters.order,
+            search,
+            limit,
+            offset,
+            userIdFilter
+        });
 
         return response.json(200, crosslinks);
     } catch {
