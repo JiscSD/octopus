@@ -3,12 +3,12 @@ import { Prisma } from '@prisma/client';
 import { createId } from '@paralleldrive/cuid2';
 import { Browser, launch } from 'puppeteer-core';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
-import * as I from 'interface';
 import * as client from 'lib/client';
 import * as Helpers from 'lib/helpers';
-import * as s3 from 'lib/s3';
+import * as I from 'interface';
 import * as publicationService from 'publication/service';
 import * as referenceService from 'reference/service';
+import * as s3 from 'lib/s3';
 
 const defaultPublicationVersionInclude = {
     publication: {
@@ -624,9 +624,11 @@ export const generatePDF = async (publicationVersion: I.PublicationVersion): Pro
 
         const page = await browser.newPage();
         await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 2 });
+        console.log('Page viewport set');
         await page.setContent(htmlTemplate, {
             waitUntil: htmlTemplate.includes('<img') ? ['load', 'networkidle0'] : undefined
         });
+        console.log('Page content set');
 
         const pdf = await page.pdf({
             format: 'a4',
@@ -636,6 +638,7 @@ export const generatePDF = async (publicationVersion: I.PublicationVersion): Pro
             headerTemplate: Helpers.createPublicationHeaderTemplate(publicationVersion),
             footerTemplate: Helpers.createPublicationFooterTemplate(publicationVersion)
         });
+        console.log('Page exported to PDF');
 
         // upload pdf to S3
         await s3.client.send(

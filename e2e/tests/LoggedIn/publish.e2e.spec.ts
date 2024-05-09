@@ -672,22 +672,22 @@ const requestApproval = async (page: Page) => {
 };
 
 const confirmInvolvement = async (browser: Browser, user: Helpers.TestUser, page: Page) => {
-    const mailhogPage = await browser.newPage();
-    await mailhogPage.goto(Helpers.MAIL_HOG);
-    await mailhogPage.waitForSelector('.messages > .row');
-    await mailhogPage
-        .locator(`.msglist-message:has-text("${user.email}")`, {
+    const mailpitPage = await browser.newPage();
+    await mailpitPage.goto(Helpers.MAILPIT);
+    await mailpitPage.waitForSelector('#message-page');
+    await mailpitPage
+        .locator(`.message:has-text("${user.email}")`, {
             hasText: 'You’ve been added as a co-author on Octopus'
         })
         .first()
         .click();
 
     // clicking 'Confirm & Review Publication' link is blocked by cors
-    const invitationLink = await mailhogPage
+    const invitationLink = await mailpitPage
         .frameLocator('iframe')
         .locator("a:has-text('Confirm & Review Publication')")
         .getAttribute('href');
-    await mailhogPage.close();
+    await mailpitPage.close();
     // navigate to that link instead
     await page.goto(invitationLink);
     await expect(page.locator('a[title="Select your affiliations"]')).toBeVisible();
@@ -727,12 +727,12 @@ const approveControlRequest = async (
 ) => {
     const page = await Helpers.getPageAsUser(browser, user);
 
-    await page.goto(Helpers.MAIL_HOG);
-    await page.waitForSelector('.messages > .row');
+    await page.goto(Helpers.MAILPIT);
+    await page.waitForSelector('#message-page');
 
     // click on the latest request for the given 'requesterName' that has been sent to this user
     await page
-        .locator(`.msglist-message:has-text("${user.email}")`, {
+        .locator(`.message:has-text("${user.email}")`, {
             hasText: `${requesterName} is requesting to take over editing`
         })
         .first()
@@ -766,12 +766,12 @@ const rejectCoAuthorInvitation = async (
 ) => {
     const page = await Helpers.getPageAsUser(browser, user);
     const page2 = await browser.newPage();
-    await page2.goto(Helpers.MAIL_HOG);
-    await page2.waitForSelector('.messages > .row');
+    await page2.goto(Helpers.MAILPIT);
+    await page2.waitForSelector('#message-page');
 
     // click latest invitation link which was sent to this user and has text: "You’ve been added as a co-author on Octopus"
     await page2
-        .locator(`.msglist-message:has-text("${user.email}")`, {
+        .locator(`.message:has-text("${user.email}")`, {
             hasText: 'You’ve been added as a co-author on Octopus'
         })
         .first()
@@ -797,9 +797,9 @@ const rejectCoAuthorInvitation = async (
 const verifyLastEmailNotification = async (browser: Browser, user: Helpers.TestUser, emailSubject: string) => {
     const context = await browser.newContext();
     const page = await context.newPage();
-    await page.goto(Helpers.MAIL_HOG);
+    await page.goto(Helpers.MAILPIT);
     // verify last notification sent to this email
-    await expect(page.locator(`.msglist-message:has-text("${user.email}")`).first()).toContainText(emailSubject);
+    await expect(page.locator(`.message:has-text("${user.email}")`).first()).toContainText(emailSubject);
     await context.close();
 };
 
@@ -1416,9 +1416,9 @@ test.describe('Publication flow + co-authors', () => {
         await expect(page.getByText('Reminder sent at')).toBeVisible();
 
         // check email
-        await page.goto(Helpers.MAIL_HOG);
+        await page.goto(Helpers.MAILPIT);
         await page
-            .locator(`.msglist-message:has-text("${Helpers.user2.email}")`, {
+            .locator(`.message:has-text("${Helpers.user2.email}")`, {
                 hasText: 'You’ve been added as a co-author on Octopus'
             })
             .first()
