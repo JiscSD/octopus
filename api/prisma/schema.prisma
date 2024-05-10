@@ -264,6 +264,9 @@ model Crosslink {
     user              User            @relation(fields: [createdBy], references: [id], onDelete: Cascade)
     votes             CrosslinkVote[]
     createdAt         DateTime        @default(now())
+    // Score can be deduced via "votes" relation, but we need it at query time.
+    // Prisma can do computed fields, but these only support scalar fields, not relations.
+    score             Int             @default(1) // Creator automatically upvotes their own crosslink on creation.
 
     @@unique([publicationFromId, publicationToId])
 }
