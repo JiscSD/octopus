@@ -112,4 +112,13 @@ describe('Get crosslinks of a publication', () => {
         expect(getCrosslinks.body.data[0].createdAt).toEqual('2024-01-22T11:00:00.000Z');
         expect(getCrosslinks.body.data[1].createdAt).toEqual('2024-01-22T10:00:00.000Z');
     });
+
+    test('Mixed sort order cannot be used with pagination', async () => {
+        const getCrosslinks = await testUtils.agent
+            .get('/publications/publication-hypothesis-live/crosslinks')
+            .query({ offset: 2, order: 'mix' });
+
+        expect(getCrosslinks.status).toEqual(400);
+        expect(getCrosslinks.body.message).toEqual('Pagination cannot be used with "mix" sort order.');
+    });
 });

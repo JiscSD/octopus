@@ -5,12 +5,13 @@ import * as Components from '@/components';
 
 type Props = {
     open: boolean;
-    onClose: any; // state setter
-    positiveActionCallback?: any; // state setter
+    onClose: () => void; // state setter
+    positiveActionCallback?: () => void; // state setter
     positiveButtonText?: string;
-    negativeActionCallback?: any;
+    negativeActionCallback?: () => void;
     cancelButtonText: string;
     title: string;
+    titleClasses?: string;
     icon?: React.ReactNode;
     children?: React.ReactNode;
     loading?: boolean;
@@ -65,7 +66,7 @@ const Modal: React.FC<Props> = (props) => {
                                     <div className="mt-3 text-center sm:mt-5">
                                         <HeadlessUI.Dialog.Title
                                             as="h3"
-                                            className="font-montserrat text-lg font-medium leading-6 text-grey-900"
+                                            className={`font-montserrat text-lg font-medium leading-6 text-grey-900${props.titleClasses ? ' ' + props.titleClasses : ''}`}
                                         >
                                             {props.title}
                                         </HeadlessUI.Dialog.Title>
@@ -75,7 +76,11 @@ const Modal: React.FC<Props> = (props) => {
                                 <div className="mt-5 flex justify-between space-x-4 sm:mt-6">
                                     {props.positiveActionCallback && props.positiveButtonText && (
                                         <Components.ModalButton
-                                            onClick={() => props.positiveActionCallback()}
+                                            onClick={() => {
+                                                // Shouldn't be necessary but typescript still thinks the function could be undefined
+                                                if (props.positiveActionCallback !== undefined)
+                                                    props.positiveActionCallback();
+                                            }}
                                             disabled={loading}
                                             text={props.positiveButtonText}
                                             title={props.positiveButtonText}

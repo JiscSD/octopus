@@ -165,6 +165,15 @@ export const getPublicationCrosslinks = async (
             });
         }
 
+        if (
+            event.queryStringParameters.order === 'mix' &&
+            (event.queryStringParameters.limit || event.queryStringParameters.offset)
+        ) {
+            return response.json(400, {
+                message: 'Pagination cannot be used with "mix" sort order.'
+            });
+        }
+
         const search = event.queryStringParameters?.search
             ? helpers.sanitizeSearchQuery(event.queryStringParameters.search)
             : '';

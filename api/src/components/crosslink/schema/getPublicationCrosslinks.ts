@@ -11,12 +11,12 @@ const getPublicationCrosslinksSchema: I.JSONSchemaType<I.GetPublicationCrosslink
         offset: {
             type: 'number',
             nullable: true,
-            default: 0
+            default: null
         },
         limit: {
             type: 'number',
             nullable: true,
-            default: 10
+            default: null
         },
         own: {
             type: 'string',

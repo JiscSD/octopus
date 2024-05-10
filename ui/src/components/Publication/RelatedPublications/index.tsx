@@ -1,19 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as Components from '@/components';
 import * as Interfaces from '@/interfaces';
 
 type Props = {
     id: string;
-    crosslinks: Interfaces.MixedCrosslinks;
+    publicationId: string;
+    crosslinks: Interfaces.GetPublicationMixedCrosslinksResponse;
 };
 
 const RelatedPublications: React.FC<Props> = (props) => {
-    const { recent, relevant } = props.crosslinks;
-    const totalCrosslinks = recent.length + relevant.length;
+    const { recent, relevant } = props.crosslinks.data;
+    const totalCrosslinks = props.crosslinks.metadata.total;
+    const [modalVisibility, setModalVisibility] = useState(false);
     const showShowAllButton = totalCrosslinks > 5;
     return totalCrosslinks ? (
         <Components.AccordionSection id={props.id} title={'Related Publications'}>
-            <Components.RelatedPublicationsModal />
             <div className="space-y-4 px-6 py-4">
                 {!!recent.length && (
                     <section className="flex flex-col">
@@ -22,7 +23,7 @@ const RelatedPublications: React.FC<Props> = (props) => {
                                 Most recent
                             </span>
                         )}
-                        {props.crosslinks.recent.map((crosslink) => (
+                        {recent.map((crosslink) => (
                             <Components.RelatedPublicationsCard
                                 crosslink={crosslink}
                                 key={crosslink.linkedPublication.id}
@@ -37,7 +38,7 @@ const RelatedPublications: React.FC<Props> = (props) => {
                                 Most relevant
                             </span>
                         )}
-                        {props.crosslinks.relevant.map((crosslink) => (
+                        {relevant.map((crosslink) => (
                             <Components.RelatedPublicationsCard
                                 crosslink={crosslink}
                                 key={crosslink.linkedPublication.id}
@@ -46,10 +47,18 @@ const RelatedPublications: React.FC<Props> = (props) => {
                     </section>
                 )}
                 {showShowAllButton && (
-                    <Components.Button
-                        title="Show All"
-                        className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                    />
+                    <>
+                        <Components.Button
+                            title="Show All"
+                            className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
+                            onClick={() => setModalVisibility((prevState) => !prevState)}
+                        />
+                        <Components.RelatedPublicationsModal
+                            publicationId={props.publicationId}
+                            open={modalVisibility}
+                            onClose={() => setModalVisibility(false)}
+                        />
+                    </>
                 )}
             </div>
         </Components.AccordionSection>
