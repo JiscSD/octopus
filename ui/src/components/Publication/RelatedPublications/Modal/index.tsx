@@ -77,13 +77,13 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
                     </button>
                 </label>
             </form>
-            <div className="flex mt-4 items-end gap-4 mb-4">
-                <fieldset className="w-1/2">
+            <div className="flex flex-col mt-4 gap-4 mb-4 sm:flex-row sm:items-end">
+                <fieldset className="sm:w-1/2">
                     <legend className="block mb-2 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300 text-left">
                         Sort by
                     </legend>
                     <div className="flex">
-                        <label htmlFor={recentInputId} className="flex mr-6">
+                        <label htmlFor={recentInputId} className="flex mr-6 items-center">
                             <input
                                 type="radio"
                                 id={recentInputId}
@@ -91,9 +91,11 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
                                 onChange={() => setSortOrder('recent')}
                                 defaultChecked={sortOrder === 'recent'}
                             />
-                            <span className="text-gray-700 mb-2 ml-3 block text-sm font-medium">Most Recent</span>
+                            <span className="text-gray-700 ml-3 block text-sm font-medium sm:text-nowrap">
+                                Most Recent
+                            </span>
                         </label>
-                        <label htmlFor={relevantInputId} className="flex">
+                        <label htmlFor={relevantInputId} className="flex items-center">
                             <input
                                 type="radio"
                                 id={relevantInputId}
@@ -101,12 +103,14 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
                                 onChange={() => setSortOrder('relevant')}
                                 defaultChecked={sortOrder === 'relevant'}
                             />
-                            <span className="text-gray-700 mb-2 ml-3 block text-sm font-medium">Most Relevant</span>
+                            <span className="text-gray-700 ml-3 block text-sm font-medium sm:text-nowrap">
+                                Most Relevant
+                            </span>
                         </label>
                     </div>
                 </fieldset>
                 {user && (
-                    <label htmlFor={ownFilterInputId} className="w-1/2 flex justify-end pt-5">
+                    <label htmlFor={ownFilterInputId} className="flex items-center sm:w-1/2 sm:justify-end sm:pt-5">
                         <input
                             type="checkbox"
                             id={ownFilterInputId}
@@ -114,7 +118,9 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
                             checked={ownLinks}
                             onChange={(event) => setOwnLinks(event.target.checked)}
                         />
-                        <span className="text-gray-700 mb-2 ml-3 block text-sm font-medium">View my suggestions</span>
+                        <span className="text-gray-700 ml-3 block text-sm font-medium sm:text-nowrap">
+                            View my suggestions
+                        </span>
                     </label>
                 )}
             </div>

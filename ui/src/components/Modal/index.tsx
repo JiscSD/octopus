@@ -20,6 +20,7 @@ type Props = {
 const Modal: React.FC<Props> = (props) => {
     const cancelButtonRef = React.useRef(null);
     const loading = !!props.loading;
+    const showPositiveActionButton = props.positiveActionCallback && props.positiveButtonText;
 
     return (
         <HeadlessUI.Transition.Root show={props.open} as={React.Fragment}>
@@ -73,8 +74,10 @@ const Modal: React.FC<Props> = (props) => {
                                         <div className="mt-2">{props.children}</div>
                                     </div>
                                 </div>
-                                <div className="mt-5 flex justify-between space-x-4 sm:mt-6">
-                                    {props.positiveActionCallback && props.positiveButtonText && (
+                                <div
+                                    className={`mt-5 flex ${showPositiveActionButton ? 'justify-between' : 'justify-end'} space-x-4 sm:mt-6`}
+                                >
+                                    {showPositiveActionButton && (
                                         <Components.ModalButton
                                             onClick={() => {
                                                 // Shouldn't be necessary but typescript still thinks the function could be undefined
@@ -82,8 +85,8 @@ const Modal: React.FC<Props> = (props) => {
                                                     props.positiveActionCallback();
                                             }}
                                             disabled={loading}
-                                            text={props.positiveButtonText}
-                                            title={props.positiveButtonText}
+                                            text={props.positiveButtonText || ''}
+                                            title={props.positiveButtonText || ''}
                                             actionType="POSITIVE"
                                         />
                                     )}
@@ -98,6 +101,7 @@ const Modal: React.FC<Props> = (props) => {
                                         text={props.cancelButtonText}
                                         title={props.cancelButtonText}
                                         actionType="NEGATIVE"
+                                        className="md:w-1/6"
                                     />
                                 </div>
                             </div>
