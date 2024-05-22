@@ -100,7 +100,11 @@ const updateScore = async (crosslinkId: string) => {
         }
     });
 
-    const score = crosslink?.votes
+    if (!crosslink) {
+        return false;
+    }
+
+    const score = crosslink.votes
         .map((vote) => vote.vote)
         .reduce((accumulator, currentValue) => accumulator + (currentValue ? 1 : -1), 0);
 

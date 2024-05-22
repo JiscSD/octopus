@@ -174,7 +174,7 @@ export const getPublicationCrosslinks = async (
             });
         }
 
-        const search = event.queryStringParameters?.search
+        const search = event.queryStringParameters.search
             ? helpers.sanitizeSearchQuery(event.queryStringParameters.search)
             : '';
         const limit = event.queryStringParameters?.limit || 10;
