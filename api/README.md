@@ -19,6 +19,7 @@ Create a `.env` file inside `~/api` using `cp .env.example .env`.
 Make sure to update the values within to match your environment.
 
 #### Changes to .env file
+
 When adding a new item to the .env file, make sure to update the environment variables in the docker-compose.yml file so the API tests can access them.
 
 ### AWS Credentials File
@@ -93,6 +94,7 @@ You can then apply the changes made by the new migration using the two commands 
 More information on migrations in Prisma can be found here: [Prisma Migrate Documentation](https://www.prisma.io/docs/concepts/components/prisma-migrate/).
 
 ---
+
 ## Opensearch
 
 This provides a search index for publications. Locally, it runs in a docker container, and on AWS it runs as a [dedicated service](https://aws.amazon.com/opensearch-service/). Other searchable models such as authors and topics aren't stored in opensearch - their search functions use prisma.
@@ -100,6 +102,7 @@ This provides a search index for publications. Locally, it runs in a docker cont
 The field mapping of the index is not explicitly defined; it is set automatically when a document is inserted into it.
 
 ## Reindexing
+
 There is a script which deletes and recreates the publications index, inserting a document into it for each live publication. This can be run from the api directory with `npm run reindex`.
 
 A similar process happens when the database is seeded. After publications are inserted into the database, they are also fed into a blank opensearch index.
@@ -139,3 +142,9 @@ A similar process happens when the database is seeded. After publications are in
 API tests are written in [Jest](https://jestjs.io/) and each endpoint has tests written to ensure the code is correct and working. These can be run manually using `npm run test:local`.
 
 ---
+
+## Overridden dependencies
+
+This is a place to track where we have added dependency overrides in package.json and explain why so that we can understand when they're no longer necessary.
+
+-   micromatch ^4.0.6: to address two vulnerabilities ([1](https://security.snyk.io/vuln/SNYK-JS-BRACES-6838727), [2](https://security.snyk.io/vuln/SNYK-JS-MICROMATCH-6838728)) introduced via copy-webpack-plugin's dependency on this package.
