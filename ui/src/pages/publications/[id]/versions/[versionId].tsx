@@ -53,7 +53,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         Promise<Interfaces.BookmarkedEntityData[] | void>,
         Promise<Interfaces.PublicationWithLinks | void>,
         Promise<Interfaces.Flag[] | void>,
-        Promise<Interfaces.MixedCrosslinks | void>
+        Promise<Interfaces.GetPublicationMixedCrosslinksResponse | void>
     ] = [
         api
             .get(`${Config.endpoints.publications}/${requestedId}/publication-versions/${versionId}`, token)
@@ -142,7 +142,7 @@ type Props = {
     bookmarkId: string | null;
     directLinks: Interfaces.PublicationWithLinks;
     flags: Interfaces.Flag[];
-    crosslinks: Interfaces.MixedCrosslinks;
+    crosslinks: Interfaces.GetPublicationMixedCrosslinksResponse;
 };
 
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
@@ -749,6 +749,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                             <Components.RelatedPublications
                                 id="mobile-related-publications"
+                                publicationId={props.publicationId}
                                 crosslinks={props.crosslinks}
                             />
                         </div>
@@ -1051,6 +1052,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         />
                         <Components.RelatedPublications
                             id="desktop-related-publications"
+                            publicationId={props.publicationId}
                             crosslinks={props.crosslinks}
                         />
                     </div>

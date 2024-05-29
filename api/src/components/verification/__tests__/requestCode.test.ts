@@ -14,6 +14,6 @@ describe('Request a verification code', () => {
         const inbox = await testUtils.getEmails(email);
 
         expect(request.status).toEqual(200);
-        expect(inbox.items[0].Content.Headers.Subject).toContain('Verify your Octopus account');
+        expect(inbox.messages[0].Subject).toContain('Verify your Octopus account');
     });
 });

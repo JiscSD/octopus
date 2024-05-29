@@ -3,23 +3,9 @@ import { render, screen } from '@testing-library/react';
 import * as Components from '@/components';
 import * as Config from '@/config';
 import * as Helpers from '@/helpers';
+import * as TestUtils from '@/testUtils';
 
-const crosslink = {
-    linkedPublication: {
-        id: 'test-1',
-        latestLiveVersion: {
-            title: 'Test 1',
-            publishedDate: '2024-04-11T11:47:00.000Z',
-            user: {
-                firstName: 'Test',
-                lastName: 'User'
-            }
-        }
-    },
-    score: 0,
-    createdBy: 'test',
-    createdAt: '2024-04-11T10:47:00.000Z'
-};
+const crosslink = TestUtils.testCrosslink;
 
 describe('Related publication card', () => {
     beforeEach(() => {
@@ -31,7 +17,7 @@ describe('Related publication card', () => {
     });
 
     it('Corresponding author credit is shown', () => {
-        expect(screen.getByText('By T. User')).toBeInTheDocument();
+        expect(screen.getByText('By J. Doe')).toBeInTheDocument();
     });
 
     it('Published date is shown in short format', () => {

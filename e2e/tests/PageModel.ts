@@ -126,7 +126,7 @@ export const PageModel = {
         octopusPublications: 'h2:has-text("Octopus publications")'
     },
     login: {
-        username: '#username',
+        username: '#username-input',
         password: '#password',
         signInButton: '#signin-button',
         authorizeButton: '#authorize-button',
