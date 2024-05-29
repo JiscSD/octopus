@@ -57,7 +57,7 @@ const RelatedPublications: React.FC<Props> = (props) => {
                                     className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50 justify-center w-full md:w-1/2 lg:w-full"
                                     onClick={() => setModalVisibility((prevState) => !prevState)}
                                 />
-                                <Components.RelatedPublicationsModal
+                                <Components.RelatedPublicationsViewAllModal
                                     publicationId={props.publicationId}
                                     open={modalVisibility}
                                     onClose={() => setModalVisibility(false)}
