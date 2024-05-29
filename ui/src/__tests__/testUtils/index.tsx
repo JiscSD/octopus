@@ -139,3 +139,32 @@ export const testFlag: Interfaces.Flag = {
         employment: testUser2.employment
     }
 };
+
+export const testCrosslink: Interfaces.Crosslink = {
+    id: 'test',
+    linkedPublication: {
+        id: 'test-1',
+        latestLiveVersion: {
+            title: testPublicationVersion.title,
+            publishedDate: '2024-04-11T11:47:00.000Z',
+            user: {
+                id: testCoreUser.id,
+                firstName: testCoreUser.firstName,
+                lastName: testCoreUser.lastName
+            },
+            coAuthors: [
+                {
+                    linkedUser: testCoreUser.id,
+                    user: {
+                        firstName: testCoreUser.firstName,
+                        lastName: testCoreUser.lastName,
+                        role: testCoreUser.role
+                    }
+                }
+            ]
+        }
+    },
+    score: 0,
+    createdBy: testUser2.id,
+    createdAt: '2024-04-11T10:47:00.000Z'
+};

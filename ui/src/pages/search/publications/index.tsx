@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon';
 import React from 'react';
 import useSWR from 'swr';
 import Head from 'next/head';
@@ -176,7 +175,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
         use: [Helpers.laggy]
     });
 
-    const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (
+    const handleSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (
         e: React.SyntheticEvent<HTMLFormElement, Event>
     ): Promise<void> => {
         e.preventDefault();
@@ -338,7 +337,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                             name="query-form"
                             id="query-form"
                             className="col-span-12 lg:col-span-7 xl:col-span-8"
-                            onSubmit={handlerSearchFormSubmit}
+                            onSubmit={handleSearchFormSubmit}
                         >
                             <label htmlFor="query" className="relative block w-full">
                                 <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
@@ -572,10 +571,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                                                             Next
                                                         </button>
                                                     </div>
-                                                    <span
-                                                        data-testid="baz"
-                                                        className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50"
-                                                    >
+                                                    <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
                                                         Showing {offset + 1} -{' '}
                                                         {limit + offset > response.metadata.total
                                                             ? response.metadata.total

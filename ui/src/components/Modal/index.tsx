@@ -5,12 +5,13 @@ import * as Components from '@/components';
 
 type Props = {
     open: boolean;
-    onClose: any; // state setter
-    positiveActionCallback: any; // state setter
-    positiveButtonText: string;
-    negativeActionCallback?: any;
+    onClose: () => void; // state setter
+    positiveActionCallback?: () => void; // state setter
+    positiveButtonText?: string;
+    negativeActionCallback?: () => void;
     cancelButtonText: string;
     title: string;
+    titleClasses?: string;
     icon?: React.ReactNode;
     children?: React.ReactNode;
     loading?: boolean;
@@ -19,6 +20,7 @@ type Props = {
 const Modal: React.FC<Props> = (props) => {
     const cancelButtonRef = React.useRef(null);
     const loading = !!props.loading;
+    const showPositiveActionButton = props.positiveActionCallback && props.positiveButtonText;
 
     return (
         <HeadlessUI.Transition.Root show={props.open} as={React.Fragment}>
@@ -53,7 +55,7 @@ const Modal: React.FC<Props> = (props) => {
                         leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                         leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                        <div className="relative mx-8 my-20 inline-block w-11/12 transform overflow-hidden rounded-lg bg-white-50 text-left align-bottom shadow-xl transition-all sm:align-middle lg:max-w-xl">
+                        <div className="relative mx-8 my-20 inline-block w-11/12 transform overflow-hidden rounded-lg bg-white-50 text-left align-bottom shadow-xl transition-all sm:align-middle lg:max-w-3xl xl:max-w-5xl">
                             <Components.ModalBarLoader loading={loading} />
                             <div className="px-4 pb-4 pt-5 sm:px-8 sm:py-6">
                                 <div>
@@ -65,21 +67,29 @@ const Modal: React.FC<Props> = (props) => {
                                     <div className="mt-3 text-center sm:mt-5">
                                         <HeadlessUI.Dialog.Title
                                             as="h3"
-                                            className="font-montserrat text-lg font-medium leading-6 text-grey-900"
+                                            className={`font-montserrat text-lg font-medium leading-6 text-grey-900${props.titleClasses ? ' ' + props.titleClasses : ''}`}
                                         >
                                             {props.title}
                                         </HeadlessUI.Dialog.Title>
                                         <div className="mt-2">{props.children}</div>
                                     </div>
                                 </div>
-                                <div className="mt-5 flex justify-between space-x-4 sm:mt-6">
-                                    <Components.ModalButton
-                                        onClick={() => props.positiveActionCallback()}
-                                        disabled={loading}
-                                        text={props.positiveButtonText}
-                                        title={props.positiveButtonText}
-                                        actionType="POSITIVE"
-                                    />
+                                <div
+                                    className={`mt-5 flex ${showPositiveActionButton ? 'justify-between' : 'justify-end'} space-x-4 sm:mt-6`}
+                                >
+                                    {showPositiveActionButton && (
+                                        <Components.ModalButton
+                                            onClick={() => {
+                                                // Shouldn't be necessary but typescript still thinks the function could be undefined
+                                                if (props.positiveActionCallback !== undefined)
+                                                    props.positiveActionCallback();
+                                            }}
+                                            disabled={loading}
+                                            text={props.positiveButtonText || ''}
+                                            title={props.positiveButtonText || ''}
+                                            actionType="POSITIVE"
+                                        />
+                                    )}
                                     <Components.ModalButton
                                         onClick={() =>
                                             props.negativeActionCallback
@@ -91,6 +101,7 @@ const Modal: React.FC<Props> = (props) => {
                                         text={props.cancelButtonText}
                                         title={props.cancelButtonText}
                                         actionType="NEGATIVE"
+                                        className="md:w-1/6"
                                     />
                                 </div>
                             </div>

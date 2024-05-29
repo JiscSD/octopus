@@ -2,32 +2,30 @@ import { within } from '@testing-library/dom';
 import { render, screen } from '@testing-library/react';
 
 import * as Components from '@/components';
+import * as TestUtils from '@/testUtils';
 
 describe('No crosslinks', () => {
     it('Nothing is rendered', () => {
         const { container } = render(
-            <Components.RelatedPublications id="related-publications" crosslinks={{ recent: [], relevant: [] }} />
+            <Components.RelatedPublications
+                id="related-publications"
+                crosslinks={{
+                    data: { recent: [], relevant: [] },
+                    metadata: {
+                        total: 0,
+                        offset: 0,
+                        limit: 10
+                    }
+                }}
+                publicationId="test"
+            />
         );
         expect(container).toBeEmptyDOMElement();
     });
 });
 
-const crosslinkBase = {
-    linkedPublication: {
-        id: 'test-1',
-        latestLiveVersion: {
-            title: 'Test 1',
-            publishedDate: '2024-04-11T11:47:00.000Z',
-            user: {
-                firstName: 'Test',
-                lastName: 'User'
-            }
-        }
-    },
-    score: 0,
-    createdAt: '2024-04-11T10:47:00.000Z',
-    createdBy: 'test'
-};
+const crosslinkBase = TestUtils.testCrosslink;
+const title = crosslinkBase.linkedPublication.latestLiveVersion.title;
 
 describe('Recent and relevant crosslinks', () => {
     beforeEach(() => {
@@ -35,16 +33,36 @@ describe('Recent and relevant crosslinks', () => {
             <Components.RelatedPublications
                 id="related-publications"
                 crosslinks={{
-                    recent: [
-                        crosslinkBase,
-                        { ...crosslinkBase, linkedPublication: { ...crosslinkBase.linkedPublication, id: 'test-2' } }
-                    ],
-                    relevant: [
-                        { ...crosslinkBase, linkedPublication: { ...crosslinkBase.linkedPublication, id: 'test-3' } },
-                        { ...crosslinkBase, linkedPublication: { ...crosslinkBase.linkedPublication, id: 'test-4' } },
-                        { ...crosslinkBase, linkedPublication: { ...crosslinkBase.linkedPublication, id: 'test-5' } }
-                    ]
+                    data: {
+                        recent: [
+                            crosslinkBase,
+                            {
+                                ...crosslinkBase,
+                                linkedPublication: { ...crosslinkBase.linkedPublication, id: 'test-2' }
+                            }
+                        ],
+                        relevant: [
+                            {
+                                ...crosslinkBase,
+                                linkedPublication: { ...crosslinkBase.linkedPublication, id: 'test-3' }
+                            },
+                            {
+                                ...crosslinkBase,
+                                linkedPublication: { ...crosslinkBase.linkedPublication, id: 'test-4' }
+                            },
+                            {
+                                ...crosslinkBase,
+                                linkedPublication: { ...crosslinkBase.linkedPublication, id: 'test-5' }
+                            }
+                        ]
+                    },
+                    metadata: {
+                        total: 10,
+                        offset: 0,
+                        limit: 10
+                    }
                 }}
+                publicationId="test"
             />
         );
     });
@@ -56,7 +74,7 @@ describe('Recent and relevant crosslinks', () => {
     it('2 recent crosslinks are shown', () => {
         // RelatedPublications is an AccordionSection, which is a section, so "Most Recent" section is the one after that.
         const recentSection = document.getElementsByTagName('section')[1];
-        expect(within(recentSection).getAllByText('Test 1')).toHaveLength(2);
+        expect(within(recentSection).getAllByText(title)).toHaveLength(2);
     });
 
     it('"Most relevant" label is shown', () => {
@@ -65,7 +83,7 @@ describe('Recent and relevant crosslinks', () => {
 
     it('3 relevant crosslinks are shown', () => {
         const recentSection = document.getElementsByTagName('section')[2];
-        expect(within(recentSection).getAllByText('Test 1')).toHaveLength(3);
+        expect(within(recentSection).getAllByText(title)).toHaveLength(3);
     });
 });
 
@@ -75,12 +93,23 @@ describe('Only recent crosslinks', () => {
             <Components.RelatedPublications
                 id="related-publications"
                 crosslinks={{
-                    recent: [
-                        crosslinkBase,
-                        { ...crosslinkBase, linkedPublication: { ...crosslinkBase.linkedPublication, id: 'test-2' } }
-                    ],
-                    relevant: []
+                    data: {
+                        recent: [
+                            crosslinkBase,
+                            {
+                                ...crosslinkBase,
+                                linkedPublication: { ...crosslinkBase.linkedPublication, id: 'test-2' }
+                            }
+                        ],
+                        relevant: []
+                    },
+                    metadata: {
+                        total: 10,
+                        offset: 0,
+                        limit: 10
+                    }
                 }}
+                publicationId="test"
             />
         );
     });
@@ -90,7 +119,7 @@ describe('Only recent crosslinks', () => {
     });
 
     it('2 crosslinks are shown', () => {
-        expect(screen.getAllByText('Test 1')).toHaveLength(2);
+        expect(screen.getAllByText(title)).toHaveLength(2);
     });
 
     it('Only one crosslink list section is shown', () => {
@@ -105,12 +134,23 @@ describe('Only relevant crosslinks', () => {
             <Components.RelatedPublications
                 id="related-publications"
                 crosslinks={{
-                    recent: [],
-                    relevant: [
-                        crosslinkBase,
-                        { ...crosslinkBase, linkedPublication: { ...crosslinkBase.linkedPublication, id: 'test-2' } }
-                    ]
+                    data: {
+                        recent: [],
+                        relevant: [
+                            crosslinkBase,
+                            {
+                                ...crosslinkBase,
+                                linkedPublication: { ...crosslinkBase.linkedPublication, id: 'test-2' }
+                            }
+                        ]
+                    },
+                    metadata: {
+                        total: 10,
+                        offset: 0,
+                        limit: 10
+                    }
                 }}
+                publicationId="test"
             />
         );
     });
@@ -120,7 +160,7 @@ describe('Only relevant crosslinks', () => {
     });
 
     it('2 crosslinks are shown', () => {
-        expect(screen.getAllByText('Test 1')).toHaveLength(2);
+        expect(screen.getAllByText(title)).toHaveLength(2);
     });
 
     it('Only one crosslink list section is shown', () => {

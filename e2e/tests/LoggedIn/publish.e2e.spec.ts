@@ -1705,7 +1705,9 @@ test.describe('Publication flow + co-authors', () => {
 
         // publish v3
         await page.locator(PageModel.publish.publishButton).click();
-        await page.locator(PageModel.publish.confirmPublishButton).click();
+        await Promise.all([
+            (page.waitForURL('**/versions/latest'), page.locator(PageModel.publish.confirmPublishButton).click())
+        ]);
         await page.locator(`h1:has-text("${newTitle}")`).first().waitFor({ state: 'visible' });
     });
 
