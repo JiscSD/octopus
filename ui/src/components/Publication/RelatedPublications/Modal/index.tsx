@@ -54,6 +54,7 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
             cancelButtonText="Close"
             title="Related Content"
             titleClasses="text-left"
+            wide={true}
         >
             <form name="crosslink-search-form" id={formId} onSubmit={handleFormSubmit}>
                 <label htmlFor={searchInputId} className="relative block w-full">

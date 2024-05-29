@@ -15,6 +15,7 @@ type Props = {
     icon?: React.ReactNode;
     children?: React.ReactNode;
     loading?: boolean;
+    wide?: boolean;
 };
 
 const Modal: React.FC<Props> = (props) => {
@@ -55,7 +56,9 @@ const Modal: React.FC<Props> = (props) => {
                         leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                         leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                        <div className="relative mx-8 my-20 inline-block w-11/12 transform overflow-hidden rounded-lg bg-white-50 text-left align-bottom shadow-xl transition-all sm:align-middle lg:max-w-3xl xl:max-w-5xl">
+                        <div
+                            className={`relative mx-8 my-20 inline-block w-11/12 transform overflow-hidden rounded-lg bg-white-50 text-left align-bottom shadow-xl transition-all sm:align-middle ${props.wide ? 'lg:max-w-3xl xl:max-w-5xl' : 'lg:max-w-xl'}`}
+                        >
                             <Components.ModalBarLoader loading={loading} />
                             <div className="px-4 pb-4 pt-5 sm:px-8 sm:py-6">
                                 <div>
@@ -88,6 +91,7 @@ const Modal: React.FC<Props> = (props) => {
                                             text={props.positiveButtonText || ''}
                                             title={props.positiveButtonText || ''}
                                             actionType="POSITIVE"
+                                            className={props.wide ? 'lg:w-1/3' : ''}
                                         />
                                     )}
                                     <Components.ModalButton
@@ -101,7 +105,7 @@ const Modal: React.FC<Props> = (props) => {
                                         text={props.cancelButtonText}
                                         title={props.cancelButtonText}
                                         actionType="NEGATIVE"
-                                        className="md:w-1/6"
+                                        className={props.wide ? 'lg:w-1/3' : ''}
                                     />
                                 </div>
                             </div>
