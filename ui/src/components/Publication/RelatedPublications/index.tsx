@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import * as Components from '@/components';
 import * as Interfaces from '@/interfaces';
+import * as Stores from '@/stores';
 
 type Props = {
     id: string;
@@ -9,6 +10,7 @@ type Props = {
 };
 
 const RelatedPublications: React.FC<Props> = (props) => {
+    const user = Stores.useAuthStore((state) => state.user);
     const { recent, relevant } = props.crosslinks.data;
     const totalCrosslinks = props.crosslinks.metadata.total;
     const [modalVisibility, setModalVisibility] = useState(false);
@@ -46,19 +48,30 @@ const RelatedPublications: React.FC<Props> = (props) => {
                         ))}
                     </section>
                 )}
-                {showShowAllButton && (
-                    <>
-                        <Components.Button
-                            title="Show All"
-                            className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                            onClick={() => setModalVisibility((prevState) => !prevState)}
-                        />
-                        <Components.RelatedPublicationsModal
-                            publicationId={props.publicationId}
-                            open={modalVisibility}
-                            onClose={() => setModalVisibility(false)}
-                        />
-                    </>
+                {(showShowAllButton || user) && (
+                    <div className="flex flex-col md:flex-row lg:flex-col gap-4 justify-between ">
+                        {showShowAllButton && (
+                            <>
+                                <Components.Button
+                                    title="Show All"
+                                    className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50 justify-center w-full md:w-1/2 lg:w-full"
+                                    onClick={() => setModalVisibility((prevState) => !prevState)}
+                                />
+                                <Components.RelatedPublicationsModal
+                                    publicationId={props.publicationId}
+                                    open={modalVisibility}
+                                    onClose={() => setModalVisibility(false)}
+                                />
+                            </>
+                        )}
+                        {user && (
+                            <Components.Button
+                                title="Suggest a link"
+                                className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50 justify-center w-full md:w-1/2 lg:w-full"
+                                onClick={() => console.log('Open suggest crosslink modal')}
+                            />
+                        )}
+                    </div>
                 )}
             </div>
         </Components.AccordionSection>
