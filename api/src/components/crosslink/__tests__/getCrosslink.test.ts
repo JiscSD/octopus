@@ -7,15 +7,15 @@ describe('Get a crosslink', () => {
     });
 
     test('Anonymous user can get a crosslink', async () => {
-        const getCrosslink = await testUtils.agent.get('/crosslinks/hypothesis-problem-crosslink');
+        const getCrosslink = await testUtils.agent.get('/crosslinks/problem-live-crosslink-1');
 
         expect(getCrosslink.status).toEqual(200);
         expect(getCrosslink.body.publications).toEqual([
             {
-                id: 'publication-hypothesis-live',
+                id: 'publication-problem-live-2',
                 versions: [
                     {
-                        title: 'Publication HYPOTHESIS-LIVE'
+                        title: 'Publication PROBLEM-LIVE 2'
                     }
                 ]
             },

@@ -15,6 +15,10 @@ export const create = async (
             return response.json(404, { message: 'One or both of the publications was not found.' });
         }
 
+        if (publicationA.type !== publicationB.type) {
+            return response.json(400, { message: 'Crosslinks must be between publications of the same type.' });
+        }
+
         if (
             !(
                 publicationA.versions.some((version) => version.currentStatus === 'LIVE') &&
