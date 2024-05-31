@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import useSWR from 'swr';
-import * as Framer from 'framer-motion';
-import * as SolidIcons from '@heroicons/react/24/solid';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as Components from '@/components';
 import * as Config from '@/config';
+import * as Helpers from '@/helpers';
 import * as Interfaces from '@/interfaces';
 import * as Stores from '@/stores';
 
@@ -22,7 +22,6 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
     const relevantInputId = 'sort-order-relevant';
     const sortOrderInputName = 'sort-order';
     const ownFilterInputId = 'view-own';
-    const formId = 'crosslink-search-form';
     const [searchTerm, setSearchTerm] = useState('');
     const [sortOrder, setSortOrder] = useState<'recent' | 'relevant'>('recent');
     const [ownLinks, setOwnLinks] = useState(false);
@@ -37,15 +36,26 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
         mutate
     } = useSWR<Interfaces.GetPublicationCrosslinksResponse>(swrKey);
 
-    const handleFormSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        setSearchTerm(searchInputRef.current?.value || '');
-    };
+    const resultCount = getCrosslinksResponse?.data?.length;
+
+    const handleSearchTermChange = Helpers.debounce(
+        () => {
+            setSearchTerm(searchInputRef.current?.value || '');
+        },
+        500,
+        { maxWait: 1500 }
+    );
 
     const handleClose = () => {
         setGenericError('');
         props.onClose();
     };
+
+    const upperPageBound = getCrosslinksResponse
+        ? limit + offset > getCrosslinksResponse.metadata.total
+            ? getCrosslinksResponse.metadata.total
+            : limit + offset
+        : null;
 
     return (
         <Components.Modal
@@ -56,28 +66,19 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
             titleClasses="text-left"
             wide={true}
         >
-            <form name="crosslink-search-form" id={formId} onSubmit={handleFormSubmit}>
-                <label htmlFor={searchInputId} className="relative block w-full">
-                    <span className="block mb-2 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300 text-left">
-                        Search for suggested links
-                    </span>
-                    <input
-                        ref={searchInputRef}
-                        id={searchInputId}
-                        name="filter"
-                        className="w-full rounded border border-grey-100 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400"
-                    />
-                    <button
-                        form={formId}
-                        type="submit"
-                        aria-label="Search related content"
-                        className="absolute right-px p-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
-                        disabled={isValidating}
-                    >
-                        <SolidIcons.MagnifyingGlassIcon className="h-6 w-6 text-teal-500" />
-                    </button>
-                </label>
-            </form>
+            <label htmlFor={searchInputId} className="relative block w-full">
+                <span className="block mb-2 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300 text-left">
+                    Search for suggested links
+                </span>
+                <input
+                    ref={searchInputRef}
+                    id={searchInputId}
+                    name="filter"
+                    className="w-full rounded border border-grey-100 text-grey-700 shadow focus:ring-2 focus:ring-yellow-400"
+                    onChange={() => handleSearchTermChange()}
+                    type="search"
+                />
+            </label>
             <div className="flex flex-col mt-4 gap-4 mb-4 sm:flex-row sm:items-end">
                 <fieldset className="sm:w-1/2">
                     <legend className="block mb-2 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300 text-left">
@@ -125,93 +126,93 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
                     </label>
                 )}
             </div>
-            <Framer.AnimatePresence>
-                {getCrosslinksError && (
-                    <Components.Alert
-                        key="getCrosslinksError"
-                        severity="ERROR"
-                        title={getCrosslinksError.response.data.message || getCrosslinksError.message}
-                        className="mb-4"
-                    />
-                )}
-                {genericError && (
-                    <Components.Alert key="genericError" severity="ERROR" title={genericError} className="mb-4" />
-                )}
-                {!getCrosslinksResponse?.data?.length && !isValidating && (
-                    <Components.Alert
-                        severity="INFO"
-                        title="No results found"
-                        details={[
-                            'Try some different search criteria.',
-                            'If you think something is wrong, please contact the helpdesk.'
-                        ]}
-                        className="mb-4"
-                    />
-                )}
-                {getCrosslinksResponse?.data?.length && (
-                    <>
-                        <div className="rounded flex flex-col gap-4">
-                            {getCrosslinksResponse.data.map((crosslink, index: number) => {
-                                let classes = '';
-                                index === 0 ? (classes += 'rounded-t') : null;
-                                index === getCrosslinksResponse.data.length - 1
-                                    ? (classes += '!border-b-transparent !rounded-b')
-                                    : null;
+            <h4 className="sr-only">Results</h4>
+            {getCrosslinksError && (
+                <Components.Alert
+                    key="getCrosslinksError"
+                    severity="ERROR"
+                    title={getCrosslinksError.response.data.message || getCrosslinksError.message}
+                    className="mb-4"
+                />
+            )}
+            {genericError && (
+                <Components.Alert key="genericError" severity="ERROR" title={genericError} className="mb-4" />
+            )}
+            <div aria-live="polite" className="sr-only">
+                {!resultCount && !isValidating && 'No results found'}
+            </div>
+            {!resultCount && !isValidating && (
+                <Components.Alert
+                    severity="INFO"
+                    title="No results found"
+                    details={[
+                        'Try some different search criteria.',
+                        'If you think something is wrong, please contact the helpdesk.'
+                    ]}
+                    className="mb-4"
+                />
+            )}
+            {!resultCount && isValidating && (
+                <OutlineIcons.ArrowPathIcon
+                    className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400 m-auto"
+                    aria-hidden="true"
+                />
+            )}
+            {!!resultCount && (
+                <>
+                    <div className="rounded flex flex-col gap-4">
+                        {getCrosslinksResponse.data.map((crosslink, index: number) => {
+                            let classes = '';
 
-                                return (
-                                    <Components.RelatedPublicationsResult
-                                        key={crosslink.id}
-                                        crosslink={crosslink}
-                                        setError={setGenericError}
-                                        mutateList={mutate}
-                                    />
-                                );
-                            })}
-                        </div>
+                            if (index === 0) {
+                                classes += 'rounded-t';
+                            }
 
-                        {!!getCrosslinksResponse?.data.length && (
-                            <Components.Delay delay={getCrosslinksResponse.data.length * 50}>
-                                <Framer.motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ type: 'tween', duration: 0.75 }}
-                                    className="mt-8 w-full items-center justify-between lg:flex lg:flex-row-reverse"
+                            if (index === getCrosslinksResponse.data.length - 1) {
+                                classes += '!border-b-transparent !rounded-b';
+                            }
+
+                            return (
+                                <Components.RelatedPublicationsResult
+                                    key={crosslink.id}
+                                    crosslink={crosslink}
+                                    setError={setGenericError}
+                                    mutateList={mutate}
+                                />
+                            );
+                        })}
+                    </div>
+
+                    {!!getCrosslinksResponse?.data.length && (
+                        <div className="mt-8 w-full items-center justify-between lg:flex lg:flex-row-reverse">
+                            <div className="flex justify-between">
+                                <button
+                                    onClick={() => {
+                                        setOffset((prev) => prev - limit);
+                                    }}
+                                    disabled={offset === 0}
+                                    className="mr-6 rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
                                 >
-                                    <div className="flex justify-between">
-                                        <button
-                                            onClick={() => {
-                                                setOffset((prev) => prev - limit);
-                                            }}
-                                            disabled={offset === 0}
-                                            className="mr-6 rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
-                                        >
-                                            Previous
-                                        </button>
+                                    Previous
+                                </button>
 
-                                        <button
-                                            onClick={() => {
-                                                setOffset((prev) => prev + limit);
-                                            }}
-                                            className="rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
-                                            disabled={limit + offset >= getCrosslinksResponse.metadata.total}
-                                        >
-                                            Next
-                                        </button>
-                                    </div>
-                                    <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                        Showing {offset + 1} -{' '}
-                                        {limit + offset > getCrosslinksResponse.metadata.total
-                                            ? getCrosslinksResponse.metadata.total
-                                            : limit + offset}{' '}
-                                        of {getCrosslinksResponse.metadata.total}
-                                    </span>
-                                </Framer.motion.div>
-                            </Components.Delay>
-                        )}
-                    </>
-                )}
-            </Framer.AnimatePresence>
+                                <button
+                                    onClick={() => {
+                                        setOffset((prev) => prev + limit);
+                                    }}
+                                    className="rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
+                                    disabled={limit + offset >= getCrosslinksResponse.metadata.total}
+                                >
+                                    Next
+                                </button>
+                            </div>
+                            <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                Showing {offset + 1} - {upperPageBound} of {getCrosslinksResponse.metadata.total}
+                            </span>
+                        </div>
+                    )}
+                </>
+            )}
         </Components.Modal>
     );
 };

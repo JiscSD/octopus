@@ -213,7 +213,7 @@ export const getPublicationCrosslinks = async (publicationId: string, options?: 
                                   some: {
                                       isLatestLiveVersion: true,
                                       title: {
-                                          search
+                                          search: search + ':*'
                                       }
                                   }
                               }
@@ -226,7 +226,7 @@ export const getPublicationCrosslinks = async (publicationId: string, options?: 
                                   some: {
                                       isLatestLiveVersion: true,
                                       title: {
-                                          search
+                                          search: search + ':*'
                                       }
                                   }
                               }
