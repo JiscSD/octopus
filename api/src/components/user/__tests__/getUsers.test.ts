@@ -46,15 +46,15 @@ describe('Get Users', () => {
         expect(`${user.firstName} ${user.lastName}`).toEqual('Science Octopus');
     });
 
-    test('Returns no user if searching for incomplete firstName/lastName', async () => {
+    test('Partial matches work on firstName/lastName', async () => {
         const testResponse1 = await testUtils.agent.get('/users?search=Sci');
         expect(testResponse1.status).toEqual(200);
-        expect(testResponse1.body.data.length).toEqual(0);
-        expect(testResponse1.body.metadata.total).toEqual(0);
+        expect(testResponse1.body.data.length).toEqual(1);
+        expect(testResponse1.body.metadata.total).toEqual(1);
 
-        const testResponse2 = await testUtils.agent.get('/users?search=Te');
+        const testResponse2 = await testUtils.agent.get('/users?search=Octop');
         expect(testResponse2.status).toEqual(200);
-        expect(testResponse2.body.data.length).toEqual(0);
-        expect(testResponse2.body.metadata.total).toEqual(0);
+        expect(testResponse2.body.data.length).toEqual(1);
+        expect(testResponse2.body.metadata.total).toEqual(1);
     });
 });

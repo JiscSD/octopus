@@ -53,10 +53,10 @@ export const getAll = async (filters: I.UserFilters) => {
         const searchQuery = helpers.sanitizeSearchQuery(filters.search);
         where = {
             firstName: {
-                search: searchQuery
+                search: searchQuery + ':*'
             },
             lastName: {
-                search: searchQuery
+                search: searchQuery + ':*'
             }
         };
     } else {
