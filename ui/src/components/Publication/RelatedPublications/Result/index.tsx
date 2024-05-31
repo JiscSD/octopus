@@ -25,7 +25,7 @@ const RelatedPublicationsResult: React.FC<Props> = (props): React.ReactElement =
         return !coAuthors.length
             ? Helpers.abbreviateUserName(publicationVersion.user)
             : coAuthors.map((author) => Helpers.abbreviateUserName(author.user)).join(', ');
-    }, [coAuthors]);
+    }, [coAuthors, publicationVersion.user]);
 
     const handleDeleteCrosslink = async () => {
         setDeleteLoading(true);
