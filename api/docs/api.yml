@@ -2,7 +2,10 @@ openapi: 3.0.0
 info:
   version: '1'
   title: Octopus
-  description: Open research publishing platform
+  description: >
+    ## API Keys
+
+    An API key is required for many of the API’s operations. To request a unique API key, please send an email to [help@jisc.ac.uk](<mailto:help@jisc.ac.uk?subject=Octopus API key request>) from the address you are signed up to Octopus with, including the subject line “Octopus API key request”.
 servers:
   - url: https://prod.api.octopus.ac/v1
     description: Octopus live environment
