@@ -453,6 +453,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 publicationToId: 'publication-problem-live',
                 createdBy: 'test-user-1',
                 createdAt: '2024-01-22T10:00:00.000Z',
+                score: 3,
                 votes: {
                     createMany: {
                         data: [
@@ -547,6 +548,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 publicationToId: 'publication-hypothesis-live',
                 createdBy: 'test-user-2',
                 createdAt: '2024-01-22T11:00:00.000Z',
+                score: -3,
                 votes: {
                     createMany: {
                         data: [
@@ -646,6 +648,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 publicationToId: 'publication-hypothesis-live',
                 createdBy: 'test-user-3',
                 createdAt: '2024-01-22T12:00:00.000Z',
+                score: 1,
                 votes: {
                     createMany: {
                         data: [
@@ -720,6 +723,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 publicationToId: 'publication-hypothesis-live',
                 createdBy: 'test-user-4',
                 createdAt: '2024-01-22T13:00:00.000Z',
+                score: -1,
                 votes: {
                     createMany: {
                         data: [

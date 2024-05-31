@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon';
 import React from 'react';
 import useSWR from 'swr';
 import Head from 'next/head';
@@ -176,7 +175,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
         use: [Helpers.laggy]
     });
 
-    const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (
+    const handleSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (
         e: React.SyntheticEvent<HTMLFormElement, Event>
     ): Promise<void> => {
         e.preventDefault();
@@ -271,6 +270,12 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
         setOffset(0);
     }, [query, publicationTypes, limit]);
 
+    const upperPageBound = response
+        ? limit + offset > response.metadata.total
+            ? response.metadata.total
+            : limit + offset
+        : null;
+
     return (
         <>
             <Head>
@@ -338,7 +343,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                             name="query-form"
                             id="query-form"
                             className="col-span-12 lg:col-span-7 xl:col-span-8"
-                            onSubmit={handlerSearchFormSubmit}
+                            onSubmit={handleSearchFormSubmit}
                         >
                             <label htmlFor="query" className="relative block w-full">
                                 <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
@@ -525,10 +530,14 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                                         <div className="rounded">
                                             {response.data.map((result, index: number) => {
                                                 let classes = '';
-                                                index === 0 ? (classes += 'rounded-t') : null;
-                                                index === response.data.length - 1
-                                                    ? (classes += '!border-b-transparent !rounded-b')
-                                                    : null;
+
+                                                if (index === 0) {
+                                                    classes += 'rounded-t';
+                                                }
+
+                                                if (index === response.data.length - 1) {
+                                                    classes += '!border-b-transparent !rounded-b';
+                                                }
 
                                                 return (
                                                     <Components.PublicationSearchResult
@@ -572,15 +581,9 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                                                             Next
                                                         </button>
                                                     </div>
-                                                    <span
-                                                        data-testid="baz"
-                                                        className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50"
-                                                    >
-                                                        Showing {offset + 1} -{' '}
-                                                        {limit + offset > response.metadata.total
-                                                            ? response.metadata.total
-                                                            : limit + offset}{' '}
-                                                        of {response.metadata.total}
+                                                    <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                                        Showing {offset + 1} - {upperPageBound} of{' '}
+                                                        {response.metadata.total}
                                                     </span>
                                                 </Framer.motion.div>
                                             </Components.Delay>

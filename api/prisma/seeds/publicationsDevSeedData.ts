@@ -867,7 +867,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 id: 'user-1-problem-1-crosslink-1',
                 publicationToId: 'publication-user-1-problem-1-live',
                 createdBy: users.user6,
-                createdAt: '2024-04-10T13:35:00.000Z',
+                createdAt: '2024-04-10T13:31:00.000Z',
                 votes: {
                     create: {
                         createdBy: users.user6,
@@ -921,7 +921,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 id: 'user-1-problem-1-crosslink-2',
                 publicationToId: 'publication-user-1-problem-1-live',
                 createdBy: users.user6,
-                createdAt: '2024-04-10T13:34:00.000Z',
+                createdAt: '2024-04-10T13:32:00.000Z',
                 votes: {
                     create: {
                         createdBy: users.user6,
@@ -983,6 +983,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 publicationToId: 'publication-user-1-problem-1-live',
                 createdBy: users.user6,
                 createdAt: '2024-04-10T13:33:00.000Z',
+                score: -3,
                 votes: {
                     createMany: {
                         data: [
@@ -1049,7 +1050,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 id: 'user-1-problem-1-crosslink-4',
                 publicationToId: 'publication-user-1-problem-1-live',
                 createdBy: users.user1,
-                createdAt: '2024-04-10T13:32:00.000Z',
+                createdAt: '2024-04-10T13:34:00.000Z',
                 votes: {
                     createMany: {
                         data: [
@@ -1170,7 +1171,8 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 id: 'user-1-problem-1-crosslink-5',
                 publicationToId: 'publication-user-1-problem-1-live',
                 createdBy: users.user1,
-                createdAt: '2024-04-10T13:31:00.000Z',
+                createdAt: '2024-04-10T13:35:00.000Z',
+                score: 5,
                 votes: {
                     createMany: {
                         data: [
@@ -1232,6 +1234,20 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 publicationToId: 'publication-user-2-analysis-1-live',
                 versionToId: 'publication-user-2-analysis-1-live-v1',
                 draft: false
+            }
+        },
+        crosslinksFrom: {
+            create: {
+                id: 'user-1-problem-1-crosslink-6',
+                publicationToId: 'publication-user-1-problem-1-live',
+                createdBy: users.user6,
+                createdAt: '2024-04-10T13:36:00.000Z',
+                votes: {
+                    create: {
+                        createdBy: users.user6,
+                        vote: true
+                    }
+                }
             }
         },
         versions: {

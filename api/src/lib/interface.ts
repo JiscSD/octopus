@@ -964,9 +964,18 @@ export interface GetPublicationCrosslinksPathParams {
     publicationId: string;
 }
 
-export type GetPublicationCrosslinksOrder = 'relevant' | 'mix';
+export type GetPublicationCrosslinksOrder = 'recent' | 'relevant' | 'mix';
 export interface GetPublicationCrosslinksQueryParams {
+    search?: string;
+    limit?: number;
+    offset?: number;
+    own?: string;
     order?: GetPublicationCrosslinksOrder;
+}
+
+// Options for the service function, as distinct from the query params received in the controller.
+export interface GetPublicationCrosslinksOptions extends Omit<GetPublicationCrosslinksQueryParams, 'own'> {
+    userIdFilter?: string;
 }
 
 // Additional information

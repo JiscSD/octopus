@@ -95,6 +95,8 @@ const Topics: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const pageTitle = Config.urls.search.title.replace('publications', 'topics');
 
+    const upperPageBound = data ? (limit + offset > data.total ? data.total : limit + offset) : null;
+
     return (
         <>
             <Head>
@@ -210,10 +212,14 @@ const Topics: Types.NextPage<Props> = (props): React.ReactElement => {
                                         <div className="rounded">
                                             {data.results.map((topic, index) => {
                                                 let classes = '';
-                                                index === 0 ? (classes += 'rounded-t') : null;
-                                                index === data.results.length - 1
-                                                    ? (classes += '!border-b-transparent !rounded-b')
-                                                    : null;
+
+                                                if (index === 0) {
+                                                    classes += 'rounded-t';
+                                                }
+
+                                                if (index === data.results.length - 1) {
+                                                    classes += '!border-b-transparent !rounded-b';
+                                                }
 
                                                 return (
                                                     <Framer.motion.div
@@ -296,9 +302,7 @@ const Topics: Types.NextPage<Props> = (props): React.ReactElement => {
                                                         id="pagination-info"
                                                         className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50"
                                                     >
-                                                        Showing {offset + 1} -{' '}
-                                                        {limit + offset > data.total ? data.total : limit + offset} of{' '}
-                                                        {data.total}
+                                                        Showing {offset + 1} - {upperPageBound} of {data.total}
                                                     </span>
                                                 </Framer.motion.div>
                                             </Components.Delay>
