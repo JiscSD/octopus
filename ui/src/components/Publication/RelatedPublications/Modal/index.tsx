@@ -22,7 +22,6 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
     const relevantInputId = 'sort-order-relevant';
     const sortOrderInputName = 'sort-order';
     const ownFilterInputId = 'view-own';
-    const formId = 'crosslink-search-form';
     const [searchTerm, setSearchTerm] = useState('');
     const [sortOrder, setSortOrder] = useState<'recent' | 'relevant'>('recent');
     const [ownLinks, setOwnLinks] = useState(false);
@@ -51,6 +50,12 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
         setGenericError('');
         props.onClose();
     };
+
+    const upperPageBound = getCrosslinksResponse
+        ? limit + offset > getCrosslinksResponse.metadata.total
+            ? getCrosslinksResponse.metadata.total
+            : limit + offset
+        : null;
 
     return (
         <Components.Modal
@@ -158,10 +163,14 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
                     <div className="rounded flex flex-col gap-4">
                         {getCrosslinksResponse.data.map((crosslink, index: number) => {
                             let classes = '';
-                            index === 0 ? (classes += 'rounded-t') : null;
-                            index === getCrosslinksResponse.data.length - 1
-                                ? (classes += '!border-b-transparent !rounded-b')
-                                : null;
+
+                            if (index === 0) {
+                                classes += 'rounded-t';
+                            }
+
+                            if (index === getCrosslinksResponse.data.length - 1) {
+                                classes += '!border-b-transparent !rounded-b';
+                            }
 
                             return (
                                 <Components.RelatedPublicationsResult
@@ -198,11 +207,7 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
                                 </button>
                             </div>
                             <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                Showing {offset + 1} -{' '}
-                                {limit + offset > getCrosslinksResponse.metadata.total
-                                    ? getCrosslinksResponse.metadata.total
-                                    : limit + offset}{' '}
-                                of {getCrosslinksResponse.metadata.total}
+                                Showing {offset + 1} - {upperPageBound} of {getCrosslinksResponse.metadata.total}
                             </span>
                         </div>
                     )}

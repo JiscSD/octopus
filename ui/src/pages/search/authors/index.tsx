@@ -117,6 +117,12 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const pageTitle = Config.urls.search.title.replace('publications', 'authors');
 
+    const upperPageBound = results
+        ? limit + offset > results.metadata.total
+            ? results.metadata.total
+            : limit + offset
+        : null;
+
     return (
         <>
             <Head>
@@ -232,10 +238,14 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                                         <div className="rounded">
                                             {results.data.map((result: any, index: number) => {
                                                 let classes = '';
-                                                index === 0 ? (classes += 'rounded-t') : null;
-                                                index === results.data.length - 1
-                                                    ? (classes += '!border-b-transparent !rounded-b')
-                                                    : null;
+
+                                                if (index === 0) {
+                                                    classes += 'rounded-t';
+                                                }
+
+                                                if (index === results.data.length - 1) {
+                                                    classes += '!border-b-transparent !rounded-b';
+                                                }
 
                                                 return (
                                                     <Components.UserSearchResult
@@ -280,11 +290,8 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                                                         </button>
                                                     </div>
                                                     <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                                        Showing {offset + 1} -{' '}
-                                                        {limit + offset > results.metadata.total
-                                                            ? results.metadata.total
-                                                            : limit + offset}{' '}
-                                                        of {results.metadata.total}
+                                                        Showing {offset + 1} - {upperPageBound} of{' '}
+                                                        {results.metadata.total}
                                                     </span>
                                                 </Framer.motion.div>
                                             </Components.Delay>
