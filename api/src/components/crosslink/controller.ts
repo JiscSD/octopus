@@ -49,7 +49,7 @@ export const deleteCrosslink = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteCrosslinkPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const crosslink = await crosslinkService.get(event.pathParameters.id);
+        const crosslink = await crosslinkService.getById(event.pathParameters.id);
 
         if (!crosslink) {
             return response.json(404, { message: 'Crosslink not found.' });
@@ -134,8 +134,14 @@ export const getVote = async (
 export const get = async (
     event: I.APIRequest<undefined, undefined, I.GetCrosslinkPathParams>
 ): Promise<I.JSONResponse> => {
+    // Check if we are getting crosslink by its own ID or a pair of publication IDs
+    const idSplit = event.pathParameters.id.split(',');
+    const getByPublicationPair = idSplit.length === 2;
+
     try {
-        const crosslink = await crosslinkService.get(event.pathParameters.id);
+        const crosslink = getByPublicationPair
+            ? await crosslinkService.getByPublicationPair([idSplit[0], idSplit[1]])
+            : await crosslinkService.getById(event.pathParameters.id);
 
         if (!crosslink) {
             return response.json(404, { message: 'Crosslink not found.' });

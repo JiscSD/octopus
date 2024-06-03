@@ -15,8 +15,68 @@ export const create = (publications: [string, string], userId: string) =>
         }
     });
 
-export const getByPublicationPair = (publications: [string, string]) =>
-    client.prisma.crosslink.findFirst({
+const publicationIncludeForGetFunctions = {
+    select: {
+        id: true,
+        versions: {
+            where: {
+                isLatestLiveVersion: true
+            },
+            select: {
+                title: true
+            }
+        }
+    }
+};
+
+const crosslinkGetBaseArgs = {
+    include: {
+        publicationFrom: publicationIncludeForGetFunctions,
+        publicationTo: publicationIncludeForGetFunctions,
+        votes: {
+            select: {
+                createdBy: true,
+                vote: true
+            }
+        }
+    }
+};
+
+type GetCrosslinkPublication = { id: string; versions: { title: string | null }[] };
+
+const simplifyCrosslinkForGetFunctions = (
+    rawCrosslink: Prisma.CrosslinkGetPayload<typeof crosslinkGetBaseArgs> | null
+): {
+    publications: [GetCrosslinkPublication, GetCrosslinkPublication];
+    upVotes: number;
+    downVotes: number;
+    createdBy: string;
+    createdAt: Date;
+} | null => {
+    return rawCrosslink
+        ? {
+              publications: [rawCrosslink.publicationFrom, rawCrosslink.publicationTo],
+              upVotes: rawCrosslink.votes.filter((vote) => vote.vote).length,
+              downVotes: rawCrosslink.votes.filter((vote) => !vote.vote).length,
+              createdBy: rawCrosslink.createdBy,
+              createdAt: rawCrosslink.createdAt
+          }
+        : null;
+};
+
+export const getById = async (id: string) => {
+    const rawCrosslink = await client.prisma.crosslink.findUnique({
+        where: {
+            id
+        },
+        ...crosslinkGetBaseArgs
+    });
+
+    return simplifyCrosslinkForGetFunctions(rawCrosslink);
+};
+
+export const getByPublicationPair = async (publications: [string, string]) => {
+    const rawCrosslink = await client.prisma.crosslink.findFirst({
         where: {
             OR: [
                 {
@@ -28,8 +88,12 @@ export const getByPublicationPair = (publications: [string, string]) =>
                     publicationToId: publications[0]
                 }
             ]
-        }
+        },
+        ...crosslinkGetBaseArgs
     });
+
+    return simplifyCrosslinkForGetFunctions(rawCrosslink);
+};
 
 export const deleteCrosslink = (id: string) =>
     client.prisma.crosslink.delete({
@@ -37,50 +101,6 @@ export const deleteCrosslink = (id: string) =>
             id
         }
     });
-
-export const get = async (id: string) => {
-    const publicationInclude = {
-        select: {
-            id: true,
-            versions: {
-                where: {
-                    isLatestLiveVersion: true
-                },
-                select: {
-                    title: true
-                }
-            }
-        }
-    };
-    const rawCrosslink = await client.prisma.crosslink.findUnique({
-        where: {
-            id
-        },
-        include: {
-            publicationFrom: publicationInclude,
-            publicationTo: publicationInclude,
-            votes: {
-                select: {
-                    createdBy: true,
-                    vote: true
-                }
-            }
-        }
-    });
-
-    // Simplify data.
-    const crosslink = rawCrosslink
-        ? {
-              publications: [rawCrosslink.publicationFrom, rawCrosslink.publicationTo],
-              upVotes: rawCrosslink.votes.filter((vote) => vote.vote).length,
-              downVotes: rawCrosslink.votes.filter((vote) => !vote.vote).length,
-              createdBy: rawCrosslink.createdBy,
-              createdAt: rawCrosslink.createdAt
-          }
-        : null;
-
-    return crosslink;
-};
 
 export const exists = async (crosslinkId: string) => {
     return Boolean(await client.prisma.crosslink.findUnique({ where: { id: crosslinkId } }));
