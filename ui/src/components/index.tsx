@@ -84,6 +84,7 @@ export { default as PublicationVisualization } from './Publication/Visualization
 export { default as RelatedPublications } from './Publication/RelatedPublications';
 export { default as RelatedPublicationsCard } from './Publication/RelatedPublications/Card';
 export { default as RelatedPublicationsResult } from './Publication/RelatedPublications/Result';
+export { default as RelatedPublicationsSuggestModal } from './Publication/RelatedPublications/SuggestModal';
 export { default as RelatedPublicationsViewAllModal } from './Publication/RelatedPublications/ViewAllModal';
 export { default as RequiredIndicator } from './RequiredIndicator';
 export { default as ScrollToTop } from './ScrollToTop';

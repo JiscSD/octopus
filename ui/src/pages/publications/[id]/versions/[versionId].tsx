@@ -750,6 +750,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             <Components.RelatedPublications
                                 id="mobile-related-publications"
                                 publicationId={props.publicationId}
+                                type={publication?.type}
                                 crosslinks={props.crosslinks}
                             />
                         </div>
@@ -1054,6 +1055,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             id="desktop-related-publications"
                             publicationId={props.publicationId}
                             crosslinks={props.crosslinks}
+                            type={publication?.type}
                         />
                     </div>
                 </aside>

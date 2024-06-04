@@ -10,6 +10,7 @@ type CommonProps = {
     onClick?: (e: React.MouseEvent) => void;
     disabled?: boolean;
     className?: string;
+    childClassName?: string;
     textSize?: string;
     padding?: string;
     children?: React.ReactNode;
@@ -54,6 +55,7 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             border-b-2
             border-b-teal-400
             dark:border-b-teal-500
+            ${props.childClassName ?? ''}
             `;
     }, [props.endIcon, props.padding, props.startIcon, props.textSize]);
 
