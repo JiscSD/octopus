@@ -13,6 +13,7 @@ setup('Log in users', async ({ browser }) => {
             // Minimise feedback popup
             await page.getByLabel('Open Close icon').click();
             await page.context().storageState({ path: `${Helpers.STORAGE_STATE_BASE}user${idx}.json` });
+            await page.close();
         })
     );
 });
