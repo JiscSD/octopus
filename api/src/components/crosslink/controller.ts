@@ -31,7 +31,7 @@ export const create = async (
         const existingCrosslink = await crosslinkService.getByPublicationPair(event.body.publications);
 
         if (existingCrosslink) {
-            return response.json(400, { message: 'A crosslink already exists between these publications.' });
+            return response.json(400, { message: 'This link cannot be added as it has already been suggested.' });
         }
 
         const crosslink = await crosslinkService.create(event.body.publications, event.user.id);

@@ -38,7 +38,7 @@ describe('Create a crosslink', () => {
             });
 
         expect(addCrosslink.status).toEqual(400);
-        expect(addCrosslink.body.message).toEqual('A crosslink already exists between these publications.');
+        expect(addCrosslink.body.message).toEqual('This link cannot be added as it has already been suggested.');
     });
 
     test('User cannot create a crosslink involving an invalid publication ID', async () => {
