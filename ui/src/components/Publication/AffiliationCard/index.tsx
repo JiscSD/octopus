@@ -6,6 +6,7 @@ import * as Helpers from '@/helpers';
 
 type AffiliationCardProps = {
     affiliation: Interfaces.MappedOrcidAffiliation;
+    bordered?: boolean;
     disableSelection?: boolean;
     onSelect?: (affiliation: Interfaces.MappedOrcidAffiliation) => void;
     onRemove?: (affiliation: Interfaces.MappedOrcidAffiliation) => void;
@@ -46,7 +47,9 @@ const AffiliationCard: React.FC<AffiliationCardProps> = (props) => {
     } = props.affiliation;
 
     return (
-        <div className="rounded-lg bg-white-50 p-4 text-sm last:mb-0 dark:bg-grey-700">
+        <div
+            className={`rounded-lg bg-white-50 p-4 text-sm last:mb-0 dark:bg-grey-700 text-left ${props.bordered ? 'border border-grey-100 shadow' : ''}`}
+        >
             <div className="flex items-start justify-between gap-4">
                 <h4 className="pt-2 font-semibold">
                     {organization.name}: {organization.address.city},{' '}

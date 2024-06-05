@@ -12,6 +12,7 @@ type Props = {
     cancelButtonText: string;
     title: string;
     titleClasses?: string;
+    subTitle?: string;
     icon?: React.ReactNode;
     children?: React.ReactNode;
     loading?: boolean;
@@ -72,6 +73,11 @@ const Modal: React.FC<Props> = (props) => {
                                         >
                                             {props.title}
                                         </HeadlessUI.Dialog.Title>
+                                        {props.subTitle && (
+                                            <h4 className="mt-6 font-montserrat text-base font-semibold leading-6 text-grey-900">
+                                                {props.subTitle}
+                                            </h4>
+                                        )}
                                         <div className="mt-2">{props.children}</div>
                                     </div>
                                 </div>
