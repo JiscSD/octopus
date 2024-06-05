@@ -19,7 +19,6 @@ type Props = {
 };
 
 const Modal: React.FC<Props> = (props) => {
-    const cancelButtonRef = React.useRef(null);
     const loading = !!props.loading;
     const showPositiveActionButton = props.positiveActionCallback && props.positiveButtonText;
 
@@ -28,7 +27,6 @@ const Modal: React.FC<Props> = (props) => {
             <HeadlessUI.Dialog
                 as="div"
                 className="fixed inset-0 z-50 overflow-y-auto"
-                initialFocus={cancelButtonRef}
                 onClose={loading ? () => {} : props.onClose}
             >
                 <div className="flex min-h-full items-center justify-center text-center">
@@ -101,7 +99,6 @@ const Modal: React.FC<Props> = (props) => {
                                                 : props.onClose()
                                         }
                                         disabled={loading}
-                                        ref={cancelButtonRef}
                                         text={props.cancelButtonText}
                                         title={props.cancelButtonText}
                                         actionType="NEGATIVE"

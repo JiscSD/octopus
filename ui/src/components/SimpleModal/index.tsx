@@ -13,8 +13,6 @@ type Props = {
 };
 
 const SimpleModal: React.FC<Props> = (props) => {
-    const cancelButtonRef = React.useRef(null);
-
     return (
         <HeadlessUI.Transition.Root show={props.open} as={React.Fragment}>
             <HeadlessUI.Dialog
@@ -67,7 +65,6 @@ const SimpleModal: React.FC<Props> = (props) => {
                             <div className="mt-5 flex justify-between space-x-4 sm:mt-6">
                                 <Components.ModalButton
                                     onClick={props.negativeActionCallback}
-                                    ref={cancelButtonRef}
                                     text={props.cancelButtonText}
                                     title={props.cancelButtonText}
                                     actionType="NEGATIVE"
