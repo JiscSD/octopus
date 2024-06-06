@@ -384,7 +384,7 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                 onClose={() => setSelectedAuthorAffiliations(null)}
                 cancelButtonText="Close"
                 title={`${selectedAuthorAffiliations?.user?.firstName} ${selectedAuthorAffiliations?.user?.lastName}'s affiliation(s) for this publication`}
-                subTitle="Selected Affiliations"
+                subtitle="Selected Affiliations"
             >
                 <ul>
                     {selectedAuthorAffiliations?.affiliations.map((affiliation) => (
