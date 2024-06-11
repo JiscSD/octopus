@@ -46,11 +46,6 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
         { maxWait: 1500 }
     );
 
-    const handleClose = () => {
-        setGenericError('');
-        props.onClose();
-    };
-
     const upperPageBound = getCrosslinksResponse
         ? limit + offset > getCrosslinksResponse.metadata.total
             ? getCrosslinksResponse.metadata.total
@@ -60,7 +55,7 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
     return (
         <Components.Modal
             open={props.open}
-            onClose={handleClose}
+            onClose={props.onClose}
             cancelButtonText="Close"
             title="Related Content"
             titleClasses="text-left"
@@ -141,78 +136,80 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
             <div aria-live="polite" className="sr-only">
                 {!resultCount && !isValidating && 'No results found'}
             </div>
-            {!resultCount && !isValidating && (
-                <Components.Alert
-                    severity="INFO"
-                    title="No results found"
-                    details={[
-                        'Try some different search criteria.',
-                        'If you think something is wrong, please contact the helpdesk.'
-                    ]}
-                    className="mb-4"
-                />
-            )}
-            {!resultCount && isValidating && (
-                <OutlineIcons.ArrowPathIcon
-                    className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400 m-auto"
-                    aria-hidden="true"
-                />
-            )}
-            {!!resultCount && (
-                <>
-                    <div className="rounded flex flex-col gap-4">
-                        {getCrosslinksResponse.data.map((crosslink, index: number) => {
-                            let classes = '';
+            <div className="min-h-160">
+                {!resultCount && !isValidating && (
+                    <Components.Alert
+                        severity="INFO"
+                        title="No results found"
+                        details={[
+                            'Try some different search criteria.',
+                            'If you think something is wrong, please contact the helpdesk.'
+                        ]}
+                        className="mb-4"
+                    />
+                )}
+                {!resultCount && isValidating && (
+                    <OutlineIcons.ArrowPathIcon
+                        className="h-5 w-5 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400 m-auto"
+                        aria-hidden="true"
+                    />
+                )}
+                {!!resultCount && (
+                    <>
+                        <div className="rounded flex flex-col gap-4">
+                            {getCrosslinksResponse.data.map((crosslink, index: number) => {
+                                let classes = '';
 
-                            if (index === 0) {
-                                classes += 'rounded-t';
-                            }
+                                if (index === 0) {
+                                    classes += 'rounded-t';
+                                }
 
-                            if (index === getCrosslinksResponse.data.length - 1) {
-                                classes += '!border-b-transparent !rounded-b';
-                            }
+                                if (index === getCrosslinksResponse.data.length - 1) {
+                                    classes += '!border-b-transparent !rounded-b';
+                                }
 
-                            return (
-                                <Components.RelatedPublicationsResult
-                                    key={crosslink.id}
-                                    crosslink={crosslink}
-                                    setError={setGenericError}
-                                    mutateList={mutate}
-                                />
-                            );
-                        })}
-                    </div>
-
-                    {!!getCrosslinksResponse?.data.length && (
-                        <div className="mt-8 w-full items-center justify-between lg:flex lg:flex-row-reverse">
-                            <div className="flex justify-between">
-                                <button
-                                    onClick={() => {
-                                        setOffset((prev) => prev - limit);
-                                    }}
-                                    disabled={offset === 0}
-                                    className="mr-6 rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
-                                >
-                                    Previous
-                                </button>
-
-                                <button
-                                    onClick={() => {
-                                        setOffset((prev) => prev + limit);
-                                    }}
-                                    className="rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
-                                    disabled={limit + offset >= getCrosslinksResponse.metadata.total}
-                                >
-                                    Next
-                                </button>
-                            </div>
-                            <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                Showing {offset + 1} - {upperPageBound} of {getCrosslinksResponse.metadata.total}
-                            </span>
+                                return (
+                                    <Components.RelatedPublicationsResult
+                                        key={crosslink.id}
+                                        crosslink={crosslink}
+                                        setError={setGenericError}
+                                        mutateList={mutate}
+                                    />
+                                );
+                            })}
                         </div>
-                    )}
-                </>
-            )}
+
+                        {!!getCrosslinksResponse?.data.length && (
+                            <div className="mt-8 w-full items-center justify-between lg:flex lg:flex-row-reverse">
+                                <div className="flex justify-between">
+                                    <button
+                                        onClick={() => {
+                                            setOffset((prev) => prev - limit);
+                                        }}
+                                        disabled={offset === 0}
+                                        className="mr-6 rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
+                                    >
+                                        Previous
+                                    </button>
+
+                                    <button
+                                        onClick={() => {
+                                            setOffset((prev) => prev + limit);
+                                        }}
+                                        className="rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
+                                        disabled={limit + offset >= getCrosslinksResponse.metadata.total}
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                                <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                    Showing {offset + 1} - {upperPageBound} of {getCrosslinksResponse.metadata.total}
+                                </span>
+                            </div>
+                        )}
+                    </>
+                )}
+            </div>
         </Components.Modal>
     );
 };
