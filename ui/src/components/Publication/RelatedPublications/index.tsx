@@ -12,7 +12,15 @@ const RelatedPublications: React.FC<Props> = (props) => {
     const { recent, relevant } = props.crosslinks.data;
     const totalCrosslinks = props.crosslinks.metadata.total;
     const [modalVisibility, setModalVisibility] = useState(false);
+    const [modalKey, setModalKey] = useState(0);
     const showShowAllButton = totalCrosslinks > 5;
+
+    const openModal = () => {
+        setModalVisibility(true);
+        // Resets modal state
+        setModalKey(modalKey + 1);
+    };
+
     return totalCrosslinks ? (
         <Components.AccordionSection id={props.id} title={'Related Publications'}>
             <div className="space-y-4 px-6 py-4">
@@ -51,12 +59,13 @@ const RelatedPublications: React.FC<Props> = (props) => {
                         <Components.Button
                             title="Show All"
                             className="rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 children:border-0 children:text-white-50"
-                            onClick={() => setModalVisibility((prevState) => !prevState)}
+                            onClick={openModal}
                         />
                         <Components.RelatedPublicationsModal
                             publicationId={props.publicationId}
                             open={modalVisibility}
                             onClose={() => setModalVisibility(false)}
+                            key={modalKey}
                         />
                     </>
                 )}
