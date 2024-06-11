@@ -9,9 +9,10 @@ type Props = {
     positiveActionCallback?: () => void; // state setter
     positiveButtonText?: string;
     negativeActionCallback?: () => void;
-    cancelButtonText: string;
+    cancelButtonText?: string;
     title: string;
     titleClasses?: string;
+    subtitle?: string;
     icon?: React.ReactNode;
     children?: React.ReactNode;
     loading?: boolean;
@@ -19,16 +20,15 @@ type Props = {
 };
 
 const Modal: React.FC<Props> = (props) => {
-    const cancelButtonRef = React.useRef(null);
     const loading = !!props.loading;
     const showPositiveActionButton = props.positiveActionCallback && props.positiveButtonText;
+    const cancelButtonText = props.cancelButtonText ?? 'Close';
 
     return (
         <HeadlessUI.Transition.Root show={props.open} as={React.Fragment}>
             <HeadlessUI.Dialog
                 as="div"
                 className="fixed inset-0 z-50 overflow-y-auto"
-                initialFocus={cancelButtonRef}
                 onClose={loading ? () => {} : props.onClose}
             >
                 <div className="flex min-h-full items-center justify-center text-center">
@@ -74,6 +74,11 @@ const Modal: React.FC<Props> = (props) => {
                                         >
                                             {props.title}
                                         </HeadlessUI.Dialog.Title>
+                                        {props.subtitle && (
+                                            <h4 className="mt-6 font-montserrat text-base font-semibold leading-6 text-grey-900">
+                                                {props.subtitle}
+                                            </h4>
+                                        )}
                                         <div className="mt-2">{props.children}</div>
                                     </div>
                                 </div>
@@ -101,9 +106,8 @@ const Modal: React.FC<Props> = (props) => {
                                                 : props.onClose()
                                         }
                                         disabled={loading}
-                                        ref={cancelButtonRef}
-                                        text={props.cancelButtonText}
-                                        title={props.cancelButtonText}
+                                        text={cancelButtonText}
+                                        title={cancelButtonText}
                                         actionType="NEGATIVE"
                                         className={props.wide ? 'lg:w-1/3' : ''}
                                     />
