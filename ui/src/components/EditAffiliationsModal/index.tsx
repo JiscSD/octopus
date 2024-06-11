@@ -16,7 +16,6 @@ type Props = {
 };
 
 const EditAffiliationsModal: React.FC<Props> = (props) => {
-    const cancelButtonRef = React.useRef(null);
     const [confirmAffiliationsError, setConfirmAffiliationsError] = React.useState('');
     const [authorAffiliations, setAuthorAffiliations] = useState<Interfaces.MappedOrcidAffiliation[]>(
         props.author?.affiliations || []
@@ -113,12 +112,7 @@ const EditAffiliationsModal: React.FC<Props> = (props) => {
 
     return (
         <HeadlessUI.Transition.Root show={props.open} as={React.Fragment}>
-            <HeadlessUI.Dialog
-                as="div"
-                className="fixed inset-0 z-50 overflow-y-auto"
-                onClose={handleCancelChanges}
-                initialFocus={cancelButtonRef}
-            >
+            <HeadlessUI.Dialog as="div" className="fixed inset-0 z-50 overflow-y-auto" onClose={handleCancelChanges}>
                 <div className="flex min-h-full items-center justify-center text-center">
                     <HeadlessUI.Transition.Child
                         as={React.Fragment}
@@ -211,7 +205,6 @@ const EditAffiliationsModal: React.FC<Props> = (props) => {
                                         actionType="POSITIVE"
                                     />
                                     <Components.ModalButton
-                                        ref={cancelButtonRef}
                                         className="mt-0 lg:w-fit"
                                         onClick={handleCancelChanges}
                                         text={'Cancel Changes'}
