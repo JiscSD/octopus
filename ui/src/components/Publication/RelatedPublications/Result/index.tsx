@@ -42,7 +42,7 @@ const RelatedPublicationsResult: React.FC<Props> = (props): React.ReactElement =
     return (
         <div
             className={`
-                    min-h-[4rem]
+                    h-[6rem]
                     items-start
                     overflow-hidden
                     rounded-none
@@ -70,11 +70,9 @@ const RelatedPublicationsResult: React.FC<Props> = (props): React.ReactElement =
                     ${props.className ? props.className : ''}
                 `}
         >
-            <div>
-                <p className="text-left font-semibold mb-2 leading-6 text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    {publicationVersion.title}
-                </p>
-            </div>
+            <p className="text-left font-semibold mb-2 leading-6 text-grey-800 transition-colors duration-500 dark:text-white-50 truncate w-full">
+                {publicationVersion.title}
+            </p>
 
             <div className="flex justify-between w-full">
                 <span
