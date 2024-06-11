@@ -120,13 +120,13 @@ const GetInvolved: NextPage = (): React.ReactElement => (
 
                             <StandardText>
                                 <>
-                                    To get involved, you can{' '}
+                                    To get involved, get in touch with{' '}
                                     <Components.Link
-                                        href="https://forms.office.com/Pages/ResponsePage.aspx?id=TTn5SBSKJ02CpvNfEjYSBdQdk25FM49NmnYND3Z_nExUMFBIRU5LU0FZR1Y2RzVCUUIwQzhUVDc4Wi4u"
+                                        href="mailto:help@jisc.ac.uk"
                                         openNew={true}
                                         className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
                                     >
-                                        request to join our user community Teams site
+                                        help@jisc.ac.uk
                                     </Components.Link>
                                     .
                                 </>

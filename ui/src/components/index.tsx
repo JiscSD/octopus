@@ -91,7 +91,6 @@ export { default as Search } from './SearchToggle';
 export { default as SearchDesktop } from './SearchToggle/Desktop';
 export { default as SearchMobile } from './SearchToggle/Mobile';
 export { default as SectionBreak } from './SectionBreak';
-export { default as SurveyWidget } from './SurveyWidget';
 export { default as Tabs } from './Tabs';
 export { default as TextEditor } from './TextEditor';
 export { default as Toast } from './Toast';
