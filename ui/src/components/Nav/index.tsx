@@ -92,6 +92,10 @@ const Nav: React.FC = (): React.ReactElement => {
                     {
                         label: 'FAQ',
                         value: Config.urls.faq.path
+                    },
+                    {
+                        label: 'API Documentation',
+                        value: '/documentation/api'
                     }
                 ]
             },

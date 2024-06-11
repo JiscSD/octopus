@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import * as Framer from 'framer-motion';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 
 import * as api from '@/api';
@@ -23,9 +22,10 @@ const RelatedPublicationsResult: React.FC<Props> = (props): React.ReactElement =
     const publicationVersion = props.crosslink.linkedPublication.latestLiveVersion;
     const publicationId = props.crosslink.linkedPublication.id;
     const authorNames = React.useMemo(() => {
-        const authorNames = coAuthors.map((author) => Helpers.abbreviateUserName(author.user));
-        return authorNames.join(', ');
-    }, [coAuthors]);
+        return !coAuthors.length
+            ? Helpers.abbreviateUserName(publicationVersion.user)
+            : coAuthors.map((author) => Helpers.abbreviateUserName(author.user)).join(', ');
+    }, [coAuthors, publicationVersion.user]);
 
     const handleDeleteCrosslink = async () => {
         setDeleteLoading(true);
@@ -40,14 +40,8 @@ const RelatedPublicationsResult: React.FC<Props> = (props): React.ReactElement =
     };
 
     return (
-        <Framer.motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ type: 'tween', duration: 0.35 }}
-        >
-            <div
-                className={`
+        <div
+            className={`
                     min-h-[4rem]
                     items-start
                     overflow-hidden
@@ -75,42 +69,41 @@ const RelatedPublicationsResult: React.FC<Props> = (props): React.ReactElement =
                     justify-between
                     ${props.className ? props.className : ''}
                 `}
-            >
-                <div>
-                    <p className="text-left font-semibold mb-2 leading-6 text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        {publicationVersion.title}
-                    </p>
-                </div>
-
-                <div className="flex justify-between w-full">
-                    <span
-                        className="block overflow-hidden text-ellipsis whitespace-nowrap text-xs tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100"
-                        title={authorNames}
-                    >
-                        By {authorNames} | {Helpers.relativeDate(publicationVersion.publishedDate)}
-                    </span>
-                    <span className="flex">
-                        <Components.Link
-                            href={`${Config.urls.viewPublication.path}/${publicationId}`}
-                            openNew={true}
-                            ariaLabel={'Visit publication'}
-                            className="block p-1"
-                        >
-                            <OutlineIcons.ArrowTopRightOnSquareIcon className="h-4 w-4 text-teal-600" />
-                        </Components.Link>
-                        {props.crosslink.createdBy === user?.id && (
-                            <Components.IconButton
-                                icon={<OutlineIcons.TrashIcon className="h-4 w-4 text-teal-600" />}
-                                title="Delete suggestion"
-                                onClick={handleDeleteCrosslink}
-                                className="ml-2"
-                                disabled={deleteLoading}
-                            />
-                        )}
-                    </span>
-                </div>
+        >
+            <div>
+                <p className="text-left font-semibold mb-2 leading-6 text-grey-800 transition-colors duration-500 dark:text-white-50">
+                    {publicationVersion.title}
+                </p>
             </div>
-        </Framer.motion.div>
+
+            <div className="flex justify-between w-full">
+                <span
+                    className="block overflow-hidden text-ellipsis whitespace-nowrap text-xs tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100"
+                    title={authorNames}
+                >
+                    By {authorNames} | {Helpers.relativeDate(publicationVersion.publishedDate)}
+                </span>
+                <span className="flex">
+                    <Components.Link
+                        href={`${Config.urls.viewPublication.path}/${publicationId}`}
+                        openNew={true}
+                        ariaLabel={'Visit publication'}
+                        className="block p-1"
+                    >
+                        <OutlineIcons.ArrowTopRightOnSquareIcon className="h-4 w-4 text-teal-600" />
+                    </Components.Link>
+                    {props.crosslink.createdBy === user?.id && (
+                        <Components.IconButton
+                            icon={<OutlineIcons.TrashIcon className="h-4 w-4 text-teal-600" />}
+                            title="Delete suggestion"
+                            onClick={handleDeleteCrosslink}
+                            className="ml-2"
+                            disabled={deleteLoading}
+                        />
+                    )}
+                </span>
+            </div>
+        </div>
     );
 };
 

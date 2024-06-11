@@ -44,7 +44,7 @@
         "cheerio": "^1.0.0-rc.12",
         "copy-webpack-plugin": "^11.0.0",
         "html-to-text": "^9.0.5",
-        "isomorphic-dompurify": "^2.4.0",
+        "isomorphic-dompurify": "^2.11.0",
         "jsonwebtoken": "^9.0.2",
         "luxon": "^3.4.3",
         "nodemailer": "^6.9.9",
@@ -96,6 +96,6 @@
     "overrides": {
         "fast-xml-parser": "^4.2.5",
         "http-cache-semantics": "^4.1.1",
-        "node-fetch": "^2.6.12"
+        "micromatch": "^4.0.6"
     }
 }

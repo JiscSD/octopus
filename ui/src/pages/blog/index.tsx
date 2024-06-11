@@ -47,6 +47,8 @@ const Blog: NextPage = (): JSX.Element => {
         Helpers.scrollTopSmooth();
     };
 
+    const upperPageBound = data ? (data.limit + data.skip > data.total ? data.total : data.limit + data.skip) : null;
+
     return (
         <>
             <Head>
@@ -136,9 +138,7 @@ const Blog: NextPage = (): JSX.Element => {
                                 id="pagination-info"
                                 className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50"
                             >
-                                Showing {data.skip + 1} -{' '}
-                                {data.limit + data.skip > data.total ? data.total : data.limit + data.skip} of{' '}
-                                {data.total}
+                                Showing {data.skip + 1} - {upperPageBound} of {data.total}
                             </span>
                         </Framer.motion.div>
                     )}
