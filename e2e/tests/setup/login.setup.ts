@@ -10,8 +10,6 @@ setup('Log in users', async ({ browser }) => {
         Helpers.users.map(async (user, idx) => {
             const page = await browser.newPage();
             await Helpers.login(page, browser, user);
-            // Minimise feedback popup
-            await page.getByLabel('Open Close icon').click();
             await page.context().storageState({ path: `${Helpers.STORAGE_STATE_BASE}user${idx}.json` });
         })
     );
