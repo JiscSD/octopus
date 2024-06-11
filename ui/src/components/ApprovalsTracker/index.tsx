@@ -379,21 +379,25 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     {authorEmailError && <Components.Alert severity="ERROR" title={authorEmailError} />}
                 </Components.Modal>
             )}
-            <Components.SimpleModal
+            <Components.Modal
                 open={Boolean(selectedAuthorAffiliations)}
-                negativeActionCallback={() => setSelectedAuthorAffiliations(null)}
+                onClose={() => setSelectedAuthorAffiliations(null)}
                 cancelButtonText="Close"
                 title={`${selectedAuthorAffiliations?.user?.firstName} ${selectedAuthorAffiliations?.user?.lastName}'s affiliation(s) for this publication`}
-                subTitle="Selected Affiliations"
+                subtitle="Selected Affiliations"
             >
                 <ul>
                     {selectedAuthorAffiliations?.affiliations.map((affiliation) => (
                         <li className="my-6" key={affiliation.id}>
-                            <Components.AffiliationCard affiliation={affiliation} disableSelection={true} />
+                            <Components.AffiliationCard
+                                affiliation={affiliation}
+                                bordered={true}
+                                disableSelection={true}
+                            />
                         </li>
                     ))}
                 </ul>
-            </Components.SimpleModal>
+            </Components.Modal>
         </div>
     );
 };
