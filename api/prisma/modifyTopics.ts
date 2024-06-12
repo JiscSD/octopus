@@ -246,7 +246,7 @@ const changeTopicParent = async (
                 },
                 data: {
                     parents: {
-                        connect: {
+                        set: {
                             id: newParentId
                         }
                     }
