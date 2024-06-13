@@ -14,7 +14,7 @@ type Props = {
     onClose: () => void;
 };
 
-const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement => {
+const RelatedPublicationsViewAllModal: React.FC<Props> = (props): React.ReactElement => {
     const user = Stores.useAuthStore((state) => state.user);
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     const searchInputId = 'crosslink-search';
@@ -214,4 +214,4 @@ const RelatedPublicationsModal: React.FC<Props> = (props): React.ReactElement =>
     );
 };
 
-export default RelatedPublicationsModal;
+export default RelatedPublicationsViewAllModal;

@@ -12,7 +12,7 @@ describe("Get a given user's publications", () => {
             .query({ apiKey: 123456789, offset: 0, limit: 100 });
 
         expect(publications.status).toEqual(200);
-        expect(publications.body.results.length).toEqual(22);
+        expect(publications.body.results.length).toEqual(25);
         expect(
             publications.body.results.some(
                 (publication) => publication.versions.some((version) => version.currentStatus === 'DRAFT') as boolean
@@ -24,7 +24,7 @@ describe("Get a given user's publications", () => {
         const publications = await testUtils.agent.get('/users/test-user-1/publications');
 
         expect(publications.status).toEqual(200);
-        expect(publications.body.results.length).toEqual(9);
+        expect(publications.body.results.length).toEqual(10);
         expect(
             publications.body.results.some(
                 (publication) => publication.versions.some((version) => version.currentStatus === 'DRAFT') as boolean
@@ -36,7 +36,7 @@ describe("Get a given user's publications", () => {
         const publications = await testUtils.agent.get('/users/test-user-1/publications').query({ apiKey: 987654321 });
 
         expect(publications.status).toEqual(200);
-        expect(publications.body.results.length).toEqual(9);
+        expect(publications.body.results.length).toEqual(10);
         expect(
             publications.body.results.some(
                 (publication) => publication.versions.some((version) => version.currentStatus === 'DRAFT') as boolean

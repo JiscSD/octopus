@@ -5,8 +5,8 @@ import * as Components from '@/components';
 import * as TestUtils from '@/testUtils';
 
 describe('No crosslinks', () => {
-    it('Nothing is rendered', () => {
-        const { container } = render(
+    beforeEach(() => {
+        render(
             <Components.RelatedPublications
                 id="related-publications"
                 crosslinks={{
@@ -18,9 +18,13 @@ describe('No crosslinks', () => {
                     }
                 }}
                 publicationId="test"
+                type="PROBLEM"
             />
         );
-        expect(container).toBeEmptyDOMElement();
+    });
+    it('Neither category label is shown', () => {
+        expect(screen.queryByText('Most relevant')).not.toBeInTheDocument();
+        expect(screen.queryByText('Most recent')).not.toBeInTheDocument();
     });
 });
 
@@ -63,6 +67,7 @@ describe('Recent and relevant crosslinks', () => {
                     }
                 }}
                 publicationId="test"
+                type="PROBLEM"
             />
         );
     });
@@ -110,6 +115,7 @@ describe('Only recent crosslinks', () => {
                     }
                 }}
                 publicationId="test"
+                type="PROBLEM"
             />
         );
     });
@@ -151,6 +157,7 @@ describe('Only relevant crosslinks', () => {
                     }
                 }}
                 publicationId="test"
+                type="PROBLEM"
             />
         );
     });

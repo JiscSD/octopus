@@ -895,8 +895,8 @@ const checkPublicationOnAccountPage = async (
     }
 };
 
-const createPublishReadyPublication = async (page: Page) => {
-    await createPublication(page, publicationWithCoAuthors.title, publicationWithCoAuthors.type);
+const createPublishReadyPublication = async (page: Page, title?: string) => {
+    await createPublication(page, title ?? publicationWithCoAuthors.title, publicationWithCoAuthors.type);
     await completeKeyInformationTab(page);
     await completeAffiliationsTab(page, true);
     await completeLinkedItemsTab(
@@ -906,6 +906,15 @@ const createPublishReadyPublication = async (page: Page) => {
     );
     await completeMainTextTabMinimally(page, publicationWithCoAuthors.content);
     await completeConflictOfInterestTab(page, false);
+};
+
+const createLivePublication = async (page: Page, title?: string) => {
+    await createPublishReadyPublication(page, title);
+    await page.locator(PageModel.publish.publishButton).click();
+    await Promise.all([
+        page.waitForURL('**/versions/latest'),
+        page.locator(PageModel.publish.confirmPublishButton).click()
+    ]);
 };
 
 const addCoAuthorsAndRequestApproval = async (page: Page, coAuthors: Helpers.TestUser[]) => {
@@ -1991,5 +2000,44 @@ test.describe('Publication Flow + File import', () => {
         await fileChooser2.setFiles(['assets/Playwright.docx']);
         await page.click('button[title="Upload image"]');
         await expect(page.getByText('Failed to upload "Playwright.docx". The format is not supported.')).toBeVisible();
+    });
+});
+
+test.describe('Crosslinking', () => {
+    test('Create a crosslink', async ({ browser }) => {
+        const targetPublicationTitle = 'Organisational account publication 1';
+        const page = await Helpers.getPageAsUser(browser);
+        // Create new publication
+        await createLivePublication(page, 'Creating a crosslink');
+        // Open suggest crosslink modal
+        await page.locator(PageModel.crosslinks.suggestModal.openButton).click();
+        await page.waitForSelector(PageModel.crosslinks.suggestModal.searchInput);
+        // Search for existing publication and select it
+        await page.locator(PageModel.crosslinks.suggestModal.searchInput).click();
+        await page.keyboard.type(targetPublicationTitle);
+        await page.locator(`[role="option"]:has-text("${targetPublicationTitle}")`).click();
+        await expect(page.locator(PageModel.crosslinks.suggestModal.clearSelectionButton)).toBeVisible();
+        await expect(page.locator(PageModel.crosslinks.suggestModal.searchInput)).toHaveValue(targetPublicationTitle);
+        // Clear selection
+        await page.locator(PageModel.crosslinks.suggestModal.clearSelectionButton).click();
+        await page.waitForSelector(PageModel.crosslinks.suggestModal.clearSelectionButton, {
+            state: 'hidden'
+        });
+        await expect(page.getByText(targetPublicationTitle)).toHaveCount(0);
+        // Re-select target publication
+        await page.locator(PageModel.crosslinks.suggestModal.searchInput).click();
+        await page.keyboard.type(targetPublicationTitle);
+        await page.locator(`[role="option"]:has-text("${targetPublicationTitle}")`).click();
+        // Save suggestion
+        await Promise.all([
+            page.waitForResponse((response) => response.url().includes('/crosslinks') && response.ok()),
+            page.locator(PageModel.crosslinks.suggestModal.suggestButton).click()
+        ]);
+        await expect(page.getByText('Suggestion created')).toBeVisible();
+        // Check that crosslink is present on new publication's page
+        await page.reload();
+        await expect(
+            page.locator('#desktop-related-publications-items').getByText(targetPublicationTitle)
+        ).toBeVisible();
     });
 });

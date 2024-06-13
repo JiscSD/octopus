@@ -8,7 +8,7 @@ describe('Vote on a crosslink', () => {
 
     test('User can vote on a crosslink', async () => {
         const setVote = await testUtils.agent
-            .put('/crosslinks/hypothesis-problem-crosslink/vote')
+            .put('/crosslinks/problem-live-crosslink-1/vote')
             .query({ apiKey: '987654321' })
             .send({
                 vote: true
@@ -18,7 +18,7 @@ describe('Vote on a crosslink', () => {
     });
 
     test('Anonymous user cannot vote on a crosslink', async () => {
-        const setVote = await testUtils.agent.put('/crosslinks/hypothesis-problem-crosslink/vote').send({
+        const setVote = await testUtils.agent.put('/crosslinks/problem-live-crosslink-1/vote').send({
             vote: true
         });
 
@@ -38,7 +38,9 @@ describe('Vote on a crosslink', () => {
     });
 
     test('User must supply a vote value', async () => {
-        const setVote = await testUtils.agent.put('/crosslinks/made-up-crosslink/vote').query({ apiKey: '987654321' });
+        const setVote = await testUtils.agent
+            .put('/crosslinks/problem-live-crosslink-1/vote')
+            .query({ apiKey: '987654321' });
 
         expect(setVote.status).toEqual(400);
         expect(setVote.body.message[0].params).toEqual({ missingProperty: 'vote' });
@@ -46,7 +48,7 @@ describe('Vote on a crosslink', () => {
 
     test('User must supply a boolean vote value', async () => {
         const setVote = await testUtils.agent
-            .put('/crosslinks/made-up-crosslink/vote')
+            .put('/crosslinks/problem-live-crosslink-1/vote')
             .query({ apiKey: '987654321' })
             .send({
                 vote: 'up'
