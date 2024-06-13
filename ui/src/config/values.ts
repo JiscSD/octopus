@@ -889,7 +889,7 @@ export const HTMLStyles = `
     dark:prose-a:text-white-50
     dark:focus:prose-a:text-grey-800
     dark:prose-blockquote:text-grey-300
-    dark:prose-strong:text-teal-300
+    dark:prose-strong:text-grey-100
 `
     .split('\n')
     .join(' ');
