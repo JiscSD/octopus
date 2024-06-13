@@ -1,3 +1,4 @@
+import * as cheerio from 'cheerio';
 import nodemailer from 'nodemailer';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
@@ -144,17 +145,34 @@ export const createFlag = async (
     }
 };
 
+const isHTMLSafe = (content: string): boolean => {
+    const $ = cheerio.load(content);
+    let error = false;
+
+    $('*').map((_, element) => {
+        const classes = $(element).attr('class');
+        const style = $(element).attr('style');
+
+        if (classes || style) {
+            error = true;
+
+            return false;
+        }
+    });
+
+    return !error;
+};
+
 export const createFlagComment = async (
     event: I.AuthenticatedAPIRequest<I.CreateFlagCommentBody, undefined, I.CreateFlagCommentPathParams>
 ): Promise<I.JSONResponse> => {
     try {
         if (event.body.comment) {
-            const isHTMLSafe = helpers.isHTMLSafe(event.body.comment);
+            const safeHTML = isHTMLSafe(event.body.comment);
 
-            if (!isHTMLSafe) {
+            if (!safeHTML) {
                 return response.json(404, {
-                    message:
-                        'HTML is not safe, please check out the <a href="https://octopus.ac/api-documentation#content">API documentation.</a>'
+                    message: 'HTML must not contain classes or inline styles.'
                 });
             }
         }

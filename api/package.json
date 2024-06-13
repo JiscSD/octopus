@@ -24,6 +24,7 @@
         "reindex": "ts-node prisma/reindex.ts",
         "createOrganisationalAccounts": "ts-node -r tsconfig-paths/register prisma/createOrganisationalAccounts.ts",
         "insertDummyEvent": "ts-node -r tsconfig-paths/register prisma/insertDummyEvent.ts",
+        "modifyTopics": "ts-node -r tsconfig-paths/register prisma/modifyTopics.ts",
         "updateOrganisationalAccount": "ts-node -r tsconfig-paths/register prisma/updateOrganisationalAccount.ts",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",

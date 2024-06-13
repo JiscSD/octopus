@@ -9,36 +9,9 @@ import * as publicationVersionService from 'publicationVersion/service';
 import { licences } from './enum';
 import { webcrypto } from 'crypto';
 
-export const isHTMLSafe = (content: string): boolean => {
-    const $ = cheerio.load(content);
-    let error = false;
-
-    $('*').map((_, element) => {
-        const classes = $(element).attr('class');
-        const style = $(element).attr('style');
-
-        if (classes || style) {
-            error = true;
-
-            return false;
-        }
-    });
-
-    return !error;
-};
-
 export const getSafeHTML = (content: string): string => {
-    // Remove all classes and styles
-    const $ = cheerio.load(content, null, false);
-
-    $('*').map((_, element) => {
-        return $(element).removeAttr('class').removeAttr('style');
-    });
-
-    const htmlToBeSanitized = $.html();
-
     // Sanitize against XSS
-    return DOMPurify.sanitize(htmlToBeSanitized);
+    return DOMPurify.sanitize(content);
 };
 
 export const createEmptyDOI = async (): Promise<I.DOIResponse> => {
