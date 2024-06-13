@@ -129,7 +129,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
                                     className={({ active }) =>
                                         `relative cursor-default select-none p-2 text-teal-900 ${
                                             active && 'ring-2 ring-inset ring-yellow-400'
-                                        } ${index === 0 && 'rounded-t'} ${index === results.length - 1 && 'rounded-b'}`
+                                        } ${index === 0 && 'rounded-t'} ${index === results.data.length - 1 && 'rounded-b'}`
                                     }
                                     value={publicationVersion}
                                     title={

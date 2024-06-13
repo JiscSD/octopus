@@ -11,6 +11,7 @@ setup('Log in users', async ({ browser }) => {
             const page = await browser.newPage();
             await Helpers.login(page, browser, user);
             await page.context().storageState({ path: `${Helpers.STORAGE_STATE_BASE}user${idx}.json` });
+            await page.close();
         })
     );
 });

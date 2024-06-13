@@ -12,7 +12,7 @@ describe('Create a crosslink', () => {
             .post('/crosslinks')
             .query({ apiKey: '123456789' })
             .send({
-                publications: ['publication-problem-live', 'publication-data-live']
+                publications: ['publication-problem-live', 'organisational-account-publication-1']
             });
 
         expect(addCrosslink.status).toEqual(200);
@@ -34,11 +34,11 @@ describe('Create a crosslink', () => {
             .post('/crosslinks')
             .query({ apiKey: '123456789' })
             .send({
-                publications: ['publication-problem-live', 'publication-hypothesis-live']
+                publications: ['publication-problem-live', 'publication-problem-live-2']
             });
 
         expect(addCrosslink.status).toEqual(400);
-        expect(addCrosslink.body.message).toEqual('A crosslink already exists between these publications.');
+        expect(addCrosslink.body.message).toEqual('This link cannot be added as it has already been suggested.');
     });
 
     test('User cannot create a crosslink involving an invalid publication ID', async () => {
@@ -58,7 +58,7 @@ describe('Create a crosslink', () => {
             .post('/crosslinks')
             .query({ apiKey: '123456789' })
             .send({
-                publications: ['publication-problem-live', 'publication-hypothesis-draft']
+                publications: ['publication-problem-live', 'publication-problem-draft']
             });
 
         expect(addCrosslink.status).toEqual(400);
@@ -80,7 +80,11 @@ describe('Create a crosslink', () => {
             .post('/crosslinks')
             .query({ apiKey: '123456789' })
             .send({
-                publications: ['publication-problem-live', 'publication-hypothesis-live', 'publication-data-live']
+                publications: [
+                    'publication-problem-live',
+                    'organisational-account-publication-1',
+                    'publication-problem-draft'
+                ]
             });
 
         expect(addCrosslinkB.status).toEqual(400);
@@ -101,9 +105,21 @@ describe('Create a crosslink', () => {
 
     test('Anonymous user cannot create a crosslink', async () => {
         const addCrosslink = await testUtils.agent.post('/crosslinks').send({
-            publications: ['publication-problem-live', 'publication-data-live']
+            publications: ['publication-problem-live', 'organisational-account-publication-1']
         });
 
         expect(addCrosslink.status).toEqual(401);
+    });
+
+    test('Crosslinks cannot be created between publications of a different type', async () => {
+        const addCrosslink = await testUtils.agent
+            .post('/crosslinks')
+            .send({
+                publications: ['publication-problem-live', 'publication-hypothesis-live']
+            })
+            .query({ apiKey: '123456789' });
+
+        expect(addCrosslink.status).toEqual(400);
+        expect(addCrosslink.body.message).toEqual('Crosslinks must be between publications of the same type.');
     });
 });

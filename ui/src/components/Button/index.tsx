@@ -10,6 +10,7 @@ type CommonProps = {
     onClick?: (e: React.MouseEvent) => void;
     disabled?: boolean;
     className?: string;
+    childClassName?: string;
     textSize?: string;
     padding?: string;
     children?: React.ReactNode;
@@ -54,6 +55,7 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             border-b-2
             border-b-teal-400
             dark:border-b-teal-500
+            ${props.childClassName ?? ''}
             `;
     }, [props.endIcon, props.padding, props.startIcon, props.textSize]);
 
@@ -82,7 +84,7 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             aria-label={props.title}
             onClick={props.onClick}
             disabled={props.disabled}
-            className={`rounded border-transparent capitalize outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${parentStyles}`}
+            className={`rounded border-transparent outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${parentStyles}`}
             {...(props.accordionConfig
                 ? {
                       'aria-expanded': !!props.accordionConfig.expanded,

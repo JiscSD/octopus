@@ -262,5 +262,13 @@ export const PageModel = {
         blogCardTitle: '.blog-card-title',
         blogCardText: '.blog-card-text',
         blogCardFooter: '.blog-card-footer'
+    },
+    crosslinks: {
+        suggestModal: {
+            clearSelectionButton: 'button[title="Clear selection"]',
+            openButton: '#desktop-related-publications >> button[title="Suggest a link"]',
+            searchInput: 'input[placeholder="Search for publications"]',
+            suggestButton: 'button[title="Suggest Link"]'
+        }
     }
 };

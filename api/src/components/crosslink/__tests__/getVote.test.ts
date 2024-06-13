@@ -8,12 +8,12 @@ describe('Get own crosslink vote', () => {
 
     test('User can get their own crosslink vote', async () => {
         const getVote = await testUtils.agent
-            .get('/crosslinks/hypothesis-problem-crosslink/vote')
+            .get('/crosslinks/problem-live-crosslink-1/vote')
             .query({ apiKey: '000000007' });
 
         expect(getVote.status).toEqual(200);
         expect(getVote.body).toEqual({
-            crosslinkId: 'hypothesis-problem-crosslink',
+            crosslinkId: 'problem-live-crosslink-1',
             createdBy: 'test-user-7',
             vote: true
         });
@@ -21,7 +21,7 @@ describe('Get own crosslink vote', () => {
 
     test('User who has not voted is notified as such', async () => {
         const getVote = await testUtils.agent
-            .get('/crosslinks/hypothesis-problem-crosslink/vote')
+            .get('/crosslinks/problem-live-crosslink-1/vote')
             .query({ apiKey: '000000003' });
 
         expect(getVote.status).toEqual(404);

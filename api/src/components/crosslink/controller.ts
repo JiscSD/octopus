@@ -15,6 +15,10 @@ export const create = async (
             return response.json(404, { message: 'One or both of the publications was not found.' });
         }
 
+        if (publicationA.type !== publicationB.type) {
+            return response.json(400, { message: 'Crosslinks must be between publications of the same type.' });
+        }
+
         if (
             !(
                 publicationA.versions.some((version) => version.currentStatus === 'LIVE') &&
@@ -27,7 +31,7 @@ export const create = async (
         const existingCrosslink = await crosslinkService.getByPublicationPair(event.body.publications);
 
         if (existingCrosslink) {
-            return response.json(400, { message: 'A crosslink already exists between these publications.' });
+            return response.json(400, { message: 'This link cannot be added as it has already been suggested.' });
         }
 
         const crosslink = await crosslinkService.create(event.body.publications, event.user.id);
@@ -45,7 +49,7 @@ export const deleteCrosslink = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteCrosslinkPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const crosslink = await crosslinkService.get(event.pathParameters.id);
+        const crosslink = await crosslinkService.getById(event.pathParameters.id);
 
         if (!crosslink) {
             return response.json(404, { message: 'Crosslink not found.' });
@@ -130,8 +134,14 @@ export const getVote = async (
 export const get = async (
     event: I.APIRequest<undefined, undefined, I.GetCrosslinkPathParams>
 ): Promise<I.JSONResponse> => {
+    // Check if we are getting crosslink by its own ID or a pair of publication IDs
+    const idSplit = event.pathParameters.id.split(',');
+    const getByPublicationPair = idSplit.length === 2;
+
     try {
-        const crosslink = await crosslinkService.get(event.pathParameters.id);
+        const crosslink = getByPublicationPair
+            ? await crosslinkService.getByPublicationPair([idSplit[0], idSplit[1]])
+            : await crosslinkService.getById(event.pathParameters.id);
 
         if (!crosslink) {
             return response.json(404, { message: 'Crosslink not found.' });

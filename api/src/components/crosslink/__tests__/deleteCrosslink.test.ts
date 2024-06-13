@@ -8,7 +8,7 @@ describe('Delete a crosslink', () => {
 
     test('Crosslink owner can delete a crosslink', async () => {
         const deleteCrosslink = await testUtils.agent
-            .delete('/crosslinks/hypothesis-problem-crosslink')
+            .delete('/crosslinks/problem-live-crosslink-1')
             .query({ apiKey: '123456789' });
 
         expect(deleteCrosslink.status).toEqual(200);
@@ -22,7 +22,7 @@ describe('Delete a crosslink', () => {
 
     test('Authenticated user other than owner cannot delete a crosslink', async () => {
         const deleteCrosslink = await testUtils.agent
-            .delete('/crosslinks/hypothesis-problem-crosslink')
+            .delete('/crosslinks/problem-live-crosslink-1')
             .query({ apiKey: '987654321' });
 
         expect(deleteCrosslink.status).toEqual(403);
