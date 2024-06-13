@@ -28,7 +28,7 @@ const RelatedPublications: React.FC<Props> = (props) => {
 
     return (
         // TODO: Remove this condition when crosslinking is fully released.
-        process.env.NEXT_PUBLIC_STAGE === 'local' && (
+        (process.env.NEXT_PUBLIC_STAGE === 'local' || !!totalCrosslinks) && (
             <Components.AccordionSection id={props.id} title={'Related Publications'}>
                 <div className="space-y-4 px-6 py-4">
                     {!!recent.length && (
