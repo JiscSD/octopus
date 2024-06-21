@@ -482,7 +482,7 @@ functions:
         handler: src/components/crosslink/routes.get
         events:
             - http:
-                path: ${self:custom.versions.v1}/crosslinks/{id}
+                path: ${self:custom.versions.v1}/crosslinks/{id} # "id" can be the crosslink ID or a pair of publication IDs for this endpoint
                 method: GET
                 cors: true
     getPublicationCrosslinks:

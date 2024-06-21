@@ -167,7 +167,7 @@ const ActionBar: React.FC<Props> = (props) => {
 
                 {props.isCorrespondingAuthor ? (
                     <Components.Button
-                        className="inline-flex max-w-fit items-center rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed children:border-0 children:text-white-50"
+                        className="inline-flex max-w-fit items-center border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm outline-0 focus:overflow-hidden focus:ring-offset-2 disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed children:border-0 children:text-white-50"
                         disabled={!props.isReadyForPublish || props.isPublishing}
                         endIcon={<OutlineIcons.CloudArrowUpIcon className="w-5 shrink-0 text-white-50" />}
                         title="Publish"
@@ -177,7 +177,7 @@ const ActionBar: React.FC<Props> = (props) => {
                     </Components.Button>
                 ) : isApproved ? (
                     <Components.Button
-                        className="inline-flex max-w-fit items-center rounded border-2 border-transparent bg-red-600 px-2.5 text-white-50 shadow-sm outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed children:border-0 children:text-white-50"
+                        className="inline-flex max-w-fit items-center border-2 bg-red-600 px-2.5 text-white-50 shadow-sm outline-0 focus:overflow-hidden focus:ring-offset-2 disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed children:border-0 children:text-white-50"
                         endIcon={<OutlineIcons.XMarkIcon className="w-5 shrink-0 text-white-50" />}
                         title="Cancel your approval"
                         onClick={props.onCancelApproval}
@@ -186,7 +186,7 @@ const ActionBar: React.FC<Props> = (props) => {
                     </Components.Button>
                 ) : (
                     <Components.Button
-                        className="inline-flex max-w-fit items-center rounded border-2 border-transparent bg-teal-600 px-2.5 text-white-50 shadow-sm outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed children:border-0 children:text-white-50"
+                        className="inline-flex max-w-fit items-center border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm outline-0 focus:overflow-hidden focus:ring-offset-2 disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed children:border-0 children:text-white-50"
                         disabled={!(author?.isIndependent || author?.affiliations.length)}
                         endIcon={<OutlineIcons.CheckIcon className="w-5 shrink-0 text-white-50" />}
                         title="Approve this publication"

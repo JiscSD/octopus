@@ -9,7 +9,7 @@ describe('Reset a crosslink vote', () => {
 
     test('User can reset their vote on a crosslink', async () => {
         const resetVote = await testUtils.agent
-            .delete('/crosslinks/hypothesis-problem-crosslink/vote')
+            .delete('/crosslinks/problem-live-crosslink-1/vote')
             .query({ apiKey: '000000005' });
 
         expect(resetVote.status).toEqual(200);
@@ -17,7 +17,7 @@ describe('Reset a crosslink vote', () => {
         const dbCheck = await client.prisma.crosslinkVote.findUnique({
             where: {
                 crosslinkId_createdBy: {
-                    crosslinkId: 'hypothesis-problem-crosslink',
+                    crosslinkId: 'problem-live-crosslink-1',
                     createdBy: 'test-user-5'
                 }
             }
@@ -27,7 +27,7 @@ describe('Reset a crosslink vote', () => {
 
     test('User cannot reset their vote when they have not voted on the crosslink', async () => {
         const resetVote = await testUtils.agent
-            .delete('/crosslinks/hypothesis-problem-crosslink/vote')
+            .delete('/crosslinks/problem-live-crosslink-1/vote')
             .query({ apiKey: '000000004' });
 
         expect(resetVote.status).toEqual(404);
@@ -35,7 +35,7 @@ describe('Reset a crosslink vote', () => {
     });
 
     test('Anonymous user cannot reset a vote', async () => {
-        const resetVote = await testUtils.agent.delete('/crosslinks/hypothesis-problem-crosslink/vote');
+        const resetVote = await testUtils.agent.delete('/crosslinks/problem-live-crosslink-1/vote');
 
         expect(resetVote.status).toEqual(401);
     });

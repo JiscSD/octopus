@@ -8,6 +8,7 @@ type Props = {
     onClose: () => void; // state setter
     positiveActionCallback?: () => void; // state setter
     positiveButtonText?: string;
+    positiveButtonDisabled?: boolean;
     negativeActionCallback?: () => void;
     cancelButtonText?: string;
     title: string;
@@ -82,9 +83,7 @@ const Modal: React.FC<Props> = (props) => {
                                         <div className="mt-2">{props.children}</div>
                                     </div>
                                 </div>
-                                <div
-                                    className={`mt-5 flex ${showPositiveActionButton ? 'justify-between' : 'justify-end'} space-x-4 sm:mt-6`}
-                                >
+                                <div className={'mt-5 flex justify-end space-x-4 sm:mt-6'}>
                                     {showPositiveActionButton && (
                                         <Components.ModalButton
                                             onClick={() => {
@@ -92,11 +91,11 @@ const Modal: React.FC<Props> = (props) => {
                                                 if (props.positiveActionCallback !== undefined)
                                                     props.positiveActionCallback();
                                             }}
-                                            disabled={loading}
+                                            disabled={loading || props.positiveButtonDisabled}
                                             text={props.positiveButtonText || ''}
                                             title={props.positiveButtonText || ''}
                                             actionType="POSITIVE"
-                                            className={props.wide ? 'lg:w-1/3' : ''}
+                                            className={props.wide ? 'lg:w-1/6' : ''}
                                         />
                                     )}
                                     <Components.ModalButton
@@ -109,7 +108,7 @@ const Modal: React.FC<Props> = (props) => {
                                         text={cancelButtonText}
                                         title={cancelButtonText}
                                         actionType="NEGATIVE"
-                                        className={props.wide ? 'lg:w-1/3' : ''}
+                                        className={props.wide ? 'lg:w-1/6' : ''}
                                     />
                                 </div>
                             </div>

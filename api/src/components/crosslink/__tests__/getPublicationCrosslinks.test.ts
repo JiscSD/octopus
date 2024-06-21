@@ -7,7 +7,7 @@ describe('Get crosslinks of a publication', () => {
     });
 
     test('Anonymous user can get crosslinks for a publication', async () => {
-        const getCrosslinks = await testUtils.agent.get('/publications/publication-hypothesis-live/crosslinks');
+        const getCrosslinks = await testUtils.agent.get('/publications/publication-problem-live/crosslinks');
 
         expect(getCrosslinks.status).toEqual(200);
         expect(getCrosslinks.body.data).toHaveLength(4);
@@ -20,7 +20,7 @@ describe('Get crosslinks of a publication', () => {
 
     test('User can sort publication crosslinks by score', async () => {
         const getCrosslinks = await testUtils.agent
-            .get('/publications/publication-hypothesis-live/crosslinks')
+            .get('/publications/publication-problem-live/crosslinks')
             .query({ order: 'relevant' });
 
         expect(getCrosslinks.status).toEqual(200);
@@ -32,7 +32,7 @@ describe('Get crosslinks of a publication', () => {
 
     test('User can get a mixed order of crosslinks', async () => {
         const getCrosslinks = await testUtils.agent
-            .get('/publications/publication-hypothesis-live/crosslinks')
+            .get('/publications/publication-problem-live/crosslinks')
             .query({ order: 'mix' });
 
         expect(getCrosslinks.status).toEqual(200);
@@ -45,7 +45,7 @@ describe('Get crosslinks of a publication', () => {
 
     test('User must supply a recognised sort order', async () => {
         const getCrosslinks = await testUtils.agent
-            .get('/publications/publication-hypothesis-live/crosslinks')
+            .get('/publications/publication-problem-live/crosslinks')
             .query({ order: 'nonsense' });
 
         expect(getCrosslinks.status).toEqual(400);
@@ -62,7 +62,7 @@ describe('Get crosslinks of a publication', () => {
 
     test('User can filter crosslinks to ones they created', async () => {
         const getCrosslinks = await testUtils.agent
-            .get('/publications/publication-hypothesis-live/crosslinks')
+            .get('/publications/publication-problem-live/crosslinks')
             .query({ own: true, apiKey: '123456789' });
 
         expect(getCrosslinks.status).toEqual(200);
@@ -72,7 +72,7 @@ describe('Get crosslinks of a publication', () => {
 
     test('Anonymous user cannot filter to their own crosslinks', async () => {
         const getCrosslinks = await testUtils.agent
-            .get('/publications/publication-hypothesis-live/crosslinks')
+            .get('/publications/publication-problem-live/crosslinks')
             .query({ own: true });
 
         expect(getCrosslinks.status).toEqual(400);
@@ -83,17 +83,17 @@ describe('Get crosslinks of a publication', () => {
 
     test('User can filter crosslinks by publication title', async () => {
         const getCrosslinks = await testUtils.agent
-            .get('/publications/publication-hypothesis-live/crosslinks')
-            .query({ search: 'protocol' });
+            .get('/publications/publication-problem-live/crosslinks')
+            .query({ search: '3' });
 
         expect(getCrosslinks.status).toEqual(200);
         expect(getCrosslinks.body.data.length).toEqual(1);
-        expect(getCrosslinks.body.data[0].linkedPublication.id).toEqual('publication-protocol-live');
+        expect(getCrosslinks.body.data[0].linkedPublication.id).toEqual('publication-problem-live-3');
     });
 
     test('Number of crosslinks returned can be limited', async () => {
         const getCrosslinks = await testUtils.agent
-            .get('/publications/publication-hypothesis-live/crosslinks')
+            .get('/publications/publication-problem-live/crosslinks')
             .query({ limit: 2 });
 
         expect(getCrosslinks.status).toEqual(200);
@@ -103,7 +103,7 @@ describe('Get crosslinks of a publication', () => {
 
     test('Results can be offset', async () => {
         const getCrosslinks = await testUtils.agent
-            .get('/publications/publication-hypothesis-live/crosslinks')
+            .get('/publications/publication-problem-live/crosslinks')
             .query({ offset: 2 });
 
         expect(getCrosslinks.status).toEqual(200);
@@ -115,7 +115,7 @@ describe('Get crosslinks of a publication', () => {
 
     test('Mixed sort order cannot be used with pagination', async () => {
         const getCrosslinks = await testUtils.agent
-            .get('/publications/publication-hypothesis-live/crosslinks')
+            .get('/publications/publication-problem-live/crosslinks')
             .query({ offset: 2, order: 'mix' });
 
         expect(getCrosslinks.status).toEqual(400);
