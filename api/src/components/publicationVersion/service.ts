@@ -617,7 +617,7 @@ export const generatePDF = async (publicationVersion: I.PublicationVersion): Pro
         browser = await launch({
             args: [...chromium.args, '--font-render-hinting=none'],
             executablePath: isLocal ? (await import('puppeteer')).executablePath() : await chromium.executablePath(),
-            headless: chromium.headless
+            headless: !!chromium.headless
         });
 
         console.log('Browser opened!');
