@@ -88,7 +88,7 @@ test.describe('Live Publication', () => {
 
         // Check and click author link
         await page.locator(PageModel.livePublication.authorLink).click();
-        await page.waitForResponse((response) => response.url().includes('/authors/') && response.ok());
+        await page.waitForURL(`/authors/octopus`);
 
         // Check name
         await expect(page.locator(PageModel.authorInfo.name)).toBeVisible();
