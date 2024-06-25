@@ -202,8 +202,9 @@ export const testDateInput = async (page: Page, dateFromInput: Locator, dateToIn
     await expect(dateFromInput).toHaveAttribute('value', PageModel.search.dateFrom);
     await expect(dateToInput).toHaveAttribute('value', PageModel.search.dateTo);
 
-    await expect(page).toHaveURL(new RegExp(`dateFrom=${PageModel.search.dateFrom}`));
-    await expect(page).toHaveURL(new RegExp(`dateTo=${PageModel.search.dateTo}`));
+    await page.waitForURL(
+        `**/search/publications?dateTo=${PageModel.search.dateTo}&dateFrom=${PageModel.search.dateFrom}`
+    );
 };
 
 export const openFileImportModal = async (page: Page, filePath: string) => {

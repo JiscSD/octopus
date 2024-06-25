@@ -45,11 +45,11 @@
         "cheerio": "^1.0.0-rc.12",
         "copy-webpack-plugin": "^11.0.0",
         "html-to-text": "^9.0.5",
-        "isomorphic-dompurify": "^2.11.0",
+        "isomorphic-dompurify": "^2.12.0",
         "jsonwebtoken": "^9.0.2",
         "luxon": "^3.4.3",
         "nodemailer": "^6.9.9",
-        "puppeteer-core": "^21.5.0",
+        "puppeteer-core": "^22.12.0",
         "supertest": "^6.3.3"
     },
     "devDependencies": {
@@ -79,7 +79,7 @@
         "nodemon": "^2.0.22",
         "prettier": "^2.8.8",
         "prisma": "^5.11.0",
-        "puppeteer": "^21.5.0",
+        "puppeteer": "^22.12.0",
         "serverless-domain-manager": "^7.1.2",
         "serverless-offline": "^12.0.4",
         "serverless-offline-ssm": "^6.2.0",
