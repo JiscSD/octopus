@@ -97,6 +97,8 @@ type CreatedTopics = {
     [creationId: number]: {
         dbId: string;
         parentDbIds: string[];
+        title: string;
+        url: string;
     };
 };
 
@@ -157,6 +159,7 @@ const createOrDeferTopics = async (
             }
 
             let createdTopic;
+            const urlBase = `https://${environment === 'int' ? 'int.' : ''}octopus.ac/topics/`;
 
             if (!dryRun) {
                 try {
@@ -181,13 +184,18 @@ const createOrDeferTopics = async (
                 } finally {
                     created[topic.creationId] = {
                         dbId: createdTopic.id,
-                        parentDbIds: parentIds
+                        parentDbIds: parentIds,
+                        title: topic.title,
+                        url: urlBase + String(createdTopic.id)
                     };
                 }
             } else {
+                const placeholderDbId = 'localtopic' + topic.creationId;
                 created[topic.creationId] = {
-                    dbId: 'localtopic' + topic.creationId,
-                    parentDbIds: parentIds
+                    dbId: placeholderDbId,
+                    parentDbIds: parentIds,
+                    title: topic.title,
+                    url: urlBase + placeholderDbId
                 };
             }
         }
@@ -231,8 +239,9 @@ const validate = validateData(readFile.data);
 
 if (validate.valid) {
     createTopics(readFile.data, 'int', true)
-        .then((result) =>
-            console.log(`Finished. Created ${Object.keys(result).length} topics out of ${readFile.data.length}.`)
-        )
+        .then((result) => {
+            console.log(`Finished. Created ${Object.keys(result).length} topics out of ${readFile.data.length}.`);
+            console.log(result);
+        })
         .catch((err) => console.log(err));
 }
