@@ -1749,8 +1749,9 @@ test.describe('Publication flow + co-authors', () => {
         // publish v1
         await page.reload();
         await page.locator(PageModel.publish.publishButtonTracker).click();
-        await page.locator(PageModel.publish.confirmPublishButtonTracker).click();
-        await page.waitForURL('**/versions/latest');
+        await Promise.all([
+            (page.waitForURL('**/versions/latest'), page.locator(PageModel.publish.confirmPublishButton).click())
+        ]);
 
         // get publication id from url and deduct canonical DOI
         const publicationId = page.url().split('/').slice(-3)[0];
@@ -1940,7 +1941,9 @@ test.describe('Publication Flow + File import', () => {
         await completeConflictOfInterestTab(page, false);
 
         await page.locator(PageModel.publish.publishButton).click();
-        await page.locator(PageModel.publish.confirmPublishButton).click();
+        await Promise.all([
+            (page.waitForURL('**/versions/latest'), page.locator(PageModel.publish.confirmPublishButton).click())
+        ]);
 
         await expect(page.getByText('File Import – Playwright')).toBeVisible();
     });
