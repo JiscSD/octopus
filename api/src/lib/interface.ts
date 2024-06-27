@@ -275,7 +275,7 @@ export interface UpdateOrganisationalAccountInput {
     email?: string;
     ror?: string;
     url?: string;
-    defaultPublicationId?: string;
+    defaultTopicId?: string;
 }
 
 /**
