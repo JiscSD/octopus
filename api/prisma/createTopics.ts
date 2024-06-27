@@ -34,7 +34,11 @@ const readDataFromFile = (): { data: CreateTopicData[]; error?: string } => {
     };
 };
 
-const validateData = (data: CreateTopicData[]): { valid: boolean; messages: string[] } => {
+const validateData = async (
+    data: CreateTopicData[],
+    environment: 'int' | 'prod' = 'int',
+    dryRun?: boolean
+): Promise<{ valid: boolean; messages: string[] }> => {
     let valid = true;
     const messages: string[] = [];
 
@@ -84,6 +88,35 @@ const validateData = (data: CreateTopicData[]): { valid: boolean; messages: stri
         ) {
             valid = false;
             messages.push(`Creation ID ${item.creationId} has an invalid new parent creation ID 2`);
+        }
+
+        if (!dryRun) {
+            // Check that DB ID of existing parent exists
+            if (item[`${environment}ExistingParentId1`]) {
+                const parent1 = await client.prisma.topic.findUnique({
+                    where: {
+                        id: item[`${environment}ExistingParentId1`]
+                    }
+                });
+
+                if (!parent1) {
+                    valid = false;
+                    messages.push(`Creation ID ${item.creationId} has an invalid existing parent ID 1`);
+                }
+            }
+
+            if (item[`${environment}ExistingParentId2`]) {
+                const parent2 = await client.prisma.topic.findUnique({
+                    where: {
+                        id: item[`${environment}ExistingParentId2`]
+                    }
+                });
+
+                if (!parent2) {
+                    valid = false;
+                    messages.push(`Creation ID ${item.creationId} has an invalid existing parent ID 2`);
+                }
+            }
         }
     }
 
@@ -235,13 +268,19 @@ const createTopics = async (
 };
 
 const readFile = readDataFromFile();
-const validate = validateData(readFile.data);
-
-if (validate.valid) {
-    createTopics(readFile.data, 'int', true)
-        .then((result) => {
-            console.log(`Finished. Created ${Object.keys(result).length} topics out of ${readFile.data.length}.`);
-            console.log(result);
-        })
-        .catch((err) => console.log(err));
-}
+validateData(readFile.data)
+    .then((validateResult) => {
+        if (validateResult.valid) {
+            createTopics(readFile.data, 'int')
+                .then((result) => {
+                    console.log(
+                        `Finished. Created ${Object.keys(result).length} topics out of ${readFile.data.length}.`
+                    );
+                    console.log(result);
+                })
+                .catch((err) => console.log(err));
+        } else {
+            console.log(validateResult);
+        }
+    })
+    .catch((err) => console.log(err));
