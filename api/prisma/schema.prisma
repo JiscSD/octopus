@@ -221,7 +221,7 @@ model Topic {
     parents                Topic[]              @relation("TopicHierarchy")
     children               Topic[]              @relation("TopicHierarchy")
     publicationVersions    PublicationVersion[]
-    OrganisationalAccounts User[]
+    organisationalAccounts User[]
 }
 
 model Bookmark {
