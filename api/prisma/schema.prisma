@@ -222,6 +222,24 @@ model Topic {
     children               Topic[]              @relation("TopicHierarchy")
     publicationVersions    PublicationVersion[]
     organisationalAccounts User[]
+    mappings               TopicMapping[]
+}
+
+model TopicTranslation {
+    id       String    @id @default(cuid())
+    topicId  String
+    language Languages
+    value    String
+    topic    Topic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
+}
+
+model TopicMapping {
+    topicId String
+    topic   Topic              @relation(fields: [topicId], references: [id], onDelete: Cascade)
+    title   String
+    source  TopicMappingSource
+
+    @@unique([title, source])
 }
 
 model Bookmark {
@@ -233,14 +251,6 @@ model Bookmark {
     user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([entityId, type, userId])
-}
-
-model TopicTranslation {
-    id       String    @id @default(cuid())
-    topicId  String
-    language Languages
-    value    String
-    topic    Topic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
 }
 
 model Event {
@@ -541,4 +551,8 @@ enum ReferenceType {
 enum BookmarkType {
     PUBLICATION
     TOPIC
+}
+
+enum TopicMappingSource {
+    ARI
 }

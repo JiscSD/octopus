@@ -1,4 +1,5 @@
 import * as testUtils from 'lib/testUtils';
+import * as topicService from 'topic/service';
 
 describe('Get individual topic', () => {
     beforeEach(async () => {
@@ -17,5 +18,11 @@ describe('Get individual topic', () => {
         const getTopic = await testUtils.agent.get('/topics/this-does-not-exist');
 
         expect(getTopic.status).toEqual(404);
+    });
+
+    test('Topic can be retrieved by its ARI title', async () => {
+        const getTopic = await topicService.getByMapping('ari test', 'ARI');
+
+        expect(getTopic?.title).toEqual('Test topic');
     });
 });
