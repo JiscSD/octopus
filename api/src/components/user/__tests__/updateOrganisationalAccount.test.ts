@@ -38,28 +38,20 @@ describe('Update organisational account', () => {
         expect(updatedAccount).toEqual('No applicable field values have been supplied.');
     });
 
-    test('Default publication ID must belong to a real publication', async () => {
+    test('Default topic ID must belong to a real topic', async () => {
         const updatedAccount = await userController.updateOrganisationalAccount('test-organisational-account-1', {
-            defaultPublicationId: 'not a real ID'
+            defaultTopicId: 'not a real ID'
         });
 
-        expect(updatedAccount).toEqual('Default publication not found.');
+        expect(updatedAccount).toEqual('Default topic not found.');
     });
 
-    test("Default publication ID must belong to one of the account's own publications", async () => {
+    test('Default topic ID can be set', async () => {
         const updatedAccount = await userController.updateOrganisationalAccount('test-organisational-account-1', {
-            defaultPublicationId: 'publication-2'
+            defaultTopicId: 'test-topic-1'
         });
 
-        expect(updatedAccount).toEqual('Default publication is not owned by this user.');
-    });
-
-    test('Default publication ID can be set', async () => {
-        const updatedAccount = await userController.updateOrganisationalAccount('test-organisational-account-1', {
-            defaultPublicationId: 'organisational-account-publication-1'
-        });
-
-        expect(updatedAccount).toHaveProperty('defaultPublicationId', 'organisational-account-publication-1');
+        expect(updatedAccount).toHaveProperty('defaultTopicId', 'test-topic-1');
     });
 
     test('API key can be regenerated', async () => {
