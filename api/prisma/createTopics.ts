@@ -36,8 +36,7 @@ const readDataFromFile = (): { data: CreateTopicData[]; error?: string } => {
 
 const validateData = async (
     data: CreateTopicData[],
-    environment: 'int' | 'prod' = 'int',
-    dryRun?: boolean
+    environment: 'int' | 'prod' = 'int'
 ): Promise<{ valid: boolean; messages: string[] }> => {
     let valid = true;
     const messages: string[] = [];
@@ -90,32 +89,30 @@ const validateData = async (
             messages.push(`Creation ID ${item.creationId} has an invalid new parent creation ID 2`);
         }
 
-        if (!dryRun) {
-            // Check that DB ID of existing parent exists
-            if (item[`${environment}ExistingParentId1`]) {
-                const parent1 = await client.prisma.topic.findUnique({
-                    where: {
-                        id: item[`${environment}ExistingParentId1`]
-                    }
-                });
-
-                if (!parent1) {
-                    valid = false;
-                    messages.push(`Creation ID ${item.creationId} has an invalid existing parent ID 1`);
+        // Check that DB ID of existing parent exists
+        if (item[`${environment}ExistingParentId1`]) {
+            const parent1 = await client.prisma.topic.findUnique({
+                where: {
+                    id: item[`${environment}ExistingParentId1`]
                 }
+            });
+
+            if (!parent1) {
+                valid = false;
+                messages.push(`Creation ID ${item.creationId} has an invalid existing parent ID 1`);
             }
+        }
 
-            if (item[`${environment}ExistingParentId2`]) {
-                const parent2 = await client.prisma.topic.findUnique({
-                    where: {
-                        id: item[`${environment}ExistingParentId2`]
-                    }
-                });
-
-                if (!parent2) {
-                    valid = false;
-                    messages.push(`Creation ID ${item.creationId} has an invalid existing parent ID 2`);
+        if (item[`${environment}ExistingParentId2`]) {
+            const parent2 = await client.prisma.topic.findUnique({
+                where: {
+                    id: item[`${environment}ExistingParentId2`]
                 }
+            });
+
+            if (!parent2) {
+                valid = false;
+                messages.push(`Creation ID ${item.creationId} has an invalid existing parent ID 2`);
             }
         }
     }
@@ -244,7 +241,10 @@ const createTopics = async (
     data: CreateTopicData[],
     environment: 'int' | 'prod' = 'int',
     dryRun?: boolean
-): Promise<CreatedTopics> => {
+): Promise<{
+    created: CreatedTopics;
+    skipped: CreateTopicData[];
+}> => {
     let { created, deferred } = await createOrDeferTopics(data, {}, environment, dryRun);
     console.log(
         `First run complete; deferred ${deferred.length} topics and created ${Object.keys(created).length} topics.`
@@ -264,19 +264,28 @@ const createTopics = async (
         );
     }
 
-    return created;
+    return {
+        created,
+        skipped: deferred
+    };
 };
 
 const readFile = readDataFromFile();
 validateData(readFile.data)
     .then((validateResult) => {
         if (validateResult.valid) {
-            createTopics(readFile.data, 'int')
+            createTopics(readFile.data, 'int', true)
                 .then((result) => {
                     console.log(
-                        `Finished. Created ${Object.keys(result).length} topics out of ${readFile.data.length}.`
+                        `Finished. Created ${Object.keys(result.created).length} topics out of ${readFile.data.length}.`
                     );
-                    console.log(result);
+
+                    if (result.skipped.length) {
+                        console.log(
+                            'Skipped the following topics due to hitting maximum number of recursive loops: ',
+                            result.skipped
+                        );
+                    }
                 })
                 .catch((err) => console.log(err));
         } else {
