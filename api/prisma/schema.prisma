@@ -234,10 +234,12 @@ model TopicTranslation {
 }
 
 model TopicMapping {
-    topicId String
-    topic   Topic              @relation(fields: [topicId], references: [id], onDelete: Cascade)
-    title   String
-    source  TopicMappingSource
+    topicId  String?
+    topic    Topic?             @relation(fields: [topicId], references: [id], onDelete: Cascade)
+    // There may be some topics we intentionally ignore from mapping. This differentiates those from genuinely unrecognised topics.
+    isMapped Boolean            @default(true)
+    title    String
+    source   TopicMappingSource
 
     @@unique([title, source])
 }
