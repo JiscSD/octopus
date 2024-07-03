@@ -14503,7 +14503,7 @@ const topics: Prisma.TopicCreateInput[] = [
     },
     {
         id: 'clkv6upoe02u4l2rsfkf7tbhg',
-        title: 'Labor market. Labor supply. Labor demand. Including unemployment, manpower policy, occupational training, employmentagencies',
+        title: 'Labor market. Labor supply. Labor demand. Including unemployment, manpower policy, occupational training, employment agencies',
         parents: {
             connect: [
                 {
