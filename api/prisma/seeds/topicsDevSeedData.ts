@@ -35,12 +35,6 @@ const topicSeeds: Prisma.TopicCreateInput[] = [
                     }
                 }
             ]
-        },
-        mappings: {
-            create: {
-                title: 'ari test',
-                source: 'ARI'
-            }
         }
     }
 ];

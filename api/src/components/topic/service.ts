@@ -91,15 +91,3 @@ export const getPaginatedResults = async (filters: I.TopicsFilters) => {
 
     return { offset, limit, total, results: topics };
 };
-
-export const getByMapping = async (title: string, source: I.TopicMappingSource) =>
-    client.prisma.topic.findFirst({
-        where: {
-            mappings: {
-                some: {
-                    title,
-                    source
-                }
-            }
-        }
-    });
