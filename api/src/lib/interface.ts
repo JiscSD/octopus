@@ -28,7 +28,7 @@ export {
     Topic,
     BookmarkType,
     EventType,
-    TopicMappingSource
+    PublicationImportSource
 } from '@prisma/client';
 export { JSONSchemaType, Schema } from 'ajv';
 export { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';

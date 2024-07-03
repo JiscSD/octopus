@@ -59,21 +59,24 @@ model Images {
 }
 
 model Publication {
-    id                   String                 @id @default(cuid())
-    url_slug             String                 @unique @default(cuid())
+    id                   String                   @id @default(cuid())
+    url_slug             String                   @unique @default(cuid())
     type                 PublicationType
     doi                  String
     publicationFlags     PublicationFlags[]
     PublicationBookmarks PublicationBookmarks[]
-    linkedTo             Links[]                @relation("from")
-    linkedFrom           Links[]                @relation("to")
+    linkedTo             Links[]                  @relation("from")
+    linkedFrom           Links[]                  @relation("to")
     versions             PublicationVersion[]
     // These reverse relations are needed by prisma, but we shouldn't use them in the application.
     // Prisma doesn't allow symmetrical many-to-many self relations.
     // There must be an "asymmetrical" relationship (e.g. from and to) in the schema. In practice, we will treat
     // crosslink entities as having a pair of publications associated that are of equal importance.
-    crosslinksFrom       Crosslink[]            @relation("crosslinkFrom")
-    crosslinksTo         Crosslink[]            @relation("crosslinkTo")
+    crosslinksFrom       Crosslink[]              @relation("crosslinkFrom")
+    crosslinksTo         Crosslink[]              @relation("crosslinkTo")
+    // Populated when a publication has been imported from an external source.
+    externalId           String?
+    externalSource       PublicationImportSource?
 }
 
 model PublicationVersion {
@@ -235,11 +238,11 @@ model TopicTranslation {
 
 model TopicMapping {
     topicId  String?
-    topic    Topic?             @relation(fields: [topicId], references: [id], onDelete: Cascade)
+    topic    Topic?                  @relation(fields: [topicId], references: [id], onDelete: Cascade)
     // There may be some topics we intentionally ignore from mapping. This differentiates those from genuinely unrecognised topics.
-    isMapped Boolean            @default(true)
+    isMapped Boolean                 @default(true)
     title    String
-    source   TopicMappingSource
+    source   PublicationImportSource
 
     @@unique([title, source])
 }
@@ -555,6 +558,6 @@ enum BookmarkType {
     TOPIC
 }
 
-enum TopicMappingSource {
+enum PublicationImportSource {
     ARI
 }
