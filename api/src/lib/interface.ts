@@ -27,7 +27,8 @@ export {
     Role,
     Topic,
     BookmarkType,
-    EventType
+    EventType,
+    PublicationImportSource
 } from '@prisma/client';
 export { JSONSchemaType, Schema } from 'ajv';
 export { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
@@ -993,3 +994,31 @@ export interface DeleteAdditionalInformationPathParams {
     publicationVersionId: string;
     additionalInformationId: string;
 }
+
+export interface ARIQuestion {
+    questionId: number;
+    postDate: string;
+    dateUpdated: string;
+    url: string;
+    question: string;
+    isArchived: boolean;
+    department: string;
+    questionGroup: string;
+    backgroundInformation: string;
+    publicationDate: string;
+    expiryDate: string | null;
+    contactDetails: string;
+    topics: string[];
+    fieldsOfResearch: string[];
+    tags: string[];
+    relatedQuestions: {
+        questionId: number;
+    }[];
+    relatedUKRIProjects: {
+        projectId: string;
+        title: string;
+        url: string;
+    }[];
+}
+
+export type MappedARIQuestion = Pick<PublicationVersion, 'title' | 'content' | 'keywords'>;
