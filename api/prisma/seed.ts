@@ -6,21 +6,7 @@ import * as client from '../src/lib/client';
 
 import { CreateBucketCommand, GetBucketAclCommand } from '@aws-sdk/client-s3';
 
-export const initialDevSeed = async (): Promise<void> => {
-    // Create users
-    await client.prisma.user.createMany({ data: SeedData.usersDevSeedData });
-
-    const doesIndexExists = await client.search.indices.exists({
-        index: 'publications'
-    });
-
-    if (doesIndexExists.body) {
-        await client.search.indices.delete({
-            index: 'publications'
-        });
-    }
-
-    // Create publications
+const createPublications = async (): Promise<void> => {
     for (const seedPublication of SeedData.publicationsDevSeedData) {
         const createdPublication = await client.prisma.publication.create({
             data: seedPublication,
@@ -56,14 +42,18 @@ export const initialDevSeed = async (): Promise<void> => {
             });
         }
     }
+};
 
-    // Create topics - one by one because they can relate to each other
-    for (const topic of SeedData.topicsDevSeedData) {
+// Create topics - one by one because they can relate to each other
+const createTopics = async (): Promise<void> => {
+    for (const topic of SeedData.topicsFullSeedData) {
         await client.prisma.topic.create({
             data: topic
         });
     }
+};
 
+const createProblems = async (): Promise<void> => {
     for (const problem of SeedData.problems) {
         const createdProblem = await client.prisma.publication.create({
             data: problem,
@@ -99,6 +89,23 @@ export const initialDevSeed = async (): Promise<void> => {
             });
         }
     }
+};
+
+export const initialDevSeed = async (): Promise<void> => {
+    // Create users
+    await client.prisma.user.createMany({ data: SeedData.usersDevSeedData });
+
+    const doesIndexExists = await client.search.indices.exists({
+        index: 'publications'
+    });
+
+    if (doesIndexExists.body) {
+        await client.search.indices.delete({
+            index: 'publications'
+        });
+    }
+
+    await Promise.all([createPublications(), createTopics(), createProblems()]);
 
     if (process.env.STAGE === 'local') {
         // Create local S3 buckets

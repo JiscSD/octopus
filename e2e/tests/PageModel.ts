@@ -148,8 +148,8 @@ export const PageModel = {
     },
     myBookmarks: {
         publicationBookmark: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
-        topicBookmark: 'a[href="/topics/test-topic-1b-1"]',
-        removeTopicBookmark: 'a[href="/topics/test-topic-1b-1"] + button[aria-label="Remove bookmark"]'
+        topicBookmark: 'a[href="/topics/cly468yyb00177ryzsvccai51"]',
+        removeTopicBookmark: 'a[href="/topics/cly468yyb00177ryzsvccai51"] + button[aria-label="Remove bookmark"]'
     },
     publish: {
         title: 'input[type="text"]',

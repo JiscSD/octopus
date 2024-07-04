@@ -27,7 +27,8 @@ export {
     Role,
     Topic,
     BookmarkType,
-    EventType
+    EventType,
+    PublicationImportSource
 } from '@prisma/client';
 export { JSONSchemaType, Schema } from 'ajv';
 export { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
@@ -275,7 +276,7 @@ export interface UpdateOrganisationalAccountInput {
     email?: string;
     ror?: string;
     url?: string;
-    defaultPublicationId?: string;
+    defaultTopicId?: string;
 }
 
 /**
