@@ -276,7 +276,7 @@ export interface UpdateOrganisationalAccountInput {
     email?: string;
     ror?: string;
     url?: string;
-    defaultPublicationId?: string;
+    defaultTopicId?: string;
 }
 
 /**
@@ -1021,4 +1021,6 @@ export interface ARIQuestion {
     }[];
 }
 
-export type MappedARIQuestion = Pick<PublicationVersion, 'title' | 'content' | 'keywords'>;
+export type MappedARIQuestion = Pick<PublicationVersion, 'title' | 'content' | 'keywords'> & {
+    topics: Pick<PublicationVersion['topics'][number], 'id' | 'title'>[];
+};

@@ -3,6 +3,7 @@ export { default as publications } from './publications';
 export { default as usersDevSeedData } from './usersDevSeedData';
 export { default as publicationsDevSeedData } from './publicationsDevSeedData';
 export { default as topicsDevSeedData } from './topicsDevSeedData';
+export { default as topicMappings } from './topicMappings';
 export { default as bookmarkSeeds } from './bookmarks';
 export { default as problems } from './problems';
 export { default as referencesSeedData } from './references';

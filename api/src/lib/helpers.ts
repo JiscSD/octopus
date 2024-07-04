@@ -1437,5 +1437,5 @@ export const validateEmail = (email: string): boolean => {
 };
 
 export const replaceHTMLLineBreaks = (html: string): string => {
-    return html.replace(/\\n|\\r\\n|\\n\\r|\\r/g, '<br>');
+    return html.replace(/\n|\r\n|\n\r|\r/g, '<br>');
 };

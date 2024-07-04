@@ -1750,7 +1750,7 @@ test.describe('Publication flow + co-authors', () => {
         await page.reload();
         await page.locator(PageModel.publish.publishButtonTracker).click();
         await Promise.all([
-            (page.waitForURL('**/versions/latest'), page.locator(PageModel.publish.confirmPublishButton).click())
+            (page.waitForURL('**/versions/latest'), page.locator(PageModel.publish.confirmPublishButtonTracker).click())
         ]);
 
         // get publication id from url and deduct canonical DOI
