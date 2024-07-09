@@ -1,6 +1,6 @@
 import * as testUtils from 'lib/testUtils';
 
-describe('Create publication', () => {
+describe('Create draft publication', () => {
     beforeAll(async () => {
         await testUtils.clearDB();
         await testUtils.testSeed();
@@ -305,6 +305,87 @@ describe('Create publication', () => {
         expect(createPublicationRequest.status).toEqual(403);
         expect(createPublicationRequest.body.message).toEqual(
             'Organisational accounts can only create Research Problems.'
+        );
+    });
+});
+
+describe('Create live publication', () => {
+    beforeAll(async () => {
+        await testUtils.clearDB();
+        await testUtils.testSeed();
+    });
+
+    test('Organisational accounts can publish directly', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '000000012',
+                directPublish: 'true'
+            })
+            .send({ type: 'PROBLEM', title: 'Direct publish by organisational account' });
+
+        expect(createPublicationRequest.status).toEqual(201);
+        expect(createPublicationRequest.body.versions[0].currentStatus).toEqual('LIVE');
+    });
+
+    test('Only organisational accounts can publish directly', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '123456789',
+                directPublish: 'true'
+            })
+            .send({ type: 'PROBLEM', title: 'Direct publish by normal user' });
+
+        expect(createPublicationRequest.status).toEqual(403);
+        expect(createPublicationRequest.body.message).toEqual('Only organisational accounts can publish directly.');
+    });
+
+    test('Query params other than directPublish are not accepted', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '000000012',
+                unrecognisedParam: 'true'
+            })
+            .send({ type: 'PROBLEM', title: 'Unrecognised query parameter publication' });
+
+        expect(createPublicationRequest.status).toEqual(400);
+        expect(createPublicationRequest.body.message[0].keyword).toEqual('additionalProperties');
+        expect(createPublicationRequest.body.message[0].params.additionalProperty).toEqual('unrecognisedParam');
+    });
+
+    test('Organisations without a default topic must supply a topic ID or publication ID to link to', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '000000013',
+                directPublish: 'true'
+            })
+            .send({ type: 'PROBLEM', title: 'Direct publish by organisational account' });
+
+        expect(createPublicationRequest.status).toEqual(400);
+        expect(createPublicationRequest.body.message).toEqual(
+            'At least one topic ID or linked publication ID must be provided, as your organisation does not have a default topic.'
+        );
+    });
+
+    test('Invalid links cannot be created via direct publishing', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '000000013',
+                directPublish: 'true'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: 'Direct publish by organisational account',
+                linkedPublicationIds: ['publication-hypothesis-draft']
+            });
+
+        expect(createPublicationRequest.status).toEqual(400);
+        expect(createPublicationRequest.body.message).toEqual(
+            'Publication with id publication-hypothesis-draft is not LIVE, so a link cannot be created to it.'
         );
     });
 });

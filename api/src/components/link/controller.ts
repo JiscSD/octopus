@@ -1,79 +1,25 @@
 import * as response from 'lib/response';
 import * as linkService from 'link/service';
-import * as publicationService from 'publication/service';
 
 import * as I from 'interface';
 
 export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>): Promise<I.JSONResponse> => {
     try {
-        const fromPublication = await publicationService.get(event.body.from);
-
-        if (!fromPublication) {
-            return response.json(404, {
-                message: `Publication with id ${event.body.from} not found.`
-            });
-        }
-
-        const fromLatestVersion = fromPublication.versions.find((version) => version.isLatestVersion);
-
-        if (!fromLatestVersion) {
-            return response.json(403, {
-                message: `Cannot find latest version of ${event.body.from}.`
-            });
-        }
-
-        if (fromLatestVersion.currentStatus === 'LIVE') {
-            return response.json(403, {
-                message: `Publication with id ${event.body.from} is LIVE.`
-            });
-        }
-
-        // The authenticated user is not the owner of the publication
-        if (fromLatestVersion.user.id !== event.user.id) {
-            return response.json(401, { message: 'You do not have permission to create publication links' });
-        }
-
-        // Peer reviews can only be linked to one thing
-        if (fromPublication.type === 'PEER_REVIEW' && fromPublication.linkedTo.length !== 0) {
-            return response.json(403, { message: 'Peer reviews can only have 1 link.' });
-        }
-
-        const toPublication = await publicationService.get(event.body.to);
-
-        if (!toPublication) {
-            return response.json(404, {
-                message: `Publication with id ${event.body.to} does not exist.`
-            });
-        }
-
-        // Check if publication to be linked to has a live version
-        const toLatestLiveVersion = toPublication.versions.find((version) => version.isLatestLiveVersion);
-
-        if (!toLatestLiveVersion) {
-            return response.json(403, {
-                message: `Publication with id ${event.body.to} is not LIVE.`
-            });
-        }
-
-        const isLinkValid = linkService.canLinkBeCreatedBetweenPublicationTypes(
-            fromPublication.type,
-            toPublication.type
+        const validate = await linkService.createLinkValidation(
+            { existing: true, publicationId: event.body.from },
+            event.body.to,
+            event.user.id
         );
 
-        if (!isLinkValid) {
-            return response.json(404, {
-                message: `Link cannot be created between types from "${fromPublication.type}" to ${toPublication.type}.`
-            });
+        if (!validate.valid) {
+            return response.json(validate.details.code, { message: validate.details.message });
         }
 
-        // does a link already exist?
-        const doesLinkExist = await linkService.doesLinkExist(event.body.from, event.body.to);
-
-        if (doesLinkExist) {
-            return response.json(404, { message: 'Link already exists.' });
-        }
-
-        const link = await linkService.create(event.body.from, event.body.to, toLatestLiveVersion.id);
+        const link = await linkService.create(
+            event.body.from,
+            validate.toPublication.publicationId,
+            validate.toPublication.versionId
+        );
 
         return response.json(200, link);
     } catch (err) {

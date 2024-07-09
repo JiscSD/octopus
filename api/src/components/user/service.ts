@@ -14,7 +14,8 @@ export const upsertUser = (orcid: string, updateUserInformation: I.UpdateUserInf
             lastName: true,
             locked: true,
             orcid: true,
-            role: true
+            role: true,
+            defaultTopicId: true
         },
         where: {
             orcid
@@ -36,7 +37,8 @@ export const updateEmail = (orcid: string, email: string) =>
             lastName: true,
             locked: true,
             orcid: true,
-            role: true
+            role: true,
+            defaultTopicId: true
         },
         data: {
             email

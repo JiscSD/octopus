@@ -98,6 +98,11 @@ export interface CreatePublicationRequestBody {
     selfDeclaration?: boolean;
     affiliationStatement?: string;
     topicIds?: string[];
+    linkedPublicationIds?: string[];
+}
+
+export interface CreatePublicationQueryStringParameters {
+    directPublish?: boolean;
 }
 
 export interface OpenSearchPublication {
@@ -250,6 +255,7 @@ export interface User {
     locked: boolean;
     orcid: string | null;
     role: Role;
+    defaultTopicId: string | null;
 }
 
 export interface UserFilters {

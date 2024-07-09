@@ -35,6 +35,11 @@ const topicSeeds: Prisma.TopicCreateInput[] = [
                     }
                 }
             ]
+        },
+        organisationalAccounts: {
+            connect: {
+                id: 'test-organisational-account-1'
+            }
         }
     }
 ];

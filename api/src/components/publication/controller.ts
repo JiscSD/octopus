@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as s3 from 'lib/s3';
 import * as I from 'interface';
 import * as helpers from 'lib/helpers';
+import * as linkService from 'link/service';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 import * as publicationVersionService from 'publicationVersion/service';
@@ -56,13 +57,64 @@ export const getSeedDataPublications = async (
 };
 
 export const create = async (
-    event: I.AuthenticatedAPIRequest<I.CreatePublicationRequestBody>
+    event: I.AuthenticatedAPIRequest<I.CreatePublicationRequestBody, I.CreatePublicationQueryStringParameters>
 ): Promise<I.JSONResponse> => {
     try {
         if (event.body.type !== 'PROBLEM' && event.user.role === 'ORGANISATION') {
             return response.json(403, {
                 message: 'Organisational accounts can only create Research Problems.'
             });
+        }
+
+        if (event.queryStringParameters.directPublish) {
+            if (event.user.role !== 'ORGANISATION') {
+                return response.json(403, {
+                    message: 'Only organisational accounts can publish directly.'
+                });
+            }
+
+            // Check body is valid for a live publication.
+
+            // The publication must be linked to a topic or publication.
+            // If the organisational account doesn't have a default topic,
+            // topic/publication ID(s) must be provided.
+            if (
+                !event.user.defaultTopicId &&
+                !event.body.topicIds?.length &&
+                !event.body.linkedPublicationIds?.length
+            ) {
+                return response.json(400, {
+                    message:
+                        'At least one topic ID or linked publication ID must be provided, as your organisation does not have a default topic.'
+                });
+            }
+
+            // All proposed links must be valid.
+            if (event.body.linkedPublicationIds?.length) {
+                let allLinksValid = true;
+                let linkCounter = 0;
+
+                while (allLinksValid && linkCounter < event.body.linkedPublicationIds?.length) {
+                    const validateLink = await linkService.createLinkValidation(
+                        {
+                            existing: false,
+                            type: event.body.type
+                        },
+                        event.body.linkedPublicationIds[linkCounter],
+                        event.user.id
+                    );
+
+                    if (!validateLink.valid) {
+                        allLinksValid = false;
+
+                        return response.json(validateLink.details.code, {
+                            message: validateLink.details.message
+                        });
+                    }
+
+                    linkCounter++;
+                }
+            }
         }
 
         if (
