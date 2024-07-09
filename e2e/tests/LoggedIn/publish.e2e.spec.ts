@@ -602,8 +602,8 @@ test.describe('Publication flow', () => {
         // Link a topic and expect it to appear below with a delete button
         await page.locator(PageModel.publish.linkedItems.entityTypeSelect).selectOption('Research topics');
         await page.locator(PageModel.publish.linkedItems.topicInput).click();
-        await page.keyboard.type('test');
-        await page.locator(`[role="option"]:has-text("Test topic")`).click();
+        await page.keyboard.type('Computer science');
+        await page.locator(`[role="option"]:has-text("Computer science")`).click();
         await page.locator(PageModel.publish.linkedItems.addLink).click();
         await page.waitForResponse((response) => response.url().includes('/topics') && response.ok());
         await expect(page.locator(PageModel.publish.linkedItems.deleteTopicLink)).toBeVisible();
@@ -624,11 +624,11 @@ test.describe('Publication flow', () => {
         const page = await Helpers.getPageAsUser(browser);
 
         // Navigate to topic and create related problem
-        await page.goto(`/topics/test-topic-1`);
+        await page.goto(`/topics/cly468yyb00177ryzsvccai51`);
         await page.locator(PageModel.topic.createProblemLink).click();
 
         // Fill in basic fields
-        await page.waitForURL(`/create?topic=test-topic-1&type=PROBLEM`);
+        await page.waitForURL(`/create?topic=cly468yyb00177ryzsvccai51&type=PROBLEM`);
         await page.locator(PageModel.publish.title).click();
         await page.keyboard.type('Problem from topic');
         await page.locator(PageModel.publish.confirmPublicationType).click();
