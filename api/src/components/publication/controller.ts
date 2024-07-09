@@ -1,11 +1,12 @@
 import axios from 'axios';
-import * as s3 from 'lib/s3';
-import * as I from 'interface';
 import * as helpers from 'lib/helpers';
+import * as I from 'interface';
 import * as linkService from 'link/service';
-import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 import * as publicationVersionService from 'publicationVersion/service';
+import * as response from 'lib/response';
+import * as s3 from 'lib/s3';
+import * as topicService from 'topic/service';
 
 export const get = async (
     event: I.APIRequest<undefined, I.GetPublicatonQueryParams, I.GetPublicationPathParams>
@@ -73,7 +74,19 @@ export const create = async (
                 });
             }
 
-            // Check body is valid for a live publication.
+            // Check body is valid to become a live publication.
+            if (helpers.isEmptyContent(event.body.content || '')) {
+                return response.json(400, {
+                    message: 'Content field cannot be empty when publishing directly.'
+                });
+            }
+
+            if (!publicationVersionService.validateConflictOfInterest(event.body)) {
+                return response.json(400, {
+                    message:
+                        'Conflict of interest status must either be false, or true and accompanied by a conflict of interest text value in order to direct publish.'
+                });
+            }
 
             // The publication must be linked to a topic or publication.
             // If the organisational account doesn't have a default topic,
@@ -91,30 +104,42 @@ export const create = async (
 
             // All proposed links must be valid.
             if (event.body.linkedPublicationIds?.length) {
-                let allLinksValid = true;
-                let linkCounter = 0;
-
-                while (allLinksValid && linkCounter < event.body.linkedPublicationIds?.length) {
+                for (const linkTargetId of event.body.linkedPublicationIds) {
                     const validateLink = await linkService.createLinkValidation(
                         {
                             existing: false,
                             type: event.body.type
                         },
-                        event.body.linkedPublicationIds[linkCounter],
+                        linkTargetId,
                         event.user.id
                     );
 
                     if (!validateLink.valid) {
-                        allLinksValid = false;
-
                         return response.json(validateLink.details.code, {
                             message: validateLink.details.message
                         });
                     }
-
-                    linkCounter++;
                 }
             }
+
+            // All proposed topics must exist.
+            if (event.body.topicIds?.length) {
+                for (const topicId of event.body.topicIds) {
+                    const topic = await topicService.get(topicId);
+
+                    if (!topic) {
+                        return response.json(400, {
+                            message: `Topic with ID ${topicId} not found.`
+                        });
+                    }
+                }
+            }
+        }
+
+        if (event.body.topicIds?.length && event.body.type !== 'PROBLEM') {
+            return response.json(400, {
+                message: 'You cannot link a publication to a topic if it is not a research problem.'
+            });
         }
 
         if (
@@ -123,20 +148,34 @@ export const create = async (
             event.body.type !== 'HYPOTHESIS'
         ) {
             return response.json(400, {
-                message:
-                    'You can not declare a self declaration for a publication that is not a protocol or hypothesis.'
+                message: 'You cannot declare a self declaration for a publication that is not a protocol or hypothesis.'
             });
         }
 
         if (event.body.dataAccessStatement !== undefined && event.body.type !== 'DATA') {
             return response.json(400, {
-                message: 'You can not supply a data access statement on and non data publication.'
+                message: 'You cannot supply a data access statement on a non-data type publication.'
             });
         }
 
         if (event.body.dataPermissionsStatement !== undefined && event.body.type !== 'DATA') {
             return response.json(400, {
-                message: 'You can not supply a data permissions statement on and non data publication.'
+                message: 'You cannot supply a data permissions statement on a non-data type publication.'
+            });
+        }
+
+        if ((event.body.externalId || event.body.externalSource) && event.user.role !== 'ORGANISATION') {
+            return response.json(400, {
+                message: 'External ID and external source fields can only be populated by organisational accounts.'
+            });
+        }
+
+        if (
+            (event.body.externalId && !event.body.externalSource) ||
+            (event.body.externalSource && !event.body.externalId)
+        ) {
+            return response.json(400, {
+                message: 'An external ID must be accompanied by an external source and vice versa.'
             });
         }
 

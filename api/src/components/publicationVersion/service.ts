@@ -303,7 +303,12 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum) 
     return updatedVersion;
 };
 
-export const validateConflictOfInterest = (version: I.PublicationVersion) => {
+export const validateConflictOfInterest = <
+    // Use generic so this can be run on incoming request bodies for validation as well.
+    T extends { conflictOfInterestStatus?: boolean | null; conflictOfInterestText?: string | null }
+>(
+    version: T
+) => {
     if (version.conflictOfInterestStatus) {
         if (!version.conflictOfInterestText?.length) return false;
     } else if (version.conflictOfInterestStatus === null) {

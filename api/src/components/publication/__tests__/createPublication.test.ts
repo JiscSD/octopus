@@ -46,6 +46,22 @@ describe('Create draft publication', () => {
         expect(createPublicationRequest.status).toEqual(201);
     });
 
+    test('Title cannot be empty', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: ''
+            });
+
+        expect(createPublicationRequest.status).toEqual(400);
+        expect(createPublicationRequest.body.message[0].instancePath).toEqual('/title');
+        expect(createPublicationRequest.body.message[0].keyword).toEqual('minLength');
+    });
+
     test('Valid publication not created by user that does not exist (401)', async () => {
         const createPublicationRequest = await testUtils.agent
             .post('/publications')
@@ -277,6 +293,24 @@ describe('Create draft publication', () => {
         expect(createPublicationRequest.body.versions[0].topics[0].title).toEqual('Test topic');
     });
 
+    test('Topics cannot be linked when type is not PROBLEM', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                type: 'HYPOTHESIS',
+                title: 'Publication related to a topic',
+                topicIds: ['test-topic-1']
+            });
+
+        expect(createPublicationRequest.status).toEqual(400);
+        expect(createPublicationRequest.body.message).toEqual(
+            'You cannot link a publication to a topic if it is not a research problem.'
+        );
+    });
+
     test('Organisational accounts can create problems', async () => {
         const createPublicationRequest = await testUtils.agent
             .post('/publications')
@@ -307,6 +341,59 @@ describe('Create draft publication', () => {
             'Organisational accounts can only create Research Problems.'
         );
     });
+
+    test('Only organisational accounts can populate externalId and externalSource fields', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: 'Attempt at external fields',
+                externalId: '12345',
+                externalSource: 'ARI'
+            });
+
+        expect(createPublicationRequest.status).toEqual(400);
+        expect(createPublicationRequest.body.message).toEqual(
+            'External ID and external source fields can only be populated by organisational accounts.'
+        );
+    });
+
+    test('External source and external ID must be supplied together if at all', async () => {
+        const onlyExternalSource = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '000000012'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: 'Only external source',
+                externalSource: 'ARI'
+            });
+
+        expect(onlyExternalSource.status).toEqual(400);
+        expect(onlyExternalSource.body.message).toEqual(
+            'An external ID must be accompanied by an external source and vice versa.'
+        );
+
+        const onlyExternalId = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '000000012'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: 'Only external ID',
+                externalId: '12345'
+            });
+
+        expect(onlyExternalId.status).toEqual(400);
+        expect(onlyExternalId.body.message).toEqual(
+            'An external ID must be accompanied by an external source and vice versa.'
+        );
+    });
 });
 
 describe('Create live publication', () => {
@@ -322,7 +409,7 @@ describe('Create live publication', () => {
                 apiKey: '000000012',
                 directPublish: 'true'
             })
-            .send({ type: 'PROBLEM', title: 'Direct publish by organisational account' });
+            .send({ type: 'PROBLEM', title: 'Direct publish by organisational account', content: 'Test' });
 
         expect(createPublicationRequest.status).toEqual(201);
         expect(createPublicationRequest.body.versions[0].currentStatus).toEqual('LIVE');
@@ -355,6 +442,42 @@ describe('Create live publication', () => {
         expect(createPublicationRequest.body.message[0].params.additionalProperty).toEqual('unrecognisedParam');
     });
 
+    test('Content value is required to direct publish', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '000000012',
+                directPublish: 'true'
+            })
+            .send({ type: 'PROBLEM', title: 'Direct publish by organisational account' });
+
+        expect(createPublicationRequest.status).toEqual(400);
+        expect(createPublicationRequest.body.message).toEqual(
+            'Content field cannot be empty when publishing directly.'
+        );
+    });
+
+    test('Cannot direct publish with an invalid conflict of interest', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '000000012',
+                directPublish: 'true'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: 'Direct publish by organisational account',
+                content: 'Test',
+                conflictOfInterestStatus: true,
+                conflictOfInterestText: ''
+            });
+
+        expect(createPublicationRequest.status).toEqual(400);
+        expect(createPublicationRequest.body.message).toEqual(
+            'Conflict of interest status must either be false, or true and accompanied by a conflict of interest text value in order to direct publish.'
+        );
+    });
+
     test('Organisations without a default topic must supply a topic ID or publication ID to link to', async () => {
         const createPublicationRequest = await testUtils.agent
             .post('/publications')
@@ -362,7 +485,7 @@ describe('Create live publication', () => {
                 apiKey: '000000013',
                 directPublish: 'true'
             })
-            .send({ type: 'PROBLEM', title: 'Direct publish by organisational account' });
+            .send({ type: 'PROBLEM', title: 'Direct publish by organisational account', content: 'Test' });
 
         expect(createPublicationRequest.status).toEqual(400);
         expect(createPublicationRequest.body.message).toEqual(
@@ -380,6 +503,7 @@ describe('Create live publication', () => {
             .send({
                 type: 'PROBLEM',
                 title: 'Direct publish by organisational account',
+                content: 'Test',
                 linkedPublicationIds: ['publication-hypothesis-draft']
             });
 
@@ -387,5 +511,23 @@ describe('Create live publication', () => {
         expect(createPublicationRequest.body.message).toEqual(
             'Publication with id publication-hypothesis-draft is not LIVE, so a link cannot be created to it.'
         );
+    });
+
+    test('Invalid topic IDs cannot be passed when direct publishing', async () => {
+        const createPublicationRequest = await testUtils.agent
+            .post('/publications')
+            .query({
+                apiKey: '000000013',
+                directPublish: 'true'
+            })
+            .send({
+                type: 'PROBLEM',
+                title: 'Direct publish by organisational account',
+                content: 'Test',
+                topicIds: ['made-up-topic-id']
+            });
+
+        expect(createPublicationRequest.status).toEqual(400);
+        expect(createPublicationRequest.body.message).toEqual('Topic with ID made-up-topic-id not found.');
     });
 });

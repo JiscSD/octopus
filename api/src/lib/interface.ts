@@ -1,13 +1,14 @@
 import {
+    BookmarkType,
+    EventType,
     Languages,
     LicenceType,
     Prisma,
     PublicationFlagCategoryEnum,
-    PublicationType,
-    Role,
-    BookmarkType,
+    PublicationImportSource,
     PublicationStatusEnum,
-    EventType
+    PublicationType,
+    Role
 } from '@prisma/client';
 import {
     APIGatewayProxyEventPathParameters,
@@ -18,17 +19,17 @@ import * as publicationVersionService from 'publicationVersion/service';
 import * as eventService from 'event/service';
 
 export {
+    BookmarkType,
+    EventType,
     ImageExtension,
     Languages,
     LicenceType,
     PublicationFlagCategoryEnum,
+    PublicationImportSource,
     PublicationStatusEnum,
     PublicationType,
     Role,
-    Topic,
-    BookmarkType,
-    EventType,
-    PublicationImportSource
+    Topic
 } from '@prisma/client';
 export { JSONSchemaType, Schema } from 'ajv';
 export { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
@@ -85,20 +86,24 @@ export interface CreatePublicationRequestBody {
     type: PublicationType;
     title: string;
     licence?: LicenceType;
+    content?: string;
     description?: string;
     keywords?: string[];
-    content?: string;
+    conflictOfInterestStatus?: boolean;
+    conflictOfInterestText?: string;
     language?: Languages;
-    fundersStatement: string;
     ethicalStatement?: string;
     ethicalStatementFreeText?: string;
     dataPermissionsStatement?: string;
     dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
+    fundersStatement: string;
     affiliationStatement?: string;
     topicIds?: string[];
     linkedPublicationIds?: string[];
+    externalId?: string;
+    externalSource?: PublicationImportSource;
 }
 
 export interface CreatePublicationQueryStringParameters {

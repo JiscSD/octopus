@@ -18,7 +18,8 @@ const createPublicationBodySchema: I.Schema = {
             ]
         },
         title: {
-            type: 'string'
+            type: 'string',
+            minLength: 1
         },
         licence: {
             type: 'string',
@@ -78,6 +79,13 @@ const createPublicationBodySchema: I.Schema = {
         linkedPublicationIds: {
             type: 'array',
             items: { type: 'string' }
+        },
+        externalId: {
+            type: 'string'
+        },
+        externalSource: {
+            type: 'string',
+            enum: <I.PublicationImportSource[]>['ARI']
         }
     },
     required: ['type', 'title'],

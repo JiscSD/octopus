@@ -17,7 +17,7 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateTopicReque
 
 export const get = async (event: I.APIRequest<undefined, undefined, I.GetTopicPathParams>): Promise<I.JSONResponse> => {
     try {
-        const topic = await topicService.get(event.pathParameters.id);
+        const topic = await topicService.get(event.pathParameters.id, true);
 
         if (!topic) {
             return response.json(404, {
