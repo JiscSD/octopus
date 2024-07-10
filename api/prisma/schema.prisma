@@ -35,8 +35,8 @@ model User {
     bookmarks            Bookmark[]
     crosslinks           Crosslink[]
     crosslinkVotes       CrosslinkVote[]
-    defaultPublicationId String?
-    defaultPublication   Publication?           @relation(fields: [defaultPublicationId], references: [id])
+    defaultTopicId       String?
+    defaultTopic         Topic?                 @relation(fields: [defaultTopicId], references: [id])
 }
 
 model Verification {
@@ -59,23 +59,24 @@ model Images {
 }
 
 model Publication {
-    id                   String                 @id @default(cuid())
-    url_slug             String                 @unique @default(cuid())
+    id                   String                   @id @default(cuid())
+    url_slug             String                   @unique @default(cuid())
     type                 PublicationType
     doi                  String
     publicationFlags     PublicationFlags[]
     PublicationBookmarks PublicationBookmarks[]
-    linkedTo             Links[]                @relation("from")
-    linkedFrom           Links[]                @relation("to")
+    linkedTo             Links[]                  @relation("from")
+    linkedFrom           Links[]                  @relation("to")
     versions             PublicationVersion[]
     // These reverse relations are needed by prisma, but we shouldn't use them in the application.
     // Prisma doesn't allow symmetrical many-to-many self relations.
     // There must be an "asymmetrical" relationship (e.g. from and to) in the schema. In practice, we will treat
     // crosslink entities as having a pair of publications associated that are of equal importance.
-    crosslinksFrom       Crosslink[]            @relation("crosslinkFrom")
-    crosslinksTo         Crosslink[]            @relation("crosslinkTo")
-    // Not the author, but a back reference to an organisational user whose default publication is this one.
-    User                 User[]
+    crosslinksFrom       Crosslink[]              @relation("crosslinkFrom")
+    crosslinksTo         Crosslink[]              @relation("crosslinkTo")
+    // Populated when a publication has been imported from an external source.
+    externalId           String?
+    externalSource       PublicationImportSource?
 }
 
 model PublicationVersion {
@@ -214,15 +215,36 @@ model PublicationBookmarks {
 }
 
 model Topic {
-    id                  String               @id @default(cuid())
-    title               String
-    language            Languages            @default(en)
-    translations        TopicTranslation[]
-    createdAt           DateTime             @default(now())
-    updatedAt           DateTime             @updatedAt
-    parents             Topic[]              @relation("TopicHierarchy")
-    children            Topic[]              @relation("TopicHierarchy")
-    publicationVersions PublicationVersion[]
+    id                     String               @id @default(cuid())
+    title                  String
+    language               Languages            @default(en)
+    translations           TopicTranslation[]
+    createdAt              DateTime             @default(now())
+    updatedAt              DateTime             @updatedAt
+    parents                Topic[]              @relation("TopicHierarchy")
+    children               Topic[]              @relation("TopicHierarchy")
+    publicationVersions    PublicationVersion[]
+    organisationalAccounts User[]
+    mappings               TopicMapping[]
+}
+
+model TopicTranslation {
+    id       String    @id @default(cuid())
+    topicId  String
+    language Languages
+    value    String
+    topic    Topic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
+}
+
+model TopicMapping {
+    topicId  String?
+    topic    Topic?                  @relation(fields: [topicId], references: [id], onDelete: Cascade)
+    // There may be some topics we intentionally ignore from mapping. This differentiates those from genuinely unrecognised topics.
+    isMapped Boolean                 @default(true)
+    title    String
+    source   PublicationImportSource
+
+    @@unique([title, source])
 }
 
 model Bookmark {
@@ -234,14 +256,6 @@ model Bookmark {
     user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([entityId, type, userId])
-}
-
-model TopicTranslation {
-    id       String    @id @default(cuid())
-    topicId  String
-    language Languages
-    value    String
-    topic    Topic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
 }
 
 model Event {
@@ -542,4 +556,8 @@ enum ReferenceType {
 enum BookmarkType {
     PUBLICATION
     TOPIC
+}
+
+enum PublicationImportSource {
+    ARI
 }

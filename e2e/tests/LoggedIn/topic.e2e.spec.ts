@@ -7,12 +7,12 @@ test.describe.configure({ mode: 'serial' });
 // Recreate parameter controls the behaviour when a bookmark already exists.
 // If true, it will remove and recreate it; if false, it will leave it.
 const ensureBookmarkPresent = async (page: Page, recreate: boolean = false) => {
-    await page.goto(`/topics/test-topic-1b-1`, {
+    await page.goto(`/topics/cly468yyb00177ryzsvccai51`, {
         waitUntil: 'domcontentloaded'
     });
 
     // Bookmark topic
-    await expect(page.locator('h1')).toHaveText('Test sub-topic B 1');
+    await expect(page.locator('h1')).toHaveText('Computer science');
 
     await page.waitForResponse((response) => response.url().includes('/topics') && response.ok());
 

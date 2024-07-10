@@ -2,7 +2,7 @@ import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
 import * as response from 'lib/response';
 import * as eventService from 'event/service';
-import * as publicationService from 'publication/service';
+import * as topicService from 'topic/service';
 import * as userService from 'user/service';
 import { Prisma } from '@prisma/client';
 import { prisma } from 'lib/client';
@@ -162,21 +162,17 @@ export const updateOrganisationalAccount = async (
         return 'Supplied email address must be valid.';
     }
 
-    // Verify that defaultPublicationId refers to a publication owned by this account.
-    if (user.defaultPublicationId) {
-        const defaultPublication = await publicationService.get(user.defaultPublicationId);
+    // Verify that defaultTopicId refers to a valid topic.
+    if (user.defaultTopicId) {
+        const defaultTopic = await topicService.get(user.defaultTopicId);
 
-        if (!defaultPublication) {
-            return 'Default publication not found.';
-        }
-
-        if (!defaultPublication.versions.some((version) => version.isLatestVersion && version.user.id === id)) {
-            return 'Default publication is not owned by this user.';
+        if (!defaultTopic) {
+            return 'Default topic not found.';
         }
     }
 
     // Verify that at least one applicable field is being updated.
-    if (!(user.name || user.email || user.ror || user.url || user.defaultPublicationId || regenerateApiKey)) {
+    if (!(user.name || user.email || user.ror || user.url || user.defaultTopicId || regenerateApiKey)) {
         return 'No applicable field values have been supplied.';
     }
 
@@ -185,7 +181,7 @@ export const updateOrganisationalAccount = async (
         ...(user.email && { email: user.email }),
         ...(user.ror && { ror: user.ror }),
         ...(user.url && { url: user.url }),
-        ...(user.defaultPublicationId && { defaultPublicationId: user.defaultPublicationId }),
+        ...(user.defaultTopicId && { defaultTopicId: user.defaultTopicId }),
         ...(regenerateApiKey && { apiKey: crypto.randomUUID() })
     });
 };
