@@ -33,6 +33,10 @@ export const testSeed = async (): Promise<void> => {
         });
     }
 
+    await client.prisma.topicMapping.createMany({
+        data: seeds.topicMappings
+    });
+
     await client.prisma.references.createMany({
         data: seeds.referencesSeedData
     });
@@ -92,6 +96,7 @@ export const clearDB = async (): Promise<void> => {
     const deletePublicationStatuses = client.prisma.publicationStatus.deleteMany();
     const deletePublications = client.prisma.publication.deleteMany();
     const deleteTopics = client.prisma.topic.deleteMany();
+    const deleteTopicMappings = client.prisma.topicMapping.deleteMany();
     const deleteUsers = client.prisma.user.deleteMany();
     const deleteBookmarks = client.prisma.publicationBookmarks.deleteMany();
     const deleteEvents = client.prisma.event.deleteMany();
@@ -100,6 +105,7 @@ export const clearDB = async (): Promise<void> => {
         deleteUsers,
         deletePublications,
         deleteTopics,
+        deleteTopicMappings,
         deleteBookmarks,
         deletePublicationStatuses,
         deleteEvents
