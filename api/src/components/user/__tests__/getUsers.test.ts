@@ -10,22 +10,22 @@ describe('Get Users', () => {
     test('Get all users', async () => {
         const response = await testUtils.agent.get('/users?limit=100');
         expect(response.status).toEqual(200);
-        expect(response.body.data.length).toEqual(12);
-        expect(response.body.metadata.total).toEqual(12);
+        expect(response.body.data.length).toEqual(13);
+        expect(response.body.metadata.total).toEqual(13);
     });
 
     test('Get first 10 users if "limit" param is not provided', async () => {
         const response = await testUtils.agent.get('/users');
         expect(response.status).toEqual(200);
         expect(response.body.data.length).toEqual(10); // default limit is 10
-        expect(response.body.metadata.total).toEqual(12);
+        expect(response.body.metadata.total).toEqual(13);
     });
 
     test('Get first 2 users', async () => {
         const response = await testUtils.agent.get('/users?limit=2');
         expect(response.status).toEqual(200);
         expect(response.body.data.length).toEqual(2);
-        expect(response.body.metadata.total).toEqual(12);
+        expect(response.body.metadata.total).toEqual(13);
     });
 
     test('Get first 2 users which have their first or last name "Test"', async () => {
@@ -35,7 +35,7 @@ describe('Get Users', () => {
         expect(response.body.data.every((user: I.User) => `${user.firstName} ${user.lastName}`.includes('Test'))).toBe(
             true
         );
-        expect(response.body.metadata.total).toEqual(10);
+        expect(response.body.metadata.total).toEqual(11);
     });
 
     test('Get "Science Octopus" user by searching for "Science"', async () => {

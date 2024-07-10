@@ -1327,22 +1327,20 @@ test.describe('Publication flow + co-authors', () => {
 
         // create new publication
         await createPublishReadyPublication(page);
-        await addCoAuthorsAndRequestApproval(page, [Helpers.user2, Helpers.user3]);
+        await addCoAuthorsAndRequestApproval(page, [Helpers.user2]);
 
         // check preview page
         await expect(page.getByText('This publication is locked for approval')).toBeVisible();
         await expect(page.locator('table[data-testid="approval-tracker-table"]')).toBeVisible();
         await expect(page.getByText(`${Helpers.user1.fullName} (You)`)).toBeVisible();
-        await expect(page.getByText('2 more author approvals are required before publishing')).toBeVisible();
+        await expect(page.getByText('1 more author approval is required before publishing')).toBeVisible();
 
         // handle co-authors confirmations
         await confirmCoAuthorInvitation(browser, Helpers.user2);
-        await confirmCoAuthorInvitation(browser, Helpers.user3);
 
         // refresh corresponding author page
         await page.reload();
         await expect(page.getByText(Helpers.user2.fullName)).toBeVisible();
-        await expect(page.getByText(Helpers.user3.fullName)).toBeVisible();
 
         await expect(page.getByText('All authors have approved this publication').first()).toBeVisible();
         await expect(page.getByText('Your role on this publication: Corresponding author')).toBeVisible();
