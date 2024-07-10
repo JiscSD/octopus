@@ -976,7 +976,9 @@ export const createPublicationHTMLTemplate = (
                 <strong>Authors:</strong> ${authorsWithAffiliationNumbers
                     .map(
                         (author) =>
-                            `<a href="${process.env.BASE_URL}/authors/${author.linkedUser}">${author.user?.firstName} ${author.user?.lastName}` +
+                            `<a href="${process.env.BASE_URL}/authors/${author.linkedUser}">${author.user?.firstName}${
+                                author.user?.lastName ? ' ' + author.user.lastName : ''
+                            }` +
                             (author.affiliationNumbers.length ? `<sup>${author.affiliationNumbers}</sup>` : '') +
                             '</a>'
                     )
@@ -1212,7 +1214,9 @@ export const createPublicationHeaderTemplate = (publicationVersion: I.Publicatio
     </style>
     <div class="header">
         <span>
-            ${`${authors[0]?.user?.firstName} ${authors[0]?.user?.lastName} ${authors.length > 1 ? 'et al.' : ''}`}
+            ${`${authors[0]?.user?.firstName}${authors[0]?.user?.lastName ? ' ' + authors[0].user.lastName : ''}${
+                authors.length > 1 ? ' et al.' : ''
+            }`}
         </span>
         <span>
             Published ${
