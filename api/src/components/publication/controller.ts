@@ -112,7 +112,7 @@ export const create = async (
             }
 
             // All proposed links must be valid.
-            if (linkedPublicationIds?.length) {
+            if (linkedPublicationIds) {
                 for (const linkTargetId of linkedPublicationIds) {
                     const validateLink = await linkService.createLinkValidation(
                         {
@@ -134,7 +134,7 @@ export const create = async (
             }
 
             // All proposed topics must exist.
-            if (topicIds?.length) {
+            if (topicIds) {
                 for (const topicId of topicIds) {
                     const topic = await topicService.get(topicId);
 
