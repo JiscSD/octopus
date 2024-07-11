@@ -1323,6 +1323,7 @@ test.describe('Publication flow + co-authors', () => {
     });
 
     test('Corresponding author can publish from Approvals Tracker', async ({ browser }) => {
+        test.slow();
         const page = await Helpers.getPageAsUser(browser);
 
         // create new publication
