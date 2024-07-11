@@ -115,30 +115,70 @@ export const getUserControlRequests = async (event: I.AuthenticatedAPIRequest<un
     }
 };
 
+const validateOrganisationalAccountInput = async <
+    T extends Pick<I.CreateOrganisationalAccountInput, 'email' | 'url' | 'defaultTopic'>
+>(
+    data: T,
+    environment: I.Environment
+): Promise<{ valid: true } | { valid: false; message: string }> => {
+    if (data.email && !Helpers.validateEmail(data.email)) {
+        return { valid: false, message: 'Supplied email addresses must be valid.' };
+    }
+
+    if (data.url && !Helpers.validateURL(data.url)) {
+        return { valid: false, message: 'Supplied URLs must be valid.' };
+    }
+
+    if (data.defaultTopic) {
+        const topicId = data.defaultTopic.ids[environment];
+        const topic = await topicService.get(topicId);
+
+        if (!topic) {
+            return { valid: false, message: `Topic not found with ID ${topicId}.` };
+        }
+
+        if (topic && topic.title !== data.defaultTopic.title) {
+            return {
+                valid: false,
+                message: `Topic found, but its title (${topic.title}) doesn't match the input data's title (${data.defaultTopic.title}).`
+            };
+        }
+    }
+
+    return { valid: true };
+};
+
 // Should only be called by a developer running a script.
 export const createOrganisationalAccounts = async (
-    users: I.CreateOrganisationalAccountInput[]
+    users: I.CreateOrganisationalAccountInput[],
+    environment: I.Environment = 'int'
 ): Promise<string | Prisma.Result<typeof prisma.user, Prisma.UserCreateArgs, 'create'>[]> => {
     if (!(users.constructor === Array)) {
         return 'An array must be supplied.';
     }
 
-    if (users.some((user) => !Object.prototype.hasOwnProperty.call(user, 'name'))) {
-        return 'Please provide a name for all accounts.';
-    }
+    const inputData: Prisma.UserUncheckedCreateInput[] = [];
 
-    // Validate email address
-    if (users.some((user) => user.email && !Helpers.validateEmail(user.email))) {
-        return 'Supplied email addresses must be valid.';
-    }
+    for (const user of users) {
+        if (!Object.prototype.hasOwnProperty.call(user, 'name')) {
+            return 'Please provide a name for all accounts.';
+        }
 
-    const inputData = users.map((user) => ({
-        firstName: user.name,
-        role: 'ORGANISATION' as I.Role,
-        email: user.email,
-        ror: user.ror,
-        url: user.url
-    }));
+        const validate = await validateOrganisationalAccountInput(user, environment);
+
+        if (!validate.valid) {
+            return validate.message;
+        }
+
+        inputData.push({
+            firstName: user.name,
+            role: 'ORGANISATION' as I.Role,
+            email: user.email,
+            ror: user.ror,
+            url: user.url,
+            defaultTopicId: user.defaultTopic ? user.defaultTopic.ids[environment] : null
+        });
+    }
 
     return await userService.createManyUsers(inputData);
 };
@@ -147,7 +187,8 @@ export const createOrganisationalAccounts = async (
 export const updateOrganisationalAccount = async (
     id: string,
     user: I.UpdateOrganisationalAccountInput,
-    regenerateApiKey = false
+    regenerateApiKey = false,
+    environment: I.Environment = 'int'
 ): Promise<string | Prisma.Result<typeof prisma.user, Prisma.UserUpdateArgs, 'update'>> => {
     // Verify that the user is an organisational user.
     // Other types of user shouldn't be updatable other than by getting their latest data from orcid.
@@ -157,22 +198,14 @@ export const updateOrganisationalAccount = async (
         return 'The supplied user ID does not belong to an existing organisational account.';
     }
 
-    // Validate email address
-    if (user.email && !Helpers.validateEmail(user.email)) {
-        return 'Supplied email address must be valid.';
-    }
+    const validate = await validateOrganisationalAccountInput(user, environment);
 
-    // Verify that defaultTopicId refers to a valid topic.
-    if (user.defaultTopicId) {
-        const defaultTopic = await topicService.get(user.defaultTopicId);
-
-        if (!defaultTopic) {
-            return 'Default topic not found.';
-        }
+    if (!validate.valid) {
+        return validate.message;
     }
 
     // Verify that at least one applicable field is being updated.
-    if (!(user.name || user.email || user.ror || user.url || user.defaultTopicId || regenerateApiKey)) {
+    if (!(user.name || user.email || user.ror || user.url || user.defaultTopic || regenerateApiKey)) {
         return 'No applicable field values have been supplied.';
     }
 
@@ -181,7 +214,7 @@ export const updateOrganisationalAccount = async (
         ...(user.email && { email: user.email }),
         ...(user.ror && { ror: user.ror }),
         ...(user.url && { url: user.url }),
-        ...(user.defaultTopicId && { defaultTopicId: user.defaultTopicId }),
+        ...(user.defaultTopic && { defaultTopicId: user.defaultTopic.ids[environment] }),
         ...(regenerateApiKey && { apiKey: crypto.randomUUID() })
     });
 };

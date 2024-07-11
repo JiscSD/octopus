@@ -74,6 +74,8 @@ export interface JSONResponse {
     statusCode: number;
 }
 
+export type Environment = 'int' | 'prod';
+
 /**
  * @description Publications
  */
@@ -269,6 +271,13 @@ export interface CreateOrganisationalAccountInput {
     email?: string;
     ror?: string;
     url?: string;
+    defaultTopic?: {
+        title: string;
+        ids: {
+            int: string;
+            prod: string;
+        };
+    };
 }
 
 export interface UpdateOrganisationalAccountInput {
@@ -276,7 +285,13 @@ export interface UpdateOrganisationalAccountInput {
     email?: string;
     ror?: string;
     url?: string;
-    defaultTopicId?: string;
+    defaultTopic?: {
+        title: string;
+        ids: {
+            int: string;
+            prod: string;
+        };
+    };
 }
 
 /**

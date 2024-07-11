@@ -29,7 +29,7 @@ describe('Update organisational account', () => {
             email: 'not an email address'
         });
 
-        expect(updatedAccount).toEqual('Supplied email address must be valid.');
+        expect(updatedAccount).toEqual('Supplied email addresses must be valid.');
     });
 
     test('At least one applicable property must be provided', async () => {
@@ -40,15 +40,27 @@ describe('Update organisational account', () => {
 
     test('Default topic ID must belong to a real topic', async () => {
         const updatedAccount = await userController.updateOrganisationalAccount('test-organisational-account-1', {
-            defaultTopicId: 'not a real ID'
+            defaultTopic: {
+                title: 'Made up topic',
+                ids: {
+                    int: 'not a real ID',
+                    prod: 'not a real ID'
+                }
+            }
         });
 
-        expect(updatedAccount).toEqual('Default topic not found.');
+        expect(updatedAccount).toEqual('Topic not found with ID not a real ID.');
     });
 
     test('Default topic ID can be set', async () => {
         const updatedAccount = await userController.updateOrganisationalAccount('test-organisational-account-1', {
-            defaultTopicId: 'test-topic-1'
+            defaultTopic: {
+                title: 'Test topic',
+                ids: {
+                    int: 'test-topic-1',
+                    prod: 'placeholder'
+                }
+            }
         });
 
         expect(updatedAccount).toHaveProperty('defaultTopicId', 'test-topic-1');
