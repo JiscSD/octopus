@@ -257,6 +257,9 @@ export const createLinkValidation = async (
     } catch (err) {
         console.log(err);
 
-        return { valid: false, details: { code: 500, message: 'Unknown server error.' } };
+        return {
+            valid: false,
+            details: { code: 500, message: 'Link validation failed because of an unexpected error.' }
+        };
     }
 };
