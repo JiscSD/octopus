@@ -29,7 +29,7 @@ export const create = (e: I.CreateTopicRequestBody) =>
         }
     });
 
-export const get = (id: string) =>
+export const get = (id: string, includePublicationVersions?: boolean) =>
     client.prisma.topic.findFirst({
         where: {
             id
@@ -52,16 +52,20 @@ export const get = (id: string) =>
                     translations: true
                 }
             },
-            publicationVersions: {
-                where: {
-                    isLatestLiveVersion: true
-                },
-                select: {
-                    id: true,
-                    title: true,
-                    versionOf: true
-                }
-            }
+            ...(includePublicationVersions
+                ? {
+                      publicationVersions: {
+                          where: {
+                              isLatestLiveVersion: true
+                          },
+                          select: {
+                              id: true,
+                              title: true,
+                              versionOf: true
+                          }
+                      }
+                  }
+                : {})
         }
     });
 

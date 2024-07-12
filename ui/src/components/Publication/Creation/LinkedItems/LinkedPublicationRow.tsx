@@ -35,7 +35,10 @@ const LinkedPublicationRow: React.FC<Props> = (props): React.ReactElement => {
                             {Helpers.formatDate(props.linkedPublication.publishedDate)},
                         </time>
                         <span className="text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
-                            {props.linkedPublication.authorFirstName[0]}. {props.linkedPublication.authorLastName}
+                            {Helpers.abbreviateUserName({
+                                firstName: props.linkedPublication.authorFirstName,
+                                lastName: props.linkedPublication.authorLastName
+                            })}
                         </span>
                     </div>
                 </div>
