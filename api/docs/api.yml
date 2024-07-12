@@ -255,12 +255,22 @@ paths:
   /publications:
     post:
       summary: Create a publication
-      description: It will be created with its first version, in draft state. Further changes to the publication should be made using the [Publication Version](#/tagName/PublicationVersions) endpoints. As such, many of the fields here actually refer to the publication version itself.
+      description: |
+        By default, it will be created with its first version, in draft state. Further changes to the publication should be made using the [Publication Version](#/tagName/PublicationVersions) endpoints. As such, many of the fields here actually refer to the publication version itself.
+        
+        Organisational accounts can create a live publication with this endpoint by providing the `directPublish` query parameter.
       tags:
         - Publications
       security:
         - ApiKey: []
         - BearerToken: []
+      parameters:
+        - in: query
+          name: directPublish
+          description: |
+            Whether the publication should go straight to live state, rather than the default of draft. This is only permitted to organisational accounts. In order to direct publish, certain conditions must be satisfied. Notably, if the account making this operation has a default topic, that will be associated with the publication on creation if no values are provided for either of `topicIds` or `linkedPublicationIds`. If it doesn't, a value must be provided for `topicIds` or `linkedPublicationIds`. See PublicationVersion's [updateStatus](#/tagName/PublicationVersions/updateStatus) endpoint for more requirements.
+          schema:
+            type: boolean
       requestBody:
         required: true
         content:
@@ -303,8 +313,19 @@ paths:
                 affiliationStatement:
                   type: string
                   description: Unused legacy field.
+                  nullable: true
                 topicIds:
                   $ref: "#/components/schemas/PublicationVersionTopicIds"
+                linkedPublicationIds:
+                  type: array
+                  nullable: true
+                  description: IDs of publications that this publication should be linked to. Only relevant when using direct publish.
+                  items:
+                    type: string
+                externalId:
+                  $ref: "#/components/schemas/PublicationExternalId"
+                externalSource:
+                  $ref: "#/components/schemas/PublicationExternalSource"
               required:
                 - type
                 - title
@@ -330,6 +351,10 @@ paths:
                                 description: Topics that the publication is linked to.
                                 items:
                                   $ref: "#/components/schemas/BaseTopicResponse"
+                    linkedTo:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/LinkResponse"
         '400':
           $ref: "#/components/responses/BadRequest"
         '403':
@@ -821,6 +846,7 @@ paths:
           $ref: "#/components/responses/NotFound"
   /publication-versions/{publicationVersionId}/status/{status}:
     put:
+      operationId: updateStatus
       summary: Set the publication status of a publication version
       description: |
         Manage the workflow state of a publication version. They start out as DRAFT, then move to LIVE (via LOCKED, if working with co-authors, to gather their approval), after which the status cannot be changed.\
@@ -1112,6 +1138,10 @@ components:
         doi:
           type: string
           description: Digital Object Identifier, minted with Datacite upon publication creation.
+        externalId:
+          $ref: "#/components/schemas/PublicationExternalId"
+        externalSource:
+          $ref: "#/components/schemas/PublicationExternalSource"
     BasePublicationVersionResponse:
       type: object
       properties:
@@ -1302,6 +1332,30 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/AdditionalInformationResponse"
+    LinkResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the link between publications.
+        publicationFromId:
+          type: string
+          description: ID of the publication linked from.
+        publicationToId:
+          type: string
+          description: ID of the publication linked to.
+        versionToId:
+          type: string
+          description: ID of the particular version of the publication that was linked to.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        draft:
+          type: boolean
+          description: Whether the link is in draft state. Generally speaking, this is true when the publication linked from is a draft being worked on, and becomes false when that publication's version becomes live.
     LinkedPublication:
       type: object
       properties:
@@ -1327,6 +1381,15 @@ components:
                 $ref: "#/components/schemas/PublicationVersionDescription"
               keywords:
                 $ref: "#/components/schemas/PublicationVersionKeywords"
+    PublicationExternalId:
+      type: string
+      nullable: true
+      description: When a publication has been imported from an external system, this is the ID it has on that system. Must be accompanied by the externalSource field.
+    PublicationExternalSource:
+      type: string
+      nullable: true
+      enum: [ARI]
+      description: An external system the publication has been imported from. Must be accompanied by the externalId field.
     PublicationStatusEnum:
       type: string
       enum: [DRAFT,LOCKED,LIVE]
@@ -1345,7 +1408,7 @@ components:
       type: string
       enum: [PROBLEM, HYPOTHESIS, PROTOCOL, DATA, ANALYSIS, INTERPRETATION, REAL_WORLD_APPLICATION, PEER_REVIEW]
       description: |
-        Publication type. Some are labelled differently in the Octopus front end.
+        Publication type. Some are labelled differently in the Octopus front end:
         - PROBLEM = Research Problem
         - HYPOTHESIS = Rationale / Hypothesis
         - PROTOCOL = Method
@@ -1421,12 +1484,13 @@ components:
       nullable: true
     PublicationVersionTitle:
       type: string
-      nullable: true
+      minLength: 1
     PublicationVersionTopicIds:
       type: array
       items:
         type: string
-      description: The IDs of one or more topics the publication is linked to. This should only be used where a publication cannot be linked to another publication (see [Links](#/tagName/Links)).
+      description: |
+        The IDs of one or more topics the publication is linked to. This should only be used where a publication cannot be linked to another publication (see [Links](#/tagName/Links)). Only PROBLEM publications can be linked to a topic.
       nullable: true
     Reference:
       type: object
@@ -1492,6 +1556,10 @@ components:
           $ref: "#/components/schemas/UserRole"
         url:
           $ref: "#/components/schemas/UserUrl"
+        defaultTopicId:
+          type: string
+          nullable: true
+          description: Organisational accounts may have a default topic that their publications can be automatically associated with on creation.
     UserRole:
       type: string
       enum: [USER, ORGANISATION, SUPER_USER]

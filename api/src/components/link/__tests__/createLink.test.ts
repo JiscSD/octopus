@@ -45,7 +45,8 @@ describe('Create links', () => {
                 from: 'publication-data-draft'
             });
 
-        expect(linkAttemptTwo.statusCode).toEqual(404);
+        expect(linkAttemptTwo.statusCode).toEqual(400);
+        expect(linkAttemptTwo.body.message).toEqual('Link already exists.');
     });
 
     test('User cannot create a link from PROBLEM (LIVE) to HYPOTHESIS (in DRAFT)', async () => {
@@ -59,7 +60,10 @@ describe('Create links', () => {
                 from: 'publication-problem-live'
             });
 
-        expect(link.statusCode).toEqual(403);
+        expect(link.statusCode).toEqual(400);
+        expect(link.body.message).toEqual(
+            `Publication with id publication-problem-live is LIVE, so a link cannot be created from it.`
+        );
     });
 
     test('User cannot create a link from HYPOTHESIS (in DRAFT) to PROBLEM (in DRAFT)', async () => {
@@ -73,7 +77,10 @@ describe('Create links', () => {
                 from: 'publication-problem-draft'
             });
 
-        expect(link.statusCode).toEqual(403);
+        expect(link.statusCode).toEqual(400);
+        expect(link.body.message).toEqual(
+            'Publication with id publication-hypothesis-draft is not LIVE, so a link cannot be created to it.'
+        );
     });
 
     test('Cannot create a link from HYPOTHESIS (in DRAFT) to PROBLEM (LIVE) if no auth', async () => {
@@ -96,7 +103,10 @@ describe('Create links', () => {
                 from: 'publication-hypothesis-draft'
             });
 
-        expect(link.statusCode).toEqual(401);
+        expect(link.statusCode).toEqual(403);
+        expect(link.body.message).toEqual(
+            'You cannot create a link from the publication with id publication-hypothesis-draft.'
+        );
     });
 });
 

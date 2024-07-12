@@ -17,7 +17,8 @@ export const create = middy(publicationController.create)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())
-    .use(middleware.validator(publicationSchema.create, 'body'));
+    .use(middleware.validator(publicationSchema.createBody, 'body'))
+    .use(middleware.validator(publicationSchema.createQueryStringParameters, 'queryStringParameters'));
 
 export const getPublicationLinks = middy(publicationController.getLinksForPublication)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
