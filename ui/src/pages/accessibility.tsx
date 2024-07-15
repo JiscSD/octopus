@@ -146,11 +146,11 @@ const Accessibility: Types.NextPage = (): React.ReactElement => {
                         present to explain their purpose in most cases.
                     </p>
                     <p>Certain fields are not marked up with their semantic purpose.</p>
-                    <p>Several lists on publication pages do not convey details about the list's structure.</p>
+                    <p>Several lists on publication pages do not convey details about the list&apos;s structure.</p>
                     <p>
-                        The "Main Text" and "References" fields on the draft edit page do not convey their purpose to
-                        screen readers. Some modals, such as the “Red flag publication” modal do not announce their name
-                        to screen readers.
+                        The &quot;Main Text&quot; and &quot;References&quot; fields on the draft edit page do not convey
+                        their purpose to screen readers. Some modals, such as the “Red flag publication” modal do not
+                        announce their name to screen readers.
                     </p>
                     <h4 className="mt-6 font-semibold">1.3.3 Sensory Characteristics (Level A)</h4>
                     <p>The completion of sections on the draft edit page is only indicated via icon colour & shape.</p>
@@ -168,8 +168,8 @@ const Accessibility: Types.NextPage = (): React.ReactElement => {
                     <p>Fields to enter organisation name do not have their semantic purpose correctly recorded.</p>
                     <h4 className="mt-6 font-semibold">1.4.3 Contrast (Minimum) (Level AA)</h4>
                     <p>
-                        Red asterisks used to denote mandatory fields are presented on the "Flag a concern" model as
-                        small text without sufficient contrast (3.78:1).
+                        Red asterisks used to denote mandatory fields are presented on the &quot;Flag a concern&quot;
+                        model as small text without sufficient contrast (3.78:1).
                     </p>
                     <p>
                         DOI text publications listed on the account page on light mode is small and has insufficient
@@ -180,8 +180,8 @@ const Accessibility: Types.NextPage = (): React.ReactElement => {
                     <p>Publication text is not marked up as being in the language it was written in.</p>
                     <h4 className="mt-6 font-semibold">3.2.4 Consistent Identification (Level AA)</h4>
                     <p>
-                        Publication title is described differently by assistive technology on the "publish" page
-                        compared with the draft edit page.
+                        Publication title is described differently by assistive technology on the &quot;publish&quot;
+                        page compared with the draft edit page.
                     </p>
                     <h4 className="mt-6 font-semibold">3.3.3 Error Suggestion (Level AA)</h4>
                     <p>
@@ -192,8 +192,8 @@ const Accessibility: Types.NextPage = (): React.ReactElement => {
                     <h4 className="mt-6 font-semibold">4.1.3 Status Messages (Level AA)</h4>
                     <p>
                         Error banners do not have a role=alert markup. This includes both programmatic errors, such as
-                        403, "Publication is already locked", and so on, as well as user input errors, such as an
-                        invalid URL for a funder, or an invalid email for a co-author.
+                        403, &quot;Publication is already locked&quot;, and so on, as well as user input errors, such as
+                        an invalid URL for a funder, or an invalid email for a co-author.
                     </p>
                     <h3 className="mt-8 text-lg font-semibold">Disproportionate Burden</h3>
                     <h4 className="mt-6 font-semibold">User uploaded content</h4>
@@ -220,8 +220,8 @@ const Accessibility: Types.NextPage = (): React.ReactElement => {
                     <h2 className="mt-10 text-xl font-semibold">What we&apos;re doing to improve accessibility</h2>
                     <p>
                         Whenever new features are released, they go through our internal quality assurance checks and
-                        must meet WCAG 2.1 A & AA guidelines. We're also committed to working on the issues above and
-                        aim to have all known issues resolved by mid-2025.
+                        must meet WCAG 2.1 A & AA guidelines. We&apos;re also committed to working on the issues above
+                        and aim to have all known issues resolved by mid-2025.
                     </p>
                     <p>
                         Improvements are being made both as a part of routine development, and as dedicated exercises.
