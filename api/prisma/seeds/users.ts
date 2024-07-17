@@ -115,6 +115,12 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Jisc',
         role: 'ORGANISATION',
         apiKey: '000000012'
+    },
+    {
+        id: 'test-organisational-account-2',
+        firstName: 'Test organisation 2',
+        role: 'ORGANISATION',
+        apiKey: '000000013'
     }
 ];
 

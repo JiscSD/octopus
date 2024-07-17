@@ -326,17 +326,48 @@ export const getOpenSearchPublications = (filters: I.OpenSearchPublicationFilter
     return client.search.search(query);
 };
 
-export const create = (e: I.CreatePublicationRequestBody, user: I.User, doiResponse: I.DOIResponse) =>
-    client.prisma.publication.create({
+export const create = async (
+    e: I.CreatePublicationRequestBody,
+    user: I.User,
+    doiResponse: I.DOIResponse,
+    directPublish?: boolean,
+    linkedPublications?: {
+        publicationId: string;
+        versionId: string;
+    }[]
+) => {
+    // If topics are provided, associate the publication to those.
+    const topics = e.topicIds?.length
+        ? {
+              connect: e.topicIds.map((topicId) => ({ id: topicId }))
+          }
+        : // If not, and this is a direct publish, use the user's default topic.
+        directPublish && user.defaultTopicId
+        ? {
+              connect: { id: user.defaultTopicId }
+          }
+        : undefined;
+    const currentStatus: I.PublicationStatusEnum = directPublish ? 'LIVE' : 'DRAFT';
+    const now = new Date().toISOString();
+    const publication = await client.prisma.publication.create({
         data: {
             id: doiResponse.data.attributes.suffix,
             doi: doiResponse.data.attributes.doi,
             type: e.type,
+            externalId: e.externalId,
+            externalSource: e.externalSource,
             // Create first version when publication is created
             versions: {
                 create: {
                     id: doiResponse.data.attributes.suffix + '-v1',
                     versionNumber: 1,
+                    isLatestLiveVersion: directPublish,
+                    currentStatus,
+                    // Prisma would handle this, but because we might be manually setting the published date to "now",
+                    // make sure these are the same so it isn't confusing. Otherwise, there may be a few milliseconds' difference.
+                    createdAt: now,
+                    updatedAt: now,
+                    publishedDate: directPublish ? now : undefined,
                     title: e.title,
                     licence: e.licence,
                     description: e.description,
@@ -357,7 +388,7 @@ export const create = (e: I.CreatePublicationRequestBody, user: I.User, doiRespo
                     },
                     publicationStatus: {
                         create: {
-                            status: 'DRAFT'
+                            status: currentStatus
                         }
                     },
                     coAuthors: {
@@ -369,13 +400,23 @@ export const create = (e: I.CreatePublicationRequestBody, user: I.User, doiRespo
                             approvalRequested: false
                         }
                     },
-                    topics: e.topicIds?.length
-                        ? {
-                              connect: e.topicIds.map((topicId) => ({ id: topicId }))
-                          }
-                        : undefined
+                    topics
                 }
-            }
+            },
+            // Create links if they were supplied and this is a direct publish.
+            ...(directPublish && linkedPublications?.length
+                ? {
+                      linkedTo: {
+                          createMany: {
+                              data: linkedPublications.map((linkedPublication) => ({
+                                  publicationToId: linkedPublication.publicationId,
+                                  versionToId: linkedPublication.versionId,
+                                  draft: false
+                              }))
+                          }
+                      }
+                  }
+                : {})
         },
         include: {
             versions: {
@@ -388,9 +429,13 @@ export const create = (e: I.CreatePublicationRequestBody, user: I.User, doiRespo
                         }
                     }
                 }
-            }
+            },
+            linkedTo: true
         }
     });
+
+    return publication;
+};
 
 export const doesDuplicateFlagExist = (publication, category, user) =>
     client.prisma.publicationFlags.findFirst({
@@ -417,7 +462,7 @@ const sortPublicationsByPublicationDate = (publications: I.LinkedPublication[]) 
  * @returns a sorted list of publications
  */
 const getOrderedLinkedPublications = (a: I.LinkedPublication[], b: I.LinkedPublication[]): I.LinkedPublication[] => {
-    const types = Helpers.octopusInformation.publications;
+    const types = Helpers.octopusInformation.publicationTypes;
     // Confirm that the type of publications in list a immediately follows or precedes the type of publications in list b
     const aFollowsB = a.every((aPub) => b.every((bPub) => types.indexOf(bPub.type) === types.indexOf(aPub.type) - 1));
     const aPrecedesB = a.every((aPub) => b.every((bPub) => types.indexOf(bPub.type) === types.indexOf(aPub.type) + 1));
@@ -708,9 +753,10 @@ export const getLinksForPublication = async (
 
     // Sorting - this is a custom order to make the visualisation neater.
     // Process parents by type, proceeding away from the selected publication's type.
-    const filteredPublicationTypes = Helpers.octopusInformation.publications.filter((type) => type !== 'PEER_REVIEW');
+    const types = Helpers.octopusInformation.publicationTypes;
+    const filteredPublicationTypes = types.filter((type) => type !== 'PEER_REVIEW');
     const orderedParents: I.LinkedToPublication[] = [];
-    let parentTypeIdx = filteredPublicationTypes.indexOf(publication.type) - 1;
+    let parentTypeIdx = types.indexOf(publication.type) - 1;
 
     // For each type, going backwards towards PROBLEM, starting with the one before the selected publication's type...
     while (parentTypeIdx >= 0) {
@@ -719,7 +765,7 @@ export const getLinksForPublication = async (
 
         // Sort parents.
         // For the type immediately before the selected publication's type, just order parents by publication date, descending.
-        if (parentTypeIdx === filteredPublicationTypes.indexOf(publication.type) - 1) {
+        if (parentTypeIdx === types.indexOf(publication.type) - 1) {
             orderedParents.push(...(sortPublicationsByPublicationDate(publicationsOfType) as I.LinkedToPublication[]));
         } else {
             // For types further along the chain, use custom ordering.
@@ -742,7 +788,7 @@ export const getLinksForPublication = async (
     }
 
     const orderedChildren: I.LinkedFromPublication[] = [];
-    let childTypeIdx = filteredPublicationTypes.indexOf(publication.type) + 1;
+    let childTypeIdx = types.indexOf(publication.type) + 1;
 
     // For each type, going forwards towards REAL_WORLD_APPLICATION, starting with the one after the selected publication's type...
     while (childTypeIdx <= filteredPublicationTypes.indexOf('REAL_WORLD_APPLICATION')) {
@@ -751,7 +797,7 @@ export const getLinksForPublication = async (
 
         // Sort child publications.
         // For the type immediately after the selected publication's type, just order children by publication date, descending.
-        if (childTypeIdx === filteredPublicationTypes.indexOf(publication.type) + 1) {
+        if (childTypeIdx === types.indexOf(publication.type) + 1) {
             orderedChildren.push(
                 ...publicationsOfType.sort(
                     (a, b) => new Date(b.publishedDate).valueOf() - new Date(a.publishedDate).valueOf()

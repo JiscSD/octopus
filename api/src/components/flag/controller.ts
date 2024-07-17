@@ -5,7 +5,6 @@ import * as publicationService from 'publication/service';
 import * as flagService from 'flag/service';
 import * as userService from 'user/service';
 import * as I from 'interface';
-import * as helpers from 'lib/helpers';
 import * as email from 'lib/email';
 
 export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByID>): Promise<I.JSONResponse> => {
@@ -46,6 +45,19 @@ export const getUserFlags = async (
 
         return response.json(500, { message: 'Unknown server error.' });
     }
+};
+
+const formatFlagType = (flagType: I.FlagCategory): string => {
+    const types = {
+        PLAGIARISM: 'Plagiarism',
+        ETHICAL_ISSUES: 'Ethical issues',
+        MISREPRESENTATION: 'Misrepresentation',
+        UNDECLARED_IMAGE_MANIPULATION: 'Undeclared image manipulation',
+        COPYRIGHT: 'Copyright',
+        INAPPROPRIATE: 'Inappropriate'
+    };
+
+    return types[flagType];
 };
 
 export const createFlag = async (
@@ -115,7 +127,7 @@ export const createFlag = async (
                     publicationName: latestPublishedVersion.title,
                     publicationId: publication.id,
                     flagId: flag.id,
-                    type: helpers.formatFlagType(event.body.category),
+                    type: formatFlagType(event.body.category),
                     submitter: `${event.user.firstName} ${event.user.lastName || ''}`,
                     flagReason: event.body.comment
                 })
@@ -224,7 +236,7 @@ export const createFlagComment = async (
                     publicationName: latestPublishedVersion.title || '',
                     publicationId: publication.id || '',
                     flagId: flag.id,
-                    type: helpers.formatFlagType(flag.category),
+                    type: formatFlagType(flag.category),
                     submitter: `${event.user.firstName} ${event.user.lastName || ''}`
                 })
             );
@@ -237,7 +249,7 @@ export const createFlagComment = async (
                     publicationName: latestPublishedVersion.title || '',
                     publicationId: publication.id || '',
                     flagId: flag.id,
-                    type: helpers.formatFlagType(flag.category),
+                    type: formatFlagType(flag.category),
                     submitter: `${event.user.firstName} ${event.user.lastName || ''}`
                 })
             );
@@ -298,7 +310,7 @@ export const resolveFlag = async (
                     publicationName: latestPublishedVersion.title || '',
                     publicationId: publication.id || '',
                     flagId: flag.id,
-                    type: helpers.formatFlagType(flag.category)
+                    type: formatFlagType(flag.category)
                 })
             );
         }

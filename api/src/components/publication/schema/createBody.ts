@@ -1,7 +1,7 @@
 import * as I from 'interface';
 import * as H from 'lib/helpers';
 
-const createPublicationSchema: I.Schema = {
+const createPublicationBodySchema: I.Schema = {
     type: 'object',
     properties: {
         type: {
@@ -18,7 +18,8 @@ const createPublicationSchema: I.Schema = {
             ]
         },
         title: {
-            type: 'string'
+            type: 'string',
+            minLength: 1
         },
         licence: {
             type: 'string',
@@ -74,10 +75,21 @@ const createPublicationSchema: I.Schema = {
         topicIds: {
             type: 'array',
             items: { type: 'string' }
+        },
+        linkedPublicationIds: {
+            type: 'array',
+            items: { type: 'string' }
+        },
+        externalId: {
+            type: 'string'
+        },
+        externalSource: {
+            type: 'string',
+            enum: <I.PublicationImportSource[]>['ARI']
         }
     },
     required: ['type', 'title'],
     additionalProperties: false
 };
 
-export default createPublicationSchema;
+export default createPublicationBodySchema;
