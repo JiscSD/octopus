@@ -187,9 +187,39 @@ export const create = async (
             event.body.content = helpers.getSafeHTML(content);
         }
 
-        const doi = await helpers.createEmptyDOI();
+        // Create empty DOI
+        const payload = {
+            data: {
+                type: 'dois',
+                attributes: {
+                    prefix: process.env.DOI_PREFIX // 10.82259/xydggf.546547
+                }
+            }
+        };
+
+        const doiRequest = await axios.post<I.DOIResponse>(process.env.DATACITE_ENDPOINT as string, payload, {
+            auth: {
+                username: process.env.DATACITE_USER as string,
+                password: process.env.DATACITE_PASSWORD as string
+            }
+        });
+
+        const doi = doiRequest.data;
 
         const publication = await publicationService.create(event.body, event.user, doi, directPublish, links);
+
+        if (directPublish) {
+            // Create a DOI for this version specifically and trigger post publish tasks.
+            const publishedVersion = await publicationVersionService.get(publication.id, 'latestLive');
+
+            if (publishedVersion) {
+                const versionWithDoi = await publicationVersionService.generateNewVersionDOI(publishedVersion, null);
+
+                if (versionWithDoi) {
+                    await publicationVersionService.postPublishHook(versionWithDoi);
+                }
+            }
+        }
 
         return response.json(201, publication);
     } catch (err) {
