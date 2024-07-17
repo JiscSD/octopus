@@ -1,5 +1,5 @@
 import * as client from '../lib/client';
-import * as helpers from '../lib/helpers';
+import * as publicationVersionService from 'publicationVersion/service';
 
 /**
  * This script will update canonical DOIs with their latest versions
@@ -101,7 +101,9 @@ const updatePublicationDOIs = async (): Promise<void> => {
     let index = 1;
 
     for (const version of latestLiveVersions) {
-        await helpers.updatePublicationDOI(version.publication.doi, version).catch((err) => console.log(err));
+        await publicationVersionService
+            .updateCanonicalDOI(version.publication.doi, version)
+            .catch((err) => console.log(err));
 
         console.log(`No: ${index}. ${version.title} doi updated (${version.publication.doi})`);
         index++;

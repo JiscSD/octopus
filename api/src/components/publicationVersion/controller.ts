@@ -1,4 +1,3 @@
-import { convert } from 'html-to-text';
 import * as I from 'interface';
 import * as response from 'lib/response';
 import * as publicationVersionService from 'publicationVersion/service';
@@ -6,7 +5,6 @@ import * as publicationService from 'publication/service';
 import * as coAuthorService from 'coauthor/service';
 import * as userService from 'user/service';
 import * as helpers from 'lib/helpers';
-import * as sqs from 'lib/sqs';
 import * as eventService from 'event/service';
 import * as email from 'lib/email';
 
@@ -303,65 +301,11 @@ export const updateStatus = async (
             );
         }
 
-        // Create a separate DOI for this version only
-        // Peer Reviews do not need this as they can only have 1 version
-        if (publicationVersion.publication.type !== 'PEER_REVIEW') {
-            const newPublicationVersionDOI = await helpers.createPublicationVersionDOI(
-                publicationVersion,
-                previousPublicationVersion?.doi as string
-            );
+        // Create a DOI for this version specifically.
+        await publicationVersionService.generateNewVersionDOI(publicationVersion, previousPublicationVersion);
 
-            if (previousPublicationVersion && previousPublicationVersion.doi) {
-                // Update previous version DOI
-                // This will indicate that the new version follows the previous one
-                await helpers.updatePreviousPublicationVersionDOI(
-                    previousPublicationVersion,
-                    newPublicationVersionDOI.data.attributes.doi
-                );
-            }
-
-            // Save the DOI to the database
-            await publicationVersionService.update(publicationVersion.id, {
-                doi: newPublicationVersionDOI.data.attributes.doi
-            });
-        }
-
-        // Update version status first so that published date is available for Opensearch record
-        const upToDateVersion = await publicationVersionService.updateStatus(publicationVersion.id, 'LIVE');
-
-        // Update the canonical DOI with the latest details from this version
-        await helpers.updatePublicationDOI(publicationVersion.publication.doi, upToDateVersion);
-
-        if (previousPublicationVersion) {
-            // delete old OpenSearch record
-            await publicationService.deleteOpenSearchRecord(upToDateVersion.versionOf);
-        }
-
-        // create new record
-        await publicationService.createOpenSearchRecord({
-            id: upToDateVersion.versionOf,
-            type: upToDateVersion.publication.type,
-            title: upToDateVersion.title,
-            licence: upToDateVersion.licence,
-            description: upToDateVersion.description,
-            keywords: upToDateVersion.keywords,
-            content: upToDateVersion.content,
-            publishedDate: upToDateVersion.publishedDate,
-            cleanContent: convert(upToDateVersion.content)
-        });
-
-        // delete all pending request control events for this publication version
-        await eventService.deleteMany({
-            type: 'REQUEST_CONTROL',
-            data: {
-                path: ['publicationVersion', 'id'],
-                equals: publicationVersion.id
-            }
-        });
-
-        // send message to the pdf generation queue
-        // currently only on deployed instances while a local solution is developed
-        if (process.env.STAGE !== 'local') await sqs.sendMessage(publicationVersion.versionOf);
+        // Publish version.
+        await publicationVersionService.updateStatus(publicationVersion.id, 'LIVE');
 
         return response.json(200, { message: 'Publication is now LIVE.' });
     } catch (err) {

@@ -635,10 +635,6 @@ export interface CreateReferencePathParams {
     publicationVersionId: string;
 }
 
-export interface OctopusInformation {
-    publications: PublicationType[];
-    languages: Languages[];
-}
 export interface CreateFlagCommentBody {
     comment: string;
 }
