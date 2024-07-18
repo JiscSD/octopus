@@ -746,7 +746,7 @@ export interface DataCiteCreatorNameIdentifiers {
 }
 
 export interface DataCiteUser {
-    firstName: string | undefined;
+    firstName: string;
     lastName: string | null;
     orcid: string | null;
     affiliations: MappedOrcidAffiliation[];

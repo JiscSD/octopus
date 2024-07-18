@@ -1236,7 +1236,7 @@ export const generatePDF = async (publicationVersion: I.PublicationVersion): Pro
 // DOI functions
 const createCreatorObject = (user: I.DataCiteUser): I.DataCiteCreator => {
     return {
-        name: `${user?.lastName}, ${user?.firstName}`, // datacite expects full name in lastname, firstname order
+        name: Helpers.abbreviateUserName(user), // datacite expects full name in lastname, firstname order
         givenName: user?.firstName,
         familyName: user?.lastName,
         nameType: 'Personal',
@@ -1391,7 +1391,7 @@ const createDOIPayload = async (
                 publicationYear: publicationVersion.createdAt.getFullYear(),
                 contributors: [
                     {
-                        name: `${publicationVersion.user.lastName} ${publicationVersion.user.firstName}`,
+                        name: Helpers.abbreviateUserName(publicationVersion.user),
                         contributorType: 'ContactPerson',
                         nameType: 'Personal',
                         givenName: publicationVersion.user.firstName,
