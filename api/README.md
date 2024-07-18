@@ -149,4 +149,3 @@ This is a place to track where we have added dependency overrides in package.jso
 
 -   fast-xml-parser ^4.2.5: to address [dependabot alert](https://github.com/JiscSD/octopus/security/dependabot/59)
 -   http-cache-semantics ^4.1.1: to address [dependabot alert](https://github.com/JiscSD/octopus/security/dependabot/45)
--   micromatch ^4.0.6: to address two vulnerabilities ([1](https://security.snyk.io/vuln/SNYK-JS-BRACES-6838727), [2](https://security.snyk.io/vuln/SNYK-JS-MICROMATCH-6838728)) introduced via copy-webpack-plugin's dependency on this package.
