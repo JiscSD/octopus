@@ -57,7 +57,7 @@
             "image/*": [
                 "src/components/image/*"
             ],
-            "coauthor/*": [
+            "coAuthor/*": [
                 "src/components/coauthor/*"
             ],
             "funder/*": [

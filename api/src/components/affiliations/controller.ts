@@ -4,7 +4,7 @@ import * as I from 'interface';
 import * as response from 'lib/response';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as userService from 'user/service';
-import * as coAuthorService from 'coauthor/service';
+import * as coAuthorService from 'coAuthor/service';
 import { Prisma } from '@prisma/client';
 
 export const updateAffiliations = async (
