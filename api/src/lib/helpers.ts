@@ -355,3 +355,16 @@ export const validateEmail = (email: string): boolean => {
 export const replaceHTMLLineBreaks = (html: string): string => {
     return html.replace(/\n|\r\n|\n\r|\r/g, '<br>');
 };
+
+// Check if two arrays are equal.
+export const compareArrays = <T>(a: Array<T>, b: Array<T>): boolean => {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+
+    for (let i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i]) return false;
+    }
+
+    return true;
+};

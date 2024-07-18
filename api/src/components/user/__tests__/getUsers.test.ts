@@ -35,7 +35,7 @@ describe('Get Users', () => {
         expect(response.body.data.every((user: I.User) => `${user.firstName} ${user.lastName}`.includes('Test'))).toBe(
             true
         );
-        expect(response.body.metadata.total).toEqual(11);
+        expect(response.body.metadata.total).toEqual(12);
     });
 
     test('Get "Science Octopus" user by searching for "Science"', async () => {

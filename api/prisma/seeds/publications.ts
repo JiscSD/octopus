@@ -1224,6 +1224,38 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 }
             }
         }
+    },
+    {
+        id: 'ari-publication-1',
+        doi: '10.82259/cty5-2g34',
+        type: 'PROBLEM',
+        externalId: '123456',
+        externalSource: 'ARI',
+        versions: {
+            create: {
+                id: 'ari-publication-1-v1',
+                doi: '10.82259/ver1-2g34',
+                versionNumber: 1,
+                title: 'ARI Publication 1',
+                content:
+                    '<p>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</p>' +
+                    // ARI Question title
+                    '<p>ARI Publication 1</p>' +
+                    // Background information
+                    '<p>Sample background information.</p>' +
+                    // Contact details
+                    '<p>Contact details: Sample contact details.</p>' +
+                    // Related UKRI projects
+                    '<p>Related UKRI Projects:</p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>',
+                conflictOfInterestStatus: false,
+                user: { connect: { id: 'test-organisational-account-1' } },
+                publicationStatus: { create: { status: 'LIVE' } },
+                currentStatus: 'LIVE',
+                isLatestLiveVersion: true,
+                publishedDate: '2024-07-16T14:06:00.000Z',
+                keywords: ['field of research 1', 'field of research 2', 'tag 1', 'tag 2']
+            }
+        }
     }
 ];
 

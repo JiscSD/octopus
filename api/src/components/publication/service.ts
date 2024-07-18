@@ -1,3 +1,4 @@
+import axios from 'axios';
 import * as I from 'interface';
 import * as client from 'lib/client';
 import * as Helpers from 'lib/helpers';
@@ -329,13 +330,30 @@ export const getOpenSearchPublications = (filters: I.OpenSearchPublicationFilter
 export const create = async (
     e: I.CreatePublicationRequestBody,
     user: I.User,
-    doiResponse: I.DOIResponse,
     directPublish?: boolean,
     linkedPublications?: {
         publicationId: string;
         versionId: string;
     }[]
 ) => {
+    // Create empty DOI
+    const payload = {
+        data: {
+            type: 'dois',
+            attributes: {
+                prefix: process.env.DOI_PREFIX
+            }
+        }
+    };
+
+    const doiRequest = await axios.post<I.DOIResponse>(process.env.DATACITE_ENDPOINT as string, payload, {
+        auth: {
+            username: process.env.DATACITE_USER as string,
+            password: process.env.DATACITE_PASSWORD as string
+        }
+    });
+    const doi = doiRequest.data;
+
     // If topics are provided, associate the publication to those.
     const topics = e.topicIds?.length
         ? {
@@ -351,15 +369,15 @@ export const create = async (
     const now = new Date().toISOString();
     const publication = await client.prisma.publication.create({
         data: {
-            id: doiResponse.data.attributes.suffix,
-            doi: doiResponse.data.attributes.doi,
+            id: doi.data.attributes.suffix,
+            doi: doi.data.attributes.doi,
             type: e.type,
             externalId: e.externalId,
             externalSource: e.externalSource,
             // Create first version when publication is created
             versions: {
                 create: {
-                    id: doiResponse.data.attributes.suffix + '-v1',
+                    id: doi.data.attributes.suffix + '-v1',
                     versionNumber: 1,
                     isLatestLiveVersion: directPublish,
                     currentStatus,
@@ -370,6 +388,8 @@ export const create = async (
                     publishedDate: directPublish ? now : undefined,
                     title: e.title,
                     licence: e.licence,
+                    conflictOfInterestStatus: e.conflictOfInterestStatus,
+                    conflictOfInterestText: e.conflictOfInterestText,
                     description: e.description,
                     keywords: e.keywords,
                     content: e.content,
@@ -397,7 +417,9 @@ export const create = async (
                             linkedUser: user.id,
                             email: user.email || '',
                             confirmedCoAuthor: true,
-                            approvalRequested: false
+                            approvalRequested: false,
+                            // Treat organisational accounts as independent authors.
+                            ...(directPublish && { isIndependent: true })
                         }
                     },
                     topics

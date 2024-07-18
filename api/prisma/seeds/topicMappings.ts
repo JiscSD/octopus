@@ -4,7 +4,7 @@ const topicMappings: Prisma.TopicMappingCreateManyInput[] = [
     {
         title: 'ari test',
         source: 'ARI',
-        topicId: 'test-topic-1'
+        topicId: 'test-topic-1a'
     },
     {
         title: 'ari test (unmapped)',

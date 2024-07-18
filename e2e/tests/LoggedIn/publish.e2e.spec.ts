@@ -1941,7 +1941,8 @@ test.describe('Publication Flow + File import', () => {
 
         await page.locator(PageModel.publish.publishButton).click();
         await Promise.all([
-            (page.waitForURL('**/versions/latest'), page.locator(PageModel.publish.confirmPublishButton).click())
+            page.waitForURL('**/versions/latest'),
+            page.locator(PageModel.publish.confirmPublishButton).click()
         ]);
 
         await expect(page.getByText('File Import – Playwright')).toBeVisible();

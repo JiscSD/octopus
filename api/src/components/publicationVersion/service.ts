@@ -18,13 +18,15 @@ import * as s3 from 'lib/s3';
 import * as sqs from 'lib/sqs';
 import { licences } from 'lib/enum';
 
-const defaultPublicationVersionInclude = {
+export const defaultPublicationVersionInclude = {
     publication: {
         select: {
             id: true,
             type: true,
             doi: true,
-            url_slug: true
+            url_slug: true,
+            externalId: true,
+            externalSource: true
         }
     },
     publicationStatus: {
