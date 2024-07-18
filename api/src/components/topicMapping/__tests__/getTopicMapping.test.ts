@@ -15,8 +15,8 @@ describe('Get a topic mapping', () => {
             source: 'ARI',
             isMapped: true,
             topic: {
-                id: 'test-topic-1',
-                title: 'Test topic'
+                id: 'test-topic-1a',
+                title: 'Test sub-topic A'
             }
         });
     });
