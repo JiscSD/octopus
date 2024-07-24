@@ -20,7 +20,12 @@ const topicSeeds: Prisma.TopicCreateInput[] = [
             create: [
                 {
                     id: 'test-topic-1a',
-                    title: 'Test sub-topic A'
+                    title: 'Test sub-topic A',
+                    publicationVersions: {
+                        connect: {
+                            id: 'ari-publication-1-v1'
+                        }
+                    }
                 },
                 {
                     id: 'test-topic-1b',

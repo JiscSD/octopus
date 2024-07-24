@@ -137,7 +137,9 @@ export const get = (id: string, isAccountOwner = false) =>
             employment: true,
             education: true,
             works: true,
-            orcidAccessToken: isAccountOwner ? true : false
+            orcidAccessToken: isAccountOwner ? true : false,
+            locked: true,
+            defaultTopicId: true
         }
     });
 

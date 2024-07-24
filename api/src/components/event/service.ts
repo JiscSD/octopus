@@ -4,7 +4,7 @@ import * as I from 'lib/interface';
 import * as email from 'lib/email';
 import * as userService from 'user/service';
 import * as publicationVersionService from 'publicationVersion/service';
-import * as coAuthorService from 'coauthor/service';
+import * as coAuthorService from 'coAuthor/service';
 
 export const getMany = (where: Prisma.EventWhereInput = {}) =>
     client.prisma.event.findMany({

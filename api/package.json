@@ -23,10 +23,6 @@
         "test:watch": "npm run test:local -- --watch",
         "reindex": "ts-node prisma/reindex.ts",
         "createOrganisationalAccounts": "ts-node -r tsconfig-paths/register prisma/createOrganisationalAccounts.ts",
-        "insertDummyEvent": "ts-node -r tsconfig-paths/register prisma/insertDummyEvent.ts",
-        "createARITopicMappings": "ts-node -r tsconfig-paths/register prisma/createARITopicMappings.ts",
-        "createTopics": "ts-node -r tsconfig-paths/register prisma/createTopics.ts",
-        "modifyTopics": "ts-node -r tsconfig-paths/register prisma/modifyTopics.ts",
         "updateOrganisationalAccount": "ts-node -r tsconfig-paths/register prisma/updateOrganisationalAccount.ts",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",
@@ -98,7 +94,6 @@
     },
     "overrides": {
         "fast-xml-parser": "^4.2.5",
-        "http-cache-semantics": "^4.1.1",
-        "micromatch": "^4.0.6"
+        "http-cache-semantics": "^4.1.1"
     }
 }
