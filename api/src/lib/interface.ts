@@ -100,7 +100,7 @@ export interface CreatePublicationRequestBody {
     dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
-    fundersStatement: string;
+    fundersStatement?: string;
     affiliationStatement?: string;
     topicIds?: string[];
     linkedPublicationIds?: string[];
@@ -746,7 +746,7 @@ export interface DataCiteCreatorNameIdentifiers {
 }
 
 export interface DataCiteUser {
-    firstName: string | undefined;
+    firstName: string;
     lastName: string | null;
     orcid: string | null;
     affiliations: MappedOrcidAffiliation[];
@@ -1043,6 +1043,14 @@ export interface ARIQuestion {
     }[];
 }
 
-export type MappedARIQuestion = Pick<PublicationVersion, 'title' | 'content' | 'keywords'> & {
+export type MappedARIQuestion = {
+    title: string;
+    content: string;
+    keywords: string[];
     topics: Pick<PublicationVersion['topics'][number], 'id' | 'title'>[];
+    externalId: string;
+    externalSource: 'ARI';
+    userId: User['id'];
 };
+
+export type ARIHandlingAction = 'create' | 'update' | 'none';

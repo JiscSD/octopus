@@ -2,7 +2,7 @@ import * as I from 'interface';
 import * as response from 'lib/response';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as publicationService from 'publication/service';
-import * as coAuthorService from 'coauthor/service';
+import * as coAuthorService from 'coAuthor/service';
 import * as userService from 'user/service';
 import * as helpers from 'lib/helpers';
 import * as eventService from 'event/service';

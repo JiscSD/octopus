@@ -18,13 +18,15 @@ import * as s3 from 'lib/s3';
 import * as sqs from 'lib/sqs';
 import { licences } from 'lib/enum';
 
-const defaultPublicationVersionInclude = {
+export const defaultPublicationVersionInclude = {
     publication: {
         select: {
             id: true,
             type: true,
             doi: true,
-            url_slug: true
+            url_slug: true,
+            externalId: true,
+            externalSource: true
         }
     },
     publicationStatus: {
@@ -1234,7 +1236,7 @@ export const generatePDF = async (publicationVersion: I.PublicationVersion): Pro
 // DOI functions
 const createCreatorObject = (user: I.DataCiteUser): I.DataCiteCreator => {
     return {
-        name: `${user?.lastName}, ${user?.firstName}`, // datacite expects full name in lastname, firstname order
+        name: Helpers.abbreviateUserName(user), // datacite expects full name in lastname, firstname order
         givenName: user?.firstName,
         familyName: user?.lastName,
         nameType: 'Personal',
@@ -1389,7 +1391,7 @@ const createDOIPayload = async (
                 publicationYear: publicationVersion.createdAt.getFullYear(),
                 contributors: [
                     {
-                        name: `${publicationVersion.user.lastName} ${publicationVersion.user.firstName}`,
+                        name: Helpers.abbreviateUserName(publicationVersion.user),
                         contributorType: 'ContactPerson',
                         nameType: 'Personal',
                         givenName: publicationVersion.user.firstName,
