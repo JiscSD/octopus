@@ -1,4 +1,4 @@
-<img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Infrastructure</h1>
+<img src="../ui/public/images/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Infrastructure</h1>
 
 This project uses [Terraform](https://www.terraform.io/) to manage all the required infastructure (please see the _[Not managed by Terraform](#Not-managed-by-Terraform)_ section for exceptions to this).
 The purpose of this is to ensure all infastructure is handled via code so that it can be tracked and documented easily.
