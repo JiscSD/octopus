@@ -24,47 +24,71 @@
             "./node_modules/@types"
         ],
         "paths": {
+            "config": [
+                "src/config"
+            ],
+            "lib/*": [
+                "src/lib/*"
+            ],
+            "email": [
+                "src/lib/email"
+            ],
+            "enum": [
+                "src/lib/enum"
+            ],
+            "interface": [
+                "src/lib/interface"
+            ],
+            "middleware": [
+                "src/middleware"
+            ],
             "prisma/*": [
                 "prisma/*"
             ],
-            "components/*": [
-                "src/components/*"
-            ],
-            "publication/*": [
-                "src/components/publication/*"
-            ],
-            "publicationVersion/*": [
-                "src/components/publicationVersion/*"
-            ],
-            "user/*": [
-                "src/components/user/*"
-            ],
-            "publicationBookmark/*": [
-                "src/components/publicationBookmark/*"
-            ],
-            "link/*": [
-                "src/components/link/*"
-            ],
-            "reference/*": [
-                "src/components/reference/*"
+            "additionalInformation/*": [
+                "src/components/additionalInformation/*"
             ],
             "authorization/*": [
                 "src/components/authorization/*"
             ],
-            "verification/*": [
-                "src/components/verification/*"
-            ],
-            "image/*": [
-                "src/components/image/*"
+            "bookmark/*": [
+                "src/components/bookmark/*"
             ],
             "coAuthor/*": [
                 "src/components/coauthor/*"
             ],
-            "funder/*": [
-                "src/components/funder/*"
+            "crosslink/*": [
+                "src/components/crosslink/*"
+            ],
+            "event/*": [
+                "src/components/event/*"
             ],
             "flag/*": [
                 "src/components/flag/*"
+            ],
+            "funder/*": [
+                "src/components/funder/*"
+            ],
+            "image/*": [
+                "src/components/image/*"
+            ],
+            "link/*": [
+                "src/components/link/*"
+            ],
+            "publication/*": [
+                "src/components/publication/*"
+            ],
+            "publicationBookmark/*": [
+                "src/components/publicationBookmark/*"
+            ],
+            "publicationVersion/*": [
+                "src/components/publicationVersion/*"
+            ],
+            "reference/*": [
+                "src/components/reference/*"
+            ],
+            "sitemap/*": [
+                "src/components/sitemap/*"
             ],
             "topic/*": [
                 "src/components/topic/*"
@@ -72,41 +96,11 @@
             "topicMapping/*": [
                 "src/components/topicMapping/*"
             ],
-            "bookmark/*": [
-                "src/components/bookmark/*"
+            "user/*": [
+                "src/components/user/*"
             ],
-            "event/*": [
-                "src/components/event/*"
-            ],
-            "additionalInformation/*": [
-                "src/components/additionalInformation/*"
-            ],
-            "sitemap/*": [
-                "src/components/sitemap/*"
-            ],
-            "crosslink/*": [
-                "src/components/crosslink/*"
-            ],
-            "lib/*": [
-                "src/lib/*"
-            ],
-            "middleware": [
-                "src/middleware"
-            ],
-            "interface": [
-                "src/lib/interface"
-            ],
-            "enum": [
-                "src/lib/enum"
-            ],
-            "config": [
-                "src/config"
-            ],
-            "utilities": [
-                "src/utilities"
-            ],
-            "email": [
-                "src/lib/email"
+            "verification/*": [
+                "src/components/verification/*"
             ]
         }
     },

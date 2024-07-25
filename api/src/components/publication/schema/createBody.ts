@@ -1,5 +1,5 @@
+import * as Enum from 'enum';
 import * as I from 'interface';
-import * as H from 'lib/helpers';
 
 const createPublicationBodySchema: I.Schema = {
     type: 'object',
@@ -45,7 +45,7 @@ const createPublicationBodySchema: I.Schema = {
         },
         language: {
             type: 'string',
-            enum: H.octopusInformation.languages
+            enum: Enum.languageCodes
         },
         ethicalStatement: {
             type: 'string'

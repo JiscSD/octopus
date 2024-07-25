@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as I from 'interface';
 import * as client from 'lib/client';
-import * as Helpers from 'lib/helpers';
+import * as Enum from 'enum';
 import { Prisma } from '@prisma/client';
 
 export const isIdInUse = async (id: string) => {
@@ -484,7 +484,7 @@ const sortPublicationsByPublicationDate = (publications: I.LinkedPublication[]) 
  * @returns a sorted list of publications
  */
 const getOrderedLinkedPublications = (a: I.LinkedPublication[], b: I.LinkedPublication[]): I.LinkedPublication[] => {
-    const types = Helpers.octopusInformation.publicationTypes;
+    const types = Enum.publicationTypes;
     // Confirm that the type of publications in list a immediately follows or precedes the type of publications in list b
     const aFollowsB = a.every((aPub) => b.every((bPub) => types.indexOf(bPub.type) === types.indexOf(aPub.type) - 1));
     const aPrecedesB = a.every((aPub) => b.every((bPub) => types.indexOf(bPub.type) === types.indexOf(aPub.type) + 1));
@@ -775,7 +775,7 @@ export const getLinksForPublication = async (
 
     // Sorting - this is a custom order to make the visualisation neater.
     // Process parents by type, proceeding away from the selected publication's type.
-    const types = Helpers.octopusInformation.publicationTypes;
+    const types = Enum.publicationTypes;
     const filteredPublicationTypes = types.filter((type) => type !== 'PEER_REVIEW');
     const orderedParents: I.LinkedToPublication[] = [];
     let parentTypeIdx = types.indexOf(publication.type) - 1;

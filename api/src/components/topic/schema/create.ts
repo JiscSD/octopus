@@ -1,4 +1,4 @@
-import * as helpers from 'lib/helpers';
+import * as Enum from 'enum';
 import * as I from 'interface';
 
 const createTopicSchema: I.Schema = {
@@ -9,7 +9,7 @@ const createTopicSchema: I.Schema = {
         },
         language: {
             type: 'string',
-            enum: helpers.octopusInformation.languages
+            enum: Enum.languageCodes
         },
         translations: {
             type: 'array',
@@ -18,7 +18,7 @@ const createTopicSchema: I.Schema = {
                 properties: {
                     language: {
                         type: 'string',
-                        enum: helpers.octopusInformation.languages
+                        enum: Enum.languageCodes
                     },
                     value: {
                         type: 'string'

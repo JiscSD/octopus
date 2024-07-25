@@ -1,4 +1,5 @@
 import { convert } from 'html-to-text';
+import { Prisma } from '@prisma/client';
 import * as s3 from '../src/lib/s3';
 import * as sqs from '../src/lib/sqs';
 import * as SeedData from './seeds';
@@ -6,8 +7,8 @@ import * as client from '../src/lib/client';
 
 import { CreateBucketCommand, GetBucketAclCommand } from '@aws-sdk/client-s3';
 
-const createPublications = async (): Promise<void> => {
-    for (const seedPublication of SeedData.publicationsDevSeedData) {
+const createPublications = async (publications: Prisma.PublicationCreateInput[]): Promise<void> => {
+    for (const seedPublication of publications) {
         const createdPublication = await client.prisma.publication.create({
             data: seedPublication,
             include: {
@@ -46,66 +47,35 @@ const createPublications = async (): Promise<void> => {
 
 // Create topics - one by one because they can relate to each other
 const createTopics = async (): Promise<void> => {
-    for (const topic of SeedData.topicsFullSeedData) {
+    for (const topic of SeedData.devTopics) {
         await client.prisma.topic.create({
             data: topic
         });
     }
 };
 
-const createProblems = async (): Promise<void> => {
-    for (const problem of SeedData.problems) {
-        const createdProblem = await client.prisma.publication.create({
-            data: problem,
-            include: {
-                versions: {
-                    where: {
-                        isLatestVersion: true
-                    }
-                }
-            }
-        });
-
-        const latestVersion = createdProblem.versions[0];
-
-        // always populate search with the latest versions beside "id" and "type"
-        if (latestVersion.currentStatus === 'LIVE') {
-            await client.search.create({
-                index: 'publications',
-                id: createdProblem.id,
-                body: {
-                    id: createdProblem.id,
-                    type: createdProblem.type,
-                    title: latestVersion.title,
-                    licence: latestVersion.licence,
-                    description: latestVersion.description,
-                    keywords: latestVersion.keywords,
-                    content: latestVersion.content,
-                    language: 'en',
-                    currentStatus: latestVersion.currentStatus,
-                    publishedDate: latestVersion.publishedDate,
-                    cleanContent: convert(latestVersion.content)
-                }
-            });
-        }
-    }
-};
-
 export const initialDevSeed = async (): Promise<void> => {
-    // Create users
-    await client.prisma.user.createMany({ data: SeedData.usersDevSeedData });
+    // Create users. These are relied upon when creating publications.
+    await client.prisma.user.createMany({ data: SeedData.devUsers });
 
-    const doesIndexExists = await client.search.indices.exists({
+    const doesIndexExist = await client.search.indices.exists({
         index: 'publications'
     });
 
-    if (doesIndexExists.body) {
+    if (doesIndexExist.body) {
         await client.search.indices.delete({
             index: 'publications'
         });
     }
 
-    await Promise.all([createPublications(), createTopics(), createProblems()]);
+    await Promise.all([
+        createPublications(SeedData.devProblems),
+        createPublications(SeedData.devOtherPublications),
+        createTopics()
+    ]);
+
+    // Add topic mappings - these depend on topics.
+    await client.prisma.topicMapping.createMany({ data: SeedData.devTopicMappings });
 
     if (process.env.STAGE === 'local') {
         // Create local S3 buckets
@@ -144,19 +114,19 @@ export const initialDevSeed = async (): Promise<void> => {
 export const initialProdSeed = async (): Promise<void> => {
     console.log('running initialProdSeed');
     // Create users
-    await client.prisma.user.createMany({ data: SeedData.usersProdSeedData });
+    await client.prisma.user.createMany({ data: SeedData.prodUsers });
 
-    const doesIndexExists = await client.search.indices.exists({
+    const doesIndexExist = await client.search.indices.exists({
         index: 'publications'
     });
 
-    if (doesIndexExists.body) {
+    if (doesIndexExist.body) {
         await client.search.indices.delete({
             index: 'publications'
         });
     }
 
-    for (const problem of SeedData.problemsProd) {
+    for (const problem of SeedData.prodPublications) {
         const publication = await client.prisma.publication.create({
             data: problem,
             include: {
