@@ -1,4 +1,4 @@
-<img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Octopus API</h1>
+<img src="../ui/public/images/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Octopus API</h1>
 
 The Octopus API is a [Prisma](https://www.prisma.io/) project, using [PostgreSQL](https://www.postgresql.org/).
 
@@ -93,6 +93,34 @@ You can then apply the changes made by the new migration using the two commands 
 
 More information on migrations in Prisma can be found here: [Prisma Migrate Documentation](https://www.prisma.io/docs/concepts/components/prisma-migrate/).
 
+### Seed data
+
+There are three sets of seed data, laid out as follows:
+
+```
+prisma/seeds
+│
+└───local
+│   │
+│   └───dev
+|   |
+|   └───unitTesting
+│
+└───prod
+```
+
+This is because they have different use cases.
+
+-   local (dev):
+    -   A wide set of data useful for local development.
+    -   Seeded using the command `npm run seed:local`.
+-   local (unitTesting):
+    -   A minimal set of data providing only what is needed for the [jest tests](#testing) to run. This needs to be small because the database is reseeded again and again while the test suite is run, so that process needs to be as quick as possible.
+    -   Seeded using the `testSeed()` function from `src/lib/testUtils`.
+-   prod:
+    -   Used for seeding a fresh prod instance.
+    -   Seeded by running `STAGE=prod npx prisma migrate reset --force` (though it's unlikely you'll ever need to do this).
+
 ---
 
 ## Opensearch
@@ -149,4 +177,3 @@ This is a place to track where we have added dependency overrides in package.jso
 
 -   fast-xml-parser ^4.2.5: to address [dependabot alert](https://github.com/JiscSD/octopus/security/dependabot/59)
 -   http-cache-semantics ^4.1.1: to address [dependabot alert](https://github.com/JiscSD/octopus/security/dependabot/45)
--   micromatch ^4.0.6: to address two vulnerabilities ([1](https://security.snyk.io/vuln/SNYK-JS-BRACES-6838727), [2](https://security.snyk.io/vuln/SNYK-JS-MICROMATCH-6838728)) introduced via copy-webpack-plugin's dependency on this package.

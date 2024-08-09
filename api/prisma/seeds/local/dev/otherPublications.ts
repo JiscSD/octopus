@@ -1,13 +1,5 @@
 import { Prisma } from '@prisma/client';
 
-// user 1 = <cite>This material is adapted from the following article under the Creative Commons Attribution 3.0 License: M M Yusoff 2020 IOP Conf. Ser.: Earth Environ. Sci. 561 012020. <a href="https://iopscience.iop.org/article/10.1088/1755-1315/561/1/012020">https://iopscience.iop.org/article/10.1088/1755-1315/561/1/012020</cite>
-
-// user 4 = <cite>This material is adapted from the following article under the Attribution-NonCommercial 4.0 International: Sharabani S. Z., Edelstein-Pardo N., Molco M.,Bachar Schwartz N. B., Morami M., Sivan A., Gendelman Rom Y., Evental R., Flaxer E., Sitt A., 2022. Messy or Ordered? Multiscale Mechanics Dictates Shape-Morphing of 2D Networks Hierarchically Assembled of Responsive Microfibers. Advanced Functional Materials. <a href="https://onlinelibrary.wiley.com/doi/10.1002/adfm.202111471">https://onlinelibrary.wiley.com/doi/10.1002/adfm.202111471</cite>
-
-// user 5 = <cite>This material is adapted from the following article under the CC BY-NC: Freeman AL, Parker S, Noakes C, Fitzgerald S, Smyth A, Macbeth R, Spiegelhalter D, Rutter H. Expert elicitation on the relative importance of possible SARS-CoV-2 transmission routes and the effectiveness of mitigations. BMJ Open. 2021 Dec 1;11(12):e050869. <a href="https://pubmed.ncbi.nlm.nih.gov/34853105/">https://pubmed.ncbi.nlm.nih.gov/34853105/</cite>
-
-// user 6 = <cite>This material is adapted from the following article under the Attribution 4.0 International: Hesse, Nicole, 2021. Visible winds: The production of new visibilities of wind energy in West Germany, 1973–1991. Centaurus 63:4. <a href="https://onlinelibrary.wiley.com/doi/10.1111/1600-0498.12420/">https://onlinelibrary.wiley.com/doi/10.1111/1600-0498.12420</cite>
-
 const users = {
     user1: 'test-user-1b-victoria-allen',
     user2: 'test-user-2b-rami-salem',

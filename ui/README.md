@@ -1,4 +1,4 @@
-<img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Octopus UI</h1>
+<img src="public/images/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Octopus UI</h1>
 
 The Octopus UI is a [Next.js](https://nextjs.org/) project bootstrapped with [create-next-app](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 

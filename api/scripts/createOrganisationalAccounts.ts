@@ -2,7 +2,7 @@ import * as I from 'interface';
 import * as userController from 'user/controller';
 import * as fs from 'fs';
 
-const inputFileName = 'prisma/createOrganisationalAccounts.json';
+const inputFileName = 'scripts/createOrganisationalAccounts.json';
 
 // Creates organisational users with details from an input file.
 const createOrganisationalAccounts = async (): Promise<string> => {

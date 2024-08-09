@@ -7,208 +7,6 @@ export const getSafeHTML = (content: string): string => {
     return DOMPurify.sanitize(content);
 };
 
-export const octopusInformation: {
-    publicationTypes: I.PublicationType[];
-    languages: I.Languages[];
-} = {
-    publicationTypes: [
-        'PROBLEM',
-        'HYPOTHESIS',
-        'PROTOCOL',
-        'DATA',
-        'ANALYSIS',
-        'INTERPRETATION',
-        'REAL_WORLD_APPLICATION',
-        'PEER_REVIEW'
-    ],
-    languages: [
-        'ab',
-        'aa',
-        'af',
-        'ak',
-        'sq',
-        'am',
-        'ar',
-        'an',
-        'hy',
-        'as',
-        'av',
-        'ae',
-        'ay',
-        'az',
-        'bm',
-        'ba',
-        'eu',
-        'be',
-        'bn',
-        'bi',
-        'bs',
-        'br',
-        'bg',
-        'bh',
-        'my',
-        'ca',
-        'km',
-        'ch',
-        'ce',
-        'ny',
-        'zh',
-        'cu',
-        'cv',
-        'kw',
-        'co',
-        'cr',
-        'hr',
-        'cs',
-        'da',
-        'dv',
-        'nl',
-        'dz',
-        'en',
-        'eo',
-        'et',
-        'ee',
-        'fo',
-        'fj',
-        'fi',
-        'fr',
-        'ff',
-        'gd',
-        'gl',
-        'lg',
-        'ka',
-        'de',
-        'el',
-        'gn',
-        'gu',
-        'ht',
-        'ha',
-        'he',
-        'hz',
-        'hi',
-        'ho',
-        'hu',
-        'is',
-        'io',
-        'ig',
-        'id',
-        'ia',
-        'ie',
-        'iu',
-        'ik',
-        'ga',
-        'it',
-        'ja',
-        'jv',
-        'kl',
-        'kn',
-        'kr',
-        'ks',
-        'kk',
-        'ki',
-        'rw',
-        'ky',
-        'kv',
-        'kg',
-        'ko',
-        'kj',
-        'ku',
-        'lo',
-        'la',
-        'lv',
-        'li',
-        'ln',
-        'lt',
-        'lu',
-        'lb',
-        'mk',
-        'mg',
-        'ms',
-        'ml',
-        'mt',
-        'gv',
-        'mi',
-        'mr',
-        'mh',
-        'mn',
-        'na',
-        'nv',
-        'ng',
-        'ne',
-        'nd',
-        'se',
-        'no',
-        'nb',
-        'nn',
-        'oc',
-        'oj',
-        'or',
-        'om',
-        'os',
-        'pi',
-        'ps',
-        'fa',
-        'pl',
-        'pt',
-        'pa',
-        'qu',
-        'ro',
-        'rm',
-        'rn',
-        'ru',
-        'sm',
-        'sg',
-        'sa',
-        'sc',
-        'sr',
-        'sn',
-        'ii',
-        'sd',
-        'si',
-        'sk',
-        'sl',
-        'so',
-        'nr',
-        'st',
-        'es',
-        'su',
-        'sw',
-        'ss',
-        'sv',
-        'tl',
-        'ty',
-        'tg',
-        'ta',
-        'tt',
-        'te',
-        'th',
-        'bo',
-        'ti',
-        'to',
-        'ts',
-        'tn',
-        'tr',
-        'tk',
-        'tw',
-        'ug',
-        'uk',
-        'ur',
-        'uz',
-        've',
-        'vi',
-        'vo',
-        'wa',
-        'cy',
-        'fy',
-        'wo',
-        'xh',
-        'yi',
-        'yo',
-        'za',
-        'zu'
-    ]
-};
-
 export function sanitizeSearchQuery(searchQuery: string): string {
     return searchQuery
         .trim()
@@ -354,4 +152,34 @@ export const validateEmail = (email: string): boolean => {
 
 export const replaceHTMLLineBreaks = (html: string): string => {
     return html.replace(/\n|\r\n|\n\r|\r/g, '<br>');
+};
+
+// Check if two arrays are equal.
+export const compareArrays = <T>(a: Array<T>, b: Array<T>): boolean => {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+
+    for (let i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i]) return false;
+    }
+
+    return true;
+};
+
+export const abbreviateUserName = <T extends { firstName: string; lastName: string | null; role?: I.Role } | undefined>(
+    user: T
+): string => {
+    // Should not occur, but just in case, better to present something than nothing.
+    if (!user || (!user.firstName && !user.lastName)) {
+        return 'Anon. User';
+    }
+
+    // Majority of cases: user is not an organisational account, and has requisite data for default abbreviation.
+    if (!(user.role === 'ORGANISATION') && user.firstName.length && user.lastName) {
+        return `${user.firstName[0]}. ${user.lastName}`;
+    }
+
+    // Default for organisational accounts and general fallback.
+    return user.firstName;
 };

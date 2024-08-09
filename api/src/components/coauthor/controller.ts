@@ -1,4 +1,4 @@
-import * as coAuthorService from 'coauthor/service';
+import * as coAuthorService from 'coAuthor/service';
 import * as I from 'interface';
 import * as email from 'email';
 import * as response from 'lib/response';
