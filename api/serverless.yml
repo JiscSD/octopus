@@ -5,7 +5,6 @@ frameworkVersion: ${file(./serverless-config-default.yml):frameworkVersion}
 useDotenv: ${file(./serverless-config-default.yml):useDotenv}
 
 plugins:
-    - serverless-domain-manager
     - serverless-webpack
     - serverless-webpack-prisma
     - serverless-prune-plugin
@@ -90,14 +89,6 @@ custom:
         perFunction: true
         perType: false
         perGroupFunction: false
-    customDomain:
-        domainName: '${self:provider.stage}.api.octopus.ac'
-        basePath: ''
-        hostedZoneId: Z0024644REA9FF3O23MK
-        certificateName: '*.api.octopus.ac'
-        stage: ${self:provider.stage}
-        createRoute53Record: true
-        route53Profile: 'octopus-dev'
     webpack:
         webpackConfig: ./webpack.config.js
         includeModules:

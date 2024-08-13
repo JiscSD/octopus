@@ -66,10 +66,12 @@ To run this Terraform, follow the below:
 
 There are some parts of this project's infrastructure that are **not** managed/created by Terraform. These were created manually and must be managed manually in AWS. They are as follows:
 
-- An `AWS S3 Bucket`, for hosting the Terraform State file **(octopus-tfstate)**.
-- Configuration to increase the limit of allowed VPCs for a single region (default 5) to 50.
-- Most Route 53 config, including certificates in Certificate Manager
+- An `AWS S3 Bucket`, for hosting the Terraform State file **(octopus-tfstate)**
+- Configuration to increase the limit of allowed VPCs for a single region (default 5) to 50
+- Route 53 config
+- Certificates in Certificate Manager
 - AWS Amplify config
+- Cloudfront distributions that sit between API domains (e.g. int.api.octopus.ac) and the corresponding API gateway
 
 ## Migration to separate int AWS account
 
