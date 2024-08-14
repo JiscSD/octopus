@@ -1,5 +1,5 @@
+import * as Enum from 'enum';
 import * as I from 'interface';
-import * as H from 'lib/helpers';
 
 const updatePublicationVersionSchema: I.JSONSchemaType<I.UpdatePublicationVersionRequestBody> = {
     type: 'object',
@@ -33,7 +33,7 @@ const updatePublicationVersionSchema: I.JSONSchemaType<I.UpdatePublicationVersio
         },
         language: {
             type: 'string',
-            enum: H.octopusInformation.languages,
+            enum: Enum.languageCodes,
             nullable: true
         },
         ethicalStatement: {

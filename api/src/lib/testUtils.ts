@@ -9,44 +9,40 @@ jest.setTimeout(60000);
 
 export const agent = supertest.agent(`http://0.0.0.0:4003/${process.env.STAGE}/v1`);
 
-/**
- * @TODO - use a smaller set of data for tests
- * - using such a large set of data for tests is unnecessary and it makes them very slow to run
- */
-
+// Seed the database with a smaller set of data, just enough to run the automated tests.
 export const testSeed = async (): Promise<void> => {
-    for (const user of seeds.users) {
+    for (const user of seeds.testUsers) {
         await client.prisma.user.create({
             data: user
         });
     }
 
-    for (const publication of seeds.publications) {
+    for (const publication of seeds.testPublications) {
         await client.prisma.publication.create({
             data: publication
         });
     }
 
-    for (const topic of seeds.topicsDevSeedData) {
+    for (const topic of seeds.testTopics) {
         await client.prisma.topic.create({
             data: topic
         });
     }
 
     await client.prisma.topicMapping.createMany({
-        data: seeds.topicMappings
+        data: seeds.testTopicMappings
     });
 
     await client.prisma.references.createMany({
-        data: seeds.referencesSeedData
+        data: seeds.testReferences
     });
 
     await client.prisma.bookmark.createMany({
-        data: seeds.bookmarkSeeds
+        data: seeds.testBookmarks
     });
 
     await client.prisma.event.createMany({
-        data: seeds.events
+        data: seeds.testEvents
     });
 };
 

@@ -40,4 +40,4 @@ jobs:
 
       - name: Stop containers
         working-directory: ./api
-        run: docker-compose -f docker-compose.yml down
+        run: docker compose -f docker-compose.yml down

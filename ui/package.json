@@ -41,7 +41,7 @@
         "@tiptap/extension-underline": "^2.2.4",
         "@tiptap/react": "^2.2.4",
         "@tiptap/starter-kit": "^2.2.4",
-        "axios": "^1.6.8",
+        "axios": "^1.7.4",
         "cheerio": "^1.0.0-rc.12",
         "contentful": "^10.8.3",
         "framer-motion": "^11.0.14",
