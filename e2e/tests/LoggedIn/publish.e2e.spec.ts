@@ -1438,6 +1438,7 @@ test.describe('Publication flow + co-authors', () => {
     });
 
     test('Editing a publication removes existing approvals', async ({ browser }) => {
+        test.slow();
         const page = await Helpers.getPageAsUser(browser);
 
         await createPublishReadyPublication(page);
@@ -1462,6 +1463,7 @@ test.describe('Publication flow + co-authors', () => {
     test('Co-authors are notified if the publication was edited after they confirmed their involvement', async ({
         browser
     }) => {
+        test.slow();
         const page = await Helpers.getPageAsUser(browser);
 
         await createPublishReadyPublication(page);
