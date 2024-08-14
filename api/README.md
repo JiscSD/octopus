@@ -112,7 +112,7 @@ prisma/seeds
 This is because they have different use cases.
 
 -   local (dev):
-    -   A wide set of data useful for local development.
+    -   A wide set of data useful for local development. For example, the requisite data for testing out integrations - to import data from the ARI database, certain topic mappings and departmental user accounts are expected to exist.
     -   Seeded using the command `npm run seed:local`.
 -   local (unitTesting):
     -   A minimal set of data providing only what is needed for the [jest tests](#testing) to run. This needs to be small because the database is reseeded again and again while the test suite is run, so that process needs to be as quick as possible.

@@ -1,4 +1,5 @@
 export { default as devProblems } from './local/dev/problems';
+export { default as devOrganisationalAccounts } from './local/dev/organisationalAccounts';
 export { default as devOtherPublications } from './local/dev/otherPublications';
 export { default as devTopicMappings } from './local/dev/topicMappings';
 export { default as devTopics } from './local/dev/topics';

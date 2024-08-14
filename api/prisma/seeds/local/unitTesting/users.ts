@@ -7,7 +7,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Science',
         lastName: 'Octopus',
         email: 'octopus@jisc.ac.uk',
-        locked: false,
         apiKey: 'kjahskjhuhaushkjhaskjhjkahsd'
     },
     {
@@ -16,7 +15,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Test',
         lastName: 'User 1',
         email: 'test-user-1@jisc.ac.uk',
-        locked: false,
         apiKey: '123456789'
     },
     {
@@ -25,7 +23,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Test',
         lastName: 'User 2',
         email: 'test-user-2@jisc.ac.uk',
-        locked: false,
         apiKey: '987654321'
     },
     {
@@ -34,7 +31,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Test',
         lastName: 'User 3',
         email: 'test-user-3@jisc.ac.uk',
-        locked: false,
         apiKey: '000000003'
     },
     {
@@ -43,7 +39,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Test',
         lastName: 'User 4',
         email: 'test-user-4@jisc.ac.uk',
-        locked: false,
         apiKey: '000000004',
         role: 'SUPER_USER'
     },
@@ -53,7 +48,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Test',
         lastName: 'CoAuthor 1',
         email: 'test-user-5@jisc.ac.uk',
-        locked: false,
         apiKey: '000000005'
     },
     {
@@ -62,7 +56,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Test',
         lastName: 'CoAuthor 2',
         email: 'test-user-6@jisc.ac.uk',
-        locked: false,
         apiKey: '000000006'
     },
     {
@@ -71,7 +64,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Test',
         lastName: 'CoAuthor 3',
         email: 'test-user-7@jisc.ac.uk',
-        locked: false,
         apiKey: '000000007'
     },
     {
@@ -80,7 +72,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Test',
         lastName: 'CoAuthor 4',
         email: 'test-user-8@jisc.ac.uk',
-        locked: false,
         apiKey: '000000008'
     },
     {
@@ -89,7 +80,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Test',
         lastName: 'CoAuthor 5',
         email: 'test-user-9@jisc.ac.uk',
-        locked: false,
         apiKey: '000000009'
     },
     {
@@ -98,7 +88,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Test',
         lastName: 'CoAuthor 6',
         email: 'test-user-10@jisc.ac.uk',
-        locked: false,
         apiKey: '000000010'
     },
     {
@@ -107,7 +96,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: '',
         lastName: '',
         email: 'test-user-11@jisc.ac.uk',
-        locked: false,
         apiKey: '000000011'
     },
     {

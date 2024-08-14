@@ -23,6 +23,7 @@
         "test:watch": "npm run test:local -- --watch",
         "reindex": "ts-node scripts/reindex.ts",
         "createOrganisationalAccounts": "ts-node -r tsconfig-paths/register scripts/createOrganisationalAccounts.ts",
+        "fullAriImport": "ts-node -r tsconfig-paths/register scripts/fullAriImport.ts",
         "updateOrganisationalAccount": "ts-node -r tsconfig-paths/register scripts/updateOrganisationalAccount.ts",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",

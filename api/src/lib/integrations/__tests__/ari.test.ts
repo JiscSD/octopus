@@ -130,6 +130,13 @@ describe('ARI Mapping', () => {
         });
     });
 
+    test('Department is matched to existing user', async () => {
+        const mappingAttempt = await ariUtils.mapAriQuestionToPublicationVersion(sampleARIQuestion);
+        expect(mappingAttempt).toMatchObject({
+            mappedData: { userId: 'test-organisational-account-1' }
+        });
+    });
+
     test('Publication is not mapped if department user is not found', async () => {
         const mappingAttempt = await ariUtils.mapAriQuestionToPublicationVersion({
             ...sampleARIQuestion,
@@ -161,6 +168,20 @@ describe('ARI handling', () => {
                 isLatestLiveVersion: true,
                 title: 'ARI Publication 1'
             }
+        });
+    });
+
+    test('ARI with unrecognised department is skipped', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({
+            ...sampleARIQuestion,
+            department: 'Unrecognised Department name'
+        });
+
+        expect(handleARI).toMatchObject({
+            actionTaken: 'none',
+            success: false,
+            message:
+                'Failed to map ARI data to octopus data. User not found for department: Unrecognised Department name'
         });
     });
 

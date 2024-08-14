@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as I from 'interface';
 import * as client from 'lib/client';
 import * as Enum from 'enum';
+import * as publicationVersionService from 'publicationVersion/service';
 import { Prisma } from '@prisma/client';
 
 export const isIdInUse = async (id: string) => {
@@ -455,6 +456,22 @@ export const create = async (
             linkedTo: true
         }
     });
+
+    if (directPublish) {
+        // Create a DOI for this version specifically and trigger post publish tasks.
+        const publishedVersion = await publicationVersionService.get(publication.id, 'latestLive');
+
+        if (publishedVersion) {
+            const versionWithDoi = await publicationVersionService.generateNewVersionDOI(publishedVersion, null);
+
+            if (versionWithDoi) {
+                await publicationVersionService.postPublishHook(versionWithDoi);
+                const upToDatePublication = await get(publication.id);
+
+                return upToDatePublication;
+            }
+        }
+    }
 
     return publication;
 };

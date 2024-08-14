@@ -1054,3 +1054,10 @@ export type MappedARIQuestion = {
 };
 
 export type ARIHandlingAction = 'create' | 'update' | 'none';
+
+export interface HandledARI {
+    actionTaken: ARIHandlingAction;
+    success: boolean;
+    message?: string;
+    publicationVersion?: PublicationVersion;
+}

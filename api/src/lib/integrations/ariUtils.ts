@@ -140,14 +140,7 @@ export const detectChangesToARIPublication = (
     return somethingChanged ? changes : false;
 };
 
-export const handleIncomingARI = async (
-    question: I.ARIQuestion
-): Promise<{
-    actionTaken: I.ARIHandlingAction;
-    success: boolean;
-    message?: string;
-    publicationVersion?: I.PublicationVersion;
-}> => {
+export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.HandledARI> => {
     // Validate question ID.
     // Quite random criteria for now - value is typed as a number which
     // stops us checking the type. May be revisited later.
