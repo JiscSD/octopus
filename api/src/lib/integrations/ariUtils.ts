@@ -7,6 +7,14 @@ import * as publicationVersionService from 'publicationVersion/service';
 import * as topicMappingService from 'topicMapping/service';
 import * as userService from 'user/service';
 
+const parseAriTextField = (value: string): string => {
+    // Sometimes ARI text fields are enclosed in quotes and we don't want to show those in a publication body.
+    const noQuotes = Helpers.stripEnclosingQuotes(value);
+
+    // Convert \n line breaks to <br>s for displaying in HTML.
+    return Helpers.replaceHTMLLineBreaks(noQuotes);
+};
+
 export const mapAriQuestionToPublicationVersion = async (
     questionData: I.ARIQuestion
 ): Promise<
@@ -17,6 +25,14 @@ export const mapAriQuestionToPublicationVersion = async (
       }
     | { success: false; mappedData: null; message: string }
 > => {
+    if (questionData.isArchived) {
+        return {
+            success: false,
+            mappedData: null,
+            message: 'This ARI is archived so has not been mapped.'
+        };
+    }
+
     const {
         backgroundInformation,
         contactDetails,
@@ -31,16 +47,14 @@ export const mapAriQuestionToPublicationVersion = async (
     const title = question;
     // Compose content.
     const commonBoilerplateHTML =
-        "<p>This problem is a UK government area of research interest (ARI) that was originally posted at <a href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</p>";
+        "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>";
     const titleHTML = `<p>${question}</p>`;
-    const backgroundInformationHTML = backgroundInformation
-        ? `<p>${Helpers.replaceHTMLLineBreaks(backgroundInformation)}</p>`
-        : '';
+    const backgroundInformationHTML = backgroundInformation ? `<p>${parseAriTextField(backgroundInformation)}</p>` : '';
     const contactDetailsHTML = contactDetails
-        ? `<p>Contact details: ${Helpers.replaceHTMLLineBreaks(contactDetails)}`
+        ? `<p><strong>Contact details</strong></p><p>${parseAriTextField(contactDetails)}</p>`
         : '';
-    const relatedUKRIProjectsHTML = relatedUKRIProjects
-        ? '<p>Related UKRI Projects:</p><ul>' +
+    const relatedUKRIProjectsHTML = relatedUKRIProjects.length
+        ? '<p><strong>Related UKRI Projects</strong></p><ul>' +
           relatedUKRIProjects
               .map((relatedProject) => `<li><a href='${relatedProject.url}'>${relatedProject.title}</a></li>`)
               .join('') +
@@ -77,7 +91,7 @@ export const mapAriQuestionToPublicationVersion = async (
         return {
             success: false,
             mappedData: null,
-            message: 'User not found for department: ' + department
+            message: 'User not found for department: ' + department + '.'
         };
     }
 
@@ -149,6 +163,15 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
             actionTaken: 'none',
             success: false,
             message: 'Invalid question ID format.'
+        };
+    }
+
+    // Reject if question is archived. Success is true because this isn't really an error.
+    if (question.isArchived) {
+        return {
+            actionTaken: 'none',
+            success: true,
+            message: 'Skipped because question is archived.'
         };
     }
 

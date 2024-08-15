@@ -145,7 +145,19 @@ describe('ARI Mapping', () => {
         expect(mappingAttempt).toMatchObject({
             success: false,
             mappedData: null,
-            message: 'User not found for department: unrecognised department'
+            message: 'User not found for department: unrecognised department.'
+        });
+    });
+
+    test('ARI is not mapped if it is archived', async () => {
+        const mappingAttempt = await ariUtils.mapAriQuestionToPublicationVersion({
+            ...sampleARIQuestion,
+            isArchived: true
+        });
+        expect(mappingAttempt).toMatchObject({
+            success: false,
+            mappedData: null,
+            message: 'This ARI is archived so has not been mapped.'
         });
     });
 });
@@ -227,6 +239,16 @@ describe('ARI handling', () => {
             actionTaken: 'none',
             success: false,
             message: 'Invalid question ID format.'
+        });
+    });
+
+    test('Archived questions are rejected', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({ ...sampleARIQuestion, isArchived: true });
+
+        expect(handleARI).toMatchObject({
+            actionTaken: 'none',
+            success: true,
+            message: 'Skipped because question is archived.'
         });
     });
 });

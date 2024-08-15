@@ -154,6 +154,19 @@ export const replaceHTMLLineBreaks = (html: string): string => {
     return html.replace(/\n|\r\n|\n\r|\r/g, '<br>');
 };
 
+// If a string is enclosed in matching quotes, remove them.
+export const stripEnclosingQuotes = (string: string): string => {
+    // String is enclosed in " or '
+    if (
+        (string.slice(0, 1) === '"' && string.slice(-1) === '"') ||
+        (string.slice(0, 1) === "'" && string.slice(-1) === "'")
+    ) {
+        return string.slice(1, -1);
+    } else {
+        return string;
+    }
+};
+
 // Check if two arrays are equal.
 export const compareArrays = <T>(a: Array<T>, b: Array<T>): boolean => {
     if (a === b) return true;

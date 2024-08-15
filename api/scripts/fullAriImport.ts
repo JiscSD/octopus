@@ -12,13 +12,10 @@ const fullAriImport = async (): Promise<string> => {
     const startTime = performance.now();
     const ariResponse = await axios.get('https://ari.org.uk/api/questions?order_by=dateUpdated');
     const firstPageAris = ariResponse.data.data;
-    // const paginationInfo = ariResponse.data.meta.pagination;
+    const paginationInfo = ariResponse.data.meta.pagination;
 
     // Collect all ARIs in a variable.
-    // let aris = firstPageAris;
-    // For testing, just use 10
-    let aris = firstPageAris.slice(0, 10);
-    /**
+    const allAris = firstPageAris;
     let pageNumber = paginationInfo.current_page;
     let nextPageUrl = paginationInfo.links.next;
 
@@ -30,7 +27,7 @@ const fullAriImport = async (): Promise<string> => {
         const nextPageAris = nextPageResponse.data.data;
 
         // Add next page's ARIs to our variable.
-        aris.push(...nextPageAris);
+        allAris.push(...nextPageAris);
 
         // Set the things we need to repeat this.
         const nextPagePaginationInfo = nextPageResponse.data.meta.pagination;
@@ -41,21 +38,27 @@ const fullAriImport = async (): Promise<string> => {
     }
 
     // In case something has caused this process to fail, perhaps the API changed, etc...
-    if (aris.length !== paginationInfo.total) {
+    if (allAris.length !== paginationInfo.total) {
         throw new Error('Number of ARIs retrieved does not match reported total. Stopping.');
     }
-         */
+
+    // Remove archived aris.
+    const aris = allAris.filter((ari) => !ari.isArchived);
 
     // Process all the ARIs.
     const handledAris: I.HandledARI[] = [];
+
     for (const ari of aris) {
         const handleAri = await ariUtils.handleIncomingARI(ari);
         handledAris.push(handleAri);
+
         // Datacite test has a firewall that only 750 request per IP across a 5 minute period.
         // Introducing a delay between each ARI handling (which may hit datacite - twice if creating a publication,
         // or once if reversioning a publication) ensures we won't hit this limit.
         // https://support.datacite.org/docs/is-there-a-rate-limit-for-making-requests-against-the-datacite-apis
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        if (handleAri.actionTaken === 'create' || handleAri.actionTaken === 'update') {
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
     }
 
     const createdAris = handledAris.filter((handle) => handle.actionTaken === 'create');
@@ -65,14 +68,16 @@ const fullAriImport = async (): Promise<string> => {
         console.log(`${createdAris.length} were created as new publications.`);
         const updatedAris = handledAris.filter((handle) => handle.actionTaken === 'update');
         console.log(`${updatedAris.length} triggered updates to existing publications.`);
-        const unHandledAris = handledAris.filter((handle) => handle.actionTaken === 'none');
-        console.log(`${unHandledAris.length} were skipped altogether.`);
+        const skippedAris = handledAris.filter((handle) => handle.actionTaken === 'none');
+        console.log(
+            `${skippedAris.length} were skipped because they were found to exist in octopus and no changes were detected.`
+        );
+        const failedAris = handledAris.filter((handle) => handle.success === false);
+        console.log(`${failedAris.length} encounted some sort of issue and failed:`, failedAris);
     }
 
-    // For testing
-    console.log(handledAris);
-
     const endTime = performance.now();
+
     return `Finished. Created ${createdAris.length} publications from ${handledAris.length} ARI questions in ${(
         (endTime - startTime) /
         1000
