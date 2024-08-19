@@ -1,23 +1,22 @@
 import * as client from 'lib/client';
 import * as I from 'interface';
 
-export const get = (title: string, source: I.PublicationImportSource) =>
-    client.prisma.topicMapping.findFirst({
+export const get = (value: string, source: I.PublicationImportSource) =>
+    client.prisma.userMapping.findFirst({
         where: {
-            title: {
-                equals: title,
+            value: {
+                equals: value,
                 mode: 'insensitive'
             },
             source
         },
         select: {
-            title: true,
+            value: true,
             source: true,
-            isMapped: true,
-            topic: {
+            user: {
                 select: {
                     id: true,
-                    title: true
+                    firstName: true
                 }
             }
         }

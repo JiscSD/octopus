@@ -80,6 +80,9 @@ export const initialDevSeed = async (): Promise<void> => {
         client.prisma.user.createMany({ data: SeedData.devOrganisationalAccounts })
     ]);
 
+    // Add organisational account mappings, which depend on organisational accounts.
+    await client.prisma.userMapping.createMany({ data: SeedData.devUserMappings });
+
     if (process.env.STAGE === 'local') {
         // Create local S3 buckets
         for (const bucketNameSegment in s3.buckets) {

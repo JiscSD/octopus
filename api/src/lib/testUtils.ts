@@ -9,41 +9,60 @@ jest.setTimeout(60000);
 
 export const agent = supertest.agent(`http://0.0.0.0:4003/${process.env.STAGE}/v1`);
 
-// Seed the database with a smaller set of data, just enough to run the automated tests.
-export const testSeed = async (): Promise<void> => {
-    for (const user of seeds.testUsers) {
-        await client.prisma.user.create({
-            data: user
-        });
-    }
-
+const createPublications = async (): Promise<void> => {
     for (const publication of seeds.testPublications) {
         await client.prisma.publication.create({
             data: publication
         });
     }
+};
 
+const createTopics = async (): Promise<void> => {
     for (const topic of seeds.testTopics) {
         await client.prisma.topic.create({
             data: topic
         });
     }
+};
 
-    await client.prisma.topicMapping.createMany({
-        data: seeds.testTopicMappings
-    });
+const createUsers = async (): Promise<void> => {
+    for (const user of seeds.testUsers) {
+        await client.prisma.user.create({
+            data: user
+        });
+    }
+};
 
-    await client.prisma.references.createMany({
-        data: seeds.testReferences
-    });
-
-    await client.prisma.bookmark.createMany({
-        data: seeds.testBookmarks
-    });
-
-    await client.prisma.event.createMany({
-        data: seeds.testEvents
-    });
+// Seed the database with a smaller set of data, just enough to run the automated tests.
+export const testSeed = async (): Promise<void> => {
+    // These don't depend on anything.
+    await createUsers();
+    // These depend on users.
+    await Promise.all([
+        createPublications(),
+        client.prisma.userMapping.createMany({
+            data: seeds.testUserMappings
+        })
+    ]);
+    // These depend on publications.
+    await Promise.all([
+        createTopics(),
+        client.prisma.references.createMany({
+            data: seeds.testReferences
+        }),
+        client.prisma.event.createMany({
+            data: seeds.testEvents
+        })
+    ]);
+    // These depend on topics.
+    await Promise.all([
+        client.prisma.bookmark.createMany({
+            data: seeds.testBookmarks
+        }),
+        client.prisma.topicMapping.createMany({
+            data: seeds.testTopicMappings
+        })
+    ]);
 };
 
 export const openSearchSeed = async (): Promise<void> => {

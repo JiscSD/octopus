@@ -37,6 +37,7 @@ model User {
     crosslinkVotes       CrosslinkVote[]
     defaultTopicId       String?
     defaultTopic         Topic?                 @relation(fields: [defaultTopicId], references: [id])
+    mappings             UserMapping[]
 }
 
 model Verification {
@@ -245,6 +246,15 @@ model TopicMapping {
     source   PublicationImportSource
 
     @@unique([title, source])
+}
+
+model UserMapping {
+    userId String
+    user   User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    value  String
+    source PublicationImportSource
+
+    @@unique([value, source])
 }
 
 model Bookmark {
