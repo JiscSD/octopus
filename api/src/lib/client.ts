@@ -27,25 +27,6 @@ export const prisma = new PrismaClient().$extends({
                 }
 
                 return query(args);
-            },
-            async updateMany({ args, query }) {
-                if (Array.isArray(args.data)) {
-                    args.data = args.data.map((item) => {
-                        if (typeof item.title === 'string') {
-                            return { ...item, title: item.title.toLowerCase() };
-                        } else {
-                            return item;
-                        }
-                    });
-
-                    return query(args);
-                } else {
-                    if (typeof args.data.title === 'string') {
-                        args.data = { ...args.data, title: args.data.title.toLowerCase() };
-                    }
-
-                    return query(args);
-                }
             }
         },
         userMapping: {
@@ -72,25 +53,6 @@ export const prisma = new PrismaClient().$extends({
                 }
 
                 return query(args);
-            },
-            async updateMany({ args, query }) {
-                if (Array.isArray(args.data)) {
-                    args.data = args.data.map((item) => {
-                        if (typeof item.value === 'string') {
-                            return { ...item, value: item.value.toLowerCase() };
-                        } else {
-                            return item;
-                        }
-                    });
-
-                    return query(args);
-                } else {
-                    if (typeof args.data.value === 'string') {
-                        args.data = { ...args.data, value: args.data.value.toLowerCase() };
-                    }
-
-                    return query(args);
-                }
             }
         }
     }
