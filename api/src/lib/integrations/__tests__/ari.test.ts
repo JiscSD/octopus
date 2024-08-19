@@ -102,12 +102,7 @@ describe('ARI Mapping', () => {
         expect(mappingAttempt).toMatchObject({
             success: true,
             mappedData: {
-                topics: [
-                    {
-                        id: 'test-topic-1a',
-                        title: 'Test sub-topic A'
-                    }
-                ]
+                topicIds: ['test-topic-1a']
             }
         });
     });
@@ -120,12 +115,7 @@ describe('ARI Mapping', () => {
         expect(mappingAttempt).toMatchObject({
             success: true,
             mappedData: {
-                topics: [
-                    {
-                        id: 'test-topic-1',
-                        title: 'Test topic'
-                    }
-                ]
+                topicIds: ['test-topic-1']
             }
         });
     });
@@ -171,6 +161,7 @@ describe('ARI handling', () => {
     test('Existing ARI publication with no changes is skipped', async () => {
         const handleARI = await ariUtils.handleIncomingARI(sampleARIQuestion);
 
+        // This test expects a seeded publication to exist in the unitTesting seed data matching sampleARIQuestion
         expect(handleARI).toMatchObject({
             actionTaken: 'none',
             success: true,
@@ -193,7 +184,7 @@ describe('ARI handling', () => {
             actionTaken: 'none',
             success: false,
             message:
-                'Failed to map ARI data to octopus data. User not found for department: Unrecognised Department name'
+                'Failed to map ARI data to octopus data. User not found for department: Unrecognised Department name.'
         });
     });
 
@@ -205,10 +196,28 @@ describe('ARI handling', () => {
             actionTaken: 'update',
             success: true,
             publicationVersion: {
+                // These fields should be different to v1.
                 id: 'ari-publication-1-v2',
                 versionNumber: 2,
                 isLatestLiveVersion: true,
-                title: 'ARI Publication 1 v2'
+                title: 'ARI Publication 1 v2',
+                // Content has changed because it includes the title on line 2.
+                content:
+                    '<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>' +
+                    '<p>ARI Publication 1 v2</p>' +
+                    '<p>Sample background information.</p>' +
+                    '<p><strong>Contact details</strong></p><p>Sample contact details.</p>' +
+                    '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>',
+                // These fields should not have changed from v1.
+                keywords: ['field of research 1', 'field of research 2', 'tag 1', 'tag 2'],
+                topics: [
+                    {
+                        id: 'test-topic-1a'
+                    }
+                ],
+                user: {
+                    id: 'test-organisational-account-1'
+                }
             }
         });
     });
@@ -216,6 +225,7 @@ describe('ARI handling', () => {
     test('ARI with no existing publication has a publication created', async () => {
         const handleARI = await ariUtils.handleIncomingARI({ ...sampleARIQuestion, questionId: 123457 });
 
+        // Ensure all the fields that are mapped have been set.
         expect(handleARI).toMatchObject({
             actionTaken: 'create',
             success: true,
@@ -223,6 +233,14 @@ describe('ARI handling', () => {
                 versionNumber: 1,
                 isLatestLiveVersion: true,
                 title: 'ARI Publication 1',
+                content:
+                    // Mapped content - see ARI mapping tests for explanation.
+                    '<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>' +
+                    '<p>ARI Publication 1</p>' +
+                    '<p>Sample background information.</p>' +
+                    '<p><strong>Contact details</strong></p><p>Sample contact details.</p>' +
+                    '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>',
+                keywords: ['field of research 1', 'field of research 2', 'tag 1', 'tag 2'],
                 publication: {
                     externalId: '123457',
                     externalSource: 'ARI',
@@ -230,9 +248,12 @@ describe('ARI handling', () => {
                 },
                 topics: [
                     {
-                        id: 'test-topic-1'
+                        id: 'test-topic-1a'
                     }
-                ]
+                ],
+                user: {
+                    id: 'test-organisational-account-1'
+                }
             }
         });
     });

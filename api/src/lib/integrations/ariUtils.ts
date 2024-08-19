@@ -84,11 +84,11 @@ export const mapAriQuestionToPublicationVersion = async (
     // Map ARI topics to octopus topics.
     const topicMappings = await Promise.all(ariTopics.map((ariTopic) => topicMappingService.get(ariTopic, 'ARI')));
     // We intentionally don't map some ARI topics, so filter those out.
-    const octopusTopics = topicMappings.flatMap((topicMapping) =>
-        topicMapping && topicMapping.isMapped && topicMapping.topic ? [topicMapping.topic] : []
+    const octopusTopicIds = topicMappings.flatMap((topicMapping) =>
+        topicMapping && topicMapping.isMapped && topicMapping.topic ? [topicMapping.topic.id] : []
     );
     // If no topics listed in ARI, fall back to default topic for the department (user).
-    const finalTopics = octopusTopics.length ? octopusTopics : user.defaultTopic ? [user.defaultTopic] : [];
+    const finalTopicIds = octopusTopicIds.length ? octopusTopicIds : user.defaultTopicId ? [user.defaultTopicId] : [];
 
     return {
         success: true,
@@ -96,7 +96,7 @@ export const mapAriQuestionToPublicationVersion = async (
             title,
             content,
             keywords,
-            topics: finalTopics,
+            topicIds: finalTopicIds,
             externalSource: 'ARI',
             externalId: questionId.toString(),
             userId: user.id
@@ -122,16 +122,15 @@ export const detectChangesToARIPublication = (
     const titleMatch = ari.title === publicationVersion.title;
     const contentMatch = ari.content === publicationVersion.content;
     const keywordsMatch = Helpers.compareArrays(ari.keywords, publicationVersion.keywords);
-    const ariTopicIds = ari.topics.map((topic) => topic.id);
     const publicationVersionTopicIds = publicationVersion.topics.map((topic) => topic.id);
-    const topicsMatch = Helpers.compareArrays(ariTopicIds, publicationVersionTopicIds);
+    const topicsMatch = Helpers.compareArrays(ari.topicIds, publicationVersionTopicIds);
     const userMatch = ari.userId === publicationVersion.user.id;
 
     const changes = {
         ...(!titleMatch ? { title: { old: ari.title, new: publicationVersion.title } } : {}),
         ...(!contentMatch ? { content: { old: ari.content, new: publicationVersion.content } } : {}),
         ...(!keywordsMatch ? { keywords: { old: ari.keywords, new: publicationVersion.keywords } } : {}),
-        ...(!topicsMatch ? { topics: { old: ariTopicIds, new: publicationVersionTopicIds } } : {}),
+        ...(!topicsMatch ? { topics: { old: ari.topicIds, new: publicationVersionTopicIds } } : {}),
         ...(!userMatch ? { user: { old: ari.userId, new: publicationVersion.user.id } } : {})
     };
 
@@ -255,7 +254,7 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
             ...(changes.title && { title: mappedData.title }),
             ...(changes.content && { content: mappedData.content }),
             ...(changes.keywords && { keywords: mappedData.keywords }),
-            ...(changes.topics && { topics: { set: mappedData.topics.map((topic) => ({ id: topic.id })) } })
+            ...(changes.topics && { topics: { set: mappedData.topicIds.map((topicId) => ({ id: topicId })) } })
         });
         const isReadyToPublish = await publicationVersionService.checkIsReadyToPublish(updatedVersion);
 

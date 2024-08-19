@@ -17,12 +17,7 @@ export const get = (value: string, source: I.PublicationImportSource) =>
                 select: {
                     id: true,
                     firstName: true,
-                    defaultTopic: {
-                        select: {
-                            id: true,
-                            title: true
-                        }
-                    }
+                    defaultTopicId: true
                 }
             }
         }

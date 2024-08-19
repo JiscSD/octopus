@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 const userMappings: Prisma.UserMappingCreateManyInput[] = [
     {
         userId: 'clyheq7ko0001eg48k2id2jao',
-        value: 'Office of Police Chief Scientific Adviser',
+        value: 'UK Policing: Office of Police Chief Scientific Adviser',
         source: 'ARI'
     },
     {
