@@ -34,8 +34,8 @@ On import, ARIs go through a handling flow:
 
 Various ARI fields are mapped to octpous ones in the `mapAriQuestionToPublicationVersion` function in [ariUtils.ts](./ariUtils.ts).
 
-Of particular importance is how ARIs are matched to an owning organisational user account. The mapping process expects an organisational account with the `department` field value from the ARI, followed by " (GB)" as its name (in the `firstName` user field). For example, an ARI with a department of "Ministry of Justice" should map to an organistional user with a firstName of "Ministry of Justice (GB)".
+Of particular importance is how ARIs are matched to an owning organisational user account. The mapping process expects a UserMapping to exist associating the `department` field value from the ARI (where the title matches, case insensitive, and the mapping source is 'ARI') with the user ID of an organisational account.
 
-Topics are also worth noting. If an ARI has values in its `topics` field, the mapping will check whether octopus has any TopicMappings in the database that match with them (where the title matches, case insensitive, and the mapping source is 'ARI') and associate the publication it creates/updates with the topic(s) from those mappings. If there are no topics listed on the ARI, the organisational user is expected to have a `defaultTopicId`, which is used as a fallback.
+Topics are mapped similarly. If an ARI has values in its `topics` field, the mapping will check whether octopus has any TopicMappings in the database that match with them and associate the publication it creates/updates with the topic(s) from those mappings. If there are no topics listed on the ARI, the organisational user is expected to have a `defaultTopicId`, which is used as a fallback.
 
 ARIs can be archived (`isArchived` field). These are not imported by Octopus.
