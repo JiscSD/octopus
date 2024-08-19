@@ -16,7 +16,13 @@ export const get = (value: string, source: I.PublicationImportSource) =>
             user: {
                 select: {
                     id: true,
-                    firstName: true
+                    firstName: true,
+                    defaultTopic: {
+                        select: {
+                            id: true,
+                            title: true
+                        }
+                    }
                 }
             }
         }

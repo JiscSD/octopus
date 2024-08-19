@@ -55,15 +55,15 @@ describe('ARI Mapping', () => {
             mappedData: {
                 content:
                     // Static placeholder text added to each mapped ARI's content
-                    '<p>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</p>' +
+                    '<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>' +
                     // ARI Question title
                     '<p>ARI Publication 1</p>' +
                     // Background information
                     '<p>Sample background information.</p>' +
                     // Contact details
-                    '<p>Contact details: Sample contact details.</p>' +
+                    '<p><strong>Contact details</strong></p><p>Sample contact details.</p>' +
                     // Related UKRI projects
-                    '<p>Related UKRI Projects:</p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>'
+                    '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>'
             }
         });
     });
@@ -79,12 +79,12 @@ describe('ARI Mapping', () => {
             success: true,
             mappedData: {
                 content:
-                    '<p>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</p><p>ARI Publication 1</p>' +
+                    '<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p><p>ARI Publication 1</p>' +
                     // Background information
                     '<p>Background information line 1.<br>Background information line 2.<br><br>Background information line 3.</p>' +
                     // Contact details
-                    '<p>Contact details: Contact details line 1.<br>Contact details line 2.<br><br>Contact details line 3.</p>' +
-                    '<p>Related UKRI Projects:</p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>'
+                    '<p><strong>Contact details</strong></p><p>Contact details line 1.<br>Contact details line 2.<br><br>Contact details line 3.</p>' +
+                    '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>'
             }
         });
     });
@@ -227,7 +227,12 @@ describe('ARI handling', () => {
                     externalId: '123457',
                     externalSource: 'ARI',
                     type: 'PROBLEM'
-                }
+                },
+                topics: [
+                    {
+                        id: 'test-topic-1'
+                    }
+                ]
             }
         });
     });

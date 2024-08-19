@@ -5,6 +5,7 @@ import * as I from 'interface';
 import * as publicationService from 'publication/service';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as topicMappingService from 'topicMapping/service';
+import * as userMappingService from 'userMapping/service';
 import * as userService from 'user/service';
 
 const parseAriTextField = (value: string): string => {
@@ -66,34 +67,19 @@ export const mapAriQuestionToPublicationVersion = async (
         )
     );
     const keywords = fieldsOfResearch.concat(tags);
-    // Find user by department title.
-    // All ARI accounts are given a firstname of the department name appended with " (GB)".
-    const user = await client.prisma.user.findFirst({
-        where: {
-            firstName: {
-                mode: 'insensitive',
-                equals: department + ' (GB)'
-            },
-            role: 'ORGANISATION'
-        },
-        select: {
-            id: true,
-            defaultTopic: {
-                select: {
-                    id: true,
-                    title: true
-                }
-            }
-        }
-    });
 
-    if (!user) {
+    // Find user by department title.
+    const userMapping = await userMappingService.get(department, 'ARI');
+
+    if (!userMapping) {
         return {
             success: false,
             mappedData: null,
             message: 'User not found for department: ' + department + '.'
         };
     }
+
+    const user = userMapping.user;
 
     // Map ARI topics to octopus topics.
     const topicMappings = await Promise.all(ariTopics.map((ariTopic) => topicMappingService.get(ariTopic, 'ARI')));
