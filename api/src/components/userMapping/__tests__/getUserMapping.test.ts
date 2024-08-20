@@ -15,7 +15,8 @@ describe('Get a user mapping', () => {
             source: 'ARI',
             user: {
                 id: 'test-organisational-account-1',
-                firstName: 'Test ARI Department (UK)'
+                firstName: 'Test ARI Department (UK)',
+                defaultTopicId: 'test-topic-1'
             }
         });
     });

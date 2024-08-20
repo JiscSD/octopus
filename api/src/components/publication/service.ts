@@ -136,6 +136,9 @@ export const get = async (id: string) => {
                 },
                 select: {
                     id: true,
+                    versionToId: true,
+                    publicationToId: true,
+                    draft: true,
                     publicationTo: {
                         select: {
                             id: true,
@@ -166,6 +169,9 @@ export const get = async (id: string) => {
                 },
                 select: {
                     id: true,
+                    versionToId: true,
+                    publicationFromId: true,
+                    draft: true,
                     publicationFrom: {
                         select: {
                             id: true,
