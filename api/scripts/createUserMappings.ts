@@ -186,30 +186,29 @@ const createUserMappings = async (
     return created;
 };
 
-const fileContents = readDataFromFile();
+const runScript = async (): Promise<void> => {
+    const fileContents = readDataFromFile();
 
-if (fileContents.error) {
-    console.log('Read file error: ', fileContents.error);
-}
+    if (fileContents.error) {
+        console.log('Read file error: ', fileContents.error);
+    }
 
-const { environment, dryRun } = parseArguments();
+    const { environment, dryRun } = parseArguments();
 
-validateData(fileContents.data, environment)
-    .then((result) => {
-        if (result.valid) {
-            createUserMappings(fileContents.data, environment, dryRun)
-                .then((createdMappings) => {
-                    console.log(
-                        dryRun
-                            ? 'Dry run complete.'
-                            : 'Real run complete.' +
-                                  ` Created ${createdMappings.length} mappings out of ${fileContents.data.length}.`
-                    );
-                    console.log(createdMappings);
-                })
-                .catch((err) => console.log(err));
-        } else {
-            console.log('Failed validation.', result);
-        }
-    })
-    .catch((err) => console.log(err));
+    const result = await validateData(fileContents.data, environment);
+
+    if (result.valid) {
+        const createdMappings = await createUserMappings(fileContents.data, environment, dryRun);
+        console.log(
+            dryRun
+                ? 'Dry run complete.'
+                : 'Real run complete.' +
+                      ` Created ${createdMappings.length} mappings out of ${fileContents.data.length}.`
+        );
+        console.log(createdMappings);
+    } else {
+        console.log('Failed validation.', result);
+    }
+};
+
+void runScript();
