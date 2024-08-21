@@ -4,9 +4,53 @@ import { Client } from '@opensearch-project/opensearch';
 export const prisma = new PrismaClient().$extends({
     query: {
         topicMapping: {
+            // Ensure all topic mapping titles are saved in lower case.
             async create({ args, query }) {
-                // Ensure all topic mapping titles are saved in lower case.
                 args.data = { ...args.data, title: args.data.title.toLowerCase() };
+
+                return query(args);
+            },
+            async createMany({ args, query }) {
+                if (Array.isArray(args.data)) {
+                    args.data = args.data.map((item) => ({ ...item, title: item.title.toLowerCase() }));
+
+                    return query(args);
+                } else {
+                    args.data = { ...args.data, title: args.data.title.toLowerCase() };
+
+                    return query(args);
+                }
+            },
+            async update({ args, query }) {
+                if (typeof args.data.title === 'string') {
+                    args.data = { ...args.data, title: args.data.title.toLowerCase() };
+                }
+
+                return query(args);
+            }
+        },
+        userMapping: {
+            // Likewise, user mapping values are saved in lower case.
+            async create({ args, query }) {
+                args.data = { ...args.data, value: args.data.value.toLowerCase() };
+
+                return query(args);
+            },
+            async createMany({ args, query }) {
+                if (Array.isArray(args.data)) {
+                    args.data = args.data.map((item) => ({ ...item, value: item.value.toLowerCase() }));
+
+                    return query(args);
+                } else {
+                    args.data = { ...args.data, value: args.data.value.toLowerCase() };
+
+                    return query(args);
+                }
+            },
+            async update({ args, query }) {
+                if (typeof args.data.value === 'string') {
+                    args.data = { ...args.data, value: args.data.value.toLowerCase() };
+                }
 
                 return query(args);
             }

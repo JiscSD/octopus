@@ -1047,10 +1047,17 @@ export type MappedARIQuestion = {
     title: string;
     content: string;
     keywords: string[];
-    topics: Pick<PublicationVersion['topics'][number], 'id' | 'title'>[];
+    topicIds: string[];
     externalId: string;
     externalSource: 'ARI';
     userId: User['id'];
 };
 
 export type ARIHandlingAction = 'create' | 'update' | 'none';
+
+export interface HandledARI {
+    actionTaken: ARIHandlingAction;
+    success: boolean;
+    message?: string;
+    publicationVersion?: PublicationVersion;
+}

@@ -189,19 +189,6 @@ export const create = async (
 
         const publication = await publicationService.create(event.body, event.user, directPublish, links);
 
-        if (directPublish) {
-            // Create a DOI for this version specifically and trigger post publish tasks.
-            const publishedVersion = await publicationVersionService.get(publication.id, 'latestLive');
-
-            if (publishedVersion) {
-                const versionWithDoi = await publicationVersionService.generateNewVersionDOI(publishedVersion, null);
-
-                if (versionWithDoi) {
-                    await publicationVersionService.postPublishHook(versionWithDoi);
-                }
-            }
-        }
-
         return response.json(201, publication);
     } catch (err) {
         console.log(err);

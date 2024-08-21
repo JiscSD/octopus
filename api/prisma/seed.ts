@@ -55,7 +55,7 @@ const createTopics = async (): Promise<void> => {
 };
 
 export const initialDevSeed = async (): Promise<void> => {
-    // Create users. These are relied upon when creating publications.
+    // Create basic users. These are relied upon when creating publications.
     await client.prisma.user.createMany({ data: SeedData.devUsers });
 
     const doesIndexExist = await client.search.indices.exists({
@@ -74,8 +74,14 @@ export const initialDevSeed = async (): Promise<void> => {
         createTopics()
     ]);
 
-    // Add topic mappings - these depend on topics.
-    await client.prisma.topicMapping.createMany({ data: SeedData.devTopicMappings });
+    // Add topic mappings and organisational accounts - these depend on topics.
+    await Promise.all([
+        client.prisma.topicMapping.createMany({ data: SeedData.devTopicMappings }),
+        client.prisma.user.createMany({ data: SeedData.devOrganisationalAccounts })
+    ]);
+
+    // Add organisational account mappings, which depend on organisational accounts.
+    await client.prisma.userMapping.createMany({ data: SeedData.devUserMappings });
 
     if (process.env.STAGE === 'local') {
         // Create local S3 buckets
