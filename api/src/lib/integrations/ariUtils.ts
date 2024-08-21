@@ -128,11 +128,11 @@ export const detectChangesToARIPublication = (
     const userMatch = ari.userId === publicationVersion.user.id;
 
     const changes = {
-        ...(!titleMatch ? { title: { old: ari.title, new: publicationVersion.title } } : {}),
-        ...(!contentMatch ? { content: { old: ari.content, new: publicationVersion.content } } : {}),
-        ...(!keywordsMatch ? { keywords: { old: ari.keywords, new: publicationVersion.keywords } } : {}),
-        ...(!topicsMatch ? { topics: { old: ariTopicIds, new: publicationVersionTopicIds } } : {}),
-        ...(!userMatch ? { user: { old: ari.userId, new: publicationVersion.user.id } } : {})
+        ...(!titleMatch ? { title: { new: ari.title, old: publicationVersion.title } } : {}),
+        ...(!contentMatch ? { content: { new: ari.content, old: publicationVersion.content } } : {}),
+        ...(!keywordsMatch ? { keywords: { new: ari.keywords, old: publicationVersion.keywords } } : {}),
+        ...(!topicsMatch ? { topics: { new: ariTopicIds, old: publicationVersionTopicIds } } : {}),
+        ...(!userMatch ? { userId: { new: ari.userId, old: publicationVersion.user.id } } : {})
     };
 
     const somethingChanged = !(titleMatch && contentMatch && keywordsMatch && topicsMatch && userMatch);
@@ -240,47 +240,43 @@ export const handleIncomingARI = async (
     const changes = detectChangesToARIPublication(mappedData, existingVersion);
 
     if (changes) {
-        // Data differs from what is in octopus, so attempt to re-version the publication.
-
-        // If the user (ARI department) changes, the create() call handles that.
-        // As such, we don't need to deal with it in the update() call.
-        const newVersion = await publicationVersionService.create(existingVersion, user);
-        // Mock coauthor workflow process of stating affiliations.
-        // Treat organisational account as an independent (unaffiliated) coauthor.
-        await coAuthorService.update(newVersion.coAuthors[0].id, { isIndependent: true });
-
-        const updatedVersion = await publicationVersionService.update(newVersion.id, {
+        // Data differs from what is in octopus, so update the publication.
+        // Unlike manually created publications, these just have 1 version that
+        // updates in-place so that we don't pollute datacite with lots of version DOIs.
+        let updatedVersion = await publicationVersionService.update(existingVersion.id, {
             ...(changes.title && { title: mappedData.title }),
             ...(changes.content && { content: mappedData.content }),
             ...(changes.keywords && { keywords: mappedData.keywords }),
-            ...(changes.topics && { topics: { set: mappedData.topics.map((topic) => ({ id: topic.id })) } })
+            ...(changes.topics && { topics: { set: mappedData.topics.map((topic) => ({ id: topic.id })) } }),
+            ...(changes.userId && { user: { connect: { id: mappedData.userId } } })
         });
-        const isReadyToPublish = await publicationVersionService.checkIsReadyToPublish(updatedVersion);
 
-        if (isReadyToPublish) {
-            await publicationVersionService.generateNewVersionDOI(updatedVersion, existingVersion);
-            const publishedNewVersion = await publicationVersionService.updateStatus(newVersion.id, 'LIVE');
+        // If user changed, update coAuthors.
+        if (changes.userId) {
+            // Delete old coAuthor.
+            // There should only be one coAuthor but since this is an array, loop through to make it clean.
+            await Promise.all(
+                existingVersion.coAuthors.map(async (coAuthor) => {
+                    return await coAuthorService.deleteCoAuthor(coAuthor.id);
+                })
+            );
+            // Create a coAuthor based on the userId of the publicationVersion.
+            await coAuthorService.createCorrespondingAuthor(updatedVersion);
+            const versionWithUpdatedCoAuthors = await publicationVersionService.getById(updatedVersion.id);
 
-            if (publishedNewVersion) {
-                return {
-                    actionTaken: 'update',
-                    success: true,
-                    publicationVersion: publishedNewVersion
-                };
-            } else {
-                return {
-                    actionTaken: 'update',
-                    success: false,
-                    message: `Created a new version (id: ${newVersion.id}) of the existing publication for ARI question: ${question.questionId}, but failed to update its status to LIVE.`
-                };
+            if (versionWithUpdatedCoAuthors) {
+                updatedVersion = versionWithUpdatedCoAuthors;
             }
-        } else {
-            return {
-                actionTaken: 'update',
-                success: false,
-                message: `Created a new version (id: ${newVersion.id}) of the existing publication for ARI question: ${question.questionId}, but its data was not ready to be made LIVE.`
-            };
         }
+
+        // Everything is good, so ensure changes hit datacite, opensearch and pdf.
+        await publicationVersionService.postPublishHook(updatedVersion);
+
+        return {
+            actionTaken: 'update',
+            success: true,
+            publicationVersion: updatedVersion
+        };
     } else {
         // No change found, so take no action.
         return {

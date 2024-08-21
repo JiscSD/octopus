@@ -1253,7 +1253,18 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 currentStatus: 'LIVE',
                 isLatestLiveVersion: true,
                 publishedDate: '2024-07-16T14:06:00.000Z',
-                keywords: ['field of research 1', 'field of research 2', 'tag 1', 'tag 2']
+                keywords: ['field of research 1', 'field of research 2', 'tag 1', 'tag 2'],
+                coAuthors: {
+                    create: {
+                        user: {
+                            connect: { id: 'test-organisational-account-1' }
+                        },
+                        email: '',
+                        confirmedCoAuthor: true,
+                        approvalRequested: false,
+                        isIndependent: true
+                    }
+                }
             }
         }
     }
