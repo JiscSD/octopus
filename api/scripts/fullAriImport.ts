@@ -10,32 +10,29 @@ import * as I from 'interface';
 
 const fullAriImport = async (): Promise<string> => {
     const startTime = performance.now();
-    const ariResponse = await axios.get('https://ari.org.uk/api/questions?order_by=dateUpdated');
-    const firstPageAris = ariResponse.data.data;
-    const paginationInfo = ariResponse.data.meta.pagination;
 
     // Collect all ARIs in a variable.
-    const allAris = firstPageAris;
-    let pageNumber = paginationInfo.current_page;
-    let nextPageUrl = paginationInfo.links.next;
+    const allAris: I.ARIQuestion[] = [];
 
     // After a page has been retrieved, add the data to the aris variable,
     // get the next page and repeat until reaching the last page.
-    while (pageNumber < paginationInfo.total_pages) {
-        // Get next page.
-        const nextPageResponse = await axios.get(nextPageUrl);
-        const nextPageAris = nextPageResponse.data.data;
+    let pageUrl = 'https://ari.org.uk/api/questions?order_by=dateUpdated';
+    // Updates with each loop. Contains total count which we need outside the loop.
+    let paginationInfo;
 
-        // Add next page's ARIs to our variable.
-        allAris.push(...nextPageAris);
+    do {
+        // Get page.
+        const response = await axios.get(pageUrl);
+        const pageAris = response.data.data;
 
-        // Set the things we need to repeat this.
-        const nextPagePaginationInfo = nextPageResponse.data.meta.pagination;
-        pageNumber = nextPagePaginationInfo.current_page;
+        // Add page's ARIs to our variable.
+        allAris.push(...pageAris);
 
+        // Get the next page URL.
         // On the last run this will be undefined but that's fine because we won't need to repeat the loop.
-        nextPageUrl = nextPagePaginationInfo.links.next;
-    }
+        paginationInfo = response.data.meta.pagination;
+        pageUrl = paginationInfo.links.next;
+    } while (pageUrl);
 
     // In case something has caused this process to fail, perhaps the API changed, etc...
     if (allAris.length !== paginationInfo.total) {
