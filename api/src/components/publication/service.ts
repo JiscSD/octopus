@@ -471,7 +471,8 @@ export const create = async (
             const versionWithDoi = await publicationVersionService.generateNewVersionDOI(publishedVersion, null);
 
             if (versionWithDoi) {
-                await publicationVersionService.postPublishHook(versionWithDoi);
+                // Run post publish tasks, except PDF generation.
+                await publicationVersionService.postPublishHook(versionWithDoi, true);
                 const upToDatePublication = await get(publication.id);
 
                 return upToDatePublication;
