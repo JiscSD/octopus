@@ -174,6 +174,47 @@ describe('ARI handling', () => {
         });
     });
 
+    test('Changed title updates publication without reversioning', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({
+            ...sampleARIQuestion,
+            question: 'ARI Publication 1 v2'
+        });
+        expect(handleARI).toMatchObject({
+            actionTaken: 'update',
+            success: true,
+            publicationVersion: {
+                // Publication has not been reversioned.
+                id: 'ari-publication-1-v1',
+                versionNumber: 1,
+                isLatestLiveVersion: true,
+                // Title has changed.
+                title: 'ARI Publication 1 v2'
+            }
+        });
+    });
+
+    test('Changed department updates user and coauthor', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({
+            ...sampleARIQuestion,
+            department: 'Test organisation 2'
+        });
+        expect(handleARI).toMatchObject({
+            actionTaken: 'update',
+            success: true,
+            publicationVersion: {
+                createdBy: 'test-organisational-account-2',
+                user: {
+                    id: 'test-organisational-account-2'
+                },
+                coAuthors: [
+                    {
+                        linkedUser: 'test-organisational-account-2'
+                    }
+                ]
+            }
+        });
+    });
+
     test('ARI with unrecognised department is skipped', async () => {
         const handleARI = await ariUtils.handleIncomingARI({
             ...sampleARIQuestion,
@@ -188,36 +229,63 @@ describe('ARI handling', () => {
         });
     });
 
-    test('Existing ARI publication with changes is re-versioned', async () => {
-        await testUtils.openSearchSeed();
-        const handleARI = await ariUtils.handleIncomingARI({ ...sampleARIQuestion, question: 'ARI Publication 1 v2' });
-
+    test('Content updates when mapped fields have changed', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({
+            ...sampleARIQuestion,
+            backgroundInformation: 'New background information.',
+            contactDetails: 'New contact details.',
+            relatedUKRIProjects: [
+                {
+                    projectId: '123',
+                    title: 'Test',
+                    url: 'https://jisc.ac.uk'
+                }
+            ]
+        });
         expect(handleARI).toMatchObject({
             actionTaken: 'update',
             success: true,
             publicationVersion: {
-                // These fields should be different to v1.
-                id: 'ari-publication-1-v2',
-                versionNumber: 2,
-                isLatestLiveVersion: true,
-                title: 'ARI Publication 1 v2',
-                // Content has changed because it includes the title on line 2.
                 content:
                     '<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>' +
-                    '<p>ARI Publication 1 v2</p>' +
-                    '<p>Sample background information.</p>' +
-                    '<p><strong>Contact details</strong></p><p>Sample contact details.</p>' +
-                    '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>',
-                // These fields should not have changed from v1.
-                keywords: ['field of research 1', 'field of research 2', 'tag 1', 'tag 2'],
+                    '<p>ARI Publication 1</p>' +
+                    '<p>New background information.</p>' +
+                    '<p><strong>Contact details</strong></p><p>New contact details.</p>' +
+                    '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://jisc.ac.uk">Test</a></li></ul>'
+            }
+        });
+    });
+
+    test('Topics update when changed', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({
+            ...sampleARIQuestion,
+            topics: ['ari test (unmapped)']
+        });
+        expect(handleARI).toMatchObject({
+            actionTaken: 'update',
+            success: true,
+            publicationVersion: {
+                // Falls back to default topic.
                 topics: [
                     {
-                        id: 'test-topic-1a'
+                        id: 'test-topic-1'
                     }
-                ],
-                user: {
-                    id: 'test-organisational-account-1'
-                }
+                ]
+            }
+        });
+    });
+
+    test('Keywords update when fieldsOfResearch/tags change', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({
+            ...sampleARIQuestion,
+            fieldsOfResearch: ['foo', 'bar'],
+            tags: ['baz']
+        });
+        expect(handleARI).toMatchObject({
+            actionTaken: 'update',
+            success: true,
+            publicationVersion: {
+                keywords: ['foo', 'bar', 'baz']
             }
         });
     });
