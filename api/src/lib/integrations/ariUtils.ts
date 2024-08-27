@@ -256,11 +256,7 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
         if (changes.userId) {
             // Delete old coAuthor.
             // There should only be one coAuthor but since this is an array, loop through to make it clean.
-            await Promise.all(
-                existingVersion.coAuthors.map(async (coAuthor) => {
-                    return await coAuthorService.deleteCoAuthor(coAuthor.id);
-                })
-            );
+            await Promise.all(existingVersion.coAuthors.map((coAuthor) => coAuthorService.deleteCoAuthor(coAuthor.id)));
             // Create a coAuthor based on the userId of the publicationVersion.
             await coAuthorService.createCorrespondingAuthor(updatedVersion);
             const versionWithUpdatedCoAuthors = await publicationVersionService.getById(updatedVersion.id);
