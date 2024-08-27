@@ -270,8 +270,8 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
             }
         }
 
-        // Everything is good, so ensure changes hit datacite, opensearch and pdf.
-        await publicationVersionService.postPublishHook(updatedVersion);
+        // Everything is good, so ensure changes hit datacite and opensearch.
+        await publicationVersionService.postPublishHook(updatedVersion, true);
 
         return {
             actionTaken: 'update',
