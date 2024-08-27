@@ -196,9 +196,7 @@ describe('ARI handling', () => {
     test('Changed department updates user and coauthor', async () => {
         const handleARI = await ariUtils.handleIncomingARI({
             ...sampleARIQuestion,
-            question: 'ARI Publication 1 v2',
-            department: 'Test organisation 2',
-            contactDetails: 'New contact details.'
+            department: 'Test organisation 2'
         });
         expect(handleARI).toMatchObject({
             actionTaken: 'update',
@@ -249,11 +247,11 @@ describe('ARI handling', () => {
             success: true,
             publicationVersion: {
                 content:
-                    '<p>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</p>' +
+                    '<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>' +
                     '<p>ARI Publication 1</p>' +
                     '<p>New background information.</p>' +
-                    '<p>Contact details: New contact details.</p>' +
-                    '<p>Related UKRI Projects:</p><ul><li><a href="https://jisc.ac.uk">Test</a></li></ul>'
+                    '<p><strong>Contact details</strong></p><p>New contact details.</p>' +
+                    '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://jisc.ac.uk">Test</a></li></ul>'
             }
         });
     });
