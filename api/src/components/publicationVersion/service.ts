@@ -1663,7 +1663,7 @@ export const updateCanonicalDOI = async (
 // Actions that run after a version is published (changes status to LIVE).
 // Pulled out to a separate function because things may need to run when something is
 // published immediately (i.e. not going through full drafting workflow) and bypasses the updateStatus function.
-export const postPublishHook = async (publicationVersion: I.PublicationVersion) => {
+export const postPublishHook = async (publicationVersion: I.PublicationVersion, skipPdfGeneration?: boolean) => {
     // Ensure links made from a PEER_REVIEW version point to the latest live version of the target publication.
     if (publicationVersion.publication.type === 'PEER_REVIEW') {
         const outdatedDraftLinks = await client.prisma.links.findMany({
@@ -1752,8 +1752,12 @@ export const postPublishHook = async (publicationVersion: I.PublicationVersion) 
     });
 
     // Send message to the pdf generation queue.
-    // Currently only on deployed instances until a local solution is developed.
-    if (process.env.STAGE !== 'local') await sqs.sendMessage(publicationVersion.versionOf);
+    // Skipped locally, as there is not an SQS que in localstack.
+    // Option to skip, e.g. in bulk import scripts, where instant pdf generation is not a priority.
+    // In both cases, the pdf will still be generated the first time it's requested.
+    if (process.env.STAGE !== 'local' && !skipPdfGeneration) {
+        await sqs.sendMessage(publicationVersion.versionOf);
+    }
 };
 
 export const updateStatus = async (id: string, status: I.PublicationStatusEnum) => {

@@ -99,6 +99,9 @@
             "user/*": [
                 "src/components/user/*"
             ],
+            "userMapping/*": [
+                "src/components/userMapping/*"
+            ],
             "verification/*": [
                 "src/components/verification/*"
             ]

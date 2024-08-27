@@ -7,7 +7,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Victoria',
         lastName: 'Allen',
         email: 'test-user-1b@jisc.ac.uk',
-        locked: false,
         apiKey: '000000001'
     },
     {
@@ -16,7 +15,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Science',
         lastName: 'Octopus',
         email: 'octopus@jisc.ac.uk',
-        locked: false,
         apiKey: 'kjahskjhuhaushkjhaskjhjkahsd'
     },
     {
@@ -25,7 +23,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Rami',
         lastName: 'Salem',
         email: 'test-user-2b@jisc.ac.uk',
-        locked: false,
         apiKey: '000000002'
     },
     {
@@ -34,7 +31,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Aoi',
         lastName: 'Han',
         email: 'test-user-3@jisc.ac.uk',
-        locked: false,
         apiKey: '000000003'
     },
     {
@@ -43,7 +39,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Juan',
         lastName: 'Garcia',
         email: 'test-user-4@jisc.ac.uk',
-        locked: false,
         apiKey: '000000004'
     },
     {
@@ -52,7 +47,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Amelia',
         lastName: 'Lucas',
         email: 'test-user-5@jisc.ac.uk',
-        locked: false,
         apiKey: '000000005'
     },
     {
@@ -61,7 +55,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Grace',
         lastName: 'Murphy',
         email: 'test-user-6@jisc.ac.uk',
-        locked: false,
         apiKey: '000000006'
     },
     {
@@ -70,7 +63,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Oliver',
         lastName: 'Smith',
         email: 'test-user-7@jisc.ac.uk',
-        locked: false,
         apiKey: '000000007'
     },
     {
@@ -79,7 +71,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Mia',
         lastName: 'Prakash',
         email: 'test-user-8@jisc.ac.uk',
-        locked: false,
         apiKey: '000000008'
     },
     {
@@ -88,7 +79,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Gabriel',
         lastName: 'Dubois',
         email: 'test-user-9@jisc.ac.uk',
-        locked: false,
         apiKey: '000000009'
     },
     {
@@ -97,7 +87,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Fatima',
         lastName: 'Akter',
         email: 'test-user-10@jisc.ac.uk',
-        locked: false,
         apiKey: '000000010'
     },
     {
@@ -106,7 +95,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Althea',
         lastName: 'De la Cruz',
         email: 'test-user-11@jisc.ac.uk',
-        locked: false,
         apiKey: '000000011'
     },
     {
@@ -115,7 +103,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Nathaniel',
         lastName: 'Hernandez',
         email: 'test-user-12@jisc.ac.uk',
-        locked: false,
         apiKey: '000000012'
     },
     {
@@ -124,7 +111,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Liam',
         lastName: 'Tremblay',
         email: 'test-user-13@jisc.ac.uk',
-        locked: false,
         apiKey: '000000013'
     },
     {
@@ -133,7 +119,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Sophia',
         lastName: 'MacDonald',
         email: 'test-user-14@jisc.ac.uk',
-        locked: false,
         apiKey: '000000014'
     },
     {
@@ -142,7 +127,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Ji-an',
         lastName: 'Choi',
         email: 'test-user-15@jisc.ac.uk',
-        locked: false,
         apiKey: '000000015'
     },
     {
@@ -151,7 +135,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Dmitry',
         lastName: 'Sokolov',
         email: 'test-user-16@jisc.ac.uk',
-        locked: false,
         apiKey: '000000016'
     },
     {
@@ -160,7 +143,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Isla',
         lastName: 'Murray',
         email: 'test-user-17@jisc.ac.uk',
-        locked: false,
         apiKey: '000000017'
     },
     {
@@ -169,7 +151,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Ines',
         lastName: 'Halimi',
         email: 'test-user-18@jisc.ac.uk',
-        locked: false,
         apiKey: '000000018'
     },
     {
@@ -178,7 +159,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Youssef',
         lastName: 'Alami',
         email: 'test-user-19@jisc.ac.uk',
-        locked: false,
         apiKey: '000000019'
     },
     {
@@ -187,7 +167,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Jackson',
         lastName: 'Fortin',
         email: 'test-user-20@jisc.ac.uk',
-        locked: false,
         apiKey: '000000020'
     },
     {
@@ -196,7 +175,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Patricia',
         lastName: 'Jones',
         email: 'test-user-21@jisc.ac.uk',
-        locked: false,
         apiKey: '000000021'
     },
     {
@@ -205,7 +183,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Sofia',
         lastName: 'Gomez',
         email: 'test-user-22@jisc.ac.uk',
-        locked: false,
         apiKey: '000000022'
     },
     {
@@ -214,7 +191,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Valentina',
         lastName: 'Gomez',
         email: 'test-user-23@jisc.ac.uk',
-        locked: false,
         apiKey: '000000023'
     },
     {
@@ -223,7 +199,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Ren',
         lastName: 'Kim',
         email: 'test-user-24@jisc.ac.uk',
-        locked: false,
         apiKey: '000000024'
     },
     {
@@ -232,7 +207,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         firstName: 'Sophie',
         lastName: 'De Vries',
         email: 'test-user-25@jisc.ac.uk',
-        locked: false,
         apiKey: '000000025'
     },
     {
@@ -240,7 +214,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         orcid: '0026',
         firstName: 'Co-Author',
         lastName: 'One',
-        locked: false,
         apiKey: '000000026'
     },
     {
@@ -248,7 +221,6 @@ const userSeeds: Prisma.UserCreateInput[] = [
         orcid: '0027',
         firstName: 'Co-Author',
         lastName: 'Two',
-        locked: false,
         apiKey: '000000027'
     },
     {

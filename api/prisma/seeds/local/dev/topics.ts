@@ -3,17 +3,11 @@ import { Prisma } from '@prisma/client';
 const topics: Prisma.TopicCreateInput[] = [
     {
         id: 'clkv6uiba001il2rsb9i7dka8',
-        title: 'What makes everything we can detect in the universe around us the way that it is, and why?',
-        parents: {
-            connect: []
-        }
+        title: 'What makes everything we can detect in the universe around us the way that it is, and why?'
     },
     {
         id: 'clkv6uoi102e6l2rs3bu1xo8b',
-        title: 'mosaic virus',
-        parents: {
-            connect: []
-        }
+        title: 'mosaic virus'
     },
     {
         id: 'clkv6uibe001kl2rsmoghv4f8',

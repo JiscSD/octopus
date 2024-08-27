@@ -505,7 +505,7 @@ const topicMappings: Prisma.TopicMappingCreateManyInput[] = [
         isMapped: true
     },
     {
-        title: 'Climatechange',
+        title: 'Climate change',
         source: 'ARI',
         topicId: 'clkv6uizf00a6l2rsck5tw4cb',
         isMapped: true
