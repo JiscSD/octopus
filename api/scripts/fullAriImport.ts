@@ -16,7 +16,7 @@ const fullAriImport = async (): Promise<string> => {
 
     // After a page has been retrieved, add the data to the aris variable,
     // get the next page and repeat until reaching the last page.
-    let pageUrl = 'https://ari.org.uk/api/questions?order_by=dateUpdated';
+    let pageUrl = ariUtils.ariEndpoint;
     // Updates with each loop. Contains total count which we need outside the loop.
     let paginationInfo;
 

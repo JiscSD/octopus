@@ -48,7 +48,7 @@ export const mapAriQuestionToPublicationVersion = async (
     const title = question;
     // Compose content.
     const commonBoilerplateHTML =
-        "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>";
+        "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>";
     const titleHTML = `<p>${question}</p>`;
     const backgroundInformationHTML = backgroundInformation ? `<p>${parseAriTextField(backgroundInformation)}</p>` : '';
     const contactDetailsHTML = contactDetails
@@ -66,7 +66,8 @@ export const mapAriQuestionToPublicationVersion = async (
             ''
         )
     );
-    const keywords = fieldsOfResearch.concat(tags);
+    // Ensure uniqueness.
+    const keywords = [...new Set(fieldsOfResearch.concat(tags))];
 
     // Find user by department title.
     const userMapping = await userMappingService.get(department, 'ARI');
@@ -88,7 +89,12 @@ export const mapAriQuestionToPublicationVersion = async (
         topicMapping && topicMapping.isMapped && topicMapping.topic ? [topicMapping.topic.id] : []
     );
     // If no topics listed in ARI, fall back to default topic for the department (user).
-    const finalTopicIds = octopusTopicIds.length ? octopusTopicIds : user.defaultTopicId ? [user.defaultTopicId] : [];
+    // Otherwise use the mapped topics, in a Set to ensure uniqueness.
+    const finalTopicIds = octopusTopicIds.length
+        ? [...new Set(octopusTopicIds)]
+        : user.defaultTopicId
+        ? [user.defaultTopicId]
+        : [];
 
     return {
         success: true,
@@ -160,14 +166,6 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
         };
     }
 
-    // Check existence of publication for this ARI Question.
-    const existingPublication = await client.prisma.publication.findFirst({
-        where: {
-            externalId: question.questionId.toString(),
-            externalSource: 'ARI'
-        }
-    });
-
     // Map ARI data to octopus data.
     const mappingAttempt = await mapAriQuestionToPublicationVersion(question);
 
@@ -192,6 +190,14 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
             message: `Failed to get user with ID from mapping: ${mappedData.userId}.`
         };
     }
+
+    // Check existence of publication for this ARI Question.
+    const existingPublication = await client.prisma.publication.findFirst({
+        where: {
+            externalId: question.questionId.toString(),
+            externalSource: 'ARI'
+        }
+    });
 
     // If the ARI has not been ingested previously, a new research problem is created.
     if (!existingPublication) {
@@ -241,6 +247,7 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
     const changes = detectChangesToARIPublication(mappedData, existingVersion);
 
     if (changes) {
+        console.log(`Changes found when handling ARI ${question.questionId}`, changes);
         // Data differs from what is in octopus, so update the publication.
         // Unlike manually created publications, these just have 1 version that
         // updates in-place so that we don't pollute datacite with lots of version DOIs.
@@ -267,7 +274,7 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
         }
 
         // Everything is good, so ensure changes hit datacite and opensearch.
-        await publicationVersionService.postPublishHook(updatedVersion, true);
+        await publicationVersionService.postPublishHook(updatedVersion, true, true);
 
         return {
             actionTaken: 'update',
@@ -283,3 +290,5 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
         };
     }
 };
+
+export const ariEndpoint = 'https://ari.org.uk/api/questions?order_by=dateUpdated';
