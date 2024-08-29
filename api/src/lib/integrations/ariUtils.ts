@@ -61,11 +61,11 @@ export const mapAriQuestionToPublicationVersion = async (
               .join('') +
           '</ul>'
         : '';
-    const content = Helpers.getSafeHTML(
-        [commonBoilerplateHTML, titleHTML, backgroundInformationHTML, contactDetailsHTML, relatedUKRIProjectsHTML].join(
-            ''
-        )
-    );
+    const content =
+        commonBoilerplateHTML +
+        Helpers.getSafeHTML(
+            [titleHTML, backgroundInformationHTML, contactDetailsHTML, relatedUKRIProjectsHTML].join('')
+        );
     // Ensure uniqueness.
     const keywords = [...new Set(fieldsOfResearch.concat(tags))];
 

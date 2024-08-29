@@ -55,7 +55,7 @@ describe('ARI Mapping', () => {
             mappedData: {
                 content:
                     // Static placeholder text added to each mapped ARI's content
-                    '<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>' +
+                    "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>" +
                     // ARI Question title
                     '<p>ARI Publication 1</p>' +
                     // Background information
@@ -79,7 +79,7 @@ describe('ARI Mapping', () => {
             success: true,
             mappedData: {
                 content:
-                    '<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p><p>ARI Publication 1</p>' +
+                    "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p><p>ARI Publication 1</p>" +
                     // Background information
                     '<p>Background information line 1.<br>Background information line 2.<br><br>Background information line 3.</p>' +
                     // Contact details
@@ -247,7 +247,7 @@ describe('ARI handling', () => {
             success: true,
             publicationVersion: {
                 content:
-                    '<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>' +
+                    "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>" +
                     '<p>ARI Publication 1</p>' +
                     '<p>New background information.</p>' +
                     '<p><strong>Contact details</strong></p><p>New contact details.</p>' +
@@ -303,7 +303,7 @@ describe('ARI handling', () => {
                 title: 'ARI Publication 1',
                 content:
                     // Mapped content - see ARI mapping tests for explanation.
-                    '<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>' +
+                    "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>" +
                     '<p>ARI Publication 1</p>' +
                     '<p>Sample background information.</p>' +
                     '<p><strong>Contact details</strong></p><p>Sample contact details.</p>' +

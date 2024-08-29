@@ -6,8 +6,12 @@ describe('Comparing arrays', () => {
         const comparison = Helpers.compareArrays(array, array);
         expect(comparison).toBe(true);
     });
-    test('Same elements in different order are not considered equal', () => {
+    test('Same elements in different order are considered equal by default', () => {
         const comparison = Helpers.compareArrays([1, 2, 3], [3, 2, 1]);
+        expect(comparison).toBe(true);
+    });
+    test('Same elements in different order are not considered equal when strictOrder is set', () => {
+        const comparison = Helpers.compareArrays([1, 2, 3], [3, 2, 1], true);
         expect(comparison).toBe(false);
     });
     test('Comparisons use strict equality', () => {
