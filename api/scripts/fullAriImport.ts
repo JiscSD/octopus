@@ -90,7 +90,7 @@ const fullAriImport = async (): Promise<string> => {
     }
 
     if (failed.length) {
-        console.log(`${failed.length} encounted some sort of issue and failed:`, failed);
+        console.log(`${failed.length} encountered some sort of issue and failed:`, failed);
     }
 
     const endTime = performance.now();
