@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as ariUtils from 'lib/integrations/ariUtils';
-import * as I from 'interface';
 
 /**
  * Incremental ARI ingest.
@@ -15,7 +14,7 @@ export const incrementalAriIngest = async (): Promise<void> => {
     // Pagination loop.
     let pageUrl = ariUtils.ariEndpoint;
     let paginationInfo;
-    const writes: I.HandledARI[] = [];
+    let writeCount = 0;
 
     do {
         // Get page.
@@ -41,7 +40,7 @@ export const incrementalAriIngest = async (): Promise<void> => {
                     unchangedStreak = 0;
                     // Log action taken.
                     console.log(`ARI ${pageAri.questionId} handled successfully with action: ${handle.actionTaken}`);
-                    writes.push(handle);
+                    writeCount++;
                     // Artificial delay to avoid hitting datacite rate limits with publication creates/updates.
                     await new Promise((resolve) => setTimeout(resolve, 1000));
                 }
@@ -54,5 +53,5 @@ export const incrementalAriIngest = async (): Promise<void> => {
         pageUrl = paginationInfo.links.next;
     } while (pageUrl && unchangedStreak < MAX_UNCHANGED_STREAK);
 
-    console.log(`Update complete. Updated ${writes.length} publication${writes.length > 1 ? 's' : ''}.`);
+    console.log(`Update complete. Updated ${writeCount} publication${writeCount !== 1 ? 's' : ''}.`);
 };
