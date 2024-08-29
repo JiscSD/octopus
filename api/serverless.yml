@@ -104,6 +104,8 @@ custom:
     prune:
         automatic: true
         number: 3
+    scheduledAriIngestEnabled:
+        int: true
 functions:
     - ${file(./serverless-config-default.yml):functions}
     - ${file(./serverless-config-deploy.yml):functions}
