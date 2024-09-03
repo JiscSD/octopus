@@ -2,7 +2,7 @@ import * as testUtils from 'lib/testUtils';
 import * as topicMappingService from 'topicMapping/service';
 
 describe('Get a topic mapping', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
         await testUtils.clearDB();
         await testUtils.testSeed();
     });

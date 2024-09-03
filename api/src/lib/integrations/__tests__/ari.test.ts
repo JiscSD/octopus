@@ -55,15 +55,15 @@ describe('ARI Mapping', () => {
             mappedData: {
                 content:
                     // Static placeholder text added to each mapped ARI's content
-                    '<p>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</p>' +
+                    '<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>' +
                     // ARI Question title
                     '<p>ARI Publication 1</p>' +
                     // Background information
                     '<p>Sample background information.</p>' +
                     // Contact details
-                    '<p>Contact details: Sample contact details.</p>' +
+                    '<p><strong>Contact details</strong></p><p>Sample contact details.</p>' +
                     // Related UKRI projects
-                    '<p>Related UKRI Projects:</p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>'
+                    '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>'
             }
         });
     });
@@ -79,12 +79,12 @@ describe('ARI Mapping', () => {
             success: true,
             mappedData: {
                 content:
-                    '<p>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</p><p>ARI Publication 1</p>' +
+                    '<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p><p>ARI Publication 1</p>' +
                     // Background information
                     '<p>Background information line 1.<br>Background information line 2.<br><br>Background information line 3.</p>' +
                     // Contact details
-                    '<p>Contact details: Contact details line 1.<br>Contact details line 2.<br><br>Contact details line 3.</p>' +
-                    '<p>Related UKRI Projects:</p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>'
+                    '<p><strong>Contact details</strong></p><p>Contact details line 1.<br>Contact details line 2.<br><br>Contact details line 3.</p>' +
+                    '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>'
             }
         });
     });
@@ -102,12 +102,7 @@ describe('ARI Mapping', () => {
         expect(mappingAttempt).toMatchObject({
             success: true,
             mappedData: {
-                topics: [
-                    {
-                        id: 'test-topic-1a',
-                        title: 'Test sub-topic A'
-                    }
-                ]
+                topicIds: ['test-topic-1a']
             }
         });
     });
@@ -120,13 +115,15 @@ describe('ARI Mapping', () => {
         expect(mappingAttempt).toMatchObject({
             success: true,
             mappedData: {
-                topics: [
-                    {
-                        id: 'test-topic-1',
-                        title: 'Test topic'
-                    }
-                ]
+                topicIds: ['test-topic-1']
             }
+        });
+    });
+
+    test('Department is matched to existing user', async () => {
+        const mappingAttempt = await ariUtils.mapAriQuestionToPublicationVersion(sampleARIQuestion);
+        expect(mappingAttempt).toMatchObject({
+            mappedData: { userId: 'test-organisational-account-1' }
         });
     });
 
@@ -138,7 +135,19 @@ describe('ARI Mapping', () => {
         expect(mappingAttempt).toMatchObject({
             success: false,
             mappedData: null,
-            message: 'User not found for department: unrecognised department'
+            message: 'User not found for department: unrecognised department.'
+        });
+    });
+
+    test('ARI is not mapped if it is archived', async () => {
+        const mappingAttempt = await ariUtils.mapAriQuestionToPublicationVersion({
+            ...sampleARIQuestion,
+            isArchived: true
+        });
+        expect(mappingAttempt).toMatchObject({
+            success: false,
+            mappedData: null,
+            message: 'This ARI is archived so has not been mapped.'
         });
     });
 });
@@ -152,6 +161,7 @@ describe('ARI handling', () => {
     test('Existing ARI publication with no changes is skipped', async () => {
         const handleARI = await ariUtils.handleIncomingARI(sampleARIQuestion);
 
+        // This test expects a seeded publication to exist in the unitTesting seed data matching sampleARIQuestion
         expect(handleARI).toMatchObject({
             actionTaken: 'none',
             success: true,
@@ -164,18 +174,118 @@ describe('ARI handling', () => {
         });
     });
 
-    test('Existing ARI publication with changes is re-versioned', async () => {
-        await testUtils.openSearchSeed();
-        const handleARI = await ariUtils.handleIncomingARI({ ...sampleARIQuestion, question: 'ARI Publication 1 v2' });
-
+    test('Changed title updates publication without reversioning', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({
+            ...sampleARIQuestion,
+            question: 'ARI Publication 1 v2'
+        });
         expect(handleARI).toMatchObject({
             actionTaken: 'update',
             success: true,
             publicationVersion: {
-                id: 'ari-publication-1-v2',
-                versionNumber: 2,
+                // Publication has not been reversioned.
+                id: 'ari-publication-1-v1',
+                versionNumber: 1,
                 isLatestLiveVersion: true,
+                // Title has changed.
                 title: 'ARI Publication 1 v2'
+            }
+        });
+    });
+
+    test('Changed department updates user and coauthor', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({
+            ...sampleARIQuestion,
+            department: 'Test organisation 2'
+        });
+        expect(handleARI).toMatchObject({
+            actionTaken: 'update',
+            success: true,
+            publicationVersion: {
+                createdBy: 'test-organisational-account-2',
+                user: {
+                    id: 'test-organisational-account-2'
+                },
+                coAuthors: [
+                    {
+                        linkedUser: 'test-organisational-account-2'
+                    }
+                ]
+            }
+        });
+    });
+
+    test('ARI with unrecognised department is skipped', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({
+            ...sampleARIQuestion,
+            department: 'Unrecognised Department name'
+        });
+
+        expect(handleARI).toMatchObject({
+            actionTaken: 'none',
+            success: false,
+            message:
+                'Failed to map ARI data to octopus data. User not found for department: Unrecognised Department name.'
+        });
+    });
+
+    test('Content updates when mapped fields have changed', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({
+            ...sampleARIQuestion,
+            backgroundInformation: 'New background information.',
+            contactDetails: 'New contact details.',
+            relatedUKRIProjects: [
+                {
+                    projectId: '123',
+                    title: 'Test',
+                    url: 'https://jisc.ac.uk'
+                }
+            ]
+        });
+        expect(handleARI).toMatchObject({
+            actionTaken: 'update',
+            success: true,
+            publicationVersion: {
+                content:
+                    '<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>' +
+                    '<p>ARI Publication 1</p>' +
+                    '<p>New background information.</p>' +
+                    '<p><strong>Contact details</strong></p><p>New contact details.</p>' +
+                    '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://jisc.ac.uk">Test</a></li></ul>'
+            }
+        });
+    });
+
+    test('Topics update when changed', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({
+            ...sampleARIQuestion,
+            topics: ['ari test (unmapped)']
+        });
+        expect(handleARI).toMatchObject({
+            actionTaken: 'update',
+            success: true,
+            publicationVersion: {
+                // Falls back to default topic.
+                topics: [
+                    {
+                        id: 'test-topic-1'
+                    }
+                ]
+            }
+        });
+    });
+
+    test('Keywords update when fieldsOfResearch/tags change', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({
+            ...sampleARIQuestion,
+            fieldsOfResearch: ['foo', 'bar'],
+            tags: ['baz']
+        });
+        expect(handleARI).toMatchObject({
+            actionTaken: 'update',
+            success: true,
+            publicationVersion: {
+                keywords: ['foo', 'bar', 'baz']
             }
         });
     });
@@ -183,6 +293,7 @@ describe('ARI handling', () => {
     test('ARI with no existing publication has a publication created', async () => {
         const handleARI = await ariUtils.handleIncomingARI({ ...sampleARIQuestion, questionId: 123457 });
 
+        // Ensure all the fields that are mapped have been set.
         expect(handleARI).toMatchObject({
             actionTaken: 'create',
             success: true,
@@ -190,10 +301,26 @@ describe('ARI handling', () => {
                 versionNumber: 1,
                 isLatestLiveVersion: true,
                 title: 'ARI Publication 1',
+                content:
+                    // Mapped content - see ARI mapping tests for explanation.
+                    '<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>' +
+                    '<p>ARI Publication 1</p>' +
+                    '<p>Sample background information.</p>' +
+                    '<p><strong>Contact details</strong></p><p>Sample contact details.</p>' +
+                    '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>',
+                keywords: ['field of research 1', 'field of research 2', 'tag 1', 'tag 2'],
                 publication: {
                     externalId: '123457',
                     externalSource: 'ARI',
                     type: 'PROBLEM'
+                },
+                topics: [
+                    {
+                        id: 'test-topic-1a'
+                    }
+                ],
+                user: {
+                    id: 'test-organisational-account-1'
                 }
             }
         });
@@ -206,6 +333,16 @@ describe('ARI handling', () => {
             actionTaken: 'none',
             success: false,
             message: 'Invalid question ID format.'
+        });
+    });
+
+    test('Archived questions are rejected', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({ ...sampleARIQuestion, isArchived: true });
+
+        expect(handleARI).toMatchObject({
+            actionTaken: 'none',
+            success: true,
+            message: 'Skipped because question is archived.'
         });
     });
 });

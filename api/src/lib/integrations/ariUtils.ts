@@ -5,7 +5,16 @@ import * as I from 'interface';
 import * as publicationService from 'publication/service';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as topicMappingService from 'topicMapping/service';
+import * as userMappingService from 'userMapping/service';
 import * as userService from 'user/service';
+
+const parseAriTextField = (value: string): string => {
+    // Sometimes ARI text fields are enclosed in quotes and we don't want to show those in a publication body.
+    const noQuotes = Helpers.stripEnclosingQuotes(value);
+
+    // Convert \n line breaks to <br>s for displaying in HTML.
+    return Helpers.replaceHTMLLineBreaks(noQuotes);
+};
 
 export const mapAriQuestionToPublicationVersion = async (
     questionData: I.ARIQuestion
@@ -17,6 +26,14 @@ export const mapAriQuestionToPublicationVersion = async (
       }
     | { success: false; mappedData: null; message: string }
 > => {
+    if (questionData.isArchived) {
+        return {
+            success: false,
+            mappedData: null,
+            message: 'This ARI is archived so has not been mapped.'
+        };
+    }
+
     const {
         backgroundInformation,
         contactDetails,
@@ -31,16 +48,14 @@ export const mapAriQuestionToPublicationVersion = async (
     const title = question;
     // Compose content.
     const commonBoilerplateHTML =
-        "<p>This problem is a UK government area of research interest (ARI) that was originally posted at <a href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</p>";
+        "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>";
     const titleHTML = `<p>${question}</p>`;
-    const backgroundInformationHTML = backgroundInformation
-        ? `<p>${Helpers.replaceHTMLLineBreaks(backgroundInformation)}</p>`
-        : '';
+    const backgroundInformationHTML = backgroundInformation ? `<p>${parseAriTextField(backgroundInformation)}</p>` : '';
     const contactDetailsHTML = contactDetails
-        ? `<p>Contact details: ${Helpers.replaceHTMLLineBreaks(contactDetails)}`
+        ? `<p><strong>Contact details</strong></p><p>${parseAriTextField(contactDetails)}</p>`
         : '';
-    const relatedUKRIProjectsHTML = relatedUKRIProjects
-        ? '<p>Related UKRI Projects:</p><ul>' +
+    const relatedUKRIProjectsHTML = relatedUKRIProjects.length
+        ? '<p><strong>Related UKRI Projects</strong></p><ul>' +
           relatedUKRIProjects
               .map((relatedProject) => `<li><a href='${relatedProject.url}'>${relatedProject.title}</a></li>`)
               .join('') +
@@ -52,43 +67,28 @@ export const mapAriQuestionToPublicationVersion = async (
         )
     );
     const keywords = fieldsOfResearch.concat(tags);
-    // Find user by department title.
-    // All ARI accounts are given a firstname of the department name appended with " (GB)".
-    const user = await client.prisma.user.findFirst({
-        where: {
-            firstName: {
-                mode: 'insensitive',
-                equals: department + ' (GB)'
-            },
-            role: 'ORGANISATION'
-        },
-        select: {
-            id: true,
-            defaultTopic: {
-                select: {
-                    id: true,
-                    title: true
-                }
-            }
-        }
-    });
 
-    if (!user) {
+    // Find user by department title.
+    const userMapping = await userMappingService.get(department, 'ARI');
+
+    if (!userMapping) {
         return {
             success: false,
             mappedData: null,
-            message: 'User not found for department: ' + department
+            message: 'User not found for department: ' + department + '.'
         };
     }
+
+    const user = userMapping.user;
 
     // Map ARI topics to octopus topics.
     const topicMappings = await Promise.all(ariTopics.map((ariTopic) => topicMappingService.get(ariTopic, 'ARI')));
     // We intentionally don't map some ARI topics, so filter those out.
-    const octopusTopics = topicMappings.flatMap((topicMapping) =>
-        topicMapping && topicMapping.isMapped && topicMapping.topic ? [topicMapping.topic] : []
+    const octopusTopicIds = topicMappings.flatMap((topicMapping) =>
+        topicMapping && topicMapping.isMapped && topicMapping.topic ? [topicMapping.topic.id] : []
     );
     // If no topics listed in ARI, fall back to default topic for the department (user).
-    const finalTopics = octopusTopics.length ? octopusTopics : user.defaultTopic ? [user.defaultTopic] : [];
+    const finalTopicIds = octopusTopicIds.length ? octopusTopicIds : user.defaultTopicId ? [user.defaultTopicId] : [];
 
     return {
         success: true,
@@ -96,7 +96,7 @@ export const mapAriQuestionToPublicationVersion = async (
             title,
             content,
             keywords,
-            topics: finalTopics,
+            topicIds: finalTopicIds,
             externalSource: 'ARI',
             externalId: questionId.toString(),
             userId: user.id
@@ -122,17 +122,16 @@ export const detectChangesToARIPublication = (
     const titleMatch = ari.title === publicationVersion.title;
     const contentMatch = ari.content === publicationVersion.content;
     const keywordsMatch = Helpers.compareArrays(ari.keywords, publicationVersion.keywords);
-    const ariTopicIds = ari.topics.map((topic) => topic.id);
     const publicationVersionTopicIds = publicationVersion.topics.map((topic) => topic.id);
-    const topicsMatch = Helpers.compareArrays(ariTopicIds, publicationVersionTopicIds);
+    const topicsMatch = Helpers.compareArrays(ari.topicIds, publicationVersionTopicIds);
     const userMatch = ari.userId === publicationVersion.user.id;
 
     const changes = {
-        ...(!titleMatch ? { title: { old: ari.title, new: publicationVersion.title } } : {}),
-        ...(!contentMatch ? { content: { old: ari.content, new: publicationVersion.content } } : {}),
-        ...(!keywordsMatch ? { keywords: { old: ari.keywords, new: publicationVersion.keywords } } : {}),
-        ...(!topicsMatch ? { topics: { old: ariTopicIds, new: publicationVersionTopicIds } } : {}),
-        ...(!userMatch ? { user: { old: ari.userId, new: publicationVersion.user.id } } : {})
+        ...(!titleMatch ? { title: { new: ari.title, old: publicationVersion.title } } : {}),
+        ...(!contentMatch ? { content: { new: ari.content, old: publicationVersion.content } } : {}),
+        ...(!keywordsMatch ? { keywords: { new: ari.keywords, old: publicationVersion.keywords } } : {}),
+        ...(!topicsMatch ? { topics: { new: ari.topicIds, old: publicationVersionTopicIds } } : {}),
+        ...(!userMatch ? { userId: { new: ari.userId, old: publicationVersion.user.id } } : {})
     };
 
     const somethingChanged = !(titleMatch && contentMatch && keywordsMatch && topicsMatch && userMatch);
@@ -140,14 +139,7 @@ export const detectChangesToARIPublication = (
     return somethingChanged ? changes : false;
 };
 
-export const handleIncomingARI = async (
-    question: I.ARIQuestion
-): Promise<{
-    actionTaken: I.ARIHandlingAction;
-    success: boolean;
-    message?: string;
-    publicationVersion?: I.PublicationVersion;
-}> => {
+export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.HandledARI> => {
     // Validate question ID.
     // Quite random criteria for now - value is typed as a number which
     // stops us checking the type. May be revisited later.
@@ -156,6 +148,15 @@ export const handleIncomingARI = async (
             actionTaken: 'none',
             success: false,
             message: 'Invalid question ID format.'
+        };
+    }
+
+    // Reject if question is archived. Success is true because this isn't really an error.
+    if (question.isArchived) {
+        return {
+            actionTaken: 'none',
+            success: true,
+            message: 'Skipped because question is archived.'
         };
     }
 
@@ -240,47 +241,39 @@ export const handleIncomingARI = async (
     const changes = detectChangesToARIPublication(mappedData, existingVersion);
 
     if (changes) {
-        // Data differs from what is in octopus, so attempt to re-version the publication.
-
-        // If the user (ARI department) changes, the create() call handles that.
-        // As such, we don't need to deal with it in the update() call.
-        const newVersion = await publicationVersionService.create(existingVersion, user);
-        // Mock coauthor workflow process of stating affiliations.
-        // Treat organisational account as an independent (unaffiliated) coauthor.
-        await coAuthorService.update(newVersion.coAuthors[0].id, { isIndependent: true });
-
-        const updatedVersion = await publicationVersionService.update(newVersion.id, {
+        // Data differs from what is in octopus, so update the publication.
+        // Unlike manually created publications, these just have 1 version that
+        // updates in-place so that we don't pollute datacite with lots of version DOIs.
+        let updatedVersion = await publicationVersionService.update(existingVersion.id, {
             ...(changes.title && { title: mappedData.title }),
             ...(changes.content && { content: mappedData.content }),
             ...(changes.keywords && { keywords: mappedData.keywords }),
-            ...(changes.topics && { topics: { set: mappedData.topics.map((topic) => ({ id: topic.id })) } })
+            ...(changes.topics && { topics: { set: mappedData.topicIds.map((topicId) => ({ id: topicId })) } }),
+            ...(changes.userId && { user: { connect: { id: mappedData.userId } } })
         });
-        const isReadyToPublish = await publicationVersionService.checkIsReadyToPublish(updatedVersion);
 
-        if (isReadyToPublish) {
-            await publicationVersionService.generateNewVersionDOI(updatedVersion, existingVersion);
-            const publishedNewVersion = await publicationVersionService.updateStatus(newVersion.id, 'LIVE');
+        // If user changed, update coAuthors.
+        if (changes.userId) {
+            // Delete old coAuthor.
+            // There should only be one coAuthor but since this is an array, loop through to make it clean.
+            await Promise.all(existingVersion.coAuthors.map((coAuthor) => coAuthorService.deleteCoAuthor(coAuthor.id)));
+            // Create a coAuthor based on the userId of the publicationVersion.
+            await coAuthorService.createCorrespondingAuthor(updatedVersion);
+            const versionWithUpdatedCoAuthors = await publicationVersionService.getById(updatedVersion.id);
 
-            if (publishedNewVersion) {
-                return {
-                    actionTaken: 'update',
-                    success: true,
-                    publicationVersion: publishedNewVersion
-                };
-            } else {
-                return {
-                    actionTaken: 'update',
-                    success: false,
-                    message: `Created a new version (id: ${newVersion.id}) of the existing publication for ARI question: ${question.questionId}, but failed to update its status to LIVE.`
-                };
+            if (versionWithUpdatedCoAuthors) {
+                updatedVersion = versionWithUpdatedCoAuthors;
             }
-        } else {
-            return {
-                actionTaken: 'update',
-                success: false,
-                message: `Created a new version (id: ${newVersion.id}) of the existing publication for ARI question: ${question.questionId}, but its data was not ready to be made LIVE.`
-            };
         }
+
+        // Everything is good, so ensure changes hit datacite and opensearch.
+        await publicationVersionService.postPublishHook(updatedVersion, true);
+
+        return {
+            actionTaken: 'update',
+            success: true,
+            publicationVersion: updatedVersion
+        };
     } else {
         // No change found, so take no action.
         return {
