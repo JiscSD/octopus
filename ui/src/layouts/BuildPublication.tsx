@@ -37,6 +37,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const setToast = Stores.useToastStore((state) => state.setToast);
     const [saveModalVisibility, setSaveModalVisibility] = React.useState(false);
     const [saveModalLoading, setSaveModalLoading] = React.useState(false);
+    const [ariContactConsent, setAriContactConsent] = React.useState<undefined | boolean>(undefined);
     const [publishModalVisibility, setPublishModalVisibility] = React.useState(false);
     const [publishModalLoading, setPublishModalLoading] = React.useState(false);
     const [requestApprovalModalVisibility, setRequestApprovalModalVisibility] = React.useState(false);
@@ -277,7 +278,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             try {
                 await saveCurrent();
                 await api.put(
-                    `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/status/LIVE`,
+                    `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/status/LIVE${ariContactConsent ? '?ariContactConsent=true' : ''}`,
                     {},
                     props.token
                 );
@@ -304,7 +305,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         props.token,
         router,
         saveCurrent,
-        store
+        store,
+        ariContactConsent
     ]);
 
     const onClosePublishModal = () => {
@@ -483,13 +485,15 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const topPrevButtonSmallId = 'top-previous-button-small-displays';
     const topNextButtonSmallId = 'top-next-button-small-displays';
 
+    const linkedToARI = store.linkedTo.some((linkedTo) => linkedTo.externalSource === 'ARI' && linkedTo.draft);
+
     return (
         <>
             <Components.Modal
                 open={saveModalVisibility}
                 onClose={onCloseSaveModal}
                 loading={saveModalLoading}
-                positiveActionCallback={save}
+                positiveCallback={save}
                 positiveButtonText="Save"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to save your changes?"
@@ -503,26 +507,71 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 open={publishModalVisibility}
                 onClose={onClosePublishModal}
                 loading={publishModalLoading}
-                positiveActionCallback={publish}
+                positiveCallback={publish}
                 positiveButtonText="Yes, save &amp; publish"
+                positiveButtonDisabled={linkedToARI && ariContactConsent === undefined}
                 cancelButtonText="Cancel"
                 title="Are you sure you want to publish?"
                 icon={<OutlineIcons.CloudArrowUpIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
             >
                 <p className="text-sm text-grey-700">It is not possible to make any changes post-publication.</p>
-                {store.linkedTo.some((linkedTo) => linkedTo.externalSource === 'ARI') && (
-                    <p className="text-sm text-grey-700 mt-4">
-                        Your publication is linked to a UK government department's Area of Research Interest (ARI). If
-                        you would like your contact details to be shared with the relevant government department so that
-                        they can get in touch with you about your work, please check the box below.
-                    </p>
+                {linkedToARI && (
+                    <>
+                        <p className="text-sm text-grey-700 my-4">
+                            Your publication is linked to a UK government department's Area of Research Interest (ARI).
+                            If you would like your contact details to be shared with the relevant government department
+                            so that they can get in touch with you about your work, please check the box below.
+                        </p>
+                        <fieldset className="flex justify-center gap-4">
+                            <legend className="text-sm text-grey-700 mb-4">
+                                I agree to having my email, name and the details of this publication shared with the
+                                government department(s) that published this ARI. <Components.RequiredIndicator />
+                            </legend>
+                            <label
+                                htmlFor="ari-contact-consent-yes"
+                                className="flex items-center space-x-2 hover:cursor-pointer"
+                            >
+                                <input
+                                    type="radio"
+                                    name="ARI contact consent"
+                                    id="ari-contact-consent-yes"
+                                    checked={ariContactConsent === true}
+                                    onChange={() => {
+                                        console.log('Yes');
+                                        setAriContactConsent(true);
+                                    }}
+                                    className="hover:cursor-pointer"
+                                    required={true}
+                                />
+                                <span className="ml-2 text-sm text-grey-700">Yes</span>
+                            </label>
+                            <label
+                                htmlFor="ari-contact-consent-no"
+                                className="flex items-center space-x-2 hover:cursor-pointer"
+                            >
+                                <input
+                                    type="radio"
+                                    name="ARI contact consent"
+                                    id="ari-contact-consent-no"
+                                    checked={ariContactConsent === false}
+                                    onChange={() => {
+                                        console.log('No');
+                                        setAriContactConsent(false);
+                                    }}
+                                    className="hover:cursor-pointer"
+                                    required={true}
+                                />
+                                <span className="ml-2 text-sm text-grey-700">No</span>
+                            </label>
+                        </fieldset>
+                    </>
                 )}
             </Components.Modal>
             <Components.Modal
                 open={requestApprovalModalVisibility}
                 onClose={onCloseRequestApprovalModal}
                 loading={requestApprovalModalLoading}
-                positiveActionCallback={requestApproval}
+                positiveCallback={requestApproval}
                 positiveButtonText="Finalise Draft and Send Request"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to finalise your publication?"
@@ -537,7 +586,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 open={deleteModalVisibility}
                 onClose={onCloseDeleteModal}
                 loading={deleteModalLoading}
-                positiveActionCallback={deleteVersion}
+                positiveCallback={deleteVersion}
                 positiveButtonText="Yes, delete this draft"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to delete this publication?"
