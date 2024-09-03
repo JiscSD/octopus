@@ -372,7 +372,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     };
 
     // Option selected from modal
-    const deleteExit = useCallback(async () => {
+    const deleteVersion = useCallback(async () => {
         setDeleteModalLoading(true);
         try {
             await api.destroy(`${Config.endpoints.publicationVersions}/${props.publicationVersion.id}`, props.token);
@@ -436,7 +436,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
         [checkRequired, isReadyToPreview, store]
     );
 
-    const isReadyRequestApproval = useMemo(
+    const isReadyToRequestApproval = useMemo(
         () => isReadyToPreview && checkRequiredApproval(store).ready,
         [checkRequiredApproval, isReadyToPreview, store]
     );
@@ -510,6 +510,13 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 icon={<OutlineIcons.CloudArrowUpIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
             >
                 <p className="text-sm text-grey-700">It is not possible to make any changes post-publication.</p>
+                {store.linkedTo.some((linkedTo) => linkedTo.externalSource === 'ARI') && (
+                    <p className="text-sm text-grey-700 mt-4">
+                        Your publication is linked to a UK government department's Area of Research Interest (ARI). If
+                        you would like your contact details to be shared with the relevant government department so that
+                        they can get in touch with you about your work, please check the box below.
+                    </p>
+                )}
             </Components.Modal>
             <Components.Modal
                 open={requestApprovalModalVisibility}
@@ -530,7 +537,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 open={deleteModalVisibility}
                 onClose={onCloseDeleteModal}
                 loading={deleteModalLoading}
-                positiveActionCallback={deleteExit}
+                positiveActionCallback={deleteVersion}
                 positiveButtonText="Yes, delete this draft"
                 cancelButtonText="Cancel"
                 title="Are you sure you want to delete this publication?"
@@ -658,7 +665,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     <Components.Button
                                         title="Request Approval"
                                         onClick={() => setRequestApprovalModalVisibility(true)}
-                                        disabled={!isReadyRequestApproval}
+                                        disabled={!isReadyToRequestApproval}
                                         endIcon={<OutlineIcons.CloudArrowUpIcon className="h-5 w-5 text-white-50" />}
                                         className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50"
                                     />
@@ -721,7 +728,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     <Components.IconButton
                                         title="Request Approval"
                                         icon={<OutlineIcons.CloudArrowUpIcon className="h-5 w-5" />}
-                                        disabled={!isReadyRequestApproval}
+                                        disabled={!isReadyToRequestApproval}
                                         onClick={() => setRequestApprovalModalVisibility(true)}
                                     />
                                 ) : (
@@ -805,7 +812,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     {hasUnconfirmedCoAuthors ? (
                                         <Components.Button
                                             className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50"
-                                            disabled={!isReadyRequestApproval}
+                                            disabled={!isReadyToRequestApproval}
                                             endIcon={
                                                 <OutlineIcons.CloudArrowUpIcon className="h-5 w-5 text-white-50" />
                                             }
@@ -857,7 +864,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
                                     {hasUnconfirmedCoAuthors ? (
                                         <Components.IconButton
-                                            disabled={!isReadyRequestApproval}
+                                            disabled={!isReadyToRequestApproval}
                                             icon={<OutlineIcons.CloudArrowUpIcon className="h-5 w-5" />}
                                             title="Request Approval"
                                             onClick={() => setRequestApprovalModalVisibility(true)}

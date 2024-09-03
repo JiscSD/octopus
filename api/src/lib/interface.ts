@@ -235,6 +235,7 @@ export interface LinkedToPublication extends LinkedPublication {
     draft: boolean;
     childPublication: string;
     childPublicationType: PublicationType;
+    externalSource: PublicationImportSource | null;
 }
 
 export interface LinkedFromPublication extends LinkedPublication {
