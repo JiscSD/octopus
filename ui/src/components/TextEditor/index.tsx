@@ -611,16 +611,16 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                 tabBody={[
                                     <Components.FileUpload
                                         key="file-upload"
-                                        positiveActionCallback={handleUploadImage}
-                                        negativeActionCallback={clearImageAndCloseModal}
+                                        positiveCallback={handleUploadImage}
+                                        negativeCallback={clearImageAndCloseModal}
                                         loading={loading}
                                         uploadErrors={uploadImageErrors}
                                     />,
                                     <Components.URLSourceUpload
                                         key="url-source-upload"
                                         image={image}
-                                        positiveActionCallback={handleURLSourceUpload}
-                                        negativeActionCallback={clearImageAndCloseModal}
+                                        positiveCallback={handleURLSourceUpload}
+                                        negativeCallback={clearImageAndCloseModal}
                                     />
                                 ]}
                             />

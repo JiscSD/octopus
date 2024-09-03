@@ -362,8 +362,8 @@ const ApprovalsTracker: React.FC<Props> = (props): React.ReactElement => {
                     open={Boolean(selectedAuthorEmail)}
                     icon={<FaIcons.FaEdit className="h-8 w-8 text-grey-600" />}
                     onClose={handleCloseChangeEmailModal}
-                    positiveActionCallback={handleAuthorEmailChange}
-                    negativeActionCallback={handleCloseChangeEmailModal}
+                    positiveCallback={handleAuthorEmailChange}
+                    negativeCallback={handleCloseChangeEmailModal}
                     positiveButtonText="Change Email"
                     cancelButtonText="Cancel"
                     title="Change author's email"

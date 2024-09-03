@@ -195,7 +195,7 @@ const FlagThread: Next.NextPage<Props> = (props): JSX.Element => {
                                 title="Are you sure you want to resolve this red flag?"
                                 loading={submitting}
                                 positiveButtonText="Resolve"
-                                positiveActionCallback={resolve}
+                                positiveCallback={resolve}
                                 cancelButtonText="Cancel"
                             >
                                 <p className="mb-8 mt-4 text-xs text-grey-700">

@@ -111,7 +111,7 @@ const RelatedPublicationsSuggestModal: React.FC<Props> = (props): React.ReactEle
         <Components.Modal
             open={props.open}
             onClose={onClose}
-            positiveActionCallback={createCrosslink}
+            positiveCallback={createCrosslink}
             positiveButtonText="Suggest Link"
             positiveButtonDisabled={!!createCrosslinkError || !selectedPublicationVersion}
             cancelButtonText="Cancel"
