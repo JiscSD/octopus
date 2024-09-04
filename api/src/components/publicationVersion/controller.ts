@@ -205,7 +205,7 @@ export const update = async (
 };
 
 export const updateStatus = async (
-    event: I.AuthenticatedAPIRequest<undefined, undefined, I.UpdateStatusPathParams>
+    event: I.AuthenticatedAPIRequest<undefined, I.UpdateStatusQueryParams, I.UpdateStatusPathParams>
 ): Promise<I.JSONResponse> => {
     try {
         const publicationVersion = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
@@ -233,6 +233,23 @@ export const updateStatus = async (
 
         if (currentStatus === newStatus) {
             return response.json(400, { message: `Publication status is already ${newStatus}.` });
+        }
+
+        if (event.queryStringParameters.ariContactConsent) {
+            if (newStatus !== 'LIVE') {
+                return response.json(400, {
+                    message: 'ARI contact consent is only applicable when changing status to LIVE.'
+                });
+            }
+
+            const links = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
+
+            if (!links.linkedTo.some((link) => link.draft && link.externalSource === 'ARI')) {
+                return response.json(400, {
+                    message:
+                        'A draft link to an ARI publication must exist from this publication if you provide the ariContactConsent parameter.'
+                });
+            }
         }
 
         if (currentStatus === 'DRAFT') {

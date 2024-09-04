@@ -24,7 +24,8 @@ export const updateStatus = middy(publicationVersionController.updateStatus)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())
-    .use(middleware.validator(publicationVersionSchema.updateStatus, 'pathParameters'));
+    .use(middleware.validator(publicationVersionSchema.updateStatusPath, 'pathParameters'))
+    .use(middleware.validator(publicationVersionSchema.updateStatusQuery, 'queryStringParameters'));
 
 export const deleteVersion = middy(publicationVersionController.deleteVersion)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))

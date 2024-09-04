@@ -162,6 +162,10 @@ export interface UpdateStatusPathParams {
     status: 'LIVE' | 'DRAFT' | 'LOCKED';
 }
 
+export interface UpdateStatusQueryParams {
+    ariContactConsent?: boolean;
+}
+
 export interface UpdatePublicationVersionRequestBody {
     title?: string;
     description?: string;
