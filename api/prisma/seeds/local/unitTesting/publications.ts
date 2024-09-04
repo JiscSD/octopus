@@ -1239,7 +1239,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'ARI Publication 1',
                 content:
                     // Static placeholder text added to each mapped ARI's content
-                    '<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a href="https://ari.org.uk/">https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>' +
+                    "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>" +
                     // ARI Question title
                     '<p>ARI Publication 1</p>' +
                     // Background information
