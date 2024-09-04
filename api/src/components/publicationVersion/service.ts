@@ -1663,97 +1663,109 @@ export const updateCanonicalDOI = async (
 // Actions that run after a version is published (changes status to LIVE).
 // Pulled out to a separate function because things may need to run when something is
 // published immediately (i.e. not going through full drafting workflow) and bypasses the updateStatus function.
-export const postPublishHook = async (publicationVersion: I.PublicationVersion) => {
-    // Ensure links made from a PEER_REVIEW version point to the latest live version of the target publication.
-    if (publicationVersion.publication.type === 'PEER_REVIEW') {
-        const outdatedDraftLinks = await client.prisma.links.findMany({
-            where: {
-                publicationFromId: publicationVersion.versionOf,
-                draft: true,
-                versionTo: {
-                    isLatestLiveVersion: false
-                }
-            }
-        });
-
-        for (const outdatedDraftLink of outdatedDraftLinks) {
-            const latestVersionTo = await client.prisma.publicationVersion.findFirst({
+export const postPublishHook = async (
+    publicationVersion: I.PublicationVersion,
+    skipPdfGeneration?: boolean,
+    forceReindex?: boolean
+) => {
+    try {
+        // Ensure links made from a PEER_REVIEW version point to the latest live version of the target publication.
+        if (publicationVersion.publication.type === 'PEER_REVIEW') {
+            const outdatedDraftLinks = await client.prisma.links.findMany({
                 where: {
-                    versionOf: outdatedDraftLink.publicationToId,
-                    isLatestLiveVersion: true
+                    publicationFromId: publicationVersion.versionOf,
+                    draft: true,
+                    versionTo: {
+                        isLatestLiveVersion: false
+                    }
                 }
             });
 
-            if (latestVersionTo) {
-                await client.prisma.links.update({
+            for (const outdatedDraftLink of outdatedDraftLinks) {
+                const latestVersionTo = await client.prisma.publicationVersion.findFirst({
                     where: {
-                        id: outdatedDraftLink.id
-                    },
-                    data: {
-                        versionToId: latestVersionTo.id
+                        versionOf: outdatedDraftLink.publicationToId,
+                        isLatestLiveVersion: true
                     }
                 });
+
+                if (latestVersionTo) {
+                    await client.prisma.links.update({
+                        where: {
+                            id: outdatedDraftLink.id
+                        },
+                        data: {
+                            versionToId: latestVersionTo.id
+                        }
+                    });
+                }
             }
         }
-    }
 
-    // Update "draft" links.
-    await client.prisma.links.updateMany({
-        where: {
-            publicationFromId: publicationVersion.versionOf,
-            draft: true
-        },
-        data: {
-            draft: false
-        }
-    });
-
-    // Update previous version's "isLatestLiveVersion" flag.
-    if (publicationVersion.versionNumber > 1) {
-        await client.prisma.publicationVersion.updateMany({
+        // Update "draft" links.
+        await client.prisma.links.updateMany({
             where: {
-                versionOf: publicationVersion.versionOf,
-                versionNumber: publicationVersion.versionNumber - 1
+                publicationFromId: publicationVersion.versionOf,
+                draft: true
             },
             data: {
-                isLatestLiveVersion: false
+                draft: false
             }
         });
-    }
 
-    // Update the canonical DOI with the latest details from this version.
-    await updateCanonicalDOI(publicationVersion.publication.doi, publicationVersion);
-
-    if (publicationVersion.versionNumber > 1) {
-        // Delete old OpenSearch record.
-        await publicationService.deleteOpenSearchRecord(publicationVersion.versionOf);
-    }
-
-    // (Re)index publication in opensearch.
-    await publicationService.createOpenSearchRecord({
-        id: publicationVersion.versionOf,
-        type: publicationVersion.publication.type,
-        title: publicationVersion.title,
-        licence: publicationVersion.licence,
-        description: publicationVersion.description,
-        keywords: publicationVersion.keywords,
-        content: publicationVersion.content,
-        publishedDate: publicationVersion.publishedDate,
-        cleanContent: convert(publicationVersion.content)
-    });
-
-    // Delete all pending request control events for this publication version.
-    await eventService.deleteMany({
-        type: 'REQUEST_CONTROL',
-        data: {
-            path: ['publicationVersion', 'id'],
-            equals: publicationVersion.id
+        // Update previous version's "isLatestLiveVersion" flag.
+        if (publicationVersion.versionNumber > 1) {
+            await client.prisma.publicationVersion.updateMany({
+                where: {
+                    versionOf: publicationVersion.versionOf,
+                    versionNumber: publicationVersion.versionNumber - 1
+                },
+                data: {
+                    isLatestLiveVersion: false
+                }
+            });
         }
-    });
 
-    // Send message to the pdf generation queue.
-    // Currently only on deployed instances until a local solution is developed.
-    if (process.env.STAGE !== 'local') await sqs.sendMessage(publicationVersion.versionOf);
+        // Update the canonical DOI with the latest details from this version.
+        await updateCanonicalDOI(publicationVersion.publication.doi, publicationVersion);
+
+        // (Re)index publication in opensearch.
+        if (publicationVersion.versionNumber > 1 || forceReindex) {
+            // Delete old OpenSearch record.
+            await publicationService.deleteOpenSearchRecord(publicationVersion.versionOf);
+        }
+
+        await publicationService.createOpenSearchRecord({
+            id: publicationVersion.versionOf,
+            type: publicationVersion.publication.type,
+            title: publicationVersion.title,
+            licence: publicationVersion.licence,
+            description: publicationVersion.description,
+            keywords: publicationVersion.keywords,
+            content: publicationVersion.content,
+            publishedDate: publicationVersion.publishedDate,
+            cleanContent: convert(publicationVersion.content)
+        });
+
+        // Delete all pending request control events for this publication version.
+        await eventService.deleteMany({
+            type: 'REQUEST_CONTROL',
+            data: {
+                path: ['publicationVersion', 'id'],
+                equals: publicationVersion.id
+            }
+        });
+
+        // Send message to the pdf generation queue.
+        // Skipped locally, as there is not an SQS que in localstack.
+        // Option to skip, e.g. in bulk import scripts, where instant pdf generation is not a priority.
+        // In both cases, the pdf will still be generated the first time it's requested.
+        if (process.env.STAGE !== 'local' && !skipPdfGeneration) {
+            await sqs.sendMessage(publicationVersion.versionOf);
+        }
+    } catch (err) {
+        console.log('Error in post-publish hook: ', err);
+    }
 };
 
 export const updateStatus = async (id: string, status: I.PublicationStatusEnum) => {

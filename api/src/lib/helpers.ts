@@ -154,11 +154,29 @@ export const replaceHTMLLineBreaks = (html: string): string => {
     return html.replace(/\n|\r\n|\n\r|\r/g, '<br>');
 };
 
-// Check if two arrays are equal.
-export const compareArrays = <T>(a: Array<T>, b: Array<T>): boolean => {
+// If a string is enclosed in matching quotes, remove them.
+export const stripEnclosingQuotes = (string: string): string => {
+    // String is enclosed in " or '
+    if (
+        (string.slice(0, 1) === '"' && string.slice(-1) === '"') ||
+        (string.slice(0, 1) === "'" && string.slice(-1) === "'")
+    ) {
+        return string.slice(1, -1);
+    } else {
+        return string;
+    }
+};
+
+// Check if two arrays are equal. By default, doesn't care about order.
+export const compareArrays = <T>(a: Array<T>, b: Array<T>, strictOrder?: boolean): boolean => {
     if (a === b) return true;
     if (a == null || b == null) return false;
     if (a.length !== b.length) return false;
+
+    if (!strictOrder) {
+        a.sort();
+        b.sort();
+    }
 
     for (let i = 0; i < a.length; ++i) {
         if (a[i] !== b[i]) return false;
@@ -182,4 +200,20 @@ export const abbreviateUserName = <T extends { firstName: string; lastName: stri
 
     // Default for organisational accounts and general fallback.
     return user.firstName;
+};
+
+// Parses args passed to an npm script in the following style:
+// npm run script -- arg=value another=somethingElse
+// and returns them as keys and values in an object.
+export const parseNpmScriptArgs = (): { [key: string]: string } => {
+    const args = process.argv.slice(2);
+    const parsedArgs = {};
+
+    args.forEach((arg) => {
+        const parts = arg.split('=');
+
+        parsedArgs[parts[0]] = parts[1];
+    });
+
+    return parsedArgs;
 };

@@ -112,7 +112,7 @@ prisma/seeds
 This is because they have different use cases.
 
 -   local (dev):
-    -   A wide set of data useful for local development.
+    -   A wide set of data useful for local development. For example, the requisite data for testing out [integrations](#integrations) - to import data from the ARI database, certain topic mappings and departmental user accounts are expected to exist.
     -   Seeded using the command `npm run seed:local`.
 -   local (unitTesting):
     -   A minimal set of data providing only what is needed for the [jest tests](#testing) to run. This needs to be small because the database is reseeded again and again while the test suite is run, so that process needs to be as quick as possible.
@@ -134,6 +134,12 @@ The field mapping of the index is not explicitly defined; it is set automaticall
 There is a script which deletes and recreates the publications index, inserting a document into it for each live publication. This can be run from the api directory with `npm run reindex`.
 
 A similar process happens when the database is seeded. After publications are inserted into the database, they are also fed into a blank opensearch index.
+
+---
+
+## Integrations
+
+Octopus is built to integrate with some external systems in order to import publications. For more information please read the dedicated [integrations readme](./src/lib/integrations/README.md).
 
 ---
 
