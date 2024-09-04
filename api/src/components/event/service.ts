@@ -36,29 +36,6 @@ export const deleteMany = (where: Prisma.EventWhereInput) =>
         where
     });
 
-export const processDummyEvents = async (dummyEvents: I.DummyEvent[]) => {
-    // Send an email to an address specified in the event json
-    for (const dummyEvent of dummyEvents) {
-        if (dummyEvent.data) {
-            const eventData = dummyEvent.data;
-
-            try {
-                if (!eventData.to) {
-                    throw Error(`Unable to process event; no "to" address provided. Event id: ${dummyEvent.id}`);
-                }
-
-                // send email to specified address
-                await email.dummyEventNotification(eventData.to);
-
-                // Delete event record when done
-                await deleteEvent(dummyEvent.id);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    }
-};
-
 export const processRequestControlEvents = async (requestControlEvents: I.RequestControlEvent[]) => {
     // if there are multiple control requests for the same publication version, only pick the oldest one and delete the rest
     const uniqueControlRequestEvents: typeof requestControlEvents = [];
