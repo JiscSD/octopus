@@ -518,9 +518,10 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 {linkedToARI && (
                     <>
                         <p className="text-sm text-grey-700 my-4">
-                            Your publication is linked to a UK government department's Area of Research Interest (ARI).
-                            If you would like your contact details to be shared with the relevant government department
-                            so that they can get in touch with you about your work, please check the box below.
+                            Your publication is linked to a UK government department&apos;s Area of Research Interest
+                            (ARI). If you would like your contact details to be shared with the relevant government
+                            department so that they can get in touch with you about your work, please check the box
+                            below.
                         </p>
                         <fieldset className="flex justify-center gap-4">
                             <legend className="text-sm text-grey-700 mb-4">
