@@ -1,8 +1,8 @@
 import AWS_SQS, { SQS } from '@aws-sdk/client-sqs';
-import * as helpers from './helpers';
+import * as Helpers from './helpers';
 
-const queueUrl = helpers.checkEnvVariable('QUEUE_URL');
-const endpoint = helpers.checkEnvVariable('SQS_ENDPOINT');
+const queueUrl = Helpers.checkEnvVariable('QUEUE_URL');
+const endpoint = Helpers.checkEnvVariable('SQS_ENDPOINT');
 
 const config = {
     region: 'eu-west-1'

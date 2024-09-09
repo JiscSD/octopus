@@ -5,14 +5,14 @@ import * as response from 'lib/response';
 import * as luxon from 'luxon';
 import * as userService from 'user/service';
 import * as verificationService from 'verification/service';
-import * as helpers from 'lib/helpers';
+import * as Helpers from 'lib/helpers';
 
 export const requestCode = async (
     event: I.AuthenticatedAPIRequest<undefined, I.RequestVerificationCodeParameters, I.GetUserParameters>
 ): Promise<I.JSONResponse> => {
     try {
         // generate code
-        const code = helpers.generateOTP(7);
+        const code = Helpers.generateOTP(7);
 
         // store code with user orcid and email
         await verificationService.upsert({
@@ -25,8 +25,7 @@ export const requestCode = async (
         await email.verificationCode({
             to: event.queryStringParameters.email,
             code,
-            userFirstName: event.user.firstName,
-            userLastName: event.user.lastName
+            userFullName: Helpers.getUserFullName(event.user)
         });
 
         return response.json(200, { message: 'OK' });

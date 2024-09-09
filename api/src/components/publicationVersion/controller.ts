@@ -4,7 +4,7 @@ import * as publicationVersionService from 'publicationVersion/service';
 import * as publicationService from 'publication/service';
 import * as coAuthorService from 'coAuthor/service';
 import * as userService from 'user/service';
-import * as helpers from 'lib/helpers';
+import * as Helpers from 'lib/helpers';
 import * as eventService from 'event/service';
 import * as email from 'lib/email';
 
@@ -129,7 +129,7 @@ export const update = async (
         }
 
         if (event.body.content) {
-            event.body.content = helpers.getSafeHTML(event.body.content);
+            event.body.content = Helpers.getSafeHTML(event.body.content);
         }
 
         if (
@@ -322,7 +322,11 @@ export const updateStatus = async (
         await publicationVersionService.generateNewVersionDOI(publicationVersion, previousPublicationVersion);
 
         // Publish version.
-        await publicationVersionService.updateStatus(publicationVersion.id, 'LIVE');
+        await publicationVersionService.updateStatus(
+            publicationVersion.id,
+            'LIVE',
+            event.queryStringParameters.ariContactConsent
+        );
 
         return response.json(200, { message: 'Publication is now LIVE.' });
     } catch (err) {
@@ -526,7 +530,7 @@ export const requestControl = async (
                 title: publicationVersion.title || '',
                 authorEmail: publicationVersion.user.email || ''
             },
-            requesterName: `${event.user.firstName} ${event.user.lastName}`
+            requesterName: Helpers.getUserFullName(event.user)
         });
 
         return response.json(200, { message: 'Successfully requested control over this publication version.' });
@@ -593,7 +597,7 @@ export const approveControlRequest = async (
             await email.rejectControlRequest({
                 requesterEmail: requester.email || '',
                 publicationVersion: {
-                    authorFullName: `${publicationVersion.user.firstName} ${publicationVersion.user.lastName}`,
+                    authorFullName: Helpers.getUserFullName(publicationVersion.user),
                     title: publicationVersion.title || ''
                 }
             });
@@ -611,9 +615,9 @@ export const approveControlRequest = async (
         await email.approveControlRequest({
             requesterEmail: requester.email || '',
             publicationVersion: {
-                authorFullName: `${publicationVersion.user.firstName} ${publicationVersion.user.lastName}`,
+                authorFullName: Helpers.getUserFullName(publicationVersion.user),
                 title: publicationVersion.title || '',
-                url: `${process.env.BASE_URL}/publications/${publicationVersion.versionOf}/versions/latest`
+                url: Helpers.getPublicationUrl(publicationVersion.versionOf)
             }
         });
 
@@ -636,7 +640,7 @@ export const approveControlRequest = async (
                 if (supersededRequester) {
                     // send email to the superseded requester
                     await email.controlRequestSuperseded({
-                        newCorrespondingAuthorFullName: `${requester.firstName} ${requester.lastName}`,
+                        newCorrespondingAuthorFullName: Helpers.getUserFullName(requester),
                         publicationVersionTitle: publicationVersion.title || '',
                         requesterEmail: supersededRequester.email || ''
                     });

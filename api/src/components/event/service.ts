@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
 import * as client from 'lib/client';
+import * as Helpers from 'lib/helpers';
 import * as I from 'lib/interface';
 import * as email from 'lib/email';
 import * as userService from 'user/service';
@@ -96,9 +97,9 @@ export const processRequestControlEvents = async (requestControlEvents: I.Reques
                     {
                         requesterEmail: requester.email || '',
                         publicationVersion: {
-                            authorFullName: `${publicationVersion.user.firstName} ${publicationVersion.user.lastName}`,
+                            authorFullName: Helpers.getUserFullName(publicationVersion.user),
                             title: publicationVersion.title || '',
-                            url: `${process.env.BASE_URL}/publications/${publicationVersion.versionOf}/versions/latest`
+                            url: Helpers.getPublicationUrl(publicationVersion.versionOf)
                         }
                     },
                     true // is automatically approved
@@ -106,7 +107,7 @@ export const processRequestControlEvents = async (requestControlEvents: I.Reques
 
                 // notify old corresponding author they've been removed
                 await email.removeCorrespondingAuthor({
-                    newCorrespondingAuthorFullName: `${requester.firstName} ${requester.lastName}`,
+                    newCorrespondingAuthorFullName: Helpers.getUserFullName(requester),
                     oldCorrespondingAuthorEmail: publicationVersion.user.email || '',
                     publicationVersionTitle: publicationVersion.title || ''
                 });
@@ -125,7 +126,7 @@ export const processRequestControlEvents = async (requestControlEvents: I.Reques
                         if (supersededRequester) {
                             // send email to the superseded requester
                             await email.controlRequestSuperseded({
-                                newCorrespondingAuthorFullName: `${requester.firstName} ${requester.lastName}`,
+                                newCorrespondingAuthorFullName: Helpers.getUserFullName(requester),
                                 publicationVersionTitle: publicationVersion.title || '',
                                 requesterEmail: supersededRequester.email || ''
                             });
