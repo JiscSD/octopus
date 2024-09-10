@@ -231,7 +231,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const showEthicalStatement =
         publicationVersion?.publication.type === 'DATA' && Boolean(publicationVersion.ethicalStatement);
     const showRedFlags = !!flags.length;
-    const isExemptFromReversioning = publication?.type === 'PEER_REVIEW' || publication?.externalSource === 'ARI';
+    const isExemptFromReversioning =
+        publicationVersion && Helpers.isPublicationVersionExemptFromReversioning(publicationVersion);
     const showVersionsAccordion = publication && !isExemptFromReversioning && !isLoadingControlRequests;
 
     if (showReferences) list.push({ title: 'References', href: 'references' });

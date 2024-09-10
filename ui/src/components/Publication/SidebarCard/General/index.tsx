@@ -14,6 +14,7 @@ type Props = {
 };
 
 const General: React.FC<Props> = (props): React.ReactElement => {
+    const isExemptFromReversioning = Helpers.isPublicationVersionExemptFromReversioning(props.publicationVersion);
     const multipleVersions = !props.publicationVersion.isLatestVersion || props.publicationVersion.versionNumber > 1;
     const peerReviews = props.linkedFrom.filter((publication) => publication.type === 'PEER_REVIEW');
     const thisVersionPeerReviewCount = peerReviews.filter(
@@ -118,7 +119,7 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                 <>
                     <div className="flex">
                         <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                            Peer Reviews (This Version): ({thisVersionPeerReviewCount})
+                            Peer Reviews{!isExemptFromReversioning && ' (This Version)'}: ({thisVersionPeerReviewCount})
                         </span>
                     </div>
                     {multipleVersions && (
