@@ -54,6 +54,8 @@ export interface CorePublication {
     type: Types.PublicationType;
     doi: string | null;
     url_slug: string;
+    externalId?: string;
+    externalSource?: Types.PublicationImportSource;
     flagCount?: number;
     peerReviewCount?: number;
 }

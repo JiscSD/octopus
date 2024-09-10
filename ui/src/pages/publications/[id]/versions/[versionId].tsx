@@ -191,11 +191,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 
     const { data: publication } = useSWR<
-        Pick<Interfaces.Publication, 'id' | 'type'> & {
+        Pick<Interfaces.Publication, 'id' | 'type' | 'externalSource'> & {
             versions: Types.PartialPublicationVersion[];
         }
     >(
-        `${Config.endpoints.publications}/${props.publicationId}?fields=id,type,versions(id,doi,currentStatus,versionOf,versionNumber,createdBy,publishedDate,isLatestLiveVersion,isLatestVersion,coAuthors)`
+        `${Config.endpoints.publications}/${props.publicationId}?fields=id,type,externalSource,versions(id,doi,currentStatus,versionOf,versionNumber,createdBy,publishedDate,isLatestLiveVersion,isLatestVersion,coAuthors)`
     );
 
     const { data: controlRequests = [], isLoading: isLoadingControlRequests } = useSWR<Interfaces.ControlRequest[]>(
@@ -231,7 +231,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const showEthicalStatement =
         publicationVersion?.publication.type === 'DATA' && Boolean(publicationVersion.ethicalStatement);
     const showRedFlags = !!flags.length;
-    const showVersionsAccordion = publication && publication.type !== 'PEER_REVIEW' && !isLoadingControlRequests;
+    const isExemptFromReversioning = publication?.type === 'PEER_REVIEW' || publication?.externalSource === 'ARI';
+    const showVersionsAccordion = publication && !isExemptFromReversioning && !isLoadingControlRequests;
 
     if (showReferences) list.push({ title: 'References', href: 'references' });
     if (showChildProblems || showParentPublications)

@@ -22,7 +22,7 @@ const General: React.FC<Props> = (props): React.ReactElement => {
 
     const activeFlags = React.useMemo(() => props.flags.filter((flag) => !flag.resolved), [props.flags]);
 
-    const showVersionDoi = props.publicationVersion.doi && props.publicationVersion.publication.type !== 'PEER_REVIEW';
+    const showVersionDoi = props.publicationVersion.doi;
     const versionDoiUrl = Config.values.doiBaseUrl + props.publicationVersion.doi;
     const versionlessDoiUrl = Config.values.doiBaseUrl + props.publicationVersion.publication.doi;
 

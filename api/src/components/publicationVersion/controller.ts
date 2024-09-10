@@ -290,20 +290,7 @@ export const updateStatus = async (
             }
         }
 
-        // Publication version is being made LIVE
-
-        let previousPublicationVersion: I.PublicationVersion | null = null;
-
-        if (publicationVersion.versionNumber > 1) {
-            previousPublicationVersion = await publicationVersionService.get(
-                publicationVersion.versionOf,
-                publicationVersion.versionNumber - 1
-            );
-        }
-
-        // Create a DOI for this version specifically.
-        await publicationVersionService.generateNewVersionDOI(publicationVersion, previousPublicationVersion);
-
+        // Publication version is being made LIVE and is valid.
         // Publish version.
         await publicationVersionService.updateStatus(publicationVersion.id, 'LIVE');
 
@@ -386,6 +373,12 @@ export const create = async (
         if (latestPublicationVersion.publication.type === 'PEER_REVIEW') {
             return response.json(400, {
                 message: 'Peer reviews cannot be reversioned.'
+            });
+        }
+
+        if (latestPublicationVersion.publication.externalSource === 'ARI') {
+            return response.json(400, {
+                message: 'ARI publications cannot be reversioned.'
             });
         }
 
