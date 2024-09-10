@@ -17,8 +17,8 @@ export const handler = async (event) => {
   const key = event.Records[0].s3.object.key;
 
   // Whether we are validating our metadata (using the pubrouter validate endpoint), as opposed to sending it for real.
-  // Currently we are using the validate endpoint everywhere except the int environment.
-  const validate = process.env.ENVIRONMENT !== "int";
+  // As of OC-898 we are using the real (notification) endpoint on int and prod.
+  const validate = false;
 
   const pdfUrl = `https://${bucket}.s3.amazonaws.com/${key}`;
 
