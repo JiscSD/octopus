@@ -315,6 +315,13 @@ model AdditionalInformation {
     publicationVersion   PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
 }
 
+model IngestLog {
+    id     String                  @id @default(cuid())
+    source PublicationImportSource
+    start  DateTime                @default(now())
+    end    DateTime?
+}
+
 enum EventType {
     REQUEST_CONTROL
 }

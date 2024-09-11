@@ -72,6 +72,9 @@
             "image/*": [
                 "src/components/image/*"
             ],
+            "ingestLog/*": [
+                "src/components/ingestLog/*"
+            ],
             "link/*": [
                 "src/components/link/*"
             ],
