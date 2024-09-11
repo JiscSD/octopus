@@ -209,7 +209,11 @@ export const getUserFullName = <T extends { firstName: string; lastName: string 
         return 'Anonymous User';
     }
 
-    return user.firstName + (user.lastName ? ' ' + user.lastName : '');
+    if (user.lastName) {
+        return `${user.firstName} ${user.lastName}`;
+    } else {
+        return user.firstName;
+    }
 };
 
 // Parses args passed to an npm script in the following style:
