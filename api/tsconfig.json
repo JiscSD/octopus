@@ -81,9 +81,6 @@
             "publication/*": [
                 "src/components/publication/*"
             ],
-            "publicationBookmark/*": [
-                "src/components/publicationBookmark/*"
-            ],
             "publicationVersion/*": [
                 "src/components/publicationVersion/*"
             ],

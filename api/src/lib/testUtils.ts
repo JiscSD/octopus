@@ -117,7 +117,6 @@ export const clearDB = async (): Promise<void> => {
         client.prisma.event.deleteMany(),
         client.prisma.ingestLog.deleteMany(),
         client.prisma.publication.deleteMany(),
-        client.prisma.publicationBookmarks.deleteMany(),
         client.prisma.user.deleteMany(),
         client.prisma.topic.deleteMany(),
         client.prisma.topicMapping.deleteMany(),
