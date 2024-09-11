@@ -64,8 +64,8 @@ const ConfirmationModalProvider = ({ children }: PropsWithChildren<{}>) => {
                 title={title}
                 positiveButtonText={positiveButtonText}
                 cancelButtonText={cancelButtonText}
-                positiveActionCallback={handlePositiveAction}
-                negativeActionCallback={handleCancelAction}
+                positiveCallback={handlePositiveAction}
+                negativeCallback={handleCancelAction}
             >
                 <div className="text-sm text-grey-700">{description}</div>
             </Components.Modal>

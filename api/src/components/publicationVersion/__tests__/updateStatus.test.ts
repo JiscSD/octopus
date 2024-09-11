@@ -326,4 +326,56 @@ describe('Update publication version status', () => {
         });
         expect(link?.versionToId).toEqual('publication-problem-live-2-v1');
     });
+
+    test('ARI consent query parameter rejects non-boolean values', async () => {
+        const updatePublicationVersionAttempt = await testUtils.agent
+            .put('/publication-versions/publication-analysis-draft-v1/status/LIVE')
+            .query({
+                apiKey: '123456789',
+                ariContactConsent: 'string'
+            });
+
+        expect(updatePublicationVersionAttempt.status).toEqual(400);
+        expect(updatePublicationVersionAttempt.body.message[0].instancePath).toEqual('/ariContactConsent');
+        expect(updatePublicationVersionAttempt.body.message[0].keyword).toEqual('type');
+    });
+
+    test('ARI consent query parameter rejected when new status is not LIVE', async () => {
+        const updatePublicationVersionAttempt = await testUtils.agent
+            .put('/publication-versions/publication-problem-draft-v1/status/LOCKED')
+            .query({
+                apiKey: '000000005',
+                ariContactConsent: true
+            });
+
+        expect(updatePublicationVersionAttempt.status).toEqual(400);
+        expect(updatePublicationVersionAttempt.body.message).toEqual(
+            'ARI contact consent is only applicable when changing status to LIVE.'
+        );
+    });
+
+    test('ARI consent query parameter rejected when no draft links to ARI publications exist', async () => {
+        const updatePublicationVersionAttempt = await testUtils.agent
+            .put('/publication-versions/publication-analysis-draft-v1/status/LIVE')
+            .query({
+                apiKey: '123456789',
+                ariContactConsent: true
+            });
+
+        expect(updatePublicationVersionAttempt.status).toEqual(400);
+        expect(updatePublicationVersionAttempt.body.message).toEqual(
+            'A draft link to an ARI publication must exist from this publication if you provide the ariContactConsent parameter.'
+        );
+    });
+
+    test('ARI consent query parameter is accepted if publication is newly linked to an ARI', async () => {
+        const updatePublicationVersionAttempt = await testUtils.agent
+            .put('/publication-versions/publication-hypothesis-draft-problem-live-v1/status/LIVE')
+            .query({
+                apiKey: '123456789',
+                ariContactConsent: true
+            });
+
+        expect(updatePublicationVersionAttempt.status).toEqual(200);
+    });
 });

@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import * as aws from '@aws-sdk/client-ses';
+import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
 
 const from = {
@@ -205,19 +206,16 @@ export const send = async (options: I.EmailSendOptions): Promise<SMTPTransport.S
 
 /* Templates */
 
-type NotifyCoAuthor = {
-    userFirstName: string;
-    userLastName: string | null;
+export const notifyCoAuthor = async (options: {
+    userFullName: string;
     coAuthor: string;
     publicationId: string;
     versionId: string;
     publicationTitle: string;
     code: string;
-};
-
-export const notifyCoAuthor = async (options: NotifyCoAuthor): Promise<void> => {
+}): Promise<void> => {
     const html = `
-    <p>${options.userFirstName} ${options.userLastName} has added you as an author of the following publication on Octopus:</p>
+    <p>${options.userFullName} has added you as an author of the following publication on Octopus:</p>
     <br>
     <p style="text-align: center;"><strong><i>${options.publicationTitle}</i></strong></p>
     <br>
@@ -232,7 +230,7 @@ export const notifyCoAuthor = async (options: NotifyCoAuthor): Promise<void> => 
     <p>An Octopus user has provided this email address so that you can receive this message. If you select that you are not involved with the publication named above, your data will be deleted immediately.</p>
     `;
 
-    const text = `${options.userFirstName} ${options.userLastName} has added you as an author of the following publication on Octopus: ${options.publicationTitle}. To confirm your involvement, and see a preview of the publication, you can use this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publicationId=${options.publicationId}&versionId=${options.versionId}&approve=true . If you are not an author of this publication, you can use this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publicationId=${options.publicationId}&versionId=${options.versionId}&approve=false . An Octopus user has provided this email address so that you can receive this message. If you select that you are not involved with the publication named above, your data will be deleted immediately.`;
+    const text = `${options.userFullName} has added you as an author of the following publication on Octopus: ${options.publicationTitle}. To confirm your involvement, and see a preview of the publication, you can use this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publicationId=${options.publicationId}&versionId=${options.versionId}&approve=true . If you are not an author of this publication, you can use this link: ${baseURL}/author-link?email=${options.coAuthor}&code=${options.code}&publicationId=${options.publicationId}&versionId=${options.versionId}&approve=false . An Octopus user has provided this email address so that you can receive this message. If you select that you are not involved with the publication named above, your data will be deleted immediately.`;
 
     await send({
         html: standardHTMLEmailTemplate(
@@ -246,16 +244,9 @@ export const notifyCoAuthor = async (options: NotifyCoAuthor): Promise<void> => 
     });
 };
 
-type VerificationCode = {
-    to: string;
-    code: string;
-    userFirstName: string;
-    userLastName: string | null;
-};
-
-export const verificationCode = async (options: VerificationCode): Promise<void> => {
+export const verificationCode = async (options: { to: string; code: string; userFullName: string }): Promise<void> => {
     const html = `
-    <p>Hi ${options.userFirstName} ${options?.userLastName},</p>
+    <p>Hi ${options.userFullName},</p>
     <p>Welcome to Octopus!</p>
     <br/>
     <p>To start publishing your research and reviewing the work of others, please verify your email address below.</p>
@@ -282,7 +273,7 @@ export const verificationCode = async (options: VerificationCode): Promise<void>
     });
 };
 
-type NewRedFlagAuthorNotification = {
+export const newRedFlagAuthorNotification = async (options: {
     to: string;
     publicationName: string | null;
     publicationId: string | null;
@@ -290,11 +281,7 @@ type NewRedFlagAuthorNotification = {
     type: string;
     submitter: string;
     flagReason: string;
-};
-
-export const newRedFlagAuthorNotification = async (
-    options: NewRedFlagAuthorNotification
-): Promise<SMTPTransport.SentMessageInfo> => {
+}): Promise<SMTPTransport.SentMessageInfo> => {
     const html = `
     <p>A potential concern has been flagged with your publication, <strong><i>${options.publicationName}</i></strong>. This will be displayed on the platform until resolved. You can respond to the red flag via the publication page.</p>
     <br>
@@ -327,16 +314,12 @@ export const newRedFlagAuthorNotification = async (
     });
 };
 
-type NewRedFlagCreatorNotification = {
+export const newRedFlagCreatorNotification = async (options: {
     to: string;
     publicationName: string | null;
     publicationId: string;
     flagId: string;
-};
-
-export const newRedFlagCreatorNotification = async (
-    options: NewRedFlagCreatorNotification
-): Promise<SMTPTransport.SentMessageInfo> => {
+}): Promise<SMTPTransport.SentMessageInfo> => {
     const html = `
     <p>Thank you for flagging a potential concern with <strong><i>${options.publicationName}</i></strong>. The submitting author has been notified, and has the option to respond to your message.</p>
     <br>
@@ -359,18 +342,14 @@ export const newRedFlagCreatorNotification = async (
     });
 };
 
-type UpdateRedFlagNotification = {
+export const updateRedFlagNotification = async (options: {
     to: string;
     publicationName: string;
     publicationId: string;
     flagId: string;
     type: string;
     submitter: string;
-};
-
-export const updateRedFlagNotification = async (
-    options: UpdateRedFlagNotification
-): Promise<SMTPTransport.SentMessageInfo> => {
+}): Promise<SMTPTransport.SentMessageInfo> => {
     const html = `
     <p>A new comment has been received against the following red flag.</p>
     <br>
@@ -399,17 +378,13 @@ export const updateRedFlagNotification = async (
     });
 };
 
-type ResolveRedFlagAuthorNotification = {
+export const resolveRedFlagAuthorNotification = async (options: {
     to: string;
     publicationName: string;
     publicationId: string;
     flagId: string;
     type: string;
-};
-
-export const resolveRedFlagAuthorNotification = async (
-    options: ResolveRedFlagAuthorNotification
-): Promise<SMTPTransport.SentMessageInfo> => {
+}): Promise<SMTPTransport.SentMessageInfo> => {
     const html = `
     <p>A red flag for <strong>${options.type}</strong> has been resolved for <strong><i>${options.publicationName}</i></strong>. The red flag 
     warning banner is no longer prominently displayed on the publication page.</p>
@@ -434,16 +409,12 @@ export const resolveRedFlagAuthorNotification = async (
     });
 };
 
-type ResolveRedFlagCreatorNotification = {
+export const resolveRedFlagCreatorNotification = async (options: {
     to: string;
     publicationName: string;
     publicationId: string;
     flagId: string;
-};
-
-export const resolveRedFlagCreatorNotification = async (
-    options: ResolveRedFlagCreatorNotification
-): Promise<SMTPTransport.SentMessageInfo> => {
+}): Promise<SMTPTransport.SentMessageInfo> => {
     const html = `
     <p>Thank you for resolving the red flag you created for <strong><i>${options.publicationName}</i></strong>. The submitting 
     author has been notified, and the warning banner is no longer prominently displayed on the publication page.</p>
@@ -464,10 +435,9 @@ export const resolveRedFlagCreatorNotification = async (
     });
 };
 
-type NotifyCoAuthorConfirmation = {
+export const notifyCoAuthorConfirmation = async (options: {
     coAuthor: {
-        firstName: string;
-        lastName: string;
+        fullName: string;
     };
     publication: {
         title: string;
@@ -475,15 +445,11 @@ type NotifyCoAuthorConfirmation = {
         authorEmail: string;
     };
     remainingConfirmationsCount: number;
-};
-
-export const notifyCoAuthorConfirmation = async (options: NotifyCoAuthorConfirmation): Promise<void> => {
+}): Promise<void> => {
     if (options.remainingConfirmationsCount) {
         // one or more confirmations left
         const html = `
-           <p><strong>${options.coAuthor.firstName} ${
-            options.coAuthor.lastName
-        }</strong> has confirmed their involvement in <strong><i>${
+           <p><strong>${options.coAuthor.fullName}</strong> has confirmed their involvement in <strong><i>${
             options.publication.title
         }</i></strong> and has confirmed that the draft is ready to publish.</p>
             <br>
@@ -498,7 +464,7 @@ export const notifyCoAuthorConfirmation = async (options: NotifyCoAuthorConfirma
             <p>Note that all co-authors must approve before this publication can go live.</p>
         `;
 
-        const text = `${options.coAuthor.firstName} ${options.coAuthor.lastName} has confirmed their involvement in '${
+        const text = `${options.coAuthor.fullName} has confirmed their involvement in '${
             options.publication.title
         }' and has confirmed that the draft is ready to publish. You can view the publication here: ${
             options.publication.url
@@ -545,7 +511,7 @@ export const notifyCoAuthorConfirmation = async (options: NotifyCoAuthorConfirma
     });
 };
 
-type NotifyCoAuthorRejection = {
+export const notifyCoAuthorRejection = async (options: {
     coAuthor: {
         email: string;
     };
@@ -553,9 +519,7 @@ type NotifyCoAuthorRejection = {
         title: string;
         authorEmail: string;
     };
-};
-
-export const notifyCoAuthorRejection = async (options: NotifyCoAuthorRejection): Promise<void> => {
+}): Promise<void> => {
     const html = `
                 <p>The request that you sent to <strong>${options.coAuthor.email}</strong> to be registered as a co-author of <strong><i>${options.publication.title}</i></strong> has been rejected, and this individual has denied their involvement.</p>
                 <br>
@@ -578,16 +542,14 @@ export const notifyCoAuthorRejection = async (options: NotifyCoAuthorRejection):
     });
 };
 
-type NotifyCoAuthorRemoval = {
+export const notifyCoAuthorRemoval = async (options: {
     coAuthor: {
         email: string;
     };
     publication: {
         title: string;
     };
-};
-
-export const notifyCoAuthorRemoval = async (options: NotifyCoAuthorRemoval): Promise<void> => {
+}): Promise<void> => {
     const html = `
                 <p>You are no longer listed as a co-author on <strong><i>${options.publication.title}</i></strong> and will not receive emails about updates to this publication in future.</p>
                 <p>If you feel that this may have been a mistake, you may wish to contact the author directly to discuss your involvement.</p>
@@ -607,7 +569,7 @@ export const notifyCoAuthorRemoval = async (options: NotifyCoAuthorRemoval): Pro
     });
 };
 
-type SendApprovalReminder = {
+export const sendApprovalReminder = async (options: {
     coAuthor: {
         email: string;
         code: string;
@@ -618,9 +580,7 @@ type SendApprovalReminder = {
         creator: string;
         versionId: string;
     };
-};
-
-export const sendApprovalReminder = async (options: SendApprovalReminder): Promise<void> => {
+}): Promise<void> => {
     const html = `
         <p>${options.publication.creator} has sent you a reminder to confirm or deny your involvement as an author of the following publication on Octopus:</p>
         <br>
@@ -651,7 +611,7 @@ export const sendApprovalReminder = async (options: SendApprovalReminder): Promi
     });
 };
 
-type NotifyCoAuthorsAboutChanges = {
+export const notifyCoAuthorsAboutChanges = async (options: {
     coAuthor: {
         email: string;
     };
@@ -659,9 +619,7 @@ type NotifyCoAuthorsAboutChanges = {
         title: string;
         url: string;
     };
-};
-
-export const notifyCoAuthorsAboutChanges = async (options: NotifyCoAuthorsAboutChanges): Promise<void> => {
+}): Promise<void> => {
     const html = `
         <p>The corresponding author has made changes to a publication you are involved with:</p>
         <br>
@@ -688,16 +646,14 @@ export const notifyCoAuthorsAboutChanges = async (options: NotifyCoAuthorsAboutC
     });
 };
 
-type NotifyCoAuthorCancelledApproval = {
+export const notifyCoAuthorCancelledApproval = async (options: {
     publication: {
         id: string;
         title: string;
         authorEmail: string;
         url: string;
     };
-};
-
-export const notifyCoAuthorCancelledApproval = async (options: NotifyCoAuthorCancelledApproval): Promise<void> => {
+}): Promise<void> => {
     const html = `
                 <p>A co-author had previously approved your publication, <strong><i>${options.publication.title}</i></strong>, but has now changed their mind, indicating that changes might be needed.</p>
                 <br>
@@ -720,22 +676,7 @@ export const notifyCoAuthorCancelledApproval = async (options: NotifyCoAuthorCan
     });
 };
 
-/**
- * @todo: remove once functionality has been tested.
- */
-export const dummyEventNotification = async (to: string): Promise<void> => {
-    const html = '<p>This is a test notification to demonstrate the scheduled notification functionality.</p>';
-    const text = 'This is a test notification to demonstrate the scheduled notification functionality.';
-
-    await send({
-        html: standardHTMLEmailTemplate('Dummy event nofication', html, 'This was sent by a scheduled function'),
-        text,
-        to,
-        subject: 'Dummy event nofication'
-    });
-};
-
-type RequestControlOptions = {
+export const requestControl = async (options: {
     requesterName: string;
     eventId: string;
     publicationVersion: {
@@ -744,9 +685,7 @@ type RequestControlOptions = {
         title: string;
         authorEmail: string;
     };
-};
-
-export const requestControl = async (options: RequestControlOptions): Promise<void> => {
+}): Promise<void> => {
     const subject = `${options.requesterName} is requesting to take over editing`;
     const approveUrl = `${process.env.BASE_URL}/approve-control-request?approve=true&eventId=${options.eventId}&versionId=${options.publicationVersion.id}&versionOf=${options.publicationVersion.versionOf}`;
     const rejectUrl = approveUrl.replace('approve=true', 'approve=false');
@@ -787,15 +726,13 @@ export const requestControl = async (options: RequestControlOptions): Promise<vo
     });
 };
 
-type RejectControlRequestOptions = {
+export const rejectControlRequest = async (options: {
     requesterEmail: string;
     publicationVersion: {
         title: string;
         authorFullName: string;
     };
-};
-
-export const rejectControlRequest = async (options: RejectControlRequestOptions): Promise<void> => {
+}): Promise<void> => {
     const subject = `${options.publicationVersion.authorFullName} has rejected your request to take over editing`;
     const html = `
                 <p>${options.publicationVersion.authorFullName} has rejected your request to take over as the corresponding author of the following publication on Octopus:</p>
@@ -815,17 +752,15 @@ export const rejectControlRequest = async (options: RejectControlRequestOptions)
     });
 };
 
-type ApproveControlRequestOptions = {
-    requesterEmail: string;
-    publicationVersion: {
-        title: string;
-        authorFullName: string;
-        url: string;
-    };
-};
-
 export const approveControlRequest = async (
-    options: ApproveControlRequestOptions,
+    options: {
+        requesterEmail: string;
+        publicationVersion: {
+            title: string;
+            authorFullName: string;
+            url: string;
+        };
+    },
     isAutomaticallyApproved = false
 ): Promise<void> => {
     const subject = isAutomaticallyApproved
@@ -871,13 +806,11 @@ export const approveControlRequest = async (
     });
 };
 
-type RemoveCorrespondingAuthorOptions = {
+export const removeCorrespondingAuthor = async (options: {
     oldCorrespondingAuthorEmail: string;
     newCorrespondingAuthorFullName: string;
     publicationVersionTitle: string;
-};
-
-export const removeCorrespondingAuthor = async (options: RemoveCorrespondingAuthorOptions): Promise<void> => {
+}): Promise<void> => {
     const subject =
         'Another author has taken over editing and correspondence responsibility for one of your publications.';
 
@@ -898,13 +831,11 @@ export const removeCorrespondingAuthor = async (options: RemoveCorrespondingAuth
     });
 };
 
-type ControlRequestSupersededOptions = {
+export const controlRequestSuperseded = async (options: {
     requesterEmail: string;
     newCorrespondingAuthorFullName: string;
     publicationVersionTitle: string;
-};
-
-export const controlRequestSuperseded = async (options: ControlRequestSupersededOptions): Promise<void> => {
+}): Promise<void> => {
     const subject = `${options.newCorrespondingAuthorFullName} has been approved as the new corresponding author.`;
 
     const html = `
@@ -922,6 +853,70 @@ export const controlRequestSuperseded = async (options: ControlRequestSuperseded
         html: standardHTMLEmailTemplate(subject, html, 'Another author has taken over as corresponding author'),
         text,
         to: options.requesterEmail,
+        subject
+    });
+};
+
+export const newAriChildPublication = async (options: {
+    ariPublication: {
+        name: string | null;
+        url: string;
+        author: {
+            email: string;
+            name: string;
+        };
+    };
+    childPublication: {
+        author: {
+            email: string;
+            fullName: string;
+        };
+        type: I.PublicationType;
+        url: string;
+    };
+}): Promise<void> => {
+    const { ariPublication, childPublication } = options;
+    const formattedType = Helpers.formatPublicationType(childPublication.type);
+    const subject = 'A researcher is working on one of your Areas of Research Interest';
+    const html = `
+        <p>${childPublication.author.fullName} has published a ${formattedType} on ${
+        ariPublication.name
+            ? 'the Area of Research Interest <a href="' + ariPublication.url + '">' + ariPublication.name + '</a>'
+            : '<a href="' + ariPublication.url + '">an Area of Research Interest</a>'
+    } published by the ${
+        ariPublication.author.name
+    } on <a href="https://www.octopus.ac">Octopus.ac</a>. During publication, they expressed that they would be happy to discuss their work with you further. If you would like to get in touch with them, please do so via <a href="mailto:${
+        childPublication.author.email
+    }">${childPublication.author.email}</a>.</p>
+        <br/>
+        <p>To view their publication, please use the following link:</p>
+        <br/>
+        <p style="text-align: center;">
+            <a style="${styles.button}" href="${childPublication.url}">
+                View publication
+            </a>
+        </p>
+        <br/>
+        <p>Octopus is a UKRI funded publishing platform that allows researchers to publish their work in smaller steps, with a focus on quality and improving the research culture. To learn more, please visit <a href="https://www.octopus.ac">Octopus.ac</a> or get in touch via <a href="mailto:help@jisc.ac.uk">help@jisc.ac.uk</a>.</p>
+    `;
+    const text = `${childPublication.author.fullName} has published a ${formattedType} on ${
+        ariPublication.name
+            ? 'the Area of Research Interest "' + ariPublication.name + '"'
+            : 'an Area of Research Interest'
+    } published by the ${
+        ariPublication.author.name
+    } on Octopus.ac. During publication, they expressed that they would be happy to discuss their work with you further. If you would like to get in touch with them, please do so via ${
+        childPublication.author.email
+    }. Octopus is a UKRI funded publishing platform that allows researchers to publish their work in smaller steps, with a focus on quality and improving the research culture. To learn more, please visit https://www.octopus.ac or get in touch via help@jisc.ac.uk.`;
+
+    await send({
+        html: standardHTMLEmailTemplate(
+            subject,
+            html,
+            `A researcher has published a ${formattedType} on a ${options.ariPublication.author.name} ARI`
+        ),
+        text,
+        to: options.ariPublication.author.email,
         subject
     });
 };

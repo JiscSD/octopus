@@ -5,8 +5,8 @@ import * as Components from '@/components';
 
 type Props = {
     image: Interfaces.TextEditorImage;
-    positiveActionCallback: (url: string) => void;
-    negativeActionCallback: () => void;
+    positiveCallback: (url: string) => void;
+    negativeCallback: () => void;
 };
 
 const URLSourceUpload: React.FC<Props> = (props): React.ReactElement => {
@@ -36,14 +36,14 @@ const URLSourceUpload: React.FC<Props> = (props): React.ReactElement => {
                     title="Upload image"
                     disabled={!url}
                     onClick={() => {
-                        url && props.positiveActionCallback(url);
+                        url && props.positiveCallback(url);
                     }}
                     actionType="POSITIVE"
                 />
                 <Components.ModalButton
                     text="Cancel"
                     title="Cancel"
-                    onClick={() => props.negativeActionCallback()}
+                    onClick={() => props.negativeCallback()}
                     actionType="NEGATIVE"
                 />
             </div>

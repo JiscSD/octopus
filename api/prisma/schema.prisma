@@ -316,7 +316,6 @@ model AdditionalInformation {
 }
 
 enum EventType {
-    DUMMY // for testing purpose
     REQUEST_CONTROL
 }
 
