@@ -241,15 +241,15 @@ export const deletePublication = (id: string) =>
         }
     });
 
-export const createOpenSearchRecord = (data: I.OpenSearchPublication) =>
-    client.search.create({
+export const upsertOpenSearchRecord = (data: I.OpenSearchPublication) =>
+    client.search.update({
         index: 'publications',
         id: data.id,
-        body: data
+        body: {
+            doc: data,
+            doc_as_upsert: true
+        }
     });
-
-export const deleteOpenSearchRecord = (publicationId: string) =>
-    client.search.delete({ index: 'publications', id: publicationId });
 
 export const getOpenSearchPublications = (filters: I.OpenSearchPublicationFilters) => {
     const orderBy = filters.orderBy

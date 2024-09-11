@@ -1665,11 +1665,7 @@ export const updateCanonicalDOI = async (
 // Actions that run after a version is published (changes status to LIVE).
 // Pulled out to a separate function because things may need to run when something is
 // published immediately (i.e. not going through full drafting workflow) and bypasses the updateStatus function.
-export const postPublishHook = async (
-    publicationVersion: I.PublicationVersion,
-    skipPdfGeneration?: boolean,
-    forceReindex?: boolean
-) => {
+export const postPublishHook = async (publicationVersion: I.PublicationVersion, skipPdfGeneration?: boolean) => {
     try {
         // Ensure links made from a PEER_REVIEW version point to the latest live version of the target publication.
         if (publicationVersion.publication.type === 'PEER_REVIEW') {
@@ -1732,12 +1728,9 @@ export const postPublishHook = async (
         await updateCanonicalDOI(publicationVersion.publication.doi, publicationVersion);
 
         // (Re)index publication in opensearch.
-        if (publicationVersion.versionNumber > 1 || forceReindex) {
-            // Delete old OpenSearch record.
-            await publicationService.deleteOpenSearchRecord(publicationVersion.versionOf);
-        }
-
-        await publicationService.createOpenSearchRecord({
+        // TODO: remove this extra logging if we don't observe ARI imports stalling here for some time.
+        console.log(`Indexing publication ${publicationVersion.versionOf} in opensearch.`);
+        await publicationService.upsertOpenSearchRecord({
             id: publicationVersion.versionOf,
             type: publicationVersion.publication.type,
             title: publicationVersion.title,
@@ -1748,6 +1741,7 @@ export const postPublishHook = async (
             publishedDate: publicationVersion.publishedDate,
             cleanContent: convert(publicationVersion.content)
         });
+        console.log(`Indexing complete.`);
 
         // Delete all pending request control events for this publication version.
         await eventService.deleteMany({
