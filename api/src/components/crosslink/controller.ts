@@ -1,5 +1,5 @@
 import * as crosslinkService from 'crosslink/service';
-import * as helpers from 'lib/helpers';
+import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
 import * as publicationService from 'publication/service';
 import * as response from 'lib/response';
@@ -185,7 +185,7 @@ export const getPublicationCrosslinks = async (
         }
 
         const search = event.queryStringParameters.search
-            ? helpers.sanitizeSearchQuery(event.queryStringParameters.search)
+            ? Helpers.sanitizeSearchQuery(event.queryStringParameters.search)
             : '';
         const limit = event.queryStringParameters?.limit || 10;
         const offset = event.queryStringParameters?.offset || 0;

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as helpers from 'lib/helpers';
+import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
 import * as linkService from 'link/service';
 import * as publicationService from 'publication/service';
@@ -33,7 +33,7 @@ export const get = async (
             return response.json(403, { message: "You don't have permissions to view this publication." });
         }
 
-        return response.json(200, fields ? helpers.buildPartialResponse(fields, publication) : publication);
+        return response.json(200, fields ? Helpers.buildPartialResponse(fields, publication) : publication);
     } catch (err) {
         console.log(err);
 
@@ -88,7 +88,7 @@ export const create = async (
                 });
             }
 
-            if (helpers.isEmptyContent(content || '')) {
+            if (Helpers.isEmptyContent(content || '')) {
                 return response.json(400, {
                     message: 'Content field cannot be empty when publishing directly.'
                 });
@@ -184,7 +184,7 @@ export const create = async (
         }
 
         if (content) {
-            event.body.content = helpers.getSafeHTML(content);
+            event.body.content = Helpers.getSafeHTML(content);
         }
 
         const publication = await publicationService.create(event.body, event.user, directPublish, links);

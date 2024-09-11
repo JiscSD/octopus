@@ -63,7 +63,7 @@ describe('Loading modal', () => {
                 open={true}
                 onClose={handleOnClose}
                 loading={true}
-                positiveActionCallback={handlePositiveActionCallBack}
+                positiveCallback={handlePositiveActionCallBack}
                 positiveButtonText={positiveButtonText}
             >
                 <p>{childText}</p>
@@ -113,7 +113,7 @@ describe('One off cases', () => {
                 title={title}
                 open={true}
                 onClose={handleOnClose}
-                positiveActionCallback={handlePositiveActionCallBack}
+                positiveCallback={handlePositiveActionCallBack}
                 positiveButtonText={positiveButtonText}
             />
         );

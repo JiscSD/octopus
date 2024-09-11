@@ -344,3 +344,5 @@ export type PartialPublicationVersion = Pick<
     | 'coAuthors'
     | 'currentStatus'
 >;
+
+export type PublicationImportSource = 'ARI';

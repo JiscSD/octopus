@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 
 import * as client from 'lib/client';
 import * as I from 'interface';
-import * as helpers from 'lib/helpers';
+import * as Helpers from 'lib/helpers';
 
 export const upsertUser = (orcid: string, updateUserInformation: I.UpdateUserInformation) =>
     client.prisma.user.upsert({
@@ -52,7 +52,7 @@ export const getAll = async (filters: I.UserFilters) => {
     let where: Prisma.UserWhereInput = {};
 
     if (filters.search) {
-        const searchQuery = helpers.sanitizeSearchQuery(filters.search);
+        const searchQuery = Helpers.sanitizeSearchQuery(filters.search);
         where = {
             firstName: {
                 search: searchQuery + ':*'

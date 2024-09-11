@@ -44,3 +44,20 @@ describe('Comparing arrays', () => {
         expect(comparison).toBe(false);
     });
 });
+
+describe('Get user full name', () => {
+    test('Undefined and null return "Anonymous User"', () => {
+        const nullUser = Helpers.getUserFullName(null);
+        expect(nullUser).toEqual('Anonymous User');
+        const undefinedUser = Helpers.getUserFullName(undefined);
+        expect(undefinedUser).toEqual('Anonymous User');
+    });
+    test('User missing lastName only gets firstName back', () => {
+        const fullName = Helpers.getUserFullName({ firstName: 'First', lastName: null });
+        expect(fullName).toEqual('First');
+    });
+    test('User with firstName and lastName gets both back', () => {
+        const fullName = Helpers.getUserFullName({ firstName: 'First', lastName: 'Last' });
+        expect(fullName).toEqual('First Last');
+    });
+});

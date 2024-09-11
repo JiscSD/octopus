@@ -1,4 +1,5 @@
 import * as coAuthorService from 'coAuthor/service';
+import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
 import * as email from 'email';
 import * as response from 'lib/response';
@@ -347,13 +348,12 @@ export const updateConfirmation = async (
             // notify main author about confirmation
             await email.notifyCoAuthorConfirmation({
                 coAuthor: {
-                    firstName: event.user.firstName,
-                    lastName: event.user.lastName || ''
+                    fullName: Helpers.getUserFullName(event.user)
                 },
                 publication: {
                     authorEmail: version.user.email || '',
                     title: version.title || '',
-                    url: `${process.env.BASE_URL}/publications/${version.versionOf}`
+                    url: Helpers.getPublicationUrl(version.versionOf)
                 },
                 remainingConfirmationsCount:
                     version.coAuthors.filter((coAuthor) => !coAuthor.confirmedCoAuthor).length - 1
@@ -365,7 +365,7 @@ export const updateConfirmation = async (
                     id: version.versionOf,
                     title: version.title || '',
                     authorEmail: version.user.email || '',
-                    url: `${process.env.BASE_URL}/publications/${version.versionOf}`
+                    url: Helpers.getPublicationUrl(version.versionOf)
                 }
             });
         }
@@ -427,7 +427,7 @@ export const requestApproval = async (
                         coAuthor: { email: linkedCoAuthor.email },
                         publication: {
                             title: version.title || '',
-                            url: `${process.env.BASE_URL}/publications/${version.versionOf}`
+                            url: Helpers.getPublicationUrl(version.versionOf)
                         }
                     });
                 }
@@ -441,8 +441,7 @@ export const requestApproval = async (
         for (const pendingCoAuthor of pendingCoAuthors) {
             await email.notifyCoAuthor({
                 coAuthor: pendingCoAuthor.email,
-                userFirstName: event.user.firstName,
-                userLastName: event.user.lastName,
+                userFullName: Helpers.getUserFullName(event.user),
                 code: pendingCoAuthor.code,
                 publicationId: version.versionOf,
                 versionId: version.id,
@@ -526,7 +525,7 @@ export const sendApprovalReminder = async (
             publication: {
                 id: version.versionOf,
                 title: version.title || '',
-                creator: `${version.user.firstName} ${version.user.lastName}`,
+                creator: Helpers.getUserFullName(version.user),
                 versionId: version.id
             }
         });
