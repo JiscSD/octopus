@@ -2,8 +2,6 @@ import axios from 'axios';
 import * as ariUtils from 'lib/integrations/ariUtils';
 import * as ingestLogService from 'ingestLog/service';
 
-const MAX_UNCHANGED_STREAK = 5;
-
 /**
  * Incremental ARI ingest.
  * Paginates through ARI questions from the ARI DB API and handles incoming ARIs.
@@ -13,6 +11,7 @@ const MAX_UNCHANGED_STREAK = 5;
  *       recent successful ingest (if this start time is available).
  */
 export const incrementalAriIngest = async (): Promise<void> => {
+    const MAX_UNCHANGED_STREAK = 5;
     // Get most start time of last successful run to help us know when to stop.
     const mostRecentStart = await ingestLogService.getMostRecentStartTime('ARI');
 
@@ -44,6 +43,7 @@ export const incrementalAriIngest = async (): Promise<void> => {
         for (const pageAri of pageAris) {
             if (mostRecentStart && new Date(pageAri.dateUpdated) < new Date(mostRecentStart)) {
                 timeOverlap = true;
+                console.log('Time overlap - reached an ARI older than the most recent ingest start time.');
             }
 
             if (!pageAri.isArchived) {
