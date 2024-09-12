@@ -642,3 +642,10 @@ export const abbreviateUserName = <
     // Default for organisational accounts and general fallback.
     return user.firstName;
 };
+
+export const isPublicationVersionExemptFromReversioning = (publicationVersion: Interfaces.PublicationVersion) => {
+    const { publication } = publicationVersion;
+    const isPeerReview = publication.type === 'PEER_REVIEW';
+    const isARI = publication.externalSource === 'ARI';
+    return isPeerReview || isARI;
+};

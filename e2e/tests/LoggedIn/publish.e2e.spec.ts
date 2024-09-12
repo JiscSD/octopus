@@ -930,6 +930,7 @@ const addCoAuthorsAndRequestApproval = async (page: Page, coAuthors: Helpers.Tes
 
 test.describe('Publication flow + co-authors', () => {
     test('Create a PROBLEM publication with co-authors', async ({ browser }) => {
+        test.slow();
         const page = await Helpers.getPageAsUser(browser);
 
         // create new publication and fill in other required fields

@@ -464,19 +464,14 @@ export const create = async (
     });
 
     if (directPublish) {
-        // Create a DOI for this version specifically and trigger post publish tasks.
         const publishedVersion = await publicationVersionService.get(publication.id, 'latestLive');
 
         if (publishedVersion) {
-            const versionWithDoi = await publicationVersionService.generateNewVersionDOI(publishedVersion, null);
+            // Run post publish tasks, except PDF generation.
+            await publicationVersionService.postPublishHook(publishedVersion, true);
+            const upToDatePublication = await get(publication.id);
 
-            if (versionWithDoi) {
-                // Run post publish tasks, except PDF generation.
-                await publicationVersionService.postPublishHook(versionWithDoi, true);
-                const upToDatePublication = await get(publication.id);
-
-                return upToDatePublication;
-            }
+            return upToDatePublication;
         }
     }
 
