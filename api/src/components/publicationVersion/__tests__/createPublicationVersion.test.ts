@@ -105,4 +105,15 @@ describe('Create new publication versions', () => {
         expect(newPublicationVersion.status).toEqual(400);
         expect(newPublicationVersion.body.message).toEqual('Peer reviews cannot be reversioned.');
     });
+
+    test('ARIs cannot be reversioned', async () => {
+        const newPublicationVersion = await testUtils.agent
+            .post('/publications/ari-publication-1/publication-versions')
+            .query({
+                apiKey: '000000012'
+            });
+
+        expect(newPublicationVersion.status).toEqual(400);
+        expect(newPublicationVersion.body.message).toEqual('ARI publications cannot be reversioned.');
+    });
 });

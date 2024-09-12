@@ -191,6 +191,12 @@ describe('ARI handling', () => {
                 title: 'ARI Publication 1 v2'
             }
         });
+        // Published date should have changed.
+        const publishedDate = handleARI.publicationVersion?.publishedDate;
+
+        if (publishedDate) {
+            expect(new Date(publishedDate).toISOString()).not.toEqual('2024-07-16T14:06:00.000Z');
+        }
     });
 
     test('Changed department updates user and coauthor', async () => {

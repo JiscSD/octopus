@@ -243,7 +243,6 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
         };
     }
 
-    // Compare all mapped fields.
     const changes = detectChangesToARIPublication(mappedData, existingVersion);
 
     if (changes) {
@@ -251,12 +250,15 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
         // Data differs from what is in octopus, so update the publication.
         // Unlike manually created publications, these just have 1 version that
         // updates in-place so that we don't pollute datacite with lots of version DOIs.
+        const now = new Date().toISOString();
         let updatedVersion = await publicationVersionService.update(existingVersion.id, {
             ...(changes.title && { title: mappedData.title }),
             ...(changes.content && { content: mappedData.content }),
             ...(changes.keywords && { keywords: mappedData.keywords }),
             ...(changes.topics && { topics: { set: mappedData.topicIds.map((topicId) => ({ id: topicId })) } }),
-            ...(changes.userId && { user: { connect: { id: mappedData.userId } } })
+            ...(changes.userId && { user: { connect: { id: mappedData.userId } } }),
+            publishedDate: now,
+            updatedAt: now
         });
 
         // If user changed, update coAuthors.
