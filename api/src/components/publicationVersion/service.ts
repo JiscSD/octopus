@@ -1494,7 +1494,7 @@ const createDOIPayload = async (
             const { oldPublicationVersionDOIs } = data;
 
             // It's possible there will be no versioned DOIs at all.
-            // Peer reviews only get a canonical DOI. In this case, skip this part.
+            // Some types of publication only get a canonical DOI. In this case, skip this part.
             if (oldPublicationVersionDOIs.length || publicationVersion.doi) {
                 const publicationVersionDOIs = [...oldPublicationVersionDOIs, publicationVersion.doi].map((doi) => ({
                     relatedIdentifier: doi,
@@ -1590,14 +1590,23 @@ const updatePreviousPublicationVersionDOI = async (
     return response.data;
 };
 
+const isExemptFromReversioning = (publicationVersion: I.PublicationVersion) => {
+    const isPeerReview = publicationVersion.publication.type === 'PEER_REVIEW';
+    const isARI = publicationVersion.publication.externalSource === 'ARI';
+
+    return isPeerReview || isARI;
+};
+
 // Create a separate DOI for a specific publication version.
-// Returns the updated version.
+// Returns the updated version with a DOI, or null if this publication doesn't use reversioning,
+// and thus doesn't have versioned DOIs.
 export const generateNewVersionDOI = async (
     publicationVersion: I.PublicationVersion,
     previousPublicationVersion?: I.PublicationVersion | null
 ) => {
-    // Peer Reviews do not need this as they can only have 1 version
-    if (publicationVersion.publication.type !== 'PEER_REVIEW') {
+    if (isExemptFromReversioning(publicationVersion)) {
+        return null;
+    } else {
         const newPublicationVersionDOI = await createPublicationVersionDOI(
             publicationVersion,
             previousPublicationVersion?.doi as string
@@ -1627,9 +1636,9 @@ export const updateCanonicalDOI = async (
         throw Error('Supplied version is not current');
     }
 
-    // Unless this is a peer review (which doesn't get versioned DOIs, as they only have 1 version)
+    // Unless this is exempt from reversioning (so doesn't get versioned DOIs),
     // we need to have the DOI of the version so we can reference it in the canonical DOI's metadata.
-    if (!latestPublicationVersion.doi && latestPublicationVersion.publication.type !== 'PEER_REVIEW') {
+    if (!latestPublicationVersion.doi && !isExemptFromReversioning(latestPublicationVersion)) {
         throw Error("Supplied version doesn't have a valid DOI.");
     }
 
@@ -1715,8 +1724,10 @@ export const postPublishHook = async (
             }
         });
 
-        // Update previous version's "isLatestLiveVersion" flag.
+        let previousVersion: I.PublicationVersion | null = null;
+
         if (publicationVersion.versionNumber > 1) {
+            // Update previous version's "isLatestLiveVersion" flag.
             await client.prisma.publicationVersion.updateMany({
                 where: {
                     versionOf: publicationVersion.versionOf,
@@ -1726,10 +1737,26 @@ export const postPublishHook = async (
                     isLatestLiveVersion: false
                 }
             });
+
+            // Get previous version to feed into DOI updates.
+            previousVersion = await client.prisma.publicationVersion.findFirst({
+                where: {
+                    versionOf: publicationVersion.versionOf,
+                    versionNumber: publicationVersion.versionNumber - 1
+                },
+                include: defaultPublicationVersionInclude
+            });
+        }
+
+        let versionWithDOI: I.PublicationVersion | null = null;
+
+        if (!isExemptFromReversioning(publicationVersion)) {
+            versionWithDOI = await generateNewVersionDOI(publicationVersion, previousVersion);
         }
 
         // Update the canonical DOI with the latest details from this version.
-        await updateCanonicalDOI(publicationVersion.publication.doi, publicationVersion);
+        // If we have a version with a DOI, pass that, but if not just pass one without.
+        await updateCanonicalDOI(publicationVersion.publication.doi, versionWithDOI || publicationVersion);
 
         // (Re)index publication in opensearch.
         if (publicationVersion.versionNumber > 1 || forceReindex) {
