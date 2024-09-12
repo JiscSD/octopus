@@ -7,8 +7,8 @@ import * as Components from '@/components';
 import * as Helpers from '@/helpers';
 
 type Props = {
-    positiveActionCallback: (files: Interfaces.ImagePreview[]) => void;
-    negativeActionCallback: () => void;
+    positiveCallback: (files: Interfaces.ImagePreview[]) => void;
+    negativeCallback: () => void;
     loading: boolean;
     uploadErrors?: string[];
 };
@@ -88,7 +88,7 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
                 <Components.ModalButton
                     text="Upload image"
                     title="Upload image"
-                    onClick={() => props.positiveActionCallback(previewBase64)}
+                    onClick={() => props.positiveCallback(previewBase64)}
                     disabled={props.loading || !previewBase64.length}
                     loading={props.loading}
                     actionType="POSITIVE"
@@ -96,7 +96,7 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
                 <Components.ModalButton
                     text="Cancel"
                     title="Cancel"
-                    onClick={() => props.negativeActionCallback()}
+                    onClick={() => props.negativeCallback()}
                     disabled={props.loading}
                     actionType="NEGATIVE"
                 />

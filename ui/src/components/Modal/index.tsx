@@ -6,10 +6,10 @@ import * as Components from '@/components';
 type Props = {
     open: boolean;
     onClose: () => void; // state setter
-    positiveActionCallback?: () => void; // state setter
+    positiveCallback?: () => void; // state setter
     positiveButtonText?: string;
     positiveButtonDisabled?: boolean;
-    negativeActionCallback?: () => void;
+    negativeCallback?: () => void;
     cancelButtonText?: string;
     title: string;
     titleClasses?: string;
@@ -22,7 +22,7 @@ type Props = {
 
 const Modal: React.FC<Props> = (props) => {
     const loading = !!props.loading;
-    const showPositiveActionButton = props.positiveActionCallback && props.positiveButtonText;
+    const showPositiveActionButton = props.positiveCallback && props.positiveButtonText;
     const cancelButtonText = props.cancelButtonText ?? 'Close';
 
     return (
@@ -88,8 +88,7 @@ const Modal: React.FC<Props> = (props) => {
                                         <Components.ModalButton
                                             onClick={() => {
                                                 // Shouldn't be necessary but typescript still thinks the function could be undefined
-                                                if (props.positiveActionCallback !== undefined)
-                                                    props.positiveActionCallback();
+                                                if (props.positiveCallback !== undefined) props.positiveCallback();
                                             }}
                                             disabled={loading || props.positiveButtonDisabled}
                                             text={props.positiveButtonText || ''}
@@ -100,9 +99,7 @@ const Modal: React.FC<Props> = (props) => {
                                     )}
                                     <Components.ModalButton
                                         onClick={() =>
-                                            props.negativeActionCallback
-                                                ? props.negativeActionCallback()
-                                                : props.onClose()
+                                            props.negativeCallback ? props.negativeCallback() : props.onClose()
                                         }
                                         disabled={loading}
                                         text={cancelButtonText}

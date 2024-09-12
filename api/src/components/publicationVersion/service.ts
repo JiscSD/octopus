@@ -2,6 +2,7 @@ import * as cheerio from 'cheerio';
 import axios, { AxiosResponse } from 'axios';
 import chromium from '@sparticuz/chromium';
 import fs from 'fs';
+import nodemailer from 'nodemailer';
 import { Browser, launch } from 'puppeteer-core';
 import { convert } from 'html-to-text';
 import { createId } from '@paralleldrive/cuid2';
@@ -9,6 +10,7 @@ import { Prisma } from '@prisma/client';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 
 import * as client from 'lib/client';
+import * as email from 'lib/email';
 import * as eventService from 'event/service';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
@@ -831,9 +833,9 @@ const createPublicationHTMLTemplate = (
                     <strong>Authors:</strong> ${authorsWithAffiliationNumbers
                         .map(
                             (author) =>
-                                `<a href="${process.env.BASE_URL}/authors/${author.linkedUser}">${
-                                    author.user?.firstName
-                                }${author.user?.lastName ? ' ' + author.user.lastName : ''}` +
+                                `<a href="${process.env.BASE_URL}/authors/${
+                                    author.linkedUser
+                                }">${Helpers.getUserFullName(author.user)}` +
                                 (author.affiliationNumbers.length ? `<sup>${author.affiliationNumbers}</sup>` : '') +
                                 '</a>'
                         )
@@ -1080,9 +1082,7 @@ const createPublicationHeaderTemplate = (publicationVersion: I.PublicationVersio
     </style>
     <div class="header">
         <span>
-            ${`${authors[0]?.user?.firstName}${authors[0]?.user?.lastName ? ' ' + authors[0].user.lastName : ''}${
-                authors.length > 1 ? ' et al.' : ''
-            }`}
+            ${Helpers.getUserFullName(authors[0]?.user) + (authors.length > 1 ? ' et al.' : '')}
         </span>
         <span>
             Published ${
@@ -1378,8 +1378,10 @@ const createDOIPayload = async (
                 event: 'publish',
                 url:
                     payloadType === 'canonical'
-                        ? `${process.env.BASE_URL}/publications/${publicationVersion.versionOf}`
-                        : `${process.env.BASE_URL}/publications/${publicationVersion.versionOf}/versions/${publicationVersion.versionNumber}`,
+                        ? Helpers.getPublicationUrl(publicationVersion.versionOf)
+                        : `${Helpers.getPublicationUrl(publicationVersion.versionOf)}/versions/${
+                              publicationVersion.versionNumber
+                          }`,
                 creators,
                 titles: [
                     {
@@ -1663,104 +1665,170 @@ export const updateCanonicalDOI = async (
 // Actions that run after a version is published (changes status to LIVE).
 // Pulled out to a separate function because things may need to run when something is
 // published immediately (i.e. not going through full drafting workflow) and bypasses the updateStatus function.
-export const postPublishHook = async (publicationVersion: I.PublicationVersion, skipPdfGeneration?: boolean) => {
-    // Ensure links made from a PEER_REVIEW version point to the latest live version of the target publication.
-    if (publicationVersion.publication.type === 'PEER_REVIEW') {
-        const outdatedDraftLinks = await client.prisma.links.findMany({
-            where: {
-                publicationFromId: publicationVersion.versionOf,
-                draft: true,
-                versionTo: {
-                    isLatestLiveVersion: false
-                }
-            }
-        });
-
-        for (const outdatedDraftLink of outdatedDraftLinks) {
-            const latestVersionTo = await client.prisma.publicationVersion.findFirst({
+export const postPublishHook = async (
+    publicationVersion: I.PublicationVersion,
+    skipPdfGeneration?: boolean,
+    forceReindex?: boolean
+) => {
+    try {
+        // Ensure links made from a PEER_REVIEW version point to the latest live version of the target publication.
+        if (publicationVersion.publication.type === 'PEER_REVIEW') {
+            const outdatedDraftLinks = await client.prisma.links.findMany({
                 where: {
-                    versionOf: outdatedDraftLink.publicationToId,
-                    isLatestLiveVersion: true
+                    publicationFromId: publicationVersion.versionOf,
+                    draft: true,
+                    versionTo: {
+                        isLatestLiveVersion: false
+                    }
                 }
             });
 
-            if (latestVersionTo) {
-                await client.prisma.links.update({
+            for (const outdatedDraftLink of outdatedDraftLinks) {
+                const latestVersionTo = await client.prisma.publicationVersion.findFirst({
                     where: {
-                        id: outdatedDraftLink.id
-                    },
-                    data: {
-                        versionToId: latestVersionTo.id
+                        versionOf: outdatedDraftLink.publicationToId,
+                        isLatestLiveVersion: true
                     }
                 });
+
+                if (latestVersionTo) {
+                    await client.prisma.links.update({
+                        where: {
+                            id: outdatedDraftLink.id
+                        },
+                        data: {
+                            versionToId: latestVersionTo.id
+                        }
+                    });
+                }
             }
         }
-    }
 
-    // Update "draft" links.
-    await client.prisma.links.updateMany({
-        where: {
-            publicationFromId: publicationVersion.versionOf,
-            draft: true
-        },
-        data: {
-            draft: false
-        }
-    });
-
-    // Update previous version's "isLatestLiveVersion" flag.
-    if (publicationVersion.versionNumber > 1) {
-        await client.prisma.publicationVersion.updateMany({
+        // Update "draft" links.
+        await client.prisma.links.updateMany({
             where: {
-                versionOf: publicationVersion.versionOf,
-                versionNumber: publicationVersion.versionNumber - 1
+                publicationFromId: publicationVersion.versionOf,
+                draft: true
             },
             data: {
-                isLatestLiveVersion: false
+                draft: false
             }
         });
-    }
 
-    // Update the canonical DOI with the latest details from this version.
-    await updateCanonicalDOI(publicationVersion.publication.doi, publicationVersion);
-
-    if (publicationVersion.versionNumber > 1) {
-        // Delete old OpenSearch record.
-        await publicationService.deleteOpenSearchRecord(publicationVersion.versionOf);
-    }
-
-    // (Re)index publication in opensearch.
-    await publicationService.createOpenSearchRecord({
-        id: publicationVersion.versionOf,
-        type: publicationVersion.publication.type,
-        title: publicationVersion.title,
-        licence: publicationVersion.licence,
-        description: publicationVersion.description,
-        keywords: publicationVersion.keywords,
-        content: publicationVersion.content,
-        publishedDate: publicationVersion.publishedDate,
-        cleanContent: convert(publicationVersion.content)
-    });
-
-    // Delete all pending request control events for this publication version.
-    await eventService.deleteMany({
-        type: 'REQUEST_CONTROL',
-        data: {
-            path: ['publicationVersion', 'id'],
-            equals: publicationVersion.id
+        // Update previous version's "isLatestLiveVersion" flag.
+        if (publicationVersion.versionNumber > 1) {
+            await client.prisma.publicationVersion.updateMany({
+                where: {
+                    versionOf: publicationVersion.versionOf,
+                    versionNumber: publicationVersion.versionNumber - 1
+                },
+                data: {
+                    isLatestLiveVersion: false
+                }
+            });
         }
-    });
 
-    // Send message to the pdf generation queue.
-    // Skipped locally, as there is not an SQS que in localstack.
-    // Option to skip, e.g. in bulk import scripts, where instant pdf generation is not a priority.
-    // In both cases, the pdf will still be generated the first time it's requested.
-    if (process.env.STAGE !== 'local' && !skipPdfGeneration) {
-        await sqs.sendMessage(publicationVersion.versionOf);
+        // Update the canonical DOI with the latest details from this version.
+        await updateCanonicalDOI(publicationVersion.publication.doi, publicationVersion);
+
+        // (Re)index publication in opensearch.
+        if (publicationVersion.versionNumber > 1 || forceReindex) {
+            // Delete old OpenSearch record.
+            await publicationService.deleteOpenSearchRecord(publicationVersion.versionOf);
+        }
+
+        await publicationService.createOpenSearchRecord({
+            id: publicationVersion.versionOf,
+            type: publicationVersion.publication.type,
+            title: publicationVersion.title,
+            licence: publicationVersion.licence,
+            description: publicationVersion.description,
+            keywords: publicationVersion.keywords,
+            content: publicationVersion.content,
+            publishedDate: publicationVersion.publishedDate,
+            cleanContent: convert(publicationVersion.content)
+        });
+
+        // Delete all pending request control events for this publication version.
+        await eventService.deleteMany({
+            type: 'REQUEST_CONTROL',
+            data: {
+                path: ['publicationVersion', 'id'],
+                equals: publicationVersion.id
+            }
+        });
+
+        // Send message to the pdf generation queue.
+        // Skipped locally, as there is not an SQS que in localstack.
+        // Option to skip, e.g. in bulk import scripts, where instant pdf generation is not a priority.
+        // In both cases, the pdf will still be generated the first time it's requested.
+        if (process.env.STAGE !== 'local' && !skipPdfGeneration) {
+            await sqs.sendMessage(publicationVersion.versionOf);
+        }
+    } catch (err) {
+        console.log('Error in post-publish hook: ', err);
     }
 };
 
-export const updateStatus = async (id: string, status: I.PublicationStatusEnum) => {
+const notifyLinkedAriOwners = async (publicationVersion: I.PublicationVersion): Promise<void> => {
+    // Gather up ARI publications that have been newly linked from this publicationVersion.
+    const newlyLinkedARIs = await client.prisma.publicationVersion.findMany({
+        where: {
+            isLatestLiveVersion: true,
+            publication: {
+                externalSource: 'ARI',
+                linkedFrom: {
+                    some: {
+                        publicationFromId: publicationVersion.versionOf,
+                        draft: true
+                    }
+                }
+            }
+        },
+        select: {
+            title: true,
+            user: {
+                select: {
+                    email: true,
+                    firstName: true
+                }
+            },
+
+            versionOf: true
+        }
+    });
+
+    const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
+
+    for (const ari of newlyLinkedARIs) {
+        if (ari.user.email && publicationVersion.user.email) {
+            emailPromises.push(
+                email.newAriChildPublication({
+                    ariPublication: {
+                        author: {
+                            email: ari.user.email,
+                            name: ari.user.firstName
+                        },
+                        name: ari.title,
+                        url: Helpers.getPublicationUrl(ari.versionOf)
+                    },
+                    childPublication: {
+                        author: {
+                            email: publicationVersion.user.email,
+                            fullName: Helpers.getUserFullName(publicationVersion.user)
+                        },
+                        type: publicationVersion.publication.type,
+                        url: Helpers.getPublicationUrl(publicationVersion.versionOf)
+                    }
+                })
+            );
+        }
+    }
+
+    await Promise.all(emailPromises);
+};
+
+export const updateStatus = async (id: string, status: I.PublicationStatusEnum, ariContactConsent?: boolean) => {
     const updatedVersion = await client.prisma.publicationVersion.update({
         where: {
             id
@@ -1781,6 +1849,12 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum) 
     });
 
     if (status === 'LIVE') {
+        // Important for this to come before postPublishHook because it needs to know which links are new
+        // by looking at the draft field. The post publish hook will set "draft: false" on all new links.
+        if (ariContactConsent) {
+            await notifyLinkedAriOwners(updatedVersion);
+        }
+
         await postPublishHook(updatedVersion);
     }
 

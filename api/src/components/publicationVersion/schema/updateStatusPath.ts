@@ -1,6 +1,6 @@
 import * as I from 'interface';
 
-const updateStatusSchema: I.JSONSchemaType<I.UpdateStatusPathParams> = {
+const updateStatusPathSchema: I.JSONSchemaType<I.UpdateStatusPathParams> = {
     type: 'object',
     properties: {
         status: {
@@ -15,4 +15,4 @@ const updateStatusSchema: I.JSONSchemaType<I.UpdateStatusPathParams> = {
     additionalProperties: false
 };
 
-export default updateStatusSchema;
+export default updateStatusPathSchema;

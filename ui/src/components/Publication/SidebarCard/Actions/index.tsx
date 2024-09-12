@@ -98,7 +98,7 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
             <Components.Modal
                 open={showRedFlagModal}
                 onClose={onCloseRedFlagModal}
-                positiveActionCallback={saveRedFlag}
+                positiveCallback={saveRedFlag}
                 loading={submitting}
                 positiveButtonText="Submit"
                 cancelButtonText="Cancel"

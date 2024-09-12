@@ -167,11 +167,16 @@ export const stripEnclosingQuotes = (string: string): string => {
     }
 };
 
-// Check if two arrays are equal.
-export const compareArrays = <T>(a: Array<T>, b: Array<T>): boolean => {
+// Check if two arrays are equal. By default, doesn't care about order.
+export const compareArrays = <T>(a: Array<T>, b: Array<T>, strictOrder?: boolean): boolean => {
     if (a === b) return true;
     if (a == null || b == null) return false;
     if (a.length !== b.length) return false;
+
+    if (!strictOrder) {
+        a.sort();
+        b.sort();
+    }
 
     for (let i = 0; i < a.length; ++i) {
         if (a[i] !== b[i]) return false;
@@ -197,6 +202,20 @@ export const abbreviateUserName = <T extends { firstName: string; lastName: stri
     return user.firstName;
 };
 
+export const getUserFullName = <T extends { firstName: string; lastName: string | null } | undefined | null>(
+    user: T
+): string => {
+    if (!user) {
+        return 'Anonymous User';
+    }
+
+    if (user.lastName) {
+        return `${user.firstName} ${user.lastName}`;
+    } else {
+        return user.firstName;
+    }
+};
+
 // Parses args passed to an npm script in the following style:
 // npm run script -- arg=value another=somethingElse
 // and returns them as keys and values in an object.
@@ -211,4 +230,8 @@ export const parseNpmScriptArgs = (): { [key: string]: string } => {
     });
 
     return parsedArgs;
+};
+
+export const getPublicationUrl = (id: string): string => {
+    return `${process.env.BASE_URL}/publications/${id}`;
 };

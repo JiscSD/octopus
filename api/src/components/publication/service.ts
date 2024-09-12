@@ -952,6 +952,7 @@ export const getDirectLinksForPublication = async (
                             id: true,
                             doi: true,
                             type: true,
+                            externalSource: true,
                             versions: {
                                 where: {
                                     isLatestLiveVersion: true
@@ -1064,7 +1065,7 @@ export const getDirectLinksForPublication = async (
 
     const linkedTo: I.LinkedToPublication[] = publication.linkedTo.map((link) => {
         const { id: linkId, publicationTo, versionTo, draft } = link;
-        const { id, type, versions, doi } = publicationTo;
+        const { id, type, versions, doi, publicationFlags, linkedFrom, externalSource } = publicationTo;
         const { createdBy, user, currentStatus, publishedDate, title } = versions[0];
 
         return {
@@ -1085,14 +1086,15 @@ export const getDirectLinksForPublication = async (
             currentStatus,
             publishedDate: publishedDate?.toISOString() || '',
             authors: [],
-            flagCount: link.publicationTo.publicationFlags.length,
-            peerReviewCount: link.publicationTo.linkedFrom.length
+            flagCount: publicationFlags.length,
+            peerReviewCount: linkedFrom.length,
+            externalSource
         };
     });
 
     const linkedFrom: I.LinkedFromPublication[] = publication.linkedFrom.map((link) => {
         const { id: linkId, publicationFrom, versionTo, draft } = link;
-        const { id, type, versions, doi } = publicationFrom;
+        const { id, type, versions, doi, publicationFlags, linkedFrom } = publicationFrom;
         const { createdBy, user, currentStatus, publishedDate, title } = versions[0];
 
         return {
@@ -1113,8 +1115,8 @@ export const getDirectLinksForPublication = async (
             currentStatus,
             publishedDate: publishedDate?.toISOString() || '',
             authors: [],
-            flagCount: link.publicationFrom.publicationFlags.length,
-            peerReviewCount: link.publicationFrom.linkedFrom.length
+            flagCount: publicationFlags.length,
+            peerReviewCount: linkedFrom.length
         };
     });
 

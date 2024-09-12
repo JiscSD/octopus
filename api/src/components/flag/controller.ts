@@ -1,5 +1,6 @@
 import * as cheerio from 'cheerio';
 import nodemailer from 'nodemailer';
+import * as Helpers from 'lib/helpers';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 import * as flagService from 'flag/service';
@@ -128,7 +129,7 @@ export const createFlag = async (
                     publicationId: publication.id,
                     flagId: flag.id,
                     type: formatFlagType(event.body.category),
-                    submitter: `${event.user.firstName} ${event.user.lastName || ''}`,
+                    submitter: Helpers.getUserFullName(event.user),
                     flagReason: event.body.comment
                 })
             );
@@ -237,7 +238,7 @@ export const createFlagComment = async (
                     publicationId: publication.id || '',
                     flagId: flag.id,
                     type: formatFlagType(flag.category),
-                    submitter: `${event.user.firstName} ${event.user.lastName || ''}`
+                    submitter: Helpers.getUserFullName(event.user)
                 })
             );
         }
@@ -250,7 +251,7 @@ export const createFlagComment = async (
                     publicationId: publication.id || '',
                     flagId: flag.id,
                     type: formatFlagType(flag.category),
-                    submitter: `${event.user.firstName} ${event.user.lastName || ''}`
+                    submitter: Helpers.getUserFullName(event.user)
                 })
             );
         }

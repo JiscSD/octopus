@@ -137,6 +137,7 @@ export interface LinkedToPublication extends LinkedPublication {
     draft: boolean;
     childPublication: string;
     childPublicationType: Types.PublicationType;
+    externalSource: Types.PublicationImportSource | null;
 }
 
 export interface LinkedFromPublication extends LinkedPublication {

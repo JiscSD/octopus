@@ -6,8 +6,12 @@ describe('Comparing arrays', () => {
         const comparison = Helpers.compareArrays(array, array);
         expect(comparison).toBe(true);
     });
-    test('Same elements in different order are not considered equal', () => {
+    test('Same elements in different order are considered equal by default', () => {
         const comparison = Helpers.compareArrays([1, 2, 3], [3, 2, 1]);
+        expect(comparison).toBe(true);
+    });
+    test('Same elements in different order are not considered equal when strictOrder is set', () => {
+        const comparison = Helpers.compareArrays([1, 2, 3], [3, 2, 1], true);
         expect(comparison).toBe(false);
     });
     test('Comparisons use strict equality', () => {
@@ -38,5 +42,22 @@ describe('Comparing arrays', () => {
             ]
         );
         expect(comparison).toBe(false);
+    });
+});
+
+describe('Get user full name', () => {
+    test('Undefined and null return "Anonymous User"', () => {
+        const nullUser = Helpers.getUserFullName(null);
+        expect(nullUser).toEqual('Anonymous User');
+        const undefinedUser = Helpers.getUserFullName(undefined);
+        expect(undefinedUser).toEqual('Anonymous User');
+    });
+    test('User missing lastName only gets firstName back', () => {
+        const fullName = Helpers.getUserFullName({ firstName: 'First', lastName: null });
+        expect(fullName).toEqual('First');
+    });
+    test('User with firstName and lastName gets both back', () => {
+        const fullName = Helpers.getUserFullName({ firstName: 'First', lastName: 'Last' });
+        expect(fullName).toEqual('First Last');
     });
 });

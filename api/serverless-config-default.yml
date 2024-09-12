@@ -492,3 +492,11 @@ functions:
                 path: ${self:custom.versions.v1}/publications/{publicationId}/crosslinks
                 method: GET
                 cors: true
+    # Integrations
+    incrementalAriIngest:
+        handler: src/components/integrations/service.incrementalAriIngest
+        timeout: 900
+        events:
+            - schedule:
+                rate: cron(0 5 ? * TUE *) # Every Tuesday at 5 a.m.
+                enabled: ${self:custom.scheduledAriIngestEnabled.${opt:stage}, false}
