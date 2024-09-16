@@ -147,8 +147,8 @@ export const PageModel = {
         liveAuthorPageButton: 'a:has-text("View my public author page")'
     },
     myBookmarks: {
-        publicationBookmark: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
-        topicBookmark: 'a[href="/topics/cly468yyb00177ryzsvccai51"]',
+        bookmarkedPublicationLink: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
+        bookmarkedTopicLink: 'a[href="/topics/cly468yyb00177ryzsvccai51"]',
         removeTopicBookmark: 'a[href="/topics/cly468yyb00177ryzsvccai51"] + button[aria-label="Remove bookmark"]'
     },
     publish: {
