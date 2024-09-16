@@ -180,8 +180,11 @@ export const getPublications = async (
                     }
                 }
             },
-            // They are an unconfirmed coauthor on at least one version (if the user is requesting their own publications)
-            ...(isAccountOwner && user?.email
+            // They are an unconfirmed coauthor on at least one version
+            // (if the user is requesting their own publications and including DRAFT/LOCKED ones)
+            ...(isAccountOwner &&
+            user?.email &&
+            versionStatusArray?.some((status) => status === 'DRAFT' || status === 'LOCKED')
                 ? [
                       {
                           versions: {
