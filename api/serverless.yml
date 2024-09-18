@@ -50,6 +50,8 @@ provider:
         SQS_ENDPOINT: ${ssm:/sqs_endpoint_${self:provider.stage}_octopus}
         MAIL_SERVER: ${ssm:/mail_server_${self:provider.stage}_octopus}
         SLACK_CHANNEL_EMAIL: ${ssm:/slack_channel_email_${self:provider.stage}_octopus}
+        TRIGGER_ARI_INGEST_API_KEY: ${ssm:/trigger_ari_ingest_api_key_${self:provider.stage}_octopus}
+        INGEST_REPORT_RECIPIENTS: ${ssm:/ingest_report_recipients_${self:provider.stage}_octopus}
     deploymentBucket:
         tags:
             Project: Octopus

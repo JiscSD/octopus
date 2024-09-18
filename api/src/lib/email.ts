@@ -973,7 +973,7 @@ export const incrementalAriIngestReport = async (options: {
     await send({
         html,
         text,
-        to: process.env.SLACK_CHANNEL_EMAIL || '',
+        to: process.env.INGEST_REPORT_RECIPIENTS ? process.env.INGEST_REPORT_RECIPIENTS.split(',') : '',
         subject: 'Incremental ARI ingest report'
     });
 };

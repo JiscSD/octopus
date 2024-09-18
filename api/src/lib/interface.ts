@@ -657,7 +657,7 @@ export interface DestroyImagePathParams {
 }
 
 export interface EmailSendOptions {
-    to: string;
+    to: string | string[];
     subject: string;
     html: string;
     text: string;
