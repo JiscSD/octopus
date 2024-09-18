@@ -105,7 +105,8 @@ custom:
         automatic: true
         number: 3
     scheduledAriIngestEnabled:
-        int: true
+        int: false
+        prod: false
 functions:
     - ${file(./serverless-config-default.yml):functions}
     - ${file(./serverless-config-deploy.yml):functions}
