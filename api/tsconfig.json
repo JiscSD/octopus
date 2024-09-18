@@ -72,6 +72,9 @@
             "image/*": [
                 "src/components/image/*"
             ],
+            "integration/*": [
+                "src/components/integration/*"
+            ],
             "link/*": [
                 "src/components/link/*"
             ],
