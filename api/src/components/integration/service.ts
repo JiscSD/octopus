@@ -1,12 +1,12 @@
 import axios from 'axios';
-import * as ariUtils from 'lib/integrations/ariUtils';
+import * as ariUtils from 'lib/integration/ariUtils';
 
 /**
  * Incremental ARI ingest.
  * Paginates through ARI questions from the ARI DB API and handles incoming ARIs.
  * If it encounters MAX_UNCHANGED_STREAK ARIs in a row not requiring changes, it stops.
  */
-export const incrementalAriIngest = async (): Promise<void> => {
+export const incrementalAriIngest = async (): Promise<string> => {
     // Count sequential unchanged ARIs so that we can stop when the streak hits MAX_UNCHANGED_STREAK.
     const MAX_UNCHANGED_STREAK = 5;
     let unchangedStreak = 0;
@@ -53,5 +53,5 @@ export const incrementalAriIngest = async (): Promise<void> => {
         pageUrl = paginationInfo.links.next;
     } while (pageUrl && unchangedStreak < MAX_UNCHANGED_STREAK);
 
-    console.log(`Update complete. Updated ${writeCount} publication${writeCount !== 1 ? 's' : ''}.`);
+    return `Update complete. Updated ${writeCount} publication${writeCount !== 1 ? 's' : ''}.`;
 };

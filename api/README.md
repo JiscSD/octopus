@@ -139,7 +139,7 @@ A similar process happens when the database is seeded. After publications are in
 
 ## Integrations
 
-Octopus is built to integrate with some external systems in order to import publications. For more information please read the dedicated [integrations readme](./src/lib/integrations/README.md).
+Octopus is built to integrate with some external systems in order to import publications. For more information please read the dedicated [integrations readme](./src/lib/integration/README.md).
 
 ---
 
