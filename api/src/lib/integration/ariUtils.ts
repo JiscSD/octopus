@@ -8,6 +8,8 @@ import * as topicMappingService from 'topicMapping/service';
 import * as userMappingService from 'userMapping/service';
 import * as userService from 'user/service';
 
+import { Prisma } from '@prisma/client';
+
 const parseAriTextField = (value: string): string => {
     // Sometimes ARI text fields are enclosed in quotes and we don't want to show those in a publication body.
     const noQuotes = Helpers.stripEnclosingQuotes(value);
@@ -22,9 +24,16 @@ export const mapAriQuestionToPublicationVersion = async (
     | {
           success: true;
           mappedData: I.MappedARIQuestion;
-          message: null;
+          message: string | null;
+          unrecognisedTopics?: string[];
       }
-    | { success: false; mappedData: null; message: string }
+    | {
+          success: false;
+          mappedData: null;
+          message: string;
+          unrecognisedDepartment?: string;
+          unrecognisedTopics?: string[];
+      }
 > => {
     if (questionData.isArchived) {
         return {
@@ -69,6 +78,26 @@ export const mapAriQuestionToPublicationVersion = async (
     // Ensure uniqueness.
     const keywords = [...new Set(fieldsOfResearch.concat(tags))];
 
+    // Map ARI topics to octopus topics.
+    const unrecognisedTopics: string[] = [];
+    type TopicMappingResult = Prisma.PromiseReturnType<typeof topicMappingService.get>;
+    const topicMappings: TopicMappingResult[] = [];
+
+    for await (const ariTopic of ariTopics) {
+        const mapping = await topicMappingService.get(ariTopic, 'ARI');
+
+        if (mapping) {
+            topicMappings.push(mapping);
+        } else {
+            unrecognisedTopics.push(ariTopic);
+        }
+    }
+
+    // We intentionally don't map some ARI topics, so filter those out.
+    const octopusTopicIds = topicMappings.flatMap((topicMapping) =>
+        topicMapping && topicMapping.isMapped && topicMapping.topic ? [topicMapping.topic.id] : []
+    );
+
     // Find user by department title.
     const userMapping = await userMappingService.get(department, 'ARI');
 
@@ -76,18 +105,13 @@ export const mapAriQuestionToPublicationVersion = async (
         return {
             success: false,
             mappedData: null,
-            message: 'User not found for department: ' + department + '.'
+            message: 'User not found for department: ' + department + '.',
+            unrecognisedDepartment: department
         };
     }
 
     const user = userMapping.user;
 
-    // Map ARI topics to octopus topics.
-    const topicMappings = await Promise.all(ariTopics.map((ariTopic) => topicMappingService.get(ariTopic, 'ARI')));
-    // We intentionally don't map some ARI topics, so filter those out.
-    const octopusTopicIds = topicMappings.flatMap((topicMapping) =>
-        topicMapping && topicMapping.isMapped && topicMapping.topic ? [topicMapping.topic.id] : []
-    );
     // If no topics listed in ARI, fall back to default topic for the department (user).
     // Otherwise use the mapped topics, in a Set to ensure uniqueness.
     const finalTopicIds = octopusTopicIds.length
@@ -95,6 +119,8 @@ export const mapAriQuestionToPublicationVersion = async (
         : user.defaultTopicId
         ? [user.defaultTopicId]
         : [];
+
+    const unrecognisedTopicsFound = unrecognisedTopics.length;
 
     return {
         success: true,
@@ -107,7 +133,8 @@ export const mapAriQuestionToPublicationVersion = async (
             externalId: questionId.toString(),
             userId: user.id
         },
-        message: null
+        message: unrecognisedTopicsFound ? 'Found unrecognised topic(s).' : null,
+        ...(unrecognisedTopicsFound ? { unrecognisedTopics } : {})
     };
 };
 
@@ -173,18 +200,27 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
         const feedback =
             'Failed to map ARI data to octopus data.' + (mappingAttempt.message ? ' ' + mappingAttempt.message : '');
 
+        const { unrecognisedDepartment, unrecognisedTopics } = mappingAttempt;
+
         return {
             actionTaken: 'none',
             success: false,
-            message: feedback
+            message: feedback,
+            ...(unrecognisedDepartment ? { unrecognisedDepartment } : {}),
+            ...(unrecognisedTopics ? { unrecognisedTopics } : {})
         };
     }
 
-    const { mappedData } = mappingAttempt;
+    const { mappedData, unrecognisedTopics } = mappingAttempt;
+    const baseReturnObject = {
+        ...(unrecognisedTopics ? { unrecognisedTopics } : {})
+    };
+
     const user = await userService.get(mappedData.userId);
 
     if (!user) {
         return {
+            ...baseReturnObject,
             actionTaken: 'none',
             success: false,
             message: `Failed to get user with ID from mapping: ${mappedData.userId}.`
@@ -209,6 +245,7 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
 
         if (!newPublication) {
             return {
+                ...baseReturnObject,
                 actionTaken: 'create',
                 success: false,
                 message: `Failed to create a publication for ARI question: ${question.questionId}.`
@@ -219,12 +256,14 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
 
         if (newVersion) {
             return {
+                ...baseReturnObject,
                 actionTaken: 'create',
                 success: true,
                 publicationVersion: newVersion
             };
         } else {
             return {
+                ...baseReturnObject,
                 actionTaken: 'create',
                 success: false,
                 message: `Created a publication for ARI question: ${question.questionId}, but couldn't retrieve the latest live version.`
@@ -237,6 +276,7 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
 
     if (!existingVersion) {
         return {
+            ...baseReturnObject,
             actionTaken: 'none',
             success: false,
             message: 'Found a publication matching this ARI, but unable to get a latest live version.'
@@ -279,6 +319,7 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
         await publicationVersionService.postPublishHook(updatedVersion, true, true);
 
         return {
+            ...baseReturnObject,
             actionTaken: 'update',
             success: true,
             publicationVersion: updatedVersion
@@ -286,6 +327,7 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
     } else {
         // No change found, so take no action.
         return {
+            ...baseReturnObject,
             actionTaken: 'none',
             success: true,
             publicationVersion: existingVersion

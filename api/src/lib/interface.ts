@@ -1056,4 +1056,6 @@ export interface HandledARI {
     success: boolean;
     message?: string;
     publicationVersion?: PublicationVersion;
+    unrecognisedDepartment?: string;
+    unrecognisedTopics?: string[];
 }
