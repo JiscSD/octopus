@@ -42,16 +42,6 @@ export const formatAffiliationName = (affiliation: I.MappedOrcidAffiliation): st
 
 export const isEmptyContent = (content: string): boolean => (content ? /^(<p>\s*<\/p>)+$/.test(content) : true);
 
-export const checkEnvVariable = (variableName: keyof NodeJS.ProcessEnv): string => {
-    const value = process.env[variableName];
-
-    if (value === undefined) {
-        throw new Error(`Environment Variable ${variableName} is undefined`);
-    }
-
-    return value;
-};
-
 const generateOTPCharacter = (OTP: string, characterSet: string): string => {
     const randomNumberArray = webcrypto.getRandomValues(new Uint32Array(1));
     const randomIndex = Math.floor(randomNumberArray[0] * Math.pow(2, -32) * characterSet.length);
