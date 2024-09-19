@@ -36,7 +36,12 @@ const createUsers = async (): Promise<void> => {
 // Seed the database with a smaller set of data, just enough to run the automated tests.
 export const testSeed = async (): Promise<void> => {
     // These don't depend on anything.
-    await createUsers();
+    await Promise.all([
+        createUsers(),
+        client.prisma.ingestLog.createMany({
+            data: seeds.testIngestLogs
+        })
+    ]);
     // These depend on users.
     await Promise.all([
         createPublications(),
@@ -108,29 +113,21 @@ export const openSearchSeed = async (): Promise<void> => {
 };
 
 export const clearDB = async (): Promise<void> => {
-    const deletePublicationStatuses = client.prisma.publicationStatus.deleteMany();
-    const deletePublications = client.prisma.publication.deleteMany();
-    const deleteTopics = client.prisma.topic.deleteMany();
-    const deleteTopicMappings = client.prisma.topicMapping.deleteMany();
-    const deleteUsers = client.prisma.user.deleteMany();
-    const deleteBookmarks = client.prisma.publicationBookmarks.deleteMany();
-    const deleteEvents = client.prisma.event.deleteMany();
-
     await client.prisma.$transaction([
-        deleteUsers,
-        deletePublications,
-        deleteTopics,
-        deleteTopicMappings,
-        deleteBookmarks,
-        deletePublicationStatuses,
-        deleteEvents
+        client.prisma.event.deleteMany(),
+        client.prisma.ingestLog.deleteMany(),
+        client.prisma.publication.deleteMany(),
+        client.prisma.user.deleteMany(),
+        client.prisma.topic.deleteMany(),
+        client.prisma.topicMapping.deleteMany(),
+        client.prisma.publicationStatus.deleteMany()
     ]);
 
-    const doesIndexExists = await client.search.indices.exists({
+    const doesIndexExist = await client.search.indices.exists({
         index: 'publications'
     });
 
-    if (doesIndexExists.body) {
+    if (doesIndexExist.body) {
         await client.search.indices.delete({
             index: 'publications'
         });

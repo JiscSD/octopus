@@ -47,6 +47,9 @@ test.describe('dateTo and dateFrom fields are persisted in URL query string', ()
         const dateToInput = page.locator(PageModel.search.dateToInput);
 
         await dateFromInput.fill(PageModel.search.dateFrom);
+        // Wait for request because filling the dateFrom field will trigger it, and filling in the next field
+        // before it's ready will stop it being added to the URL.
+        await page.waitForResponse((response) => response.url().includes('/publication-versions'));
         await dateToInput.fill(PageModel.search.dateTo);
 
         // expect dateFrom/dateTo input and URL to match selections
