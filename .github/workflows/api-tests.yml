@@ -34,6 +34,10 @@ jobs:
       - name: Wait for API and DB to be ready
         run: docker exec -t api-test dockerize -wait tcp://db:5432 -wait tcp://api-test:4003 -wait tcp://mailpit:8025 -wait tcp://localstack:4566 -timeout 120s
 
+      - name: docker logs
+        if: failure()
+        run: docker logs api-test
+
       - name: Run test suite
         working-directory: ./api
         run: docker exec -t api-test npm run test:local
