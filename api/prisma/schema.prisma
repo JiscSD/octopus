@@ -10,34 +10,33 @@ datasource db {
 }
 
 model User {
-    id                   String                 @id @default(cuid())
-    orcid                String?                @unique
-    orcidAccessToken     String?
-    firstName            String
-    lastName             String?
-    email                String?
-    role                 Role                   @default(USER)
-    locked               Boolean                @default(false)
-    apiKey               String                 @unique @default(uuid())
-    ror                  String?
-    url                  String?
-    createdAt            DateTime               @default(now())
-    updatedAt            DateTime               @updatedAt
-    employment           Json[]
-    works                Json[]
-    education            Json[]
-    coAuthors            CoAuthors[]
-    publicationVersions  PublicationVersion[]
-    PublicationFlags     PublicationFlags[]
-    flagComments         FlagComments[]
-    Images               Images[]
-    PublicationBookmarks PublicationBookmarks[]
-    bookmarks            Bookmark[]
-    crosslinks           Crosslink[]
-    crosslinkVotes       CrosslinkVote[]
-    defaultTopicId       String?
-    defaultTopic         Topic?                 @relation(fields: [defaultTopicId], references: [id])
-    mappings             UserMapping[]
+    id                  String               @id @default(cuid())
+    orcid               String?              @unique
+    orcidAccessToken    String?
+    firstName           String
+    lastName            String?
+    email               String?
+    role                Role                 @default(USER)
+    locked              Boolean              @default(false)
+    apiKey              String               @unique @default(uuid())
+    ror                 String?
+    url                 String?
+    createdAt           DateTime             @default(now())
+    updatedAt           DateTime             @updatedAt
+    employment          Json[]
+    works               Json[]
+    education           Json[]
+    coAuthors           CoAuthors[]
+    publicationVersions PublicationVersion[]
+    PublicationFlags    PublicationFlags[]
+    flagComments        FlagComments[]
+    Images              Images[]
+    bookmarks           Bookmark[]
+    crosslinks          Crosslink[]
+    crosslinkVotes      CrosslinkVote[]
+    defaultTopicId      String?
+    defaultTopic        Topic?               @relation(fields: [defaultTopicId], references: [id])
+    mappings            UserMapping[]
 }
 
 model Verification {
@@ -60,24 +59,23 @@ model Images {
 }
 
 model Publication {
-    id                   String                   @id @default(cuid())
-    url_slug             String                   @unique @default(cuid())
-    type                 PublicationType
-    doi                  String
-    publicationFlags     PublicationFlags[]
-    PublicationBookmarks PublicationBookmarks[]
-    linkedTo             Links[]                  @relation("from")
-    linkedFrom           Links[]                  @relation("to")
-    versions             PublicationVersion[]
+    id               String                   @id @default(cuid())
+    url_slug         String                   @unique @default(cuid())
+    type             PublicationType
+    doi              String
+    publicationFlags PublicationFlags[]
+    linkedTo         Links[]                  @relation("from")
+    linkedFrom       Links[]                  @relation("to")
+    versions         PublicationVersion[]
     // These reverse relations are needed by prisma, but we shouldn't use them in the application.
     // Prisma doesn't allow symmetrical many-to-many self relations.
     // There must be an "asymmetrical" relationship (e.g. from and to) in the schema. In practice, we will treat
     // crosslink entities as having a pair of publications associated that are of equal importance.
-    crosslinksFrom       Crosslink[]              @relation("crosslinkFrom")
-    crosslinksTo         Crosslink[]              @relation("crosslinkTo")
+    crosslinksFrom   Crosslink[]              @relation("crosslinkFrom")
+    crosslinksTo     Crosslink[]              @relation("crosslinkTo")
     // Populated when a publication has been imported from an external source.
-    externalId           String?
-    externalSource       PublicationImportSource?
+    externalId       String?
+    externalSource   PublicationImportSource?
 }
 
 model PublicationVersion {
@@ -204,17 +202,6 @@ model FlagComments {
     flag      PublicationFlags @relation(fields: [flagId], references: [id], onDelete: Cascade)
 }
 
-model PublicationBookmarks {
-    id            String      @id @default(cuid())
-    publicationId String
-    userId        String
-    createdAt     DateTime    @default(now())
-    publication   Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-    user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    @@unique([publicationId, userId])
-}
-
 model Topic {
     id                     String               @id @default(cuid())
     title                  String
@@ -313,6 +300,13 @@ model AdditionalInformation {
     createdAt            DateTime           @default(now())
     publicationVersionId String
     publicationVersion   PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
+}
+
+model IngestLog {
+    id     String                  @id @default(cuid())
+    source PublicationImportSource
+    start  DateTime                @default(now())
+    end    DateTime?
 }
 
 enum EventType {
