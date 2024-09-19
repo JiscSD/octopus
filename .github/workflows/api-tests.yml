@@ -1,7 +1,7 @@
 name: API-Tests
 on:
   pull_request:
-#    types: [opened, reopened, synchronize, ready_for_review]
+    types: [opened, reopened, synchronize, ready_for_review]
 
 jobs:
   api-tests:
@@ -12,7 +12,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        
 
       # Note: this step is only required locally when using act since the ubuntu image
       # does not come with docker-compose installed, however the alternative to the reinstall
@@ -36,7 +35,7 @@ jobs:
         run: docker exec -t api-test dockerize -wait tcp://db:5432 -wait tcp://api-test:4003 -wait tcp://mailhog:8025 -timeout 120s
 
       - name: docker logs
-        if: success() || failure()
+        if: failure()
         run: docker logs api-test
 
       - name: Run test suite
