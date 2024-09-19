@@ -68,7 +68,7 @@ resource "aws_instance" "bastion" {
   instance_type               = "t3.small" # Anything lower and npm install can crash the instance
   subnet_id                   = var.public_subnet
   vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
-  associate_public_ip_address = false
+  associate_public_ip_address = true
   user_data                   = data.template_file.install_software.rendered
   iam_instance_profile        = aws_iam_instance_profile.allow_ssm_iam_profile.name
 
