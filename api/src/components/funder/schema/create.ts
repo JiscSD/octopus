@@ -1,4 +1,4 @@
-const createCoAuthorSchema = {
+const createFunderSchema = {
     type: 'object',
     properties: {
         name: {
@@ -15,10 +15,13 @@ const createCoAuthorSchema = {
         },
         ror: {
             type: 'string'
+        },
+        grantId: {
+            type: 'string'
         }
     },
     required: ['name', 'country', 'city', 'link'],
     additionalProperties: false
 };
 
-export default createCoAuthorSchema;
+export default createFunderSchema;

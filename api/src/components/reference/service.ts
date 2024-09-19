@@ -1,25 +1,26 @@
 import * as client from 'lib/client';
+import * as I from 'interface';
+import * as publicationVersionService from 'publicationVersion/service';
 
-export const getAllByPublication = async (publicationId: string) => {
-    const references = await client.prisma.references.findMany({
+export const getAllByPublicationVersion = (publicationVersionId: string) =>
+    client.prisma.references.findMany({
         where: {
-            publicationId
+            publicationVersionId
         }
     });
 
-    return references;
-};
-
-export const updateAll = async (publicationId, data) => {
+export const updateAll = async (publicationVersionId: string, data: I.UpdateReferencesBody) => {
     await client.prisma.references.deleteMany({
         where: {
-            publicationId
+            publicationVersionId
         }
     });
 
-    const created = await client.prisma.references.createMany({
+    const create = await client.prisma.references.createMany({
         data
     });
 
-    return created;
+    await publicationVersionService.update(publicationVersionId, { updatedAt: new Date().toISOString() });
+
+    return create;
 };

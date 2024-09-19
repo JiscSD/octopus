@@ -1,6 +1,4 @@
 import * as testUtils from 'lib/testUtils';
-import cryptoRandomString from 'crypto-random-string';
-import * as cheerio from 'cheerio';
 
 describe('Confirm a verification code', () => {
     beforeEach(async () => {
@@ -9,7 +7,7 @@ describe('Confirm a verification code', () => {
     });
 
     test('User receives an error on incorrect code', async () => {
-        const email = `${cryptoRandomString({ length: 7, type: 'distinguishable' })}@domain.com`;
+        const email = 'example@domain.com';
 
         await testUtils.agent.get('/verification/0000-0000-0000-0001').query({ apiKey: 123456789, email });
 
@@ -17,11 +15,11 @@ describe('Confirm a verification code', () => {
 
         const confirm = await testUtils.agent.post('/verification/0000-0000-0000-0001').send({ code });
 
-        expect(confirm.status).toEqual(422);
+        expect(confirm.status).toEqual(400);
     });
 
     test('User receives not found on three incorrect code attempts', async () => {
-        const email = `${cryptoRandomString({ length: 7, type: 'distinguishable' })}@domain.com`;
+        const email = 'example@domain.com';
 
         await testUtils.agent.get('/verification/0000-0000-0000-0002').query({ apiKey: 123456789, email });
 
@@ -31,22 +29,20 @@ describe('Confirm a verification code', () => {
         const attemptTwo = await testUtils.agent.post('/verification/0000-0000-0000-0002').send({ code });
         const attemptThree = await testUtils.agent.post('/verification/0000-0000-0000-0002').send({ code });
 
-        expect(attemptOne.status).toEqual(422);
-        expect(attemptTwo.status).toEqual(422);
+        expect(attemptOne.status).toEqual(400);
+        expect(attemptTwo.status).toEqual(400);
         expect(attemptThree.status).toEqual(404);
     });
 
     test('User can confirm a correct verification code', async () => {
-        const email = `${cryptoRandomString({ length: 7, type: 'distinguishable' })}@domain.com`;
+        const address = 'example@domain.com';
 
-        await testUtils.agent.get('/verification/0000-0000-0000-0001').query({ apiKey: 123456789, email });
+        await testUtils.agent.get('/verification/0000-0000-0000-0001').query({ apiKey: 123456789, email: address });
 
-        const inbox = await testUtils.getEmails(email);
-        const emailContent = inbox.items[0].Content.Body.replace(/3D"/g, '"'); // get rid of email encoding "3D"
-
-        // get verification code using cheerio
-        const $ = cheerio.load(emailContent);
-        const code = $('p[id="verification-code"]').text();
+        const emails = await testUtils.getEmails(address);
+        const emailId = emails.messages[0].ID;
+        const email = await testUtils.getEmail(emailId);
+        const code = email.Text.slice(-7); // Get code from end of email text body.
 
         const confirm = await testUtils.agent.post('/verification/0000-0000-0000-0001').send({ code });
 

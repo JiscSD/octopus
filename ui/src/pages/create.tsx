@@ -1,32 +1,29 @@
 import React from 'react';
 import Head from 'next/head';
 import * as Router from 'next/router';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Helpers from '@/helpers';
+import * as Layouts from '@/layouts';
+import * as Config from '@/config';
+import * as Types from '@/types';
+import * as api from '@/api';
 
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Helpers from '@helpers';
-import * as Layouts from '@layouts';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
-
-export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    // prevent unauthenticated users to access this page
-    await Helpers.guardPrivateRoute(context);
-
-    const { for: publicationForID = null, type: publicationType = null } = context.query;
+export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context) => {
+    const { for: publicationForID = null, type: publicationType = null, topic: topicId = null } = context.query;
 
     return {
         props: {
             publicationForID,
             publicationType,
-            protectedPage: true
+            protectedPage: true,
+            topicId
         }
     };
-};
+});
 
-const SupportText: React.FC = (props): React.ReactElement => (
+const SupportText: React.FC<React.PropsWithChildren> = (props): React.ReactElement => (
     <span className="mb-3 block w-full text-sm text-grey-700 transition-colors duration-500 dark:text-white-100 xl:w-1/2">
         {props.children}
     </span>
@@ -35,6 +32,7 @@ const SupportText: React.FC = (props): React.ReactElement => (
 type PageProps = {
     publicationForID: string | null;
     publicationType: Types.PublicationType | null;
+    topicId: string | null;
 };
 
 const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
@@ -43,8 +41,10 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
     const [publicationType, setPublicationType] = React.useState(props.publicationType ?? 'PROBLEM');
     const [confirmed, setConfirmed] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
+    const [createPublicationLoading, setCreatePublicationLoading] = React.useState(false);
 
     const createPublication = async () => {
+        setCreatePublicationLoading(true);
         setError(null);
 
         try {
@@ -52,7 +52,9 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                 Config.endpoints.publications,
                 {
                     title,
-                    type: publicationType
+                    type: publicationType,
+                    licence: Config.values.octopusInformation.licences.CC_BY.value, // This is no longer editable - save hard-coded value
+                    topicIds: props.topicId ? [props.topicId] : []
                 },
                 Helpers.getJWT()
             );
@@ -74,16 +76,19 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             setError(message);
+            setCreatePublicationLoading(false);
         }
     };
 
     return (
         <>
             <Head>
+                <title>{Config.urls.createPublication.title}</title>
                 <meta name="description" content={Config.urls.createPublication.description} />
+                <meta name="og:title" content={Config.urls.createPublication.title} />
+                <meta name="og:description" content={Config.urls.createPublication.description} />
                 <meta name="keywords" content={Config.urls.createPublication.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.createPublication.canonical} />
-                <title>{Config.urls.createPublication.title}</title>
             </Head>
 
             <Layouts.Standard>
@@ -211,10 +216,10 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                     </label>
                     <Components.Button
                         title="Create this publication"
-                        disabled={!publicationType || !title.length || !confirmed}
+                        disabled={!publicationType || !title.length || !confirmed || createPublicationLoading}
                         onClick={createPublication}
                         endIcon={
-                            <OutlineIcons.ArrowSmRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                            <OutlineIcons.ArrowSmallRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                         }
                     />
                 </section>

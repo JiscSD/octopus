@@ -6,11 +6,11 @@ test.describe('Static pages, logged out', () => {
     test('Check homepage', async ({ browser }) => {
         // Start up test
         const page = await browser.newPage();
-        await page.goto(Helpers.UI_BASE);
+        await page.goto('/');
 
         // Expect elements to be visible
         await expect(page.locator('h1').first()).toHaveText(
-            'Free, fast and fair: the global primary research record where researchers record their work in full detail'
+            'Free, fast and fair: the global primary research record where researchers publish their work in full detail'
         );
         await expect(page.locator(PageModel.header.loginButton)).toBeVisible();
 
@@ -34,7 +34,7 @@ test.describe('Static pages, logged out', () => {
     test('Check about page', async ({ browser }) => {
         // Start up test
         const page = await browser.newPage();
-        await page.goto(Helpers.UI_BASE);
+        await page.goto('/');
         await page.locator(PageModel.footer.links[2]).click();
 
         // Expects h1 and links (faq, author guide, aims)
@@ -77,21 +77,21 @@ test.describe('Static pages, logged out', () => {
     test('Check static pages in the footer', async ({ browser }) => {
         // Start up test
         const page = await browser.newPage();
-        await page.goto(Helpers.UI_BASE);
+        await page.goto('/');
 
         // Check terms
         await page.locator(PageModel.footer.links[5]).click();
-        await expect(page).toHaveURL(`${Helpers.UI_BASE}/user-terms`);
+        await expect(page).toHaveURL(`/user-terms`);
         await page.goBack();
 
         // Check privacy
         await page.locator(PageModel.footer.links[6]).click();
-        await expect(page).toHaveURL(`${Helpers.UI_BASE}/privacy`);
+        await expect(page).toHaveURL(`/privacy`);
         await page.goBack();
 
         // Check accessibility
         await page.locator(PageModel.footer.links[7]).click();
-        await expect(page).toHaveURL(`${Helpers.UI_BASE}/accessibility`);
+        await expect(page).toHaveURL(`/accessibility`);
         await page.goBack();
     });
 });

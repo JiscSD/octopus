@@ -1,16 +1,23 @@
 import React from 'react';
 
-import * as Components from '@components';
+import * as Components from '@/components';
 
 type CommonProps = {
+    id?: string;
     title: string;
     endIcon?: React.ReactElement;
     startIcon?: React.ReactElement;
     onClick?: (e: React.MouseEvent) => void;
     disabled?: boolean;
     className?: string;
+    childClassName?: string;
     textSize?: string;
     padding?: string;
+    children?: React.ReactNode;
+    accordionConfig?: {
+        contentElementId: string;
+        expanded: Boolean;
+    };
 };
 
 type ConditionalProps = { href: string; openNew?: boolean } | { href?: never; openNew?: never };
@@ -48,11 +55,13 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             border-b-2
             border-b-teal-400
             dark:border-b-teal-500
+            ${props.childClassName ?? ''}
             `;
     }, [props.endIcon, props.padding, props.startIcon, props.textSize]);
 
     return props.href ? (
         <Components.Link
+            id={props.id}
             href={props.href}
             title={props.title}
             ariaLabel={props.title}
@@ -68,13 +77,20 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
         </Components.Link>
     ) : (
         <button
+            id={props.id}
             type="button"
             title={props.title}
             name={props.title}
             aria-label={props.title}
             onClick={props.onClick}
             disabled={props.disabled}
-            className={`rounded border-transparent capitalize outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${parentStyles}`}
+            className={`rounded border-transparent outline-0 focus:overflow-hidden focus:ring-2 focus:ring-yellow-400 ${parentStyles}`}
+            {...(props.accordionConfig
+                ? {
+                      'aria-expanded': !!props.accordionConfig.expanded,
+                      'aria-controls': props.accordionConfig.contentElementId
+                  }
+                : {})}
         >
             {props.startIcon}
             <span className={childStyles}>{props.children || props.title}</span>

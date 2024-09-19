@@ -1,60 +1,39 @@
 locals {
-  project_name          = "octopus"
-  project_key_pair_name = "octopus-ssh"
-  environment           = terraform.workspace
-  allowable_ips = [
-    "193.62.83.114/32", // vpn
-    "193.62.83.115/32", // vpn
-    "194.81.3.15/32",   // vpn
-    "194.81.3.16/32",   // vpn
-    "10.0.0.0/16",      // vpc
-    "10.100.0.0/16"     // vpc pairing with code build
-  ]
-  third_party_vpn_ips = [
-    "194.83.97.110/32"
-  ]
+  project_name = "octopus"
+  environment  = terraform.workspace
+}
+
+data "aws_ssm_parameter" "vpc_cidr_block" {
+  name = "vpc_cidr_block_${local.environment}_${local.project_name}"
 }
 
 module "network" {
-  source          = "../modules/network"
-  cidr_block      = "10.0.0.0/16"
-  public_subnets  = ["10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24"]
-  private_subnets = ["10.0.100.0/24", "10.0.101.0/24", "10.0.102.0/24"]
-  environment     = local.environment
-  project_name    = local.project_name
+  source       = "../modules/network"
+  environment  = local.environment
+  project_name = local.project_name
 }
-
-# module "frontend" {
-#   source         = "../modules/frontend"
-#   vpc_id         = module.network.vpc_id
-#   public_subnet  = module.network.public_subnet_ids[0]
-#   ec2_key_name   = local.project_key_pair_name
-#   allowable_ips  = local.allowable_ips
-#   domain_name    = var.domain_name
-#   environment    = local.environment
-#   public_subnets = module.network.public_subnet_ids
-# }
 
 module "bastion" {
   source        = "../modules/bastion"
   vpc_id        = module.network.vpc_id
   public_subnet = module.network.public_subnet_ids[0]
   environment   = local.environment
-  allowable_ips = local.allowable_ips
-  third_party_vpn_ips = local.third_party_vpn_ips
-  ec2_key_name  = local.project_key_pair_name
 }
 
 module "postgres" {
-  source                  = "../modules/postgres"
-  private_subnet_ids      = module.network.private_subnet_ids
-  environment             = local.environment
-  vpc_id                  = module.network.vpc_id
-  allocated_storage       = var.allocated_storage
-  instance                = var.instance
-  project_name            = local.project_name
-  db_version              = var.db_version
-  backup_retention_period = var.backup_retention_period
+  source                                = "../modules/postgres"
+  private_subnet_ids                    = module.network.private_subnet_ids
+  environment                           = local.environment
+  vpc_id                                = module.network.vpc_id
+  vpc_cidr_block                        = data.aws_ssm_parameter.vpc_cidr_block.value
+  allocated_storage                     = var.rds_allocated_storage
+  max_allocated_storage                 = var.rds_max_allocated_storage
+  instance                              = var.rds_instance
+  project_name                          = local.project_name
+  db_version                            = var.rds_db_version
+  backup_retention_period               = var.rds_backup_retention_period
+  monitoring_interval                   = var.rds_monitoring_interval
+  performance_insights_retention_period = var.rds_performance_insights_retention_period
 }
 
 module "elasticsearch" {
@@ -62,15 +41,31 @@ module "elasticsearch" {
   private_subnet_ids = module.network.private_subnet_ids
   environment        = local.environment
   vpc_id             = module.network.vpc_id
+  vpc_cidr_block     = data.aws_ssm_parameter.vpc_cidr_block.value
   instance_size      = var.elasticsearch_instance_size
 }
 
 module "s3" {
-  source             = "../modules/s3"
-  environment        = local.environment
+  source       = "../modules/s3"
+  environment  = local.environment
+  project_name = local.project_name
 }
 
 module "ses" {
-    source = "../modules/ses"
-    environment = local.environment
+  source       = "../modules/ses"
+  environment  = local.environment
+  project_name = local.project_name
 }
+
+module "sqs" {
+  source      = "../modules/sqs"
+  sns_arn     = module.sns.arn
+  environment = local.environment
+}
+
+module "sns" {
+  source       = "../modules/sns"
+  environment  = local.environment
+  project_name = local.project_name
+}
+

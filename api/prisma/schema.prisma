@@ -11,7 +11,7 @@ datasource db {
 
 model User {
     id                   String                 @id @default(cuid())
-    orcid                String                 @unique
+    orcid                String?                @unique
     orcidAccessToken     String?
     firstName            String
     lastName             String?
@@ -19,17 +19,25 @@ model User {
     role                 Role                   @default(USER)
     locked               Boolean                @default(false)
     apiKey               String                 @unique @default(uuid())
+    ror                  String?
+    url                  String?
     createdAt            DateTime               @default(now())
     updatedAt            DateTime               @updatedAt
     employment           Json[]
     works                Json[]
     education            Json[]
     coAuthors            CoAuthors[]
-    Publication          Publication[]
+    publicationVersions  PublicationVersion[]
     PublicationFlags     PublicationFlags[]
     flagComments         FlagComments[]
     Images               Images[]
     PublicationBookmarks PublicationBookmarks[]
+    bookmarks            Bookmark[]
+    crosslinks           Crosslink[]
+    crosslinkVotes       CrosslinkVote[]
+    defaultTopicId       String?
+    defaultTopic         Topic?                 @relation(fields: [defaultTopicId], references: [id])
+    mappings             UserMapping[]
 }
 
 model Verification {
@@ -52,11 +60,43 @@ model Images {
 }
 
 model Publication {
-    id                                 String                 @id @default(cuid())
-    url_slug                           String                 @unique @default(cuid())
-    type                               PublicationType
+    id                   String                   @id @default(cuid())
+    url_slug             String                   @unique @default(cuid())
+    type                 PublicationType
+    doi                  String
+    publicationFlags     PublicationFlags[]
+    PublicationBookmarks PublicationBookmarks[]
+    linkedTo             Links[]                  @relation("from")
+    linkedFrom           Links[]                  @relation("to")
+    versions             PublicationVersion[]
+    // These reverse relations are needed by prisma, but we shouldn't use them in the application.
+    // Prisma doesn't allow symmetrical many-to-many self relations.
+    // There must be an "asymmetrical" relationship (e.g. from and to) in the schema. In practice, we will treat
+    // crosslink entities as having a pair of publications associated that are of equal importance.
+    crosslinksFrom       Crosslink[]              @relation("crosslinkFrom")
+    crosslinksTo         Crosslink[]              @relation("crosslinkTo")
+    // Populated when a publication has been imported from an external source.
+    externalId           String?
+    externalSource       PublicationImportSource?
+}
+
+model PublicationVersion {
+    id                                 String                  @id @default(cuid())
+    doi                                String?
+    versionOf                          String
+    versionNumber                      Int
+    isLatestVersion                    Boolean                 @default(true)
+    isLatestLiveVersion                Boolean                 @default(false)
+    publication                        Publication             @relation(fields: [versionOf], references: [id], onDelete: Cascade)
+    createdBy                          String
+    createdAt                          DateTime                @default(now())
+    updatedAt                          DateTime                @updatedAt
+    user                               User                    @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    currentStatus                      PublicationStatusEnum   @default(DRAFT)
+    publicationStatus                  PublicationStatus[]
+    publishedDate                      DateTime?
     title                              String?
-    licence                            LicenceType            @default(CC_BY)
+    licence                            LicenceType             @default(CC_BY)
     conflictOfInterestStatus           Boolean?
     conflictOfInterestText             String?
     ethicalStatement                   String?
@@ -64,103 +104,82 @@ model Publication {
     dataPermissionsStatement           String?
     dataPermissionsStatementProvidedBy String?
     dataAccessStatement                String?
-    selfDeclaration                    Boolean?               @default(false)
+    selfDeclaration                    Boolean?                @default(false)
     description                        String?
     keywords                           String[]
     content                            String?
-    doi                                String
-    language                           Languages              @default(en)
-    publishedDate                      DateTime?
-    currentStatus                      PublicationStatusEnum  @default(DRAFT)
-    createdBy                          String
-    createdAt                          DateTime               @default(now())
-    updatedAt                          DateTime               @updatedAt
-    user                               User                   @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    language                           Languages               @default(en)
     coAuthors                          CoAuthors[]
-    linkedTo                           Links[]                @relation("from")
-    linkedFrom                         Links[]                @relation("to")
-    publicationFlags                   PublicationFlags[]
-    publicationStatus                  PublicationStatus[]
-    PublicationBookmarks               PublicationBookmarks[]
     References                         References[]
     funders                            Funders[]
     fundersStatement                   String?
-    affiliations                       Affiliations[]
-    affiliationStatement               String?
+    topics                             Topic[]
+    additionalInformation              AdditionalInformation[]
+    linkedFromPublications             Links[]                 @relation("toVersion")
 }
 
 model References {
-    id            String        @id
-    publicationId String
-    type          ReferenceType
-    text          String
-    location      String?
-    publication   Publication   @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+    id                   String             @id
+    type                 ReferenceType
+    text                 String
+    location             String?
+    publicationVersionId String
+    publicationVersion   PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
 }
 
 model Funders {
-    id            String  @id @default(cuid())
-    name          String
-    country       String
-    city          String
-    link          String
-    ror           String?
-    publicationId String
-
-    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-    createdAt   DateTime    @default(now())
-}
-
-model Affiliations {
-    id            String  @id @default(cuid())
-    name          String
-    country       String
-    city          String
-    link          String
-    ror           String?
-    publicationId String
-
-    publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
-    createdAt   DateTime    @default(now())
+    id                   String             @id @default(cuid())
+    name                 String
+    country              String
+    city                 String
+    link                 String
+    ror                  String?
+    grantId              String?
+    createdAt            DateTime           @default(now())
+    publicationVersionId String
+    publicationVersion   PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
 }
 
 model Links {
-    id                 String      @id @default(cuid())
-    publicationFrom    String
-    publicationTo      String
-    createdAt          DateTime    @default(now())
-    updatedAt          DateTime    @updatedAt
-    publicationFromRef Publication @relation("from", fields: [publicationFrom], references: [id], onDelete: Cascade)
-    publicationToRef   Publication @relation("to", fields: [publicationTo], references: [id], onDelete: Cascade)
+    id                String             @id @default(cuid())
+    publicationFromId String
+    publicationToId   String
+    versionToId       String
+    createdAt         DateTime           @default(now())
+    updatedAt         DateTime           @updatedAt
+    publicationFrom   Publication        @relation("from", fields: [publicationFromId], references: [id], onDelete: Cascade)
+    publicationTo     Publication        @relation("to", fields: [publicationToId], references: [id], onDelete: Cascade)
+    versionTo         PublicationVersion @relation("toVersion", fields: [versionToId], references: [id], onDelete: Cascade)
+    draft             Boolean            @default(true)
 
-    @@unique([publicationFrom, publicationTo])
+    @@unique([publicationFromId, publicationToId])
 }
 
 model PublicationStatus {
-    id            String                @id @default(cuid())
-    publicationId String
-    status        PublicationStatusEnum
-    createdAt     DateTime              @default(now())
-    publication   Publication           @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+    id                   String                @id @default(cuid())
+    status               PublicationStatusEnum
+    createdAt            DateTime              @default(now())
+    publicationVersionId String
+    publicationVersion   PublicationVersion    @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
 }
 
 model CoAuthors {
-    id                String      @id @default(cuid())
-    publicationId     String
-    email             String
-    code              String      @default(cuid())
-    confirmedCoAuthor Boolean     @default(false)
-    approvalRequested Boolean     @default(false)
-    linkedUser        String?
-    position          Int         @default(0)
-    createdAt         DateTime    @default(now())
-    reminderDate      DateTime?
-    affiliations      Json[]
-    isIndependent     Boolean     @default(false)
-    user              User?       @relation(fields: [linkedUser], references: [id])
-    publication       Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+    id                   String             @id @default(cuid())
+    email                String
+    code                 String             @default(cuid())
+    confirmedCoAuthor    Boolean            @default(false)
+    approvalRequested    Boolean            @default(false)
+    linkedUser           String?
+    position             Int                @default(0)
+    createdAt            DateTime           @default(now())
+    reminderDate         DateTime?
+    affiliations         Json[]
+    isIndependent        Boolean            @default(false)
+    user                 User?              @relation(fields: [linkedUser], references: [id])
+    publicationVersion   PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
+    publicationVersionId String
 
-    @@unique([publicationId, email])
+    @@unique([publicationVersionId, email])
 }
 
 model PublicationFlags {
@@ -196,6 +215,110 @@ model PublicationBookmarks {
     @@unique([publicationId, userId])
 }
 
+model Topic {
+    id                     String               @id @default(cuid())
+    title                  String
+    language               Languages            @default(en)
+    translations           TopicTranslation[]
+    createdAt              DateTime             @default(now())
+    updatedAt              DateTime             @updatedAt
+    parents                Topic[]              @relation("TopicHierarchy")
+    children               Topic[]              @relation("TopicHierarchy")
+    publicationVersions    PublicationVersion[]
+    organisationalAccounts User[]
+    mappings               TopicMapping[]
+}
+
+model TopicTranslation {
+    id       String    @id @default(cuid())
+    topicId  String
+    language Languages
+    value    String
+    topic    Topic     @relation(fields: [topicId], references: [id], onDelete: Cascade)
+}
+
+model TopicMapping {
+    topicId  String?
+    topic    Topic?                  @relation(fields: [topicId], references: [id], onDelete: Cascade)
+    // There may be some topics we intentionally ignore from mapping. This differentiates those from genuinely unrecognised topics.
+    isMapped Boolean                 @default(true)
+    title    String
+    source   PublicationImportSource
+
+    @@unique([title, source])
+}
+
+model UserMapping {
+    userId String
+    user   User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    value  String
+    source PublicationImportSource
+
+    @@unique([value, source])
+}
+
+model Bookmark {
+    id        String       @id @default(cuid())
+    type      BookmarkType
+    entityId  String
+    userId    String
+    createdAt DateTime     @default(now())
+    user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([entityId, type, userId])
+}
+
+model Event {
+    id        String    @id @default(cuid())
+    type      EventType
+    createdAt DateTime  @default(now())
+    data      Json
+}
+
+model Crosslink {
+    id                String          @id @default(cuid())
+    // In practice, the two publications involved in a crosslink will be considered equal.
+    // It won't matter which publication is "from" and which is "to"; this is just done to keep a valid prisma schema.
+    // Logic in controllers + services will ensure that what we store conforms to our model.
+    publicationFromId String
+    publicationFrom   Publication     @relation("crosslinkFrom", fields: [publicationFromId], references: [id], onDelete: Cascade)
+    publicationToId   String
+    publicationTo     Publication     @relation("crosslinkTo", fields: [publicationToId], references: [id], onDelete: Cascade)
+    createdBy         String
+    user              User            @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    votes             CrosslinkVote[]
+    createdAt         DateTime        @default(now())
+    // Score can be deduced via "votes" relation, but we need it at query time.
+    // Prisma can do computed fields, but these only support scalar fields, not relations.
+    score             Int             @default(1) // Creator automatically upvotes their own crosslink on creation.
+
+    @@unique([publicationFromId, publicationToId])
+}
+
+model CrosslinkVote {
+    crosslinkId String
+    crosslink   Crosslink @relation(fields: [crosslinkId], references: [id], onDelete: Cascade)
+    createdBy   String
+    user        User      @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    vote        Boolean
+
+    @@unique([crosslinkId, createdBy])
+}
+
+model AdditionalInformation {
+    id                   String             @id @default(cuid())
+    title                String
+    url                  String
+    description          String?
+    createdAt            DateTime           @default(now())
+    publicationVersionId String
+    publicationVersion   PublicationVersion @relation(fields: [publicationVersionId], references: [id], onDelete: Cascade)
+}
+
+enum EventType {
+    REQUEST_CONTROL
+}
+
 enum ImageExtension {
     png
     jpg
@@ -208,8 +331,8 @@ enum ImageExtension {
 
 enum Role {
     SUPER_USER
-    FUNDER
     USER
+    ORGANISATION
 }
 
 enum PublicationStatusEnum {
@@ -437,4 +560,13 @@ enum ReferenceType {
     DOI
     URL
     TEXT
+}
+
+enum BookmarkType {
+    PUBLICATION
+    TOPIC
+}
+
+enum PublicationImportSource {
+    ARI
 }

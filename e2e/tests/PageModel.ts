@@ -8,7 +8,7 @@ export const PageModel = {
         publishButton: 'ul a:has-text("Publish")',
         myBookmarksButton: 'a[href="/my-bookmarks"]',
         myPublicationsButton: 'a[href="/account"]',
-        myProfileButton: 'a:has-text("My profile")'
+        myAccountButton: 'a:has-text("My Account")'
     },
     footer: {
         links: [
@@ -84,7 +84,7 @@ export const PageModel = {
             // content
             '#main-text >> text=How has life on earth evolved?',
             // problems above this
-            'text=Research problems above this in the hierarchy',
+            'text=Publications above this in the hierarchy',
             // problems below this
             'text=Research problems below this in the hierarchy',
             // funders
@@ -92,7 +92,7 @@ export const PageModel = {
             // coi
             'h2:has-text("Conflict of interest")'
         ],
-        doiLink: 'aside [aria-label="DOI link: https://doi.org/10.82259/cl3fz14dr0001es6i5ji51rq4"]',
+        doiLink: 'aside [aria-label="DOI link: https://handle.test.datacite.org/10.82259/cl3fz14dr0001es6i5ji51rq4"]',
         authorLink: 'a[href="/authors/octopus"]:has-text("S. Octopus")',
         signInForMoreButton: 'text=Sign in for more actions',
         verifyEmailForMoreButton: 'text=Verify your email for more actions',
@@ -117,7 +117,7 @@ export const PageModel = {
             'section > h2:has-text("Works")'
         ],
         showAll: 'button:has-text("Show More")',
-        result: '_react=SearchResult[publication.id="cl3fz14dr0001es6i5ji51rq4"]'
+        result: '_react=SearchResult[publicationVersion.publication.id="cl3fz14dr0001es6i5ji51rq4"]'
     },
     profilePage: {
         employment: 'h2:has-text("Employment")',
@@ -126,21 +126,30 @@ export const PageModel = {
         octopusPublications: 'h2:has-text("Octopus publications")'
     },
     login: {
-        username: '#username',
+        username: '#username-input',
         password: '#password',
         signInButton: '#signin-button',
-        authorizeButton: '#authorize-button'
+        authorizeButton: '#authorize-button',
+        rejectCookies: '#onetrust-reject-all-handler'
     },
     confirmEmail: {},
-    myProfile: {
-        liveAuthorPageButton: 'a:has-text("View live author page")',
-        draftPublicationHeader: 'h2:has-text("Draft publications")'
+    myAccount: {
+        liveAuthorPageButton: 'a:has-text("View my public author page")',
+        publicationHeader: 'h2:has-text("Publications")',
+        editDraftButton: 'a:has-text("Edit Draft")',
+        viewDraftButton: 'a:has-text("View Draft")',
+        createDraftVersionButton: 'button:has-text("Create Draft Version")',
+        viewButton: 'a:has-text("View")',
+        requestControlButton: 'button:has-text("Take over editing")',
+        confirmInvolvementButton: 'a:has-text("Confirm Involvement")'
     },
     myPublications: {
-        liveAuthorPageButton: 'a:has-text("View live author page")'
+        liveAuthorPageButton: 'a:has-text("View my public author page")'
     },
     myBookmarks: {
-        bookmark: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]'
+        publicationBookmark: 'a[href="/publications/cl3fz14dr0001es6i5ji51rq4"]',
+        topicBookmark: 'a[href="/topics/cly468yyb00177ryzsvccai51"]',
+        removeTopicBookmark: 'a[href="/topics/cly468yyb00177ryzsvccai51"] + button[aria-label="Remove bookmark"]'
     },
     publish: {
         title: 'input[type="text"]',
@@ -149,7 +158,7 @@ export const PageModel = {
         createThisPublicationButton: 'button[aria-label="Create this publication"]',
         nextButton: 'button:has-text("Next") >> nth=0',
         previewButton: 'button:has-text("Preview") >> nth=0',
-        publishButton: 'button:has-text("Publish") >> nth=1',
+        publishButton: 'button:has-text("Publish") >> nth=0',
         publishButtonTracker: 'button[title="Publish"]',
         requestApprovalButton: 'button:has-text("Request Approval") >> nth=0',
         confirmRequestApproval: 'button:has-text("Finalise Draft and Send Request") >> nth=0',
@@ -166,7 +175,6 @@ export const PageModel = {
         unlockButton: 'a:has-text("Cancel all authorship requests and unlock for editing")',
         confirmUnlockButton: 'button:has-text("Unlock")',
         keyInformation: {
-            licence: 'select#licence',
             rorID: 'input[name=ror]',
             addAffiliationButton: 'button[aria-label="Add affiliation"]:enabled',
             manualAffiliationSelect: 'input#manual',
@@ -175,12 +183,23 @@ export const PageModel = {
             manualAffiliationLink: 'input[placeholder="Link"]',
             affiliationDetails: 'textarea[placeholder="Enter any details"]'
         },
-        linkedPub: {
-            input: 'input[placeholder="Search for publications"]',
-            addLink: 'button[aria-label="Add link"]'
+        linkedItems: {
+            entityTypeSelect: 'select#linked-entity-type',
+            publicationInput: 'input[placeholder="Search for publications"]',
+            topicInput: 'input[placeholder="Search for topics"]',
+            addLink: 'button[aria-label="Add link"]',
+            deletePublicationLink: '#linked-publication-table > tbody > tr > td > button[title="Delete"]',
+            deleteTopicLink: '#linked-topic-table > tbody > tr > td > button[title="Delete"]'
         },
         text: {
             editor: '.ProseMirror >> nth=0',
+            additionalInformation: {
+                title: 'input[placeholder="Title*"]',
+                url: 'input[placeholder="URL*"]',
+                description: 'input[placeholder="Short description"]',
+                saveButton: 'button[aria-label="Save link"]',
+                table: 'table[aria-label="additional-information-table"]'
+            },
             language: 'select[name="language"]',
             references: '.ProseMirror >> nth=1',
             addReferencesButton: 'button[name="Add references"]',
@@ -189,7 +208,7 @@ export const PageModel = {
             continueModalButton: 'button[aria-label="Continue"]',
             saveReferenceModalButton: 'div[role=dialog] button[title="Save"]',
             deleteReferenceModalButton: 'div[role="dialog"] button[title="Delete"]',
-            deleteFirstReferenceButton: 'tr:first-of-type button[title="Delete"]',
+            deleteFirstReferenceButton: 'table[aria-label="references-table"] tr:first-of-type button[title="Delete"]',
             addReferenceButton: 'tr:first-of-type button[title="Add below"]',
             description:
                 'text=Short descriptionInclude a short description of your publication to aid discover >> textarea',
@@ -205,12 +224,51 @@ export const PageModel = {
             rorID: 'input[name="ror"]',
             addAffiliationButton: 'button[aria-label="Add funder"]:enabled',
             manualAffiliationSelect: 'input#manual',
-            manualAffiliationName: 'input[placeholder="Name"]',
-            manualAffiliationCity: 'input[placeholder="City"]',
-            manualAffiliationLink: 'input[placeholder="Link"]',
+            manualAffiliationName: 'input[placeholder="Name*"]',
+            manualAffiliationCity: 'input[placeholder="City*"]',
+            manualAffiliationLink: 'input[placeholder="Link*"]',
             affiliationDetails: 'textarea[placeholder="Enter any details"]'
-        }
+        },
+        researchProcess: {
+            selfDeclaration: '#self-declaration'
+        },
+        dataStatements: {
+            ethicalStatementTrue: 'input#the-results-in-this-publication-involved-human-or-animal-subjects',
+            ethicalApprover: 'textarea#freeText',
+            dataPermissionsStatementTrue:
+                'input#the-results-in-this-publication-involved-access-to-owned-or-copyrighted-materials',
+            dataCollectionApprover: 'textarea#dataPermissionsStatementProvidedBy',
+            dataAccessStatementOther: 'input#other',
+            dataAccessStatementFreeText: '#dataAccessStatementfreeText'
+        },
+        versionsAccordion: 'aside >> #versions-accordion',
+        versionsAccordionButton: 'aside button[title="Versions"]'
     },
     coauthorApprove: {},
-    coauthorDeny: {}
+    coauthorDeny: {},
+    topic: {
+        createProblemLink: 'a:has-text("Write a linked Research Problem")',
+        addBookmark: '[title="Bookmark this topic"]',
+        removeBookmark: '[title="Remove bookmark"]'
+    },
+    blog: {
+        pageTitle: 'h1:has-text("The Octopus Blog")',
+        pageDescription: 'h2:has-text("Stay up to date with the latest from the Octopus team")',
+        followOnTwitter: 'a:has-text("Follow Octopus on Twitter")',
+        paginationInfo: '#pagination-info',
+        nextButton: 'button:has-text("Next")',
+        prevButton: 'button:has-text("Previous")',
+        blogCard: '.blog-card',
+        blogCardTitle: '.blog-card-title',
+        blogCardText: '.blog-card-text',
+        blogCardFooter: '.blog-card-footer'
+    },
+    crosslinks: {
+        suggestModal: {
+            clearSelectionButton: 'button[title="Clear selection"]',
+            openButton: '#desktop-related-publications >> button[title="Suggest a link"]',
+            searchInput: 'input[placeholder="Search for publications"]',
+            suggestButton: 'button[title="Suggest Link"]'
+        }
+    }
 };

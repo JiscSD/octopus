@@ -1,5 +1,5 @@
-import * as Interfaces from '@interfaces';
-import * as Types from '@types';
+import * as Interfaces from '@/interfaces';
+import * as Types from '@/types';
 
 export const publicationTypes: Types.PublicationType[] = [
     'PROBLEM',
@@ -889,7 +889,7 @@ export const HTMLStyles = `
     dark:prose-a:text-white-50
     dark:focus:prose-a:text-grey-800
     dark:prose-blockquote:text-grey-300
-    dark:prose-strong:text-teal-300
+    dark:prose-strong:text-grey-100
 `
     .split('\n')
     .join(' ');
@@ -918,3 +918,10 @@ export const HTMLStylesTiptapEditor = `
 `
     .split('\n')
     .join(' ');
+
+export const topicDescription =
+    'This is a research topic created to provide authors with a place to attach new problem publications.';
+
+export const blogContentType = 'octopusBlog';
+
+export const doiBaseUrl = `https://${process.env.NEXT_PUBLIC_STAGE === 'prod' ? 'doi.org' : 'handle.test.datacite.org'}/`;

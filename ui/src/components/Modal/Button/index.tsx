@@ -1,20 +1,22 @@
 import React from 'react';
 
-import * as Assets from '@assets';
+import * as Assets from '@/assets';
 
 type Props = {
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
     disabled?: boolean;
     loading?: boolean;
-    ref?: React.RefObject<HTMLButtonElement>;
     className?: string;
     actionType: 'POSITIVE' | 'NEGATIVE';
     text: string;
     title: string;
 };
 
-const Button: React.FC<Props> = (props) => (
+type ButtonRef = HTMLButtonElement;
+
+const Button = React.forwardRef<ButtonRef, Props>((props, ref) => (
     <button
+        ref={ref}
         type="button"
         aria-label={props.title}
         title={props.title}
@@ -41,13 +43,15 @@ const Button: React.FC<Props> = (props) => (
             sm:text-sm
             ${props.actionType === 'POSITIVE' && 'bg-teal-600 hover:bg-teal-700 disabled:hover:bg-teal-600'}
             ${props.actionType === 'NEGATIVE' && 'bg-red-600 hover:bg-red-700 disabled:hover:bg-red-600 '}
+            ${props.className}
             `}
         onClick={(e) => props.onClick(e)}
         disabled={props.disabled}
-        {...(props.ref && { ref: props.ref })}
     >
         {props.loading ? <Assets.Spinner width={25} height={25} className="stroke-white-50" /> : props.text}
     </button>
-);
+));
+
+Button.displayName = 'Button';
 
 export default Button;

@@ -1,15 +1,13 @@
-<img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Infrastructure</h1>
+<img src="../ui/public/images/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Infrastructure</h1>
 
 This project uses [Terraform](https://www.terraform.io/) to manage all the required infastructure (please see the _[Not managed by Terraform](#Not-managed-by-Terraform)_ section for exceptions to this).
-The purpose of this is to ensure all infastruchure that is created, is handled via code so that it can be tracked & documented easily.
+The purpose of this is to ensure all infastructure is handled via code so that it can be tracked and documented easily.
 
-Any work that cannot be achived through Terraform should be kept as minimal as possible.
-
-&nbsp;
+Any work that cannot be achieved through Terraform should be kept as minimal as possible.
 
 ## Terraform Version
 
-It is **highly important** that the **exact** terraform version is used, please see [tfenv](https://github.com/tfutils/tfenv) for more information on how to set your local Terraform version. For this project, ensure you are using version **0.14.6**.
+This should work with the latest terraform version (1.5.2 at the time of writing). Please see [tfenv](https://github.com/tfutils/tfenv) for more information on managing your terraform version.
 
 To check your local version, open your command line and run:
 
@@ -17,74 +15,34 @@ To check your local version, open your command line and run:
 $ terraform -v
 ```
 
-You should get the following output:
+You should get the following output, showing your terraform version and OS:
 
 ```bash
-Terraform v0.14.6
-
-Your version of Terraform is out of date! The latest version
-is 1.1.3. You can update by downloading from https://www.terraform.io/downloads.html
+Terraform v1.5.2
+on linux_amd64
 ```
-
-&nbsp;
 
 ## Modules
 
-Terraform has a concept of _modules_, which are reuseable chunks of code, similar to _packages_ so that we can easily pull them in & their implementation is consistent across
-projects. This project has set up it's modules so that they never have to be changed, only their varibles can be adjusted in the `main.tf`.
-
--   **Bastion** `~/infra/modules/bastion`
--   **Codebuild** `~/infra/modules/codebuild`
--   **Network** `~/infra/modules/network`
--   **Postgress** `~/infra/modules/postgres`
--   **SES** `~/infra/modules/ses`
--   Frontend `~/infra/modules/frontend` - TODO
--   S3 `~/infra/modules/s3` - TODO
--   Elasticsearch `~/infra/modules/elasticsearch` - TODO
-
-&nbsp;
+Terraform has a concept of _modules_, which are reuseable chunks of code similar to _packages_. We can easily pull these in and their implementation is consistent across
+projects. This project has set up its modules so that they never have to be changed; only their variables can be adjusted in the top-level `main.tf`. The modules are stored in `infra/modules`.
 
 ## Workspaces
 
-We use [Terraform workspaces](https://learn.hashicorp.com/tutorials/terraform/organize-configuration?in=terraform/modules) to separate our environments. The reason for this is because the infrastructure composition betweeen environments doesn't change, but some attributes may - e.g. RDS instance size. This is handled by the having separate variables file per environment and passing that in as a flag when we `terraform apply` within a particular workspace. e.g. `int.tfvars`.
+We use [Terraform workspaces](https://learn.hashicorp.com/tutorials/terraform/organize-configuration?in=terraform/modules) to separate our environments. The reason for this is because the infrastructure composition between environments doesn't change, but some attributes may - e.g. RDS instance size. This is handled by having a separate variables file per environment - e.g. `int.tfvars` - and passing that in as a flag when we `terraform apply` within a particular workspace.
 
 The infrastructure is created/updated by simply switching to the correct workspace and applying, passing in the correct variables file:
 
 ```bash
 $ terraform workspace select int
+$ terraform apply --var-file=int.tfvars
 ```
 
 Workspaces currently in use:
 
--   **`int`**
--   **`prod`**
-
-&nbsp;
-
-## Create CI/CD
-
-**⚠️ Please speak to the project lead before attempting to run this Terraform app locally. ⚠️**
-
-Location: `~/infra/create-ci-cd`
-
-The `create-ci-cd` Terraform sets up the [AWS Codebuild](https://aws.amazon.com/codebuild/) and only needs to be applied/ran **once**, regardless of how many environments/workspaces there are. This does not need to be updated with each change to main/production.
-
-This project current only sets up one trigger, `PULL_REQUEST_MERGED`.
-The code build will only trigger when a PR is merged into branch `main`.
-
-To create this infrastructure you will need to:
-
-1. Make sure there is an `S3 bucket` on the AWS account called `octopus-app-tfstate`, this is referenced in [create-ci-cd/provider.tf](./create-cicd/provider.tf). Ths `S3 bucket` is where the remote state for this terraformed infrastructure is stored, this is something that has to be created manually, referenced in the _[Not managed by Terraform](#Not-managed-by-Terraform)_ section.
-2. Ensure you have the correct version of Terraform installed, you can find the required Terraform version in the [create-ci-cd/provider.tf](./create-cicd/provider.tf) file.
-3. Once the correct version of Terraform is installed, you can simply run:
-
-```bash
-~/infra/create-ci-cd $ terraform init    # init the terraform
-~/infra/create-ci-cd $ terraform plan    # pre-apply dry run
-~/infra/create-ci-cd $ terraform apply   # apply the terraform
-```
-
-&nbsp;
+- **`int`**
+- **`prod`**
+- **`new-int`** (temporarily until int environment has finished being moved to its own account)
 
 ## Create application
 
@@ -92,32 +50,37 @@ To create this infrastructure you will need to:
 
 Location: `~/infra/create-app`
 
-The `create-app` Terraform sets up the main projects int & prod enviroments on AWS. Details of which can be found in the `~/infra/create-app/main.tf` which contains the used modules and the information passed to those modules.
-As this project uses workspaces, there are **two** tfvar files, one per enviroment, this way the enviroments are 1:1 and their ownly differences are value related, i.e the technology behind stays the same, just the values are different. An example of this may be that the int enviroment has a smaller allocated size for the database, where as production would be larger.
+The `create-app` Terraform sets up the main project's int & prod environments on AWS. Details can be found in `~/infra/create-app/main.tf` which contains the used modules and the information passed to those modules.
+As this project uses workspaces, there is one tfvars file per environment. This way, the environments are 1:1 and their only differences are value related - i.e the technology behind stays the same, just the values are different. An example of this may be that the int environment has a smaller allocated size for the database, whereas production would be larger.
 
 To run this Terraform, follow the below:
 
 ```bash
 ~/infra/create-app $ terraform init                             # init the terraform
-~/infra/create-app $ terraform workspace select $WORKSPACE      # select the enviroment workspace (int or prod)
-~/infra/create-app $ terraform plan -var-file=int.tfvars        # pre-apply dry run (pass in enviroment vars)
-~/infra/create-app $ terraform apply -var-file=int.tfvars       # apply the terraform (pass in enviroment vars)
+~/infra/create-app $ terraform workspace select $WORKSPACE      # select the environment workspace (int or prod)
+~/infra/create-app $ terraform plan --var-file=int.tfvars       # pre-apply dry run (pass in environment vars)
+~/infra/create-app $ terraform apply --var-file=int.tfvars      # apply the terraform (pass in environment vars)
 ```
-
-&nbsp;
 
 ## Not managed by Terraform
 
-There are some parts to this projects infrastructure that is **not** managed/created by Terraform.
+There are some parts of this project's infrastructure that are **not** managed/created by Terraform. These were created manually and must be managed manually in AWS. They are as follows:
 
-The following are not managed by terraform and were created manually and must be managed manually in AWS.
+- An `AWS S3 Bucket`, for hosting the Terraform State file **(octopus-tfstate)**
+- Configuration to increase the limit of allowed VPCs for a single region (default 5) to 50
+- Route 53 config
+- Certificates in Certificate Manager
+- AWS Amplify config
+- Cloudfront distributions that sit between API domains (e.g. int.api.octopus.ac) and the corresponding API gateway
 
-This includes:
+## Migration to separate int AWS account
 
--   Manually creating an `AWS S3 Bucket`, for hosting the Terraform State file **(octopus-app-tfstate)**.
--   Manually creating an `AWS S3 Bucket`, for hosting the SSH pemkey file
--   AWS permissions for GitHub webhooks for CodeBuild
--   Increase the limit of allowed VPCs for a single region (default 5) to 50.
--   More to come...
+We are in the process of moving the int environment to a separate AWS account. Until this is done, there are the following additional things to note:
 
-&nbsp;
+- There is a new workspace called `new-int` with its own `.tfvars` file. We will remove this after the migration. For now, it allows us to provision int-like resources in parallel to the currently running int environment.
+- Terraform will expect a number of profiles to be defined in your `~/.aws/credentials` file when running commands, depending on the account you're working with:
+  - `octopus-tfstate`: a separate account to store terraform state for all environments, and other centralised things TBD
+  - `octopus-int`: the account for the int environment (where new-int currently lives, and where int will eventually live)
+    - Please note that on the AWS sign-in page, this account was provisioned with the name OctopusProjectProd, which unfortunately can't be changed.
+  - `octopus-dev`: the account for the prod environment (where prod and int currently live, and eventually will only contain prod)
+    - This profile name will likely be changed to `octopus-prod` when the migration is done.

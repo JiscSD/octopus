@@ -1,16 +1,16 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import * as Components from '@components';
-import * as Helpers from '@helpers';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as Stores from '@stores';
-import * as Types from '@types';
-import * as Interfaces from '@interfaces';
+import * as Components from '@/components';
+import * as Helpers from '@/helpers';
+import * as OutlineIcons from '@heroicons/react/24/outline';
+import * as Stores from '@/stores';
+import * as Types from '@/types';
+import * as Interfaces from '@/interfaces';
 import * as FAIcons from 'react-icons/fa';
-import * as Config from '@config';
-import * as Contexts from '@contexts';
+import * as Config from '@/config';
+import * as Contexts from '@/contexts';
 
-import cuid from 'cuid';
+import { createId } from '@paralleldrive/cuid2';
 
 const getTransformedReference = (reference: Interfaces.Reference, textContent: string): Interfaces.Reference => {
     const urlMatches = Helpers.getURLsFromText(textContent);
@@ -43,7 +43,7 @@ const getTransformedReference = (reference: Interfaces.Reference, textContent: s
                     ...reference,
                     type: 'DOI',
                     text: reference.text.replace(lastDoiString, ''), // remove DOI string
-                    location: `https://doi.org/${doi}` // convert to DOI url
+                    location: Config.values.doiBaseUrl + doi // convert to DOI url
                 };
             }
         }
@@ -70,19 +70,8 @@ const getTransformedReference = (reference: Interfaces.Reference, textContent: s
 };
 
 const MainText: React.FC = (): React.ReactElement | null => {
-    const {
-        id: publicationId,
-        updateDescription,
-        keywords,
-        updateKeywords,
-        content,
-        description,
-        updateContent,
-        language,
-        updateLanguage,
-        references,
-        updateReferences
-    } = Stores.usePublicationCreationStore();
+    const { publicationVersion, updatePublicationVersion, references, updateReferences } =
+        Stores.usePublicationCreationStore();
     const [selectedReference, setSelectedReference] = useState<Interfaces.Reference | null>(null);
     const [selectedReferenceIndex, setSelectedReferenceIndex] = useState<number | null>(null);
     const isAddingReference = useMemo(() => selectedReferenceIndex !== null, [selectedReferenceIndex]);
@@ -108,8 +97,8 @@ const MainText: React.FC = (): React.ReactElement | null => {
 
             const newReference = getTransformedReference(
                 {
-                    id: cuid(),
-                    publicationId,
+                    id: createId(),
+                    publicationVersionId: publicationVersion.id,
                     type: 'TEXT',
                     text: currentParagraph,
                     location: null
@@ -119,6 +108,7 @@ const MainText: React.FC = (): React.ReactElement | null => {
 
             referencesArray.push(newReference);
         }
+
         updateReferences(referencesArray);
     };
 
@@ -149,13 +139,18 @@ const MainText: React.FC = (): React.ReactElement | null => {
         [handleCloseReferenceModal, isAddingReference, references, selectedReferenceIndex, updateReferences]
     );
 
+    const updateContent = useCallback(
+        (htmlString: string) => updatePublicationVersion({ ...publicationVersion, content: htmlString }),
+        [publicationVersion, updatePublicationVersion]
+    );
+
     return (
         <div className="space-y-12 2xl:space-y-16">
             <div data-testid="main-text">
                 <Components.PublicationCreationStepTitle text="Main text" required />
-                {publicationId && (
+                {publicationVersion.id && (
                     <Components.TextEditor
-                        defaultContent={content}
+                        defaultContent={publicationVersion.content || ''}
                         contentChangeHandler={updateContent}
                         references={references}
                     />
@@ -163,21 +158,18 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div data-testid="main-text-select">
-                <label htmlFor="language-label" id="language-label">
-                    <Components.PublicationCreationStepTitle text="Language" required />
-                </label>
+                <Components.PublicationCreationStepTitle text="Language" required />
                 <select
                     data-testid="main-text-select-element"
                     name="language"
                     id="language"
-                    aria-labelledby="language-label"
-                    onChange={(e) => updateLanguage(e.target.value as Types.Languages)}
+                    aria-label="Language"
+                    onChange={(e) =>
+                        updatePublicationVersion({ ...publicationVersion, language: e.target.value as Types.Languages })
+                    }
                     className="mb-4 block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400 lg:mb-0 xl:w-1/2"
                     required
-                    defaultValue={
-                        Config.values.octopusInformation.languages.find((entry) => entry.code === language)?.code ||
-                        'en'
-                    }
+                    value={publicationVersion.language || 'en'}
                 >
                     {Config.values.octopusInformation.languages.map((entry) => (
                         <option key={entry.code} value={entry.code}>
@@ -185,6 +177,16 @@ const MainText: React.FC = (): React.ReactElement | null => {
                         </option>
                     ))}
                 </select>
+            </div>
+
+            <div>
+                <Components.PublicationCreationStepTitle text="Link to part of this work hosted elsewhere" />
+                <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
+                    Please add links to any other resources you have used for this publication, such as large datasets,
+                    software repositories, video sites, and so on.
+                </span>
+                <Components.AdditionalInformationForm />
+                <Components.AdditionalInformationTable />
             </div>
 
             <div className="space-y-4">
@@ -213,7 +215,10 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                 Manage references
                             </h3>
                             <div className="overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
-                                <table className="w-full divide-y divide-grey-100  dark:divide-teal-300">
+                                <table
+                                    aria-label="references-table"
+                                    className="w-full divide-y divide-grey-100  dark:divide-teal-300"
+                                >
                                     <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
                                         <tr>
                                             <th className="py-4 pl-4 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
@@ -268,8 +273,8 @@ const MainText: React.FC = (): React.ReactElement | null => {
                                                                 setTimeout(() => {
                                                                     setSelectedReferenceIndex(index);
                                                                     setSelectedReference({
-                                                                        id: cuid(), // generate new id
-                                                                        publicationId,
+                                                                        id: createId(), // generate new id
+                                                                        publicationVersionId: publicationVersion.id,
                                                                         text: '',
                                                                         type: 'TEXT',
                                                                         location: null
@@ -350,49 +355,52 @@ const MainText: React.FC = (): React.ReactElement | null => {
             </div>
 
             <div>
-                <label htmlFor="short-description-label" id="short-description-label">
-                    <Components.PublicationCreationStepTitle text="Short description" />
-                </label>
+                <Components.PublicationCreationStepTitle text="Short description" />
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Include a short description of your publication to aid discovery. This can be no more than 160
                     characters in length.
                 </span>
                 <textarea
-                    aria-labelledby="short-description-label"
+                    aria-label="Short description"
                     title="Short description"
                     required
                     rows={3}
                     maxLength={160}
-                    value={description}
-                    onChange={(e) => updateDescription(e.target.value)}
+                    value={publicationVersion.description || ''}
+                    onChange={(e) => updatePublicationVersion({ ...publicationVersion, description: e.target.value })}
                     id="short-description"
                     className="block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
                 />
                 <div className="mt-2 flex justify-end">
-                    <span className="text-xs text-grey-500 dark:text-white-50">{description.length} / 160</span>
+                    <span className="text-xs text-grey-500 dark:text-white-50">
+                        {publicationVersion.description?.length || 0} / 160
+                    </span>
                 </div>
             </div>
 
             <div>
-                <label htmlFor="keywords-label" id="keywords-label">
-                    <Components.PublicationCreationStepTitle text="Keywords" />
-                </label>
+                <Components.PublicationCreationStepTitle text="Keywords" />
                 <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Include up to 10 keywords relating to your content. These can be comma-separated and/or line
                     separated.
                 </span>
                 <textarea
-                    aria-labelledby="keywords-label"
+                    aria-label="Keywords"
                     title="Keywords"
                     required
                     rows={5}
-                    value={keywords}
-                    onChange={(e) => updateKeywords(e.target.value)}
+                    defaultValue={publicationVersion.keywords.join(', ')}
+                    onBlur={(e) => {
+                        updatePublicationVersion({
+                            ...publicationVersion,
+                            keywords: Helpers.formatKeywords(e.target.value)
+                        });
+                    }}
                     className="block w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
                 />
                 <div className="mt-2 flex justify-end">
                     <span className="text-xs text-grey-500 dark:text-white-50">
-                        {Helpers.formatKeywords(keywords).length} / 10
+                        {publicationVersion?.keywords.length} / 10
                     </span>
                 </div>
             </div>
@@ -407,4 +415,4 @@ const MainText: React.FC = (): React.ReactElement | null => {
     );
 };
 
-export default MainText;
+export default React.memo(MainText);

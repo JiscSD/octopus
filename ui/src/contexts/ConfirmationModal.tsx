@@ -1,5 +1,5 @@
 import React, { createContext, PropsWithChildren, useCallback, useContext, useState } from 'react';
-import * as Components from '@components';
+import * as Components from '@/components';
 
 type ConfirmationModalContextType = (
     title: string,
@@ -59,17 +59,13 @@ const ConfirmationModalProvider = ({ children }: PropsWithChildren<{}>) => {
             {children}
             <Components.Modal
                 open={open}
-                setOpen={(open: boolean) => {
-                    if (!open) {
-                        handleCancelAction();
-                    }
-                }}
+                onClose={handleCancelAction}
                 icon={icon}
                 title={title}
                 positiveButtonText={positiveButtonText}
                 cancelButtonText={cancelButtonText}
-                positiveActionCallback={handlePositiveAction}
-                negativeActionCallback={handleCancelAction}
+                positiveCallback={handlePositiveAction}
+                negativeCallback={handleCancelAction}
             >
                 <div className="text-sm text-grey-700">{description}</div>
             </Components.Modal>

@@ -8,15 +8,17 @@ function checkEnvVariable(variable: string | undefined): string {
 
 const host = checkEnvVariable(process.env.NEXT_PUBLIC_BASE_URL);
 const mediaBucket = checkEnvVariable(process.env.NEXT_PUBLIC_MEDIA_BUCKET);
+const sitemapBucket = checkEnvVariable(process.env.NEXT_PUBLIC_SITEMAP_BUCKET);
 const orcidAppId = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_APP_ID);
 const orcidAuthUrl = checkEnvVariable(process.env.NEXT_PUBLIC_ORCID_AUTH_URL);
 
-export const base = {
+const base = {
     title: 'Octopus | Built for Researchers',
     host
 };
 
 const urls = {
+    base,
     // Search
     search: {
         path: '/search',
@@ -120,6 +122,13 @@ const urls = {
         canonical: `${base.host}/publications` // append `/{publication_id}/flag/{flag_id}`
     },
 
+    // Topics
+    viewTopic: {
+        path: '/topics',
+        title: `${base.title}`,
+        canonical: `${base.host}/topics`
+    },
+
     // Static Pages
     home: {
         path: '/',
@@ -182,13 +191,6 @@ const urls = {
         ],
         canonical: `${base.host}/faq`
     },
-    documentation: {
-        path: '/documentation',
-        title: `API documentation - ${base.title}`,
-        description: 'Find out more about the Octopus API through this documentation page.',
-        keywords: ['open source', 'api', 'documentation', 'publishing platform'],
-        canonical: `${base.host}/documentation`
-    },
     accessibility: {
         path: '/accessibility',
         title: `Accessibility - ${base.title}`,
@@ -244,10 +246,32 @@ const urls = {
         keywords: '',
         canonical: `${base.host}/login`
     },
+    orcidAccountPage: {
+        path: 'https://orcid.org/my-orcid'
+    },
     orcidLogin: {
         path: `${orcidAuthUrl}/authorize?client_id=${orcidAppId}&response_type=code&scope=openid%20/read-limited&prompt=login&redirect_uri=${base.host}/login`
     },
-    mediaBucket
+    mediaBucket,
+    sitemapBucket,
+    baseUrl: base.host,
+    blog: {
+        path: '/blog',
+        title: 'The Octopus Blog',
+        description: 'Stay up to date with the latest from the Octopus team',
+        documentTitle: `The Octopus Blog - ${base.title}`,
+        keywords: ['blog', 'Octopus blog'],
+        canonical: `${base.host}/blog`
+    },
+    researchCultureReport: {
+        path: '/research-culture-report',
+        title: 'Research Culture Report',
+        description:
+            'Explore Octopus: Transforming Academic Research Culture. Discover how the University of Bristol report highlights challenges in academia and how Octopus is reshaping research incentives to foster collaboration and quality.',
+        documentTitle: `Research Culture Report - ${base.title}`,
+        keywords: ['research', 'culture', 'report'],
+        canonical: `${base.host}/research-culture-report`
+    }
 };
 
 export default urls;

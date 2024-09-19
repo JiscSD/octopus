@@ -6,8 +6,9 @@ type Props = {
     title?: string;
     showCaption: boolean;
     controls: boolean;
+    controlsList?: string;
     poster?: string;
-    width?: number;
+    width?: number | string;
     className?: string;
 };
 
@@ -20,6 +21,7 @@ const HTML: React.FC<Props> = (props): React.ReactElement => (
     >
         <video
             controls={props.controls}
+            controlsList={props.controlsList}
             width={props.width}
             poster={props.poster}
             preload="none"
@@ -27,7 +29,7 @@ const HTML: React.FC<Props> = (props): React.ReactElement => (
         >
             <source src={props.srcWebM} type="video/webm" />
             <source src={props.srcMp4} type="video/mp4" />
-            <track kind="captions" about={props.title ?? ''} />
+            <track kind="captions" label={props.title ?? ''} />
         </video>
 
         <figcaption className={`mt-2 block text-right text-sm ${!props.showCaption && 'sr-only'}`}>

@@ -1,6 +1,7 @@
-import * as Components from '@components';
+import React from 'react';
 
 type IconButtonProps = {
+    id?: string;
     className?: string;
     disabled?: boolean;
     icon: React.ReactElement;
@@ -10,6 +11,7 @@ type IconButtonProps = {
 
 const IconButton: React.FC<IconButtonProps> = (props) => (
     <button
+        id={props.id}
         title={props.title}
         disabled={props.disabled}
         className={`${

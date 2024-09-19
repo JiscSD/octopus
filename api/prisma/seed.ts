@@ -1,114 +1,118 @@
-import htmlToText from 'html-to-text';
-import s3 from '../src/lib/s3';
-
+import { convert } from 'html-to-text';
+import { Prisma } from '@prisma/client';
+import * as s3 from '../src/lib/s3';
+import * as sqs from '../src/lib/sqs';
 import * as SeedData from './seeds';
 import * as client from '../src/lib/client';
 
-export const initialDevSeed = async (): Promise<void> => {
-    // Create users
-    await client.prisma.user.createMany({ data: SeedData.usersDevSeedData });
+import { CreateBucketCommand, GetBucketAclCommand } from '@aws-sdk/client-s3';
 
-    const doesIndexExists = await client.search.indices.exists({
+const createPublications = async (publications: Prisma.PublicationCreateInput[]): Promise<void> => {
+    for (const seedPublication of publications) {
+        const createdPublication = await client.prisma.publication.create({
+            data: seedPublication,
+            include: {
+                versions: {
+                    where: {
+                        isLatestVersion: true
+                    }
+                }
+            }
+        });
+
+        const latestVersion = createdPublication.versions[0];
+
+        // always populate search with the latest versions beside "id" and "type"
+        if (latestVersion.currentStatus === 'LIVE') {
+            await client.search.create({
+                index: 'publications',
+                id: createdPublication.id,
+                body: {
+                    id: createdPublication.id,
+                    type: createdPublication.type,
+                    title: latestVersion.title,
+                    licence: latestVersion.licence,
+                    description: latestVersion.description,
+                    keywords: latestVersion.keywords,
+                    content: latestVersion.content,
+                    language: 'en',
+                    currentStatus: latestVersion.currentStatus,
+                    publishedDate: latestVersion.publishedDate,
+                    cleanContent: convert(latestVersion.content)
+                }
+            });
+        }
+    }
+};
+
+// Create topics - one by one because they can relate to each other
+const createTopics = async (): Promise<void> => {
+    for (const topic of SeedData.devTopics) {
+        await client.prisma.topic.create({
+            data: topic
+        });
+    }
+};
+
+export const initialDevSeed = async (): Promise<void> => {
+    // Create basic users. These are relied upon when creating publications.
+    await client.prisma.user.createMany({ data: SeedData.devUsers });
+
+    const doesIndexExist = await client.search.indices.exists({
         index: 'publications'
     });
 
-    if (doesIndexExists.body) {
+    if (doesIndexExist.body) {
         await client.search.indices.delete({
             index: 'publications'
         });
     }
 
-    // Create publications
-    for (const publication of SeedData.publicationsDevSeedData) {
-        await client.prisma.publication.create({
-            // @ts-ignore
-            data: publication
-        });
+    await Promise.all([
+        createPublications(SeedData.devProblems),
+        createPublications(SeedData.devOtherPublications),
+        createTopics()
+    ]);
 
-        if (publication.currentStatus === 'LIVE') {
-            await client.search.create({
-                index: 'publications',
-                id: publication.id,
-                body: {
-                    id: publication.id,
-                    type: publication.type,
-                    title: publication.title,
-                    licence: publication.licence,
-                    description: publication.description,
-                    keywords: publication.keywords,
-                    content: publication.content,
-                    language: 'en',
-                    currentStatus: publication.currentStatus,
-                    publishedDate: publication.publishedDate,
-                    cleanContent: htmlToText.convert(publication.content)
-                }
-            });
-        }
-    }
+    // Add topic mappings and organisational accounts - these depend on topics.
+    await Promise.all([
+        client.prisma.topicMapping.createMany({ data: SeedData.devTopicMappings }),
+        client.prisma.user.createMany({ data: SeedData.devOrganisationalAccounts })
+    ]);
 
-    for (const problem of SeedData.problems) {
-        await client.prisma.publication.create({
-            // @ts-ignore
-            data: problem
-        });
-
-        if (problem.currentStatus === 'LIVE') {
-            await client.search.create({
-                index: 'publications',
-                id: problem.id,
-                body: {
-                    id: problem.id,
-                    type: problem.type,
-                    title: problem.title,
-                    licence: problem.licence,
-                    description: problem.description,
-                    keywords: problem.keywords,
-                    content: problem.content,
-                    language: 'en',
-                    currentStatus: problem.currentStatus,
-                    publishedDate: problem.publishedDate,
-                    cleanContent: htmlToText.convert(problem.content)
-                }
-            });
-        }
-    }
+    // Add organisational account mappings, which depend on organisational accounts.
+    await client.prisma.userMapping.createMany({ data: SeedData.devUserMappings });
 
     if (process.env.STAGE === 'local') {
-        // create S3 bucket locally for image uploads
+        // Create local S3 buckets
+        for (const bucketNameSegment in s3.buckets) {
+            const bucketName = s3.buckets[bucketNameSegment];
 
-        try {
-            await s3
-                .getBucketAcl({
-                    Bucket: `science-octopus-publishing-images-${process.env.STAGE}`
-                })
-                .promise();
-            console.log('Bucket already exists');
-        } catch (err) {
-            // Bucket does not exist, therefor create
-            await s3
-                .createBucket({
-                    Bucket: `science-octopus-publishing-images-${process.env.STAGE}`
-                })
-                .promise();
-            console.log('Bucket created');
+            try {
+                await s3.client.send(
+                    new GetBucketAclCommand({
+                        Bucket: bucketName
+                    })
+                );
+                console.log(`${bucketNameSegment} bucket already exists`);
+            } catch (err) {
+                // Bucket does not exist, therefore create
+                await s3.client.send(
+                    new CreateBucketCommand({
+                        Bucket: bucketName
+                    })
+                );
+                console.log(`${bucketNameSegment} bucket created`);
+            }
         }
 
-        // create S3 bucket locally for PDF uploads
+        // Create local PDF generation queue
         try {
-            await s3
-                .getBucketAcl({
-                    Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`
-                })
-                .promise();
-            console.log('Bucket already exists');
+            await sqs.getQueue(`science-octopus-pdf-queue-${process.env.STAGE}`);
+            console.log('PDF queue already exists');
         } catch (err) {
-            // Bucket does not exist, therefor create
-            await s3
-                .createBucket({
-                    Bucket: `science-octopus-publishing-pdfs-${process.env.STAGE}`
-                })
-                .promise();
-            console.log('Bucket created');
+            await sqs.createQueue();
+            console.log('PDF queue created');
         }
     }
 };
@@ -116,40 +120,49 @@ export const initialDevSeed = async (): Promise<void> => {
 export const initialProdSeed = async (): Promise<void> => {
     console.log('running initialProdSeed');
     // Create users
-    await client.prisma.user.createMany({ data: SeedData.usersProdSeedData });
+    await client.prisma.user.createMany({ data: SeedData.prodUsers });
 
-    const doesIndexExists = await client.search.indices.exists({
+    const doesIndexExist = await client.search.indices.exists({
         index: 'publications'
     });
 
-    if (doesIndexExists.body) {
+    if (doesIndexExist.body) {
         await client.search.indices.delete({
             index: 'publications'
         });
     }
 
-    for (const problem of SeedData.problemsProd) {
-        await client.prisma.publication.create({
-            // @ts-ignore
-            data: problem
+    for (const problem of SeedData.prodPublications) {
+        const publication = await client.prisma.publication.create({
+            data: problem,
+            include: {
+                versions: {
+                    where: {
+                        isLatestVersion: true
+                    }
+                }
+            }
         });
 
-        if (problem.currentStatus === 'LIVE') {
+        const latestVersion = publication.versions[0];
+
+        // always populate search with the latest versions beside "id" and "type"
+        if (latestVersion.currentStatus === 'LIVE') {
             await client.search.create({
                 index: 'publications',
-                id: problem.id,
+                id: publication.id,
                 body: {
-                    id: problem.id,
-                    type: problem.type,
-                    title: problem.title,
-                    licence: problem.licence,
-                    description: problem.description,
-                    keywords: problem.keywords,
-                    content: problem.content,
+                    id: publication.id,
+                    type: publication.type,
+                    title: latestVersion.title,
+                    licence: latestVersion.licence,
+                    description: latestVersion.description,
+                    keywords: latestVersion.keywords,
+                    content: latestVersion.content,
                     language: 'en',
-                    currentStatus: problem.currentStatus,
-                    publishedDate: problem.publishedDate,
-                    cleanContent: htmlToText.convert(problem.content)
+                    currentStatus: latestVersion.currentStatus,
+                    publishedDate: latestVersion.publishedDate,
+                    cleanContent: convert(latestVersion.content)
                 }
             });
         }

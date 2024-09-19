@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import Xarrow from 'react-xarrows';
+import Xarrow, { useXarrow, Xwrapper } from 'react-xarrows';
 import useSWR from 'swr';
 
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Helpers from '@helpers';
-import * as Interfaces from '@interfaces';
-import * as Axios from 'axios';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Interfaces from '@/interfaces';
+import * as Types from '@/types';
 import * as Framer from 'framer-motion';
 
 interface BoxEntry {
@@ -17,8 +17,10 @@ interface BoxEntry {
     authorFirstName: string;
     authorLastName: string;
     publishedDate: string;
-    authors: Pick<Interfaces.CoAuthor, 'id' | 'linkedUser' | 'publicationId' | 'user'>[];
+    authors: Interfaces.LinkedPublication['authors'];
     pointers: string[];
+    flagCount: number;
+    peerReviewCount: number;
 }
 
 type BoxProps = BoxEntry & {
@@ -26,6 +28,7 @@ type BoxProps = BoxEntry & {
 };
 
 const Box: React.FC<BoxProps> = (props): React.ReactElement => {
+    useXarrow();
     // pick main author to display on visualization box
     const mainAuthor = useMemo(() => {
         const correspondingAuthor = {
@@ -40,8 +43,8 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
 
         const authors = props.authors.map((author) => ({
             id: author.linkedUser,
-            firstName: author.user?.firstName,
-            lastName: author.user?.lastName
+            firstName: author.user?.firstName || '',
+            lastName: author.user?.lastName || ''
         }));
 
         // check if corresponding author is part of authors list
@@ -52,6 +55,10 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
         // return first author
         return authors[0];
     }, [props.authorFirstName, props.authorLastName, props.authors, props.createdBy]);
+
+    const { flagCount, peerReviewCount } = props;
+    const hasFlagAndPeerReview = flagCount && peerReviewCount;
+    const hasOneOfFlagOrPeerReview = flagCount || peerReviewCount;
 
     return (
         <Framer.motion.div id={props.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative">
@@ -66,18 +73,22 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
              relative z-20 block overflow-hidden rounded-md border-2 px-3 py-2 text-grey-800 shadow transition-colors duration-500 dark:text-white-100
             `}
             >
-                <>
+                <div
+                    className={`mb-2 line-clamp-3 text-xs leading-snug xl:min-h-[50px] 2xl:min-h-[60px] 2xl:text-sm ${
+                        props.isSelected ? 'font-semibold' : 'font-medium'
+                    }`}
+                    title={props.title}
+                    role="complementary"
+                    aria-label={props.title}
+                >
+                    <span>{props.title}</span>
+                </div>
+                <div className="flex">
                     <div
-                        className={`mb-2 text-xs leading-snug line-clamp-3 xl:min-h-[50px] 2xl:min-h-[60px] 2xl:text-sm ${
-                            props.isSelected ? 'font-semibold' : 'font-medium'
-                        }`}
-                        title={props.title}
-                        role="complementary"
-                        aria-label={props.title}
+                        className={`${
+                            hasFlagAndPeerReview ? 'w-1/2' : hasOneOfFlagOrPeerReview ? 'w-3/4' : 'w-full'
+                        }  space-y-1`}
                     >
-                        <span>{props.title}</span>
-                    </div>
-                    <div className="space-y-1">
                         <span
                             className={`${
                                 props.isSelected
@@ -85,18 +96,29 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                                     : 'text-grey-600 dark:font-medium dark:text-teal-50'
                             } block overflow-hidden text-ellipsis whitespace-nowrap text-xxs transition-colors duration-500 2xl:text-xs`}
                         >
-                            {`${mainAuthor.firstName ? `${mainAuthor.firstName[0]}. ` : ''}${mainAuthor.lastName}`}
+                            {Helpers.abbreviateUserName(mainAuthor)}
                         </span>
-
                         <time
                             className={`${
                                 props.isSelected ? 'text-teal-50' : 'text-grey-600'
                             } block text-xxs transition-colors duration-500 dark:text-grey-200 2xl:text-xs`}
+                            suppressHydrationWarning
                         >
                             {Helpers.formatDate(props.publishedDate, 'short')}
                         </time>
                     </div>
-                </>
+                    <Components.EngagementCounts
+                        flagCount={props.flagCount}
+                        peerReviewCount={props.peerReviewCount}
+                        narrow={true}
+                        className={hasFlagAndPeerReview ? 'w-1/2' : 'w-1/4'}
+                        childClasses={
+                            props.isSelected
+                                ? 'font-medium text-teal-100'
+                                : 'text-grey-600 dark:font-medium dark:text-teal-50'
+                        }
+                    />
+                </div>
             </Components.Link>
             {props.pointers.map((pointer, index) => (
                 <Xarrow
@@ -123,24 +145,28 @@ const getPublicationsByType = (data: Interfaces.PublicationWithLinks, type: stri
     const publications: BoxEntry[] = [];
 
     if (publication.type === type) {
-        // Push the selected publication first
-        publications.push({
-            id: publication.id,
-            title: publication.title,
-            type: publication.type,
-            createdBy: publication.createdBy,
-            publishedDate: publication.publishedDate,
-            authorFirstName: publication.user.firstName,
-            authorLastName: publication.user.lastName,
-            authors: publication.coAuthors,
-            pointers: linkedFrom
-                .filter(
-                    (linkedPublication) =>
-                        linkedPublication.type !== 'PEER_REVIEW' &&
-                        linkedPublication.parentPublication === publication.id
-                )
-                .map((publication) => publication.id) // get the ids of all direct child publications
-        });
+        // We only need the currently viewed publication in this case.
+        return [
+            {
+                id: publication.id,
+                title: publication.title,
+                type: publication.type,
+                createdBy: publication.createdBy,
+                publishedDate: publication.publishedDate,
+                authorFirstName: publication.authorFirstName,
+                authorLastName: publication.authorLastName,
+                authors: publication.authors,
+                pointers: linkedFrom
+                    .filter(
+                        (linkedPublication) =>
+                            linkedPublication.type !== 'PEER_REVIEW' &&
+                            linkedPublication.parentPublication === publication.id
+                    )
+                    .map((publication) => publication.id), // get the ids of all direct child publications
+                flagCount: publication.flagCount,
+                peerReviewCount: publication.peerReviewCount
+            }
+        ];
     }
 
     // ignore publications above 'PROBLEM'
@@ -165,7 +191,9 @@ const getPublicationsByType = (data: Interfaces.PublicationWithLinks, type: stri
                             (publication) =>
                                 publication.type !== 'PEER_REVIEW' && publication.id === linkedPublication.id
                         )
-                        .map((publication) => publication.childPublication) // get the ids of all direct child publications
+                        .map((publication) => publication.childPublication), // get the ids of all direct child publications
+                    flagCount: linkedPublication.flagCount,
+                    peerReviewCount: linkedPublication.peerReviewCount
                 });
             }
         }
@@ -194,7 +222,9 @@ const getPublicationsByType = (data: Interfaces.PublicationWithLinks, type: stri
                                 publication.type !== 'PEER_REVIEW' &&
                                 publication.parentPublication === linkedPublication.id
                         )
-                        .map((publication) => publication.id) // get the ids of all direct child publications
+                        .map((publication) => publication.id), // get the ids of all direct child publications
+                    flagCount: linkedPublication.flagCount,
+                    peerReviewCount: linkedPublication.peerReviewCount
                 });
             }
         }
@@ -260,18 +290,21 @@ const Visualization: React.FC<VisualizationProps> = (props): React.ReactElement 
                     ref={visualizationWrapperRef}
                 >
                     <div className="grid min-w-[1000px] grid-cols-7 gap-[2%]">
-                        {data &&
-                            filteredPublicationTypes.map((type) => (
-                                <div key={type} className="space-y-4 p-1">
-                                    {getPublicationsByType(data, type).map((publication) => (
-                                        <Box
-                                            isSelected={props.publicationId == publication.id}
-                                            key={publication.id}
-                                            {...publication}
-                                        />
-                                    ))}
-                                </div>
-                            ))}
+                        {data && (
+                            <Xwrapper>
+                                {filteredPublicationTypes.map((type) => (
+                                    <div key={type} className="space-y-4 p-1">
+                                        {getPublicationsByType(data, type).map((publication) => (
+                                            <Box
+                                                isSelected={props.publicationId == publication.id}
+                                                key={publication.id}
+                                                {...publication}
+                                            />
+                                        ))}
+                                    </div>
+                                ))}
+                            </Xwrapper>
+                        )}
                     </div>
                 </div>
             </div>

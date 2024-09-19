@@ -1,20 +1,26 @@
 import React from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
-import fileDownload from 'js-file-download';
 import JWT from 'jsonwebtoken';
 
+import * as cheerio from 'cheerio';
 import * as luxon from 'luxon';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
-import * as Interfaces from '@interfaces';
+import * as Config from '@/config';
+import * as Types from '@/types';
+import * as api from '@/api';
+import * as Interfaces from '@/interfaces';
+import Cookies from '@/cookies';
+import { Middleware } from 'swr';
 
 /**
  * @description Truncates a string
  */
-export const truncateString = (value: string, length: number): string => {
-    return value.length ? (length < value.length ? `${value.substring(0, length)}...` : value) : value;
+export const truncateString = (string: string, length: number): string => {
+    const trimmedString = string.trim();
+    if (length <= 3) {
+        return '...';
+    }
+    const sliceLength = length - 3;
+    return trimmedString.length > sliceLength ? trimmedString.slice(0, sliceLength).trimEnd() + '...' : trimmedString;
 };
 
 /**
@@ -180,46 +186,6 @@ export const getDecodedUserToken = async (token: string) => {
 };
 
 /**
- * @description For use in NextJS SSR, check cookies for token & set the response location
- */
-export const guardPrivateRoute = async (context: Types.GetServerSidePropsContext): Promise<Types.UserType> => {
-    const token = getJWT(context);
-    const redirectTo = encodeURIComponent(context.req.url || Config.urls.home.path);
-
-    const redirectToORCIDLogin = () => {
-        context.res.writeHead(302, {
-            Location: `${Config.urls.orcidLogin.path}&state=${redirectTo}`
-        });
-
-        context.res.end();
-    };
-
-    if (!token) {
-        redirectToORCIDLogin();
-        return {} as Types.UserType;
-    }
-
-    const decodedToken = await getDecodedUserToken(token);
-
-    if (!decodedToken) {
-        redirectToORCIDLogin();
-    } else {
-        const { email } = decodedToken; // check user email
-        const isVerifyEmailPage = context.req.url?.startsWith(`${Config.urls.verify.path}`);
-
-        // Only allow users with a verified email to access guarded routes
-        if (!email && !isVerifyEmailPage) {
-            context.res.writeHead(302, {
-                Location: `${Config.urls.verify.path}?state=${redirectTo}`
-            });
-            context.res.end();
-        }
-    }
-
-    return decodedToken as Types.UserType;
-};
-
-/**
  * @description todo
  */
 export const publicationsAvailabletoPublication = (publicationType: Types.PublicationType) => {
@@ -280,8 +246,12 @@ export const blobFileDownload = async (url: string, fileName: string) => {
         responseType: 'blob'
     });
 
-    // @ts-ignore
-    fileDownload(res.data, fileName);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(res.data);
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    a.remove();
 };
 
 export const getBase64FromFile = async (file: Blob): Promise<string> =>
@@ -308,14 +278,6 @@ export const formatKeywords = (keywordsAsString: string): string[] => {
     return formattedKeywords;
 };
 
-export const checkLinkIsValid = (text: string) => {
-    const lowerCaseText = text.toLowerCase();
-    const urlR = new RegExp(
-        /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
-    );
-    return urlR.test(lowerCaseText);
-};
-
 export const linkedPublicationTypes = {
     PROBLEM: ['PROBLEM', 'HYPOTHESIS'],
     HYPOTHESIS: ['PROBLEM', 'PROTOCOL'],
@@ -331,7 +293,7 @@ export const getURLsFromText = (text: string) =>
     text.match(/(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;\/~+#-]*[\w@?^=%&\/~+#-])/g) || [];
 
 export const validateURL = (value: string) =>
-    /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;\/~+#-]*[\w@?^=%&\/~+#-])/.test(value);
+    /(http|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:()<>;\/~+#-]*[\w@?^=%&\/~+#-])/.test(value);
 
 // extracts DOIs including ‘DOI: 10.’ / ‘DOI:10.’ / ‘DOI-10.’ / ‘DOI - 10.’ / ‘DOI 10.’ etc...
 export const getFullDOIsStrings = (text: string) =>
@@ -352,27 +314,338 @@ export const validateEmail = (email: string): Boolean => {
 export const isEmptyContent = (content: string) => (content ? /^(<p>\s*<\/p>)+$/.test(content) : true);
 
 export const getPublicationStatusByAuthor = (
-    publication: Interfaces.Publication | Interfaces.UserPublication,
+    publicationVersion: Interfaces.PublicationVersion,
     user: Types.UserType | Interfaces.User
 ) => {
-    if (publication.currentStatus === 'LIVE') return 'Live';
+    if (publicationVersion.currentStatus === 'LIVE') return 'Live';
 
-    if (publication.currentStatus === 'DRAFT') {
-        return publication.createdBy === user.id ? 'Draft' : 'Editing in progress';
+    if (publicationVersion.currentStatus === 'DRAFT') {
+        return publicationVersion.createdBy === user.id ? 'Draft' : 'Editing in progress';
     }
 
-    if (publication.coAuthors.length > 1) {
-        if (publication.coAuthors.every((author) => author.confirmedCoAuthor)) {
+    if (publicationVersion.coAuthors.length > 1) {
+        if (publicationVersion.coAuthors.every((author) => author.confirmedCoAuthor)) {
             return 'Ready to publish';
         }
 
         if (
-            user.id !== publication.createdBy &&
-            publication.coAuthors.find((author) => author.linkedUser === user.id && !author.confirmedCoAuthor)
+            user.id !== publicationVersion.createdBy &&
+            publicationVersion.coAuthors.find((author) => author.linkedUser === user.id && !author.confirmedCoAuthor)
         ) {
             return 'Pending your approval';
         }
     }
 
     return 'Pending author approval';
+};
+
+export const getFormattedAffiliationDate = (date: number | Interfaces.OrcidAffiliationDate): string => {
+    if (typeof date === 'number') {
+        const jsDate = new Date(date);
+        const day = jsDate.toLocaleDateString('en-GB', { day: '2-digit' });
+        const month = jsDate.toLocaleDateString('en-GB', { month: '2-digit' });
+        const year = jsDate.toLocaleDateString('en-GB', { year: 'numeric' });
+
+        return `${year}-${month}-${day}`;
+    }
+
+    return Object.values({ year: date.year, month: date.month, day: date.day }) // enforce order yyyy-mm-dd
+        .filter((value) => value)
+        .join('-');
+};
+
+export const getSortedAffiliations = (affiliations: Interfaces.MappedOrcidAffiliation[]) => {
+    const affiliationsWithStartDate = affiliations.filter((affiliation) => affiliation.startDate);
+    const affiliationsWithoutStartDate = affiliations.filter((affiliation) => !affiliation.startDate);
+
+    return [
+        ...affiliationsWithStartDate.sort((a1, a2) =>
+            getFormattedAffiliationDate(a2.startDate as Interfaces.OrcidAffiliationDate).localeCompare(
+                getFormattedAffiliationDate(a1.startDate as Interfaces.OrcidAffiliationDate)
+            )
+        ),
+        ...affiliationsWithoutStartDate.sort((a1, a2) => a1.organization.name.localeCompare(a2.organization.name))
+    ];
+};
+
+// Determines whether a tab is missing mandatory fields or not.
+export const getTabCompleteness = (
+    steps: Interfaces.CreationStep[],
+    store: Types.PublicationCreationStoreType
+): Interfaces.CreationStepWithCompletenessStatus[] => {
+    const { publicationVersion, linkedTo } = store;
+    const stepsWithCompleteness: Interfaces.CreationStepWithCompletenessStatus[] = [];
+    const correspondingAuthor = publicationVersion?.coAuthors.find(
+        (author) => author.linkedUser === store.publicationVersion?.createdBy
+    );
+
+    steps.forEach((step) => {
+        switch (step.id) {
+            case 'KEY_INFORMATION':
+                if (publicationVersion?.title) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'AFFILIATIONS':
+                if (correspondingAuthor?.affiliations.length || correspondingAuthor?.isIndependent) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'LINKED_ITEMS':
+                if (linkedTo?.length || publicationVersion.topics.length) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'MAIN_TEXT':
+                if (
+                    publicationVersion?.content &&
+                    !isEmptyContent(publicationVersion?.content) &&
+                    publicationVersion.language
+                ) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'CONFLICT_OF_INTEREST':
+                if (
+                    (publicationVersion?.conflictOfInterestStatus &&
+                        publicationVersion?.conflictOfInterestText?.length) ||
+                    publicationVersion?.conflictOfInterestStatus === false
+                ) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'CO_AUTHORS':
+                if (publicationVersion?.coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor)) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+                break;
+            case 'FUNDERS':
+                // No mandatory fields
+                stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                break;
+            case 'DATA_STATEMENT':
+                if (
+                    publicationVersion?.ethicalStatement &&
+                    (publicationVersion?.dataPermissionsStatement === Config.values.dataPermissionsOptions[1] ||
+                        (publicationVersion?.dataPermissionsStatement === Config.values.dataPermissionsOptions[0] &&
+                            publicationVersion?.dataPermissionsStatementProvidedBy))
+                ) {
+                    stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                } else {
+                    stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
+                }
+
+                break;
+            case 'RESEARCH_PROCESS':
+                // No mandatory fields
+                stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
+                break;
+        }
+    });
+    return stepsWithCompleteness;
+};
+
+export const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
+    fn: F,
+    wait: number,
+    { maxWait }: { maxWait?: number } = {}
+) => {
+    let timeout: NodeJS.Timeout;
+    let maxTimeout: NodeJS.Timeout | null;
+
+    const debounced = (...args: Parameters<F>) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            if (maxTimeout) {
+                clearTimeout(maxTimeout);
+                maxTimeout = null;
+            }
+            fn(...args);
+        }, wait);
+
+        if (maxWait && !maxTimeout) {
+            maxTimeout = setTimeout(() => {
+                clearTimeout(timeout);
+                maxTimeout = null;
+                fn(...args);
+            }, maxWait);
+        }
+    };
+
+    return debounced;
+};
+
+/**
+ * @description 'getServerSideProps' wrapper for protected routes
+ */
+
+export const withServerSession = (
+    callback: (
+        context: Types.GetServerSidePropsContext,
+        currentUser: Types.UserType
+    ) => Promise<Types.GetServerSidePropsResult<{}>>
+) => {
+    return async function (context: Types.GetServerSidePropsContext): Promise<Types.GetServerSidePropsResult<{}>> {
+        const token = getJWT(context);
+        const { resolvedUrl } = context;
+
+        if (!token) {
+            // redirect to ORCID login page
+            return {
+                redirect: {
+                    destination: `${Config.urls.orcidLogin.path}&state=${encodeURIComponent(resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+
+        const decodedToken = await getDecodedUserToken(token);
+
+        if (!decodedToken) {
+            // redirect to ORCID login page
+            return {
+                redirect: {
+                    destination: `${Config.urls.orcidLogin.path}&state=${encodeURIComponent(resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+
+        const { email, firstName, lastName } = decodedToken;
+        const isVerifyEmailPage = resolvedUrl.startsWith(Config.urls.verify.path);
+        const isHomePage = context.req.url === '/';
+
+        // Only allow users with a verified email and visible name to access protected routes
+        if (!email && !isVerifyEmailPage) {
+            // redirect to /verify page
+            return {
+                redirect: {
+                    destination: `${Config.urls.verify.path}?state=${encodeURIComponent(resolvedUrl)}`,
+                    permanent: false
+                }
+            };
+        }
+        if (!(firstName || lastName) && !isHomePage) {
+            // redirect to home page
+            return {
+                redirect: {
+                    destination: `${Config.urls.home.path}`,
+                    permanent: false
+                }
+            };
+        }
+
+        return callback(context, decodedToken);
+    };
+};
+
+// This is a SWR middleware for keeping the data even if key changes until new data has loaded.
+export const laggy: Middleware = (useSWRNext) => {
+    return (key, fetcher, config) => {
+        // Use a ref to store previous returned data.
+        const laggyDataRef = React.useRef<{} | null>();
+
+        // Actual SWR hook.
+        const swr = useSWRNext(key, fetcher, config);
+
+        React.useEffect(() => {
+            // Update ref if data is not undefined.
+            if (swr.data !== undefined) {
+                laggyDataRef.current = swr.data;
+            }
+        }, [swr.data]);
+
+        // Fallback to previous data if the current data is undefined.
+        const dataOrLaggyData = swr.data === undefined ? laggyDataRef.current : swr.data;
+
+        return Object.assign({}, swr, {
+            data: dataOrLaggyData
+        });
+    };
+};
+
+// helper to scroll top smooth - using setTimeout to ensure event loop executes this after any state updates so it doesn't get interrupted
+export const scrollTopSmooth = () => setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 0);
+
+export const htmlToText = (htmlString: string): string => {
+    if (typeof window !== 'undefined') {
+        // Use DOMParser if running in browser
+        const htmlDoc = new DOMParser().parseFromString(htmlString, 'text/html');
+        // Remove tables as text inside them is unlikely to make any sense
+        const nodesToRemove = htmlDoc.querySelectorAll('table');
+        for (const node of nodesToRemove) {
+            node.remove();
+        }
+        return htmlDoc.documentElement.textContent || '';
+    } else {
+        // Server-side fallback method
+        const $ = cheerio.load(htmlString);
+        $('table').remove();
+        return $(':root').text() || '';
+    }
+};
+
+export const toKebabCase = (inputString: string): string => {
+    return inputString
+        .toLowerCase() // Convert to lower case
+        .replace(/[^\w\s\']|_/g, '') // Remove everything except alphanumeric characters and whitespace
+        .replace(/\s+/g, ' ') // Condense longer whitespace down to one space
+        .replace(/\s/g, '-'); // Replace single spaces with hyphen
+};
+
+// Fetches sitemaps of a category from the sitemap S3 bucket and constructs a sitemap index of them.
+export const getSitemapIndexXML = async (category: 'publications' | 'users'): Promise<string> => {
+    let sitemapS3Keys: string[] = [];
+    try {
+        const sitemapsRequest = await api.get('/sitemaps/paths');
+        sitemapS3Keys = sitemapsRequest.data;
+    } catch (error) {
+        console.log(error);
+    }
+    // Write an XML element for each applicable sitemap we have in S3
+    const sitemapXMLElements = sitemapS3Keys
+        .filter((sitemapS3Key) => sitemapS3Key.startsWith(category + '/'))
+        .map((sitemapS3Key) => `<sitemap><loc>${Config.urls.baseUrl}/sitemaps/${sitemapS3Key}</loc></sitemap>`)
+        .join('');
+    return `<?xml version="1.0" encoding="UTF-8"?>
+        <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+            ${sitemapXMLElements}
+        </sitemapindex>
+    `;
+};
+
+export const abbreviateUserName = <
+    T extends { firstName: string; lastName: string; role?: Types.UserRole } | undefined
+>(
+    user: T
+): string => {
+    // Should not occur, but just in case, better to present something than nothing.
+    if (!user || (!user.firstName && !user.lastName)) {
+        return 'Anon. User';
+    }
+    // Majority of cases: user is not an organisational account, and has requisite data for default abbreviation.
+    if (!(user.role === 'ORGANISATION') && user.firstName.length && user.lastName) {
+        return `${user.firstName[0]}. ${user.lastName}`;
+    }
+    // Default for organisational accounts and general fallback.
+    return user.firstName;
+};
+
+export const isPublicationVersionExemptFromReversioning = (publicationVersion: Interfaces.PublicationVersion) => {
+    const { publication } = publicationVersion;
+    const isPeerReview = publication.type === 'PEER_REVIEW';
+    const isARI = publication.externalSource === 'ARI';
+    return isPeerReview || isARI;
 };

@@ -1,4 +1,4 @@
-<img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Octopus UI</h1>
+<img src="public/images/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Octopus UI</h1>
 
 The Octopus UI is a [Next.js](https://nextjs.org/) project bootstrapped with [create-next-app](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
@@ -25,6 +25,12 @@ $ ~/ui$ npm run dev
 Open [https://localhost:3001](https://localhost:3001) with your browser to see the result.
 
 To view any dynamic pages, you will also need to start the API. More information can be found in the [API readme](../api/README.md).
+
+---
+
+## Working with the UI
+
+If you add a new static page to the site, remember to add it to the array of static page names in the static pages sitemap at `src/pages/sitemaps/static.xml.tsx`.
 
 ---
 
@@ -56,25 +62,9 @@ To view any dynamic pages, you will also need to start the API. More information
 
 ## Testing
 
-End-to-end tests use [Playwright](https://playwright.dev/).
+UI tests use [Jest](https://jestjs.io/) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
 
-To run the tests you need to set the following in the .env file to match a test ORCID account (it doesn't have to be the same account used for the NEXT_PUBLIC_ORCID_APP_ID):
-
-```
-ORCID_TEST_FIRST_NAME=<first name as defined in orchid account>
-ORCID_TEST_LAST_NAME=<last name as defined in orchid account>
-ORCID_TEST_USER=
-ORCID_TEST_PASS=
-
-```
-
-You need the API and the UI to be running. To run the tests use:
-
-```bash
-$ ~/ui $ npm run test:e2e
-
-```
-
+To run the tests, run the command `npm run test`.
 
 ---
 

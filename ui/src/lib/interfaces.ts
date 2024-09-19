@@ -1,6 +1,7 @@
 import React from 'react';
-import * as Types from '@types';
+import * as Types from '@/types';
 import * as Axios from 'axios';
+import { ParsedUrlQuery } from 'querystring';
 
 export interface JSON {
     [key: string]: Types.JSONValue;
@@ -24,16 +25,16 @@ export interface PublicationStatus {
 
 export interface PublicationRef {
     id: string;
-    title: string;
-    publishedDate: string;
-    currentStatus: PublicationStatus;
     type: Types.PublicationType;
-    user: {
-        id: string;
-        firstName: string;
-        lastName: string;
-        orcid: string;
-    };
+    doi: string;
+    versions: {
+        title: string;
+        publishedDate: string;
+        currentStatus: PublicationStatus;
+        description: string;
+        keywords: string[];
+        user: User;
+    }[];
     linkedTo: LinkTo[];
     linkedFrom: LinkFrom[];
 }
@@ -50,74 +51,106 @@ export interface LinkFrom {
 
 export interface CorePublication {
     id: string;
-    title: string;
     type: Types.PublicationType;
     doi: string | null;
-    description: string;
-    keywords: string[];
+    url_slug: string;
+    externalId?: string;
+    externalSource?: Types.PublicationImportSource;
+    flagCount?: number;
+    peerReviewCount?: number;
+}
+
+export interface PublicationVersionUser {
+    id: string;
+    orcid: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
+    role: Types.UserRole;
+    url?: string;
+}
+export interface PublicationVersion {
+    id: string;
+    doi?: string;
+    versionOf: string;
+    versionNumber: number;
+    isLatestVersion: boolean;
+    isLatestLiveVersion: boolean;
     createdBy: string;
     createdAt: string;
     updatedAt: string;
-    publishedDate: string;
     currentStatus: Types.PublicationStatuses;
-    url_slug: string;
+    publishedDate: string | null;
+    title: string;
     licence: Types.LicenceType;
-    content: string;
-    language: Types.Languages;
-    ethicalStatement: string;
+    conflictOfInterestStatus: boolean | null;
+    conflictOfInterestText: string | null;
+    ethicalStatement: string | null;
     ethicalStatementFreeText: string | null;
+    dataPermissionsStatement: string | null;
+    dataPermissionsStatementProvidedBy: string | null;
+    dataAccessStatement: string | null;
+    selfDeclaration: boolean;
+    description: string | null;
+    keywords: string[];
+    content: string | null;
+    language: Types.Languages;
+    fundersStatement: string | null;
+    user: PublicationVersionUser;
+    publicationStatus: PublicationStatus[];
+    funders: Funder[];
+    coAuthors: CoAuthor[];
+    publication: CorePublication;
+    topics: BaseTopic[];
+    additionalInformation: AdditionalInformation[];
 }
 
 export interface Publication extends CorePublication {
-    publicationStatus: PublicationStatus[];
-    user: User;
-    linkedFrom: LinkFrom[];
-    linkedTo: LinkTo[];
-    conflictOfInterestStatus: boolean | undefined;
-    conflictOfInterestText: string | null;
-    dataAccessStatement: string | null;
-    dataPermissionsStatement: string | null;
-    dataPermissionsStatementProvidedBy: string | null;
-    selfDeclaration: boolean;
-    coAuthors: CoAuthor[];
-    funders: Funder[];
-    fundersStatement: string | null;
-    affiliations: Affiliations[];
-    affiliationStatement: string | null;
+    linkedTo: LinkedToPublication[];
+    linkedFrom: LinkedFromPublication[];
     publicationFlags: Flag[];
-    references: Reference[];
+    versions: PublicationVersion[];
 }
 
-export interface LinkedToPublication {
+export interface LinkedPublication {
     id: string;
+    type: Types.PublicationType;
+    doi: string;
+    title: string;
+    publishedDate: string;
+    currentStatus: Types.PublicationStatuses;
+    createdBy: string;
+    authorFirstName: string;
+    authorLastName: string;
+    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationVersionId' | 'user'>[];
+    flagCount: number;
+    peerReviewCount: number;
+    // Only returned with ?direct=true on the getPublicationLinks endpoint.
+    // Just used at present to show, and link to, the version a Peer Review was created against.
+    parentVersionId?: string;
+    parentVersionNumber?: number;
+    parentVersionIsLatestLive?: boolean;
+}
+
+export interface LinkedToPublication extends LinkedPublication {
+    linkId: string;
+    draft: boolean;
     childPublication: string;
     childPublicationType: Types.PublicationType;
-    type: Types.PublicationType;
-    title: string;
-    publishedDate: string;
-    currentStatus: Types.PublicationStatuses;
-    createdBy: string;
-    authorFirstName: string;
-    authorLastName: string;
-    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationId' | 'user'>[];
+    externalSource: Types.PublicationImportSource | null;
 }
 
-export interface LinkedFromPublication {
-    id: string;
+export interface LinkedFromPublication extends LinkedPublication {
+    linkId: string;
+    draft: boolean;
     parentPublication: string;
-    type: Types.PublicationType;
     parentPublicationType: Types.PublicationType;
-    title: string;
-    publishedDate: string;
-    currentStatus: Types.PublicationStatuses;
-    createdBy: string;
-    authorFirstName: string;
-    authorLastName: string;
-    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationId' | 'user'>[];
 }
 
 export interface PublicationWithLinks {
-    publication: Publication;
+    publication: LinkedPublication;
     linkedTo: LinkedToPublication[];
     linkedFrom: LinkedFromPublication[];
 }
@@ -126,7 +159,7 @@ export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
 
 export interface Reference {
     id: string;
-    publicationId: string;
+    publicationVersionId: string;
     type: ReferenceType;
     text: string;
     location?: string | null;
@@ -138,7 +171,7 @@ export interface CoAuthor {
     confirmedCoAuthor: boolean;
     approvalRequested: boolean;
     email: string;
-    publicationId: string;
+    publicationVersionId: string;
     createdAt?: string;
     reminderDate?: string | null;
     affiliations: MappedOrcidAffiliation[];
@@ -147,6 +180,8 @@ export interface CoAuthor {
         firstName: string;
         lastName: string;
         orcid: string;
+        role: Types.UserRole;
+        url?: string;
     };
 }
 
@@ -182,7 +217,7 @@ export interface CoreUser {
     firstName: string;
     lastName: string;
     email: string | null;
-    role: string;
+    role: Types.UserRole;
     createdAt: string;
     updatedAt: string;
     orcid: string;
@@ -191,11 +226,11 @@ export interface CoreUser {
 export interface User extends CoreUser {
     education: EducationRecord[];
     employment: EmploymentRecord[];
-    publications: Publication[];
+    publicationVersions: PublicationVersion[];
     works: WorksRecord[];
 }
 
-export interface SearchResults<T extends Publication | User> {
+export interface SearchResults<T extends PublicationVersion | User> {
     data: T[];
     metadata: SearchResultMeta;
 }
@@ -216,23 +251,6 @@ export interface SearchQueryParams {
     orderDirection?: string;
 }
 
-export interface DocumentationEntry {
-    method: string;
-    endpoint: string;
-    id: string;
-    description: string;
-    exampleResponse: unknown;
-    exampleUse: string;
-    queryParameters: DocumentationEntryQueryParams[];
-}
-
-export interface DocumentationEntryQueryParams {
-    name: string;
-    optional: boolean;
-    enums?: Array<string>;
-    description: string;
-}
-
 export interface LicenceTypeShape {
     value: Types.LicenceType;
     nicename: string;
@@ -240,36 +258,37 @@ export interface LicenceTypeShape {
     link: string;
 }
 
-export interface BookmarkedPublicationsData {
+export interface BookmarkedEntityData {
     id: string;
-    publicationId: string;
+    type: Types.BookmarkType;
+    entityId: string;
     userId: string;
-    publication: BookmarkedPublication;
+    entity: BookmarkedPublication | BookmarkedTopic;
 }
 
 export interface BookmarkedPublication {
     id: string;
-    title: string;
-    publicationId: string;
+    title: string | null;
     createdAt: string;
-    currentStatus: string;
-    url_slug: string;
-    description: string;
     type: Types.PublicationType;
-    publishedDate: string;
+    publishedDate: string | null;
     coAuthors: Array<{
         user: {
             firstName: string;
-            lastName: string;
-            id: string;
-        };
+            lastName: string | null;
+        } | null;
     }>;
     doi: string;
     updatedAt: string;
     user: {
         firstName: string;
-        lastName: string;
+        lastName: string | null;
     };
+}
+
+export interface BookmarkedTopic {
+    id: string;
+    title: string;
 }
 
 export interface OctopusInformation {
@@ -329,6 +348,7 @@ export interface Funder {
     city: string;
     link: string;
     ror?: string;
+    grantId?: string;
     id: string;
 }
 
@@ -355,6 +375,7 @@ export interface Flag {
     publicationId: string;
     resolved: boolean;
     createdAt: string;
+    createdBy: string;
     user: Omit<CoreUser, 'email'>;
 }
 
@@ -364,51 +385,39 @@ export interface FlagWithComments extends Flag {
 
 export interface PublicationUpdateRequestBody extends JSON {
     title: string;
-    content: string;
-    description: string;
+    content: string | null;
+    description: string | null;
     keywords: string[];
-    licence: Types.LicenceType;
     fundersStatement?: string | null;
     language: Types.Languages;
-    conflictOfInterestStatus: boolean | undefined;
-    conflictOfInterestText: string;
+    conflictOfInterestStatus: boolean | null;
+    conflictOfInterestText: string | null;
     ethicalStatement?: string | null;
     ethicalStatementFreeText?: string | null;
     dataAccessStatement?: string | null;
     dataPermissionsStatement?: string | null;
     dataPermissionsStatementProvidedBy?: string | null;
     selfDeclaration?: boolean;
-    affiliationStatement?: string | null;
+    topics?: string[];
 }
 
 export interface CreationStep {
+    id: Types.PublicationCreationStep;
     title: string;
     subTitle: string;
     component: React.ReactElement;
     icon: React.ReactElement;
 }
 
-export interface UserPublication {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    createdBy: string;
-    publishedDate: string | null;
-    doi: string;
-    title: string | null;
-    type: Types.PublicationType;
-    currentStatus: Types.PublicationStatuses;
-    url_slug: string;
-    licence: Types.LicenceType;
-    content: string | null;
-    coAuthors: CoAuthor[];
+export interface CreationStepWithCompletenessStatus extends CreationStep {
+    status: Types.TabCompletionStatus;
 }
 
-export interface UserPublicationsPage {
+export interface UserPublicationsResult {
     offset: number;
     limit: number;
     total: number;
-    results: UserPublication[];
+    results: Publication[];
 }
 
 export interface OrcidAffiliationDate {
@@ -449,4 +458,116 @@ export interface MappedOrcidAffiliation {
     updatedAt: number;
     source: { name: string; orcid: string };
     url: string | null;
+}
+
+export interface TopicPublicationVersion {
+    id: string;
+    title: string;
+    versionOf: string;
+}
+
+export interface TopicTranslation {
+    id: string;
+    topicId: string;
+    language: Types.Languages;
+    value: string;
+}
+
+export interface BaseTopic {
+    id: string;
+    title: string;
+    createdAt: string;
+    draft?: boolean;
+}
+
+export interface Topic extends BaseTopic {
+    updatedAt: string;
+    language: string;
+    parents: BaseTopic[];
+    children: BaseTopic[];
+    publicationVersions: TopicPublicationVersion[];
+    translations: TopicTranslation[];
+}
+
+export interface TopicsPaginatedResults {
+    offset: number;
+    limit: number;
+    total: number;
+    results: {
+        id: string;
+        title: string;
+        createdAt: Date;
+    }[];
+}
+
+export interface TopicsPageQuery extends ParsedUrlQuery {
+    query?: string;
+}
+
+export interface ControlRequest {
+    id: string;
+    type: string;
+    createdAt: string;
+    data: {
+        requesterId: string;
+        publicationVersion: {
+            id: string;
+            versionOf: string;
+        };
+    };
+}
+
+export interface AdditionalInformation {
+    id: string;
+    title: string;
+    url: string;
+    description: string;
+}
+
+export interface AuthorsPaginatedResults {
+    data: CoreUser[];
+    metadata: {
+        total: number;
+        limit: number;
+        offset: number;
+    };
+}
+
+export interface AuthorSearchQuery extends ParsedUrlQuery {
+    query?: string;
+}
+
+// Crosslinking
+export interface Crosslink {
+    id: string;
+    linkedPublication: {
+        id: string;
+        latestLiveVersion: Pick<PublicationVersion, 'title'> & {
+            publishedDate: string;
+            user: Pick<PublicationVersionUser, 'id' | 'firstName' | 'lastName'>;
+            coAuthors: Array<
+                Pick<CoAuthor, 'linkedUser'> & {
+                    user: Pick<User, 'firstName' | 'lastName' | 'role'>;
+                }
+            >;
+        };
+    };
+    score: number;
+    createdBy: string;
+    createdAt: string;
+}
+
+export interface MixedCrosslinks {
+    recent: Crosslink[];
+    relevant: Crosslink[];
+}
+
+export interface GetPublicationCrosslinksResponse {
+    data: Crosslink[];
+    metadata: SearchResultMeta;
+}
+
+export interface GetPublicationMixedCrosslinksResponse {
+    data: MixedCrosslinks;
+    metadata: SearchResultMeta;
 }

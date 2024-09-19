@@ -19,6 +19,10 @@ variable "allocated_storage" {
   type = number
 }
 
+variable "max_allocated_storage" {
+  type = number
+}
+
 variable "instance" {
   type = string
 }
@@ -29,4 +33,16 @@ variable "db_version" {
 
 variable "backup_retention_period" {
   type = number
+}
+
+variable "monitoring_interval" {
+  type = number
+}
+
+variable "performance_insights_retention_period" {
+  type = number
+}
+
+variable "vpc_cidr_block" {
+  type = string
 }

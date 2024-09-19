@@ -1,15 +1,16 @@
-import React, { useMemo } from 'react';
-import cuid from 'cuid';
+import React, { useEffect, useState } from 'react';
 
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Framer from 'framer-motion';
-import * as api from '@api';
-import * as Components from '@components';
-import * as Stores from '@stores';
-import * as Helpers from '@helpers';
-import * as I from '@interfaces';
+import * as api from '@/api';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Stores from '@/stores';
+import * as Helpers from '@/helpers';
+import * as I from '@/interfaces';
 
 import { DragDropContext, Droppable, Draggable, DropResult, DragStart } from 'react-beautiful-dnd';
+import { createId } from '@paralleldrive/cuid2';
 
 // reorder the result
 const reorder = (list: I.CoAuthor[], startIndex: number, endIndex: number) => {
@@ -32,52 +33,63 @@ const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
     background: isDraggingOver ? 'transparent' : undefined
 });
 
-const handleColumnsWidth = (draggableId: string, isDragging?: boolean) => {
+const preserveColumnsWidth = (draggableId: string) => {
     const selectedRow = document.getElementById(draggableId);
 
     if (!selectedRow) {
         return;
     }
 
-    if (isDragging) {
-        // preserve selected row columns width while dragging
-        selectedRow.querySelectorAll('td').forEach((cell) => {
-            cell.setAttribute('style', `width: ${cell.clientWidth}px;`);
-        });
+    // preserve selected row columns width while dragging
+    selectedRow.querySelectorAll('td').forEach((cell) => {
+        cell.setAttribute('style', `width: ${cell.clientWidth}px;`);
+    });
 
-        // preserve table columns width while dragging
-        const columns = document.querySelectorAll('th');
-        columns.forEach((column) => {
-            column.setAttribute('style', `min-width: ${column.clientWidth}px`);
-        });
-    } else {
-        // reset selected row columns width
-        selectedRow.querySelectorAll('td').forEach((cell) => {
-            cell.removeAttribute('style');
-        });
+    // preserve table columns width while dragging
+    const columns = document.querySelectorAll('th');
+    columns.forEach((column) => {
+        column.setAttribute('style', `min-width: ${column.clientWidth}px`);
+    });
+};
 
-        // reset table columns width
-        const columns = document.querySelectorAll('th');
-        columns.forEach((column) => {
-            column.removeAttribute('style');
-        });
+const resetColumnsWidth = (draggableId: string) => {
+    const selectedRow = document.getElementById(draggableId);
+
+    if (!selectedRow) {
+        return;
     }
+
+    // reset selected row columns width
+    selectedRow.querySelectorAll('td').forEach((cell) => {
+        cell.removeAttribute('style');
+    });
+
+    // reset table columns width
+    const columns = document.querySelectorAll('th');
+    columns.forEach((column) => {
+        column.removeAttribute('style');
+    });
 };
 
 const onBeforeDragStart = (start: DragStart) => {
-    handleColumnsWidth(start.draggableId, true);
+    preserveColumnsWidth(start.draggableId);
 };
 
 const CoAuthor: React.FC = (): React.ReactElement => {
-    const coAuthors = Stores.usePublicationCreationStore((state) => state.coAuthors);
+    const coAuthors = Stores.usePublicationCreationStore((state) => state.publicationVersion.coAuthors);
     const updateCoAuthors = Stores.usePublicationCreationStore((state) => state.updateCoAuthors);
-    const publicationId = Stores.usePublicationCreationStore((state) => state.id);
+    const versionId = Stores.usePublicationCreationStore((state) => state.publicationVersion.id);
     const user = Stores.useAuthStore((state) => state.user);
 
     const [loading, setLoading] = React.useState(false);
     const [coAuthor, setCoAuthor] = React.useState('');
     const [emailValidated, setEmailValidated] = React.useState(true);
-    const [emailDuplicated, SetEmailDuplicated] = React.useState(true);
+    const [emailDuplicated, setEmailDuplicated] = React.useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const onDragEnd = (result: DropResult) => {
         if (!result.destination) {
@@ -88,13 +100,13 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         const items = reorder(coAuthors, result.source.index, result.destination.index);
 
         updateCoAuthors(items);
-        handleColumnsWidth(result.draggableId);
+        setTimeout(() => resetColumnsWidth(result.draggableId)); // execute after state update in order to prevent flickering
     };
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setEmailValidated(true);
-        SetEmailDuplicated(true);
-        setCoAuthor(event.target.value?.trim());
+        setEmailDuplicated(false);
+        setCoAuthor(event.target.value);
     };
 
     // Validate email for co author regex to use -
@@ -104,14 +116,15 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         const authorsArray = coAuthors || [];
 
         // check to ensure co-author email is not already in the store/database
-        const emailDuplicate = authorsArray.some((author) => author.email.toLowerCase() === coAuthor.toLowerCase());
+        const coAuthorEmail = coAuthor.trim().toLowerCase();
+        const emailDuplicate = authorsArray.some((author) => author.email.toLowerCase() === coAuthorEmail);
         if (emailDuplicate) {
-            SetEmailDuplicated(false);
+            setEmailDuplicated(true);
             setLoading(false);
             return;
         }
 
-        const validEmail = Helpers.validateEmail(coAuthor);
+        const validEmail = Helpers.validateEmail(coAuthorEmail);
 
         if (!validEmail) {
             setEmailValidated(false);
@@ -122,9 +135,9 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         setCoAuthor('');
 
         const newAuthor = {
-            id: cuid(),
-            publicationId: publicationId,
-            email: coAuthor,
+            id: createId(),
+            email: coAuthorEmail,
+            publicationVersionId: versionId,
             linkedUser: null,
             approvalRequested: false,
             confirmedCoAuthor: false,
@@ -135,7 +148,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         authorsArray.push(newAuthor);
         updateCoAuthors(authorsArray);
         setLoading(false);
-    }, [coAuthors, coAuthor, publicationId, updateCoAuthors]);
+    }, [coAuthors, coAuthor, versionId, updateCoAuthors]);
 
     const deleteCoAuthor = async (coAuthorId: string) => {
         updateCoAuthors(coAuthors.filter((item) => item.id !== coAuthorId));
@@ -145,13 +158,16 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         setLoading(true);
 
         try {
-            const response = await api.get(`/publications/${publicationId}/coauthors`, user?.token);
+            const response = await api.get(
+                `${Config.endpoints.publicationVersions}/${versionId}/coauthors`,
+                user?.token
+            );
             updateCoAuthors(response.data);
             setLoading(false);
         } catch {
             setLoading(false);
         }
-    }, [user, publicationId]);
+    }, [updateCoAuthors, user?.token, versionId]);
 
     return (
         <div className="space-y-12 2xl:space-y-16">
@@ -160,7 +176,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                 <p className="block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                     Add the email addresses of any co-authors involved in this publication. Note that they will only
                     receive an email asking them to confirm their involvement and preview the publication once you have
-                    requested approval from the “Review and Publish” section.
+                    requested their approval using the &quot;Request Approval&quot; button.
                 </p>
                 <br />
                 <p className="block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
@@ -190,7 +206,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                         onClick={addCoAuthorToPublication}
                         endIcon={
                             loading ? (
-                                <OutlineIcons.RefreshIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
+                                <OutlineIcons.ArrowPathIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                             ) : (
                                 <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                             )
@@ -205,7 +221,7 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                         className="mt-3 w-2/3"
                     />
                 )}
-                {!emailDuplicated && (
+                {emailDuplicated && (
                     <Components.Alert
                         data-testid="email-error"
                         severity="ERROR"
@@ -252,46 +268,48 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                                 </thead>
 
                                 <DragDropContext onDragEnd={onDragEnd} onBeforeDragStart={onBeforeDragStart}>
-                                    <Droppable droppableId="droppable">
-                                        {(provided, snapshot) => (
-                                            <tbody
-                                                className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600"
-                                                {...provided.droppableProps}
-                                                ref={provided.innerRef}
-                                                style={getListStyle(snapshot.isDraggingOver)}
-                                            >
-                                                {coAuthors.map((coAuthor, index) => (
-                                                    <Draggable
-                                                        key={coAuthor.id}
-                                                        draggableId={coAuthor.id}
-                                                        index={index}
-                                                    >
-                                                        {(provided, snapshot) => (
-                                                            <Components.PublicationCreationCoAuthorEntry
-                                                                key={coAuthor.id}
-                                                                coAuthor={coAuthor}
-                                                                deleteCoAuthor={deleteCoAuthor}
-                                                                dragHandleProps={provided.dragHandleProps}
-                                                                isMainAuthor={coAuthor.linkedUser === user?.id} // only main author can access 'edit draft' screen atm
-                                                                entryProps={{
-                                                                    id: coAuthor.id,
-                                                                    className:
-                                                                        'box-border w-full h-full bg-white-50 outline-0 ring-offset-1 focus:ring-2 focus:ring-inset focus:ring-yellow-400 last-of-type:focus:rounded-b-lg dark:bg-grey-600',
-                                                                    ref: provided.innerRef,
-                                                                    ...provided.draggableProps,
-                                                                    style: getItemStyle(
-                                                                        snapshot.isDragging,
-                                                                        provided.draggableProps.style
-                                                                    )
-                                                                }}
-                                                            />
-                                                        )}
-                                                    </Draggable>
-                                                ))}
-                                                {provided.placeholder}
-                                            </tbody>
-                                        )}
-                                    </Droppable>
+                                    {isMounted && (
+                                        <Droppable droppableId="droppable">
+                                            {(provided, snapshot) => (
+                                                <tbody
+                                                    className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600"
+                                                    {...provided.droppableProps}
+                                                    ref={provided.innerRef}
+                                                    style={getListStyle(snapshot.isDraggingOver)}
+                                                >
+                                                    {coAuthors.map((coAuthor, index) => (
+                                                        <Draggable
+                                                            key={coAuthor.id}
+                                                            draggableId={coAuthor.id}
+                                                            index={index}
+                                                        >
+                                                            {(provided, snapshot) => (
+                                                                <Components.PublicationCreationCoAuthorEntry
+                                                                    key={coAuthor.id}
+                                                                    coAuthor={coAuthor}
+                                                                    deleteCoAuthor={deleteCoAuthor}
+                                                                    dragHandleProps={provided.dragHandleProps}
+                                                                    isMainAuthor={coAuthor.linkedUser === user?.id} // only main author can access 'edit draft' screen atm
+                                                                    entryProps={{
+                                                                        id: coAuthor.id,
+                                                                        className:
+                                                                            'box-border w-full h-full bg-white-50 outline-0 ring-offset-1 focus:ring-2 focus:ring-inset focus:ring-yellow-400 last-of-type:focus:rounded-b-lg dark:bg-grey-600',
+                                                                        ref: provided.innerRef,
+                                                                        ...provided.draggableProps,
+                                                                        style: getItemStyle(
+                                                                            snapshot.isDragging,
+                                                                            provided.draggableProps.style
+                                                                        )
+                                                                    }}
+                                                                />
+                                                            )}
+                                                        </Draggable>
+                                                    ))}
+                                                    {provided.placeholder}
+                                                </tbody>
+                                            )}
+                                        </Droppable>
+                                    )}
                                 </DragDropContext>
                             </table>
                         </div>
@@ -302,10 +320,10 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                         title="Refresh"
                         onClick={refreshCoAuthors}
                         startIcon={
-                            <OutlineIcons.RefreshIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                            <OutlineIcons.ArrowPathIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                         }
                         textSize="sm"
-                        className="py-2 px-1"
+                        className="px-1 py-2"
                         disabled={loading}
                     />
                 </div>

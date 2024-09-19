@@ -12,7 +12,7 @@ const linkCoAuthorSchema = {
             type: 'boolean'
         }
     },
-    required: ['email', 'code', 'approve'],
+    required: ['email', 'approve'],
     additionalProperties: false
 };
 

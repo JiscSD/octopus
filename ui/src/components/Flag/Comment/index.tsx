@@ -1,9 +1,9 @@
 import React from 'react';
 
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Helpers from '@helpers';
-import * as Config from '@config';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Helpers from '@/helpers';
+import * as Config from '@/config';
 
 type Props = {
     flagComment: Interfaces.FlagComment;
@@ -22,7 +22,7 @@ const Comment: React.FC<Props> = (props): React.ReactElement => (
                 {props.flagComment.user.firstName} {props.flagComment.user.lastName}
             </span>
             <span className="block text-xs text-grey-500 transition-colors duration-500 group-hover:underline dark:text-white-100">
-                Posted: {Helpers.formatDate(props.flagComment.createdAt)}
+                Posted: <time suppressHydrationWarning>{Helpers.formatDate(props.flagComment.createdAt)}</time>
             </span>
         </Components.Link>
         <div className="col-span-12 lg:col-span-8">

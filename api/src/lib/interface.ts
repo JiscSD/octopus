@@ -1,23 +1,38 @@
-import { Languages, LicenceType, Prisma, PublicationFlagCategoryEnum, PublicationType, Role } from '@prisma/client';
+import {
+    BookmarkType,
+    EventType,
+    Languages,
+    LicenceType,
+    Prisma,
+    PublicationFlagCategoryEnum,
+    PublicationImportSource,
+    PublicationStatusEnum,
+    PublicationType,
+    Role
+} from '@prisma/client';
 import {
     APIGatewayProxyEventPathParameters,
     APIGatewayProxyEventQueryStringParameters,
     APIGatewayProxyEventV2
 } from 'aws-lambda';
-import * as publicationService from 'publication/service';
+import * as publicationVersionService from 'publicationVersion/service';
+import * as eventService from 'event/service';
 
 export {
+    BookmarkType,
+    EventType,
     ImageExtension,
     Languages,
     LicenceType,
     PublicationFlagCategoryEnum,
+    PublicationImportSource,
     PublicationStatusEnum,
     PublicationType,
-    Role
+    Role,
+    Topic
 } from '@prisma/client';
 export { JSONSchemaType, Schema } from 'ajv';
 export { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
-export { HandlerLambda } from 'middy';
 
 export type RequestType = 'body' | 'queryStringParameters' | 'pathParameters';
 
@@ -56,33 +71,45 @@ export interface OptionalAuthenticatedAPIRequest<
 
 export interface JSONResponse {
     body?: string;
-    headers: any;
+    headers: unknown;
     statusCode: number;
 }
+
+export type Environment = 'int' | 'prod';
 
 /**
  * @description Publications
  */
 
-const prismaGeneratedPublicationType = Prisma.validator<Prisma.PublicationArgs>()({});
+const prismaGeneratedPublicationType = Prisma.validator<Prisma.PublicationDefaultArgs>()({});
 export type Publication = Prisma.PublicationGetPayload<typeof prismaGeneratedPublicationType>;
 
 export interface CreatePublicationRequestBody {
     type: PublicationType;
     title: string;
     licence?: LicenceType;
+    content?: string;
     description?: string;
     keywords?: string[];
-    content?: string;
+    conflictOfInterestStatus?: boolean;
+    conflictOfInterestText?: string;
     language?: Languages;
-    fundersStatement: string;
     ethicalStatement?: string;
     ethicalStatementFreeText?: string;
     dataPermissionsStatement?: string;
     dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
+    fundersStatement?: string;
     affiliationStatement?: string;
+    topicIds?: string[];
+    linkedPublicationIds?: string[];
+    externalId?: string;
+    externalSource?: PublicationImportSource;
+}
+
+export interface CreatePublicationQueryStringParameters {
+    directPublish?: boolean;
 }
 
 export interface OpenSearchPublication {
@@ -98,7 +125,24 @@ export interface OpenSearchPublication {
 }
 
 export interface GetPublicationPathParams {
-    id: string;
+    publicationId: string;
+}
+
+export interface GetPublicatonQueryParams {
+    fields?: string;
+}
+
+export interface GetPublicationLinksPathParams {
+    publicationId: string;
+}
+
+export interface GetPublicationLinksQueryParams {
+    direct?: string;
+}
+
+export interface GetPublicationVersionPathParams {
+    publicationId: string;
+    version: string;
 }
 
 export interface GetSeedDataPublicationsFilters {
@@ -109,32 +153,42 @@ export interface UpdatePublicationPathParams {
     id: string;
 }
 
+export interface UpdatePublicationVersionPathParams {
+    publicationVersionId: string;
+}
+
 export interface UpdateStatusPathParams {
-    id: string;
+    publicationVersionId: string;
     status: 'LIVE' | 'DRAFT' | 'LOCKED';
 }
 
-export interface UpdatePublicationRequestBody {
-    content?: string;
+export interface UpdateStatusQueryParams {
+    ariContactConsent?: boolean;
+}
+
+export interface UpdatePublicationVersionRequestBody {
     title?: string;
-    licence?: LicenceType;
     description?: string;
+    content?: string;
     keywords?: string[];
-    id?: string;
     language?: Languages;
+    topics?: string[];
     ethicalStatement?: string;
     ethicalStatementFreeText?: string;
     dataPermissionsStatement?: string;
     dataPermissionsStatementProvidedBy?: string;
     dataAccessStatement?: string;
     selfDeclaration?: boolean;
+    conflictOfInterestStatus?: boolean;
+    conflictOfInterestText?: string;
+    fundersStatement?: string;
 }
 
 export type PublicationOrderBy = 'publishedDate' | '_score';
 export type UserOrderBy = 'id' | 'firstName' | 'lastName' | 'createdAt' | 'updatedAt';
 export type OrderDirection = 'asc' | 'desc';
 
-export interface PublicationFilters {
+export interface OpenSearchPublicationFilters {
     search?: string;
     limit: number;
     offset: number;
@@ -146,14 +200,59 @@ export interface PublicationFilters {
     orderDirection?: OrderDirection;
 }
 
-export type PublicationWithMetadata = Prisma.PromiseReturnType<typeof publicationService.get>;
+export type PublicationVersion = Exclude<Prisma.PromiseReturnType<typeof publicationVersionService.get>, null>;
 
 /**
  * @description Links
  */
+
+const prismaGeneratedLinkType = Prisma.validator<Prisma.LinksDefaultArgs>()({});
+export type Link = Prisma.LinksGetPayload<typeof prismaGeneratedLinkType>;
+
 export interface CreateLinkBody {
     to: string;
     from: string;
+}
+
+export interface LinkedPublication {
+    id: string;
+    type: PublicationType;
+    doi: string;
+    title: string;
+    publishedDate: string;
+    currentStatus: PublicationStatusEnum;
+    createdBy: string;
+    authorFirstName: string;
+    authorLastName: string;
+    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'user'>[];
+    flagCount: number;
+    peerReviewCount: number;
+    // Only returned with ?direct=true on the getPublicationLinks endpoint.
+    // Just used at present to show, and link to, the version a Peer Review was created against.
+    parentVersionId?: string;
+    parentVersionNumber?: number;
+    parentVersionIsLatestLive?: boolean;
+}
+
+export interface LinkedToPublication extends LinkedPublication {
+    linkId: string;
+    draft: boolean;
+    childPublication: string;
+    childPublicationType: PublicationType;
+    externalSource: PublicationImportSource | null;
+}
+
+export interface LinkedFromPublication extends LinkedPublication {
+    linkId: string;
+    draft: boolean;
+    parentPublication: string;
+    parentPublicationType: PublicationType;
+}
+
+export interface PublicationWithLinks {
+    publication: LinkedPublication | null;
+    linkedTo: LinkedToPublication[];
+    linkedFrom: LinkedFromPublication[];
 }
 
 /**
@@ -166,8 +265,9 @@ export interface User {
     firstName: string;
     lastName: string | null;
     locked: boolean;
-    orcid: string;
+    orcid: string | null;
     role: Role;
+    defaultTopicId: string | null;
 }
 
 export interface UserFilters {
@@ -180,6 +280,34 @@ export interface UserFilters {
 
 export interface GetUserParameters {
     id: string;
+}
+
+export interface CreateOrganisationalAccountInput {
+    name: string;
+    email?: string;
+    ror?: string;
+    url?: string;
+    defaultTopic?: {
+        title: string;
+        ids: {
+            int: string;
+            prod: string;
+        };
+    };
+}
+
+export interface UpdateOrganisationalAccountInput {
+    name?: string;
+    email?: string;
+    ror?: string;
+    url?: string;
+    defaultTopic?: {
+        title: string;
+        ids: {
+            int: string;
+            prod: string;
+        };
+    };
 }
 
 /**
@@ -204,6 +332,9 @@ export interface ConfirmVerificationCodeBody {
  * @description Flags
  */
 
+const prismaGeneratedFlagType = Prisma.validator<Prisma.PublicationFlagsDefaultArgs>()({});
+export type Flag = Prisma.PublicationFlagsGetPayload<typeof prismaGeneratedFlagType>;
+
 export type FlagCategory =
     | 'PLAGIARISM'
     | 'ETHICAL_ISSUES'
@@ -213,7 +344,7 @@ export type FlagCategory =
     | 'INAPPROPRIATE';
 
 export interface CreateFlagPathParams {
-    id: string;
+    publicationId: string;
 }
 
 export interface CreateFlagRequestBody {
@@ -257,8 +388,27 @@ export interface UpdateUserInformation {
     orcidAccessToken: string;
 }
 
-export interface DeletePublicationPathParams {
-    id: string;
+export interface DeletePublicationVersionPathParams {
+    publicationVersionId: string;
+}
+
+export interface CreatePublicationVersionPathParams {
+    publicationId: string;
+}
+
+export interface RequestControlPathParams {
+    publicationId: string;
+    version: string;
+}
+
+export interface ApproveControlRequestPathParams {
+    publicationId: string;
+    version: string;
+}
+
+export interface ApproveControlRequestBody {
+    approve: 'true' | 'false';
+    eventId: string;
 }
 
 export interface DeleteLinkPathParams {
@@ -371,14 +521,17 @@ export interface CoAuthor {
     confirmedCoAuthor: boolean;
     approvalRequested: boolean;
     email: string;
-    publicationId: string;
+    publicationVersionId: string;
     createdAt?: string;
     reminderDate?: string | null;
+    isIndependent: boolean;
     affiliations: MappedOrcidAffiliation[];
     user?: {
         firstName: string;
         lastName: string;
         orcid: string;
+        role: Role;
+        url?: string;
     };
 }
 
@@ -387,29 +540,29 @@ export interface CreateCoAuthorRequestBody {
 }
 
 export interface CreateCoAuthorPathParams {
-    id: string;
+    publicationVersionId: string;
 }
 
 export interface DeleteCoAuthorPathParams {
-    id: string;
-    coauthor: string;
+    publicationVersionId: string;
+    coauthorId: string;
 }
 
-export interface ConfirmCoAuthorPathParams {
-    id: string;
+export interface LinkCoAuthorPathParams {
+    publicationVersionId: string;
 }
 
 export interface ConfirmCoAuthorBody {
     email: string;
-    code: string;
     approve: boolean;
+    code?: string;
 }
 
 export interface ChangeCoAuthorRequestBody {
     confirm: boolean;
 }
 export interface UpdateCoAuthorPathParams {
-    id: string;
+    publicationVersionId: string;
 }
 
 export interface ImageSentBody {
@@ -418,21 +571,53 @@ export interface ImageSentBody {
 }
 
 // @description Bookmarks
+export type GetBookmarkPathParamType = Lowercase<BookmarkType>;
 
-export interface CreateBookmarkPathParams {
+export interface CreateBookmarkRequestBody {
+    type: BookmarkType;
+    entityId: string;
+}
+
+export interface GetAllBookmarksQueryStringParameters {
+    type: BookmarkType;
+    entityId?: string;
+}
+
+export interface DeleteBookmarkPathParams {
     id: string;
 }
 
-export interface RemoveBookmarkPathParams {
+export interface BookmarkedPublication {
     id: string;
+    title: string | null;
+    createdAt: Date;
+    type: PublicationType;
+    publishedDate: Date | null;
+    coAuthors: Array<{
+        user: {
+            firstName: string;
+            lastName: string | null;
+        } | null;
+    }>;
+    doi: string;
+    updatedAt: Date;
+    user: {
+        firstName: string;
+        lastName: string | null;
+    };
 }
 
-export interface GetBookmarkPathParams {
+export interface BookmarkedTopic {
     id: string;
+    title: string;
 }
 
-export interface GetAllBookmarkPathParams {
+export interface PopulatedBookmark {
     id: string;
+    type: BookmarkType;
+    entityId: string;
+    userId: string;
+    entity: BookmarkedPublication | BookmarkedTopic;
 }
 
 /**
@@ -443,29 +628,18 @@ export type ReferenceType = 'URL' | 'DOI' | 'TEXT';
 
 export interface Reference {
     id: string;
-    publicationId: string;
+    publicationVersionId: string;
     type: ReferenceType;
     text: string;
     location?: string | null;
 }
 
-export interface CreateReferencePath {
-    id: string;
+export type UpdateReferencesBody = Array<Reference>;
+
+export interface CreateReferencePathParams {
+    publicationVersionId: string;
 }
 
-export interface UpdateReferencePath {
-    id: string;
-    referenceId: string;
-}
-
-export interface RemoveAllReferencesPathParams {
-    id: string;
-}
-
-export interface OctopusInformation {
-    publications: PublicationType[];
-    languages: Languages[];
-}
 export interface CreateFlagCommentBody {
     comment: string;
 }
@@ -490,12 +664,12 @@ export interface EmailSendOptions {
 }
 
 export interface CreateFunderPathParams {
-    id: string;
+    publicationVersionId: string;
 }
 
 export interface DeleteFunderPathParams {
-    id: string;
-    funder: string;
+    publicationVersionId: string;
+    funderId: string;
 }
 
 export interface CreateFunderRequestBody {
@@ -504,18 +678,19 @@ export interface CreateFunderRequestBody {
     city: string;
     country: string;
     link: string;
+    grantId?: string;
 }
 
 export interface GetFlagByID {
     id: string;
 }
 
-export interface GetFlagsByUserID {
-    id: string;
+export interface GetUserFlagsPathParams {
+    userId: string;
 }
 
-export interface GetFlagsByPublicationID {
-    id: string;
+export interface GetPublicationFlagsPathParams {
+    publicationId: string;
 }
 
 export interface DOIResponse {
@@ -533,7 +708,7 @@ export interface DOIResponse {
 //affiliations
 
 export interface UpdateAffiliationsPathParams {
-    id: string;
+    publicationVersionId: string;
 }
 
 export interface UpdateAffiliationsBody {
@@ -541,18 +716,15 @@ export interface UpdateAffiliationsBody {
     isIndependent: boolean;
 }
 
-export type UserPublicationsOrderBy = 'id' | 'title' | 'type' | 'publishedDate' | 'createdAt' | 'updatedAt';
-
 export interface UserPublicationsFilters {
     offset: number;
     limit: number;
-    orderBy?: UserPublicationsOrderBy;
-    orderDirection?: OrderDirection;
+    versionStatus?: string;
 }
 
 export interface SendApprovalReminderPathParams {
-    id: string;
-    coauthor: string;
+    publicationVersionId: string;
+    coauthorId: string;
 }
 
 type NameType = 'Personal' | 'Organizational';
@@ -579,13 +751,13 @@ export interface DataCiteCreatorNameIdentifiers {
 }
 
 export interface DataCiteUser {
-    firstName: string | undefined;
+    firstName: string;
     lastName: string | null;
-    orcid: string;
+    orcid: string | null;
     affiliations: MappedOrcidAffiliation[];
 }
 export interface GeneratePDFPathParams {
-    id: string;
+    publicationId: string;
 }
 
 export interface GeneratePDFQueryParams {
@@ -595,13 +767,13 @@ export interface GeneratePDFQueryParams {
 
 export interface OrcidAffiliationSummaryDate {
     year: {
-        value: string | null;
+        value?: string;
     };
     month: {
-        value: string | null;
+        value?: string;
     };
     day: {
-        value: string | null;
+        value?: string;
     };
 }
 
@@ -609,13 +781,13 @@ export interface OrcidOrganization {
     name: string;
     address: {
         city: string;
-        region: string | null;
+        region?: string;
         country: string;
     };
-    'disambiguated-organization': {
+    'disambiguated-organization'?: {
         'disambiguated-organization-identifier': string;
         'disambiguation-source': string;
-    } | null;
+    };
 }
 
 export interface OrcidAffiliationSummary {
@@ -626,12 +798,16 @@ export interface OrcidAffiliationSummary {
         value: number;
     };
     source: {
-        'source-orcid': {
+        'source-orcid'?: {
             uri: string;
             path: string;
             host: string;
         };
-        'source-client-id'?: string;
+        'source-client-id'?: {
+            uri: string;
+            path: string;
+            host: string;
+        };
         'source-name': {
             value: string;
         };
@@ -640,13 +816,13 @@ export interface OrcidAffiliationSummary {
         'assertion-origin-name'?: string;
     };
     'put-code': number;
-    'department-name': string | null;
-    'role-title': string | null;
-    'start-date': OrcidAffiliationSummaryDate | null;
-    'end-date': OrcidAffiliationSummaryDate | null;
+    'department-name'?: string;
+    'role-title'?: string;
+    'start-date'?: OrcidAffiliationSummaryDate;
+    'end-date'?: OrcidAffiliationSummaryDate;
     organization: OrcidOrganization;
-    url: { value: string } | null;
-    'external-ids': string[] | null;
+    url?: { value: string };
+    'external-ids'?: string[];
     'display-index': string;
     visibility: string;
     path: string;
@@ -678,14 +854,206 @@ export interface MappedOrcidAffiliation {
         | 'distinction'
         | 'employment'
         | 'education'
-        | 'qualification';
-    title: string | null;
-    departmentName: string | null;
-    startDate: OrcidAffiliationDate | null;
-    endDate: OrcidAffiliationDate | null;
+        | 'qualification'
+        | 'misc.';
+    title?: string;
+    departmentName?: string;
+    startDate?: OrcidAffiliationDate;
+    endDate?: OrcidAffiliationDate;
     organization: OrcidOrganization;
     createdAt: number;
     updatedAt: number;
     source: { name: string; orcid: string };
-    url: string | null;
+    url?: string;
+}
+
+export interface AffiliationWithFormattedName extends MappedOrcidAffiliation {
+    name: string;
+}
+
+export interface LegacyAffiliation {
+    name: string;
+    country: string;
+    city: string;
+    link: string;
+    ror: string | null;
+    id: string;
+}
+
+export interface UserEmployment {
+    role: string | null;
+    endDate: {
+        day: string | null;
+        month: string | null;
+        year: string | null;
+    };
+    startDate: {
+        day: string | null;
+        month: string | null;
+        year: string | null;
+    };
+    department: string | null;
+    organisation: string;
+}
+
+// Topics
+export interface TopicTranslation {
+    language: Languages;
+    value: string;
+}
+
+export interface CreateTopicRequestBody {
+    title: string;
+    language?: Languages;
+    translations?: TopicTranslation[];
+    parentIds: string[];
+}
+
+export interface GetTopicPathParams {
+    id: string;
+}
+
+export interface TopicsFilters {
+    search?: string;
+    limit?: number;
+    offset?: number;
+    exclude?: string;
+}
+
+export interface TopicsPaginatedResults {
+    offset: number;
+    limit: number;
+    total: number;
+    results: {
+        id: string;
+        title: string;
+        createdAt: Date;
+    }[];
+}
+
+export type Event = Exclude<Prisma.PromiseReturnType<typeof eventService.get>, null>;
+
+// events
+export interface RequestControlData extends Record<string, unknown> {
+    requesterId: string;
+    publicationVersion: {
+        id: string;
+        versionOf: string;
+    };
+}
+
+export interface EventDataType {
+    [EventType.REQUEST_CONTROL]: RequestControlData;
+}
+
+export interface RequestControlEvent extends Record<string, unknown>, Omit<Event, 'data'> {
+    data: RequestControlData;
+}
+
+// Crosslinking
+export interface CreateCrosslinkRequestBody {
+    publications: [string, string];
+}
+
+export interface DeleteCrosslinkPathParams {
+    id: string;
+}
+
+export interface SetCrosslinkVotePathParams {
+    id: string;
+}
+
+export interface SetCrosslinkVoteRequestBody {
+    vote: boolean;
+}
+
+export interface ResetCrosslinkVotePathParams {
+    id: string;
+}
+
+export interface GetCrosslinkPathParams {
+    id: string;
+}
+
+export interface GetCrosslinkVotePathParams {
+    id: string;
+}
+
+export interface GetPublicationCrosslinksPathParams {
+    publicationId: string;
+}
+
+export type GetPublicationCrosslinksOrder = 'recent' | 'relevant' | 'mix';
+export interface GetPublicationCrosslinksQueryParams {
+    search?: string;
+    limit?: number;
+    offset?: number;
+    own?: string;
+    order?: GetPublicationCrosslinksOrder;
+}
+
+// Options for the service function, as distinct from the query params received in the controller.
+export interface GetPublicationCrosslinksOptions extends Omit<GetPublicationCrosslinksQueryParams, 'own'> {
+    userIdFilter?: string;
+}
+
+// Additional information
+export interface CreateAdditionalInformationPathParams {
+    publicationVersionId: string;
+}
+
+export interface CreateAdditionalInformationBody {
+    title: string;
+    url: string;
+    description?: string;
+}
+
+export interface DeleteAdditionalInformationPathParams {
+    publicationVersionId: string;
+    additionalInformationId: string;
+}
+
+export interface ARIQuestion {
+    questionId: number;
+    postDate: string;
+    dateUpdated: string;
+    url: string;
+    question: string;
+    isArchived: boolean;
+    department: string;
+    questionGroup: string;
+    backgroundInformation: string;
+    publicationDate: string;
+    expiryDate: string | null;
+    contactDetails: string;
+    topics: string[];
+    fieldsOfResearch: string[];
+    tags: string[];
+    relatedQuestions: {
+        questionId: number;
+    }[];
+    relatedUKRIProjects: {
+        projectId: string;
+        title: string;
+        url: string;
+    }[];
+}
+
+export type MappedARIQuestion = {
+    title: string;
+    content: string;
+    keywords: string[];
+    topicIds: string[];
+    externalId: string;
+    externalSource: 'ARI';
+    userId: User['id'];
+};
+
+export type ARIHandlingAction = 'create' | 'update' | 'none';
+
+export interface HandledARI {
+    actionTaken: ARIHandlingAction;
+    success: boolean;
+    message?: string;
+    publicationVersion?: PublicationVersion;
 }

@@ -1,10 +1,10 @@
 import React from 'react';
 
 import * as Framer from 'framer-motion';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Config from '@config';
+import * as OutlineIcons from '@heroicons/react/24/outline';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Config from '@/config';
 
 type Props = {
     user: Interfaces.CoreUser;
@@ -26,11 +26,12 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => (
                 items-start
                 gap-4
                 overflow-hidden
+                rounded-none
                 border-b
                 border-grey-50
                 bg-white-50
-                py-4
                 px-4
+                py-4
                 shadow
                 outline-0
                 transition-colors

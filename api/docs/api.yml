@@ -1,0 +1,1579 @@
+openapi: 3.0.0
+info:
+  version: '1'
+  title: Octopus
+  description: >
+    ## API Keys
+
+    An API key is required for many of the API’s operations. To request a unique API key, please send an email to [help@jisc.ac.uk](<mailto:help@jisc.ac.uk?subject=Octopus API key request>) from the address you are signed up to Octopus with, including the subject line “Octopus API key request”.
+servers:
+  - url: https://prod.api.octopus.ac/v1
+    description: Octopus live environment
+tags:
+- name: Affiliations
+  description: Organizations related to the work an author has put into a publication
+- name: Bookmarks
+  description: Mark a publication or topic of particular interest
+- name: Links
+  description: Links between publications
+- name: Publications
+  description: Units of work representing one stage of the research process
+- name: PublicationVersions
+  description: A version of a publication
+paths:
+  /bookmarks:
+    get:
+      summary: Get all my bookmarks
+      description: A user can have many bookmarks on publications or topics.
+      tags:
+        - Bookmarks
+      security:
+        - ApiKey: []
+        - BearerToken: []
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [PUBLICATION, TOPIC]
+          required: true
+          description: Type of bookmark to return
+        - in: query
+          name: entityId
+          schema:
+            type: string
+          required: false
+          description: Filter to a particular entity, to check if it is bookmarked
+      responses:
+        '200':
+          description: User's bookmarks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Bookmark"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      summary: Create a bookmark
+      tags:
+        - Bookmarks
+      security:
+        - ApiKey: []
+        - BearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum: [PUBLICATION, TOPIC]
+                entityId:
+                  type: string
+      responses:
+        '201':
+          description: Bookmark created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bookmark"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /bookmarks/{id}:
+    delete:
+      summary: Delete a bookmark
+      tags:
+        - Bookmarks
+      security:
+        - ApiKey: []
+        - BearerToken: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Bookmark ID
+      responses:
+        '200':
+          description: Bookmark deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: Bookmark deleted successfully.
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /links:
+    post:
+      summary: Create a link between publications
+      description: |
+        To be published, a publication must be linked to another publication.\
+        \
+        A link must be created from a DRAFT publication to a LIVE publication.\
+        \
+        A helpful way to picture the relationship is that the publication "linked to" is one step higher in the hierarchy than the one "linked from".\
+        \
+        The type-based restrictions on creating links are as follows:
+        - PROBLEM: can be linked to any publication
+        - HYPOTHESIS: can only be linked to PROBLEM
+        - PROTOCOL: can only be linked to HYPOTHESIS
+        - DATA: can only be linked to PROTOCOL
+        - ANALYSIS: can only be linked to DATA
+        - INTERPRETATION: can only be linked to ANALYSIS
+        - REAL_WORLD_APPLICATION: can only be linked to INTERPRETATION
+        - PEER_REVIEW: can be linked to any publication
+      tags:
+        - Links
+      security:
+        - ApiKey: []
+        - BearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                  description: The ID of the publication to link from.
+                to:
+                  type: string
+                  description: The ID of the publication to link to.
+              required: [from, to]
+      responses:
+        '200':
+          description: Link created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  publicationFromId:
+                    type: string
+                    description: The ID of the publication the link was created from.
+                  publicationToId:
+                    type: string
+                    description: The ID of the publication the link was created to.
+                  versionToId:
+                    type: string
+                    description: The ID of the current live (at the time of link creation) version of the publication the link was created to.
+                  createdAt:
+                    type: string
+                    format: date-time
+                  updatedAt:
+                    type: string
+                    format: date-time
+                  draft:
+                    type: boolean
+                    description: Whether this link is a draft (i.e. created in a current draft/locked version) or not (i.e. created in a previous/live version).
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /links/{id}:
+    delete:
+      summary: Delete a link
+      tags:
+        - Links
+      security:
+        - ApiKey: []
+        - BearerToken: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Link ID
+      responses:
+        '200':
+          description: Link deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: Link deleted
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /orcid-affiliations:
+    get:
+      summary: Get associated organization details from your own ORCiD record
+      description: |
+        Octopus user accounts are paired to ORCiD accounts. This endpoint looks up the ORCiD user record paired to the Octopus user account this request was authorized as and extracts organizations from the `activities-summary`, before presenting them in a custom mapped structure.
+      tags:
+        - Affiliations
+      security:
+        - ApiKey: []
+        - BearerToken: []
+      responses:
+        '200':
+          description: An array of affiliations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Affiliation"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+  /publications:
+    post:
+      summary: Create a publication
+      description: |
+        By default, it will be created with its first version, in draft state. Further changes to the publication should be made using the [Publication Version](#/tagName/PublicationVersions) endpoints. As such, many of the fields here actually refer to the publication version itself.
+        
+        Organisational accounts can create a live publication with this endpoint by providing the `directPublish` query parameter.
+      tags:
+        - Publications
+      security:
+        - ApiKey: []
+        - BearerToken: []
+      parameters:
+        - in: query
+          name: directPublish
+          description: |
+            Whether the publication should go straight to live state, rather than the default of draft. This is only permitted to organisational accounts. In order to direct publish, certain conditions must be satisfied. Notably, if the account making this operation has a default topic, that will be associated with the publication on creation if no values are provided for either of `topicIds` or `linkedPublicationIds`. If it doesn't, a value must be provided for `topicIds` or `linkedPublicationIds`. See PublicationVersion's [updateStatus](#/tagName/PublicationVersions/updateStatus) endpoint for more requirements.
+          schema:
+            type: boolean
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  $ref: "#/components/schemas/PublicationTypeEnum"
+                title:
+                  $ref: "#/components/schemas/PublicationVersionTitle"
+                licence:
+                  $ref: "#/components/schemas/PublicationVersionLicence"
+                content:
+                  $ref: "#/components/schemas/PublicationVersionContent"
+                description:
+                  $ref: "#/components/schemas/PublicationVersionDescription"
+                keywords:
+                  $ref: "#/components/schemas/PublicationVersionKeywords"
+                conflictOfInterestStatus:
+                  $ref: "#/components/schemas/PublicationVersionConflictOfInterestStatus"
+                conflictOfInterestText:
+                  $ref: "#/components/schemas/PublicationVersionConflictOfInterestText"
+                language:
+                  $ref: "#/components/schemas/PublicationVersionLanguage"
+                ethicalStatement:
+                  $ref: "#/components/schemas/PublicationVersionEthicalStatement"
+                ethicalStatementFreeText:
+                  $ref: "#/components/schemas/PublicationVersionEthicalStatementFreeText"
+                dataPermissionsStatement:
+                  $ref: "#/components/schemas/PublicationVersionDataPermissionsStatement"
+                dataPermissionsStatementProvidedBy:
+                  $ref: "#/components/schemas/PublicationVersionDataPermissionsStatementProvidedBy"
+                dataAccessStatement:
+                  $ref: "#/components/schemas/PublicationVersionDataAccessStatement"
+                selfDeclaration:
+                  $ref: "#/components/schemas/PublicationVersionSelfDeclaration"
+                fundersStatement:
+                  $ref: "#/components/schemas/PublicationVersionFundersStatement"
+                affiliationStatement:
+                  type: string
+                  description: Unused legacy field.
+                  nullable: true
+                topicIds:
+                  $ref: "#/components/schemas/PublicationVersionTopicIds"
+                linkedPublicationIds:
+                  type: array
+                  nullable: true
+                  description: IDs of publications that this publication should be linked to. Only relevant when using direct publish.
+                  items:
+                    type: string
+                externalId:
+                  $ref: "#/components/schemas/PublicationExternalId"
+                externalSource:
+                  $ref: "#/components/schemas/PublicationExternalSource"
+              required:
+                - type
+                - title
+      responses:
+        '201':
+          description: Publication created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: "#/components/schemas/BasePublicationResponse"
+                - type: object
+                  properties:
+                    versions:
+                      type: array
+                      items:
+                        allOf:
+                          - $ref: "#/components/schemas/BasePublicationVersionResponse"
+                          - type: object
+                            properties:
+                              topics:
+                                type: array
+                                description: Topics that the publication is linked to.
+                                items:
+                                  $ref: "#/components/schemas/BaseTopicResponse"
+                    linkedTo:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/LinkResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+  /publications/{publicationId}:
+    get:
+      summary: Get a full publication with its versions and other relations
+      description: Can be used unauthorized, but will only include DRAFT/LOCKED versions if the request is authorized and the user has permission to view them. If there would be no viewable versions, a 403 response is returned.
+      tags:
+        - Publications
+      parameters:
+        - $ref: "#/components/parameters/PublicationId"
+        - in: query
+          name: fields
+          schema:
+            type: string
+            example: id,type,versions(id,title,createdAt,user)
+          description: |
+            Filter the response to only include certain fields. Can use parentheses to refer to nested fields (limited to one level of nesting). For example, `id,type,versions(id,title)` would get `id` and `type` from the publication, and its `versions`, with their `id` and `title` fields.\
+            \
+            Despite the limit, data nested more than one level deep can be obtained by treating double-nested objects as fields. For example, `versions(user)` will get the `user` nested in each `version` with its default fields.
+      responses:
+        '200':
+          description: A publication object
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: "#/components/schemas/BasePublicationResponse"
+                - type: object
+                  properties:
+                    versions:
+                      type: array
+                      items:
+                        allOf:
+                          - $ref: "#/components/schemas/BasePublicationVersionResponse"
+                          - type: object
+                            properties:
+                              user:
+                                $ref: "#/components/schemas/UserResponse"
+                              publicationStatus:
+                                type: array
+                                items:
+                                  $ref: "#/components/schemas/PublicationStatusResponse"
+                              funders:
+                                type: array
+                                items:
+                                  $ref: "#/components/schemas/BaseFunderResponse"
+                              coAuthors:
+                                type: array
+                                items:
+                                  $ref: "#/components/schemas/CoAuthorResponse"
+                              topics:
+                                type: array
+                                items:
+                                  $ref: "#/components/schemas/BaseTopicResponse"
+                              additionalInformation:
+                                type: array
+                                items:
+                                  $ref: "#/components/schemas/AdditionalInformationResponse"
+                    publicationFlags:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          category:
+                            type: string
+                            description: The nature of the issue being flagged.
+                            enum: [PLAGIARISM, ETHICAL_ISSUES, MISREPRESENTATION, UNDECLARED_IMAGE_MANIPULATION, COPYRIGHT, INAPPROPRIATE]
+                          resolved:
+                            type: boolean
+                          createdBy:
+                            type: string
+                          createdAt:
+                            type: string
+                            format: date-time
+                          user:
+                            $ref: "#/components/schemas/UserResponse"
+                    linkedTo:
+                      type: array
+                      description: Other publications this publication is linked to (returns live publications only).
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the link between the publications.
+                          publicationTo:
+                            $ref: "#/components/schemas/LinkedPublication"
+                    linkedFrom:
+                      type: array
+                      description: Other publications this publication is linked from (returns live publications only).
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the link between the publications.
+                          publicationFrom:
+                            $ref: "#/components/schemas/LinkedPublication"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /publications/{publicationId}/publication-versions/{versionId}:
+    get:
+      summary: Get a publication version
+      description: Can be used with authorization to get versions that aren't publicly visible (i.e. in DRAFT or LOCKED state).
+      tags:
+        - PublicationVersions
+      parameters:
+        - $ref: "#/components/parameters/PublicationId"
+        - in: path
+          name: versionId
+          schema:
+            oneOf:
+              - type: string
+              - type: number
+          examples:
+            number:
+              value: 2
+            uniqueId:
+              value: kx8b-gw18-v2
+            latestOrLatestLive:
+              value: latest
+          description: |
+            Specify the version to get. This can be provided in one of 3 ways:
+            - A number matching the `versionNumber` field of the version
+            - A string matching the `id` of the version
+            - Either of:
+                - `latest`: gets the latest version of any state. If the latest version is not in LIVE state and the requestor isn't permitted to access it, this will return the latest LIVE version if it exists.
+                - `latestLive`: gets the latest version in LIVE state.
+          required: true
+      responses:
+        '200':
+          description: A publication version object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FullPublicationVersionResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /publication-versions/{publicationVersionId}:
+    patch:
+      summary: Update a publication version
+      tags:
+        - PublicationVersions
+      security:
+        - ApiKey: []
+        - BearerToken: []
+      parameters:
+        - $ref: "#/components/parameters/PublicationVersionId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  $ref: "#/components/schemas/PublicationVersionTitle"
+                content:
+                  $ref: "#/components/schemas/PublicationVersionContent"
+                description:
+                  $ref: "#/components/schemas/PublicationVersionDescription"
+                keywords:
+                  $ref: "#/components/schemas/PublicationVersionKeywords"
+                conflictOfInterestStatus:
+                  $ref: "#/components/schemas/PublicationVersionConflictOfInterestStatus"
+                conflictOfInterestText:
+                  $ref: "#/components/schemas/PublicationVersionConflictOfInterestText"
+                language:
+                  $ref: "#/components/schemas/PublicationVersionLanguage"
+                ethicalStatement:
+                  $ref: "#/components/schemas/PublicationVersionEthicalStatement"
+                ethicalStatementFreeText:
+                  $ref: "#/components/schemas/PublicationVersionEthicalStatementFreeText"
+                dataPermissionsStatement:
+                  $ref: "#/components/schemas/PublicationVersionDataPermissionsStatement"
+                dataPermissionsStatementProvidedBy:
+                  $ref: "#/components/schemas/PublicationVersionDataPermissionsStatementProvidedBy"
+                dataAccessStatement:
+                  $ref: "#/components/schemas/PublicationVersionDataAccessStatement"
+                selfDeclaration:
+                  $ref: "#/components/schemas/PublicationVersionSelfDeclaration"
+                fundersStatement:
+                  $ref: "#/components/schemas/PublicationVersionFundersStatement"
+                topics:
+                  $ref: "#/components/schemas/PublicationVersionTopicIds"
+      responses:
+        '200':
+          description: Publication version updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FullPublicationVersionResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /publication-versions/{publicationVersionId}/additional-information:
+    post:
+      summary: Create a piece of additional information for a publication version
+      description: Additional information is used for links to any other resources used for a publication, such as large datasets, software repositories, video sites, and so on.
+      tags:
+        - PublicationVersions
+      security:
+        - ApiKey: []
+        - BearerToken: []
+      parameters:
+        - $ref: "#/components/parameters/PublicationVersionId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  minLength: 1
+                  description: Label for the additional information.
+                url:
+                  type: string
+                  description: A valid URL where the resource can be found.
+                description:
+                  type: string
+                  nullable: true
+                  maxLength: 255
+                  description: An optional description of the resource.
+              required: [title, url]
+      responses:
+        '200':
+          description: Additional information created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  url:
+                    type: string
+                  description:
+                    type: string
+                    nullable: true
+                  createdAt:
+                    type: string
+                    format: date-time
+                  publicationVersionId:
+                    type: string
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /publication-versions/{publicationVersionId}/additional-information/{additionalInformationId}:
+    delete:
+      summary: Delete a piece of additional information for a publication version
+      tags:
+        - PublicationVersions
+      security:
+        - ApiKey: []
+        - BearerToken: []
+      parameters:
+        - $ref: "#/components/parameters/PublicationVersionId"
+        - in: path
+          name: additionalInformationId
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Additional information deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: Number of items deleted.
+                    example: 1
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /publication-versions/{publicationVersionId}/funders:
+    post:
+      summary: Add a funder to a publication version
+      description: A funder is any source of funding for work done on a publication.
+      tags:
+        - PublicationVersions
+      security:
+        - ApiKey: []
+        - BearerToken: []
+      parameters:
+        - $ref: "#/components/parameters/PublicationVersionId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                country:
+                  type: string
+                city:
+                  type: string
+                link:
+                  type: string
+                ror:
+                  type: string
+                grantId:
+                  type: string
+              required: [name, country, city, link]
+      responses:
+        '200':
+          description: Funder created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FullFunderResponse"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /publication-versions/{publicationVersionId}/funders/{funderId}:
+    delete:
+      summary: Delete a funder for a publication version
+      tags:
+        - PublicationVersions
+      security:
+        - ApiKey: []
+        - BearerToken: []
+      parameters:
+        - $ref: "#/components/parameters/PublicationVersionId"
+        - in: path
+          name: funderId
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Funder deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: Number of items deleted.
+                    example: 1
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /publication-versions/{publicationVersionId}/my-affiliations:
+    put:
+      summary: Set your own affiliations for a publication version
+      description: The user whose affiliations are to be updated is determined to be the owner of the API key or bearer token used to authenticate the request.
+      tags:
+        - PublicationVersions
+      security:
+        - ApiKey: []
+        - BearerToken: []
+      parameters:
+        - $ref: "#/components/parameters/PublicationVersionId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                affiliations:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Affiliation"
+                isIndependent:
+                  $ref: "#/components/schemas/CoAuthorIsIndependent"
+              required: [affiliations, isIndependent]
+      responses:
+        '200':
+          description: Affiliations updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Successfully updated affiliations"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /publication-versions/{publicationVersionId}/references:
+    get:
+      summary: Get all references for a publication version
+      tags:
+        - PublicationVersions
+      parameters:
+        - $ref: "#/components/parameters/PublicationVersionId"
+      responses:
+        '200':
+          description: An array of references
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Reference"
+    put:
+      summary: Set references for a publication version
+      tags:
+        - PublicationVersions
+      security:
+        - ApiKey: []
+        - BearerToken: []
+      parameters:
+        - $ref: "#/components/parameters/PublicationVersionId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Reference"
+      responses:
+        '200':
+          description: References updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    description: The number of references related to the publication version after this operation.
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /publication-versions/{publicationVersionId}/status/{status}:
+    put:
+      operationId: updateStatus
+      summary: Set the publication status of a publication version
+      description: |
+        Manage the workflow state of a publication version. They start out as DRAFT, then move to LIVE (via LOCKED, if working with co-authors, to gather their approval), after which the status cannot be changed.\
+        \
+        In order to be made LIVE, a publication version must:
+        - Have values for `title`, `license`, and `content`
+        - If a version of a DATA type publication, have a value for `ethicalStatement` and `dataPermissionsStatement`
+        - Either:
+            - Be a version of a publication that has at least one link to another publication
+            - Be related to at least one topic
+        - Either:
+            - Have `conflictOfInterestStatus` set to `true` and a value for `conflictOfInterestText`
+            - Have `conflictOfInterestStatus` set to `false`
+      tags:
+        - PublicationVersions
+      security:
+        - ApiKey: []
+        - BearerToken: []
+      parameters:
+        - $ref: "#/components/parameters/PublicationVersionId"
+        - in: path
+          name: status
+          schema:
+            $ref: "#/components/schemas/PublicationStatusEnum"
+          required: true
+      responses:
+        '200':
+          description: Status set successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Publication is now LIVE.
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '401':
+          $ref: "#/components/responses/Unauthorized"
+        '403':
+          $ref: "#/components/responses/Forbidden"
+        '404':
+          $ref: "#/components/responses/NotFound"
+  /users/{userId}/publications:
+    get:
+      summary: Get publications owned by a user
+      description: |
+        As the user matching `userId`, this will return all publications with at least one version on which you are a corresponding author or co-author (confirmed or unconfirmed). If requesting another user's publications, only live publications will be returned.\
+        \
+        By default, results are paginated to batches of 10 publications. Use the `offset` and `limit` query parameters to fetch more. For example, to get results 11-30, set `?offset=10&limit=20`.
+      tags:
+        - PublicationVersions
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: offset
+          schema:
+            $ref: "#/components/schemas/SearchOffset"
+        - in: query
+          name: limit
+          schema:
+            $ref: "#/components/schemas/SearchLimit"
+        - in: query
+          name: versionStatus
+          description: Used to filter results by publication state. Multiple values should be comma-separated. Publications that have a version with a `currentStatus` in the provided values will be returned. Only works if the requestor is the user specified in the `userId` path parameter.
+          schema:
+            type: string
+            nullable: true
+            example: DRAFT,LOCKED
+      responses:
+        '200':
+          description: An array of publications
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  offset:
+                    $ref: "#/components/schemas/SearchOffset"
+                  limit:
+                    $ref: "#/components/schemas/SearchLimit"
+                  total:
+                    type: integer
+                    minimum: 0
+                  results:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: "#/components/schemas/BasePublicationResponse"
+                        - type: object
+                          properties:
+                            versions:
+                              type: array
+                              items:
+                                allOf:
+                                  - $ref: "#/components/schemas/BasePublicationVersionResponse"
+                                  - type: object
+                                    properties:
+                                      user:
+                                        type: object
+                                        properties:
+                                          firstName:
+                                            $ref: "#/components/schemas/UserFirstName"
+                                          lastName:
+                                            $ref: "#/components/schemas/UserLastName"
+                                          id:
+                                            $ref: "#/components/schemas/UserId"
+                                          orcid:
+                                            $ref: "#/components/schemas/UserOrcid"
+                                      coAuthors:
+                                        type: array
+                                        items:
+                                          type: object
+                                          properties:
+                                            id:
+                                              $ref: "#/components/schemas/CoAuthorId"
+                                            linkedUser:
+                                              $ref: "#/components/schemas/CoAuthorLinkedUser"
+                                            confirmedCoAuthor:
+                                              $ref: "#/components/schemas/CoAuthorConfirmedCoAuthor"
+                                            email:
+                                              $ref: "#/components/schemas/CoAuthorEmail"
+                                            user:
+                                              $ref: "#/components/schemas/CoAuthorUser"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '404':
+          $ref: "#/components/responses/NotFound"
+components:
+  parameters:
+    PublicationId:
+      in: path
+      name: publicationId
+      schema:
+        type: string
+      required: true
+    PublicationVersionId:
+      in: path
+      name: publicationVersionId
+      schema:
+        type: string
+      required: true
+  responses:
+    BadRequest:
+      description: Bad request
+    Unauthorized:
+      description: Unauthorized. Missing bearer token or API key
+    Forbidden:
+      description: Forbidden
+    NotFound:
+      description: Resource not found
+  schemas:
+    AdditionalInformationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        url:
+          type: string
+        description:
+          type: string
+          nullable: true
+    Affiliation:
+      type: object
+      description: Affiliation data from ORCiD mapped to a custom structure.
+      properties:
+        id:
+          type: integer
+          description: Affiliation ID.
+        title:
+          type: string
+          nullable: true
+        source:
+          type: object
+          properties:
+            name:
+              type: string
+            orcid:
+              type: string
+              description: ORCiD ID.
+        createdAt:
+          type: integer
+          format: timestamp
+          example: 1682427304185
+        startDate:
+          type: object
+          nullable: true
+          properties:
+            day:
+              type: string
+              nullable: true
+            year:
+              type: string
+              nullable: true
+            month:
+              type: string
+              nullable: true
+        endDate:
+          type: object
+          nullable: true
+          properties:
+            day:
+              type: string
+              nullable: true
+            year:
+              type: string
+              nullable: true
+            month:
+              type: string
+              nullable: true
+        updatedAt:
+          type: integer
+          format: timestamp
+          example: 1682427304185
+        organization:
+          type: object
+          properties:
+            name:
+              type: string
+            address:
+              type: object
+              properties:
+                city:
+                  type: string
+                region:
+                  type: string
+                  nullable: true
+                country:
+                  type: string
+            disambiguated-organization:
+              type: object
+              nullable: true
+              properties:
+                disambiguation-source:
+                  type: string
+                disambiguated-organization-identifier:
+                  type: string
+        departmentName:
+          type: string
+          nullable: true
+        affiliationType:
+          type: string
+          enum: [membership, service, invited-position, distinction, employment, education, qualification, misc.]
+        url:
+          type: string
+          nullable: true
+    BaseFunderResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        city:
+          type: string
+          example: Bristol
+        country:
+          type: string
+          example: United Kingdom
+        name:
+          type: string
+          example: Jisc
+        link:
+          type: string
+          description: The funder's URL.
+          example: https://www.jisc.ac.uk
+        ror:
+          type: string
+          description: Research Organization Registry ID, if applicable.
+          example: 01rv9gx86
+        grantId:
+          type: string
+    BasePublicationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Publication ID.
+        url_slug:
+          type: string
+          description: Unused legacy field.
+        type:
+          $ref: "#/components/schemas/PublicationTypeEnum"
+        doi:
+          type: string
+          description: Digital Object Identifier, minted with Datacite upon publication creation.
+        externalId:
+          $ref: "#/components/schemas/PublicationExternalId"
+        externalSource:
+          $ref: "#/components/schemas/PublicationExternalSource"
+    BasePublicationVersionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Publication version ID.
+        doi:
+          type: string
+          description: Digital Object Identifier specific to this version, related to the publication's DOI. Null until the version is published.
+          nullable: true
+        versionOf:
+          type: string
+          description: ID of the publication this is a version of.
+        versionNumber:
+          type: integer
+          minimum: 1
+        isLatestVersion:
+          type: boolean
+        isLatestLiveVersion:
+          type: boolean
+        createdBy:
+          type: string
+          description: ID of the user who created the publication version.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        currentStatus:
+          $ref: "#/components/schemas/PublicationStatusEnum"
+        publishedDate:
+          $ref: "#/components/schemas/PublicationVersionPublishedDate"
+        title:
+          $ref: "#/components/schemas/PublicationVersionTitle"
+        licence:
+          $ref: "#/components/schemas/PublicationVersionLicence"
+        conflictOfInterestStatus:
+          $ref: "#/components/schemas/PublicationVersionConflictOfInterestStatus"
+        conflictOfInterestText:
+          $ref: "#/components/schemas/PublicationVersionConflictOfInterestText"
+        ethicalStatement:
+          $ref: "#/components/schemas/PublicationVersionEthicalStatement"
+        ethicalStatementFreeText:
+          $ref: "#/components/schemas/PublicationVersionEthicalStatementFreeText"
+        dataPermissionsStatement:
+          $ref: "#/components/schemas/PublicationVersionDataPermissionsStatement"
+        dataPermissionsStatementProvidedBy:
+          $ref: "#/components/schemas/PublicationVersionDataPermissionsStatementProvidedBy"
+        dataAccessStatement:
+          $ref: "#/components/schemas/PublicationVersionDataAccessStatement"
+        selfDeclaration:
+          $ref: "#/components/schemas/PublicationVersionSelfDeclaration"
+        description:
+          $ref: "#/components/schemas/PublicationVersionDescription"
+        keywords:
+          $ref: "#/components/schemas/PublicationVersionKeywords"
+        content:
+          $ref: "#/components/schemas/PublicationVersionContent"
+        language:
+          $ref: "#/components/schemas/PublicationVersionLanguage"
+        fundersStatement:
+          $ref: "#/components/schemas/PublicationVersionFundersStatement"
+    BaseTopicResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Topic ID.
+        title:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    Bookmark:
+      type: object
+      properties:
+        id:
+          type: string
+        type: 
+          type: string
+          enum: [PUBLICATION, TOPIC]
+        entityId:
+          type: string
+        userId:
+          type: string
+    CoAuthorConfirmedCoAuthor:
+      type: boolean
+      description: Whether the coauthor has confirmed their involvement in the publication.
+    CoAuthorEmail:
+      type: string
+    CoAuthorId:
+      type: string
+    CoAuthorIsIndependent:
+      type: boolean
+      description: Whether the author undertook their work with any affiliations or worked independently.
+    CoAuthorLinkedUser:
+      type: string
+      description: ID of the octopus user linked to this CoAuthor object.
+      nullable: true
+    CoAuthorResponse:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/CoAuthorId"
+        email:
+          $ref: "#/components/schemas/CoAuthorEmail"
+        linkedUser:
+          $ref: "#/components/schemas/CoAuthorLinkedUser"
+        publicationVersionId:
+          type: string
+        confirmedCoAuthor:
+          $ref: "#/components/schemas/CoAuthorConfirmedCoAuthor"
+        approvalRequested:
+          type: boolean
+          description: Whether the corresponding author has requested the approval of this coauthor.
+        createdAt:
+          type: string
+          format: date-time
+        reminderDate:
+          type: string
+          format: date-time
+          description: When the last email was sent to this coauthor reminding them to approve the publication.
+          nullable: true
+        isIndependent:
+          $ref: "#/components/schemas/CoAuthorIsIndependent"
+        affiliations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Affiliation"
+        user:
+          $ref: "#/components/schemas/CoAuthorUser"
+    CoAuthorUser:
+      type: object
+      properties:
+        firstName:
+          $ref: "#/components/schemas/UserFirstName"
+        lastName:
+          $ref: "#/components/schemas/UserLastName"
+        orcid:
+          $ref: "#/components/schemas/UserOrcid"
+        role:
+          $ref: "#/components/schemas/UserRole"
+        url:
+          $ref: "#/components/schemas/UserUrl"
+    FullFunderResponse:
+      allOf:
+        - $ref: "#/components/schemas/BaseFunderResponse"
+        - type: object
+          properties:
+            createdAt:
+              type: string
+              format: date-time
+            publicationVersionId:
+              type: string
+    FullPublicationVersionResponse:
+      allOf:
+        - $ref: "#/components/schemas/BasePublicationVersionResponse"
+        - type: object
+          properties:
+            publication:
+              $ref: "#/components/schemas/BasePublicationResponse"
+            publicationStatus:
+              type: array
+              items:
+                $ref: "#/components/schemas/PublicationStatusResponse"
+            funders:
+              type: array
+              items:
+                $ref: "#/components/schemas/BaseFunderResponse"
+            coAuthors:
+              type: array
+              items:
+                $ref: "#/components/schemas/CoAuthorResponse"
+            user:
+              $ref: "#/components/schemas/UserResponse"
+            topics:
+              type: array
+              items:
+                allOf:
+                  - $ref: "#/components/schemas/BaseTopicResponse"
+                  - type: object
+                    properties:
+                      draft:
+                        type: boolean
+                        description: Whether the link from the publication to the topic is a draft (i.e. created in a current draft/locked version) or not (i.e. created in a previous/live version)
+            additionalInformation:
+              type: array
+              items:
+                $ref: "#/components/schemas/AdditionalInformationResponse"
+    LinkResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the link between publications.
+        publicationFromId:
+          type: string
+          description: ID of the publication linked from.
+        publicationToId:
+          type: string
+          description: ID of the publication linked to.
+        versionToId:
+          type: string
+          description: ID of the particular version of the publication that was linked to.
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        draft:
+          type: boolean
+          description: Whether the link is in draft state. Generally speaking, this is true when the publication linked from is a draft being worked on, and becomes false when that publication's version becomes live.
+    LinkedPublication:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the linked publication.
+        type:
+          $ref: "#/components/schemas/PublicationTypeEnum"
+        doi:
+          type: string
+        versions:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                $ref: "#/components/schemas/PublicationVersionTitle"
+              publishedDate:
+                $ref: "#/components/schemas/PublicationVersionPublishedDate"
+              currentStatus:
+                $ref: "#/components/schemas/PublicationStatusEnum"
+              description:
+                $ref: "#/components/schemas/PublicationVersionDescription"
+              keywords:
+                $ref: "#/components/schemas/PublicationVersionKeywords"
+    PublicationExternalId:
+      type: string
+      nullable: true
+      description: When a publication has been imported from an external system, this is the ID it has on that system. Must be accompanied by the externalSource field.
+    PublicationExternalSource:
+      type: string
+      nullable: true
+      enum: [ARI]
+      description: An external system the publication has been imported from. Must be accompanied by the externalId field.
+    PublicationStatusEnum:
+      type: string
+      enum: [DRAFT,LOCKED,LIVE]
+      description: Publication status - draft, locked for approval, or live.
+    PublicationStatusResponse:
+      type: object
+      properties:
+        status:
+          $ref: "#/components/schemas/PublicationStatusEnum"
+        createdAt:
+          type: string
+          format: date-time
+        id:
+          type: string
+    PublicationTypeEnum:
+      type: string
+      enum: [PROBLEM, HYPOTHESIS, PROTOCOL, DATA, ANALYSIS, INTERPRETATION, REAL_WORLD_APPLICATION, PEER_REVIEW]
+      description: |
+        Publication type. Some are labelled differently in the Octopus front end:
+        - PROBLEM = Research Problem
+        - HYPOTHESIS = Rationale / Hypothesis
+        - PROTOCOL = Method
+        - DATA = Results
+    PublicationVersionConflictOfInterestStatus:
+      type: boolean
+      description: Whether the publication has any conflict of interest.
+      nullable: true
+    PublicationVersionConflictOfInterestText:
+      type: string
+      description: Explains the nature of any conflict of interest.
+      nullable: true
+    PublicationVersionContent:
+      type: string
+      description: The main body of the publication (HTML string).
+      example: <p>Content here...</p>
+      nullable: true
+    PublicationVersionDataAccessStatement:
+      type: string
+      description: Used for DATA publications. Where the results associated with the publication can be found, and how they can be accessed.
+      example: This publication contains a sample of relevant results or data, with the full data publicly stored on another platform.
+      nullable: true
+    PublicationVersionDataPermissionsStatement:
+      type: string
+      description: Used for DATA publications. Whether the data involve materials owned by parties other than the author, or copyrighted materials.
+      example: The results in this publication involved access to owned or copyrighted materials.
+      nullable: true
+    PublicationVersionDataPermissionsStatementProvidedBy:
+      type: string
+      description: Used for DATA publications. Who gave permission for the use of materials referred to in dataPermissionsStatement, if necessary.
+      nullable: true
+    PublicationVersionDescription:
+      type: string
+      maxLength: 160
+      description: A short description of the publication.
+      nullable: true
+    PublicationVersionEthicalStatement:
+      type: string
+      description: Used for DATA publications. Whether the data involve human or animal subjects.
+      example: The results in this publication involved human or animal subjects.
+      nullable: true
+    PublicationVersionEthicalStatementFreeText:
+      type: string
+      description: Used for DATA publications. Who gave ethical approval for the collection and sharing of data, if necessary.
+      nullable: true
+    PublicationVersionFundersStatement:
+      type: string
+      description: Information on the publication’s funding arrangements (beyond the funders themselves)
+      nullable: true
+    PublicationVersionKeywords:
+      type: array
+      items:
+        type: string
+      maxItems: 50
+    PublicationVersionLanguage:
+      type: string
+      description: An ISO 639 language code.
+      example: 'en'
+      nullable: true
+    PublicationVersionLicence:
+      type: string
+      enum: [CC_BY, CC_BY_SA, CC_BY_NC, CC_BY_NC_SA]
+      description: Selected creative commons licences.
+      nullable: true
+    PublicationVersionPublishedDate:
+      type: string
+      format: date-time
+      description: When the version was published (changed to LIVE status).
+      nullable: true
+    PublicationVersionSelfDeclaration:
+      type: boolean
+      description: Used for HYPOTHESIS and PROTOCOL publications. Whether results have yet been collected to test the hypothesis (i.e. this is a pre-registration).
+      nullable: true
+    PublicationVersionTitle:
+      type: string
+      minLength: 1
+    PublicationVersionTopicIds:
+      type: array
+      items:
+        type: string
+      description: |
+        The IDs of one or more topics the publication is linked to. This should only be used where a publication cannot be linked to another publication (see [Links](#/tagName/Links)). Only PROBLEM publications can be linked to a topic.
+      nullable: true
+    Reference:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique ID for the reference.
+        publicationVersionId:
+          type: string
+        type:
+          type: string
+          enum: [DOI, URL, TEXT]
+          description: Classifies the identifier of the reference. Use `DOI` or `URL` if supplying a DOI or URL in the location property, otherwise use `TEXT`.
+        text:
+          type: string
+          description: Reference citation or description.
+        location:
+          type: string
+          nullable: true
+          description: Where type is `DOI` or `URL`, this should be set to the DOI or URL in question.
+      required: [id, publicationVersionId, type, text]
+    SearchLimit:
+      type: integer
+      minimum: 1
+      default: 10
+    SearchOffset:
+      type: integer
+      minimum: 0
+      default: 0
+    UserFirstName:
+      type: string
+      description: User's first name.
+    UserId:
+      type: string
+      description: User ID.
+    UserLastName:
+      type: string
+      description: User's last name.
+    UserOrcid:
+      type: string
+      description: ORCiD ID. Not used for organisational accounts.
+      nullable: true
+    UserResponse:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UserId"
+        orcid:
+          $ref: "#/components/schemas/UserOrcid"
+        firstName:
+          $ref: "#/components/schemas/UserFirstName"
+        lastName:
+          $ref: "#/components/schemas/UserLastName"
+        email:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        role:
+          $ref: "#/components/schemas/UserRole"
+        url:
+          $ref: "#/components/schemas/UserUrl"
+        defaultTopicId:
+          type: string
+          nullable: true
+          description: Organisational accounts may have a default topic that their publications can be automatically associated with on creation.
+    UserRole:
+      type: string
+      enum: [USER, ORGANISATION, SUPER_USER]
+      description: The type of account held by a user.
+    UserUrl:
+      type: string
+      description: Used by organisational accounts to record their website address.
+      nullable: true
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      in: query
+      name: api_key
+    BearerToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,18 +1,18 @@
 import * as authorizationService from 'authorization/service';
-import cryptoRandomString from 'crypto-random-string';
 import * as I from 'interface';
 import * as email from 'lib/email';
 import * as response from 'lib/response';
 import * as luxon from 'luxon';
 import * as userService from 'user/service';
 import * as verificationService from 'verification/service';
+import * as Helpers from 'lib/helpers';
 
 export const requestCode = async (
     event: I.AuthenticatedAPIRequest<undefined, I.RequestVerificationCodeParameters, I.GetUserParameters>
 ): Promise<I.JSONResponse> => {
     try {
         // generate code
-        const code = cryptoRandomString({ length: 7, type: 'distinguishable' });
+        const code = Helpers.generateOTP(7);
 
         // store code with user orcid and email
         await verificationService.upsert({
@@ -25,8 +25,7 @@ export const requestCode = async (
         await email.verificationCode({
             to: event.queryStringParameters.email,
             code,
-            userFirstName: event.user.firstName,
-            userLastName: event.user.lastName
+            userFullName: Helpers.getUserFullName(event.user)
         });
 
         return response.json(200, { message: 'OK' });
@@ -80,7 +79,7 @@ export const confirmCode = async (
             return response.json(404, { message: 'Not found' });
         }
 
-        return response.json(422, { message: 'Incorrect code' });
+        return response.json(400, { message: 'Incorrect code' });
     } catch (err) {
         console.log(err);
 

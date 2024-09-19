@@ -1,6 +1,6 @@
 data "aws_caller_identity" "current" {}
 
-resource "random_string" "db_master_pass" {
+resource "random_password" "db_master_pass" {
   length           = 40
   special          = true
   min_numeric      = 1
@@ -27,13 +27,13 @@ resource "aws_security_group" "elasticsearch" {
     to_port   = 443
     protocol  = "tcp"
 
-    cidr_blocks = ["10.0.0.0/16"]
+    cidr_blocks = [var.vpc_cidr_block]
   }
 }
 
 resource "aws_elasticsearch_domain" "elasticsearch" {
   domain_name           = "${var.environment}-octopus"
-  elasticsearch_version = "OpenSearch_2.3.0"
+  elasticsearch_version = "OpenSearch_2.7"
 
   encrypt_at_rest {
     enabled = true
@@ -70,6 +70,7 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
 
   advanced_options = {
     "rest.action.multi.allow_explicit_index" = "true"
+    "override_main_response_version"         = "true"
   }
 
   advanced_security_options {
@@ -78,7 +79,7 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
 
     master_user_options {
       master_user_name     = "octopus_admin"
-      master_user_password = random_string.db_master_pass.result
+      master_user_password = random_password.db_master_pass.result
     }
   }
 
@@ -90,15 +91,16 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
             "Action": "es:*",
             "Principal": "*",
             "Effect": "Allow",
-            "Resource": "arn:aws:es:eu-west-1:948306873545:domain/${var.environment}-octopus/*"
+            "Resource": "arn:aws:es:eu-west-1:${data.aws_caller_identity.current.account_id}:domain/${var.environment}-octopus/*"
         }
     ]
   }
   CONFIG
 
-#   depends_on = [
-#     aws_iam_service_linked_role.elasticsearch
-#   ]
+  #   depends_on = [
+  #     aws_iam_service_linked_role.elasticsearch
+  #   ]
+
 }
 
 // Save password to SSM
@@ -128,6 +130,6 @@ resource "aws_ssm_parameter" "elasticsearch_user" {
 resource "aws_ssm_parameter" "elasticsearch_password" {
   name      = "elasticsearch_password_${var.environment}_octopus"
   type      = "String"
-  value     = random_string.db_master_pass.result
+  value     = random_password.db_master_pass.result
   overwrite = true
 }

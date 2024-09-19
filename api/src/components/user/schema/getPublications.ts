@@ -13,14 +13,8 @@ const getPublicationsSchema: I.JSONSchemaType<I.UserPublicationsFilters> = {
             minimum: 1,
             default: 10
         },
-        orderBy: {
+        versionStatus: {
             type: 'string',
-            enum: ['id', 'title', 'createdAt', 'updatedAt', 'publishedDate', 'type'],
-            nullable: true
-        },
-        orderDirection: {
-            type: 'string',
-            enum: ['asc', 'desc'],
             nullable: true
         }
     },

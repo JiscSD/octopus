@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as Components from '@components';
+import * as Components from '@/components';
 
 type Props = {
     fixedHeader?: boolean;
@@ -11,7 +11,6 @@ type Props = {
 const Publication: React.FC<Props> = (props): React.ReactElement => (
     <>
         <Components.JumpToContent />
-        <Components.SurveyWidget />
         <Components.Header fixed={props.fixedHeader} />
         {props.publicationId && <Components.PublicationVisualization publicationId={props.publicationId} />}
         <main className="container mx-auto px-8 pb-6 pt-4 lg:grid lg:grid-cols-12 lg:gap-8 lg:pb-16 lg:pt-8 2xl:gap-16">

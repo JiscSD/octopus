@@ -1,16 +1,15 @@
 import React from 'react';
 import * as HeadlessUi from '@headlessui/react';
-import * as SolidIcon from '@heroicons/react/solid';
+import * as SolidIcon from '@heroicons/react/24/solid';
 import * as tiptap from '@tiptap/react';
-import * as Mammoth from 'mammoth';
 import * as FAIcons from 'react-icons/fa';
-import * as api from '@api';
-import * as Components from '@components';
-import * as Config from '@config';
-import * as Interfaces from '@interfaces';
-import * as Stores from '@stores';
-import * as Types from '@types';
+import * as api from '@/api';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Interfaces from '@/interfaces';
+import * as Stores from '@/stores';
 
+import Mammoth from 'mammoth';
 import TipTapImage from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Table from '@tiptap/extension-table';
@@ -308,7 +307,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             <HeadlessUi.Listbox.Button className="relative w-full cursor-default rounded-lg py-2 pl-3 pr-10 text-left hover:cursor-pointer hover:bg-grey-100 focus:outline-yellow-500 sm:text-sm">
                                 <span className="block truncate">{selected.name}</span>
                                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                    <SolidIcon.SelectorIcon className="h-5 w-5 text-grey-400" aria-hidden="true" />
+                                    <SolidIcon.ChevronUpDownIcon className="h-5 w-5 text-grey-400" aria-hidden="true" />
                                 </span>
                             </HeadlessUi.Listbox.Button>
                             <HeadlessUi.Transition
@@ -323,7 +322,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                             key={index}
                                             className={({ active }) =>
                                                 `${active ? 'text-slate-800  bg-grey-50' : 'text-slate-600'}
-                          relative cursor-default select-none py-2 px-4 ${heading.className}`
+                          relative cursor-default select-none px-4 py-2 ${heading.className}`
                                             }
                                             value={heading}
                                         >
@@ -612,16 +611,16 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                 tabBody={[
                                     <Components.FileUpload
                                         key="file-upload"
-                                        positiveActionCallback={handleUploadImage}
-                                        negativeActionCallback={clearImageAndCloseModal}
+                                        positiveCallback={handleUploadImage}
+                                        negativeCallback={clearImageAndCloseModal}
                                         loading={loading}
                                         uploadErrors={uploadImageErrors}
                                     />,
                                     <Components.URLSourceUpload
                                         key="url-source-upload"
                                         image={image}
-                                        positiveActionCallback={handleURLSourceUpload}
-                                        negativeActionCallback={clearImageAndCloseModal}
+                                        positiveCallback={handleURLSourceUpload}
+                                        negativeCallback={clearImageAndCloseModal}
                                     />
                                 ]}
                             />
@@ -649,7 +648,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                     type="file"
                                     aria-label="Choose a Word document"
                                     accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                                    className="cursor-pointer rounded-md text-sm ring-offset-2 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-blue-50 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-teal-700 hover:file:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                    className="cursor-pointer rounded-md text-sm ring-offset-2 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-teal-700 hover:file:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                                 />
                                 <span className="sr-only">Choose a Word document</span>
                             </label>
@@ -690,7 +689,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
 };
 
 interface TextEditorProps {
-    contentChangeHandler: (editor: any) => void;
+    contentChangeHandler: (htmlString: string) => void;
     defaultContent: string;
     references?: Interfaces.Reference[];
 }
@@ -745,7 +744,7 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
                 <span>Import from Microsoft Word (.docx)</span>
             </button>
 
-            <div className="mb-4 rounded-md border border-grey-100 bg-white-50 px-4 pt-2 pb-4 shadow focus-within:ring-2 focus-within:ring-yellow-500">
+            <div className="mb-4 rounded-md border border-grey-100 bg-white-50 px-4 pb-4 pt-2 shadow focus-within:ring-2 focus-within:ring-yellow-500">
                 <MenuBar
                     editor={textEditor}
                     loading={loading}

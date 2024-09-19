@@ -87,9 +87,12 @@ export const authorize = async (event: I.APIRequest<I.AuthorizeRequestBody>): Pr
             console.log(error);
         }
 
+        const existingUser = await userService.getByOrcid(orcidUserId);
+
+        // If names aren't visible on orcid record and we have previously saved values, keep those.
         const user = await userService.upsertUser(orcidUserId, {
-            firstName: userInformation?.person?.name?.['given-names']?.value || '',
-            lastName: userInformation?.person?.name?.['family-name']?.value || '',
+            firstName: userInformation?.person?.name?.['given-names']?.value || existingUser?.firstName || '',
+            lastName: userInformation?.person?.name?.['family-name']?.value || existingUser?.lastName || '',
             employment,
             education,
             works,
@@ -111,6 +114,10 @@ export const getDecodedUserToken = async (event: I.AuthenticatedAPIRequest): Pro
 };
 
 export const verifyOrcidAccess = async (event: I.AuthenticatedAPIRequest): Promise<I.JSONResponse> => {
+    if (!event.user.orcid) {
+        return response.json(400, 'User does not have an ORCiD ID');
+    }
+
     try {
         await authorizationService.verifyOrcidAccess(event.user.orcid);
     } catch (error) {
@@ -121,6 +128,10 @@ export const verifyOrcidAccess = async (event: I.AuthenticatedAPIRequest): Promi
 };
 
 export const revokeOrcidAccess = async (event: I.AuthenticatedAPIRequest): Promise<I.JSONResponse> => {
+    if (!event.user.orcid) {
+        return response.json(400, 'User does not have an ORCiD ID');
+    }
+
     try {
         await authorizationService.revokeOrcidAccess(event.user.orcid);
     } catch (error) {

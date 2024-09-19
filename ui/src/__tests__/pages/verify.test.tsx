@@ -1,20 +1,22 @@
+import '@/mocks';
 import Verify from '../../pages/verify';
-
 import { render, screen, fireEvent } from '@testing-library/react';
 
 // https://jestjs.io/docs/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
-Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: jest.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: jest.fn(), // deprecated
-        removeListener: jest.fn(), // deprecated
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn()
-    }))
+Object.defineProperties(window, {
+    matchMedia: {
+        writable: true,
+        value: jest.fn().mockImplementation((query) => ({
+            matches: false,
+            media: query,
+            onchange: null,
+            addListener: jest.fn(), // deprecated
+            removeListener: jest.fn(), // deprecated
+            addEventListener: jest.fn(),
+            removeEventListener: jest.fn(),
+            dispatchEvent: jest.fn()
+        }))
+    }
 });
 
 describe('Verify email tests', () => {
@@ -53,7 +55,7 @@ describe('Verify email tests', () => {
     });
 
     it('Error alert is not rendered initially', () => {
-        expect(screen.queryByTestId('alert-box')).not.toBeInTheDocument();
+        expect(screen.queryByText('Please enter a valid email address')).not.toBeInTheDocument();
     });
 
     it('Error alert appears when invalid email is entered into input field', () => {
@@ -61,7 +63,7 @@ describe('Verify email tests', () => {
         const sendInviteButton = screen.getByTitle('Send code');
         fireEvent.change(emailInput, { target: { value: 'invalidemail.com' } });
         fireEvent.click(sendInviteButton);
-        expect(screen.getByTestId('alert-box')).toBeInTheDocument();
+        expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
     });
 
     it('Alert is removed on invalid email when input is changed', () => {
@@ -69,9 +71,9 @@ describe('Verify email tests', () => {
         const sendInviteButton = screen.getByTitle('Send code');
         fireEvent.change(emailInput, { target: { value: 'invalidemail.com' } });
         fireEvent.click(sendInviteButton);
-        expect(screen.getByTestId('alert-box')).toBeInTheDocument();
+        expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
 
         fireEvent.change(emailInput, { target: { value: 'valid@email.com' } });
-        expect(screen.queryByTestId('alert-box')).not.toBeInTheDocument();
+        expect(screen.queryByText('Please enter a valid email address')).not.toBeInTheDocument();
     });
 });

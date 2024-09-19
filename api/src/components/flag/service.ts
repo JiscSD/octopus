@@ -1,8 +1,8 @@
 import * as client from 'lib/client';
 import * as I from 'interface';
 
-export const get = async (id: string) => {
-    const flags = await client.prisma.publicationFlags.findFirst({
+export const get = (id: string) =>
+    client.prisma.publicationFlags.findFirst({
         include: {
             user: {
                 select: {
@@ -34,11 +34,8 @@ export const get = async (id: string) => {
         }
     });
 
-    return flags;
-};
-
-export const getByPublicationID = async (id: string) => {
-    const flags = await client.prisma.publicationFlags.findMany({
+export const getByPublicationID = (id: string) =>
+    client.prisma.publicationFlags.findMany({
         include: {
             user: {
                 select: {
@@ -70,15 +67,12 @@ export const getByPublicationID = async (id: string) => {
         }
     });
 
-    return flags;
-};
-
 /**
  * This gets the flags created by a user
  * keeping as this can be useful for profile pages
  */
-export const getByUserID = async (id: string) => {
-    const flags = await client.prisma.publicationFlags.findMany({
+export const getByUserID = (id: string) =>
+    client.prisma.publicationFlags.findMany({
         include: {
             user: {
                 select: {
@@ -112,16 +106,13 @@ export const getByUserID = async (id: string) => {
         }
     });
 
-    return flags;
-};
-
-export const createFlag = async (
+export const createFlag = (
     publication: string,
     user: string,
     category: I.PublicationFlagCategoryEnum,
     comment: string
-) => {
-    const flag = await client.prisma.publicationFlags.create({
+) =>
+    client.prisma.publicationFlags.create({
         data: {
             category,
             user: {
@@ -143,28 +134,26 @@ export const createFlag = async (
         }
     });
 
-    return flag;
-};
-
-export const getFlag = async (id: string) => {
-    const flag = await client.prisma.publicationFlags.findFirst({
+export const getFlag = (id: string) =>
+    client.prisma.publicationFlags.findFirst({
         where: {
             id
         },
         include: {
             publication: {
                 include: {
-                    user: true
+                    versions: {
+                        include: {
+                            user: true
+                        }
+                    }
                 }
             }
         }
     });
 
-    return flag;
-};
-
-export const createFlagComment = async (id: string, comment: string, user: string) => {
-    const flagComment = await client.prisma.flagComments.create({
+export const createFlagComment = (id: string, comment: string, user: string) =>
+    client.prisma.flagComments.create({
         data: {
             flagId: id,
             comment,
@@ -172,11 +161,8 @@ export const createFlagComment = async (id: string, comment: string, user: strin
         }
     });
 
-    return flagComment;
-};
-
-export const resolveFlag = async (id: string) => {
-    const resolveFlag = await client.prisma.publicationFlags.update({
+export const resolveFlag = (id: string) =>
+    client.prisma.publicationFlags.update({
         where: {
             id
         },
@@ -184,6 +170,3 @@ export const resolveFlag = async (id: string) => {
             resolved: true
         }
     });
-
-    return resolveFlag;
-};

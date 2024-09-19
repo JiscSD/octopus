@@ -1,10 +1,11 @@
+import * as cheerio from 'cheerio';
 import nodemailer from 'nodemailer';
+import * as Helpers from 'lib/helpers';
 import * as response from 'lib/response';
 import * as publicationService from 'publication/service';
 import * as flagService from 'flag/service';
 import * as userService from 'user/service';
 import * as I from 'interface';
-import * as helpers from 'lib/helpers';
 import * as email from 'lib/email';
 
 export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByID>): Promise<I.JSONResponse> => {
@@ -20,10 +21,10 @@ export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByI
 };
 
 export const getPublicationFlags = async (
-    event: I.APIRequest<undefined, undefined, I.GetFlagsByPublicationID>
+    event: I.APIRequest<undefined, undefined, I.GetPublicationFlagsPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const flags = await flagService.getByPublicationID(event.pathParameters.id);
+        const flags = await flagService.getByPublicationID(event.pathParameters.publicationId);
 
         return response.json(200, flags);
     } catch (err) {
@@ -34,10 +35,10 @@ export const getPublicationFlags = async (
 };
 
 export const getUserFlags = async (
-    event: I.APIRequest<undefined, undefined, I.GetFlagsByUserID>
+    event: I.APIRequest<undefined, undefined, I.GetUserFlagsPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const flags = await flagService.getByUserID(event.pathParameters.id);
+        const flags = await flagService.getByUserID(event.pathParameters.userId);
 
         return response.json(200, flags);
     } catch (err) {
@@ -47,38 +48,71 @@ export const getUserFlags = async (
     }
 };
 
+const formatFlagType = (flagType: I.FlagCategory): string => {
+    const types = {
+        PLAGIARISM: 'Plagiarism',
+        ETHICAL_ISSUES: 'Ethical issues',
+        MISREPRESENTATION: 'Misrepresentation',
+        UNDECLARED_IMAGE_MANIPULATION: 'Undeclared image manipulation',
+        COPYRIGHT: 'Copyright',
+        INAPPROPRIATE: 'Inappropriate'
+    };
+
+    return types[flagType];
+};
+
 export const createFlag = async (
     event: I.AuthenticatedAPIRequest<I.CreateFlagRequestBody, undefined, I.CreateFlagPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const publication = await publicationService.get(event.pathParameters.id);
-
-        if (!publication || publication.currentStatus !== 'LIVE') {
-            return response.json(404, {
-                message: 'Cannot flag that a publication that does not exist, or is not LIVE'
+        if (event.user.role === 'ORGANISATION') {
+            return response.json(403, {
+                message: 'Organisational accounts cannot flag publications.'
             });
         }
 
-        if (publication.user.id === event.user.id) {
+        const publication = await publicationService.get(event.pathParameters.publicationId);
+
+        if (!publication) {
+            return response.json(404, {
+                message: 'Cannot flag that a publication that does not exist.'
+            });
+        }
+
+        if (!publication.versions.some((version) => version.isLatestLiveVersion)) {
+            return response.json(400, {
+                message: 'Cannot flag a publication that has not gone live.'
+            });
+        }
+
+        // Latest published version (the version presented when someone tries to raise a flag) is either current version,
+        // or if that's not LIVE, the version before, as we've already confirmed that the publication has been live at some point.
+        const latestPublishedVersion = publication.versions.find((version) => version.isLatestLiveVersion);
+
+        if (!latestPublishedVersion) {
+            throw Error('Unable to find latest published version.');
+        }
+
+        if (latestPublishedVersion.user.id === event.user.id) {
             return response.json(403, {
-                message: 'Cannot flag your own publication'
+                message: 'Cannot flag your own publication.'
             });
         }
 
         const doesDuplicateFlagExist = await publicationService.doesDuplicateFlagExist(
-            event.pathParameters.id,
+            event.pathParameters.publicationId,
             event.body.category,
             event.user.id
         );
 
         if (doesDuplicateFlagExist) {
             return response.json(400, {
-                message: 'An unresolved flag created by you, for this publication and category already exists.'
+                message: 'An unresolved flag created by you for this publication and category already exists.'
             });
         }
 
         const flag = await flagService.createFlag(
-            event.pathParameters.id,
+            event.pathParameters.publicationId,
             event.user.id,
             event.body.category,
             event.body.comment
@@ -87,15 +121,15 @@ export const createFlag = async (
         // send email to the author aka the creator of the flagged publication
         const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
 
-        if (publication?.user?.email) {
+        if (latestPublishedVersion.user?.email) {
             emailPromises.push(
                 email.newRedFlagAuthorNotification({
-                    to: publication.user.email,
-                    publicationName: publication.title,
+                    to: latestPublishedVersion.user.email,
+                    publicationName: latestPublishedVersion.title,
                     publicationId: publication.id,
                     flagId: flag.id,
-                    type: helpers.formatFlagType(event.body.category),
-                    submitter: `${event.user.firstName} ${event.user.lastName || ''}`,
+                    type: formatFlagType(event.body.category),
+                    submitter: Helpers.getUserFullName(event.user),
                     flagReason: event.body.comment
                 })
             );
@@ -106,7 +140,7 @@ export const createFlag = async (
             emailPromises.push(
                 email.newRedFlagCreatorNotification({
                     to: event.user.email,
-                    publicationName: publication.title,
+                    publicationName: latestPublishedVersion.title,
                     publicationId: publication.id,
                     flagId: flag.id
                 })
@@ -124,17 +158,34 @@ export const createFlag = async (
     }
 };
 
+const isHTMLSafe = (content: string): boolean => {
+    const $ = cheerio.load(content);
+    let error = false;
+
+    $('*').map((_, element) => {
+        const classes = $(element).attr('class');
+        const style = $(element).attr('style');
+
+        if (classes || style) {
+            error = true;
+
+            return false;
+        }
+    });
+
+    return !error;
+};
+
 export const createFlagComment = async (
     event: I.AuthenticatedAPIRequest<I.CreateFlagCommentBody, undefined, I.CreateFlagCommentPathParams>
 ): Promise<I.JSONResponse> => {
     try {
         if (event.body.comment) {
-            const isHTMLSafe = helpers.isHTMLSafe(event.body.comment);
+            const safeHTML = isHTMLSafe(event.body.comment);
 
-            if (!isHTMLSafe) {
+            if (!safeHTML) {
                 return response.json(404, {
-                    message:
-                        'HTML is not safe, please check out the <a href="https://octopus.ac/api-documentation#content">API documentation.</a>'
+                    message: 'HTML must not contain classes or inline styles.'
                 });
             }
         }
@@ -148,13 +199,21 @@ export const createFlagComment = async (
         }
 
         if (flag.resolved) {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'You cannot comment on a flag that has already been resolved.'
             });
         }
 
-        // The user attempting to leave a comment, is not the flag creator, or the publication owner
-        if (flag.createdBy !== event.user.id && flag.publication.user.id !== event.user.id) {
+        const publication = flag.publication;
+
+        // The user attempting to leave a comment is not the flag creator or the publication owner.
+        const latestPublishedVersion = publication.versions.find((version) => version.isLatestLiveVersion);
+
+        if (!latestPublishedVersion) {
+            throw Error('Could not get latest published version of publication');
+        }
+
+        if (flag.createdBy !== event.user.id && latestPublishedVersion.user.id !== event.user.id) {
             return response.json(403, {
                 message: 'You do not have permission to comment on this flag.'
             });
@@ -166,22 +225,20 @@ export const createFlagComment = async (
             event.user.id
         );
 
-        const publication = await publicationService.get(flag.publicationId);
-
         const flagCreator = await userService.get(flag.createdBy, true);
 
         // send email to the author aka the creator of the flagged publication and to the creator of the flag
         const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
 
-        if (publication?.user.email) {
+        if (latestPublishedVersion.user?.email) {
             emailPromises.push(
                 email.updateRedFlagNotification({
-                    to: publication.user.email,
-                    publicationName: publication?.title || '',
-                    publicationId: publication?.id || '',
+                    to: latestPublishedVersion.user.email,
+                    publicationName: latestPublishedVersion.title || '',
+                    publicationId: publication.id || '',
                     flagId: flag.id,
-                    type: helpers.formatFlagType(flag.category),
-                    submitter: `${event.user.firstName} ${event.user.lastName || ''}`
+                    type: formatFlagType(flag.category),
+                    submitter: Helpers.getUserFullName(event.user)
                 })
             );
         }
@@ -190,11 +247,11 @@ export const createFlagComment = async (
             emailPromises.push(
                 email.updateRedFlagNotification({
                     to: flagCreator.email,
-                    publicationName: publication?.title || '',
-                    publicationId: publication?.id || '',
+                    publicationName: latestPublishedVersion.title || '',
+                    publicationId: publication.id || '',
                     flagId: flag.id,
-                    type: helpers.formatFlagType(flag.category),
-                    submitter: `${event.user.firstName} ${event.user.lastName || ''}`
+                    type: formatFlagType(flag.category),
+                    submitter: Helpers.getUserFullName(event.user)
                 })
             );
         }
@@ -229,26 +286,32 @@ export const resolveFlag = async (
         }
 
         if (flag.resolved) {
-            return response.json(403, {
+            return response.json(400, {
                 message: 'This flag has already been resolved.'
             });
         }
 
         const resolveFlag = await flagService.resolveFlag(event.pathParameters.id);
 
-        const publication = await publicationService.get(flag.publicationId);
+        const publication = flag.publication;
+
+        const latestPublishedVersion = publication.versions.find((version) => version.isLatestLiveVersion);
+
+        if (!latestPublishedVersion) {
+            throw Error('Could not get latest published version of publication');
+        }
 
         // send email to the author aka the creator of the flagged publication
         const emailPromises: Promise<nodemailer.SentMessageInfo>[] = [];
 
-        if (publication?.user?.email) {
+        if (latestPublishedVersion.user?.email) {
             emailPromises.push(
                 email.resolveRedFlagAuthorNotification({
-                    to: publication.user.email,
-                    publicationName: publication?.title || '',
-                    publicationId: publication?.id || '',
+                    to: latestPublishedVersion.user.email,
+                    publicationName: latestPublishedVersion.title || '',
+                    publicationId: publication.id || '',
                     flagId: flag.id,
-                    type: helpers.formatFlagType(flag.category)
+                    type: formatFlagType(flag.category)
                 })
             );
         }
@@ -258,8 +321,8 @@ export const resolveFlag = async (
             emailPromises.push(
                 email.resolveRedFlagCreatorNotification({
                     to: event.user.email,
-                    publicationName: publication?.title || '',
-                    publicationId: publication?.id || '',
+                    publicationName: latestPublishedVersion.title || '',
+                    publicationId: publication.id || '',
                     flagId: flag.id
                 })
             );

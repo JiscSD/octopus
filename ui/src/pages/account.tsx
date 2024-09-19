@@ -1,39 +1,24 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import axios from 'axios';
+import useSWR from 'swr';
 
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Helpers from '@helpers';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
-import * as Assets from '@assets';
-import * as Contexts from '@contexts';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as Stores from '@stores';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Layouts from '@/layouts';
+import * as Helpers from '@/helpers';
+import * as Config from '@/config';
+import * as Types from '@/types';
+import * as api from '@/api';
+import * as Assets from '@/assets';
+import * as Contexts from '@/contexts';
+import * as OutlineIcons from '@heroicons/react/24/outline';
+import * as Stores from '@/stores';
 import * as Framer from 'framer-motion';
 
-export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    // If not logged in, i.e no token with the right key, send them to ocrid to login and return
-    const decodedJWT = await Helpers.guardPrivateRoute(context);
-    // If logged in, grab the token from cookies
+export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context, currentUser) => {
     const token = Helpers.getJWT(context);
-
-    let user: Interfaces.User | null = null;
-    let userPublications: Interfaces.UserPublication[] = [];
-    let error: string | null = null;
-
-    // fetch the current user
-    try {
-        const response = await api.get(`${Config.endpoints.users}/${decodedJWT.id}`, token);
-        user = response.data;
-    } catch (err) {
-        const { message } = err as Interfaces.JSONResponseError;
-        error = message;
-    }
 
     /**
      * @TODO - /user/{id}/publications now returns paginated results
@@ -41,26 +26,47 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
      *
      */
 
-    try {
-        const response = await api.get(`${Config.endpoints.users}/${decodedJWT.id}/publications?limit=999`, token);
-        userPublications = response.data.results;
-    } catch (err) {
-        const { message } = err as Interfaces.JSONResponseError;
-        error = message;
+    const promises: [
+        Promise<Interfaces.User | void>,
+        Promise<Interfaces.UserPublicationsResult | void>,
+        Promise<Interfaces.ControlRequest[] | void>
+    ] = [
+        api
+            .get(`${Config.endpoints.users}/${currentUser.id}`, token)
+            .then((res) => res.data)
+            .catch((error) => console.log(error)),
+        api
+            .get(`${Config.endpoints.users}/${currentUser.id}/publications?limit=999`, token)
+            .then((res) => res.data)
+            .catch((error) => console.log(error)),
+        api
+            .get(`${Config.endpoints.users}/me/control-requests`, token)
+            .then((res) => res.data)
+            .catch((error) => console.log(error))
+    ];
+
+    const [user, userPublications = [], controlRequests = []] = await Promise.all(promises);
+
+    if (!user) {
+        return {
+            notFound: true
+        };
     }
 
     return {
         props: {
             user,
             userPublications,
+            controlRequests,
             protectedPage: true
         }
     };
-};
+});
 
 type Props = {
     user: Interfaces.User;
-    userPublications: Interfaces.UserPublication[];
+    userPublications: Interfaces.UserPublicationsResult;
+    controlRequests: Interfaces.ControlRequest[];
 };
 
 const Account: Types.NextPage<Props> = (props): React.ReactElement => {
@@ -69,25 +75,31 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
     const { setUser } = Stores.useAuthStore();
     const [revokeAccessError, setRevokeAccessError] = useState<string | null>(null);
     const [isRevokingAccess, setIsRevokingAccess] = useState(false);
+    const [versionStatusArray, setVersionStatusArray] = useState<Types.PublicationStatuses[]>([
+        'LIVE',
+        'DRAFT',
+        'LOCKED'
+    ]);
 
-    const livePublications = React.useMemo(
-        () => props.userPublications.filter((publication) => publication.currentStatus === 'LIVE'),
-        [props.userPublications]
+    const { data: controlRequests = [] } = useSWR<Interfaces.ControlRequest[]>(
+        `${Config.endpoints.users}/me/control-requests`,
+        null,
+        { fallbackData: props.controlRequests, revalidateOnFocus: false }
     );
 
-    const draftPublications = React.useMemo(
-        () =>
-            props.userPublications.filter(
-                (publication) => publication.currentStatus === 'DRAFT' || publication.currentStatus === 'LOCKED'
-            ),
-        [props.userPublications]
+    const { data: { results: userPublications = [] } = {} } = useSWR<Interfaces.UserPublicationsResult>(
+        `${Config.endpoints.users}/${props.user.id}/publications?limit=999`.concat(
+            versionStatusArray.length ? `&versionStatus=${versionStatusArray.join(',')}` : ''
+        ),
+        null,
+        { fallbackData: props.userPublications }
     );
 
     const handleRevokeAccess = useCallback(async () => {
         const confirmed = await confirmation(
             'Are you sure?',
             "Revoking access to your ORCID profile will log you out. In order to access Octopus again, you'll need to grant permission to your ORCID profile next time you login.",
-            <OutlineIcons.UserRemoveIcon className="h-8 w-8 text-teal-600 transition-colors duration-500 dark:text-teal-400" />,
+            <OutlineIcons.UserMinusIcon className="h-8 w-8 text-teal-600 transition-colors duration-500 dark:text-teal-400" />,
             'Yes',
             'No'
         );
@@ -127,7 +139,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                 <title>{`Author: ${props.user?.orcid} - ${Config.urls.account.title}`}</title>
             </Head>
             <Layouts.Standard fixedHeader={false}>
-                <header className="container mx-auto px-8 pt-10 pb-20 md:pb-24 md:pt-16">
+                <header className="container mx-auto px-8 pb-20 pt-10 md:pb-24 md:pt-16">
                     <div className="mb-8 flex items-center">
                         <Components.Avatar user={props.user} className="text-xl lg:h-16 lg:w-16" />
                         <h1 className="ml-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-tight">
@@ -168,7 +180,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                             className="rounded underline decoration-teal-500 decoration-2 underline-offset-1 outline-none focus:ring-2 focus:ring-yellow-500"
                         >
                             <span className="block py-2 font-montserrat text-sm font-medium leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                View live author page
+                                View my public author page
                             </span>
                         </Components.Link>
 
@@ -177,7 +189,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.Button
                             disabled={isRevokingAccess}
                             endIcon={
-                                <OutlineIcons.UserRemoveIcon className='className="h-6 dark:text-white-50" w-6 text-teal-500 transition-colors duration-500' />
+                                <OutlineIcons.UserMinusIcon className='className="h-6 dark:text-white-50" w-6 text-teal-500 transition-colors duration-500' />
                             }
                             title="Revoke ORCID Access"
                             onClick={handleRevokeAccess}
@@ -197,53 +209,73 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
 
                 <section id="content" className="container mx-auto mb-16 px-8">
                     <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
-                        Draft publications
+                        Publications
                     </h2>
-                    {draftPublications.length ? (
-                        <div className="relative space-y-4 xl:w-2/3">
-                            {draftPublications.map((publication: Interfaces.UserPublication) => (
-                                <Components.Link
-                                    key={publication.id}
-                                    href={
-                                        props.user.id === publication.createdBy
-                                            ? `${Config.urls.viewPublication.path}/${publication.id}/edit`
-                                            : `${Config.urls.viewPublication.path}/${publication.id}/`
-                                    }
-                                    className="mb-5 flex "
-                                >
-                                    <Components.PublicationSimpleResult publication={publication} user={props.user} />
-                                </Components.Link>
-                            ))}
-                        </div>
-                    ) : (
-                        <Components.Alert
-                            severity="INFO"
-                            title="You do not currently have any draft publications"
-                            className="w-fit"
-                        />
-                    )}
-                </section>
 
-                <section className="container mx-auto mb-16 px-8">
-                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
-                        Live publications
-                    </h2>
-                    {livePublications.length ? (
-                        <div className="relative space-y-4 xl:w-2/3">
-                            {livePublications.map((publication: Interfaces.UserPublication) => (
-                                <Components.Link
-                                    key={publication.id}
-                                    href={`${Config.urls.viewPublication.path}/${publication.id}`}
-                                    className="mb-5 flex "
-                                >
-                                    <Components.PublicationSimpleResult publication={publication} user={props.user} />
-                                </Components.Link>
-                            ))}
+                    <fieldset className="mb-8">
+                        <legend className="mb-2 text-sm text-grey-800 transition-colors dark:text-white-50">
+                            Include publications with:
+                        </legend>
+                        <div className="flex flex-wrap gap-4 sm:gap-12">
+                            <label htmlFor="include-live-version" className="flex cursor-pointer items-center gap-2">
+                                <input
+                                    id="include-live-version"
+                                    name="LIVE"
+                                    type="checkbox"
+                                    checked={versionStatusArray.includes('LIVE')}
+                                    onChange={(e) =>
+                                        setVersionStatusArray(
+                                            e.target.checked
+                                                ? [...versionStatusArray, 'LIVE']
+                                                : versionStatusArray.filter((status) => status !== 'LIVE')
+                                        )
+                                    }
+                                    className="cursor-pointer rounded border-teal-500 bg-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                                />
+                                <span className="text-grey-800 transition-colors dark:text-white-50">
+                                    A live version
+                                </span>
+                            </label>
+
+                            <label htmlFor="include-draft-version" className="flex cursor-pointer items-center gap-2">
+                                <input
+                                    id="include-draft-version"
+                                    name="DRAFT"
+                                    type="checkbox"
+                                    checked={versionStatusArray.includes('DRAFT')}
+                                    onChange={(e) =>
+                                        setVersionStatusArray(
+                                            e.target.checked
+                                                ? [...versionStatusArray, 'DRAFT', 'LOCKED']
+                                                : versionStatusArray.filter(
+                                                      (status) => !['DRAFT', 'LOCKED'].includes(status)
+                                                  )
+                                        )
+                                    }
+                                    className="cursor-pointer rounded border-teal-500 bg-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                                />
+                                <span className="text-grey-800 transition-colors dark:text-white-50">
+                                    A draft version
+                                </span>
+                            </label>
                         </div>
+                    </fieldset>
+
+                    {userPublications.length ? (
+                        <ul className="relative space-y-4">
+                            {userPublications.map((publication) => (
+                                <Components.PublicationSimpleResult
+                                    key={publication.id}
+                                    publication={publication}
+                                    user={props.user}
+                                    controlRequests={controlRequests}
+                                />
+                            ))}
+                        </ul>
                     ) : (
                         <Components.Alert
                             severity="INFO"
-                            title="You do not currently have any live publications"
+                            title="You do not currently have any publications"
                             className="w-fit"
                         />
                     )}

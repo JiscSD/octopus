@@ -1,7 +1,7 @@
 import React from 'react';
 import parse from 'html-react-parser';
 
-import * as Config from '@config';
+import * as Config from '@/config';
 
 type Props = {
     content: string;

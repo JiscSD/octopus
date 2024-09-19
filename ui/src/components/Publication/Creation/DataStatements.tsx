@@ -1,10 +1,11 @@
 import React from 'react';
 import parse from 'html-react-parser';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
-import * as Components from '@components';
-import * as Stores from '@stores';
-import * as Config from '@config';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Stores from '@/stores';
 
 const ethicalStatementOptions: string[] = [
     'The results in this publication involved human or animal subjects.',
@@ -20,36 +21,17 @@ const dataAccessOptions: string[] = [
 ];
 
 const DataStatements: React.FC = (): React.ReactElement => {
-    // Ethical statement
-    const ethicalStatement = Stores.usePublicationCreationStore((state) => state.ethicalStatement);
-    const updateEthicalStatement = Stores.usePublicationCreationStore((state) => state.updateEthicalStatement);
-    const ethicalStatementFreeText = Stores.usePublicationCreationStore((state) => state.ethicalStatementFreeText);
-    const updateEthicalStatementFreeText = Stores.usePublicationCreationStore(
-        (state) => state.updateEthicalStatementFreeText
-    );
-
-    // Data permissions statement
-    const dataPermissionsStatement = Stores.usePublicationCreationStore((state) => state.dataPermissionsStatement);
-    const updateDataPermissionsStatement = Stores.usePublicationCreationStore(
-        (state) => state.updateDataPermissionsStatemnt
-    );
-    const dataPermissionsStatementProvidedBy = Stores.usePublicationCreationStore(
-        (state) => state.dataPermissionsStatementProvidedBy
-    );
-    const updateDataPermissionsStatementProvidedBy = Stores.usePublicationCreationStore(
-        (state) => state.updateDataPermissionsStatementProvidedBy
-    );
-
-    // Data access statement
-    const dataAccessStatement = Stores.usePublicationCreationStore((state) => state.dataAccessStatement);
-    const updateDataAccessStatement = Stores.usePublicationCreationStore((state) => state.updateDataAccessStatement);
+    const { publicationVersion, updatePublicationVersion } = Stores.usePublicationCreationStore();
     const [dataAccessStatementOther, setDataAccessStatementOther] = React.useState('');
 
     React.useEffect(() => {
-        if (!dataAccessOptions.includes(dataAccessStatement) && dataAccessStatement !== null) {
-            setDataAccessStatementOther(dataAccessStatement);
+        if (
+            publicationVersion.dataAccessStatement &&
+            !dataAccessOptions.includes(publicationVersion.dataAccessStatement)
+        ) {
+            setDataAccessStatementOther(publicationVersion.dataAccessStatement);
         }
-    }, []);
+    }, [publicationVersion.dataAccessStatement]);
 
     return (
         <div className="space-y-12 2xl:space-y-16">
@@ -60,19 +42,23 @@ const DataStatements: React.FC = (): React.ReactElement => {
                     {ethicalStatementOptions.map((option) => (
                         <label
                             key={option}
-                            htmlFor={option}
+                            htmlFor={Helpers.toKebabCase(option)}
                             className="flex items-center space-x-2 hover:cursor-pointer"
                         >
                             <input
                                 type="radio"
                                 name={option}
-                                id={option}
-                                checked={option === ethicalStatement}
+                                id={Helpers.toKebabCase(option)}
+                                checked={option === publicationVersion.ethicalStatement}
                                 onChange={() => {
-                                    updateEthicalStatement(option);
-                                    if (option === ethicalStatementOptions[1]) {
-                                        updateEthicalStatementFreeText(null);
-                                    }
+                                    updatePublicationVersion({
+                                        ...publicationVersion,
+                                        ethicalStatement: option,
+                                        ethicalStatementFreeText:
+                                            option === ethicalStatementOptions[1]
+                                                ? null
+                                                : publicationVersion.ethicalStatementFreeText
+                                    });
                                 }}
                                 className="hover:cursor-pointer"
                                 aria-label="The results and data in this publication involved human or animal subjects."
@@ -85,7 +71,7 @@ const DataStatements: React.FC = (): React.ReactElement => {
                 </fieldset>
 
                 <div className="mt-8">
-                    {ethicalStatement === ethicalStatementOptions[0] && (
+                    {publicationVersion.ethicalStatement === ethicalStatementOptions[0] && (
                         <>
                             <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                                 If relevant: Ethical approval for the data collection and sharing was given by:
@@ -99,8 +85,13 @@ const DataStatements: React.FC = (): React.ReactElement => {
                                 rows={3}
                                 className="w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 lg:w-2/3"
                                 required
-                                value={ethicalStatementFreeText ?? ''}
-                                onChange={(e) => updateEthicalStatementFreeText(e.target.value)}
+                                value={publicationVersion.ethicalStatementFreeText ?? ''}
+                                onChange={(e) =>
+                                    updatePublicationVersion({
+                                        ...publicationVersion,
+                                        ethicalStatementFreeText: e.target.value
+                                    })
+                                }
                             />
                         </>
                     )}
@@ -114,19 +105,23 @@ const DataStatements: React.FC = (): React.ReactElement => {
                     {Config.values.dataPermissionsOptions.map((option) => (
                         <label
                             key={option}
-                            htmlFor={option}
+                            htmlFor={Helpers.toKebabCase(option)}
                             className="flex items-center space-x-2 hover:cursor-pointer"
                         >
                             <input
                                 type="radio"
                                 name={option}
-                                id={option}
-                                checked={option === dataPermissionsStatement}
+                                id={Helpers.toKebabCase(option)}
+                                checked={option === publicationVersion.dataPermissionsStatement}
                                 onChange={() => {
-                                    updateDataPermissionsStatement(option);
-                                    if (option === Config.values.dataPermissionsOptions[1]) {
-                                        updateDataPermissionsStatementProvidedBy(null);
-                                    }
+                                    updatePublicationVersion({
+                                        ...publicationVersion,
+                                        dataPermissionsStatement: option,
+                                        dataPermissionsStatementProvidedBy:
+                                            option === Config.values.dataPermissionsOptions[1]
+                                                ? null
+                                                : publicationVersion.dataPermissionsStatementProvidedBy
+                                    });
                                 }}
                                 className="hover:cursor-pointer"
                                 aria-label={option}
@@ -138,7 +133,7 @@ const DataStatements: React.FC = (): React.ReactElement => {
                     ))}
                 </fieldset>
 
-                {dataPermissionsStatement === Config.values.dataPermissionsOptions[0] && (
+                {publicationVersion.dataPermissionsStatement === Config.values.dataPermissionsOptions[0] && (
                     <>
                         <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-100">
                             Permission for the data collection and sharing was given by <Components.RequiredIndicator />
@@ -149,8 +144,13 @@ const DataStatements: React.FC = (): React.ReactElement => {
                             rows={2}
                             className="w-full rounded-md border border-grey-100 bg-white-50 text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 lg:w-2/3"
                             required
-                            value={dataPermissionsStatementProvidedBy ?? ' '}
-                            onChange={(e) => updateDataPermissionsStatementProvidedBy(e.target.value)}
+                            value={publicationVersion.dataPermissionsStatementProvidedBy ?? ' '}
+                            onChange={(e) =>
+                                updatePublicationVersion({
+                                    ...publicationVersion,
+                                    dataPermissionsStatementProvidedBy: e.target.value
+                                })
+                            }
                         />
                     </>
                 )}
@@ -167,21 +167,21 @@ const DataStatements: React.FC = (): React.ReactElement => {
                     Select from the pre-defined statements below, or create your own. You can provide a link to any
                     publicly accessible datasets in the &apos;Additional materials&apos; field.
                 </span>
-                <fieldset className="mt-8 mb-4 space-y-3">
+                <fieldset className="mb-4 mt-8 space-y-3">
                     {dataAccessOptions.map((option) => (
                         <label
                             key={option}
-                            htmlFor={option}
+                            htmlFor={Helpers.toKebabCase(option)}
                             className="flex items-center space-x-2 hover:cursor-pointer"
                         >
                             <input
                                 type="radio"
                                 name={option}
-                                id={option}
-                                checked={option === dataAccessStatement}
+                                id={Helpers.toKebabCase(option)}
+                                checked={option === publicationVersion.dataAccessStatement}
                                 onChange={() => {
                                     setDataAccessStatementOther('');
-                                    updateDataAccessStatement(option);
+                                    updatePublicationVersion({ ...publicationVersion, dataAccessStatement: option });
                                 }}
                                 className="hover:cursor-pointer"
                                 aria-label={option}
@@ -197,10 +197,10 @@ const DataStatements: React.FC = (): React.ReactElement => {
                             type="radio"
                             name="other"
                             id="other"
-                            checked={dataAccessStatementOther === dataAccessStatement}
+                            checked={dataAccessStatementOther === publicationVersion.dataAccessStatement}
                             onChange={() => {
                                 setDataAccessStatementOther('');
-                                updateDataAccessStatement('');
+                                updatePublicationVersion({ ...publicationVersion, dataAccessStatement: '' });
                             }}
                             className="hover:cursor-pointer"
                             aria-label="other"
@@ -221,18 +221,23 @@ const DataStatements: React.FC = (): React.ReactElement => {
                     placeholder="Please provide your own data access statement."
                     onChange={(e) => {
                         setDataAccessStatementOther(e.target.value);
-                        updateDataAccessStatement(e.target.value);
+                        updatePublicationVersion({ ...publicationVersion, dataAccessStatement: e.target.value });
                     }}
-                    onFocus={() => updateDataAccessStatement(dataAccessStatementOther)}
+                    onFocus={() =>
+                        updatePublicationVersion({
+                            ...publicationVersion,
+                            dataAccessStatement: dataAccessStatementOther
+                        })
+                    }
                 />
 
                 <Components.Button
                     title="Clear selection"
-                    disabled={!dataAccessStatement}
-                    startIcon={<OutlineIcons.XIcon className="h-4 w-4" />}
+                    disabled={!publicationVersion.dataAccessStatement}
+                    startIcon={<OutlineIcons.XMarkIcon className="h-4 w-4" />}
                     onClick={() => {
                         setDataAccessStatementOther('');
-                        updateDataAccessStatement(null);
+                        updatePublicationVersion({ ...publicationVersion, dataAccessStatement: null });
                     }}
                 />
             </div>

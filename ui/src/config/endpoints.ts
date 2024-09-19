@@ -1,16 +1,19 @@
-import * as api from '@api';
+import * as api from '@/api';
 
 const endpoints = {
-    publications: `${api.baseURL}/publications`,
-    users: `${api.baseURL}/users`,
-    links: `${api.baseURL}/links`,
     authorization: `${api.baseURL}/authorization`,
-    verification: `${api.baseURL}/verification`,
-    flag: `${api.baseURL}/flag`,
     bookmarks: `${api.baseURL}/bookmarks`,
+    crosslinks: `${api.baseURL}/crosslinks`,
     decodeUserToken: `${api.baseURL}/decode-user-token`,
-    verifyOrcidAccess: `${api.baseURL}/verify-orcid-access`,
-    revokeOrcidAccess: `${api.baseURL}/revoke-orcid-access`
+    flags: `${api.baseURL}/flags`,
+    links: `${api.baseURL}/links`,
+    publications: `${api.baseURL}/publications`,
+    publicationVersions: `${api.baseURL}/publication-versions`,
+    revokeOrcidAccess: `${api.baseURL}/revoke-orcid-access`,
+    topics: `${api.baseURL}/topics`,
+    users: `${api.baseURL}/users`,
+    verification: `${api.baseURL}/verification`,
+    verifyOrcidAccess: `${api.baseURL}/verify-orcid-access`
 };
 
 export default endpoints;

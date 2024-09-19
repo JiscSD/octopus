@@ -1,10 +1,10 @@
 import React from 'react';
 
-import * as Components from '@components';
-import * as Interfaces from '@interfaces';
+import * as Components from '@/components';
+import * as Interfaces from '@/interfaces';
 
 type Props = {
-    publications: Interfaces.Publication[];
+    publicationVersions: Interfaces.PublicationVersion[];
 };
 
 const LatestPublications: React.FC<Props> = (props): React.ReactElement => (
@@ -15,8 +15,8 @@ const LatestPublications: React.FC<Props> = (props): React.ReactElement => (
         </h3>
 
         {/** If there are no latest or there was an error, we do show an alert */}
-        {props.publications.length ? (
-            <Components.PublicationCarousel publications={props.publications} />
+        {props.publicationVersions.length ? (
+            <Components.PublicationCarousel publicationVersions={props.publicationVersions} />
         ) : (
             <Components.Alert
                 title="There was a problem fetching the latest publications"

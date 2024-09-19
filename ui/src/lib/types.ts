@@ -1,6 +1,15 @@
-import * as Interfaces from '@interfaces';
+import * as Interfaces from '@/interfaces';
+import * as Contentful from 'contentful';
 
-export type { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
+export type {
+    GetServerSideProps,
+    GetServerSidePropsContext,
+    GetServerSidePropsResult,
+    NextPage,
+    GetStaticProps,
+    GetStaticPaths
+} from 'next';
+
 export type { AppProps } from 'next/app';
 export type { AxiosError } from 'axios';
 
@@ -11,12 +20,14 @@ export type PreferencesStoreTypes = {
     toggleFeedback: () => void;
 };
 
+export type UserRole = 'USER' | 'ORGANISATION' | 'SUPER_USER';
+
 export type UserType = {
     id: string;
     firstName: string;
     lastName: string;
     email: string | null;
-    role: string;
+    role: UserRole;
     createdAt: string;
     updatedAt: string;
     orcid: string;
@@ -38,65 +49,40 @@ export type ToastStoreType = {
     clearToast: () => void;
 };
 
-export type PublicationCreationStoreType = {
-    error: null | string;
-    setError: (error: string | null) => void;
-    id: string;
-    updateId: (id: string) => void;
-    title: string;
-    updateTitle: (title: string) => void;
-    type: PublicationType;
-    updateType: (type: PublicationType) => void;
-    content: string;
-    updateContent: (content: string) => void;
-    description: string;
-    updateDescription: (description: string) => void;
-    keywords: string;
-    updateKeywords: (keywords: string) => void;
-    licence: LicenceType;
-    updateLicence: (licence: LicenceType) => void;
-    language: Languages;
-    updateLanguage: (language: Languages) => void;
-    conflictOfInterestStatus: boolean | undefined;
-    updateConflictOfInterestStatus: (conflictOfInterestStatus: boolean | undefined) => void;
-    conflictOfInterestText: string;
-    updateConflictOfInterestText: (conflictOfInterestText: string) => void;
-    linkTo: Interfaces.LinkTo[];
-    updateLinkTo: (linkTo: Interfaces.LinkTo[]) => void;
-    ethicalStatement: string | null;
-    ethicalStatementFreeText: string | null;
-    updateEthicalStatementFreeText: (ethicalStatementFreeText: string | null) => void;
-    updateEthicalStatement: (ethicalStatement: string) => void;
-    dataAccessStatement: string;
-    updateDataAccessStatement: (dataAccessStatement: string | null) => void;
-    dataPermissionsStatement: string | null;
-    updateDataPermissionsStatemnt: (dataPermissionsStatement: string) => void;
-    dataPermissionsStatementProvidedBy: string | null;
-    updateDataPermissionsStatementProvidedBy: (dataPermissionsStatementProvidedBy: string | null) => void;
-    reset: () => void;
-    coAuthors: Interfaces.CoAuthor[];
+export type PublicationVersionSlice = {
+    publicationVersion: Interfaces.PublicationVersion;
+    updatePublicationVersion: (publicationVersion: Interfaces.PublicationVersion) => void;
+    updateAuthorAffiliations: (affiliations: Interfaces.MappedOrcidAffiliation[]) => void;
+    updateIsIndependentAuthor: (isIndependent: boolean) => void;
     updateCoAuthors: (coAuthors: Interfaces.CoAuthor[]) => void;
-    funderStatement: string | null;
-    updateFunderStatement: (funderStatement: string | null) => void;
-    funders: Interfaces.Funder[];
-    updateFunders: (funders: Interfaces.Funder[]) => void;
-    authorAffiliations: Interfaces.MappedOrcidAffiliation[];
-    updateAuthorAffiliations: (authorAffiliations: Interfaces.MappedOrcidAffiliation[]) => void;
-    isIndependentAuthor: boolean;
-    updateIsIndependentAuthor: (isIndependentAuthor: boolean) => void;
-    affiliationsStatement: string | null; // need discussion if this is needed anymore
-    updateAffiliationsStatement: (affiliationsStatement: string | null) => void;
-    selfDeclaration: boolean;
-    updateSelfDeclaration: (selfDeclaration: boolean) => void;
+    updateTopics: (topics: Interfaces.BaseTopic[]) => void;
+    resetPublicationVersion: () => void;
+};
+
+export type LinkedToSlice = {
+    linkedTo: Interfaces.LinkedToPublication[];
+    updateLinkedTo: (linkedTo: Interfaces.LinkedToPublication[]) => void;
+    resetLinkedTo: () => void;
+};
+
+export type ReferencesSlice = {
     references: Interfaces.Reference[];
     updateReferences: (references: Interfaces.Reference[]) => void;
+    resetReferences: () => void;
 };
+
+export type ErrorSlice = {
+    error: string | null;
+    setError: (message: string | null) => void;
+};
+
+export type PublicationCreationStoreType = PublicationVersionSlice & LinkedToSlice & ReferencesSlice & ErrorSlice;
 
 export type JSONValue = unknown;
 
-export type SearchType = 'publications' | 'users';
+export type SearchType = 'publication-versions' | 'authors' | 'topics';
 
-export type SearchParameter = Interfaces.Publication | Interfaces.User;
+export type SearchParameter = Interfaces.PublicationVersion | Interfaces.User;
 
 export type PublicationOrderBySearchOption = 'title' | 'publishedDate';
 
@@ -316,17 +302,47 @@ export type Languages =
     | 'za'
     | 'zu';
 
-export type PublicationCreationSteps =
+export type PublicationCreationStep =
     | 'KEY_INFORMATION'
-    | 'LINKED_PUBLICATIONS'
+    | 'AFFILIATIONS'
+    | 'LINKED_ITEMS'
     | 'MAIN_TEXT'
     | 'CONFLICT_OF_INTEREST'
     | 'CO_AUTHORS'
     | 'FUNDERS'
     | 'DATA_STATEMENT'
-    | 'RESEARCH_PROCESS'
-    | 'REVIEW';
+    | 'RESEARCH_PROCESS';
 
 export type CreationSteps = {
-    [key in PublicationCreationSteps]: Interfaces.CreationStep;
+    [key in PublicationCreationStep]: Interfaces.CreationStep;
 };
+
+export type TabCompletionStatus = 'COMPLETE' | 'INCOMPLETE';
+
+export type LinkedEntityType = 'PUBLICATION' | 'TOPIC';
+
+export type BookmarkType = 'PUBLICATION' | 'TOPIC';
+
+export type BlogFields = {
+    title: Contentful.EntryFields.Text;
+    author: Contentful.EntryFields.Text;
+    content: Contentful.EntryFields.RichText;
+    slug: Contentful.EntryFields.Text;
+    publishedDate: Contentful.EntryFields.Date;
+};
+
+export type PartialPublicationVersion = Pick<
+    Interfaces.PublicationVersion,
+    | 'id'
+    | 'doi'
+    | 'versionOf'
+    | 'versionNumber'
+    | 'createdBy'
+    | 'publishedDate'
+    | 'isLatestLiveVersion'
+    | 'isLatestVersion'
+    | 'coAuthors'
+    | 'currentStatus'
+>;
+
+export type PublicationImportSource = 'ARI';

@@ -1,7 +1,7 @@
 import React from 'react';
-import * as SolidIcon from '@heroicons/react/solid';
+import * as SolidIcon from '@heroicons/react/24/solid';
 import * as Router from 'next/router';
-import * as Config from '@config';
+import * as Config from '@/config';
 
 const Mobile: React.FC = (): React.ReactElement => {
     const router = Router.useRouter();
@@ -12,7 +12,7 @@ const Mobile: React.FC = (): React.ReactElement => {
                 aria-label="Search"
                 className="rounded border-transparent text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400"
             >
-                <SolidIcon.SearchIcon
+                <SolidIcon.MagnifyingGlassIcon
                     aria-label="Search Palette"
                     className="h-7 w-7 text-teal-500 transition-colors duration-500"
                 />

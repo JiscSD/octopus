@@ -1,8 +1,8 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import * as zustandMiddleware from 'zustand/middleware';
 
-import * as Types from '@types';
-import * as Interfaces from '@interfaces';
+import * as Types from '@/types';
+import * as Interfaces from '@/interfaces';
 
 let store: any = (set: any): Types.ToastStoreType => ({
     toast: {

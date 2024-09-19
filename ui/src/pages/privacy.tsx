@@ -1,18 +1,20 @@
 import Head from 'next/head';
 
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Config from '@config';
-import * as Types from '@types';
+import * as Components from '@/components';
+import * as Layouts from '@/layouts';
+import * as Config from '@/config';
+import * as Types from '@/types';
 
 const Privacy: Types.NextPage = (): React.ReactElement => {
     return (
         <>
             <Head>
+                <title>{Config.urls.privacy.title}</title>
                 <meta name="description" content={Config.urls.privacy.description} />
+                <meta name="og:title" content={Config.urls.privacy.title} />
+                <meta name="og:description" content={Config.urls.privacy.description} />
                 <meta name="keywords" content={Config.urls.privacy.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.privacy.canonical} />
-                <title>{Config.urls.privacy.title}</title>
             </Head>
 
             <Layouts.Information>

@@ -2,8 +2,8 @@ import * as client from 'lib/client';
 
 import * as I from 'interface';
 
-export const upsert = async (request: I.UpdateVerificationInformation) => {
-    const verification = await client.prisma.verification.upsert({
+export const upsert = (request: I.UpdateVerificationInformation) =>
+    client.prisma.verification.upsert({
         select: {
             id: true,
             orcid: true,
@@ -26,21 +26,12 @@ export const upsert = async (request: I.UpdateVerificationInformation) => {
         }
     });
 
-    return verification;
-};
+export const find = (orcid: string) => client.prisma.verification.findUnique({ where: { orcid } });
 
-export const find = async (orcid: string) => {
-    const verification = await client.prisma.verification.findUnique({ where: { orcid } });
+export const deleteVerification = (orcid: string) => client.prisma.verification.delete({ where: { orcid } });
 
-    return verification;
-};
-
-export const deleteVerification = async (orcid: string) => {
-    await client.prisma.verification.delete({ where: { orcid } });
-};
-
-export const incrementAttempts = async (orcid: string) => {
-    const verification = await client.prisma.verification.update({
+export const incrementAttempts = (orcid: string) =>
+    client.prisma.verification.update({
         where: { orcid },
         data: {
             attempts: {
@@ -48,6 +39,3 @@ export const incrementAttempts = async (orcid: string) => {
             }
         }
     });
-
-    return verification;
-};

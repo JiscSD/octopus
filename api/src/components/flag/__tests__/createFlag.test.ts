@@ -8,7 +8,7 @@ describe('Create flags on publications', () => {
 
     test('User can create a valid flag on LIVE publication they did not create', async () => {
         const createFlag = await testUtils.agent
-            .post('/publications/publication-interpretation-live/flag')
+            .post('/publications/publication-interpretation-live/flags')
             .query({
                 apiKey: '987654321'
             })
@@ -22,7 +22,7 @@ describe('Create flags on publications', () => {
 
     test('User cannot create a valid flag on LIVE publication they created', async () => {
         const createFlag = await testUtils.agent
-            .post('/publications/publication-interpretation-live/flag')
+            .post('/publications/publication-interpretation-live/flags')
             .query({
                 apiKey: '123456789'
             })
@@ -34,9 +34,9 @@ describe('Create flags on publications', () => {
         expect(createFlag.status).toEqual(403);
     });
 
-    test('User cannot create a invalid flag on LIVE publication they did not create', async () => {
+    test('User cannot create an invalid flag on LIVE publication they did not create', async () => {
         const createFlag = await testUtils.agent
-            .post('/publications/publication-interpretation-live/flag')
+            .post('/publications/publication-interpretation-live/flags')
             .query({
                 apiKey: '987654321'
             })
@@ -45,12 +45,12 @@ describe('Create flags on publications', () => {
                 category: 'INVALID_CATEGORY'
             });
 
-        expect(createFlag.status).toEqual(422);
+        expect(createFlag.status).toEqual(400);
     });
 
     test('User cannot create a duplicate flag for an unresolved flag', async () => {
         const createFlag = await testUtils.agent
-            .post('/publications/publication-interpretation-live/flag')
+            .post('/publications/publication-interpretation-live/flags')
             .query({
                 apiKey: '987654321'
             })
@@ -62,7 +62,7 @@ describe('Create flags on publications', () => {
         expect(createFlag.status).toEqual(200);
 
         const createFlagAttempt2 = await testUtils.agent
-            .post('/publications/publication-interpretation-live/flag')
+            .post('/publications/publication-interpretation-live/flags')
             .query({
                 apiKey: '987654321'
             })
@@ -76,7 +76,7 @@ describe('Create flags on publications', () => {
 
     test('Cannot create a valid flag for a publication that is in DRAFT', async () => {
         const createFlag = await testUtils.agent
-            .post('/publications/publication-interpretation-draft/flag')
+            .post('/publications/publication-interpretation-draft/flags')
             .query({
                 apiKey: '987654321'
             })
@@ -85,12 +85,12 @@ describe('Create flags on publications', () => {
                 category: 'ETHICAL_ISSUES'
             });
 
-        expect(createFlag.status).toEqual(404);
+        expect(createFlag.status).toEqual(400);
     });
 
-    test('User can create 2 differente flags for the same publication that they did not create', async () => {
+    test('User can create 2 different flags for the same publication that they did not create', async () => {
         const createFlag = await testUtils.agent
-            .post('/publications/publication-interpretation-live/flag')
+            .post('/publications/publication-interpretation-live/flags')
             .query({
                 apiKey: '987654321'
             })
@@ -102,7 +102,7 @@ describe('Create flags on publications', () => {
         expect(createFlag.status).toEqual(200);
 
         const createFlagAttempt2 = await testUtils.agent
-            .post('/publications/publication-interpretation-live/flag')
+            .post('/publications/publication-interpretation-live/flags')
             .query({
                 apiKey: '987654321'
             })
@@ -112,5 +112,20 @@ describe('Create flags on publications', () => {
             });
 
         expect(createFlagAttempt2.status).toEqual(200);
+    });
+
+    test('Organisational account cannot raise a flag', async () => {
+        const createFlag = await testUtils.agent
+            .post('/publications/publication-interpretation-live/flags')
+            .query({
+                apiKey: '000000012'
+            })
+            .send({
+                comment: 'Comments',
+                category: 'ETHICAL_ISSUES'
+            });
+
+        expect(createFlag.status).toEqual(403);
+        expect(createFlag.body.message).toEqual('Organisational accounts cannot flag publications.');
     });
 });

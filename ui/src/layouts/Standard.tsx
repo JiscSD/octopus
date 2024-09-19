@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as Components from '@components';
+import * as Components from '@/components';
 
 type Props = {
     fixedHeader?: boolean;
@@ -10,7 +10,6 @@ type Props = {
 const Standard: React.FC<Props> = (props): React.ReactElement => (
     <>
         <Components.JumpToContent />
-        <Components.SurveyWidget />
         <Components.Header />
         <main>{props.children}</main>
         <Components.Footer waves={true} />

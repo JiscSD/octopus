@@ -1,25 +1,31 @@
 import React from 'react';
-import * as SolidIcons from '@heroicons/react/solid';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as SolidIcons from '@heroicons/react/24/solid';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Helpers from '@helpers';
-import * as Config from '@config';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Helpers from '@/helpers';
+import * as Config from '@/config';
 
 type Props = {
-    publication: Interfaces.Publication;
+    publicationVersion: Interfaces.PublicationVersion;
+    linkedFrom: Interfaces.LinkedFromPublication[];
+    flags: Interfaces.Flag[];
 };
 
 const General: React.FC<Props> = (props): React.ReactElement => {
-    const peerReviewCount = props.publication.linkedFrom.filter(
-        (publication) => publication.publicationFromRef.type === 'PEER_REVIEW'
+    const isExemptFromReversioning = Helpers.isPublicationVersionExemptFromReversioning(props.publicationVersion);
+    const multipleVersions = !props.publicationVersion.isLatestVersion || props.publicationVersion.versionNumber > 1;
+    const peerReviews = props.linkedFrom.filter((publication) => publication.type === 'PEER_REVIEW');
+    const thisVersionPeerReviewCount = peerReviews.filter(
+        (peerReview) => peerReview.parentVersionId === props.publicationVersion.id
     ).length;
 
-    const activeFlags = React.useMemo(
-        () => props.publication.publicationFlags.filter((flag) => !flag.resolved),
-        [props.publication]
-    );
+    const activeFlags = React.useMemo(() => props.flags.filter((flag) => !flag.resolved), [props.flags]);
+
+    const showVersionDoi = props.publicationVersion.doi;
+    const versionDoiUrl = Config.values.doiBaseUrl + props.publicationVersion.doi;
+    const versionlessDoiUrl = Config.values.doiBaseUrl + props.publicationVersion.publication.doi;
 
     const uniqueRedFlagCategoryList = React.useMemo(
         () => Array.from(new Set(activeFlags.map((flag) => flag.category))),
@@ -33,25 +39,31 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                     Publication type:
                 </span>
                 <span className=" text-sm font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    {Helpers.formatPublicationType(props.publication.type)}
+                    {Helpers.formatPublicationType(props.publicationVersion.publication.type)}
                 </span>
             </div>
-            <div className="flex">
-                <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                    Published:
-                </span>
-                <time className=" text-sm font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    {Helpers.formatDate(props.publication.publishedDate)}
-                </time>
-            </div>
+            {props.publicationVersion.publishedDate && (
+                <div className="flex">
+                    <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                        Published:
+                    </span>
+                    <time
+                        className=" text-sm font-medium text-grey-800 transition-colors duration-500 dark:text-white-50"
+                        suppressHydrationWarning
+                    >
+                        {Helpers.formatDate(props.publicationVersion.publishedDate)}
+                    </time>
+                </div>
+            )}
             <div className="flex">
                 <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
                     Language:
                 </span>
                 <span className=" text-sm font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
                     {
-                        Config.values.octopusInformation.languages.find((l) => l.code === props.publication.language)
-                            ?.name
+                        Config.values.octopusInformation.languages.find(
+                            (l) => l.code === props.publicationVersion.language
+                        )?.name
                     }
                 </span>
             </div>
@@ -60,38 +72,64 @@ const General: React.FC<Props> = (props): React.ReactElement => {
                     Licence:
                 </span>
                 <Components.Link
-                    href={Config.values.octopusInformation.licences[props.publication.licence].link}
-                    title="licence"
+                    href={Config.values.octopusInformation.licences[props.publicationVersion.licence].link}
+                    title="Licence"
                     openNew={true}
                     className=" text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                 >
                     <div className="flex items-center">
-                        {Config.values.octopusInformation.licences[props.publication.licence].nicename}
-                        <OutlineIcons.ExternalLinkIcon className="ml-1 h-4 w-4" />
+                        {Config.values.octopusInformation.licences[props.publicationVersion.licence].nicename}
+                        <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
                     </div>
                 </Components.Link>
             </div>
+            {showVersionDoi && (
+                <div className="flex w-full flex-wrap whitespace-normal">
+                    <span className="mr-2 whitespace-nowrap text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                        DOI (This Version):
+                    </span>
+                    <Components.Link
+                        href={versionDoiUrl}
+                        ariaLabel={`DOI link: ${versionDoiUrl}`}
+                        className="flex items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                        openNew={true}
+                    >
+                        <p className="break-words break-all">{versionDoiUrl}</p>
+                        <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4 flex-shrink-0" />
+                    </Components.Link>
+                </div>
+            )}
 
-            <div className="flex w-full whitespace-normal">
-                <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                    DOI:
+            <div className={`flex w-full ${props.publicationVersion.doi ? 'flex-wrap' : ''} whitespace-normal`}>
+                <span className="mr-2 whitespace-nowrap text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                    {showVersionDoi ? 'DOI (All Versions):' : 'DOI:'}
                 </span>
                 <Components.Link
-                    href={`https://doi.org/${props.publication.doi}`}
-                    ariaLabel={`DOI link: https://doi.org/${props.publication.doi}`}
-                    className="flex w-full items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                    href={versionlessDoiUrl}
+                    ariaLabel={`DOI link: ${versionlessDoiUrl}`}
+                    className="flex items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
                     openNew={true}
                 >
-                    <p className="break-words break-all">https://doi.org/{props.publication.doi}</p>
-                    <OutlineIcons.ExternalLinkIcon className="ml-1 h-4 w-4" />
+                    <p className="break-words break-all">{versionlessDoiUrl}</p>
+                    <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4 flex-shrink-0" />
                 </Components.Link>
             </div>
-            {props.publication.type !== 'PEER_REVIEW' && (
-                <div className="flex">
-                    <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                        Peer reviews: ({peerReviewCount})
-                    </span>
-                </div>
+
+            {props.publicationVersion.publication.type !== 'PEER_REVIEW' && (
+                <>
+                    <div className="flex">
+                        <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                            Peer Reviews{!isExemptFromReversioning && ' (This Version)'}: ({thisVersionPeerReviewCount})
+                        </span>
+                    </div>
+                    {multipleVersions && (
+                        <div className="flex">
+                            <span className="mr-2 text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                Peer Reviews (All Versions): ({peerReviews.length})
+                            </span>
+                        </div>
+                    )}
+                </>
             )}
             {!!activeFlags && (
                 <div className="flex">

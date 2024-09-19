@@ -1,7 +1,7 @@
 import React from 'react';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
-import * as Components from '@components';
+import * as Components from '@/components';
 
 const Funders: React.FC = (): React.ReactElement => {
     return (
@@ -28,11 +28,11 @@ const Funders: React.FC = (): React.ReactElement => {
                     href="https://ror.org/"
                     openNew
                     endIcon={
-                        <OutlineIcons.SearchIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                        <OutlineIcons.MagnifyingGlassIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                     }
                 />
             </div>
-            <Components.RORForm />
+            <Components.FunderForm />
         </div>
     );
 };

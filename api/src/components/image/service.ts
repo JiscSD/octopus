@@ -1,9 +1,10 @@
 import * as client from 'lib/client';
 import * as I from 'interface';
-import s3 from 'lib/s3';
+import * as s3 from 'lib/s3';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
 
-export const createDBReference = async (name: string, extension: I.ImageExtension, user: string) => {
-    const imageReference = await client.prisma.images.create({
+export const createDBReference = (name: string, extension: I.ImageExtension, user: string) =>
+    client.prisma.images.create({
         data: {
             name,
             extension,
@@ -11,49 +12,34 @@ export const createDBReference = async (name: string, extension: I.ImageExtensio
         }
     });
 
-    return imageReference;
-};
-
-export const uploadToS3 = async (id: string, image: string, imageType: I.ImageExtension) => {
-    const s3Image = await s3
-        .putObject({
-            Bucket: `science-octopus-publishing-images-${process.env.STAGE}`,
+export const uploadToS3 = (id: string, image: string, imageType: I.ImageExtension) =>
+    s3.client.send(
+        new PutObjectCommand({
+            Bucket: s3.buckets.images,
             Key: id,
             ContentType: `image/${imageType}`,
             ContentEncoding: 'base64',
             Body: Buffer.from(image.replace(/^data:image\/\w+;base64,/, ''), 'base64')
         })
-        .promise();
+    );
 
-    return s3Image;
-};
-
-export const get = async (id: string) => {
-    const image = await client.prisma.images.findFirst({
+export const get = (id: string) =>
+    client.prisma.images.findFirst({
         where: {
             id
         }
     });
 
-    return image;
-};
-
-export const destroy = async (id: string) => {
-    const image = await client.prisma.images.delete({
+export const destroy = (id: string) =>
+    client.prisma.images.delete({
         where: {
             id
         }
     });
 
-    return image;
-};
-
-export const getAll = async (user: string) => {
-    const images = await client.prisma.images.findMany({
+export const getAll = (user: string) =>
+    client.prisma.images.findMany({
         where: {
             user
         }
     });
-
-    return images;
-};

@@ -1,8 +1,11 @@
-domain_name = "octopus.ac"
+profile = "octopus-dev"
 
-allocated_storage       = 50
-instance                = "db.m5.large"
-db_version              = "14.5"
-backup_retention_period = 35
+rds_allocated_storage                     = 50
+rds_max_allocated_storage                 = 100
+rds_instance                              = "db.t4g.medium"
+rds_db_version                            = "14.12"
+rds_backup_retention_period               = 35
+rds_monitoring_interval                   = 60
+rds_performance_insights_retention_period = 7
 
 elasticsearch_instance_size = "t3.medium.elasticsearch"

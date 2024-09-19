@@ -7,46 +7,77 @@ describe('Link co-author', () => {
         await testUtils.testSeed();
     });
 
-    test('Link a co-author to a publication (allow)', async () => {
+    test('Can confirm publication involvement using authentication (and no code)', async () => {
         const link = await testUtils.agent
-            .patch('/publications/publication-hypothesis-draft/link-coauthor')
+            .patch('/publication-versions/publication-hypothesis-draft-v1/link-coauthor')
             .query({ apiKey: '000000007' })
             .send({
                 email: 'test-user-7@jisc.ac.uk',
-                code: 'test-code-user-7',
                 approve: true
             });
         expect(link.status).toEqual(200);
 
         const dbLink = await client.prisma.coAuthors.findFirst({
-            where: { email: 'test-user-7@jisc.ac.uk', publicationId: 'publication-hypothesis-draft' }
+            where: { email: 'test-user-7@jisc.ac.uk', publicationVersionId: 'publication-hypothesis-draft-v1' }
         });
 
         expect(dbLink?.linkedUser).toEqual('test-user-7');
     });
 
-    test('Link a co-author to a publication (do not allow) with authentication', async () => {
+    test('Can confirm involvement with a different email if code is provided', async () => {
         const link = await testUtils.agent
-            .patch('/publications/publication-problem-draft/link-coauthor')
-            .query({ apiKey: '987654321' })
+            .patch('/publication-versions/publication-problem-draft-v1/link-coauthor')
+            .query({ apiKey: '123456789' }) // Test user 1
+            .send({
+                email: 'test-user-8@jisc.ac.uk',
+                code: 'test-code-user-8',
+                approve: true
+            });
+
+        expect(link.status).toEqual(200);
+
+        // Email should be updated to that of the authenticated user.
+        const dbLink = await client.prisma.coAuthors.findFirst({
+            where: { code: 'test-code-user-8', publicationVersionId: 'publication-problem-draft-v1' }
+        });
+        expect(dbLink?.linkedUser).toEqual('test-user-1');
+        expect(dbLink?.email).toEqual('test-user-1@jisc.ac.uk');
+    });
+
+    test('Cannot confirm involvement if no code is provided and user email does not match coauthor record', async () => {
+        const link = await testUtils.agent
+            .patch('/publication-versions/publication-hypothesis-draft-v1/link-coauthor')
+            .query({ apiKey: '123456789' }) // Test user 1
             .send({
                 email: 'test-user-7@jisc.ac.uk',
-                code: 'test-code-user-7',
+                approve: true
+            });
+        expect(link.status).toEqual(400);
+        expect(link.body.message).toEqual(
+            'To confirm or deny your involvement, you must either provide a code or be authenticated as a user with a verified email matching the co-author record.'
+        );
+    });
+
+    test('Can deny publication involvement using authentication (and no code)', async () => {
+        const link = await testUtils.agent
+            .patch('/publication-versions/publication-problem-draft-v1/link-coauthor')
+            .query({ apiKey: '000000007' })
+            .send({
+                email: 'test-user-7@jisc.ac.uk',
                 approve: false
             });
         expect(link.status).toEqual(200);
 
         const dbLink = await client.prisma.coAuthors.findFirst({
-            where: { email: 'test-user-7@jisc.ac.uk', publicationId: 'publication-problem-draft' }
+            where: { email: 'test-user-7@jisc.ac.uk', publicationVersionId: 'publication-problem-draft-v1' }
         });
 
         expect(dbLink).toEqual(null);
     });
 
-    test('Link a co-author to a publication (do not allow) without authentication', async () => {
+    test('Can deny publication involvement using a code (and no authentication)', async () => {
         const link = await testUtils.agent
-            .patch('/publications/publication-problem-draft/link-coauthor')
-            .query({ apiKey: '987654321' })
+            .patch('/publication-versions/publication-problem-draft-v1/link-coauthor')
             .send({
                 email: 'test-user-7@jisc.ac.uk',
                 code: 'test-code-user-7',
@@ -56,9 +87,9 @@ describe('Link co-author', () => {
         expect(link.status).toEqual(200);
     });
 
-    test('Cannot link as co-author if you are the creator', async () => {
+    test('Cannot confirm involvement if you are the creator', async () => {
         const link = await testUtils.agent
-            .patch('/publications/publication-problem-draft/link-coauthor')
+            .patch('/publication-versions/publication-problem-draft-v1/link-coauthor')
             .query({ apiKey: '000000005' })
             .send({
                 email: 'test-user-7@jisc.ac.uk',
@@ -69,9 +100,9 @@ describe('Link co-author', () => {
         expect(link.status).toEqual(404);
     });
 
-    test('Cannot link co-author if user has already been linked as another co-author', async () => {
+    test('Cannot confirm involvement if user has already been linked as another co-author', async () => {
         const link = await testUtils.agent
-            .patch('/publications/publication-problem-draft/link-coauthor')
+            .patch('/publication-versions/publication-problem-draft-v1/link-coauthor')
             .query({ apiKey: '000000006' })
             .send({
                 email: 'test-user-6@jisc.ac.uk',
@@ -84,7 +115,7 @@ describe('Link co-author', () => {
 
     test('Cannot override co-authorship', async () => {
         const link = await testUtils.agent
-            .patch('/publications/publication-problem-draft/link-coauthor')
+            .patch('/publication-versions/publication-problem-draft-v1/link-coauthor')
             .query({ apiKey: '987654321' })
             .send({
                 email: 'test-user-6@jisc.ac.uk',
@@ -93,5 +124,6 @@ describe('Link co-author', () => {
             });
 
         expect(link.status).toEqual(404);
+        expect(link.body.message).toEqual('User has already been linked to this publication.');
     });
 });

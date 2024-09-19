@@ -1,14 +1,14 @@
 import React from 'react';
 import * as DropZone from 'react-dropzone';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Helpers from '@helpers';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Helpers from '@/helpers';
 
 type Props = {
-    positiveActionCallback: (files: Interfaces.ImagePreview[]) => void;
-    negativeActionCallback: () => void;
+    positiveCallback: (files: Interfaces.ImagePreview[]) => void;
+    negativeCallback: () => void;
     loading: boolean;
     uploadErrors?: string[];
 };
@@ -50,7 +50,7 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
             <label
                 {...getRootProps()}
                 htmlFor="file-upload"
-                className="relative flex w-full items-center justify-center rounded border-2 border-dashed border-grey-100 bg-grey-50 py-4 px-8 hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
+                className="relative flex w-full items-center justify-center rounded border-2 border-dashed border-grey-100 bg-grey-50 px-8 py-4 hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
             >
                 <input
                     id="file-upload"
@@ -61,12 +61,12 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
                 />
                 {isDragActive ? (
                     <span>
-                        <OutlineIcons.DownloadIcon className="mx-auto mb-2 w-12 text-grey-200" />
+                        <OutlineIcons.ArrowDownTrayIcon className="mx-auto mb-2 w-12 text-grey-200" />
                         <span className="font-montserrat text-base font-medium text-grey-300">Drop here....</span>
                     </span>
                 ) : (
                     <span>
-                        <OutlineIcons.PhotographIcon className="mx-auto mb-2 w-12 text-grey-200" />
+                        <OutlineIcons.PhotoIcon className="mx-auto mb-2 w-12 text-grey-200" />
                         <span className="font-montserrat text-base font-medium text-grey-300">
                             Click or drag files here to upload
                         </span>
@@ -88,7 +88,7 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
                 <Components.ModalButton
                     text="Upload image"
                     title="Upload image"
-                    onClick={() => props.positiveActionCallback(previewBase64)}
+                    onClick={() => props.positiveCallback(previewBase64)}
                     disabled={props.loading || !previewBase64.length}
                     loading={props.loading}
                     actionType="POSITIVE"
@@ -96,7 +96,7 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
                 <Components.ModalButton
                     text="Cancel"
                     title="Cancel"
-                    onClick={() => props.negativeActionCallback()}
+                    onClick={() => props.negativeCallback()}
                     disabled={props.loading}
                     actionType="NEGATIVE"
                 />

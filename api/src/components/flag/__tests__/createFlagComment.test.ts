@@ -8,7 +8,7 @@ describe('Create flags comments on a flag', () => {
 
     test('User who created the flag can leave comments', async () => {
         const createFlagComment = await testUtils.agent
-            .post('/flag/publication-problem-live-flag/comment')
+            .post('/flags/publication-problem-live-flag/comment')
             .query({
                 apiKey: '987654321'
             })
@@ -21,7 +21,7 @@ describe('Create flags comments on a flag', () => {
 
     test('Owner of the publication can leave comments', async () => {
         const createFlagComment = await testUtils.agent
-            .post('/flag/publication-problem-live-flag/comment')
+            .post('/flags/publication-problem-live-flag/comment')
             .query({
                 apiKey: '123456789'
             })
@@ -33,7 +33,7 @@ describe('Create flags comments on a flag', () => {
 
     test('You cannot leave a comment on an resolved flag', async () => {
         const createFlagComment = await testUtils.agent
-            .post('/flag/publication-hypothesis-live/comment')
+            .post('/flags/publication-hypothesis-live-flag/comment')
             .query({
                 apiKey: '123456789'
             })
@@ -41,12 +41,12 @@ describe('Create flags comments on a flag', () => {
                 comment: 'Comments'
             });
 
-        expect(createFlagComment.status).toEqual(404);
+        expect(createFlagComment.status).toEqual(400);
     });
 
     test('You cannot leave a comment on an un-flagged publication', async () => {
         const createFlagComment = await testUtils.agent
-            .post('/flag/publication-analysis-live/comment')
+            .post('/flags/publication-analysis-live/comment')
             .query({
                 apiKey: '123456789'
             })
@@ -59,7 +59,7 @@ describe('Create flags comments on a flag', () => {
 
     test('You can only leave a comment if you are either the author of the publication or the flagger', async () => {
         const createFlagComment = await testUtils.agent
-            .post('/flag/publication-problem-live-flag/comment')
+            .post('/flags/publication-problem-live-flag/comment')
             .query({
                 apiKey: '000000003'
             })
@@ -72,13 +72,13 @@ describe('Create flags comments on a flag', () => {
 
     test('The body of the request is invalid', async () => {
         const createFlagComment = await testUtils.agent
-            .post('/flag/publication-problem-live-flag/comment')
+            .post('/flags/publication-problem-live-flag/comment')
             .query({
                 apiKey: '123456789'
             })
             .send({
                 comments: 'Comments'
             });
-        expect(createFlagComment.status).toEqual(422);
+        expect(createFlagComment.status).toEqual(400);
     });
 });

@@ -1,14 +1,14 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
-import * as Interfaces from '@interfaces';
-import * as Config from '@config';
-import * as Types from '@types';
+import * as Interfaces from '@/interfaces';
+import * as Config from '@/config';
+import * as Types from '@/types';
 
 export let baseURL: string;
 
 switch (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF) {
     case 'local':
-        baseURL = 'http://localhost:4003/local/v1';
+        baseURL = 'http://127.0.0.1:4003/local/v1'; // https://github.com/node-fetch/node-fetch/issues/1624
         break;
     case 'main':
         baseURL = 'https://api.octopus.ac/v1';
@@ -22,7 +22,7 @@ const api = axios.create({
     baseURL
 });
 
-export const get = async (url: string, token: string | undefined): Promise<AxiosResponse> => {
+export const get = async (url: string, token?: string): Promise<AxiosResponse> => {
     const headers = {
         headers: {
             Authorization: `Bearer ${token}`
@@ -92,7 +92,7 @@ export const search = async <T extends Types.SearchParameter>(
     offset: number | null = null,
     publicationType?: string | null
 ): Promise<Interfaces.SearchResults<T>> => {
-    let endpoint: string = searchType === 'users' ? Config.endpoints.users : Config.endpoints.publications;
+    let endpoint: string = searchType === 'authors' ? Config.endpoints.users : Config.endpoints.publicationVersions;
     let params: string = '';
 
     // Global search params
@@ -101,7 +101,7 @@ export const search = async <T extends Types.SearchParameter>(
     search && (params += '&search=' + search);
 
     // publication specific params
-    searchType === 'publications' && publicationType && (params += '&type=' + publicationType);
+    searchType === 'publication-versions' && publicationType && (params += '&type=' + publicationType);
 
     params.includes('&') && (params = params.replace('&', '?'));
 

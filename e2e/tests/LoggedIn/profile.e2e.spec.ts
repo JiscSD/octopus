@@ -3,24 +3,16 @@ import { BrowserContext, expect, Page, test } from '@playwright/test';
 import { PageModel } from '../PageModel';
 
 test.describe('Live author page', () => {
-    let context: BrowserContext;
     let page: Page;
 
     test.beforeAll(async ({ browser }) => {
-        context = await browser.newContext();
-        page = await context.newPage();
-        // navigate to homepage
-        await page.goto(Helpers.UI_BASE, { waitUntil: 'domcontentloaded' });
-        await expect(page).toHaveTitle('Octopus | Built for Researchers');
-
-        // login
-        await Helpers.login(page, browser);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
+        page = await Helpers.getPageAsUser(browser);
 
         // go to "Live author page" page
+        await page.goto('/');
         await page.locator(PageModel.header.usernameButton).click();
-        await page.locator(PageModel.header.myProfileButton).click();
-        await page.locator(PageModel.myProfile.liveAuthorPageButton).click();
+        await page.locator(PageModel.header.myAccountButton).click();
+        await page.locator(PageModel.myAccount.liveAuthorPageButton).click();
     });
 
     test.afterAll(async () => {
@@ -50,6 +42,7 @@ test.describe('Live author page', () => {
         await expect(orcidProfileLink).toBeVisible();
 
         await orcidProfileLink.click();
+        const context = page.context();
         await context.waitForEvent('page');
 
         const pages = context.pages();

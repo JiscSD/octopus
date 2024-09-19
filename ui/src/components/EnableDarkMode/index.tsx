@@ -1,9 +1,9 @@
 import React from 'react';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as HeadlessUI from '@headlessui/react';
 
-import * as Stores from '@stores';
-import * as Types from '@types';
+import * as Stores from '@/stores';
+import * as Types from '@/types';
 
 const EnableDarkMode: React.FC = (): React.ReactElement => {
     const darkMode = Stores.usePreferencesStore((state: Types.PreferencesStoreTypes) => state.darkMode);

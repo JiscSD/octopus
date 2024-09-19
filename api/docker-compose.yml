@@ -1,122 +1,111 @@
-version: '3.2'
-
 services:
+    db:
+        container_name: api-test-db
+        image: postgres:14.11-alpine
+        command: postgres -c 'max_connections=1000'
+        restart: always
+        environment:
+            POSTGRES_DB: postgres
+            POSTGRES_USER: mydbuser
+            POSTGRES_PASSWORD: mydbpwd
+        ports:
+            - '5432:5432'
 
-  db:
-    container_name: api-test-db
-    image: postgres:14.5
-    command: postgres -c 'max_connections=1000'
-    restart: always
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: mydbuser
-      POSTGRES_PASSWORD: mydbpwd
-    ports:
-      - "5432:5432"
+    mailpit:
+        container_name: api-test-mailpit
+        image: axllent/mailpit:latest
+        restart: always
+        ports:
+            - '1025:1025'
+            - '8025:8025'
 
-  mailhog:
-    container_name: api-test-mailhog
-    image: mailhog/mailhog:latest
-    restart: always
-    ports:
-      - 1025:1025
-      - 8025:8025
-  
-  localstack:
-    container_name: api-test-localstack
-    image: localstack/localstack:latest
-    ports:
-      - "4510-4559:4510-4559"
-      - "4567:4566"
-    environment:
-      - SERVICES=s3
-      - DEBUG=1
-      - DATA_DIR=/tmp/localstack/data
-    volumes:
-      - "./.localstack:/var/lib/localstack"
-      - "/var/run/docker.sock:/var/run/docker.sock"
+    localstack:
+        container_name: api-test-localstack
+        image: localstack/localstack:latest
+        ports:
+            - '4510-4559:4510-4559'
+            - '4567:4566'
+        environment:
+            - SERVICES=s3,sqs
+            - DEBUG=1
+            - DATA_DIR=/tmp/localstack/data
+        volumes:
+            - '${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack'
+            - '/var/run/docker.sock:/var/run/docker.sock'
 
-  adminer:
-    container_name: api-test-adminer
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-    depends_on:
-      - db
+    opensearch-node1: # This is also the hostname of the container within the Docker network (i.e. https://opensearch-node1/)
+        image: opensearchproject/opensearch:2.13.0
+        container_name: api-test-opensearch-node1
+        environment:
+            - cluster.name=opensearch-cluster # Name the cluster
+            - node.name=opensearch-node1 # Name the node that will run in this container
+            - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
+            - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m' # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+            - 'DISABLE_INSTALL_DEMO_CONFIG=true' # disables execution of install_demo_configuration.sh bundled with security plugin, which installs demo certificates and security configurations to OpenSearch
+            - 'DISABLE_SECURITY_PLUGIN=true' # disables security plugin entirely in OpenSearch by setting plugins.security.disabled: true in opensearch.yml
+            - 'discovery.type=single-node' # disables bootstrap checks that are enabled when network.host is set to a non-loopback address
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+            nofile:
+                soft: 65536 # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
+                hard: 65536
+        ports:
+            - '9200:9200' # REST API
+            - '9600:9600' # Performance Analyzer
+        healthcheck:
+            test: ['CMD', 'curl', '-f', 'http://localhost:9200']
+            interval: 30s
+            timeout: 10s
+            retries: 5
 
-  opensearch-node1: # This is also the hostname of the container within the Docker network (i.e. https://opensearch-node1/)
-    image: opensearchproject/opensearch:2.3.0 # upgrade from 1.2
-    container_name: api-test-opensearch-node1
-    environment:
-      - cluster.name=opensearch-cluster # Name the cluster
-      - node.name=opensearch-node1 # Name the node that will run in this container
-      - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
-      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
-      - "DISABLE_INSTALL_DEMO_CONFIG=true" # disables execution of install_demo_configuration.sh bundled with security plugin, which installs demo certificates and security configurations to OpenSearch
-      - "DISABLE_SECURITY_PLUGIN=true" # disables security plugin entirely in OpenSearch by setting plugins.security.disabled: true in opensearch.yml
-      - "discovery.type=single-node" # disables bootstrap checks that are enabled when network.host is set to a non-loopback address
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-        soft: 65536 # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
-        hard: 65536
-    ports:
-      - 9200:9200 # REST API
-      - 9600:9600 # Performance Analyzer
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9200"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+    opensearch-dashboards:
+        image: opensearchproject/opensearch-dashboards:2.13.0
+        container_name: api-test-opensearch-dashboards
+        ports:
+            - '5601:5601' # Map host port 5601 to container port 5601
+        environment:
+            - 'OPENSEARCH_HOSTS=["http://opensearch-node1:9200"]' # Define the OpenSearch nodes that OpenSearch Dashboards will query
+            - 'DISABLE_SECURITY_DASHBOARDS_PLUGIN=true' # disables security dashboards plugin in OpenSearch Dashboards
 
-  opensearch-dashboards:
-    image: opensearchproject/opensearch-dashboards:2.3.0 # upgrade from 1.2
-    container_name: api-test-opensearch-dashboards
-    ports:
-      - 5601:5601 # Map host port 5601 to container port 5601
-    expose:
-      - "5601" # Expose port 5601 for web access to OpenSearch Dashboards
-    environment:
-      - 'OPENSEARCH_HOSTS=["http://opensearch-node1:9200"]' # Define the OpenSearch nodes that OpenSearch Dashboards will query
-      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true" # disables security dashboards plugin in OpenSearch Dashboards
+    api:
+        restart: always
+        container_name: api-test
+        depends_on:
+            - opensearch-node1
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - '4005:4003'
+        command: sh -c "npm run seed:local && npm run start:local"
+        environment:
+            - DATACITE_USER # this and next 3 come from calling environment
+            - DATACITE_PASSWORD
+            - ORCID_ID
+            - ORCID_SECRET
+            - DOI_PREFIX=10.82259
+            - DATACITE_ENDPOINT=https://api.test.datacite.org/dois
+            - BASE_URL=https://localhost:3001
+            - AUTHORISATION_CALLBACK_URL=https://localhost:3001/login
+            - JWT_SECRET=PUT_JWT_SECRET_HERE
+            - MAIL_SERVER=mailpit
+            - LOCALSTACK_SERVER=http://localstack:4566
+            - STAGE=local
+            - EMAIL_SENDER_ADDRESS=no-reply@local.ac
+            - ELASTICSEARCH_PROTOCOL=http
+            - ELASTICSEARCH_USER=admin
+            - ELASTICSEARCH_PASSWORD=admin
+            - ELASTICSEARCH_ENDPOINT=opensearch-node1:9200
+            - ORCID_AUTH_URL=https://sandbox.orcid.org/oauth
+            - ORCID_MEMBER_API_URL=https://api.sandbox.orcid.org/v3.0
+            - VALIDATION_CODE_EXPIRY=10
+            - VALIDATION_CODE_ATTEMPTS=3
+            - DATABASE_URL=postgresql://mydbuser:mydbpwd@api-test-db:5432/postgres?schema=public
+            - QUEUE_URL=http://localhost:4566/000000000000/science-octopus-pdf-queue-local
+            - SQS_ENDPOINT=http://localstack:4566
+            - LIST_USERS_API_KEY=123456789
 
-  api:
-    restart: always
-    container_name: api-test
-    depends_on:
-      - opensearch-node1
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - '4005:4003'
-    command: sh -c "npm run seed:local && npm run start:local"
-    environment:
-      - DATACITE_USER # this and next 3 come from calling environment 
-      - DATACITE_PASSWORD
-      - ORCID_ID
-      - ORCID_SECRET
-      - DOI_PREFIX=10.82259
-      - DATACITE_ENDPOINT=https://api.test.datacite.org/dois
-      - BASE_URL=https://localhost:3001
-      - AUTHORISATION_CALLBACK_URL=https://localhost:3001/login
-      - JWT_SECRET=PUT_JWT_SECRET_HERE      
-      - MAIL_SERVER=mailhog
-      - LOCALSTACK_SERVER=localstack
-      - STAGE=local
-      - EMAIL_SENDER_ADDRESS=no-reply@local.ac
-      - ELASTICSEARCH_PROTOCOL=http
-      - ELASTICSEARCH_USER=admin
-      - ELASTICSEARCH_PASSWORD=admin
-      - ELASTICSEARCH_ENDPOINT=opensearch-node1:9200
-      - ORCID_AUTH_URL=https://sandbox.orcid.org/oauth
-      - ORCID_MEMBER_API_URL=https://api.sandbox.orcid.org/v3.0
-      - VALIDATION_CODE_EXPIRY=10
-      - VALIDATION_CODE_ATTEMPTS=3
-      - DATABASE_URL=postgresql://mydbuser:mydbpwd@api-test-db:5432/postgres?schema=public
-  
 volumes:
-  opensearch-data1:
+    opensearch-data1:

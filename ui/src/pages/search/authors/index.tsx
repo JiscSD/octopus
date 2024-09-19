@@ -4,13 +4,14 @@ import Head from 'next/head';
 
 import * as Router from 'next/router';
 import * as Framer from 'framer-motion';
-import * as SolidIcons from '@heroicons/react/solid';
-import * as Interfaces from '@interfaces';
-import * as Components from '@components';
-import * as Layouts from '@layouts';
-import * as Config from '@config';
-import * as Types from '@types';
-import * as api from '@api';
+import * as SolidIcons from '@heroicons/react/24/solid';
+import * as Interfaces from '@/interfaces';
+import * as Components from '@/components';
+import * as Layouts from '@/layouts';
+import * as Config from '@/config';
+import * as Types from '@/types';
+import * as api from '@/api';
+import * as Helpers from '@/helpers';
 
 /**
  *
@@ -19,15 +20,10 @@ import * as api from '@api';
  */
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    // defaults to possible query params
-    let searchType: Types.SearchType = 'users';
+    const searchType: Types.SearchType = 'authors';
     let query: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
     let offset: number | string | string[] | null = null;
-
-    // defaults to results
-    let results: Interfaces.CoreUser[] | [] = [];
-    let metadata: Interfaces.SearchResultMeta | {} = {};
 
     // default error
     let error: string | null = null;
@@ -46,22 +42,22 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     limit && !Number.isNaN(parseInt(limit, 10)) ? (limit = parseInt(limit, 10)) : (limit = null);
     offset && !Number.isNaN(parseInt(offset, 10)) ? (offset = parseInt(offset, 10)) : (offset = null);
 
-    // ensure the value of the seach type is acceptable
-    // ensure the value of the search type is acceptable
+    const swrKey = `/users?search=${encodeURIComponent(query || '')}&limit=${limit || '10'}&offset=${offset || '0'}`;
+    let fallbackData: Interfaces.AuthorsPaginatedResults = {
+        data: [],
+        metadata: {
+            offset: 0,
+            limit: 10,
+            total: 0
+        }
+    };
 
     try {
-        const response = await api.search<Interfaces.User>(searchType, encodeURIComponent(query || ''), limit, offset);
-        results = response.data;
-        metadata = response.metadata;
-        error = null;
+        fallbackData = (await api.get(swrKey, undefined)).data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
     }
-
-    const swrKey = `/users?search=${encodeURIComponent((Array.isArray(query) ? query[0] : query) || '')}&limit=${
-        limit || '10'
-    }&offset=${offset || '0'}`;
 
     return {
         props: {
@@ -70,7 +66,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             limit,
             offset,
             fallback: {
-                [swrKey]: results
+                [swrKey]: fallbackData
             },
             error
         }
@@ -78,57 +74,75 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    searchType?: Types.SearchType;
+    searchType: Types.SearchType;
     query: string | null;
     limit: string | null;
     offset: string | null;
+    fallback: {
+        [swrKey: string]: Interfaces.CoreUser[];
+    };
     error: string | null;
 };
 
-const Search: Types.NextPage<Props> = (props): React.ReactElement => {
+const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
-    const searchInputRef = React.useRef<HTMLInputElement>(null);
-    // params
-    const [searchType] = React.useState(props.searchType);
-    const [query, setQuery] = React.useState(props.query ? props.query : '');
-    // param for pagination
+    // Query params
+    const { query = '' } = router.query as Interfaces.AuthorSearchQuery;
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
 
-    // ugly complex swr key
-
     const swrKey = `/users?search=${encodeURIComponent(query || '')}&limit=${limit || '10'}&offset=${offset || '0'}`;
 
-    const { data: results = [], error, isValidating } = useSWR(swrKey);
+    const {
+        data: results,
+        error,
+        isValidating
+    } = useSWR<Interfaces.AuthorsPaginatedResults>(swrKey, {
+        fallback: props.fallback,
+        use: [Helpers.laggy]
+    });
 
     const handlerSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
-        const searchTerm = searchInputRef.current?.value || '';
-        setQuery(searchTerm);
+        const searchTerm = e.currentTarget.searchTerm.value;
+        const newQuery = { ...router.query, query: searchTerm };
+
+        if (!searchTerm) {
+            delete newQuery.query; // remove query param from browser url
+        }
+
+        await router.push({ query: newQuery }, undefined, { shallow: true });
+        setOffset(0);
     };
 
-    React.useEffect(() => {
-        setOffset(0);
-    }, [query, limit]);
+    const pageTitle = Config.urls.search.title.replace('publications', 'authors');
+
+    const upperPageBound = results
+        ? limit + offset > results.metadata.total
+            ? results.metadata.total
+            : limit + offset
+        : null;
 
     return (
         <>
             <Head>
+                <title>{pageTitle}</title>
                 <meta name="description" content={Config.urls.search.description} />
+                <meta name="og:title" content={pageTitle} />
+                <meta name="og:description" content={Config.urls.search.description} />
                 <meta name="keywords" content={Config.urls.search.keywords.join(', ')} />
                 <link rel="canonical" href={Config.urls.search.canonical} />
-                <title>{Config.urls.search.title}</title>
             </Head>
 
             <Layouts.Standard>
-                <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pt-16 lg:pb-0">
+                <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pb-0 lg:pt-16">
                     <Components.PageTitle text={`Search results ${query ? `for ${query}` : ''}`} />
                 </section>
                 <section
                     id="content"
                     className="container mx-auto grid grid-cols-1 px-8 lg:grid-cols-12 lg:gap-x-16 lg:gap-y-8"
                 >
-                    <fieldset className="col-span-12 mb-8 grid w-full grid-cols-12 items-end gap-y-4 gap-x-6 lg:mb-0 lg:gap-x-6 2xl:gap-x-10">
+                    <fieldset className="col-span-12 mb-8 grid w-full grid-cols-12 items-end gap-x-6 gap-y-4 lg:mb-0 lg:gap-x-6 2xl:gap-x-10">
                         <legend className="sr-only">Search options</legend>
 
                         <label htmlFor="search-type" className="relative col-span-8 block lg:col-span-3">
@@ -139,25 +153,23 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                 name="search-type"
                                 id="search-type"
                                 onChange={(e) => router.push(`/search/${e.target.value}`)}
-                                value={searchType}
+                                value={props.searchType}
                                 className="col-span-3 !mt-0 block w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
                                 disabled={isValidating}
                             >
                                 <option value="publications">Publications</option>
                                 <option value="authors">Authors</option>
+                                <option value="topics">Topics</option>
                             </select>
                         </label>
 
-                        <label
-                            htmlFor="order-direction"
-                            className="relative col-span-4 block lg:col-span-2 xl:col-span-1"
-                        >
+                        <label htmlFor="pageSize" className="relative col-span-4 block lg:col-span-2 xl:col-span-1">
                             <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
                                 Showing
                             </span>
                             <select
-                                name="order-direction"
-                                id="order-direction"
+                                name="pageSize"
+                                id="pageSize"
                                 onChange={(e) => setLimit(parseInt(e.target.value, 10))}
                                 value={limit}
                                 className="w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
@@ -177,14 +189,13 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                             className="col-span-12 lg:col-span-7 xl:col-span-8"
                             onSubmit={handlerSearchFormSubmit}
                         >
-                            <label htmlFor="search-query" className="relative block w-full">
+                            <label htmlFor="searchTerm" className="relative block w-full">
                                 <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
                                     Quick search
                                 </span>
                                 <input
-                                    ref={searchInputRef}
-                                    name="query"
-                                    id="query"
+                                    name="searchTerm"
+                                    id="searchTerm"
                                     defaultValue={props.query ? props.query : ''}
                                     type="text"
                                     placeholder="Type here and press enter..."
@@ -198,7 +209,7 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                     className="absolute right-px rounded-md p-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                                     disabled={isValidating}
                                 >
-                                    <SolidIcons.SearchIcon className="h-6 w-6 text-teal-500" />
+                                    <SolidIcons.MagnifyingGlassIcon className="h-6 w-6 text-teal-500" />
                                 </button>
                             </label>
                         </form>
@@ -206,20 +217,10 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
 
                     <article className="col-span-12 min-h-screen">
                         {props.error ? (
-                            <Components.Alert
-                                severity="ERROR"
-                                title={props.error}
-                                details={['Placeholder support text here']}
-                            />
+                            <Components.Alert severity="ERROR" title={props.error} />
                         ) : (
                             <Framer.AnimatePresence>
-                                {error && (
-                                    <Components.Alert
-                                        severity="ERROR"
-                                        title={error}
-                                        details={['Placeholder support text here']}
-                                    />
-                                )}
+                                {error && <Components.Alert severity="ERROR" title={error} />}
 
                                 {!error && !results?.data?.length && !isValidating && (
                                     <Components.Alert
@@ -232,15 +233,19 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                     />
                                 )}
 
-                                {!isValidating && results?.data?.length && (
+                                {results?.data?.length && (
                                     <>
                                         <div className="rounded">
                                             {results.data.map((result: any, index: number) => {
                                                 let classes = '';
-                                                index === 0 ? (classes += 'rounded-t') : null;
-                                                index === results.data.length - 1
-                                                    ? (classes += '!border-b-transparent !rounded-b')
-                                                    : null;
+
+                                                if (index === 0) {
+                                                    classes += 'rounded-t';
+                                                }
+
+                                                if (index === results.data.length - 1) {
+                                                    classes += '!border-b-transparent !rounded-b';
+                                                }
 
                                                 return (
                                                     <Components.UserSearchResult
@@ -263,9 +268,9 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 >
                                                     <div className="flex justify-between">
                                                         <button
-                                                            onClick={(e) => {
-                                                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                            onClick={() => {
                                                                 setOffset((prev) => prev - limit);
+                                                                Helpers.scrollTopSmooth();
                                                             }}
                                                             disabled={offset === 0}
                                                             className="mr-6 rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
@@ -274,9 +279,9 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                                         </button>
 
                                                         <button
-                                                            onClick={(e) => {
-                                                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                            onClick={() => {
                                                                 setOffset((prev) => prev + limit);
+                                                                Helpers.scrollTopSmooth();
                                                             }}
                                                             className="rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
                                                             disabled={limit + offset > results.metadata.total}
@@ -285,11 +290,8 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
                                                         </button>
                                                     </div>
                                                     <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                                        Showing {offset + 1} -{' '}
-                                                        {limit + offset > results.metadata.total
-                                                            ? results.metadata.total
-                                                            : limit + offset}{' '}
-                                                        of {results.metadata.total}
+                                                        Showing {offset + 1} - {upperPageBound} of{' '}
+                                                        {results.metadata.total}
                                                     </span>
                                                 </Framer.motion.div>
                                             </Components.Delay>
@@ -305,4 +307,4 @@ const Search: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 };
 
-export default Search;
+export default Authors;

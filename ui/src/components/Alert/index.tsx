@@ -1,9 +1,9 @@
 import React from 'react';
-import * as OutlineIcons from '@heroicons/react/outline';
-import * as SolidIcons from '@heroicons/react/solid';
+import * as OutlineIcons from '@heroicons/react/24/outline';
+import * as SolidIcons from '@heroicons/react/24/solid';
 import * as Framer from 'framer-motion';
-import * as Components from '@components';
-import * as Types from '@types';
+import * as Components from '@/components';
+import * as Types from '@/types';
 
 type Props = {
     severity: Types.Severity;
@@ -33,7 +33,7 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                 title = 'text-grey-800';
                 details = 'text-grey-700';
                 icon = (
-                    <OutlineIcons.ExclamationIcon
+                    <OutlineIcons.ExclamationTriangleIcon
                         className="text h-5 w-5 text-grey-800 transition-colors duration-500"
                         aria-hidden="true"
                     />
@@ -92,7 +92,7 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                     }`}
                 >
                     <div className="flex items-start" data-testid="alert-box">
-                        <div className="mr-3 ml-1">{classes.icon}</div>
+                        <div className="ml-1 mr-3">{classes.icon}</div>
                         <div className="">
                             {!!props.title && (
                                 <h3 className={`text-sm font-medium transition-colors duration-500 ${classes.title}`}>
@@ -104,7 +104,7 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
 
                             {props.details && (
                                 <div className={`mt-2 text-sm transition-colors duration-500 ${classes.details}`}>
-                                    <ul className="list-disc space-y-1 pl-5">
+                                    <ul className="list-disc space-y-1 pl-5 text-left">
                                         {props.details.map((detail) => (
                                             <li key={detail}>{detail}</li>
                                         ))}
@@ -119,7 +119,7 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                                         openNew={props.supportLink.external}
                                         className="mr-2 flex rounded outline-0 focus:ring-2 focus:ring-yellow-400"
                                     >
-                                        <span className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white-50 transition-colors duration-500">
+                                        <span className="rounded bg-grey-700 px-2 py-1 text-sm font-semibold text-white-50 transition-colors duration-500">
                                             {props.supportLink.text}
                                         </span>
                                     </Components.Link>
@@ -131,7 +131,8 @@ const Alert: React.FC<Props> = (props): React.ReactElement => {
                                     <button
                                         type="button"
                                         onClick={() => setShow(false)}
-                                        className="rounded bg-grey-700 py-1 px-2 text-sm font-semibold text-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                                        className="rounded bg-grey-700 px-2 py-1 text-sm font-semibold text-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
+                                        aria-label="Dismiss alert"
                                     >
                                         Dismiss
                                     </button>

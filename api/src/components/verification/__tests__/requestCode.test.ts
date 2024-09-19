@@ -1,5 +1,4 @@
 import * as testUtils from 'lib/testUtils';
-import cryptoRandomString from 'crypto-random-string';
 
 describe('Request a verification code', () => {
     beforeEach(async () => {
@@ -8,13 +7,13 @@ describe('Request a verification code', () => {
     });
 
     test('User can request a code and receives an email to their address', async () => {
-        const email = `${cryptoRandomString({ length: 7, type: 'distinguishable' })}@domain.com`;
+        const email = 'example@domain.com';
 
         const request = await testUtils.agent.get('/verification/1234').query({ apiKey: 123456789, email });
 
         const inbox = await testUtils.getEmails(email);
 
         expect(request.status).toEqual(200);
-        expect(inbox.items[0].Content.Headers.Subject).toContain('Verify your Octopus account');
+        expect(inbox.messages[0].Subject).toContain('Verify your Octopus account');
     });
 });

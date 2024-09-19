@@ -1,9 +1,9 @@
 import React from 'react';
-import * as OutlineIcons from '@heroicons/react/outline';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
-import * as Components from '@components';
-import * as Interfaces from '@interfaces';
-import * as Config from '@config';
+import * as Components from '@/components';
+import * as Interfaces from '@/interfaces';
+import * as Config from '@/config';
 
 import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 
@@ -28,7 +28,7 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
                     className="rounded-sm outline-2 outline-offset-2 outline-yellow-400"
                     title="Drag to reorder authors"
                 >
-                    <OutlineIcons.MenuIcon className="h-5 w-5 text-teal-700 transition-colors duration-500 dark:text-white-50" />
+                    <OutlineIcons.Bars3Icon className="h-5 w-5 text-teal-700 transition-colors duration-500 dark:text-white-50" />
                 </span>
             </td>
             <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
@@ -37,7 +37,7 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
                         <span className="leading-10">N/A</span>
                     ) : props.coAuthor.confirmedCoAuthor ? (
                         <span title={`${props.coAuthor.email} has given approval for this publication to published.`}>
-                            <OutlineIcons.BadgeCheckIcon className="h-5 w-5 text-orcid transition-colors duration-500 dark:text-white-50" />
+                            <OutlineIcons.CheckBadgeIcon className="h-5 w-5 text-orcid transition-colors duration-500 dark:text-white-50" />
                         </span>
                     ) : (
                         <span
@@ -57,13 +57,13 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
                     ) : props.coAuthor.approvalRequested ? (
                         <span title="Request sent">
                             <div title="Request sent">
-                                <OutlineIcons.MailIcon className="h-5 w-5 text-green-400 transition-colors duration-500 dark:text-green-50" />
+                                <OutlineIcons.EnvelopeIcon className="h-5 w-5 text-green-400 transition-colors duration-500 dark:text-green-50" />
                             </div>
                         </span>
                     ) : (
                         <span title="Request to be sent when draft editing is complete">
                             <div title="Request to be sent when draft editing is complete">
-                                <OutlineIcons.MailOpenIcon className="h-5 w-5 text-yellow-600 transition-colors duration-500 dark:text-yellow-500" />
+                                <OutlineIcons.EnvelopeOpenIcon className="h-5 w-5 text-yellow-600 transition-colors duration-500 dark:text-yellow-500" />
                             </div>
                         </span>
                     )}
@@ -96,7 +96,7 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
                     )}
                 </div>
             </td>
-            <td className="space-nowrap py-4 px-8 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+            <td className="space-nowrap px-8 py-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
                 {!props.isMainAuthor && (
                     <Components.IconButton
                         className="p-2"

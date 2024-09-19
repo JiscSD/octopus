@@ -24,65 +24,86 @@
             "./node_modules/@types"
         ],
         "paths": {
-            "prisma/*": [
-                "prisma/*"
-            ],
-            "components/*": [
-                "src/components/*"
-            ],
-            "publication/*": [
-                "src/components/publication/*"
-            ],
-            "user/*": [
-                "src/components/user/*"
-            ],
-            "bookmark/*": [
-                "src/components/bookmark/*"
-            ],
-            "link/*": [
-                "src/components/link/*"
-            ],
-            "reference/*": [
-                "src/components/reference/*"
-            ],
-            "authorization/*": [
-                "src/components/authorization/*"
-            ],
-            "verification/*": [
-                "src/components/verification/*"
-            ],
-            "image/*": [
-                "src/components/image/*"
-            ],
-            "coauthor/*": [
-                "src/components/coauthor/*"
-            ],
-            "funder/*": [
-                "src/components/funder/*"
-            ],
-            "flag/*": [
-                "src/components/flag/*"
+            "config": [
+                "src/config"
             ],
             "lib/*": [
                 "src/lib/*"
             ],
-            "middleware": [
-                "src/middleware"
-            ],
-            "interface": [
-                "src/lib/interface"
+            "email": [
+                "src/lib/email"
             ],
             "enum": [
                 "src/lib/enum"
             ],
-            "config": [
-                "src/config"
+            "interface": [
+                "src/lib/interface"
             ],
-            "utilities": [
-                "src/utilities"
+            "middleware": [
+                "src/middleware"
             ],
-            "email": [
-                "src/lib/email"
+            "prisma/*": [
+                "prisma/*"
+            ],
+            "additionalInformation/*": [
+                "src/components/additionalInformation/*"
+            ],
+            "authorization/*": [
+                "src/components/authorization/*"
+            ],
+            "bookmark/*": [
+                "src/components/bookmark/*"
+            ],
+            "coAuthor/*": [
+                "src/components/coauthor/*"
+            ],
+            "crosslink/*": [
+                "src/components/crosslink/*"
+            ],
+            "event/*": [
+                "src/components/event/*"
+            ],
+            "flag/*": [
+                "src/components/flag/*"
+            ],
+            "funder/*": [
+                "src/components/funder/*"
+            ],
+            "image/*": [
+                "src/components/image/*"
+            ],
+            "link/*": [
+                "src/components/link/*"
+            ],
+            "publication/*": [
+                "src/components/publication/*"
+            ],
+            "publicationBookmark/*": [
+                "src/components/publicationBookmark/*"
+            ],
+            "publicationVersion/*": [
+                "src/components/publicationVersion/*"
+            ],
+            "reference/*": [
+                "src/components/reference/*"
+            ],
+            "sitemap/*": [
+                "src/components/sitemap/*"
+            ],
+            "topic/*": [
+                "src/components/topic/*"
+            ],
+            "topicMapping/*": [
+                "src/components/topicMapping/*"
+            ],
+            "user/*": [
+                "src/components/user/*"
+            ],
+            "userMapping/*": [
+                "src/components/userMapping/*"
+            ],
+            "verification/*": [
+                "src/components/verification/*"
             ]
         }
     },

@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Note: this step is only required locally when using act since the ubuntu image
       # does not come with docker-compose installed, however the alternative to the reinstall
@@ -32,7 +32,7 @@ jobs:
         run: docker compose -f "docker-compose.yml" up -d --build
 
       - name: Wait for API and DB to be ready
-        run: docker exec -t api-test dockerize -wait tcp://db:5432 -wait tcp://api-test:4003 -wait tcp://mailhog:8025 -timeout 120s
+        run: docker exec -t api-test dockerize -wait tcp://db:5432 -wait tcp://api-test:4003 -wait tcp://mailpit:8025 -wait tcp://localstack:4566 -timeout 120s
 
       - name: docker logs
         if: failure()
@@ -44,4 +44,4 @@ jobs:
 
       - name: Stop containers
         working-directory: ./api
-        run: docker-compose -f docker-compose.yml down
+        run: docker compose -f docker-compose.yml down
