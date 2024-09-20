@@ -72,14 +72,14 @@
             "image/*": [
                 "src/components/image/*"
             ],
+            "ingestLog/*": [
+                "src/components/ingestLog/*"
+            ],
             "link/*": [
                 "src/components/link/*"
             ],
             "publication/*": [
                 "src/components/publication/*"
-            ],
-            "publicationBookmark/*": [
-                "src/components/publicationBookmark/*"
             ],
             "publicationVersion/*": [
                 "src/components/publicationVersion/*"
