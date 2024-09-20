@@ -41,7 +41,7 @@ export const incrementalAriIngest = async (): Promise<void> => {
         const pageAris = response.data.data;
 
         for (const pageAri of pageAris) {
-            if (mostRecentStart && new Date(pageAri.dateUpdated) < new Date(mostRecentStart)) {
+            if (mostRecentStart && new Date(pageAri.dateUpdated) < new Date(mostRecentStart) && !timeOverlap) {
                 timeOverlap = true;
                 console.log('Time overlap - reached an ARI older than the most recent ingest start time.');
             }
