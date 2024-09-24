@@ -5,7 +5,6 @@ frameworkVersion: ${file(./serverless-config-default.yml):frameworkVersion}
 useDotenv: ${file(./serverless-config-default.yml):useDotenv}
 
 plugins:
-    - serverless-offline-ssm
     - serverless-offline
     - serverless-webpack
     - serverless-webpack-prisma
@@ -17,6 +16,35 @@ provider:
     runtime: nodejs18.x
     region: eu-west-1
     stage: 'local'
+    environment:
+        STAGE: ${self:provider.stage}
+        DATABASE_URL: ${env:DATABASE_URL}
+        ORCID_SECRET: ${env:ORCID_SECRET}
+        ORCID_ID: ${env:ORCID_ID}
+        ORCID_AUTH_URL: ${env:ORCID_AUTH_URL}
+        ORCID_MEMBER_API_URL: ${env:ORCID_MEMBER_API_URL}
+        JWT_SECRET: ${env:JWT_SECRET}
+        EMAIL_SENDER_ADDRESS: ${env:EMAIL_SENDER_ADDRESS}
+        BASE_URL: ${env:BASE_URL}
+        AUTHORISATION_CALLBACK_URL: ${env:AUTHORISATION_CALLBACK_URL}
+        ELASTICSEARCH_PROTOCOL: ${env:ELASTICSEARCH_PROTOCOL}
+        ELASTICSEARCH_USER: ${env:ELASTICSEARCH_USER}
+        ELASTICSEARCH_PASSWORD: ${env:ELASTICSEARCH_PASSWORD}
+        ELASTICSEARCH_ENDPOINT: ${env:ELASTICSEARCH_ENDPOINT}
+        VALIDATION_CODE_EXPIRY: 10
+        VALIDATION_CODE_ATTEMPTS: 3
+        DOI_PREFIX: ${env:DOI_PREFIX}
+        DATACITE_ENDPOINT: ${env:DATACITE_ENDPOINT}
+        DATACITE_USER: ${env:DATACITE_USER}
+        DATACITE_PASSWORD: ${env:DATACITE_PASSWORD}
+        MAIL_SERVER: ${env:MAIL_SERVER}
+        LOCALSTACK_SERVER: ${env:LOCALSTACK_SERVER}
+        QUEUE_URL: ${env:QUEUE_URL}
+        SQS_ENDPOINT: ${env:SQS_ENDPOINT}
+        LIST_USERS_API_KEY: ${env:LIST_USERS_API_KEY}
+        TRIGGER_ARI_INGEST_API_KEY: ${env:TRIGGER_ARI_INGEST_API_KEY}
+        SLACK_CHANNEL_EMAIL: ${env:SLACK_CHANNEL_EMAIL}
+        INGEST_REPORT_RECIPIENTS: ${env:INGEST_REPORT_RECIPIENTS}
     deploymentBucket:
         tags:
             Project: Octopus
