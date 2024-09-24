@@ -385,3 +385,19 @@ describe('ARI handling', () => {
         });
     });
 });
+
+describe('ARI import processes', () => {
+    beforeEach(async () => {
+        await testUtils.clearDB();
+        await testUtils.testSeed();
+    });
+
+    test('Incremental import endpoint requires API key', async () => {
+        const triggerImport = await testUtils.agent.post('/integrations/ari/incremental');
+
+        expect(triggerImport.status).toEqual(401);
+        expect(triggerImport.body).toMatchObject({
+            message: "Please provide a valid 'apiKey'."
+        });
+    });
+});
