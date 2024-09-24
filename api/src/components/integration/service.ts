@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as ariUtils from 'lib/integration/ariUtils';
+import * as ariUtils from 'integration/ariUtils';
 import * as email from 'lib/email';
 import * as ingestLogService from 'ingestLog/service';
 

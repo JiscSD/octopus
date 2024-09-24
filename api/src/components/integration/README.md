@@ -32,7 +32,7 @@ On import, ARIs go through a handling flow:
 
 #### How ARI data is mapped to octopus data
 
-Various ARI fields are mapped to octpous ones in the `mapAriQuestionToPublicationVersion` function in [ariUtils.ts](./ariUtils.ts).
+Various ARI fields are mapped to octopus ones in the `mapAriQuestionToPublicationVersion` function in [ariUtils.ts](./ariUtils.ts).
 
 Of particular importance is how ARIs are matched to an owning organisational user account. The mapping process expects a UserMapping to exist associating the `department` field value from the ARI (where the title matches, case insensitive, and the mapping source is 'ARI') with the user ID of an organisational account.
 

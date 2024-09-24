@@ -1,4 +1,4 @@
-import * as ariUtils from 'lib/integration/ariUtils';
+import * as ariUtils from 'integration/ariUtils';
 import * as I from 'interface';
 import * as testUtils from 'lib/testUtils';
 
