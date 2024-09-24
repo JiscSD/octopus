@@ -1,5 +1,6 @@
 import * as ariUtils from 'integration/ariUtils';
 import * as I from 'interface';
+import * as ingestLogService from 'ingestLog/service';
 import * as testUtils from 'lib/testUtils';
 
 // This ARI will match a publication in the seed data via the questionId.
@@ -398,6 +399,19 @@ describe('ARI import processes', () => {
         expect(triggerImport.status).toEqual(401);
         expect(triggerImport.body).toMatchObject({
             message: "Please provide a valid 'apiKey'."
+        });
+    });
+
+    test('Incremental ingest cancels if already in progress', async () => {
+        // Create an open ended log first.
+        await ingestLogService.create('ARI');
+        const triggerImport = await testUtils.agent
+            .post('/integrations/ari/incremental')
+            .query({ apiKey: process.env.TRIGGER_ARI_INGEST_API_KEY });
+
+        expect(triggerImport.status).toEqual(202);
+        expect(triggerImport.body).toMatchObject({
+            message: 'Cancelling ingest. Either an import is already in progress or the last import failed.'
         });
     });
 });

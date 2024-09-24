@@ -15,13 +15,15 @@ export const incrementalAriIngest = async (): Promise<string> => {
     const start = new Date();
     const MAX_UNCHANGED_STREAK = 5;
     // Get most start time of last successful run to help us know when to stop.
-    const mostRecentStart = await ingestLogService.getMostRecentStartTime('ARI');
+    const mostRecentLog = await ingestLogService.getMostRecentLog('ARI');
 
-    if (!mostRecentStart) {
+    if (!mostRecentLog) {
         console.log(
             `Unable to get most recent start time. This job will stop when it encounters ${MAX_UNCHANGED_STREAK} unchanged ARIs, regardless of their dateUpdated value.`
         );
     }
+
+    const mostRecentStart = mostRecentLog?.start;
 
     // Log start time.
     const log = await ingestLogService.create('ARI');
