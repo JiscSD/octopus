@@ -72,6 +72,9 @@
             "image/*": [
                 "src/components/image/*"
             ],
+            "ingestLog/*": [
+                "src/components/ingestLog/*"
+            ],
             "integration/*": [
                 "src/components/integration/*"
             ],
@@ -80,9 +83,6 @@
             ],
             "publication/*": [
                 "src/components/publication/*"
-            ],
-            "publicationBookmark/*": [
-                "src/components/publicationBookmark/*"
             ],
             "publicationVersion/*": [
                 "src/components/publicationVersion/*"

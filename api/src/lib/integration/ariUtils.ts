@@ -316,7 +316,7 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
         }
 
         // Everything is good, so ensure changes hit datacite and opensearch.
-        await publicationVersionService.postPublishHook(updatedVersion, true, true);
+        await publicationVersionService.postPublishHook(updatedVersion, true);
 
         return {
             ...baseReturnObject,
