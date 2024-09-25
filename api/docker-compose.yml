@@ -106,6 +106,7 @@ services:
             - QUEUE_URL=http://localhost:4566/000000000000/science-octopus-pdf-queue-local
             - SQS_ENDPOINT=http://localstack:4566
             - LIST_USERS_API_KEY=123456789
+            - TRIGGER_ARI_INGEST_API_KEY=123456789
 
 volumes:
     opensearch-data1:
