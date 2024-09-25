@@ -107,6 +107,7 @@ services:
             - SQS_ENDPOINT=http://localstack:4566
             - LIST_USERS_API_KEY=123456789
             - TRIGGER_ARI_INGEST_API_KEY=123456789
+            - INGEST_REPORT_RECIPIENTS=example.jisc@mailinator.com
 
 volumes:
     opensearch-data1:
