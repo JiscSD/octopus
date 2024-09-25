@@ -84,34 +84,5 @@ custom:
         v1: v1
     serverless-offline:
         useChildProcesses: true
-    serverless-offline-ssm:
-        stages:
-            - local
-        ssm:
-            /local_octopus_sls_sg: '1'
-            /local_octopus_private_subnet_az1: '1'
-            /local_octopus_private_subnet_az2: '2'
-            /local_octopus_private_subnet_az3: '3'
-            /elasticsearch_user_local_octopus: ${env:ELASTICSEARCH_USER}
-            /elasticsearch_password_local_octopus: ${env:ELASTICSEARCH_PASSWORD}
-            /elasticsearch_endpoint_local_octopus: ${env:ELASTICSEARCH_ENDPOINT}
-            /elastic_search_protocol_local_octopus: ${env:ELASTICSEARCH_PROTOCOL}
-            /db_connection_string_local_octopus: ${env:DATABASE_URL}
-            /jwt_secret_local_octopus: ${env:JWT_SECRET}
-            /orcid_secret_key_local_octopus: ${env:ORCID_SECRET}
-            /orcid_app_id_local_octopus: ${env:ORCID_ID}
-            /orcid_auth_url_local_octopus: ${env:ORCID_AUTH_URL}
-            /orcid_member_api_url_local_octopus: ${env:ORCID_MEMBER_API_URL}
-            /doi_prefix_local_octopus: ${env:DOI_PREFIX}
-            /datacite_endpoint_local_octopus: ${env:DATACITE_ENDPOINT}
-            /datacite_user_local_octopus: ${env:DATACITE_USER}
-            /datacite_password_local_octopus: ${env:DATACITE_PASSWORD}
-            /email_sender_address_local_octopus: ${env:EMAIL_SENDER_ADDRESS}
-            /base_url_local_octopus: ${env:BASE_URL}
-            /authorization_callback_url_local_octopus: ${env:AUTHORISATION_CALLBACK_URL}
-            /list_users_api_key_local_octopus: ${env:LIST_USERS_API_KEY}
-            /queue_url_local_octopus: ${env:QUEUE_URL}
-            /sqs_endpoint_local_octopus: ${env:SQS_ENDPOINT}
-            /mail_server_local_octopus: ${env:MAIL_SERVER}
 functions:
     - ${file(./serverless-config-default.yml):functions}
