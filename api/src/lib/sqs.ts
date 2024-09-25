@@ -1,20 +1,23 @@
 import AWS_SQS, { SQS } from '@aws-sdk/client-sqs';
+import * as Helpers from './helpers';
 
-const queueUrl = process.env.QUEUE_URL;
-const endpoint = process.env.SQS_ENDPOINT;
+const queueUrl = Helpers.checkEnvVariable('QUEUE_URL');
+const endpoint = Helpers.checkEnvVariable('SQS_ENDPOINT');
 
 const config = {
-    region: 'eu-west-1',
-    ...(process.env.STAGE === 'local'
-        ? {
-              credentials: {
-                  accessKeyId: 'dummy',
-                  secretAccessKey: 'dummy'
-              },
-              endpoint
-          }
-        : {})
+    region: 'eu-west-1'
 };
+
+if (process.env.STAGE === 'local') {
+    // @ts-ignore
+    config.credentials = {
+        accessKeyId: 'dummy',
+        secretAccessKey: 'dummy'
+    };
+
+    // @ts-ignore
+    config.endpoint = endpoint;
+}
 
 const sqs = new SQS(config);
 
