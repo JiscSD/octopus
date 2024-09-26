@@ -941,7 +941,7 @@ export const incrementalAriIngestReport = async (options: {
                   createdCount + updatedCount / 2
               } additional seconds due to datacite API rate limits while creating/updating publications.`
             : '');
-    const detailsPrefix = `The ${dryRun ? 'simulated ' : ''} results of this run are as follows.`;
+    const detailsPrefix = `The ${dryRun ? 'simulated ' : ''}results of this run are as follows.`;
     const html = `
         <html>
             <body>
