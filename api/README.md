@@ -183,3 +183,4 @@ This is a place to track where we have added dependency overrides in package.jso
 
 -   fast-xml-parser ^4.2.5: to address [dependabot alert](https://github.com/JiscSD/octopus/security/dependabot/59)
 -   http-cache-semantics ^4.1.1: to address [dependabot alert](https://github.com/JiscSD/octopus/security/dependabot/45)
+-   micromatch ^4.0.8: to address [snyk alert](https://security.snyk.io/vuln/SNYK-JS-MICROMATCH-6838728)
