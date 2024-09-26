@@ -2,6 +2,7 @@ import * as Helpers from '../helpers';
 import { expect, test, Page, Browser } from '@playwright/test';
 import { PageModel } from '../PageModel';
 import cuid2 from '@paralleldrive/cuid2';
+import path from 'path';
 
 const createPublication = async (page: Page, publicationTitle: string, pubType: string) => {
     await page.goto(`/create`);
@@ -1892,6 +1893,7 @@ test.describe('Publication flow + co-authors', () => {
 
 test.describe('Publication Flow + File import', () => {
     let page: Page;
+    const assetsDirName = path.join(__dirname, '../../assets/');
 
     test.beforeAll(async ({ browser }) => {
         page = await Helpers.getPageAsUser(browser);
@@ -1912,7 +1914,7 @@ test.describe('Publication Flow + File import', () => {
         );
 
         // import initial playwright file
-        await Helpers.openFileImportModal(page, 'assets/Playwright.docx');
+        await Helpers.openFileImportModal(page, assetsDirName + 'Playwright.docx');
         await page.locator(PageModel.publish.insertButton).click();
 
         // Ensure modal has closed and file import
@@ -1920,7 +1922,7 @@ test.describe('Publication Flow + File import', () => {
         await expect(page.locator(PageModel.publish.text.editor)).toContainText('File Import – Playwright');
 
         // replace playwright file
-        await Helpers.openFileImportModal(page, 'assets/Playwright - Replace.docx');
+        await Helpers.openFileImportModal(page, assetsDirName + 'Playwright - Replace.docx');
         await page.locator(PageModel.publish.replaceButton).click();
 
         // Ensure modal has closed and file import
@@ -1966,12 +1968,12 @@ test.describe('Publication Flow + File import', () => {
         ]);
 
         const validImageFiles = [
-            'assets/apng-image-test.png',
-            'assets/avif-image-test.avif',
-            'assets/gif-image-test.gif',
-            'assets/jpeg-image-test.jpeg',
-            'assets/jpg-image-test.jpg',
-            'assets/webp-image-test.webp'
+            assetsDirName + 'apng-image-test.png',
+            assetsDirName + 'avif-image-test.avif',
+            assetsDirName + 'gif-image-test.gif',
+            assetsDirName + 'jpeg-image-test.jpeg',
+            assetsDirName + 'jpg-image-test.jpg',
+            assetsDirName + 'webp-image-test.webp'
         ];
 
         // import correct file formats
@@ -1993,7 +1995,7 @@ test.describe('Publication Flow + File import', () => {
         await expect(page.locator('button[title="Upload image"]')).not.toBeVisible();
         for (const image of validImageFiles) {
             await expect(
-                page.locator(`div[contenteditable="true"] img[title="${image.split('assets/').pop()}"]`)
+                page.locator(`div[contenteditable="true"] img[title="${image.split(assetsDirName).pop()}"]`)
             ).toBeVisible();
         }
 
@@ -2003,7 +2005,7 @@ test.describe('Publication Flow + File import', () => {
             page.waitForEvent('filechooser'),
             page.click('label[for="file-upload"]')
         ]);
-        await fileChooser2.setFiles(['assets/Playwright.docx']);
+        await fileChooser2.setFiles([assetsDirName + 'Playwright.docx']);
         await page.click('button[title="Upload image"]');
         await expect(page.getByText('Failed to upload "Playwright.docx". The format is not supported.')).toBeVisible();
     });
