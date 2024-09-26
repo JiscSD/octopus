@@ -11,7 +11,7 @@ import * as ingestLogService from 'ingestLog/service';
  *   - It encounters an ARI with dateUpdated before the start time of the most
  *       recent successful ingest (if this start time is available).
  */
-export const incrementalAriIngest = async (): Promise<string> => {
+export const incrementalAriIngest = async (dryRun: boolean): Promise<string> => {
     const start = new Date();
     const MAX_UNCHANGED_STREAK = 5;
     // Get most start time of last successful run to help us know when to stop.
@@ -26,7 +26,12 @@ export const incrementalAriIngest = async (): Promise<string> => {
     const mostRecentStart = mostRecentLog?.start;
 
     // Log start time.
-    const log = await ingestLogService.create('ARI');
+    let logId: string | null = null;
+
+    if (!dryRun) {
+        const log = await ingestLogService.create('ARI');
+        logId = log.id;
+    }
 
     // Count sequential unchanged ARIs so that we can stop when the streak hits MAX_UNCHANGED_STREAK.
     let unchangedStreak = 0;
@@ -57,7 +62,7 @@ export const incrementalAriIngest = async (): Promise<string> => {
 
             if (!pageAri.isArchived) {
                 // Create, update, or skip this ARI as appropriate.
-                const handle = await ariUtils.handleIncomingARI(pageAri);
+                const handle = await ariUtils.handleIncomingARI(pageAri, dryRun);
                 checkedCount++;
 
                 if (handle.unrecognisedDepartment) {
@@ -81,21 +86,32 @@ export const incrementalAriIngest = async (): Promise<string> => {
                 } else {
                     // This was not a skip so reset unchangedStreak counter.
                     unchangedStreak = 0;
-                    // Log action taken.
-                    console.log(`ARI ${pageAri.questionId} handled successfully with action: ${handle.actionTaken}`);
+
+                    if (!dryRun) {
+                        // Log action taken.
+                        console.log(
+                            `ARI ${pageAri.questionId} handled successfully with action: ${handle.actionTaken}`
+                        );
+                    }
 
                     // Artificial delay to avoid hitting datacite rate limits with publication creates/updates.
                     // https://support.datacite.org/docs/is-there-a-rate-limit-for-making-requests-against-the-datacite-apis
                     if (handle.actionTaken === 'create') {
                         createdCount++;
+
                         // Datacite is hit twice, to initialise DOI and get publication ID, then update DOI with data.
-                        await new Promise((resolve) => setTimeout(resolve, 1000));
+                        if (!dryRun) {
+                            await new Promise((resolve) => setTimeout(resolve, 1000));
+                        }
                     }
 
                     if (handle.actionTaken === 'update') {
                         updatedCount++;
+
                         // Datacite is hit once, to update the DOI with changes.
-                        await new Promise((resolve) => setTimeout(resolve, 500));
+                        if (!dryRun) {
+                            await new Promise((resolve) => setTimeout(resolve, 500));
+                        }
                     }
                 }
             }
@@ -110,17 +126,24 @@ export const incrementalAriIngest = async (): Promise<string> => {
     const end = new Date();
     // Get duration in seconds to the nearest 1st decimal place.
     const durationSeconds = Math.round((end.getTime() - start.getTime()) / 100) / 10;
-    await ingestLogService.setEndTime(log.id, end);
+
+    if (!dryRun && logId) {
+        await ingestLogService.setEndTime(logId, end);
+    }
+
     await email.incrementalAriIngestReport({
         checkedCount,
         durationSeconds,
         createdCount,
         updatedCount,
         unrecognisedDepartments: Array.from(unrecognisedDepartments).sort(),
-        unrecognisedTopics: Array.from(unrecognisedTopics).sort()
+        unrecognisedTopics: Array.from(unrecognisedTopics).sort(),
+        dryRun
     });
 
     const writeCount = createdCount + updatedCount;
 
-    return `Update complete. Updated ${writeCount} publication${writeCount !== 1 ? 's' : ''}.`;
+    const preamble = dryRun ? 'Dry run complete. Would have updated' : 'Update complete. Updated';
+
+    return `${preamble} ${writeCount} publication${writeCount !== 1 ? 's' : ''}.`;
 };

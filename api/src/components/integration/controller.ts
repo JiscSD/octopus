@@ -6,18 +6,11 @@ import * as response from 'lib/response';
 export const incrementalAriIngest = async (
     event: I.APIRequest | I.EventBridgeEvent<'Scheduled Event', string>
 ): Promise<I.JSONResponse> => {
-    // Check if a process is currently running.
-    const lastLog = await ingestLogService.getMostRecentLog('ARI', true);
-
-    if (lastLog && !lastLog.end) {
-        return response.json(202, {
-            message: 'Cancelling ingest. Either an import is already in progress or the last import failed.'
-        });
-    }
+    const triggeredByHttp = event && 'headers' in event;
 
     // This can also be triggered on a schedule, in which case we don't need to check for an API key,
     // so only check for the API key if the event is an API request.
-    if (event && 'headers' in event) {
+    if (triggeredByHttp) {
         const apiKey = event.queryStringParameters?.apiKey;
 
         if (apiKey !== process.env.TRIGGER_ARI_INGEST_API_KEY) {
@@ -25,10 +18,30 @@ export const incrementalAriIngest = async (
         }
     }
 
-    try {
-        const ingestResult = await integrationService.incrementalAriIngest();
+    // Check if a process is currently running.
+    const lastLog = await ingestLogService.getMostRecentLog('ARI', true);
+    const dryRun = triggeredByHttp ? !!event.queryStringParameters?.dryRun : false;
+    const dryRunMessages: string[] = [];
 
-        return response.json(200, ingestResult);
+    if (lastLog && !lastLog.end) {
+        if (dryRun) {
+            dryRunMessages.push(
+                'This run would have been cancelled because another run is currently in progress. However, the run has still been simulated.'
+            );
+        } else {
+            return response.json(202, {
+                message: 'Cancelling ingest. Either an import is already in progress or the last import failed.'
+            });
+        }
+    }
+
+    try {
+        const ingestResult = await integrationService.incrementalAriIngest(dryRun);
+
+        return response.json(
+            200,
+            dryRunMessages.length ? { messages: [...dryRunMessages, ingestResult] } : ingestResult
+        );
     } catch (error) {
         console.log(error);
 
