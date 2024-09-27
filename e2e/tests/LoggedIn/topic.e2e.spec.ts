@@ -41,7 +41,7 @@ test.describe('Topic page', () => {
         await page.locator(PageModel.header.myBookmarksButton).click();
         await page.waitForURL('**/my-bookmarks');
 
-        await expect(page.locator(PageModel.myBookmarks.topicBookmark)).toBeVisible();
+        await expect(page.locator(PageModel.myBookmarks.bookmarkedTopicLink)).toBeVisible();
     });
 
     test('Remove a topic bookmark from topic page', async ({ browser }) => {
@@ -57,7 +57,7 @@ test.describe('Topic page', () => {
         await page.locator(PageModel.header.usernameButton).click();
         await page.locator(PageModel.header.myBookmarksButton).click();
 
-        await expect(page.locator(PageModel.myBookmarks.topicBookmark)).not.toBeVisible();
+        await expect(page.locator(PageModel.myBookmarks.bookmarkedTopicLink)).not.toBeVisible();
     });
 
     test('Remove a topic bookmark from My Bookmarks page', async ({ browser }) => {
@@ -70,6 +70,6 @@ test.describe('Topic page', () => {
         await page.locator(PageModel.header.myBookmarksButton).click();
         await expect(page.locator(PageModel.myBookmarks.removeTopicBookmark)).toBeVisible();
         await page.locator(PageModel.myBookmarks.removeTopicBookmark).click();
-        await expect(page.locator(PageModel.myBookmarks.topicBookmark)).not.toBeVisible();
+        await expect(page.locator(PageModel.myBookmarks.bookmarkedTopicLink)).not.toBeVisible();
     });
 });

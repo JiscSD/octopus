@@ -14,23 +14,38 @@ export const testBookmarking = async (page: Page, id: string) => {
 
     const isRemoveBookmarkVisible = await page.isVisible(PageModel.livePublication.removeBookmark);
     if (isRemoveBookmarkVisible) {
-        await page.locator(PageModel.livePublication.removeBookmark).click();
+        await Promise.all([
+            page.locator(PageModel.livePublication.removeBookmark).click(),
+            page.waitForResponse(
+                (response) =>
+                    response.request().method() === 'DELETE' && response.url().includes('/bookmarks') && response.ok()
+            )
+        ]);
     }
     await expect(page.locator(PageModel.livePublication.addBookmark)).toBeVisible();
-    await page.locator(PageModel.livePublication.addBookmark).click();
+    await Promise.all([
+        page.locator(PageModel.livePublication.addBookmark).click(),
+        page.waitForResponse(
+            (response) =>
+                response.request().method() === 'POST' && response.url().includes('/bookmarks') && response.ok()
+        )
+    ]);
 
     // Check in 'my bookmarks' page
     await page.locator(PageModel.header.usernameButton).click();
     await page.locator(PageModel.header.myBookmarksButton).click();
 
-    await page.waitForSelector(PageModel.myBookmarks.publicationBookmark);
-    await expect(page.locator(PageModel.myBookmarks.publicationBookmark)).toHaveAttribute(
+    await page.waitForSelector(PageModel.myBookmarks.bookmarkedPublicationLink);
+    await expect(page.locator(PageModel.myBookmarks.bookmarkedPublicationLink)).toHaveAttribute(
         'href',
         `/publications/${id}`
     );
 
     // Remove bookmark
-    await page.locator(PageModel.myBookmarks.publicationBookmark).click();
+    await Promise.all([
+        page.waitForURL('**/publications/' + id + '/versions/latest'),
+        page.locator(PageModel.myBookmarks.bookmarkedPublicationLink).click()
+    ]);
     await page.waitForSelector('h1');
     await expect(page.locator(PageModel.livePublication.removeBookmark)).toBeVisible();
     await page.locator(PageModel.livePublication.removeBookmark).click();
@@ -54,7 +69,12 @@ export const testFlagging = async (page: Page, id: string, redFlagContent: strin
     await page.locator(PageModel.livePublication.flagConcern).locator('visible=true').click();
     await page.locator(PageModel.livePublication.redFlagComment).click();
     await page.keyboard.type(redFlagContent);
-    await page.locator(PageModel.livePublication.redFlagSubmit).click();
+    await Promise.all([
+        page.locator(PageModel.livePublication.redFlagSubmit).click(),
+        page.waitForResponse(
+            (response) => response.request().method() === 'POST' && response.url().includes('/flags') && response.ok()
+        )
+    ]);
 
     // Check flag and resolve flag
     await expect(page.locator(PageModel.livePublication.redFlagAlert)).toBeVisible();
