@@ -26,14 +26,14 @@ describe('Ingest log functions', () => {
         });
     });
 
-    test('Get most recent start time', async () => {
-        const mostRecentStart = await ingestLogService.getMostRecentStartTime('ARI');
-        expect(mostRecentStart).toEqual(new Date('2024-09-11T12:53:00.000Z'));
+    test('Get most recent log', async () => {
+        const mostRecentLog = await ingestLogService.getMostRecentLog('ARI');
+        expect(mostRecentLog?.start).toEqual(new Date('2024-09-11T12:53:00.000Z'));
     });
 
     test('Most recent start is null if no run that ended successfully is present', async () => {
         await client.prisma.ingestLog.update({ where: { id: 'ingest-log-1' }, data: { end: null } });
-        const mostRecentStart = await ingestLogService.getMostRecentStartTime('ARI');
+        const mostRecentStart = await ingestLogService.getMostRecentLog('ARI');
         expect(mostRecentStart).toBeNull();
     });
 });

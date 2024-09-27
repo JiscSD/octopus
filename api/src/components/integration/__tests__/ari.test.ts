@@ -1,5 +1,6 @@
-import * as ariUtils from 'lib/integrations/ariUtils';
+import * as ariUtils from 'integration/ariUtils';
 import * as I from 'interface';
+import * as ingestLogService from 'ingestLog/service';
 import * as testUtils from 'lib/testUtils';
 
 // This ARI will match a publication in the seed data via the questionId.
@@ -120,6 +121,18 @@ describe('ARI Mapping', () => {
         });
     });
 
+    test('Unrecognised topics are reported', async () => {
+        const mappingAttempt = await ariUtils.mapAriQuestionToPublicationVersion({
+            ...sampleARIQuestion,
+            topics: ['unrecognised topic']
+        });
+        expect(mappingAttempt).toMatchObject({
+            success: true,
+            message: 'Found unrecognised topic(s).',
+            unrecognisedTopics: ['unrecognised topic']
+        });
+    });
+
     test('Department is matched to existing user', async () => {
         const mappingAttempt = await ariUtils.mapAriQuestionToPublicationVersion(sampleARIQuestion);
         expect(mappingAttempt).toMatchObject({
@@ -135,7 +148,8 @@ describe('ARI Mapping', () => {
         expect(mappingAttempt).toMatchObject({
             success: false,
             mappedData: null,
-            message: 'User not found for department: unrecognised department.'
+            message: 'User not found for department: unrecognised department.',
+            unrecognisedDepartment: 'unrecognised department'
         });
     });
 
@@ -221,7 +235,7 @@ describe('ARI handling', () => {
         });
     });
 
-    test('ARI with unrecognised department is skipped', async () => {
+    test('ARI with unrecognised department is skipped and dept name is reported in a field', async () => {
         const handleARI = await ariUtils.handleIncomingARI({
             ...sampleARIQuestion,
             department: 'Unrecognised Department name'
@@ -231,7 +245,8 @@ describe('ARI handling', () => {
             actionTaken: 'none',
             success: false,
             message:
-                'Failed to map ARI data to octopus data. User not found for department: Unrecognised Department name.'
+                'Failed to map ARI data to octopus data. User not found for department: Unrecognised Department name.',
+            unrecognisedDepartment: 'Unrecognised Department name'
         });
     });
 
@@ -278,6 +293,25 @@ describe('ARI handling', () => {
                     }
                 ]
             }
+        });
+    });
+
+    test('Unrecognised topics are reported', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({
+            ...sampleARIQuestion,
+            topics: [...sampleARIQuestion.topics, 'unrecognised topic']
+        });
+        expect(handleARI).toMatchObject({
+            actionTaken: 'none',
+            success: true,
+            publicationVersion: {
+                topics: [
+                    {
+                        id: 'test-topic-1a'
+                    }
+                ]
+            },
+            unrecognisedTopics: ['unrecognised topic']
         });
     });
 
@@ -349,6 +383,35 @@ describe('ARI handling', () => {
             actionTaken: 'none',
             success: true,
             message: 'Skipped because question is archived.'
+        });
+    });
+});
+
+describe('ARI import processes', () => {
+    beforeEach(async () => {
+        await testUtils.clearDB();
+        await testUtils.testSeed();
+    });
+
+    test('Incremental import endpoint requires API key', async () => {
+        const triggerImport = await testUtils.agent.post('/integrations/ari/incremental');
+
+        expect(triggerImport.status).toEqual(401);
+        expect(triggerImport.body).toMatchObject({
+            message: "Please provide a valid 'apiKey'."
+        });
+    });
+
+    test('Incremental ingest cancels if already in progress', async () => {
+        // Create an open ended log first.
+        await ingestLogService.create('ARI');
+        const triggerImport = await testUtils.agent
+            .post('/integrations/ari/incremental')
+            .query({ apiKey: process.env.TRIGGER_ARI_INGEST_API_KEY });
+
+        expect(triggerImport.status).toEqual(202);
+        expect(triggerImport.body).toMatchObject({
+            message: 'Cancelling ingest. Either an import is already in progress or the last import failed.'
         });
     });
 });

@@ -5,7 +5,6 @@ frameworkVersion: ${file(./serverless-config-default.yml):frameworkVersion}
 useDotenv: ${file(./serverless-config-default.yml):useDotenv}
 
 plugins:
-    - serverless-offline-ssm
     - serverless-offline
     - serverless-webpack
     - serverless-webpack-prisma
@@ -19,29 +18,32 @@ provider:
     stage: 'local'
     environment:
         STAGE: ${self:provider.stage}
-        ELASTICSEARCH_USER: ${ssm:/elasticsearch_user_${self:provider.stage}_octopus}
-        ELASTICSEARCH_PASSWORD: ${ssm:/elasticsearch_password_${self:provider.stage}_octopus}
-        ELASTICSEARCH_ENDPOINT: ${ssm:/elasticsearch_endpoint_${self:provider.stage}_octopus}
-        ELASTICSEARCH_PROTOCOL: ${ssm:/elastic_search_protocol_${self:provider.stage}_octopus}
-        DATABASE_URL: ${ssm:/db_connection_string_${self:provider.stage}_octopus}
-        JWT_SECRET: ${ssm:/jwt_secret_${self:provider.stage}_octopus}
+        DATABASE_URL: ${env:DATABASE_URL}
+        ORCID_SECRET: ${env:ORCID_SECRET}
+        ORCID_ID: ${env:ORCID_ID}
+        ORCID_AUTH_URL: ${env:ORCID_AUTH_URL}
+        ORCID_MEMBER_API_URL: ${env:ORCID_MEMBER_API_URL}
+        JWT_SECRET: ${env:JWT_SECRET}
+        EMAIL_SENDER_ADDRESS: ${env:EMAIL_SENDER_ADDRESS}
+        BASE_URL: ${env:BASE_URL}
+        AUTHORISATION_CALLBACK_URL: ${env:AUTHORISATION_CALLBACK_URL}
+        ELASTICSEARCH_PROTOCOL: ${env:ELASTICSEARCH_PROTOCOL}
+        ELASTICSEARCH_USER: ${env:ELASTICSEARCH_USER}
+        ELASTICSEARCH_PASSWORD: ${env:ELASTICSEARCH_PASSWORD}
+        ELASTICSEARCH_ENDPOINT: ${env:ELASTICSEARCH_ENDPOINT}
         VALIDATION_CODE_EXPIRY: 10
         VALIDATION_CODE_ATTEMPTS: 3
-        ORCID_ID: ${ssm:/orcid_app_id_${self:provider.stage}_octopus}
-        ORCID_SECRET: ${ssm:/orcid_secret_key_${self:provider.stage}_octopus}
-        ORCID_AUTH_URL: ${ssm:/orcid_auth_url_${self:provider.stage}_octopus}
-        ORCID_MEMBER_API_URL: ${ssm:/orcid_member_api_url_${self:provider.stage}_octopus}
-        DOI_PREFIX: ${ssm:/doi_prefix_${self:provider.stage}_octopus}
-        DATACITE_ENDPOINT: ${ssm:/datacite_endpoint_${self:provider.stage}_octopus}
-        DATACITE_USER: ${ssm:/datacite_user_${self:provider.stage}_octopus}
-        DATACITE_PASSWORD: ${ssm:/datacite_password_${self:provider.stage}_octopus}
-        EMAIL_SENDER_ADDRESS: ${ssm:/email_sender_address_${self:provider.stage}_octopus}
-        BASE_URL: ${ssm:/base_url_${self:provider.stage}_octopus}
-        AUTHORISATION_CALLBACK_URL: ${ssm:/authorization_callback_url_${self:provider.stage}_octopus}
-        LIST_USERS_API_KEY: ${ssm:/list_users_api_key_${self:provider.stage}_octopus}
-        QUEUE_URL: ${ssm:/queue_url_${self:provider.stage}_octopus}
-        SQS_ENDPOINT: ${ssm:/sqs_endpoint_${self:provider.stage}_octopus}
-        MAIL_SERVER: ${ssm:/mail_server_${self:provider.stage}_octopus}
+        DOI_PREFIX: ${env:DOI_PREFIX}
+        DATACITE_ENDPOINT: ${env:DATACITE_ENDPOINT}
+        DATACITE_USER: ${env:DATACITE_USER}
+        DATACITE_PASSWORD: ${env:DATACITE_PASSWORD}
+        MAIL_SERVER: ${env:MAIL_SERVER}
+        LOCALSTACK_SERVER: ${env:LOCALSTACK_SERVER}
+        QUEUE_URL: ${env:QUEUE_URL}
+        SQS_ENDPOINT: ${env:SQS_ENDPOINT}
+        LIST_USERS_API_KEY: ${env:LIST_USERS_API_KEY}
+        TRIGGER_ARI_INGEST_API_KEY: ${env:TRIGGER_ARI_INGEST_API_KEY}
+        INGEST_REPORT_RECIPIENTS: ${env:INGEST_REPORT_RECIPIENTS}
     deploymentBucket:
         tags:
             Project: Octopus
@@ -81,34 +83,5 @@ custom:
         v1: v1
     serverless-offline:
         useChildProcesses: true
-    serverless-offline-ssm:
-        stages:
-            - local
-        ssm:
-            /local_octopus_sls_sg: '1'
-            /local_octopus_private_subnet_az1: '1'
-            /local_octopus_private_subnet_az2: '2'
-            /local_octopus_private_subnet_az3: '3'
-            /elasticsearch_user_local_octopus: ${env:ELASTICSEARCH_USER}
-            /elasticsearch_password_local_octopus: ${env:ELASTICSEARCH_PASSWORD}
-            /elasticsearch_endpoint_local_octopus: ${env:ELASTICSEARCH_ENDPOINT}
-            /elastic_search_protocol_local_octopus: ${env:ELASTICSEARCH_PROTOCOL}
-            /db_connection_string_local_octopus: ${env:DATABASE_URL}
-            /jwt_secret_local_octopus: ${env:JWT_SECRET}
-            /orcid_secret_key_local_octopus: ${env:ORCID_SECRET}
-            /orcid_app_id_local_octopus: ${env:ORCID_ID}
-            /orcid_auth_url_local_octopus: ${env:ORCID_AUTH_URL}
-            /orcid_member_api_url_local_octopus: ${env:ORCID_MEMBER_API_URL}
-            /doi_prefix_local_octopus: ${env:DOI_PREFIX}
-            /datacite_endpoint_local_octopus: ${env:DATACITE_ENDPOINT}
-            /datacite_user_local_octopus: ${env:DATACITE_USER}
-            /datacite_password_local_octopus: ${env:DATACITE_PASSWORD}
-            /email_sender_address_local_octopus: ${env:EMAIL_SENDER_ADDRESS}
-            /base_url_local_octopus: ${env:BASE_URL}
-            /authorization_callback_url_local_octopus: ${env:AUTHORISATION_CALLBACK_URL}
-            /list_users_api_key_local_octopus: ${env:LIST_USERS_API_KEY}
-            /queue_url_local_octopus: ${env:QUEUE_URL}
-            /sqs_endpoint_local_octopus: ${env:SQS_ENDPOINT}
-            /mail_server_local_octopus: ${env:MAIL_SERVER}
 functions:
     - ${file(./serverless-config-default.yml):functions}

@@ -5,7 +5,7 @@ import { expand } from 'dotenv-expand';
 // Important to do this so that environment variables are treated the same as in deployed code.
 expand(dotenv.config());
 
-import * as ariUtils from 'lib/integrations/ariUtils';
+import * as ariUtils from 'integration/ariUtils';
 import * as I from 'interface';
 
 const fullAriImport = async (): Promise<string> => {
