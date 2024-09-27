@@ -920,3 +920,60 @@ export const newAriChildPublication = async (options: {
         subject
     });
 };
+
+export const incrementalAriIngestReport = async (options: {
+    checkedCount: number;
+    durationSeconds: number;
+    createdCount: number;
+    updatedCount: number;
+    unrecognisedDepartments: string[];
+    unrecognisedTopics: string[];
+}): Promise<void> => {
+    const cleanDepartments = options.unrecognisedDepartments.map((department) => Helpers.getSafeHTML(department));
+    const cleanTopics = options.unrecognisedTopics.map((topic) => Helpers.getSafeHTML(topic));
+    const html = `
+        <html>
+            <body>
+                <p>Incremental ARI import run completed in ${options.durationSeconds} seconds.</p>
+                <ul>
+                    <li>ARIs checked: ${options.checkedCount}</li><li>Publications created: ${
+        options.createdCount
+    }</li><li>Publications updated: ${options.updatedCount}</li>
+                    ${
+                        cleanDepartments.length
+                            ? '<li>Unrecognised departments: <ul><li>' +
+                              cleanDepartments.join('</li><li>') +
+                              '</li></ul></li>'
+                            : ''
+                    }
+                    ${
+                        cleanTopics.length
+                            ? '<li>Unrecognised topics: <ul><li>' + cleanTopics.join('</li><li>') + '</li></ul></li>'
+                            : ''
+                    }
+                </ul>
+            </body>
+        </html>
+    `;
+    const text = `
+        Incremental ARI ingest run completed in ${options.durationSeconds} seconds.
+        ARIs checked: ${options.checkedCount}.
+        Publications created: ${options.createdCount}.
+        Publications updated: ${options.updatedCount}.
+        ${
+            options.unrecognisedDepartments.length
+                ? 'Unrecognised departments: "' + options.unrecognisedDepartments.join('", "') + '".'
+                : ''
+        }
+        ${
+            options.unrecognisedTopics.length
+                ? 'Unrecognised topics: "' + options.unrecognisedTopics.join('", "') + '".'
+                : ''
+        }`;
+    await send({
+        html,
+        text,
+        to: process.env.INGEST_REPORT_RECIPIENTS ? process.env.INGEST_REPORT_RECIPIENTS.split(',') : '',
+        subject: 'Incremental ARI ingest report'
+    });
+};

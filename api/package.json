@@ -82,7 +82,6 @@
         "prisma": "^5.11.0",
         "puppeteer": "^22.12.0",
         "serverless-offline": "^12.0.4",
-        "serverless-offline-ssm": "^6.2.0",
         "serverless-plugin-split-stacks": "^1.13.0",
         "serverless-prune-plugin": "^2.0.2",
         "serverless-webpack": "^5.13.0",
