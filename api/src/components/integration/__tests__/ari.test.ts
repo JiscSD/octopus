@@ -396,9 +396,16 @@ describe('ARI import processes', () => {
     test('Incremental import endpoint requires API key', async () => {
         const triggerImport = await testUtils.agent.post('/integrations/ari/incremental');
 
-        expect(triggerImport.status).toEqual(401);
+        expect(triggerImport.status).toEqual(400);
         expect(triggerImport.body).toMatchObject({
-            message: "Please provide a valid 'apiKey'."
+            message: [
+                {
+                    keyword: 'required',
+                    params: {
+                        missingProperty: 'apiKey'
+                    }
+                }
+            ]
         });
     });
 
