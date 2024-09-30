@@ -1,5 +1,6 @@
 import axios from 'axios';
-import * as ariUtils from 'lib/integrations/ariUtils';
+import * as ariUtils from 'integration/ariUtils';
+import * as email from 'lib/email';
 import * as ingestLogService from 'ingestLog/service';
 
 /**
@@ -10,16 +11,19 @@ import * as ingestLogService from 'ingestLog/service';
  *   - It encounters an ARI with dateUpdated before the start time of the most
  *       recent successful ingest (if this start time is available).
  */
-export const incrementalAriIngest = async (): Promise<void> => {
+export const incrementalAriIngest = async (): Promise<string> => {
+    const start = new Date();
     const MAX_UNCHANGED_STREAK = 5;
     // Get most start time of last successful run to help us know when to stop.
-    const mostRecentStart = await ingestLogService.getMostRecentStartTime('ARI');
+    const mostRecentLog = await ingestLogService.getMostRecentLog('ARI');
 
-    if (!mostRecentStart) {
+    if (!mostRecentLog) {
         console.log(
             `Unable to get most recent start time. This job will stop when it encounters ${MAX_UNCHANGED_STREAK} unchanged ARIs, regardless of their dateUpdated value.`
         );
     }
+
+    const mostRecentStart = mostRecentLog?.start;
 
     // Log start time.
     const log = await ingestLogService.create('ARI');
@@ -33,7 +37,12 @@ export const incrementalAriIngest = async (): Promise<void> => {
     // Pagination loop.
     let pageUrl = ariUtils.ariEndpoint;
     let paginationInfo;
-    let writeCount = 0;
+    // Keep count of things to report on at the end.
+    let checkedCount = 0;
+    let createdCount = 0;
+    let updatedCount = 0;
+    const unrecognisedDepartments = new Set<string>();
+    const unrecognisedTopics = new Set<string>();
 
     do {
         // Get page.
@@ -49,6 +58,15 @@ export const incrementalAriIngest = async (): Promise<void> => {
             if (!pageAri.isArchived) {
                 // Create, update, or skip this ARI as appropriate.
                 const handle = await ariUtils.handleIncomingARI(pageAri);
+                checkedCount++;
+
+                if (handle.unrecognisedDepartment) {
+                    unrecognisedDepartments.add(handle.unrecognisedDepartment);
+                }
+
+                if (handle.unrecognisedTopics) {
+                    handle.unrecognisedTopics.forEach((topic) => unrecognisedTopics.add(topic));
+                }
 
                 if (!handle.success) {
                     console.log(`Error when handling ARI with question ID ${pageAri.questionId}: ${handle.message}`);
@@ -65,16 +83,17 @@ export const incrementalAriIngest = async (): Promise<void> => {
                     unchangedStreak = 0;
                     // Log action taken.
                     console.log(`ARI ${pageAri.questionId} handled successfully with action: ${handle.actionTaken}`);
-                    writeCount++;
 
                     // Artificial delay to avoid hitting datacite rate limits with publication creates/updates.
                     // https://support.datacite.org/docs/is-there-a-rate-limit-for-making-requests-against-the-datacite-apis
                     if (handle.actionTaken === 'create') {
+                        createdCount++;
                         // Datacite is hit twice, to initialise DOI and get publication ID, then update DOI with data.
                         await new Promise((resolve) => setTimeout(resolve, 1000));
                     }
 
                     if (handle.actionTaken === 'update') {
+                        updatedCount++;
                         // Datacite is hit once, to update the DOI with changes.
                         await new Promise((resolve) => setTimeout(resolve, 500));
                     }
@@ -88,7 +107,20 @@ export const incrementalAriIngest = async (): Promise<void> => {
         pageUrl = paginationInfo.links.next;
     } while (pageUrl && unchangedStreak < MAX_UNCHANGED_STREAK && !timeOverlap);
 
-    // Log end time.
-    await ingestLogService.setEndTime(log.id, new Date());
-    console.log(`Update complete. Updated ${writeCount} publication${writeCount !== 1 ? 's' : ''}.`);
+    const end = new Date();
+    // Get duration in seconds to the nearest 1st decimal place.
+    const durationSeconds = Math.round((end.getTime() - start.getTime()) / 100) / 10;
+    await ingestLogService.setEndTime(log.id, end);
+    await email.incrementalAriIngestReport({
+        checkedCount,
+        durationSeconds,
+        createdCount,
+        updatedCount,
+        unrecognisedDepartments: Array.from(unrecognisedDepartments).sort(),
+        unrecognisedTopics: Array.from(unrecognisedTopics).sort()
+    });
+
+    const writeCount = createdCount + updatedCount;
+
+    return `Update complete. Updated ${writeCount} publication${writeCount !== 1 ? 's' : ''}.`;
 };

@@ -32,7 +32,12 @@ export {
     Topic
 } from '@prisma/client';
 export { JSONSchemaType, Schema } from 'ajv';
-export { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2, APIGatewayProxyResultV2 } from 'aws-lambda';
+export {
+    APIGatewayProxyEventV2,
+    APIGatewayProxyHandlerV2,
+    APIGatewayProxyResultV2,
+    EventBridgeEvent
+} from 'aws-lambda';
 
 export type RequestType = 'body' | 'queryStringParameters' | 'pathParameters';
 
@@ -657,7 +662,7 @@ export interface DestroyImagePathParams {
 }
 
 export interface EmailSendOptions {
-    to: string;
+    to: string | string[];
     subject: string;
     html: string;
     text: string;
@@ -1056,4 +1061,6 @@ export interface HandledARI {
     success: boolean;
     message?: string;
     publicationVersion?: PublicationVersion;
+    unrecognisedDepartment?: string;
+    unrecognisedTopics?: string[];
 }

@@ -13,26 +13,14 @@ export const setEndTime = (id: string, end: Date) =>
         }
     });
 
-export const getMostRecentStartTime = async (source: I.PublicationImportSource): Promise<Date | null> => {
-    const mostRecentStartQuery = await client.prisma.ingestLog.findFirst({
+export const getMostRecentLog = (source: I.PublicationImportSource, includeOpenLogs?: boolean) =>
+    client.prisma.ingestLog.findFirst({
         where: {
             source,
-            // Successful runs only.
-            end: {
-                not: null
-            }
+            // By default, get successful (having an end time) logs only.
+            ...(includeOpenLogs ? {} : { end: { not: null } })
         },
         orderBy: {
             start: 'desc'
-        },
-        select: {
-            start: true
         }
     });
-
-    if (mostRecentStartQuery) {
-        return mostRecentStartQuery.start;
-    } else {
-        return null;
-    }
-};
