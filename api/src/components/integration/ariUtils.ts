@@ -172,7 +172,7 @@ export const detectChangesToARIPublication = (
     return somethingChanged ? changes : false;
 };
 
-export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.HandledARI> => {
+export const handleIncomingARI = async (question: I.ARIQuestion, dryRun?: boolean): Promise<I.HandledARI> => {
     // Validate question ID.
     // Quite random criteria for now - value is typed as a number which
     // stops us checking the type. May be revisited later.
@@ -237,6 +237,14 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
 
     // If the ARI has not been ingested previously, a new research problem is created.
     if (!existingPublication) {
+        if (dryRun) {
+            return {
+                ...baseReturnObject,
+                actionTaken: 'create',
+                success: true
+            };
+        }
+
         const newPublication = await publicationService.create(
             { ...mappedData, type: 'PROBLEM', conflictOfInterestStatus: false },
             user,
@@ -287,6 +295,15 @@ export const handleIncomingARI = async (question: I.ARIQuestion): Promise<I.Hand
 
     if (changes) {
         console.log(`Changes found when handling ARI ${question.questionId}`, changes);
+
+        if (dryRun) {
+            return {
+                ...baseReturnObject,
+                actionTaken: 'update',
+                success: true
+            };
+        }
+
         // Data differs from what is in octopus, so update the publication.
         // Unlike manually created publications, these just have 1 version that
         // updates in-place so that we don't pollute datacite with lots of version DOIs.
