@@ -14,12 +14,25 @@ export const get = async (
     const { publicationId, version } = event.pathParameters;
 
     try {
-        const publicationVersion = await publicationVersionService.get(publicationId, version);
+        let publicationVersion = await publicationVersionService.get(publicationId, version);
 
         if (!publicationVersion) {
             return response.json(404, {
                 message: 'Publication version not found.'
             });
+        }
+
+        const isAuthor =
+            event.user?.id === publicationVersion.user.id ||
+            publicationVersion.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id);
+
+        // If this is being requested by an author, include private data
+        if (isAuthor) {
+            const privateVersion = await publicationVersionService.privateGet(publicationId, version);
+
+            if (privateVersion) {
+                publicationVersion = privateVersion;
+            }
         }
 
         // anyone can see a LIVE publication
@@ -28,12 +41,7 @@ export const get = async (
         }
 
         // only the owner or co-authors can view a DRAFT publication version
-        if (
-            !(
-                event.user?.id === publicationVersion.user.id ||
-                publicationVersion.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)
-            )
-        ) {
+        if (!isAuthor) {
             // if client requested the "latest" version but user doesn't have permissions to see it
             // return the latest published version instead, if exists
             if (version === 'latest' && publicationVersion.versionNumber > 1) {
@@ -383,7 +391,7 @@ export const create = async (
 
     try {
         // take the latest publication version
-        const latestPublicationVersion = await publicationVersionService.get(publicationId, 'latest');
+        const latestPublicationVersion = await publicationVersionService.privateGet(publicationId, 'latest');
 
         if (!latestPublicationVersion) {
             return response.json(404, {
@@ -441,7 +449,7 @@ export const requestControl = async (
 
     try {
         // get publication version
-        const publicationVersion = await publicationVersionService.get(publicationId, version);
+        const publicationVersion = await publicationVersionService.privateGet(publicationId, version);
 
         if (!publicationVersion) {
             return response.json(404, {

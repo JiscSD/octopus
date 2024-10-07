@@ -206,6 +206,10 @@ export interface OpenSearchPublicationFilters {
 }
 
 export type PublicationVersion = Exclude<Prisma.PromiseReturnType<typeof publicationVersionService.get>, null>;
+export type PrivatePublicationVersion = Exclude<
+    Prisma.PromiseReturnType<typeof publicationVersionService.privateGet>,
+    null
+>;
 
 /**
  * @description Links

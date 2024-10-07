@@ -233,7 +233,7 @@ export const updateRequestApprovalStatus = async (publicationVersionId: string, 
     return coAuthors;
 };
 
-export const createCorrespondingAuthor = async (publicationVersion: I.PublicationVersion) => {
+export const createCorrespondingCoAuthor = async (publicationVersion: I.PrivatePublicationVersion) => {
     const create = client.prisma.coAuthors.create({
         data: {
             email: publicationVersion.user.email || '',

@@ -5,15 +5,24 @@ import * as email from 'email';
 import * as response from 'lib/response';
 import * as publicationVersionService from 'publicationVersion/service';
 
-export const get = async (
+export const getAll = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.CreateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const version = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
+        const version = await publicationVersionService.privateGetById(event.pathParameters.publicationVersionId);
 
         if (!version) {
             return response.json(404, {
                 message: 'This publication version does not exist.'
+            });
+        }
+
+        if (
+            !version.coAuthors.find((coAuthor) => coAuthor.linkedUser === event.user.id) &&
+            version.user.id !== event.user.id
+        ) {
+            return response.json(403, {
+                message: 'You do not have permission to view the co-authors of this publication version.'
             });
         }
 
@@ -23,7 +32,7 @@ export const get = async (
 
         // enforce adding corresponding author if it's missing - this will fix old publications which don't have the corresponding author in the coAuthors list
         if (!correspondingAuthor) {
-            const correspondingAuthor = await coAuthorService.createCorrespondingAuthor(version);
+            const correspondingAuthor = await coAuthorService.createCorrespondingCoAuthor(version);
 
             // put corresponding author in the first position
             coAuthors.unshift({
@@ -50,7 +59,7 @@ export const updateAll = async (
     event: I.AuthenticatedAPIRequest<I.CoAuthor[], undefined, I.CreateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const version = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
+        const version = await publicationVersionService.privateGetById(event.pathParameters.publicationVersionId);
 
         // Does the publication version exist?
         if (!version) {
@@ -131,7 +140,7 @@ export const remove = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.DeleteCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const version = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
+        const version = await publicationVersionService.privateGetById(event.pathParameters.publicationVersionId);
 
         // Does the publication version exist?
         if (!version) {
@@ -186,7 +195,7 @@ export const link = async (
     event: I.OptionalAuthenticatedAPIRequest<I.ConfirmCoAuthorBody, undefined, I.LinkCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const version = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
+        const version = await publicationVersionService.privateGetById(event.pathParameters.publicationVersionId);
 
         if (!version) {
             return response.json(404, {
@@ -306,7 +315,7 @@ export const updateConfirmation = async (
     event: I.AuthenticatedAPIRequest<I.ChangeCoAuthorRequestBody, undefined, I.UpdateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const version = await publicationVersionService.getById(event.pathParameters.publicationVersionId);
+        const version = await publicationVersionService.privateGetById(event.pathParameters.publicationVersionId);
 
         // Does the publication version exist?
         if (!version) {
@@ -383,7 +392,7 @@ export const requestApproval = async (
 ): Promise<I.JSONResponse> => {
     try {
         const versionId = event.pathParameters.publicationVersionId;
-        const version = await publicationVersionService.getById(versionId);
+        const version = await publicationVersionService.privateGetById(versionId);
 
         if (!version) {
             return response.json(404, { message: 'Publication version not found' });

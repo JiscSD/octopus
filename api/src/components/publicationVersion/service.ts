@@ -55,7 +55,6 @@ export const defaultPublicationVersionInclude = {
     coAuthors: {
         select: {
             id: true,
-            email: true,
             linkedUser: true,
             publicationVersionId: true,
             confirmedCoAuthor: true,
@@ -84,7 +83,6 @@ export const defaultPublicationVersionInclude = {
             orcid: true,
             firstName: true,
             lastName: true,
-            email: true,
             createdAt: true,
             updatedAt: true,
             role: true,
@@ -108,6 +106,24 @@ export const defaultPublicationVersionInclude = {
     }
 } satisfies Prisma.PublicationVersionInclude;
 
+const privatePublicationVersionInclude = {
+    ...defaultPublicationVersionInclude,
+    user: {
+        ...defaultPublicationVersionInclude.user,
+        select: {
+            ...defaultPublicationVersionInclude.user.select,
+            email: true
+        }
+    },
+    coAuthors: {
+        ...defaultPublicationVersionInclude.coAuthors,
+        select: {
+            ...defaultPublicationVersionInclude.coAuthors.select,
+            email: true
+        }
+    }
+};
+
 export const getById = (id: string) =>
     client.prisma.publicationVersion.findFirst({
         where: {
@@ -116,21 +132,43 @@ export const getById = (id: string) =>
         include: defaultPublicationVersionInclude
     });
 
-export const get = (publicationId: string, version: string | number) =>
+export const privateGetById = (id: string) =>
+    client.prisma.publicationVersion.findFirst({
+        where: {
+            id
+        },
+        include: privatePublicationVersionInclude
+    });
+
+const getVersionFilterFromStringOrNumber = (versionFilter: string | number) => ({
+    ...(typeof versionFilter === 'number' || Number(versionFilter)
+        ? { versionNumber: Number(versionFilter) }
+        : versionFilter === 'latest'
+        ? { isLatestVersion: true }
+        : versionFilter === 'latestLive'
+        ? {
+              isLatestLiveVersion: true
+          }
+        : { id: versionFilter })
+});
+
+export const get = (publicationId: string, versionFilter: string | number) =>
     client.prisma.publicationVersion.findFirst({
         where: {
             versionOf: publicationId,
-            ...(typeof version === 'number' || Number(version)
-                ? { versionNumber: Number(version) }
-                : version === 'latest'
-                ? { isLatestVersion: true }
-                : version === 'latestLive'
-                ? {
-                      isLatestLiveVersion: true
-                  }
-                : { id: version })
+            ...getVersionFilterFromStringOrNumber(versionFilter)
         },
         include: defaultPublicationVersionInclude
+    });
+
+// Get a publication version including fields that shouldn't be exposed in an API response.
+export const privateGet = (publicationId: string, versionFilter: string | number) =>
+    client.prisma.publicationVersion.findFirst({
+        where: {
+            versionOf: publicationId,
+            ...getVersionFilterFromStringOrNumber(versionFilter)
+        },
+        include: privatePublicationVersionInclude
     });
 
 export const getAllByPublicationIds = async (ids: string[]) => {
@@ -380,7 +418,7 @@ export const deleteVersion = async (publicationVersion: I.PublicationVersion) =>
     }
 };
 
-export const create = async (previousVersion: I.PublicationVersion, user: I.User) => {
+export const create = async (previousVersion: I.PrivatePublicationVersion, user: I.User) => {
     const newVersionNumber = previousVersion.versionNumber + 1;
     const previousVersionReferences = await referenceService.getAllByPublicationVersion(previousVersion.id);
     const previousVersionCoAuthors = previousVersion.coAuthors.map((coAuthor, index) =>
@@ -580,7 +618,6 @@ const createPublicationHTMLTemplate = (
             approvalRequested: false,
             confirmedCoAuthor: true,
             createdAt: new Date(),
-            email: publicationVersion.user.email || '',
             linkedUser: publicationVersion.createdBy,
             publicationVersionId: publicationVersion.id,
             user: publicationVersion.user,
@@ -1040,7 +1077,6 @@ const createPublicationHeaderTemplate = (publicationVersion: I.PublicationVersio
             approvalRequested: false,
             confirmedCoAuthor: true,
             createdAt: new Date(),
-            email: publicationVersion.user.email || '',
             linkedUser: publicationVersion.createdBy,
             publicationVersionId: publicationVersion.id,
             user: publicationVersion.user,
@@ -1791,7 +1827,7 @@ export const postPublishHook = async (publicationVersion: I.PublicationVersion, 
     }
 };
 
-const notifyLinkedAriOwners = async (publicationVersion: I.PublicationVersion): Promise<void> => {
+const notifyLinkedAriOwners = async (publicationVersion: I.PrivatePublicationVersion): Promise<void> => {
     // Gather up ARI publications that have been newly linked from this publicationVersion.
     const newlyLinkedARIs = await client.prisma.publicationVersion.findMany({
         where: {
@@ -1873,7 +1909,12 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum, 
         // Important for this to come before postPublishHook because it needs to know which links are new
         // by looking at the draft field. The post publish hook will set "draft: false" on all new links.
         if (ariContactConsent) {
-            await notifyLinkedAriOwners(updatedVersion);
+            // Author email is excluded from the return value of "update", and we need to include it in the email that is sent.
+            const publicationWithEmail = await privateGet(updatedVersion.versionOf, 'latest');
+
+            if (publicationWithEmail) {
+                await notifyLinkedAriOwners(publicationWithEmail);
+            }
         }
 
         await postPublishHook(updatedVersion);
