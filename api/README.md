@@ -4,10 +4,10 @@ The Octopus API is a [Prisma](https://www.prisma.io/) project, using [PostgreSQL
 
 ## Prerequisites
 
--   Install [Node](https://github.com/nodejs/node) `v18`.
+-   Install [Node](https://github.com/nodejs/node) `v20`.
 -   Recommended: use [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js versions.
 -   Install [Docker](https://docs.docker.com/get-docker).
--   Install [Serverless](https://www.serverless.com).
+-   Install [Serverless](https://www.serverless.com) `v3`, (`3.37` or higher).
 -   Obtain credentials to allow access to the [ORCID Public/Member API](https://info.orcid.org/documentation/integration-guide/registering-a-public-api-client/).
 -   Obtain credentials to allow access to the [DataCite API](https://support.datacite.org/docs/api).
 -   Create your environment file as described below.

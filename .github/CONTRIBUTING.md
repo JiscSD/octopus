@@ -64,7 +64,7 @@ Any pull requests from contributors will require a member of the team to review 
 
 **Prerequisites and local setup**
 
-- Install [Node.js](https://github.com/nodejs/node) `v14`
+- Install [Node.js](https://github.com/nodejs/node) `v20`
   - Recommended: use [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js versions
 
 Follow our documentation on locally setting up [the UI](../ui/README.md#local-setup) and [the API](../api/README.md#local-setup).

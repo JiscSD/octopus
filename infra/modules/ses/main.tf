@@ -106,7 +106,7 @@ resource "aws_lambda_function" "forward_mail" {
   count            = length(keys(local.email_address_map))
   function_name    = "mail-${var.environment}-${replace(nonsensitive(element(keys(local.email_address_map), count.index)), "/@|\\./", "-")}"
   handler          = "lambda_function.lambda_handler"
-  runtime          = "python3.8"
+  runtime          = "python3.12"
   filename         = "${path.module}/forward-mail.zip"
   source_code_hash = filebase64sha256("${path.module}/forward-mail.zip")
   role             = aws_iam_role.inbound_email_role.arn

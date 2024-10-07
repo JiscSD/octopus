@@ -14,7 +14,7 @@ provider:
     name: aws
     deploymentMethod: direct
     timeout: 30
-    runtime: nodejs18.x
+    runtime: nodejs20.x
     region: eu-west-1
     stage: ${opt:stage}
     vpc:

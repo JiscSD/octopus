@@ -86,7 +86,7 @@ resource "aws_lambda_function" "pdf_processing_lambda" {
   function_name    = "octopus-api-${var.environment}-pdfProcessingLambda"
   role             = aws_iam_role.pdf_processing_lambda_role.arn
   handler          = "index.handler"
-  runtime          = "nodejs18.x"
+  runtime          = "nodejs20.x"
   timeout          = 10 // if a retry is needed, this function can hit the 3 second default timeout
 
   environment {
