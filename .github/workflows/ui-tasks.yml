@@ -19,10 +19,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node 18.x Environment
+      - name: Setup Node 20.x Environment
         uses: actions/setup-node@v4
         with:
-          node-version: "18.x"
+          node-version: "20.x"
 
       - name: Install dependencies
         working-directory: ./ui
@@ -39,10 +39,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node 18.x Environment
+      - name: Setup Node 20.x Environment
         uses: actions/setup-node@v4
         with:
-          node-version: "18.x"
+          node-version: "20.x"
 
       - name: Install dependencies
         working-directory: ./ui
@@ -59,10 +59,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node 18.x Environment
+      - name: Setup Node 20.x Environment
         uses: actions/setup-node@v4
         with:
-          node-version: "18.x"
+          node-version: "20.x"
 
       - name: Install dependencies
         working-directory: ./ui
@@ -83,10 +83,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node 18.x Environment
+      - name: Setup Node 20.x Environment
         uses: actions/setup-node@v4
         with:
-          node-version: "18.x"
+          node-version: "20.x"
 
       - name: Install dependencies
         working-directory: ./ui
@@ -103,10 +103,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node 18.x Environment
+      - name: Setup Node 20.x Environment
         uses: actions/setup-node@v4
         with:
-          node-version: "18.x"
+          node-version: "20.x"
 
       - name: Install dependencies
         working-directory: ./ui
