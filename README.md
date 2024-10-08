@@ -20,7 +20,7 @@ A new way to publish your scientific work that's fast, free and fair.
 
 To run this application locally you will need:
 
-- [Node v18](https://nodejs.org/en/about/releases/)
+- [Node v20](https://nodejs.org/en/about/releases/)
 - [Docker](https://www.docker.com/)
 - [Serverless Framework](https://www.serverless.com/)
 - [AWS Credentials File](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)

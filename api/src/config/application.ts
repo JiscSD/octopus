@@ -8,6 +8,6 @@ export default {
         url: 'https://github.com/JiscSD/octopus'
     },
     engines: {
-        node: '18.x'
+        node: '20.x'
     }
 };

@@ -10,7 +10,7 @@
         "url": "https://github.com/JiscSD/octopus/tree/main/ui"
     },
     "engines": {
-        "node": "18.x"
+        "node": "20.x"
     },
     "scripts": {
         "dev": "concurrently \"NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF=local next dev -p 3000\" \"local-ssl-proxy --source 3001 --target 3000\"",
@@ -77,7 +77,7 @@
         "@types/js-cookie": "^3.0.6",
         "@types/jsonwebtoken": "^9.0.6",
         "@types/luxon": "^3.4.2",
-        "@types/node": "^18.17.1",
+        "@types/node": "^20.16.10",
         "@types/react": "^18.2.67",
         "@types/react-beautiful-dnd": "^13.1.8",
         "autoprefixer": "^10.4.18",
