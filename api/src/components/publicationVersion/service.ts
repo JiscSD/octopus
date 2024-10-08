@@ -140,7 +140,7 @@ export const privateGetById = (id: string) =>
         include: privatePublicationVersionInclude
     });
 
-const getVersionFilterFromStringOrNumber = (versionFilter: string | number) => ({
+const getVersionFilter = (versionFilter: string) => ({
     ...(typeof versionFilter === 'number' || Number(versionFilter)
         ? { versionNumber: Number(versionFilter) }
         : versionFilter === 'latest'
@@ -152,21 +152,21 @@ const getVersionFilterFromStringOrNumber = (versionFilter: string | number) => (
         : { id: versionFilter })
 });
 
-export const get = (publicationId: string, versionFilter: string | number) =>
+export const get = (publicationId: string, versionFilter: string) =>
     client.prisma.publicationVersion.findFirst({
         where: {
             versionOf: publicationId,
-            ...getVersionFilterFromStringOrNumber(versionFilter)
+            ...getVersionFilter(versionFilter)
         },
         include: defaultPublicationVersionInclude
     });
 
 // Get a publication version including fields that shouldn't be exposed in an API response.
-export const privateGet = (publicationId: string, versionFilter: string | number) =>
+export const privateGet = (publicationId: string, versionFilter: string) =>
     client.prisma.publicationVersion.findFirst({
         where: {
             versionOf: publicationId,
-            ...getVersionFilterFromStringOrNumber(versionFilter)
+            ...getVersionFilter(versionFilter)
         },
         include: privatePublicationVersionInclude
     });
@@ -1606,7 +1606,7 @@ const updatePreviousPublicationVersionDOI = async (
         // get the previous version DOI of this previous version
         const previousVersion = await get(
             previousPublicationVersion.versionOf,
-            previousPublicationVersion.versionNumber - 1
+            (previousPublicationVersion.versionNumber - 1).toString()
         );
 
         if (previousVersion?.doi) {

@@ -480,7 +480,7 @@ export const requestControl = async (
 
         const previousPublicationVersion = await publicationVersionService.get(
             publicationVersion.versionOf,
-            publicationVersion.versionNumber - 1
+            (publicationVersion.versionNumber - 1).toString()
         );
 
         if (!previousPublicationVersion) {
