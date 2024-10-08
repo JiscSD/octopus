@@ -320,15 +320,22 @@ export const handleIncomingARI = async (question: I.ARIQuestion, dryRun?: boolea
 
         // If user changed, update coAuthors.
         if (changes.userId) {
-            // Delete old coAuthor.
-            // There should only be one coAuthor but since this is an array, loop through to make it clean.
-            await Promise.all(existingVersion.coAuthors.map((coAuthor) => coAuthorService.deleteCoAuthor(coAuthor.id)));
             // Create a coAuthor based on the userId of the publicationVersion.
-            await coAuthorService.createCorrespondingAuthor(updatedVersion);
-            const versionWithUpdatedCoAuthors = await publicationVersionService.getById(updatedVersion.id);
+            // Get private version for compatibility with createCorrespondingCoAuthor.
+            const privateVersion = await publicationVersionService.privateGetById(updatedVersion.id);
 
-            if (versionWithUpdatedCoAuthors) {
-                updatedVersion = versionWithUpdatedCoAuthors;
+            if (privateVersion) {
+                // Delete old coAuthor.
+                // There should only be one coAuthor but since this is an array, loop through to make it clean.
+                await Promise.all(
+                    existingVersion.coAuthors.map((coAuthor) => coAuthorService.deleteCoAuthor(coAuthor.id))
+                );
+                await coAuthorService.createCorrespondingCoAuthor(privateVersion);
+                const versionWithUpdatedCoAuthors = await publicationVersionService.getById(updatedVersion.id);
+
+                if (versionWithUpdatedCoAuthors) {
+                    updatedVersion = versionWithUpdatedCoAuthors;
+                }
             }
         }
 

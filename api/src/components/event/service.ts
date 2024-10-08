@@ -71,7 +71,7 @@ export const processRequestControlEvents = async (requestControlEvents: I.Reques
                     requesterId
                 } = requestControlEvent.data;
 
-                const publicationVersion = await publicationVersionService.getById(publicationVersionId);
+                const publicationVersion = await publicationVersionService.privateGetById(publicationVersionId);
                 const requester = await userService.get(requesterId, true);
 
                 if (!publicationVersion) {

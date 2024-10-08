@@ -4,7 +4,7 @@ import * as middleware from 'middleware';
 import * as coAuthorController from 'coAuthor/controller';
 import * as coAuthorSchema from 'coAuthor/schema';
 
-export const get = middy(coAuthorController.get)
+export const getAll = middy(coAuthorController.getAll)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication());

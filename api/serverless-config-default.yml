@@ -191,7 +191,7 @@ functions:
                 cors: true
     # CoAuthors
     getCoAuthors:
-        handler: src/components/coauthor/routes.get
+        handler: src/components/coauthor/routes.getAll
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors
