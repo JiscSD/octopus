@@ -184,43 +184,35 @@ const defaultPublicationInclude = {
     }
 } satisfies Prisma.PublicationInclude;
 
-// Ugly, but extend the default include to include private information.
-const privatePublicationInclude = {
-    ...defaultPublicationInclude,
+type PrivatePublicationInclude = typeof defaultPublicationInclude & {
     versions: {
-        ...defaultPublicationInclude.versions,
         include: {
-            ...defaultPublicationInclude.versions.include,
             user: {
-                ...defaultPublicationInclude.versions.include.user,
                 select: {
-                    ...defaultPublicationInclude.versions.include.user.select,
-                    email: true
-                }
-            },
+                    email?: true;
+                };
+            };
             coAuthors: {
-                ...defaultPublicationInclude.versions.include.coAuthors,
                 select: {
-                    ...defaultPublicationInclude.versions.include.coAuthors.select,
-                    email: true
-                }
-            }
-        }
-    },
+                    email?: true;
+                };
+            };
+        };
+    };
     publicationFlags: {
-        ...defaultPublicationInclude.publicationFlags,
         select: {
-            ...defaultPublicationInclude.publicationFlags.select,
             user: {
-                ...defaultPublicationInclude.publicationFlags.select.user,
                 select: {
-                    ...defaultPublicationInclude.publicationFlags.select.user.select,
-                    email: true
-                }
-            }
-        }
-    }
+                    email?: true;
+                };
+            };
+        };
+    };
 };
+const privatePublicationInclude: PrivatePublicationInclude = structuredClone(defaultPublicationInclude);
+privatePublicationInclude.versions.include.user.select.email = true;
+privatePublicationInclude.versions.include.coAuthors.select.email = true;
+privatePublicationInclude.publicationFlags.select.user.select.email = true;
 
 type DefaultFullPublication = Prisma.PublicationGetPayload<{ include: typeof defaultPublicationInclude }>;
 type PrivateFullPublication = Prisma.PublicationGetPayload<{ include: typeof privatePublicationInclude }>;

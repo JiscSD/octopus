@@ -106,23 +106,23 @@ export const defaultPublicationVersionInclude = {
     }
 } satisfies Prisma.PublicationVersionInclude;
 
-const privatePublicationVersionInclude = {
-    ...defaultPublicationVersionInclude,
+type PrivatePublicationVersionInclude = typeof defaultPublicationVersionInclude & {
     user: {
-        ...defaultPublicationVersionInclude.user,
         select: {
-            ...defaultPublicationVersionInclude.user.select,
-            email: true
-        }
-    },
+            email?: true;
+        };
+    };
     coAuthors: {
-        ...defaultPublicationVersionInclude.coAuthors,
         select: {
-            ...defaultPublicationVersionInclude.coAuthors.select,
-            email: true
-        }
-    }
+            email?: true;
+        };
+    };
 };
+const privatePublicationVersionInclude: PrivatePublicationVersionInclude = structuredClone(
+    defaultPublicationVersionInclude
+);
+privatePublicationVersionInclude.user.select.email = true;
+privatePublicationVersionInclude.coAuthors.select.email = true;
 
 export const getById = (id: string) =>
     client.prisma.publicationVersion.findFirst({
