@@ -1233,6 +1233,7 @@ components:
       description: Whether the coauthor has confirmed their involvement in the publication.
     CoAuthorEmail:
       type: string
+      description: Sometimes not returned if the user doesn't have permission to see it.
     CoAuthorId:
       type: string
     CoAuthorIsIndependent:
@@ -1243,12 +1244,21 @@ components:
       description: ID of the octopus user linked to this CoAuthor object.
       nullable: true
     CoAuthorResponse:
+      oneOf:
+        - $ref: "#/components/schemas/CoAuthorResponsePrivate"
+        - $ref: "#/components/schemas/CoAuthorResponsePublic"
+    CoAuthorResponsePrivate:
+      allOf:
+        - $ref: "#/components/schemas/CoAuthorResponsePublic"
+        - type: object
+          properties:
+            email:
+              $ref: "#/components/schemas/CoAuthorEmail"
+    CoAuthorResponsePublic:
       type: object
       properties:
         id:
           $ref: "#/components/schemas/CoAuthorId"
-        email:
-          $ref: "#/components/schemas/CoAuthorEmail"
         linkedUser:
           $ref: "#/components/schemas/CoAuthorLinkedUser"
         publicationVersionId:
@@ -1534,6 +1544,18 @@ components:
       description: ORCiD ID. Not used for organisational accounts.
       nullable: true
     UserResponse:
+      oneOf:
+        - $ref: "#/components/schemas/UserResponsePrivate"
+        - $ref: "#/components/schemas/UserResponsePublic"
+    UserResponsePrivate:
+      allOf:
+        - $ref: "#/components/schemas/UserResponsePublic"
+        - type: object
+          properties:
+            email:
+              type: string
+              description: Only returned if the requester has permission to see it (usually, that they are the user in question).
+    UserResponsePublic:
       type: object
       properties:
         id:
@@ -1544,8 +1566,6 @@ components:
           $ref: "#/components/schemas/UserFirstName"
         lastName:
           $ref: "#/components/schemas/UserLastName"
-        email:
-          type: string
         createdAt:
           type: string
           format: date-time
