@@ -46,6 +46,15 @@ describe('Get co-authors of a publication version', () => {
             .query({ apiKey: '000000006' });
 
         expect(getCoAuthors.status).toEqual(200);
+        // Only the email of the requesting coauthor themselves should be returned.
+        const coAuthors = getCoAuthors.body;
+        coAuthors.forEach((coAuthor) => {
+            if (coAuthor.linkedUser === 'test-user-6') {
+                expect(coAuthor).toHaveProperty('email');
+            } else {
+                expect(coAuthor).not.toHaveProperty('email');
+            }
+        });
     });
 
     test('Authenticated user who is not a confirmed co-author cannot get co-authors', async () => {

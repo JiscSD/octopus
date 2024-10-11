@@ -47,7 +47,21 @@ export const getAll = async (
             });
         }
 
-        return response.json(200, version.coAuthors);
+        // Redact emails of other co-authors unless the user is the corresponding author.
+        const coAuthorsWithRedactedEmails =
+            event.user.id === version.createdBy
+                ? coAuthors
+                : coAuthors.map((coAuthor) => {
+                      if (coAuthor.linkedUser === event.user.id) {
+                          return coAuthor;
+                      } else {
+                          const { email, ...rest } = coAuthor;
+
+                          return rest;
+                      }
+                  });
+
+        return response.json(200, coAuthorsWithRedactedEmails);
     } catch (err) {
         console.log(err);
 

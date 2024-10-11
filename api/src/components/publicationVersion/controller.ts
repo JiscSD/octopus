@@ -22,12 +22,10 @@ export const get = async (
             });
         }
 
-        const isAuthor =
-            event.user?.id === publicationVersion.user.id ||
-            publicationVersion.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id);
+        const isCorrespondingAuthor = event.user?.id === publicationVersion.user.id;
 
-        // If this is being requested by an author, include private data
-        if (isAuthor) {
+        // If this is being requested by the corresponding author, include private data (including co-author emails).
+        if (isCorrespondingAuthor) {
             const privateVersion = await publicationVersionService.privateGet(publicationId, version);
 
             if (privateVersion) {
@@ -41,7 +39,12 @@ export const get = async (
         }
 
         // only the owner or co-authors can view a DRAFT publication version
-        if (!isAuthor) {
+        if (
+            !(
+                isCorrespondingAuthor ||
+                publicationVersion.coAuthors.some((coAuthor) => coAuthor.linkedUser === event.user?.id)
+            )
+        ) {
             // if client requested the "latest" version but user doesn't have permissions to see it
             // return the latest published version instead, if exists
             if (version === 'latest' && publicationVersion.versionNumber > 1) {
