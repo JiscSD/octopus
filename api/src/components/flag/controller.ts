@@ -71,7 +71,7 @@ export const createFlag = async (
             });
         }
 
-        const publication = await publicationService.get(event.pathParameters.publicationId);
+        const publication = await publicationService.privateGet(event.pathParameters.publicationId);
 
         if (!publication) {
             return response.json(404, {

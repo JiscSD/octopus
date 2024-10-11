@@ -109,7 +109,6 @@ const CoAuthor: React.FC = (): React.ReactElement => {
         setCoAuthor(event.target.value);
     };
 
-    // Validate email for co author regex to use -
     const addCoAuthorToPublication = React.useCallback(async () => {
         setLoading(true);
 
@@ -117,7 +116,9 @@ const CoAuthor: React.FC = (): React.ReactElement => {
 
         // check to ensure co-author email is not already in the store/database
         const coAuthorEmail = coAuthor.trim().toLowerCase();
-        const emailDuplicate = authorsArray.some((author) => author.email.toLowerCase() === coAuthorEmail);
+        const emailDuplicate = authorsArray.some(
+            (author) => author.email && author.email.toLowerCase() === coAuthorEmail
+        );
         if (emailDuplicate) {
             setEmailDuplicated(true);
             setLoading(false);
