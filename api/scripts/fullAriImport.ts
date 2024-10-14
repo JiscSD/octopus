@@ -49,7 +49,7 @@ const fullAriImport = async (): Promise<string> => {
     let skippedCount = 0;
 
     for (const ari of aris) {
-        const handleAri = await ariUtils.handleIncomingARI(ari);
+        const handleAri = await ariUtils.handleIncomingARI(ari, false, true);
 
         if (handleAri.success) {
             switch (handleAri.actionTaken) {

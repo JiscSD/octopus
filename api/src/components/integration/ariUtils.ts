@@ -1,3 +1,4 @@
+import axios from 'axios';
 import * as client from 'lib/client';
 import * as coAuthorService from 'coAuthor/service';
 import * as Helpers from 'lib/helpers';
@@ -172,7 +173,11 @@ export const detectChangesToARIPublication = (
     return somethingChanged ? changes : false;
 };
 
-export const handleIncomingARI = async (question: I.ARIQuestion, dryRun?: boolean): Promise<I.HandledARI> => {
+export const handleIncomingARI = async (
+    question: I.ARIQuestion,
+    dryRun?: boolean,
+    findExistingDoi?: boolean
+): Promise<I.HandledARI> => {
     // Validate question ID.
     // Quite random criteria for now - value is typed as a number which
     // stops us checking the type. May be revisited later.
@@ -237,6 +242,19 @@ export const handleIncomingARI = async (question: I.ARIQuestion, dryRun?: boolea
 
     // If the ARI has not been ingested previously, a new research problem is created.
     if (!existingPublication) {
+        if (findExistingDoi) {
+            // Attempt to find a DOI we already provisioned for this ARI.
+            const doiQueryUrl = `${process.env.DATACITE_ENDPOINT}?prefix=${
+                process.env.DOI_PREFIX
+            }&query=creators.name:%22${encodeURIComponent(
+                user.firstName
+            )}%22%20AND%20titles.title:%22${encodeURIComponent(mappedData.title)}%22`;
+            const doiQueryResponse = await axios.get(doiQueryUrl);
+            console.log('DOI query response count: ', doiQueryResponse.data.meta.total);
+            // Artificial delay to avoid hitting rate limits.
+            await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+
         if (dryRun) {
             return {
                 ...baseReturnObject,
