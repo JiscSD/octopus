@@ -12,7 +12,7 @@ const sampleARIQuestion: I.ARIQuestion = {
     question: 'ARI Publication 1',
     isArchived: false,
     department: 'Test ARI Department',
-    questionGroup: '',
+    questionGroup: 'Question group',
     backgroundInformation: 'Sample background information.',
     publicationDate: '2024-02-26 00:00:00',
     expiryDate: null,
@@ -55,6 +55,8 @@ describe('ARI Mapping', () => {
             success: true,
             mappedData: {
                 content:
+                    // Question group
+                    '<p><strong>Question group</strong></p>' +
                     // Static placeholder text added to each mapped ARI's content
                     "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>" +
                     // ARI Question title
@@ -80,7 +82,7 @@ describe('ARI Mapping', () => {
             success: true,
             mappedData: {
                 content:
-                    "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p><p>ARI Publication 1</p>" +
+                    "<p><strong>Question group</strong></p><p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p><p>ARI Publication 1</p>" +
                     // Background information
                     '<p>Background information line 1.<br>Background information line 2.<br><br>Background information line 3.</p>' +
                     // Contact details
@@ -253,6 +255,7 @@ describe('ARI handling', () => {
     test('Content updates when mapped fields have changed', async () => {
         const handleARI = await ariUtils.handleIncomingARI({
             ...sampleARIQuestion,
+            questionGroup: 'New question group',
             backgroundInformation: 'New background information.',
             contactDetails: 'New contact details.',
             relatedUKRIProjects: [
@@ -268,11 +271,26 @@ describe('ARI handling', () => {
             success: true,
             publicationVersion: {
                 content:
+                    '<p><strong>New question group</strong></p>' +
                     "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>" +
                     '<p>ARI Publication 1</p>' +
                     '<p>New background information.</p>' +
                     '<p><strong>Contact details</strong></p><p>New contact details.</p>' +
                     '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://jisc.ac.uk">Test</a></li></ul>'
+            }
+        });
+    });
+
+    test('Description updates when questionGroup is changed', async () => {
+        const handleARI = await ariUtils.handleIncomingARI({
+            ...sampleARIQuestion,
+            questionGroup: 'New question group'
+        });
+        expect(handleARI).toMatchObject({
+            actionTaken: 'update',
+            success: true,
+            publicationVersion: {
+                description: 'New question group'
             }
         });
     });
@@ -343,6 +361,7 @@ describe('ARI handling', () => {
                 title: 'ARI Publication 1',
                 content:
                     // Mapped content - see ARI mapping tests for explanation.
+                    '<p><strong>Question group</strong></p>' +
                     "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>" +
                     '<p>ARI Publication 1</p>' +
                     '<p>Sample background information.</p>' +
