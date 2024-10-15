@@ -52,6 +52,7 @@ provider:
         SLACK_CHANNEL_EMAIL: ${ssm:/slack_channel_email_${self:provider.stage}_octopus}
         TRIGGER_ARI_INGEST_API_KEY: ${ssm:/trigger_ari_ingest_api_key_${self:provider.stage}_octopus}
         INGEST_REPORT_RECIPIENTS: ${ssm:/ingest_report_recipients_${self:provider.stage}_octopus}
+        PARTICIPATING_ARI_USER_IDS: ${ssm:/participating_ari_user_ids_${self:provider.stage}_octopus}
     deploymentBucket:
         tags:
             Project: Octopus
