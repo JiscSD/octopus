@@ -1,3 +1,4 @@
+import * as config from 'config';
 import * as Enum from 'enum';
 import * as I from 'interface';
 
@@ -30,7 +31,7 @@ const createPublicationBodySchema: I.Schema = {
         },
         description: {
             type: 'string',
-            maxLength: 160 // TODO: Re look at this cap
+            maxLength: config.constants.publication.description.maxLength
         },
         keywords: {
             type: 'array',

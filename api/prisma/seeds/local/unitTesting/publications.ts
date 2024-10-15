@@ -791,6 +791,8 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 versionNumber: 1,
                 title: 'ARI Publication 1',
                 content:
+                    // Question group
+                    '<p><strong>Question group</strong></p>' +
                     // Static placeholder text added to each mapped ARI's content
                     "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>" +
                     // ARI Question title
@@ -801,6 +803,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                     '<p><strong>Contact details</strong></p><p>Sample contact details.</p>' +
                     // Related UKRI projects
                     '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>',
+                description: 'Question group',
                 conflictOfInterestStatus: false,
                 user: { connect: { id: 'test-organisational-account-1' } },
                 publicationStatus: { create: { status: 'LIVE' } },
