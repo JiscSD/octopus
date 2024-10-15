@@ -33,6 +33,9 @@ export const incrementalAriIngest = async (dryRun: boolean): Promise<string> => 
         logId = log.id;
     }
 
+    // Determine which departments are having their ARIs imported.
+    const participatingDepartmentNames = await ariUtils.getParticipatingDepartmentNames();
+
     // Count sequential unchanged ARIs so that we can stop when the streak hits MAX_UNCHANGED_STREAK.
     let unchangedStreak = 0;
 
@@ -55,12 +58,13 @@ export const incrementalAriIngest = async (dryRun: boolean): Promise<string> => 
         const pageAris = response.data.data;
 
         for (const pageAri of pageAris) {
-            if (mostRecentStart && new Date(pageAri.dateUpdated) < new Date(mostRecentStart) && !timeOverlap) {
-                timeOverlap = true;
-                console.log('Time overlap - reached an ARI older than the most recent ingest start time.');
-            }
+            // Skip archived ARIs and ones not from one of the participating departments.
+            if (!pageAri.isArchived && participatingDepartmentNames.includes(pageAri.department.toLowerCase())) {
+                if (mostRecentStart && new Date(pageAri.dateUpdated) < new Date(mostRecentStart) && !timeOverlap) {
+                    timeOverlap = true;
+                    console.log('Time overlap - reached an ARI older than the most recent ingest start time.');
+                }
 
-            if (!pageAri.isArchived) {
                 // Create, update, or skip this ARI as appropriate.
                 const handle = await ariUtils.handleIncomingARI(pageAri, dryRun);
                 checkedCount++;
@@ -121,7 +125,7 @@ export const incrementalAriIngest = async (dryRun: boolean): Promise<string> => 
         // On the last run this will be undefined but that's fine because we won't need to repeat the loop.
         paginationInfo = response.data.meta.pagination;
         pageUrl = paginationInfo.links.next;
-    } while (pageUrl && unchangedStreak < MAX_UNCHANGED_STREAK && !timeOverlap);
+    } while (pageUrl && unchangedStreak < MAX_UNCHANGED_STREAK && !timeOverlap && participatingDepartmentNames.length);
 
     const end = new Date();
     // Get duration in seconds to the nearest 1st decimal place.

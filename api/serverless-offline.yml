@@ -44,6 +44,7 @@ provider:
         LIST_USERS_API_KEY: ${env:LIST_USERS_API_KEY}
         TRIGGER_ARI_INGEST_API_KEY: ${env:TRIGGER_ARI_INGEST_API_KEY}
         INGEST_REPORT_RECIPIENTS: ${env:INGEST_REPORT_RECIPIENTS}
+        PARTICIPATING_ARI_USER_IDS: ${env:PARTICIPATING_ARI_USER_IDS}
     deploymentBucket:
         tags:
             Project: Octopus
