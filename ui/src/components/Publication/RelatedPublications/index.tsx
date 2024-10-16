@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import * as Components from '@/components';
 import * as Interfaces from '@/interfaces';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Stores from '@/stores';
 import * as Types from '@/types';
 
@@ -31,6 +32,13 @@ const RelatedPublications: React.FC<Props> = (props) => {
         (process.env.NEXT_PUBLIC_STAGE === 'local' || !!totalCrosslinks) && (
             <Components.AccordionSection id={props.id} title={'Related Publications'}>
                 <div className="space-y-4 px-6 py-4">
+                    <span className="flex text-teal-600 dark:text-teal-200 font-montserrat gap-4">
+                        <OutlineIcons.InformationCircleIcon
+                            className="w-6 text-teal-600 dark:text-teal-200"
+                            title={`This area displays publications that have been identified by other readers as being related to this one. ${user ? 'You can' : 'Log in to'} vote on how appropriate a link is, or add your own suggestions.`}
+                        />
+                        User suggested links
+                    </span>
                     {!!recent.length && (
                         <section className="flex flex-col">
                             {!!relevant.length && (
