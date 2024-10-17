@@ -373,3 +373,13 @@ export const handleIncomingARI = async (question: I.ARIQuestion, dryRun?: boolea
 };
 
 export const ariEndpoint = 'https://ari.org.uk/api/questions?order_by=dateUpdated';
+
+// Returns the mapped ARI department names for a given set of octopus organisational user IDs.
+export const getParticipatingDepartmentNames = async (): Promise<string[]> => {
+    const participatingDepartmentIds = process.env.PARTICIPATING_ARI_USER_IDS?.split(',') ?? [];
+    const queryResults = await Promise.all(
+        participatingDepartmentIds.map((userId) => client.prisma.userMapping.findMany({ where: { userId } }))
+    );
+
+    return queryResults.flatMap((userMappings) => userMappings.map((userMapping) => userMapping.value));
+};

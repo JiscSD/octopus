@@ -23,6 +23,13 @@ The ARI DB is a UK government database storing research questions that governmen
 
 #### ARI import process
 
+ARIs can be excluded from the import process for one of these reasons:
+
+-   The `isArchived` field is `true`.
+-   The `department` field doesn't correspond to one of our participating departments.
+    -   These are defined in an environment variable (`PARTICIPATING_ARI_USER_IDS`) as a comma-separated list of octopus user IDs. Each ID corresponds to the organisational account representing an ARI department.
+    -   At import time, the user mapping table is consulted to get the expected names the departments have on the ARI DB side. As such, user mappings must also exist in the octopus DB for a department to be included properly.
+
 On import, ARIs go through a handling flow:
 
 -   If no publication exists with the ARI's question ID in its `externalId` field, it is created as a new publication.
@@ -37,5 +44,3 @@ Various ARI fields are mapped to octopus ones in the `mapAriQuestionToPublicatio
 Of particular importance is how ARIs are matched to an owning organisational user account. The mapping process expects a UserMapping to exist associating the `department` field value from the ARI (where the title matches, case insensitive, and the mapping source is 'ARI') with the user ID of an organisational account.
 
 Topics are mapped similarly. If an ARI has values in its `topics` field, the mapping will check whether octopus has any TopicMappings in the database that match with them and associate the publication it creates/updates with the topic(s) from those mappings. If there are no topics listed on the ARI, the organisational user is expected to have a `defaultTopicId`, which is used as a fallback.
-
-ARIs can be archived (`isArchived` field). These are not imported by Octopus.
