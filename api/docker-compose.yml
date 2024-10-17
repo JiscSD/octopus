@@ -108,6 +108,7 @@ services:
             - LIST_USERS_API_KEY=123456789
             - TRIGGER_ARI_INGEST_API_KEY=123456789
             - INGEST_REPORT_RECIPIENTS=example.jisc@mailinator.com
+            - PARTICIPATING_ARI_USER_IDS=
 
 volumes:
     opensearch-data1:

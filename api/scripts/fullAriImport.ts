@@ -20,6 +20,8 @@ const fullAriImport = async (): Promise<string> => {
     // Updates with each loop. Contains total count which we need outside the loop.
     let paginationInfo;
 
+    console.log(`${((performance.now() - startTime) / 1000).toFixed(1)}: Retrieving ARIs from ARI DB...`);
+
     do {
         // Get page.
         const response = await axios.get(pageUrl);
@@ -34,15 +36,23 @@ const fullAriImport = async (): Promise<string> => {
         pageUrl = paginationInfo.links.next;
     } while (pageUrl);
 
+    console.log(`${((performance.now() - startTime) / 1000).toFixed(1)}: Finished retrieving ARIs.`);
+
     // In case something has caused this process to fail, perhaps the API changed, etc...
     if (allAris.length !== paginationInfo.total) {
         throw new Error('Number of ARIs retrieved does not match reported total. Stopping.');
     }
 
-    // Remove archived aris.
-    const aris = allAris.filter((ari) => !ari.isArchived);
+    // Determine which departments are having their ARIs imported.
+    const participatingDepartmentNames = await ariUtils.getParticipatingDepartmentNames();
+
+    // Remove archived ARIs and ARIs from departments we are not importing.
+    const aris = allAris.filter(
+        (ari) => !ari.isArchived && participatingDepartmentNames.includes(ari.department.toLowerCase())
+    );
 
     // Process all the ARIs.
+    console.log('Processing ARIs...');
     const failed: I.HandledARI[] = [];
     let createdCount = 0;
     let updatedCount = 0;

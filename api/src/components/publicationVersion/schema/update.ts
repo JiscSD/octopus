@@ -1,3 +1,4 @@
+import * as config from 'config';
 import * as Enum from 'enum';
 import * as I from 'interface';
 
@@ -14,7 +15,7 @@ const updatePublicationVersionSchema: I.JSONSchemaType<I.UpdatePublicationVersio
         },
         description: {
             type: 'string',
-            maxLength: 160,
+            maxLength: config.constants.publication.description.maxLength,
             nullable: true
         },
         keywords: {

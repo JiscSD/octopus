@@ -1051,6 +1051,7 @@ export interface ARIQuestion {
 export type MappedARIQuestion = {
     title: string;
     content: string;
+    description: string;
     keywords: string[];
     topicIds: string[];
     externalId: string;

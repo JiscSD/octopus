@@ -1,5 +1,6 @@
 import * as client from 'lib/client';
 import * as coAuthorService from 'coAuthor/service';
+import * as config from 'config';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
 import * as publicationService from 'publication/service';
@@ -49,6 +50,7 @@ export const mapAriQuestionToPublicationVersion = async (
         department,
         fieldsOfResearch,
         question,
+        questionGroup,
         questionId,
         relatedUKRIProjects,
         tags,
@@ -56,6 +58,7 @@ export const mapAriQuestionToPublicationVersion = async (
     } = questionData;
     const title = question;
     // Compose content.
+    const questionGroupHTML = questionGroup ? `<p><strong>${questionGroup}</strong></p>` : '';
     const commonBoilerplateHTML =
         "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>";
     const titleHTML = `<p>${question}</p>`;
@@ -71,6 +74,8 @@ export const mapAriQuestionToPublicationVersion = async (
           '</ul>'
         : '';
     const content =
+        Helpers.getSafeHTML(questionGroupHTML) +
+        // Don't run getSafeHTML on this because sanitize() removes the target attribute from the link.
         commonBoilerplateHTML +
         Helpers.getSafeHTML(
             [titleHTML, backgroundInformationHTML, contactDetailsHTML, relatedUKRIProjectsHTML].join('')
@@ -127,6 +132,10 @@ export const mapAriQuestionToPublicationVersion = async (
         mappedData: {
             title,
             content,
+            description:
+                questionGroup && questionGroup.length <= config.constants.publication.description.maxLength
+                    ? questionGroup
+                    : '',
             keywords,
             topicIds: finalTopicIds,
             externalSource: 'ARI',
@@ -148,12 +157,14 @@ export const detectChangesToARIPublication = (
     | {
           title?: FieldDiff<string>;
           content?: FieldDiff<string>;
+          description?: FieldDiff<string>;
           keywords?: FieldDiff<string[]>;
           topics?: FieldDiff<string[]>;
           userId?: FieldDiff<string>;
       } => {
     const titleMatch = ari.title === publicationVersion.title;
     const contentMatch = ari.content === publicationVersion.content;
+    const descriptionMatch = ari.description === publicationVersion.description;
     const keywordsMatch = Helpers.compareArrays(ari.keywords, publicationVersion.keywords);
     const publicationVersionTopicIds = publicationVersion.topics.map((topic) => topic.id);
     const topicsMatch = Helpers.compareArrays(ari.topicIds, publicationVersionTopicIds);
@@ -162,12 +173,13 @@ export const detectChangesToARIPublication = (
     const changes = {
         ...(!titleMatch ? { title: { new: ari.title, old: publicationVersion.title } } : {}),
         ...(!contentMatch ? { content: { new: ari.content, old: publicationVersion.content } } : {}),
+        ...(!descriptionMatch ? { description: { new: ari.description, old: publicationVersion.description } } : {}),
         ...(!keywordsMatch ? { keywords: { new: ari.keywords, old: publicationVersion.keywords } } : {}),
         ...(!topicsMatch ? { topics: { new: ari.topicIds, old: publicationVersionTopicIds } } : {}),
         ...(!userMatch ? { userId: { new: ari.userId, old: publicationVersion.user.id } } : {})
     };
 
-    const somethingChanged = !(titleMatch && contentMatch && keywordsMatch && topicsMatch && userMatch);
+    const somethingChanged = Object.keys(changes).length;
 
     return somethingChanged ? changes : false;
 };
@@ -311,6 +323,7 @@ export const handleIncomingARI = async (question: I.ARIQuestion, dryRun?: boolea
         let updatedVersion = await publicationVersionService.update(existingVersion.id, {
             ...(changes.title && { title: mappedData.title }),
             ...(changes.content && { content: mappedData.content }),
+            ...(changes.description && { description: mappedData.description }),
             ...(changes.keywords && { keywords: mappedData.keywords }),
             ...(changes.topics && { topics: { set: mappedData.topicIds.map((topicId) => ({ id: topicId })) } }),
             ...(changes.userId && { user: { connect: { id: mappedData.userId } } }),
@@ -360,3 +373,13 @@ export const handleIncomingARI = async (question: I.ARIQuestion, dryRun?: boolea
 };
 
 export const ariEndpoint = 'https://ari.org.uk/api/questions?order_by=dateUpdated';
+
+// Returns the mapped ARI department names for a given set of octopus organisational user IDs.
+export const getParticipatingDepartmentNames = async (): Promise<string[]> => {
+    const participatingDepartmentIds = process.env.PARTICIPATING_ARI_USER_IDS?.split(',') ?? [];
+    const queryResults = await Promise.all(
+        participatingDepartmentIds.map((userId) => client.prisma.userMapping.findMany({ where: { userId } }))
+    );
+
+    return queryResults.flatMap((userMappings) => userMappings.map((userMapping) => userMapping.value));
+};
