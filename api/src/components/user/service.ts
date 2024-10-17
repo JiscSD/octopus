@@ -273,7 +273,6 @@ export const getPublications = async (
                             id: true,
                             linkedUser: true,
                             confirmedCoAuthor: true,
-                            email: true,
                             user: {
                                 select: {
                                     orcid: true,

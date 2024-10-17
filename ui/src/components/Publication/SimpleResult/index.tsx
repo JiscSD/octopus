@@ -95,12 +95,13 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                     </span>
                     {draftExistsWithPermission && (
                         <span>
-                            {latestVersion.user.id === props.user.id
-                                ? ' (Corresponding Author)'
-                                : latestVersion.coAuthors.find((coAuthor) => coAuthor.linkedUser === props.user.id)
-                                  ? ' (Author)'
-                                  : latestVersion.coAuthors.find((coAuthor) => coAuthor.email === props.user.email) &&
-                                    ' (Invited)'}
+                            {
+                                latestVersion.user.id === props.user.id
+                                    ? ' (Corresponding Author)'
+                                    : latestVersion.coAuthors.find((coAuthor) => coAuthor.linkedUser === props.user.id)
+                                      ? ' (Author)'
+                                      : ' (Invited)' // We can infer that they are an unconfirmed coauthor.
+                            }
                         </span>
                     )}
                 </p>
@@ -114,9 +115,23 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                             Status: {Helpers.getPublicationStatusByAuthor(draftVersion, props.user)}
                         </p>
                         {props.user.id !== draftVersion.user.id ? (
-                            draftVersion.coAuthors.some(
-                                (coAuthor) => coAuthor.email === props.user.email && !coAuthor.linkedUser
-                            ) ? (
+                            // Confirmed coauthor.
+                            draftVersion.coAuthors.some((coAuthor) => coAuthor.linkedUser === props.user.id) ? (
+                                <>
+                                    <p>
+                                        <Components.Link
+                                            href={`${Config.urls.viewUser.path}/${draftVersion.user.id}`}
+                                            className="underline"
+                                        >
+                                            {draftVersion.user.firstName.substring(0, 1)}. {draftVersion.user.lastName}
+                                        </Components.Link>{' '}
+                                        is working on a new draft version
+                                    </p>
+                                    {viewDraftButton}
+                                    {requestControl}
+                                </>
+                            ) : (
+                                // Unconfirmed coauthor.
                                 <>
                                     <p>
                                         <Components.Link
@@ -133,20 +148,6 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                         title="Confirm Involvement"
                                         className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
                                     />
-                                </>
-                            ) : (
-                                <>
-                                    <p>
-                                        <Components.Link
-                                            href={`${Config.urls.viewUser.path}/${draftVersion.user.id}`}
-                                            className="underline"
-                                        >
-                                            {draftVersion.user.firstName.substring(0, 1)}. {draftVersion.user.lastName}
-                                        </Components.Link>{' '}
-                                        is working on a new draft version
-                                    </p>
-                                    {viewDraftButton}
-                                    {requestControl}
                                 </>
                             )
                         ) : draftVersion.currentStatus === 'LOCKED' ? (

@@ -481,7 +481,7 @@ const topicMappings: Prisma.TopicMappingCreateManyInput[] = [
         isMapped: true
     },
     {
-        title: 'Creditand debt',
+        title: 'Credit and debt',
         source: 'ARI',
         topicId: 'clkv6upos02ual2rswg7o0a6m',
         isMapped: true
@@ -1386,7 +1386,7 @@ const topicMappings: Prisma.TopicMappingCreateManyInput[] = [
         isMapped: true
     },
     {
-        title: 'Industrialaccident and incident',
+        title: 'Industrial accident and incident',
         source: 'ARI',
         topicId: 'cly468zj3004k7ryzr5nnrthn',
         isMapped: true
