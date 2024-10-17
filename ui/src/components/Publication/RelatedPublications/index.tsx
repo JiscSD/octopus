@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import * as Components from '@/components';
+import * as Config from '@/config';
 import * as Interfaces from '@/interfaces';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Stores from '@/stores';
@@ -31,14 +32,18 @@ const RelatedPublications: React.FC<Props> = (props) => {
         // TODO: Remove this condition when crosslinking is fully released.
         (process.env.NEXT_PUBLIC_STAGE === 'local' || !!totalCrosslinks) && (
             <Components.AccordionSection id={props.id} title={'Related Publications'}>
-                <div className="space-y-4 px-6 py-4">
-                    <span className="flex text-teal-600 dark:text-teal-200 font-montserrat gap-4">
-                        <OutlineIcons.InformationCircleIcon
-                            className="w-6 text-teal-600 dark:text-teal-200"
-                            title={`This area displays publications that have been identified by other readers as being related to this one. ${user ? 'You can' : 'Log in to'} vote on how appropriate a link is, or add your own suggestions.`}
-                        />
-                        User suggested links
-                    </span>
+                <div className="flex flex-col space-y-4 px-6 py-4">
+                    <Components.Button
+                        title="Crosslinking section in author guide"
+                        className="self-end"
+                        endIcon={
+                            <OutlineIcons.InformationCircleIcon className="w-6 text-teal-600 dark:text-teal-200" />
+                        }
+                        openNew={true}
+                        href={Config.urls.faq.path + '#related_publications'}
+                    >
+                        <span className="text-teal-600 dark:text-teal-200">What is this?</span>
+                    </Components.Button>
                     {!!recent.length && (
                         <section className="flex flex-col">
                             {!!relevant.length && (
