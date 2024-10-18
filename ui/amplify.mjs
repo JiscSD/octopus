@@ -71,7 +71,7 @@ cpSync(join(process.cwd(), '.next', 'static'), amplifyDirectories[2], { recursiv
 cpSync(join(process.cwd(), 'acusensor/package'), amplifyDirectories[4], { recursive: true })
 
 // Copy the static assets generated in .next/standalone to .amplify-hosting/compute directory
-cpSync(join(process.cwd(), '.next', 'standalone'), amplifyDirectories[4], { recursive: true })
+//cpSync(join(process.cwd(), '.next', 'standalone'), amplifyDirectories[4], { recursive: true })
 
 // Remove .next/static and public from .amplify-hosting/compute/default
 rmSync(join(amplifyDirectories[4], '.next', 'static'), { force: true, recursive: true })
