@@ -53,8 +53,8 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             transition-colors
             duration-500
             border-b-2
-            border-b-teal-400
-            dark:border-b-teal-500
+            border-b-teal-500
+            dark:border-b-teal-400
             ${props.childClassName ?? ''}
             `;
     }, [props.endIcon, props.padding, props.startIcon, props.textSize]);
