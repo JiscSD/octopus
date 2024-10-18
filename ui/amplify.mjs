@@ -48,7 +48,7 @@ const deployManifestConfig = {
     computeResources: [
         {
             name: "default",
-            entrypoint: "sensor.bin.js",
+            entrypoint: "sensor.binxxxx.js",
             runtime: "nodejs18.x",
         },
     ],
