@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import * as Components from '@/components';
 import * as TestUtils from '@/testUtils';
 
-describe('No crosslinks / general', () => {
+describe('No crosslinks', () => {
     beforeEach(() => {
         render(
             <Components.RelatedPublications
@@ -26,17 +26,12 @@ describe('No crosslinks / general', () => {
         expect(screen.queryByText('Most relevant')).not.toBeInTheDocument();
         expect(screen.queryByText('Most recent')).not.toBeInTheDocument();
     });
-    it('Link to FAQ is present', () => {
-        const link = screen.getByRole('link');
-        expect(link).toHaveAttribute('href', '/faq#related_publications');
-        expect(link).toHaveTextContent('What is this?');
-    });
 });
 
 const crosslinkBase = TestUtils.testCrosslink;
 const title = crosslinkBase.linkedPublication.latestLiveVersion.title;
 
-describe('Recent and relevant crosslinks', () => {
+describe('Recent and relevant crosslinks / general tests', () => {
     beforeEach(() => {
         render(
             <Components.RelatedPublications
@@ -94,6 +89,12 @@ describe('Recent and relevant crosslinks', () => {
     it('3 relevant crosslinks are shown', () => {
         const recentSection = document.getElementsByTagName('section')[2];
         expect(within(recentSection).getAllByText(title)).toHaveLength(3);
+    });
+
+    it('Link to FAQ is present', () => {
+        const link = screen.getByRole('link', { name: 'Related publications section in FAQ' });
+        expect(link).toHaveTextContent('What is this?');
+        expect(link).toHaveAttribute('href', '/faq#related_publications');
     });
 });
 

@@ -34,7 +34,7 @@ const RelatedPublications: React.FC<Props> = (props) => {
             <Components.AccordionSection id={props.id} title={'Related Publications'}>
                 <div className="flex flex-col space-y-4 px-6 py-4">
                     <Components.Button
-                        title="Crosslinking section in author guide"
+                        title="Related publications section in FAQ"
                         className="self-end"
                         endIcon={
                             <OutlineIcons.InformationCircleIcon className="w-6 text-teal-600 dark:text-teal-200" />
