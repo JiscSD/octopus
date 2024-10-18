@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import * as Components from '@/components';
 import * as TestUtils from '@/testUtils';
 
-describe('No crosslinks', () => {
+describe('No crosslinks / general', () => {
     beforeEach(() => {
         render(
             <Components.RelatedPublications
@@ -25,6 +25,11 @@ describe('No crosslinks', () => {
     it('Neither category label is shown', () => {
         expect(screen.queryByText('Most relevant')).not.toBeInTheDocument();
         expect(screen.queryByText('Most recent')).not.toBeInTheDocument();
+    });
+    it('Link to FAQ is present', () => {
+        const link = screen.getByRole('link');
+        expect(link).toHaveAttribute('href', '/faq#related_publications');
+        expect(link).toHaveTextContent('What is this?');
     });
 });
 
