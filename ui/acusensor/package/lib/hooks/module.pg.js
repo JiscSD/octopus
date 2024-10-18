@@ -1,0 +1,1 @@
+"use strict";module.exports.hook="sql",module.exports.packageNames=["pg"],module.exports.load=({onBeforeRequire:e,require:o,report:r,proxyMethod:p})=>{e("pg",(()=>{const e=o("pg"),t=({args:e,stack:o})=>{r({engine:"pg",sql:e[0]||""},o)};p(e.Client.prototype,"query",t),p(e.Pool.prototype,"query",t)}))};

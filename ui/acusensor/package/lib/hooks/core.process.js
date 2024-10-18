@@ -1,0 +1,1 @@
+"use strict";module.exports.hook="configuration",module.exports.load=({onEventRegistered:e,report:o})=>{e("uncaughtException",(({context:e,handler:n})=>{e===process&&o({has_node_exception_handler:!0})})),e("unhandledRejection",(({context:e,handler:n})=>{e===process&&o({has_node_rejection_handler:!0})}))};

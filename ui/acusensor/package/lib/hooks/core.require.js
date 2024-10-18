@@ -1,0 +1,1 @@
+"use strict";module.exports.hook="core.require",module.exports.load=({proxyMethod:e,report:r,emitInternal:o})=>{e(require("module").prototype,"require",(function({args:e,stack:t}){r({id:e[0],path:require.resolve(e[0])},t),o({id:e[0],path:require.resolve(e[0])})}))};

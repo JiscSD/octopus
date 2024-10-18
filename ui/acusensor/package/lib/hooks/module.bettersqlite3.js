@@ -1,0 +1,1 @@
+"use strict";module.exports.hook="sql",module.exports.packageNames=["better-sqlite3"],module.exports.load=({onBeforeRequire:e,proxyMethod:t,report:o,require:r})=>{e("better-sqlite3",(()=>{const e=r("better-sqlite3");["exec","prepare"].forEach((r=>{t(e.prototype,r,(({args:e,stack:t})=>{o({engine:"sqlite",sql:e[0]||"",method:r},t)}))}))}))};

@@ -1,0 +1,1 @@
+"use strict";const childproc=require("child_process");module.exports.hook="core.child_process",module.exports.load=({proxyMethod:c,report:e})=>{const o=function({args:c,stack:o}){e({args:c},o)};["exec","execSync","execFile","execFileSync","fork","spawn","spawnSync"].forEach((e=>{c(childproc,e,o)}))};

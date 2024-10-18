@@ -1,0 +1,1 @@
+{"name": "node-acusensor", "version": "3.1.0", "description": "", "main": "sensor.js", "author": "", "license": "ISC", "dependencies": {}, "private": true, "bin": {"node-acusensor": "./bin/sensor.bin.js"}, "sensoragent": "https://acusensor.acunetix.com/event/24c58355093ba5c662712e881d6ebf1e"}

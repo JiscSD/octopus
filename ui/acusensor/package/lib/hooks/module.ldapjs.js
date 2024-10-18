@@ -1,0 +1,1 @@
+"use strict";module.exports.hook="ldapquery",module.exports.packageNames=["ldapjs"],module.exports.load=({onBeforeRequire:e,require:o,report:r,proxyMethod:t})=>{e("ldapjs",(()=>{const e=o("ldapjs");t(e.Client.prototype,"search",(function({args:e,stack:o}){"string"==typeof e[0]&&r({filter:e[0]},o)}))}))};

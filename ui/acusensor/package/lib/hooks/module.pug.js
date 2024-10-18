@@ -1,0 +1,1 @@
+"use strict";module.exports.hook="template",module.exports.packageNames=["pug"],module.exports.load=({onBeforeRequire:e,proxyMethod:o,report:r,require:t})=>{e("pug",(()=>{const e=t("pug");["compile","render"].forEach((t=>{o(e,t,(({args:e,stack:o})=>{const t=e[0];"string"==typeof t&&r({markup:t},o)}))}))}))};

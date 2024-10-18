@@ -1,0 +1,1 @@
+"use strict";module.exports.hook="sql",module.exports.packageNames=["sqlite3"],module.exports.load=({onBeforeRequire:e,proxyMethod:o,report:t,require:r})=>{e("sqlite3",(()=>{const e=r("sqlite3");["each","run","prepare","get","all","map"].forEach((r=>{o(e.Database.prototype,r,(({args:e,stack:o})=>{t({engine:"sqlite",sql:e[0]||"",method:r},o)}))}))}))};

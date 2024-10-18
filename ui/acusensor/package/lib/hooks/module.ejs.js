@@ -1,0 +1,1 @@
+"use strict";module.exports.hook="template",module.exports.packageNames=["ejs"],module.exports.load=({onBeforeRequire:e,proxyMethod:o,report:r,require:t})=>{e("ejs",(()=>{const e=t("ejs");["compile","render"].forEach((t=>{o(e,t,(({args:e,getReturnValue:o,stack:t})=>{const s=e[0];"string"==typeof s&&r({markup:s},t)}))}))}))};

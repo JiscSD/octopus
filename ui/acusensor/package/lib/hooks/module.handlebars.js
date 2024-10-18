@@ -1,0 +1,1 @@
+"use strict";module.exports.hook="template",module.exports.packageNames=["handlebars"],module.exports.load=({onBeforeRequire:e,proxyMethod:o,report:r,require:a})=>{e("handlebars",(()=>{const e=a("handlebars");["compile","precompile"].forEach((a=>{o(e,a,(({args:e,stack:o})=>{const a=e[0];"string"==typeof a&&r({markup:a},o)}))}))}))};

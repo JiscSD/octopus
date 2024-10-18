@@ -1,0 +1,1 @@
+"use strict";module.exports.hook="core.events",module.exports.load=({proxyMethod:e,emitInternal:t})=>{const o=require("events").prototype;["on","emit"].forEach((r=>{e(o,r,(function({args:e,stack:o}){if(["unref","beforeExit"].includes(e[0]))return!1;t({method:r,args:e,context:this})}))}))};

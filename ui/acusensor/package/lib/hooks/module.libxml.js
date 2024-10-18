@@ -1,0 +1,1 @@
+"use strict";module.exports.hook="xmlparser",module.exports.packageNames=["libxmljs"],module.exports.load=({onBeforeRequire:e,proxyMethod:o,report:r,require:s})=>{e("libxmljs",(()=>{const e=s("libxmljs");o(e,"parseXml",(({args:e,stack:o})=>{const s=e[0];if("string"!=typeof s)return;const t=e[1];t&&"object"==typeof t&&!0===t.noent&&r({markup:s},o)}))}))};
