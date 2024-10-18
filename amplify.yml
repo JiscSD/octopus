@@ -8,7 +8,6 @@ applications:
             - npm ci
         build:
           commands:
-            - npm install acusensor/node-acusensor.tar --no-save
             - npm run build
             - node amplify.mjs
       artifacts:
