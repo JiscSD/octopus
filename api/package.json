@@ -24,6 +24,7 @@
         "reindex": "ts-node scripts/reindex.ts",
         "createOrganisationalAccounts": "ts-node -r tsconfig-paths/register scripts/createOrganisationalAccounts.ts",
         "createTopicMappings": "ts-node -r tsconfig-paths/register scripts/createTopicMappings.ts",
+        "createTopics": "ts-node -r tsconfig-paths/register scripts/createTopics.ts",
         "createUserMappings": "ts-node -r tsconfig-paths/register scripts/createUserMappings.ts",
         "fullAriImport": "ts-node -r tsconfig-paths/register scripts/fullAriImport.ts",
         "updateOrganisationalAccount": "ts-node -r tsconfig-paths/register scripts/updateOrganisationalAccount.ts",
