@@ -26278,6 +26278,20 @@ const topics: Prisma.TopicCreateInput[] = [
                 }
             ]
         }
+    },
+    {
+        id: 'cm2it6nkj00009k9lehmh7vkj',
+        title: 'Civil Rights',
+        parents: {
+            connect: [
+                {
+                    id: 'cly468zhg004a7ryza5n7nlh2'
+                },
+                {
+                    id: 'clkv6ulwp01eal2rs74waj9sc'
+                }
+            ]
+        }
     }
 ];
 

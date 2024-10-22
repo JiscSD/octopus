@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import * as I from 'interface';
 import * as userController from 'user/controller';
 import * as fs from 'fs';

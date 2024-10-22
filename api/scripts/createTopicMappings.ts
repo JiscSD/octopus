@@ -8,6 +8,7 @@
  * npm run createTopicMappings -- environment=prod dryRun=false
  */
 
+import 'dotenv/config';
 import * as client from '../src/lib/client';
 import * as fs from 'fs';
 import * as Helpers from 'lib/helpers';

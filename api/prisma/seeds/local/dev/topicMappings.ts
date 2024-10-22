@@ -314,6 +314,12 @@ const topicMappings: Prisma.TopicMappingCreateManyInput[] = [
         isMapped: true
     },
     {
+        title: 'Civil Rights',
+        source: 'ARI',
+        topicId: 'cm2it6nkj00009k9lehmh7vkj',
+        isMapped: true
+    },
+    {
         title: 'Civil war',
         source: 'ARI',
         topicId: 'cly468ywd000x7ryz9e12502q',
@@ -3198,6 +3204,86 @@ const topicMappings: Prisma.TopicMappingCreateManyInput[] = [
         source: 'ARI',
         topicId: 'clkv6uir40078l2rsp2xvet66',
         isMapped: true
+    },
+    {
+        title: 'arts, culture, entertainment and media',
+        source: 'ARI',
+        isMapped: false
+    },
+    {
+        title: 'conflict, war and peace',
+        source: 'ARI',
+        isMapped: false
+    },
+    {
+        title: 'crime, law and justice',
+        source: 'ARI',
+        isMapped: false
+    },
+    {
+        title: 'disaster, accident and emergency incident',
+        source: 'ARI',
+        isMapped: false
+    },
+    {
+        title: 'economy, business and finance',
+        source: 'ARI',
+        isMapped: false
+    },
+    {
+        title: 'education',
+        source: 'ARI',
+        isMapped: false
+    },
+    {
+        title: 'environment',
+        source: 'ARI',
+        isMapped: false
+    },
+    {
+        title: 'health',
+        source: 'ARI',
+        isMapped: false
+    },
+    {
+        title: 'labour',
+        source: 'ARI',
+        isMapped: false
+    },
+    {
+        title: 'lifestyle and leisure',
+        source: 'ARI',
+        isMapped: false
+    },
+    {
+        title: 'politics',
+        source: 'ARI',
+        isMapped: false
+    },
+    {
+        title: 'religion',
+        source: 'ARI',
+        isMapped: false
+    },
+    {
+        title: 'science and technology',
+        source: 'ARI',
+        isMapped: false
+    },
+    {
+        title: 'society',
+        source: 'ARI',
+        isMapped: false
+    },
+    {
+        title: 'sport',
+        source: 'ARI',
+        isMapped: false
+    },
+    {
+        title: 'weather',
+        source: 'ARI',
+        isMapped: false
     }
 ];
 
