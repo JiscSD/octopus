@@ -208,7 +208,7 @@ const faqContents = [
         heading: 'How are related publications identified?',
         content: `
             <p className="mb-2">To avoid bias, Octopus does not use any sort of algorithm to identify related publications. Instead, whilst viewing a publication that has already been published, the related publications area displays publications that have been identified by readers as being related to the one currently being viewed.</p>
-            <p className="mb-2">To make sure that this section contains useful links, after clicking through to a related publication, you are able to vote on whether or not you think it is in some way relevant to the one just came from.</p>
+            <p className="mb-2">To make sure that this section contains useful links, after clicking through to a related publication, you are able to vote on whether or not you think it is in some way relevant to the one you just came from.</p>
             <p>If you know of another publication that is relevant to the one you are viewing, you can also use the “Suggest a link” option to add it to the list.</p>
         `
     }
