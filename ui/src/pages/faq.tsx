@@ -200,6 +200,17 @@ const faqContents = [
             <p className="mb-2">Both of these methods will log you out of Octopus. If you attempt to log in again after revoking access you&apos;ll be asked to "give Octopus permission to access your ORCID record" again.</p>
             <p>You will not be able to log into Octopus again without granting permission to access your ORCID record.</p>
         `
+    },
+    {
+        title: 'How are related publications identified?',
+        href: 'related_publications',
+        id: 'related_publications',
+        heading: 'How are related publications identified?',
+        content: `
+            <p className="mb-2">To avoid bias, Octopus does not use any sort of algorithm to identify related publications. Instead, whilst viewing a publication that has already been published, the related publications area displays publications that have been identified by readers as being related to the one currently being viewed.</p>
+            <p className="mb-2">To make sure that this section contains useful links, after clicking through to a related publication, you are able to vote on whether or not you think it is in some way relevant to the one you just came from.</p>
+            <p>If you know of another publication that is relevant to the one you are viewing, you can also use the “Suggest a link” option to add it to the list.</p>
+        `
     }
 ];
 
