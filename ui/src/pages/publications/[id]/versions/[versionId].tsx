@@ -42,6 +42,7 @@ const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestedId = context.query.id;
     const versionId = context.query.versionId;
+    const suggestedFromPublicationId = context.query.suggestedFrom;
     const token = Helpers.getJWT(context);
 
     // fetch data concurrently
@@ -53,7 +54,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         Promise<Interfaces.BookmarkedEntityData[] | void>,
         Promise<Interfaces.PublicationWithLinks | void>,
         Promise<Interfaces.Flag[] | void>,
-        Promise<Interfaces.GetPublicationMixedCrosslinksResponse | void>
+        Promise<Interfaces.GetPublicationMixedCrosslinksResponse | void>,
+        Promise<Interfaces.Crosslink | void>
     ] = [
         api
             .get(`${Config.endpoints.publications}/${requestedId}/publication-versions/${versionId}`, token)
@@ -90,7 +92,13 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         api
             .get(`${Config.endpoints.publications}/${requestedId}/crosslinks?order=mix`, token)
             .then((res) => res.data)
-            .catch((error) => console.log(error))
+            .catch((error) => console.log(error)),
+        suggestedFromPublicationId
+            ? api
+                  .get(`${Config.endpoints.crosslinks}/${suggestedFromPublicationId},${requestedId}`, token)
+                  .then((res) => res.data)
+                  .catch((error) => console.log(error))
+            : Promise.resolve()
     ];
 
     const [
@@ -98,8 +106,18 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         bookmarks = [],
         directLinks = { publication: null, linkedTo: [], linkedFrom: [] },
         flags = [],
-        crosslinks = []
+        crosslinks = [],
+        activeCrosslink = null
     ] = await Promise.all(promises);
+
+    let activeCrosslinkVote: Interfaces.CrosslinkVote | null = null;
+    if (suggestedFromPublicationId && activeCrosslink) {
+        activeCrosslinkVote =
+            (await api
+                .get(`${Config.endpoints.crosslinks}/${activeCrosslink.id}/vote`, token)
+                .then((res) => res.data)
+                .catch((error) => console.log(error))) ?? null;
+    }
 
     if (versionRequestError) {
         const status = versionRequestError.status;
@@ -126,7 +144,10 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
                 protectedPage: ['LOCKED', 'DRAFT'].includes(publicationVersion.currentStatus),
                 directLinks,
                 flags,
-                crosslinks
+                crosslinks,
+                suggestedFromPublicationId,
+                activeCrosslink,
+                activeCrosslinkVote
             }
         };
     } else {
@@ -143,6 +164,9 @@ type Props = {
     directLinks: Interfaces.PublicationWithLinks;
     flags: Interfaces.Flag[];
     crosslinks: Interfaces.GetPublicationMixedCrosslinksResponse;
+    suggestedFromPublicationId: string | null;
+    activeCrosslink: Interfaces.Crosslink | null;
+    activeCrosslinkVote: Interfaces.CrosslinkVote | null;
 };
 
 const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
@@ -495,6 +519,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const pageTitle = publicationVersion ? `${publicationVersion.title} - ${Config.urls.viewPublication.title}` : '';
     const contentText = publicationVersion?.content ? Helpers.htmlToText(publicationVersion.content) : '';
 
+    const suggestedFromPublication = props.activeCrosslink
+        ? props.activeCrosslink.publications.find((pub) => pub.id === props.suggestedFromPublicationId)
+        : null;
+
     // Collate all alerts that might be shown.
     const generateAlertComponents = (): React.ReactElement[] | null => {
         if (!publicationVersion) {
@@ -502,7 +530,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         }
         let alerts: React.ReactElement[] = [];
 
-        // Provide info about DRAFT publication status
+        // Provide info about DRAFT publication status.
         if (publicationVersion.currentStatus === 'DRAFT') {
             const draftBanner = isCorrespondingAuthor ? (
                 <Components.Alert
@@ -541,7 +569,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             alerts.push(draftBanner);
         }
 
-        // Indicate where control has been requested
+        // Indicate where control has been requested.
         if (hasAlreadyRequestedControl) {
             alerts.push(
                 <Components.Alert
@@ -552,9 +580,9 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             );
         }
 
-        // For Peer Reviews, show details of the reviewed publication (there must only be one)
+        // For Peer Reviews, show details of the reviewed publication (there must only be one).
         if (publication?.type === 'PEER_REVIEW' && linkedTo.length === 1) {
-            // Peer review is of current live version
+            // Peer review is of current live version.
             if (linkedTo[0].parentVersionIsLatestLive) {
                 alerts.push(
                     <Components.Alert severity="INFO" className="mb-4 text-white-100  dark:text-grey-50">
@@ -569,7 +597,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     </Components.Alert>
                 );
             }
-            // Peer review is of outdated version - render alert if we have all details
+            // Peer review is of outdated version - render alert if we have all details.
             else if (linkedTo[0].parentVersionNumber && linkedTo[0].parentVersionId) {
                 alerts.push(
                     <Components.Alert
@@ -592,9 +620,21 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             }
         }
 
-        // General API error
+        // General API error.
         if (serverError) {
             alerts.push(<Components.Alert severity="ERROR" className="mb-4" title={serverError} />);
+        }
+
+        // If user navigated here from a crosslinked page (defined by query param), show info and voting controls.
+        if (props.activeCrosslink && suggestedFromPublication) {
+            alerts.push(
+                <Components.RelatedPublicationsVotingArea
+                    key="related-publications-voting-area"
+                    suggestedFromPublication={suggestedFromPublication}
+                    crosslink={props.activeCrosslink}
+                    vote={props.activeCrosslinkVote === null ? null : props.activeCrosslinkVote.vote}
+                />
+            );
         }
 
         return alerts;

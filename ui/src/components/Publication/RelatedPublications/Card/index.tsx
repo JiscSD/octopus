@@ -7,7 +7,7 @@ import * as Helpers from '@/helpers';
 import * as Config from '@/config';
 
 type Props = {
-    crosslink: Interfaces.Crosslink;
+    crosslink: Interfaces.RelativeCrosslink;
 };
 
 const Card: React.FC<Props> = (props): React.ReactElement => {

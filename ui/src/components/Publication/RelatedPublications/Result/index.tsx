@@ -10,7 +10,7 @@ import * as Stores from '@/stores';
 
 type Props = {
     className?: string;
-    crosslink: Interfaces.Crosslink;
+    crosslink: Interfaces.RelativeCrosslink;
     mutateList: () => void; // Refetch the list of related publications, e.g. after this one is deleted.
     setError: (message: string) => void;
 };
