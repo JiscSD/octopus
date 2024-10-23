@@ -27,77 +27,74 @@ const RelatedPublications: React.FC<Props> = (props) => {
     };
 
     return (
-        // TODO: Remove this condition when crosslinking is fully released.
-        (process.env.NEXT_PUBLIC_STAGE === 'local' || !!totalCrosslinks) && (
-            <Components.AccordionSection id={props.id} title={'Related Publications'}>
-                <div className="space-y-4 px-6 py-4">
-                    {!!recent.length && (
-                        <section className="flex flex-col">
-                            {!!relevant.length && (
-                                <span className="uppercase leading-0 block font-montserrat text-xs font-bold tracking-wide text-teal-400 dark:text-teal-200">
-                                    Most recent
-                                </span>
-                            )}
-                            {recent.map((crosslink) => (
-                                <Components.RelatedPublicationsCard
-                                    crosslink={crosslink}
-                                    key={crosslink.linkedPublication.id}
+        <Components.AccordionSection id={props.id} title={'Related Publications'}>
+            <div className="space-y-4 px-6 py-4">
+                {!!recent.length && (
+                    <section className="flex flex-col">
+                        {!!relevant.length && (
+                            <span className="uppercase leading-0 block font-montserrat text-xs font-bold tracking-wide text-teal-400 dark:text-teal-200">
+                                Most recent
+                            </span>
+                        )}
+                        {recent.map((crosslink) => (
+                            <Components.RelatedPublicationsCard
+                                crosslink={crosslink}
+                                key={crosslink.linkedPublication.id}
+                            />
+                        ))}
+                    </section>
+                )}
+                {!!relevant.length && (
+                    <section className="flex flex-col border-grey-200 border-t pt-4">
+                        {!!recent.length && (
+                            <span className="uppercase leading-0 block font-montserrat text-xs font-bold tracking-wide text-teal-400 dark:text-teal-200">
+                                Most relevant
+                            </span>
+                        )}
+                        {relevant.map((crosslink) => (
+                            <Components.RelatedPublicationsCard
+                                crosslink={crosslink}
+                                key={crosslink.linkedPublication.id}
+                            />
+                        ))}
+                    </section>
+                )}
+                {(showShowAllButton || (user && props.type)) && (
+                    <div className="flex flex-col md:flex-row lg:flex-col gap-4 justify-between ">
+                        {showShowAllButton && (
+                            <>
+                                <Components.Button
+                                    title="Show All"
+                                    className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50 justify-center w-full md:w-1/2 lg:w-full"
+                                    onClick={openViewAllModal}
                                 />
-                            ))}
-                        </section>
-                    )}
-                    {!!relevant.length && (
-                        <section className="flex flex-col border-grey-200 border-t pt-4">
-                            {!!recent.length && (
-                                <span className="uppercase leading-0 block font-montserrat text-xs font-bold tracking-wide text-teal-400 dark:text-teal-200">
-                                    Most relevant
-                                </span>
-                            )}
-                            {relevant.map((crosslink) => (
-                                <Components.RelatedPublicationsCard
-                                    crosslink={crosslink}
-                                    key={crosslink.linkedPublication.id}
+                                <Components.RelatedPublicationsViewAllModal
+                                    publicationId={props.publicationId}
+                                    open={viewAllModalVisibility}
+                                    onClose={() => setViewAllModalVisibility(false)}
+                                    key={viewAllModalKey}
                                 />
-                            ))}
-                        </section>
-                    )}
-                    {(showShowAllButton || (user && props.type)) && (
-                        <div className="flex flex-col md:flex-row lg:flex-col gap-4 justify-between ">
-                            {showShowAllButton && (
-                                <>
-                                    <Components.Button
-                                        title="Show All"
-                                        className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50 justify-center w-full md:w-1/2 lg:w-full"
-                                        onClick={openViewAllModal}
-                                    />
-                                    <Components.RelatedPublicationsViewAllModal
-                                        publicationId={props.publicationId}
-                                        open={viewAllModalVisibility}
-                                        onClose={() => setViewAllModalVisibility(false)}
-                                        key={viewAllModalKey}
-                                    />
-                                </>
-                            )}
-                            {user && props.type && (
-                                <>
-                                    <Components.Button
-                                        title="Suggest a link"
-                                        className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50 justify-center w-full md:w-1/2 lg:w-full"
-                                        onClick={() => setSuggestModalVisibility((prevState) => !prevState)}
-                                    />
-                                    <Components.RelatedPublicationsSuggestModal
-                                        publicationId={props.publicationId}
-                                        type={props.type}
-                                        open={suggestModalVisibility}
-                                        onClose={() => setSuggestModalVisibility(false)}
-                                    />
-                                </>
-                            )}
-                        </div>
-                    )}
-                </div>
-            </Components.AccordionSection>
-        )
+                            </>
+                        )}
+                        {user && props.type && (
+                            <>
+                                <Components.Button
+                                    title="Suggest a link"
+                                    className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50 justify-center w-full md:w-1/2 lg:w-full"
+                                    onClick={() => setSuggestModalVisibility((prevState) => !prevState)}
+                                />
+                                <Components.RelatedPublicationsSuggestModal
+                                    publicationId={props.publicationId}
+                                    type={props.type}
+                                    open={suggestModalVisibility}
+                                    onClose={() => setSuggestModalVisibility(false)}
+                                />
+                            </>
+                        )}
+                    </div>
+                )}
+            </div>
+        </Components.AccordionSection>
     );
 };
 
