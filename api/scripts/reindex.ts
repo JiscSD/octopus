@@ -1,5 +1,5 @@
+import 'dotenv/config';
 import { convert } from 'html-to-text';
-
 import * as client from '../src/lib/client';
 
 const reindex = async (): Promise<void> => {

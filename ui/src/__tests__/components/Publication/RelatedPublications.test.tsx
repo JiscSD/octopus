@@ -42,7 +42,7 @@ describe('No crosslinks', () => {
 const crosslinkBase = TestUtils.testCrosslink;
 const title = crosslinkBase.linkedPublication.latestLiveVersion.title;
 
-describe('Recent and relevant crosslinks', () => {
+describe('Recent and relevant crosslinks / general tests', () => {
     beforeEach(() => {
         render(
             <Components.RelatedPublications
@@ -100,6 +100,12 @@ describe('Recent and relevant crosslinks', () => {
     it('3 relevant crosslinks are shown', () => {
         const recentSection = document.getElementsByTagName('section')[2];
         expect(within(recentSection).getAllByText(title)).toHaveLength(3);
+    });
+
+    it('Link to FAQ is present', () => {
+        const link = screen.getByRole('link', { name: 'Related publications section in FAQ' });
+        expect(link).toHaveTextContent('What is this?');
+        expect(link).toHaveAttribute('href', '/faq#related_publications');
     });
 });
 

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import * as Components from '@/components';
 import * as Config from '@/config';
 import * as Interfaces from '@/interfaces';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Stores from '@/stores';
 import * as Types from '@/types';
 
@@ -31,7 +32,16 @@ const RelatedPublications: React.FC<Props> = (props) => {
 
     return (
         <Components.AccordionSection id={props.id} title={'Related Publications'}>
-            <div className="space-y-4 px-6 py-4">
+            <div className="flex flex-col space-y-4 px-6 py-4">
+                <Components.Button
+                    title="Related publications section in FAQ"
+                    className="self-end"
+                    endIcon={<OutlineIcons.InformationCircleIcon className="w-6 text-teal-600 dark:text-teal-200" />}
+                    openNew={true}
+                    href={Config.urls.faq.path + '#related_publications'}
+                >
+                    <span className="text-teal-600 dark:text-teal-200">What is this?</span>
+                </Components.Button>
                 {!!recent.length && (
                     <section className="flex flex-col">
                         {!!relevant.length && (
