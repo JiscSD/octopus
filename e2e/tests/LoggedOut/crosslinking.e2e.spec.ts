@@ -80,7 +80,7 @@ test.describe('Crosslinking', () => {
         // Change order.
         await expect(page.getByRole('link', { name: 'Visit publication' }).first()).toHaveAttribute(
             'href',
-            '/publications/publication-user-7-peer-review-1-live'
+            '/publications/publication-user-7-peer-review-1-live?suggestedFrom=publication-user-1-problem-1-live'
         );
         await orderByRelevance.click();
         await page.waitForResponse((response) => response.url().includes('/crosslinks') && response.ok());
@@ -88,7 +88,7 @@ test.describe('Crosslinking', () => {
         await expect(orderByRelevance).toBeChecked();
         await expect(page.getByRole('link', { name: 'Visit publication' }).first()).toHaveAttribute(
             'href',
-            '/publications/publication-user-7-problem-1-live'
+            '/publications/publication-user-7-problem-1-live?suggestedFrom=publication-user-1-problem-1-live'
         );
         // Filter results.
         await page.getByLabel('Search for suggested links').fill('complicated');
@@ -96,7 +96,7 @@ test.describe('Crosslinking', () => {
         await expect(page.getByRole('link', { name: 'Visit publication' })).toHaveCount(1);
         await expect(page.getByRole('link', { name: 'Visit publication' }).first()).toHaveAttribute(
             'href',
-            '/publications/publication-user-5-data-1-live'
+            '/publications/publication-user-5-data-1-live?suggestedFrom=publication-user-1-problem-1-live'
         );
         await page.getByLabel('Search for suggested links').clear();
         await page.waitForResponse((response) => response.url().includes('/crosslinks') && response.ok());

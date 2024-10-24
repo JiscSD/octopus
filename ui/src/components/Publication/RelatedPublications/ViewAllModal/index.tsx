@@ -172,6 +172,7 @@ const RelatedPublicationsViewAllModal: React.FC<Props> = (props): React.ReactEle
                                     <Components.RelatedPublicationsResult
                                         key={crosslink.id}
                                         crosslink={crosslink}
+                                        sourcePublicationId={props.publicationId}
                                         setError={setGenericError}
                                         mutateList={mutate}
                                     />

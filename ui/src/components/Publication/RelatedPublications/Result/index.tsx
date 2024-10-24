@@ -11,6 +11,7 @@ import * as Stores from '@/stores';
 type Props = {
     className?: string;
     crosslink: Interfaces.RelativeCrosslink;
+    sourcePublicationId: string;
     mutateList: () => void; // Refetch the list of related publications, e.g. after this one is deleted.
     setError: (message: string) => void;
 };
@@ -83,7 +84,7 @@ const RelatedPublicationsResult: React.FC<Props> = (props): React.ReactElement =
                 </span>
                 <span className="flex">
                     <Components.Link
-                        href={`${Config.urls.viewPublication.path}/${publicationId}`}
+                        href={`${Config.urls.viewPublication.path}/${publicationId}?suggestedFrom=${props.sourcePublicationId}`}
                         openNew={true}
                         ariaLabel={'Visit publication'}
                         className="block p-1"
