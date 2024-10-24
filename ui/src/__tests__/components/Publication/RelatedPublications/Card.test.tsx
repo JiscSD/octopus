@@ -9,7 +9,7 @@ const crosslink = TestUtils.testCrosslink;
 
 describe('Related publication card', () => {
     beforeEach(() => {
-        render(<Components.RelatedPublicationsCard crosslink={crosslink} />);
+        render(<Components.RelatedPublicationsCard crosslink={crosslink} sourcePublicationId="source-publication" />);
     });
 
     it('Title is shown', () => {
@@ -29,7 +29,10 @@ describe('Related publication card', () => {
     it('Visit publication link is shown', () => {
         const link = screen.getByRole('link');
         expect(link).toHaveTextContent('View this publication');
-        expect(link).toHaveAttribute('href', `${Config.urls.viewPublication.path}/${crosslink.linkedPublication.id}`);
+        expect(link).toHaveAttribute(
+            'href',
+            `${Config.urls.viewPublication.path}/${crosslink.linkedPublication.id}?suggestedFrom=source-publication`
+        );
     });
 });
 
@@ -47,6 +50,7 @@ describe('Standalone tests', () => {
                         }
                     }
                 }}
+                sourcePublicationId="source-publication"
             />
         );
         expect(

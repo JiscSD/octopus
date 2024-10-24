@@ -264,11 +264,22 @@ export const PageModel = {
         blogCardFooter: '.blog-card-footer'
     },
     crosslinks: {
+        relatedPublicationsSidebar: {
+            suggestLinkButton: '#desktop-related-publications >> button[title="Suggest a link"]',
+            suggestLinkButtonLoggedOut: '#desktop-related-publications >> a[title="Sign in to suggest a link"]',
+            toggle: '#desktop-related-publications >> button[title="Related Publications"]'
+        },
+        showAllModal: {},
         suggestModal: {
             clearSelectionButton: 'button[title="Clear selection"]',
-            openButton: '#desktop-related-publications >> button[title="Suggest a link"]',
+            openButtonLoggedIn: '#desktop-related-publications >> button[title="Suggest a link"]',
+            suggestButtonLoggedOut: 'button[title="Sign in to suggest a link"]',
             searchInput: 'input[placeholder="Search for publications"]',
             suggestButton: 'button[title="Suggest Link"]'
+        },
+        votingArea: {
+            upvoteButton: 'button[title="Upvote"]',
+            downvoteButton: 'button[title="Downvote"]'
         }
     }
 };

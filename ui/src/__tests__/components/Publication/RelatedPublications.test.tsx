@@ -4,6 +4,14 @@ import { render, screen } from '@testing-library/react';
 import * as Components from '@/components';
 import * as TestUtils from '@/testUtils';
 
+jest.mock('next/router', () => ({
+    useRouter() {
+        return {
+            asPath: jest.fn()
+        };
+    }
+}));
+
 describe('No crosslinks', () => {
     beforeEach(() => {
         render(
@@ -25,6 +33,9 @@ describe('No crosslinks', () => {
     it('Neither category label is shown', () => {
         expect(screen.queryByText('Most relevant')).not.toBeInTheDocument();
         expect(screen.queryByText('Most recent')).not.toBeInTheDocument();
+    });
+    it('Sign in button is shown', () => {
+        expect(screen.getByRole('link', { name: 'Sign in to suggest a link' })).toBeInTheDocument();
     });
 });
 

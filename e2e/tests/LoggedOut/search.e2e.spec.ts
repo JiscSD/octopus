@@ -9,7 +9,7 @@ test.describe('Publication search', () => {
         await page.goto('/');
 
         // search and check result
-        await Helpers.search(page, 'How has life on earth evolved?', PageModel.search.publicationSearchResult);
+        await Helpers.search.search(page, 'How has life on earth evolved?', PageModel.search.publicationSearchResult);
 
         // Click on search result
         await page.locator(PageModel.search.publicationSearchResult).click();
@@ -22,7 +22,7 @@ test.describe('Publication search', () => {
         await page.goto('/');
 
         // search and check result
-        await Helpers.search(page, 'life evolved', PageModel.search.publicationSearchResult);
+        await Helpers.search.search(page, 'life evolved', PageModel.search.publicationSearchResult);
 
         // Click on search result
         await page.locator(PageModel.search.publicationSearchResult).click();
@@ -35,7 +35,7 @@ test.describe('Publication search', () => {
         await page.goto('/');
 
         // search and check error
-        await Helpers.search(page, 'thisShouldProduceNoResults', PageModel.search.noPublicationsFound);
+        await Helpers.search.search(page, 'thisShouldProduceNoResults', PageModel.search.noPublicationsFound);
     });
 
     test.skip('Search filters', async ({ browser }) => {

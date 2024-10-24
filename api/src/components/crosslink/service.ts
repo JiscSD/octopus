@@ -42,22 +42,27 @@ const crosslinkGetBaseArgs = {
     }
 };
 
-type GetCrosslinkPublication = { id: string; versions: { title: string | null }[] };
+type GetCrosslinkPublication = { id: string; title: string | null };
 
 const simplifyCrosslinkForGetFunctions = (
     rawCrosslink: Prisma.CrosslinkGetPayload<typeof crosslinkGetBaseArgs> | null
 ): {
+    id: string;
     publications: [GetCrosslinkPublication, GetCrosslinkPublication];
-    upVotes: number;
-    downVotes: number;
+    upvotes: number;
+    downvotes: number;
     createdBy: string;
     createdAt: Date;
 } | null => {
     return rawCrosslink
         ? {
-              publications: [rawCrosslink.publicationFrom, rawCrosslink.publicationTo],
-              upVotes: rawCrosslink.votes.filter((vote) => vote.vote).length,
-              downVotes: rawCrosslink.votes.filter((vote) => !vote.vote).length,
+              id: rawCrosslink.id,
+              publications: [
+                  { id: rawCrosslink.publicationFrom.id, title: rawCrosslink.publicationFrom.versions[0].title },
+                  { id: rawCrosslink.publicationTo.id, title: rawCrosslink.publicationTo.versions[0].title }
+              ],
+              upvotes: rawCrosslink.votes.filter((vote) => vote.vote).length,
+              downvotes: rawCrosslink.votes.filter((vote) => !vote.vote).length,
               createdBy: rawCrosslink.createdBy,
               createdAt: rawCrosslink.createdAt
           }

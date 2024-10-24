@@ -23,7 +23,7 @@ test.describe('Live Publication', () => {
         await expect(page.locator('h1')).toHaveText('How has life on earth evolved?');
 
         // Check sections
-        await Helpers.checkLivePublicationLayout(page, 'cl3fz14dr0001es6i5ji51rq4');
+        await Helpers.livePublication.checkLivePublicationLayout(page, 'cl3fz14dr0001es6i5ji51rq4');
 
         // Check sign in for more button and that bookmark, flag link, review link are not visible
         await expect(page.locator(PageModel.livePublication.signInForMoreButton).locator('visible=true')).toBeVisible();
@@ -45,7 +45,7 @@ test.describe('Live Publication', () => {
         await page.goto('/');
         // Uncomment and move this test if it gets worked on - it shouldn't be in LoggedOut directory if it logs in.
         // await Helpers.login(page, browser);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user1.fullName}`);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.users.user1.fullName}`);
 
         await page.locator(PageModel.header.searchButton).click();
         await page.locator(PageModel.search.searchInput).click();

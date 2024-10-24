@@ -80,7 +80,9 @@ export const setVote = async (
         const vote = await crosslinkService.setVote(event.pathParameters.id, event.user.id, event.body.vote);
 
         return response.json(200, vote);
-    } catch {
+    } catch (err) {
+        console.log(err);
+
         return response.json(500, { message: 'Unknown server error.' });
     }
 };

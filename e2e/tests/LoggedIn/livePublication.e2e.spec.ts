@@ -88,22 +88,22 @@ export const testFlagging = async (page: Page, id: string, redFlagContent: strin
 
 test.describe('Live Publication', () => {
     test('Live Publication page contents', async ({ browser }) => {
-        const page = await Helpers.getPageAsUser(browser);
-        await Helpers.checkLivePublicationLayout(page, 'cl3fz14dr0001es6i5ji51rq4', true);
+        const page = await Helpers.users.getPageAsUser(browser);
+        await Helpers.livePublication.checkLivePublicationLayout(page, 'cl3fz14dr0001es6i5ji51rq4', true);
     });
 
     test('Bookmarking a publication', async ({ browser }) => {
-        const page = await Helpers.getPageAsUser(browser);
+        const page = await Helpers.users.getPageAsUser(browser);
         await testBookmarking(page, 'cl3fz14dr0001es6i5ji51rq4');
     });
 
     test('Flagging a publication', async ({ browser }) => {
-        const page = await Helpers.getPageAsUser(browser);
+        const page = await Helpers.users.getPageAsUser(browser);
         await testFlagging(page, 'cl3fz14dr0001es6i5ji51rq4', 'testing the flagging functionality');
     });
 
     test('Author profile', async ({ browser }) => {
-        const page = await Helpers.getPageAsUser(browser);
+        const page = await Helpers.users.getPageAsUser(browser);
         await page.goto(`/publications/cl3fz14dr0001es6i5ji51rq4`, { waitUntil: 'domcontentloaded' });
 
         // Check and click author link
@@ -125,7 +125,7 @@ test.describe('Live Publication', () => {
     });
 
     test('Download pdf/json', async ({ browser, headless }) => {
-        const page = await Helpers.getPageAsUser(browser);
+        const page = await Helpers.users.getPageAsUser(browser);
         await page.goto(`/publications/cl3fz14dr0001es6i5ji51rq4`, { waitUntil: 'domcontentloaded' });
 
         // Behaviour is different depending on whether test is running headless or not.

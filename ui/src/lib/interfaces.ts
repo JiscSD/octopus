@@ -540,6 +540,24 @@ export interface AuthorSearchQuery extends ParsedUrlQuery {
 // Crosslinking
 export interface Crosslink {
     id: string;
+    publications: [
+        {
+            id: string;
+            title: string;
+        },
+        {
+            id: string;
+            title: string;
+        }
+    ];
+    upvotes: number;
+    downvotes: number;
+    createdBy: string;
+    createdAt: string;
+}
+
+export interface RelativeCrosslink {
+    id: string;
     linkedPublication: {
         id: string;
         latestLiveVersion: Pick<PublicationVersion, 'title'> & {
@@ -558,16 +576,22 @@ export interface Crosslink {
 }
 
 export interface MixedCrosslinks {
-    recent: Crosslink[];
-    relevant: Crosslink[];
+    recent: RelativeCrosslink[];
+    relevant: RelativeCrosslink[];
 }
 
 export interface GetPublicationCrosslinksResponse {
-    data: Crosslink[];
+    data: RelativeCrosslink[];
     metadata: SearchResultMeta;
 }
 
 export interface GetPublicationMixedCrosslinksResponse {
     data: MixedCrosslinks;
     metadata: SearchResultMeta;
+}
+
+export interface CrosslinkVote {
+    crosslinkId: string;
+    createdBy: string;
+    vote: boolean;
 }
