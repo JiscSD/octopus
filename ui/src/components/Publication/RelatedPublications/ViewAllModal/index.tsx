@@ -57,7 +57,7 @@ const RelatedPublicationsViewAllModal: React.FC<Props> = (props): React.ReactEle
             open={props.open}
             onClose={props.onClose}
             cancelButtonText="Close"
-            title="Related Content"
+            title="Related Publications"
             titleClasses="text-left"
             wide={true}
         >
