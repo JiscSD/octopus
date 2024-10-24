@@ -1431,7 +1431,7 @@ const createDOIPayload = async (
                     {
                         name: Helpers.abbreviateUserName(publicationVersion.user),
                         contributorType: 'ContactPerson',
-                        nameType: 'Personal',
+                        nameType: publicationVersion.user.role === 'ORGANISATION' ? 'Organizational' : 'Personal',
                         givenName: publicationVersion.user.firstName,
                         familyName: publicationVersion.user.lastName,
                         nameIdentifiers: [
