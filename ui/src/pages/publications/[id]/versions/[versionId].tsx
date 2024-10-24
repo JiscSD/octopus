@@ -42,7 +42,7 @@ const SidebarCard: React.FC<SidebarCardProps> = (props): React.ReactElement => (
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const requestedId = context.query.id;
     const versionId = context.query.versionId;
-    const suggestedFromPublicationId = context.query.suggestedFrom;
+    const suggestedFromPublicationId = context.query.suggestedFrom || null;
     const token = Helpers.getJWT(context);
 
     // fetch data concurrently
@@ -642,7 +642,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
     const alerts = generateAlertComponents();
 
-    return publicationVersion ? (
+    return publication && publicationVersion ? (
         <>
             <Head>
                 <title>{pageTitle}</title>
@@ -792,7 +792,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             <Components.RelatedPublications
                                 id="mobile-related-publications"
                                 publicationId={props.publicationId}
-                                type={publication?.type}
+                                type={publication.type}
                                 crosslinks={props.crosslinks}
                             />
                         </div>

@@ -113,7 +113,7 @@ const VotingArea: React.FC<Props> = (props): React.ReactElement => {
             </div>
             <p className={paragraphClasses}>
                 <a
-                    href={Config.urls.viewPublication.path + props.suggestedFromPublication.id}
+                    href={Config.urls.viewPublication.path + '/' + props.suggestedFromPublication.id}
                     className="underline underline-offset-4"
                 >
                     Return to previous publication
