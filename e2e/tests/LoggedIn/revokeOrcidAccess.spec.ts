@@ -10,7 +10,7 @@ test.describe('Revoke ORCID access', () => {
         await page.goto('/');
 
         // login into Octopus - this process will log the user into ORCID as well
-        await Helpers.login(page, browser, Helpers.user4);
+        await Helpers.users.login(page, browser, Helpers.users.user4);
 
         // navigate to ORCID and revoke access for Octopus
         await page.goto('https://sandbox.orcid.org/signin');
@@ -62,8 +62,8 @@ test.describe('Revoke ORCID access', () => {
     test('Can revoke ORCID access from Octopus', async ({ browser }) => {
         const page = await browser.newPage();
         await page.goto('/');
-        await Helpers.login(page, browser, Helpers.user4);
-        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.user4.fullName}`);
+        await Helpers.users.login(page, browser, Helpers.users.user4);
+        await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${Helpers.users.user4.fullName}`);
 
         await page.click(PageModel.header.usernameButton);
 
@@ -83,8 +83,8 @@ test.describe('Revoke ORCID access', () => {
         await Promise.all([page.waitForNavigation(), page.click(PageModel.header.loginButton)]);
 
         await page.waitForLoadState('domcontentloaded');
-        await page.fill(PageModel.login.username, Helpers.user4.email);
-        await page.fill(PageModel.login.password, Helpers.user4.password);
+        await page.fill(PageModel.login.username, Helpers.users.user4.email);
+        await page.fill(PageModel.login.password, Helpers.users.user4.password);
 
         await Promise.all([
             page.waitForNavigation(), // wait to see if authorization is required
