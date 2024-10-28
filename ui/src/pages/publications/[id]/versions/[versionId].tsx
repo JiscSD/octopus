@@ -101,22 +101,16 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             : Promise.resolve()
     ];
 
-    const [
-        { publicationVersion, versionRequestError },
-        bookmarks = [],
-        directLinks = { publication: null, linkedTo: [], linkedFrom: [] },
-        flags = [],
-        crosslinks = [],
-        activeCrosslink = null
-    ] = await Promise.all(promises);
+    const [{ publicationVersion, versionRequestError }, bookmarks, directLinks, flags, crosslinks, activeCrosslink] =
+        await Promise.all(promises);
 
     let activeCrosslinkVote: Interfaces.CrosslinkVote | null = null;
     if (suggestedFromPublicationId && activeCrosslink) {
-        activeCrosslinkVote =
-            (await api
-                .get(`${Config.endpoints.crosslinks}/${activeCrosslink.id}/vote`, token)
-                .then((res) => res.data)
-                .catch((error) => console.log(error))) ?? null;
+        api.get(`${Config.endpoints.crosslinks}/${activeCrosslink.id}/vote`, token)
+            .then((res) => {
+                activeCrosslinkVote = res.data;
+            })
+            .catch((error) => console.log(error));
     }
 
     if (versionRequestError) {
@@ -139,14 +133,14 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         return {
             props: {
                 publicationVersion,
-                bookmarkId: bookmarks.length ? bookmarks[0].id : null,
+                bookmarkId: bookmarks?.length ? bookmarks[0].id : null,
                 publicationId: publicationVersion.publication.id,
                 protectedPage: ['LOCKED', 'DRAFT'].includes(publicationVersion.currentStatus),
                 directLinks,
                 flags,
                 crosslinks,
                 suggestedFromPublicationId,
-                activeCrosslink,
+                activeCrosslink: activeCrosslink || null,
                 activeCrosslinkVote
             }
         };

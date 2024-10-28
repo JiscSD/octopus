@@ -25,13 +25,13 @@ const VotingArea: React.FC<Props> = (props): React.ReactElement => {
     const [downvotes, setDownvotes] = useState<number>(props.crosslink.downvotes);
     const paragraphClasses = 'mt-4 text-sm text-white-100 dark:text-grey-50';
 
-    const handleVote = async (vote: boolean) => {
-        const resettingUpvote = vote && userHasUpvoted;
-        const resettingDownVote = !vote && userHasDownVoted;
+    const handleVote = async (isUpVote: boolean) => {
+        const resettingUpvote = isUpVote && userHasUpvoted;
+        const resettingDownVote = !isUpVote && userHasDownVoted;
         const resettingVote = resettingUpvote || resettingDownVote;
         const neutralToVote = !userHasUpvoted && !userHasDownVoted;
-        const downToUp = vote && userHasDownVoted;
-        const upToDown = !vote && userHasUpvoted;
+        const downToUp = isUpVote && userHasDownVoted;
+        const upToDown = !isUpVote && userHasUpvoted;
         const changingVote = neutralToVote || downToUp || upToDown;
 
         if (resettingVote) {
@@ -49,8 +49,9 @@ const VotingArea: React.FC<Props> = (props): React.ReactElement => {
             } finally {
                 return;
             }
-        } else if (changingVote) {
-            if (vote) {
+        }
+        if (changingVote) {
+            if (isUpVote) {
                 setUserHasUpvoted(true);
                 setUpvotes((prev) => prev + 1);
                 if (downToUp) {
@@ -66,7 +67,7 @@ const VotingArea: React.FC<Props> = (props): React.ReactElement => {
                 }
             }
             try {
-                await api.put(`/crosslinks/${props.crosslink.id}/vote`, { vote }, user?.token);
+                await api.put(`/crosslinks/${props.crosslink.id}/vote`, { vote: isUpVote }, user?.token);
             } catch (err) {
                 console.log(err);
             } finally {
