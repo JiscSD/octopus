@@ -764,6 +764,7 @@ export interface DataCiteUser {
     lastName: string | null;
     orcid: string | null;
     affiliations: MappedOrcidAffiliation[];
+    role: Role;
 }
 export interface GeneratePDFPathParams {
     publicationId: string;

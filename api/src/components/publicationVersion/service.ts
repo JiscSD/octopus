@@ -1275,7 +1275,7 @@ const createCreatorObject = (user: I.DataCiteUser): I.DataCiteCreator => {
         name: Helpers.abbreviateUserName(user), // datacite expects full name in lastname, firstname order
         givenName: user?.firstName,
         familyName: user?.lastName,
-        nameType: 'Personal',
+        nameType: user.role === 'ORGANISATION' ? 'Organizational' : 'Personal',
         nameIdentifiers: [
             {
                 nameIdentifier: user?.orcid ? user?.orcid : 'ORCID iD not provided',
@@ -1332,7 +1332,8 @@ const createDOIPayload = async (
                     firstName: author.user.firstName,
                     lastName: author.user.lastName,
                     orcid: author.user.orcid,
-                    affiliations: author.affiliations as unknown as I.MappedOrcidAffiliation[]
+                    affiliations: author.affiliations as unknown as I.MappedOrcidAffiliation[],
+                    role: author.user.role
                 })
             );
         }
@@ -1346,7 +1347,8 @@ const createDOIPayload = async (
                 firstName: publicationVersion.user.firstName,
                 lastName: publicationVersion.user.lastName,
                 orcid: publicationVersion.user.orcid,
-                affiliations: []
+                affiliations: [],
+                role: publicationVersion.user.role
             })
         );
     }
