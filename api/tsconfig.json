@@ -81,6 +81,9 @@
             "link/*": [
                 "src/components/link/*"
             ],
+            "pdf/*": [
+                "src/components/pdf/*"
+            ],
             "publication/*": [
                 "src/components/publication/*"
             ],
