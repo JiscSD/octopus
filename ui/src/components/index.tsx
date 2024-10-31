@@ -86,6 +86,7 @@ export { default as RelatedPublicationsCard } from './Publication/RelatedPublica
 export { default as RelatedPublicationsResult } from './Publication/RelatedPublications/Result';
 export { default as RelatedPublicationsSuggestModal } from './Publication/RelatedPublications/SuggestModal';
 export { default as RelatedPublicationsViewAllModal } from './Publication/RelatedPublications/ViewAllModal';
+export { default as RelatedPublicationsVotingArea } from './Publication/RelatedPublications/VotingArea';
 export { default as RequiredIndicator } from './RequiredIndicator';
 export { default as ScrollToTop } from './ScrollToTop';
 export { default as Search } from './SearchToggle';

@@ -10,7 +10,7 @@ test.describe('My account page', () => {
     let page: Page;
 
     test.beforeAll(async ({ browser }) => {
-        page = await Helpers.getPageAsUser(browser);
+        page = await Helpers.users.getPageAsUser(browser);
         await page.goto(`/account`);
     });
 
@@ -19,7 +19,7 @@ test.describe('My account page', () => {
     });
 
     test('My account page filters are enabled by default', async () => {
-        await expect(page.locator(`h1:has-text("${Helpers.user1.fullName}")`)).toBeVisible();
+        await expect(page.locator(`h1:has-text("${Helpers.users.user1.fullName}")`)).toBeVisible();
 
         const includeLiveVersion = page.locator('input#include-live-version');
         const includeDraftVersion = page.locator('input#include-draft-version');

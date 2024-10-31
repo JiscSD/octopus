@@ -1,38 +1,6 @@
-import { Browser, expect, Locator, Page } from '@playwright/test';
-import { PageModel } from './PageModel';
-
-export const MAILPIT = process.env.MAILPIT;
-
-export const STORAGE_STATE_BASE = 'playwright/.auth/';
-
-const requiredEnvVariables = [
-    'ORCID_TEST_USER',
-    'ORCID_TEST_PASS',
-    'ORCID_TEST_FIRST_NAME',
-    'ORCID_TEST_LAST_NAME',
-    'ORCID_TEST_USER2',
-    'ORCID_TEST_PASS2',
-    'ORCID_TEST_FIRST_NAME2',
-    'ORCID_TEST_LAST_NAME2',
-    'ORCID_TEST_USER3',
-    'ORCID_TEST_PASS3',
-    'ORCID_TEST_FIRST_NAME3',
-    'ORCID_TEST_LAST_NAME3',
-    'ORCID_TEST_USER4',
-    'ORCID_TEST_PASS4',
-    'ORCID_TEST_FIRST_NAME4',
-    'ORCID_TEST_LAST_NAME4',
-    'MAILPIT',
-    'UI_BASE'
-];
-
-function checkEnvVariable(variableName: string) {
-    if (process.env[variableName] === undefined) {
-        throw new Error(`Environment Variable '${variableName}' is undefined.`);
-    }
-}
-
-requiredEnvVariables.forEach(checkEnvVariable);
+import { Browser, expect, Page } from '@playwright/test';
+import { PageModel } from '../PageModel';
+import { MAILPIT } from './constants';
 
 export type TestUser = {
     email: string;
@@ -72,6 +40,8 @@ export const user4: TestUser = {
     shortName: `${process.env.ORCID_TEST_FIRST_NAME4?.[0]}. ${process.env.ORCID_TEST_LAST_NAME4}`,
     fullName: `${process.env.ORCID_TEST_FIRST_NAME4} ${process.env.ORCID_TEST_LAST_NAME4}`
 };
+
+export const users = [user1, user2, user3, user4];
 
 export const login = async (page: Page, browser: Browser, user: TestUser) => {
     await page.goto('/');
@@ -135,81 +105,11 @@ export const login = async (page: Page, browser: Browser, user: TestUser) => {
     await expect(page.locator(PageModel.header.usernameButton)).toHaveText(`${user.fullName}`);
 };
 
-export const users = [user1, user2, user3, user4];
-
 export const logout = async (page: Page) => {
     await page.click(PageModel.header.usernameButton);
     await page.click(PageModel.header.logoutButton);
     await page.waitForLoadState();
     await expect(page.locator(PageModel.header.loginButton)).toBeVisible();
-};
-
-export const selectFirstPublication = async (page: Page, type: string = 'PROBLEM') => {
-    await page.goto(`/search?for=publications&type=${type}`);
-    await page.locator(`article`).first().click();
-};
-
-export const search = async (page: Page, searchTerm: string, publicationSearchResult?: string) => {
-    // Navigate to search page
-    await page.locator(PageModel.header.searchButton).click();
-    await page.locator(PageModel.search.searchInput).click();
-
-    // Type in search term
-    await page.keyboard.type(searchTerm);
-    await page.keyboard.press('Enter');
-    await page.waitForResponse((response) => response.url().includes('/publication-versions'));
-    await expect(page.locator('h1')).toHaveText(`Search results for ${searchTerm}`);
-
-    // if (publicationSearchResult passed in) expect its href anchor to be visible
-    publicationSearchResult && (await expect(page.locator(publicationSearchResult)).toBeVisible());
-};
-
-export const checkLivePublicationLayout = async (page: Page, id: string, loggedIn?: boolean) => {
-    // Go to live publication page
-    await page.goto(`/publications/${id}`, {
-        waitUntil: 'networkidle'
-    });
-    await expect(page.locator('h1')).toBeVisible();
-
-    // Check visualisation, content, linked problems, funders, conflict of interest sections
-    for (const visibleSection of PageModel.livePublication.visibleSections) {
-        await expect(page.locator(`${visibleSection}`).locator('visible=true')).toBeVisible();
-    }
-
-    // Expect DOI link
-    await expect(page.locator(PageModel.livePublication.doiLink)).toHaveAttribute(
-        'href',
-        `https://handle.test.datacite.org/10.82259/${id}`
-    );
-
-    if (loggedIn) {
-        // Confirm review link
-        await page.locator(PageModel.livePublication.writeReview).locator('visible=true').click();
-        await expect(page).toHaveURL(`/create?for=${id}&type=PEER_REVIEW`);
-    }
-};
-
-export const clickFirstPublication = async (page: Page): Promise<void> => {
-    const firstPublication = page.locator(PageModel.search.firstPublication);
-    const firstPublicationPath = await firstPublication.getAttribute('href');
-    await firstPublication.click();
-
-    // expect URL to contain publication path
-    await expect(page).toHaveURL(`${firstPublicationPath}/versions/latest`);
-};
-
-export const testDateInput = async (page: Page, dateFromInput: Locator, dateToInput: Locator): Promise<void> => {
-    await expect(dateFromInput).toHaveAttribute('value', PageModel.search.dateFrom);
-    await expect(dateToInput).toHaveAttribute('value', PageModel.search.dateTo);
-
-    await page.waitForURL(
-        `**/search/publications?dateTo=${PageModel.search.dateTo}&dateFrom=${PageModel.search.dateFrom}`
-    );
-};
-
-export const openFileImportModal = async (page: Page, filePath: string) => {
-    await page.locator(PageModel.publish.fileImportButtonModal).click();
-    await page.locator(PageModel.publish.fileImportButton).setInputFiles(filePath);
 };
 
 export const getPageAsUser = async (browser: Browser, user: TestUser = user1): Promise<Page> => {

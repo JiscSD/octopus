@@ -9,7 +9,14 @@ const crosslink = TestUtils.testCrosslink;
 
 describe('Related publication result', () => {
     beforeEach(() => {
-        render(<Components.RelatedPublicationsResult crosslink={crosslink} mutateList={jest.fn} setError={jest.fn} />);
+        render(
+            <Components.RelatedPublicationsResult
+                crosslink={crosslink}
+                sourcePublicationId="test-publication"
+                mutateList={jest.fn}
+                setError={jest.fn}
+            />
+        );
     });
 
     it('Title is shown', () => {
@@ -27,6 +34,9 @@ describe('Related publication result', () => {
     it('Visit publication link is shown', () => {
         const link = screen.getByRole('link');
         expect(link).toHaveAccessibleName('Visit publication');
-        expect(link).toHaveAttribute('href', `${Config.urls.viewPublication.path}/${crosslink.linkedPublication.id}`);
+        expect(link).toHaveAttribute(
+            'href',
+            `${Config.urls.viewPublication.path}/${crosslink.linkedPublication.id}?suggestedFrom=test-publication`
+        );
     });
 });

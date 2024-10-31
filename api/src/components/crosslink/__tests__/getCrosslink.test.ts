@@ -10,27 +10,23 @@ describe('Get a crosslink', () => {
         const getCrosslink = await testUtils.agent.get('/crosslinks/problem-live-crosslink-1');
 
         expect(getCrosslink.status).toEqual(200);
-        expect(getCrosslink.body.publications).toEqual([
-            {
-                id: 'publication-problem-live-2',
-                versions: [
-                    {
-                        title: 'Publication PROBLEM-LIVE 2'
-                    }
-                ]
-            },
-            {
-                id: 'publication-problem-live',
-                versions: [
-                    {
-                        title: 'Publication PROBLEM-LIVE v2'
-                    }
-                ]
-            }
-        ]);
-        expect(getCrosslink.body.upVotes).toEqual(4);
-        expect(getCrosslink.body.downVotes).toEqual(1);
-        expect(getCrosslink.body.createdBy).toEqual('test-user-1');
+        expect(getCrosslink.body).toEqual({
+            id: 'problem-live-crosslink-1',
+            publications: [
+                {
+                    id: 'publication-problem-live-2',
+                    title: 'Publication PROBLEM-LIVE 2'
+                },
+                {
+                    id: 'publication-problem-live',
+                    title: 'Publication PROBLEM-LIVE v2'
+                }
+            ],
+            upvotes: 4,
+            downvotes: 1,
+            createdBy: 'test-user-1',
+            createdAt: '2024-01-22T10:00:00.000Z'
+        });
     });
 
     test('User cannot get a crosslink with an invalid ID', async () => {
@@ -49,19 +45,11 @@ describe('Get a crosslink', () => {
         expect(getCrosslink.body.publications).toEqual([
             {
                 id: 'publication-problem-live-2',
-                versions: [
-                    {
-                        title: 'Publication PROBLEM-LIVE 2'
-                    }
-                ]
+                title: 'Publication PROBLEM-LIVE 2'
             },
             {
                 id: 'publication-problem-live',
-                versions: [
-                    {
-                        title: 'Publication PROBLEM-LIVE v2'
-                    }
-                ]
+                title: 'Publication PROBLEM-LIVE v2'
             }
         ]);
     });

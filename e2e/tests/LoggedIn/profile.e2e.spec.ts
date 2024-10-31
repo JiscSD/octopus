@@ -6,7 +6,7 @@ test.describe('Live author page', () => {
     let page: Page;
 
     test.beforeAll(async ({ browser }) => {
-        page = await Helpers.getPageAsUser(browser);
+        page = await Helpers.users.getPageAsUser(browser);
 
         // go to "Live author page" page
         await page.goto('/');
@@ -21,7 +21,7 @@ test.describe('Live author page', () => {
 
     test('Live author page contents', async () => {
         // check user full name
-        await expect(page.locator('h1')).toHaveText(`${Helpers.user1.fullName}`);
+        await expect(page.locator('h1')).toHaveText(`${Helpers.users.user1.fullName}`);
 
         // check Employment section
         expect(page.locator(PageModel.profilePage.employment)).toBeVisible();
