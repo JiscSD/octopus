@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import useSWR from 'swr';
+import useSWR, { KeyedMutator } from 'swr';
 import * as axios from 'axios';
 import * as HeadlessUI from '@headlessui/react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
@@ -17,6 +17,7 @@ type Props = {
     type: Types.PublicationType;
     open: boolean;
     onClose: () => void;
+    refreshCrosslinks: KeyedMutator<Interfaces.GetPublicationMixedCrosslinksResponse>;
 };
 
 const RelatedPublicationsSuggestModal: React.FC<Props> = (props): React.ReactElement => {
@@ -81,6 +82,7 @@ const RelatedPublicationsSuggestModal: React.FC<Props> = (props): React.ReactEle
                     },
                     user.token
                 );
+                props.refreshCrosslinks();
                 onClose();
                 setToast({
                     visible: true,
