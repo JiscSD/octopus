@@ -106,11 +106,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     let activeCrosslinkVote: Interfaces.CrosslinkVote | null = null;
     if (suggestedFromPublicationId && activeCrosslink) {
-        api.get(`${Config.endpoints.crosslinks}/${activeCrosslink.id}/vote`, token)
-            .then((res) => {
-                activeCrosslinkVote = res.data;
-            })
-            .catch((error) => console.log(error));
+        activeCrosslinkVote = (await api.get(`${Config.endpoints.crosslinks}/${activeCrosslink.id}/vote`, token)).data;
     }
 
     if (versionRequestError) {
