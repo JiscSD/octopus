@@ -11,6 +11,7 @@ jest.mock('next/router', () => ({
         };
     }
 }));
+const mockMutate = jest.fn();
 
 describe('No crosslinks', () => {
     beforeEach(() => {
@@ -27,6 +28,7 @@ describe('No crosslinks', () => {
                 }}
                 publicationId="test"
                 type="PROBLEM"
+                refreshCrosslinks={mockMutate}
             />
         );
     });
@@ -79,6 +81,7 @@ describe('Recent and relevant crosslinks / general tests', () => {
                 }}
                 publicationId="test"
                 type="PROBLEM"
+                refreshCrosslinks={mockMutate}
             />
         );
     });
@@ -133,6 +136,7 @@ describe('Only recent crosslinks', () => {
                 }}
                 publicationId="test"
                 type="PROBLEM"
+                refreshCrosslinks={mockMutate}
             />
         );
     });
@@ -175,6 +179,7 @@ describe('Only relevant crosslinks', () => {
                 }}
                 publicationId="test"
                 type="PROBLEM"
+                refreshCrosslinks={mockMutate}
             />
         );
     });
