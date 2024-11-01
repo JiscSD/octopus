@@ -31,7 +31,7 @@ const ensureBookmarkPresent = async (page: Page, recreate: boolean = false) => {
 
 test.describe('Topic page', () => {
     test('Bookmark a topic', async ({ browser }) => {
-        const page = await Helpers.getPageAsUser(browser);
+        const page = await Helpers.users.getPageAsUser(browser);
 
         // Add bookmark
         await ensureBookmarkPresent(page, true);
@@ -45,7 +45,7 @@ test.describe('Topic page', () => {
     });
 
     test('Remove a topic bookmark from topic page', async ({ browser }) => {
-        const page = await Helpers.getPageAsUser(browser);
+        const page = await Helpers.users.getPageAsUser(browser);
 
         await ensureBookmarkPresent(page);
 
@@ -61,7 +61,7 @@ test.describe('Topic page', () => {
     });
 
     test('Remove a topic bookmark from My Bookmarks page', async ({ browser }) => {
-        const page = await Helpers.getPageAsUser(browser);
+        const page = await Helpers.users.getPageAsUser(browser);
 
         await ensureBookmarkPresent(page);
 

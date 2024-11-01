@@ -140,7 +140,7 @@ export const testFlag: Interfaces.Flag = {
     }
 };
 
-export const testCrosslink: Interfaces.Crosslink = {
+export const testCrosslink: Interfaces.RelativeCrosslink = {
     id: 'test',
     linkedPublication: {
         id: 'test-1',
