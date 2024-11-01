@@ -1,3 +1,4 @@
+import { KeyedMutator } from 'swr';
 import * as NextRouter from 'next/router';
 import React, { useState } from 'react';
 import * as Components from '@/components';
@@ -12,6 +13,7 @@ type Props = {
     publicationId: string;
     crosslinks: Interfaces.GetPublicationMixedCrosslinksResponse;
     type: Types.PublicationType;
+    refreshCrosslinks: KeyedMutator<Interfaces.GetPublicationMixedCrosslinksResponse>;
 };
 
 const RelatedPublications: React.FC<Props> = (props) => {
@@ -101,7 +103,10 @@ const RelatedPublications: React.FC<Props> = (props) => {
                                 publicationId={props.publicationId}
                                 type={props.type}
                                 open={suggestModalVisibility}
-                                onClose={() => setSuggestModalVisibility(false)}
+                                onClose={() => {
+                                    setSuggestModalVisibility(false);
+                                }}
+                                refreshCrosslinks={props.refreshCrosslinks}
                             />
                         </>
                     ) : (

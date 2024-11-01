@@ -34,7 +34,6 @@ test.describe('Crosslinking', () => {
         ]);
         await expect(page.getByText('Suggestion created')).toBeVisible();
         // Check that crosslink is present on new publication's page
-        await page.reload();
         await expect(
             page.locator('#desktop-related-publications-items').getByText(targetPublicationTitle)
         ).toBeVisible();

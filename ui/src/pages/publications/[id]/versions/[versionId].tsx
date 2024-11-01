@@ -176,7 +176,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         setBookmarkId(props.bookmarkId);
     }, [props.bookmarkId, props.publicationId]);
 
-    const { data: publicationVersion, mutate } = useSWR<Interfaces.PublicationVersion>(
+    const { data: publicationVersion, mutate: mutatePublicationVersion } = useSWR<Interfaces.PublicationVersion>(
         `${Config.endpoints.publications}/${props.publicationId}/publication-versions/${props.publicationVersion.id}`,
         null,
         { fallbackData: props.publicationVersion }
@@ -215,6 +215,15 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const { data: controlRequests = [], isLoading: isLoadingControlRequests } = useSWR<Interfaces.ControlRequest[]>(
         // Only bother fetching if user is verified
         isVerifiedWithName ? `${Config.endpoints.users}/me/control-requests` : null
+    );
+
+    const {
+        data: crosslinks = { data: { recent: [], relevant: [] }, metadata: { total: 0, limit: 0, offset: 0 } },
+        mutate: mutateCrosslinks
+    } = useSWR<Interfaces.GetPublicationMixedCrosslinksResponse>(
+        `${Config.endpoints.publications}/${props.publicationId}/crosslinks?order=mix`,
+        null,
+        { fallbackData: props.crosslinks }
     );
 
     const hasAlreadyRequestedControl = controlRequests.some(
@@ -410,7 +419,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
         if (confirmed) {
             await updateCoAuthor(false);
-            await mutate();
+            await mutatePublicationVersion();
         }
     };
 
@@ -424,7 +433,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
         if (confirmed) {
             await updateCoAuthor(true);
-            await mutate();
+            await mutatePublicationVersion();
         }
     };
 
@@ -433,11 +442,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const handleCloseAffiliationsModal = React.useCallback(
         async (revalidate?: boolean) => {
             if (revalidate) {
-                await mutate();
+                await mutatePublicationVersion();
             }
             setIsEditingAffiliations(false);
         },
-        [mutate]
+        [mutatePublicationVersion]
     );
 
     const activeFlags = React.useMemo(() => flags.filter((flag) => !flag.resolved), [flags]);
@@ -678,7 +687,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 onPublish={handlePublish}
                                 onError={setServerError}
                                 onEditAffiliations={handleOpenAffiliationsModal}
-                                refreshPublicationVersionData={mutate}
+                                refreshPublicationVersionData={mutatePublicationVersion}
                             />
                         </div>
                     )}
@@ -783,7 +792,8 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 id="mobile-related-publications"
                                 publicationId={props.publicationId}
                                 type={publication.type}
-                                crosslinks={props.crosslinks}
+                                crosslinks={crosslinks}
+                                refreshCrosslinks={mutateCrosslinks}
                             />
                         </div>
                     </header>
@@ -1086,8 +1096,9 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         <Components.RelatedPublications
                             id="desktop-related-publications"
                             publicationId={props.publicationId}
-                            crosslinks={props.crosslinks}
-                            type={publication?.type}
+                            crosslinks={crosslinks}
+                            type={publication.type}
+                            refreshCrosslinks={mutateCrosslinks}
                         />
                     </div>
                 </aside>
