@@ -27,7 +27,7 @@
         "createTopics": "ts-node -r tsconfig-paths/register scripts/createTopics.ts",
         "createUserMappings": "ts-node -r tsconfig-paths/register scripts/createUserMappings.ts",
         "fullAriImport": "ts-node -r tsconfig-paths/register scripts/fullAriImport.ts",
-        "updateOrganisationalAccount": "ts-node -r tsconfig-paths/register scripts/updateOrganisationalAccount.ts",
+        "updateOrganisationalAccounts": "ts-node -r tsconfig-paths/register scripts/updateOrganisationalAccounts.ts",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",
         "lint:check": "eslint src/",
