@@ -122,7 +122,7 @@ const RelatedPublicationsSuggestModal: React.FC<Props> = (props): React.ReactEle
             wide={true}
             loading={loading}
         >
-            <div className="min-h-192">
+            <div className="min-h-[55vh]">
                 <p className="text-left mb-8">
                     Suggest a related {Helpers.formatPublicationType(props.type)} to link it to the one you are viewing
                     currently.
