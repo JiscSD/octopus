@@ -1076,7 +1076,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     </Components.ContentSection>
                 </section>
                 <aside className="relative hidden lg:col-span-4 lg:block xl:col-span-3">
-                    <div className="sticky top-12 space-y-8">
+                    <div className="space-y-8">
                         {showVersionsAccordion && (
                             <Components.VersionsAccordion
                                 id="desktop-versions-accordion"
