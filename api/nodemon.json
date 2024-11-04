@@ -1,5 +1,0 @@
-{
-    "verbose": true,
-    "ignore": ["*.test.js", "*.test.ts", "thunder-tests/*"],
-    "exec": "sls offline start -c serverless-offline.yml --reloadHandler --httpPort 4003 --host 0.0.0.0 --stage local --aws-profile octopus-dev"
-}
