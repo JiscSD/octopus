@@ -79,7 +79,7 @@ services:
             dockerfile: Dockerfile
         ports:
             - '4005:4003'
-        command: sh -c "npm run seed:local && npm run start:local"
+        command: sh -c "npm run seed:local && npm run dev"
         environment:
             - DATACITE_USER # this and next 3 come from calling environment
             - DATACITE_PASSWORD
