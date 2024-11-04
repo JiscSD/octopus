@@ -80,7 +80,7 @@ const RelatedPublications: React.FC<Props> = (props) => {
                     {showShowAllButton && (
                         <>
                             <Components.Button
-                                title="Show All"
+                                title="View All"
                                 className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50 justify-center w-full md:w-1/2 lg:w-full"
                                 onClick={openViewAllModal}
                             />
