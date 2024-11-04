@@ -5,8 +5,6 @@ frameworkVersion: ${file(./serverless-config-default.yml):frameworkVersion}
 useDotenv: ${file(./serverless-config-default.yml):useDotenv}
 
 plugins:
-    - serverless-webpack
-    - serverless-webpack-prisma
     - serverless-prune-plugin
     - serverless-plugin-split-stacks
 
@@ -92,16 +90,6 @@ custom:
         perFunction: true
         perType: false
         perGroupFunction: false
-    webpack:
-        webpackConfig: ./webpack.config.js
-        includeModules:
-            forceExclude:
-                - '@aws-sdk/client-s3'
-                - '@aws-sdk/client-ses'
-                - '@aws-sdk/client-sqs'
-                - 'puppeteer'
-                - 'prisma'
-        packager: 'npm'
     versions:
         v1: v1
     prune:
@@ -113,3 +101,5 @@ custom:
 functions:
     - ${file(./serverless-config-default.yml):functions}
     - ${file(./serverless-config-deploy.yml):functions}
+package:
+    patterns: ${file(./serverless-config-default.yml):package.defaultPatterns}
