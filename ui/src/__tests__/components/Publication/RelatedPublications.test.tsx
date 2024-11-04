@@ -32,12 +32,18 @@ describe('No crosslinks', () => {
             />
         );
     });
+
     it('Neither category label is shown', () => {
         expect(screen.queryByText('Most relevant')).not.toBeInTheDocument();
         expect(screen.queryByText('Most recent')).not.toBeInTheDocument();
     });
+
     it('Sign in button is shown', () => {
         expect(screen.getByRole('link', { name: 'Sign in to suggest a link' })).toBeInTheDocument();
+    });
+
+    it('View all button is not shown', () => {
+        expect(screen.queryByRole('button', { name: 'View All' })).not.toBeInTheDocument();
     });
 });
 
@@ -109,6 +115,10 @@ describe('Recent and relevant crosslinks / general tests', () => {
         const link = screen.getByRole('link', { name: 'Related publications section in FAQ' });
         expect(link).toHaveTextContent('What is this?');
         expect(link).toHaveAttribute('href', '/faq#related_publications');
+    });
+
+    it('View all button is shown', () => {
+        expect(screen.getByRole('button', { name: 'View All' })).toBeInTheDocument();
     });
 });
 

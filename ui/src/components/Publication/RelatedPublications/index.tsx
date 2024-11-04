@@ -24,7 +24,7 @@ const RelatedPublications: React.FC<Props> = (props) => {
     const [viewAllModalVisibility, setViewAllModalVisibility] = useState(false);
     const [suggestModalVisibility, setSuggestModalVisibility] = useState(false);
     const [viewAllModalKey, setViewAllModalKey] = useState(0);
-    const showShowAllButton = totalCrosslinks > 5;
+    const showViewAllButton = totalCrosslinks > 0;
 
     const openViewAllModal = () => {
         setViewAllModalVisibility(true);
@@ -77,7 +77,7 @@ const RelatedPublications: React.FC<Props> = (props) => {
                     </section>
                 )}
                 <div className="flex flex-col md:flex-row lg:flex-col gap-4 justify-between ">
-                    {showShowAllButton && (
+                    {showViewAllButton && (
                         <>
                             <Components.Button
                                 title="View All"
