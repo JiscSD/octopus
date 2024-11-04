@@ -105,8 +105,16 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         await Promise.all(promises);
 
     let activeCrosslinkVote: Interfaces.CrosslinkVote | null = null;
-    if (suggestedFromPublicationId && activeCrosslink) {
-        activeCrosslinkVote = (await api.get(`${Config.endpoints.crosslinks}/${activeCrosslink.id}/vote`, token)).data;
+    if (suggestedFromPublicationId && activeCrosslink && token) {
+        try {
+            activeCrosslinkVote = (await api.get(`${Config.endpoints.crosslinks}/${activeCrosslink.id}/vote`, token))
+                .data;
+        } catch (error) {
+            // Users who haven't voted will get a 404 back from this request, which is expected.
+            if (axios.isAxiosError(error) && error.response?.status !== 404) {
+                console.error('Error fetching crosslink vote:', error);
+            }
+        }
     }
 
     if (versionRequestError) {
