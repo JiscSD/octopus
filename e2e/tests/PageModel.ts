@@ -269,7 +269,6 @@ export const PageModel = {
             suggestLinkButtonLoggedOut: '#desktop-related-publications >> a[title="Sign in to suggest a link"]',
             toggle: '#desktop-related-publications >> button[title="Related Publications"]'
         },
-        showAllModal: {},
         suggestModal: {
             clearSelectionButton: 'button[title="Clear selection"]',
             openButtonLoggedIn: '#desktop-related-publications >> button[title="Suggest a link"]',
