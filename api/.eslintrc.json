@@ -12,7 +12,6 @@
         "project": "./tsconfig.json"
     },
     "ignorePatterns": [
-        "webpack.config.js",
         "jest.config.ts",
         "docs"
     ],

@@ -1,28 +1,13 @@
 {
-    "compilerOptions": {
-        "skipLibCheck": true,
-        "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
-        "lib": [
-            "esnext"
-        ],
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "outDir": "dist",
-        "sourceMap": true,
-        "target": "es2019",
-        "strictNullChecks": true,
-        "resolveJsonModule": true,
+    "$schema": "https://json.schemastore.org/swcrc",
+    "jsc": {
+        "parser": {
+            "syntax": "typescript",
+            "tsx": false,
+            "dynamicImport": true,
+            "decorators": false
+        },
         "baseUrl": "./",
-        "types": [
-            "node",
-            "jest"
-        ],
-        "typeRoots": [
-            "./node_modules/@types"
-        ],
         "paths": {
             "config": [
                 "src/config"
@@ -111,15 +96,23 @@
             "verification/*": [
                 "src/components/verification/*"
             ]
-        }
+        },
+        "target": "es2020",
+        "loose": false,
+        "externalHelpers": false,
+        "keepClassNames": false
     },
-    "include": [
-        "./**/*.ts"
-    ],
+    "sourceMaps": true,
+    "module": {
+        "type": "commonjs",
+        "strict": true,
+        "strictMode": false,
+        "noInterop": false,
+        "lazy": false
+    },
+    "minify": false,
     "exclude": [
-        "node_modules/**/*",
-        ".serverless/**/*",
-        "_warmup/**/*",
-        ".vscode/**/*"
+        "__tests__/", // Jest (and whatever other test runner we use) compiles these
+        "prisma"
     ]
 }

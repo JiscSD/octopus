@@ -7,9 +7,9 @@
 ## Octopus Project Overview
 
 **Octopus. The primary research record.**  
-A new way to publish your scientific work that's fast, free and fair.
+A new way to publish your academic work that's fast, free and fair.
 
-- The place to establish priority and record your work in full detail, Octopus is free to use and publishes all kinds of scientific work, whether it is a hypothesis, a method, data, an analysis or a peer review.
+- The place to establish priority and record your work in full detail, Octopus is free to use and publishes all kinds of academic work, whether it is a hypothesis, a method, data, an analysis or a peer review.
 - Publication is instant. Peer review happens openly. All work can be reviewed and rated.
 - Your personal page records everything you do and how it is rated by your peers.
 - Octopus encourages meritocracy, collaboration and a fast and effective scientific process.
