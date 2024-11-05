@@ -47,9 +47,9 @@ test.describe('Crosslinking', () => {
         const page = await browser.newPage();
         await page.goto('/publications/publication-user-1-problem-1-live');
 
-        // Open show all modal.
+        // Open view all modal.
         const relatedPublicationsSidebar = page.locator('#desktop-related-publications-items');
-        await relatedPublicationsSidebar.getByRole('button', { name: 'Show all' }).click();
+        await relatedPublicationsSidebar.getByRole('button', { name: 'View all' }).click();
 
         // Check elements.
         await expect(page.getByRole('heading', { name: 'Related Publications' })).toBeVisible();

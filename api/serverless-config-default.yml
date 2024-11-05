@@ -7,103 +7,106 @@ useDotenv: true
 functions:
     # App
     healthcheck:
-        handler: src/components/application/routes.healthcheck
+        handler: dist/src/components/application/routes.healthcheck
         events:
             - http:
                 path: ${self:custom.versions.v1}/healthcheck
                 method: GET
                 cors: true
     seedOpenSearch:
-        handler: src/lib/testUtils.openSearchSeed
+        handler: dist/src/lib/testUtils.openSearchSeed
     # Publications
     getPublication:
-        handler: src/components/publication/routes.get
+        handler: dist/src/components/publication/routes.get
         events:
             - http:
                 path: ${self:custom.versions.v1}/publications/{publicationId}
                 method: GET
                 cors: true
     getSeedDataPublications:
-        handler: src/components/publication/routes.getSeedDataPublications
+        handler: dist/src/components/publication/routes.getSeedDataPublications
         events:
             - http:
                 path: ${self:custom.versions.v1}/publications/seed-data-publications
                 method: GET
                 cors: true
     createPublication:
-        handler: src/components/publication/routes.create
+        handler: dist/src/components/publication/routes.create
         events:
             - http:
                 path: ${self:custom.versions.v1}/publications
                 method: POST
                 cors: true
     getPublicationLinks:
-        handler: src/components/publication/routes.getPublicationLinks
+        handler: dist/src/components/publication/routes.getPublicationLinks
         events:
             - http:
                 path: ${self:custom.versions.v1}/publications/{publicationId}/links
                 method: GET
                 cors: true
     getPDF:
-        handler: src/components/publication/routes.getPDF
+        handler: dist/src/components/pdf/routes.getPublicationPDF
         memorySize: 2048 # https://github.com/alixaxel/chrome-aws-lambda#:~:text=You%20should%20allocate%20at%20least%20512%20MB%20of%20RAM%20to%20your%20Lambda%2C%20however%201600%20MB%20(or%20more)%20is%20recommended
         events:
             - http:
                 path: ${self:custom.versions.v1}/publications/{publicationId}/pdf
                 method: GET
                 cors: true
+        package:
+            individually: true
+            patterns: ${file(./serverless-config-default.yml):package.pdfFunctionPatterns}
     # Publication Versions
     createPublicationVersion:
-        handler: src/components/publicationVersion/routes.create
+        handler: dist/src/components/publicationVersion/routes.create
         events:
             - http:
                 path: ${self:custom.versions.v1}/publications/{publicationId}/publication-versions
                 method: POST
                 cors: true
     getPublicationVersion:
-        handler: src/components/publicationVersion/routes.get
+        handler: dist/src/components/publicationVersion/routes.get
         events:
             - http:
                 path: ${self:custom.versions.v1}/publications/{publicationId}/publication-versions/{version} # {version} can be a version id, number, "latest" or "latestLive"
                 method: GET
                 cors: true
     getIndexedPublicationVersions:
-        handler: src/components/publicationVersion/routes.getAll
+        handler: dist/src/components/publicationVersion/routes.getAll
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions
                 method: GET
                 cors: true
     updatePublicationVersion:
-        handler: src/components/publicationVersion/routes.update
+        handler: dist/src/components/publicationVersion/routes.update
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}
                 method: PATCH
                 cors: true
     updateStatus:
-        handler: src/components/publicationVersion/routes.updateStatus
+        handler: dist/src/components/publicationVersion/routes.updateStatus
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/status/{status}
                 method: PUT
                 cors: true
     deleteVersion:
-        handler: src/components/publicationVersion/routes.deleteVersion
+        handler: dist/src/components/publicationVersion/routes.deleteVersion
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}
                 method: DELETE
                 cors: true
     requestControl:
-        handler: src/components/publicationVersion/routes.requestControl
+        handler: dist/src/components/publicationVersion/routes.requestControl
         events:
             - http:
                 path: ${self:custom.versions.v1}/publications/{publicationId}/publication-versions/{version}/request-control
                 method: GET
                 cors: true
     approveControlRequest:
-        handler: src/components/publicationVersion/routes.approveControlRequest
+        handler: dist/src/components/publicationVersion/routes.approveControlRequest
         events:
             - http:
                 path: ${self:custom.versions.v1}/publications/{publicationId}/publication-versions/{version}/approve-control-request
@@ -111,35 +114,35 @@ functions:
                 cors: true
     # Users
     getUsers:
-        handler: src/components/user/routes.getAll
+        handler: dist/src/components/user/routes.getAll
         events:
             - http:
                 path: ${self:custom.versions.v1}/users
                 method: GET
                 cors: true
     getUser:
-        handler: src/components/user/routes.get
+        handler: dist/src/components/user/routes.get
         events:
             - http:
                 path: ${self:custom.versions.v1}/users/{id}
                 method: GET
                 cors: true
     getUserPublications:
-        handler: src/components/user/routes.getPublications
+        handler: dist/src/components/user/routes.getPublications
         events:
             - http:
                 path: ${self:custom.versions.v1}/users/{id}/publications
                 method: GET
                 cors: true
     getUserList:
-        handler: src/components/user/routes.getUserList
+        handler: dist/src/components/user/routes.getUserList
         events:
             - http:
                 path: ${self:custom.versions.v1}/user-list
                 method: GET
                 cors: true
     getUserControlRequests:
-        handler: src/components/user/routes.getUserControlRequests
+        handler: dist/src/components/user/routes.getUserControlRequests
         events:
             - http:
                 path: ${self:custom.versions.v1}/users/me/control-requests
@@ -147,28 +150,28 @@ functions:
                 cors: true
     # Auth
     authorization:
-        handler: src/components/authorization/routes.authorize
+        handler: dist/src/components/authorization/routes.authorize
         events:
             - http:
                 path: ${self:custom.versions.v1}/authorization
                 method: POST
                 cors: true
     getDecodedUserToken:
-        handler: src/components/authorization/routes.getDecodedUserToken
+        handler: dist/src/components/authorization/routes.getDecodedUserToken
         events:
             - http:
                 path: ${self:custom.versions.v1}/decode-user-token
                 method: GET
                 cors: true
     verifyOrcidAccess:
-        handler: src/components/authorization/routes.verifyOrcidAccess
+        handler: dist/src/components/authorization/routes.verifyOrcidAccess
         events:
             - http:
                 path: ${self:custom.versions.v1}/verify-orcid-access
                 method: GET
                 cors: true
     revokeOrcidAccess:
-        handler: src/components/authorization/routes.revokeOrcidAccess
+        handler: dist/src/components/authorization/routes.revokeOrcidAccess
         events:
             - http:
                 path: ${self:custom.versions.v1}/revoke-orcid-access
@@ -176,14 +179,14 @@ functions:
                 cors: true
     # Links
     createLink:
-        handler: src/components/link/routes.create
+        handler: dist/src/components/link/routes.create
         events:
             - http:
                 path: ${self:custom.versions.v1}/links
                 method: POST
                 cors: true
     deleteLink:
-        handler: src/components/link/routes.deleteLink
+        handler: dist/src/components/link/routes.deleteLink
         events:
             - http:
                 path: ${self:custom.versions.v1}/links/{id}
@@ -191,49 +194,49 @@ functions:
                 cors: true
     # CoAuthors
     getCoAuthors:
-        handler: src/components/coauthor/routes.getAll
+        handler: dist/src/components/coauthor/routes.getAll
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors
                 method: GET
                 cors: true
     updateAll:
-        handler: src/components/coauthor/routes.updateAll
+        handler: dist/src/components/coauthor/routes.updateAll
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors
                 method: PUT
                 cors: true
     deleteCoAuthor:
-        handler: src/components/coauthor/routes.remove
+        handler: dist/src/components/coauthor/routes.remove
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors/{coauthorId}
                 method: DELETE
                 cors: true
     linkCoAuthor:
-        handler: src/components/coauthor/routes.link
+        handler: dist/src/components/coauthor/routes.link
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/link-coauthor
                 method: PATCH
                 cors: true
     updateCoAuthorConfirmation:
-        handler: src/components/coauthor/routes.updateConfirmation
+        handler: dist/src/components/coauthor/routes.updateConfirmation
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthor-confirmation
                 method: PATCH
                 cors: true
     requestApproval:
-        handler: src/components/coauthor/routes.requestApproval
+        handler: dist/src/components/coauthor/routes.requestApproval
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors/request-approval
                 method: PUT
                 cors: true
     sendApprovalReminder:
-        handler: src/components/coauthor/routes.sendApprovalReminder
+        handler: dist/src/components/coauthor/routes.sendApprovalReminder
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors/{coauthorId}/approval-reminder
@@ -241,42 +244,42 @@ functions:
                 cors: true
     # Flags
     getFlag:
-        handler: src/components/flag/routes.get
+        handler: dist/src/components/flag/routes.get
         events:
             - http:
                 path: ${self:custom.versions.v1}/flags/{id}
                 method: GET
                 cors: true
     createFlag:
-        handler: src/components/flag/routes.createFlag
+        handler: dist/src/components/flag/routes.createFlag
         events:
             - http:
                 path: ${self:custom.versions.v1}/publications/{publicationId}/flags
                 method: POST
                 cors: true
     createFlagComment:
-        handler: src/components/flag/routes.createFlagComment
+        handler: dist/src/components/flag/routes.createFlagComment
         events:
             - http:
                 path: ${self:custom.versions.v1}/flags/{id}/comment
                 method: POST
                 cors: true
     resolveFlag:
-        handler: src/components/flag/routes.resolveFlag
+        handler: dist/src/components/flag/routes.resolveFlag
         events:
             - http:
                 path: ${self:custom.versions.v1}/flags/{id}/resolve
                 method: POST
                 cors: true
     getPublicationFlags:
-        handler: src/components/flag/routes.getPublicationFlags
+        handler: dist/src/components/flag/routes.getPublicationFlags
         events:
             - http:
                 path: ${self:custom.versions.v1}/publications/{publicationId}/flags
                 method: GET
                 cors: true
     getUserFlags:
-        handler: src/components/flag/routes.getUserFlags
+        handler: dist/src/components/flag/routes.getUserFlags
         events:
             - http:
                 path: ${self:custom.versions.v1}/user/{userId}/flags
@@ -284,21 +287,21 @@ functions:
                 cors: true
     # Images
     createImage:
-        handler: src/components/image/routes.create
+        handler: dist/src/components/image/routes.create
         events:
             - http:
                 path: ${self:custom.versions.v1}/images
                 method: POST
                 cors: true
     deleteImage:
-        handler: src/components/image/routes.destroy
+        handler: dist/src/components/image/routes.destroy
         events:
             - http:
                 path: ${self:custom.versions.v1}/images/{id}
                 method: DELETE
                 cors: true
     getAllImages:
-        handler: src/components/image/routes.getAll
+        handler: dist/src/components/image/routes.getAll
         events:
             - http:
                 path: ${self:custom.versions.v1}/images
@@ -306,21 +309,21 @@ functions:
                 cors: true
     # Bookmarks
     createBookmark:
-        handler: src/components/bookmark/routes.create
+        handler: dist/src/components/bookmark/routes.create
         events:
             - http:
                 path: ${self:custom.versions.v1}/bookmarks
                 method: POST
                 cors: true
     deleteBookmark:
-        handler: src/components/bookmark/routes.deleteBookmark
+        handler: dist/src/components/bookmark/routes.deleteBookmark
         events:
             - http:
                 path: ${self:custom.versions.v1}/bookmarks/{id}
                 method: DELETE
                 cors: true
     getAllBookmarks:
-        handler: src/components/bookmark/routes.getAll
+        handler: dist/src/components/bookmark/routes.getAll
         events:
             - http:
                 path: ${self:custom.versions.v1}/bookmarks
@@ -328,14 +331,14 @@ functions:
                 cors: true
     # Verification
     requestVerification:
-        handler: src/components/verification/routes.requestCode
+        handler: dist/src/components/verification/routes.requestCode
         events:
             - http:
                 path: ${self:custom.versions.v1}/verification/{id}
                 method: GET
                 cors: true
     confirmVerification:
-        handler: src/components/verification/routes.confirmCode
+        handler: dist/src/components/verification/routes.confirmCode
         events:
             - http:
                 path: ${self:custom.versions.v1}/verification/{id}
@@ -343,14 +346,14 @@ functions:
                 cors: true
     # Funders
     createFunder:
-        handler: src/components/funder/routes.create
+        handler: dist/src/components/funder/routes.create
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/funders
                 method: POST
                 cors: true
     deleteFunder:
-        handler: src/components/funder/routes.destroy
+        handler: dist/src/components/funder/routes.destroy
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/funders/{funderId}
@@ -358,14 +361,14 @@ functions:
                 cors: true
     # References
     getReferences:
-        handler: src/components/reference/routes.get
+        handler: dist/src/components/reference/routes.get
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/references
                 method: get
                 cors: true
     updateAllReference:
-        handler: src/components/reference/routes.updateAll
+        handler: dist/src/components/reference/routes.updateAll
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/references
@@ -373,14 +376,14 @@ functions:
                 cors: true
     # Affiliations
     updateAffiliations:
-        handler: src/components/affiliations/routes.updateAffiliations
+        handler: dist/src/components/affiliations/routes.updateAffiliations
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/my-affiliations
                 method: PUT
                 cors: true
     getORCIDAffiliations:
-        handler: src/components/affiliations/routes.getORCIDAffiliations
+        handler: dist/src/components/affiliations/routes.getORCIDAffiliations
         events:
             - http:
                 path: ${self:custom.versions.v1}/orcid-affiliations
@@ -388,14 +391,14 @@ functions:
                 cors: true
     # Topics
     getTopic:
-        handler: src/components/topic/routes.get
+        handler: dist/src/components/topic/routes.get
         events:
             - http:
                 path: ${self:custom.versions.v1}/topics/{id}
                 method: GET
                 cors: true
     getTopics:
-        handler: src/components/topic/routes.getTopics
+        handler: dist/src/components/topic/routes.getTopics
         events:
             - http:
                 path: ${self:custom.versions.v1}/topics
@@ -403,19 +406,19 @@ functions:
                 cors: true
     # Events
     dailyEventCheck:
-        handler: src/components/event/routes.dailyEventCheck
+        handler: dist/src/components/event/routes.dailyEventCheck
         events:
             - schedule: cron(0 8 * * ? *) # Every day at 8 a.m.
     # Additional Information
     createAdditionalInformation:
-        handler: src/components/additionalInformation/routes.create
+        handler: dist/src/components/additionalInformation/routes.create
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/additional-information
                 method: POST
                 cors: true
     deleteAdditionalInformation:
-        handler: src/components/additionalInformation/routes.deleteAdditionalInformation
+        handler: dist/src/components/additionalInformation/routes.deleteAdditionalInformation
         events:
             - http:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/additional-information/{additionalInformationId}
@@ -423,12 +426,12 @@ functions:
                 cors: true
     # Sitemaps
     generateSitemaps:
-        handler: src/components/sitemap/routes.generate
+        handler: dist/src/components/sitemap/routes.generate
         events:
             - schedule: cron(0 5 ? * * *) # Every day at 5 a.m.
 
     getSitemapPaths:
-        handler: src/components/sitemap/routes.getPaths
+        handler: dist/src/components/sitemap/routes.getPaths
         events:
             - http:
                 path: ${self:custom.versions.v1}/sitemaps/paths
@@ -437,49 +440,49 @@ functions:
 
     # Crosslinks
     createCrosslink:
-        handler: src/components/crosslink/routes.create
+        handler: dist/src/components/crosslink/routes.create
         events:
             - http:
                 path: ${self:custom.versions.v1}/crosslinks
                 method: POST
                 cors: true
     deleteCrosslink:
-        handler: src/components/crosslink/routes.deleteCrosslink
+        handler: dist/src/components/crosslink/routes.deleteCrosslink
         events:
             - http:
                 path: ${self:custom.versions.v1}/crosslinks/{id}
                 method: DELETE
                 cors: true
     setCrosslinkVote:
-        handler: src/components/crosslink/routes.setVote
+        handler: dist/src/components/crosslink/routes.setVote
         events:
             - http:
                 path: ${self:custom.versions.v1}/crosslinks/{id}/vote
                 method: PUT
                 cors: true
     resetCrosslinkVote:
-        handler: src/components/crosslink/routes.resetVote
+        handler: dist/src/components/crosslink/routes.resetVote
         events:
             - http:
                 path: ${self:custom.versions.v1}/crosslinks/{id}/vote
                 method: DELETE
                 cors: true
     getCrosslinkVote:
-        handler: src/components/crosslink/routes.getVote
+        handler: dist/src/components/crosslink/routes.getVote
         events:
             - http:
                 path: ${self:custom.versions.v1}/crosslinks/{id}/vote
                 method: GET
                 cors: true
     getCrosslink:
-        handler: src/components/crosslink/routes.get
+        handler: dist/src/components/crosslink/routes.get
         events:
             - http:
                 path: ${self:custom.versions.v1}/crosslinks/{id} # "id" can be the crosslink ID or a pair of publication IDs for this endpoint
                 method: GET
                 cors: true
     getPublicationCrosslinks:
-        handler: src/components/crosslink/routes.getPublicationCrosslinks
+        handler: dist/src/components/crosslink/routes.getPublicationCrosslinks
         events:
             - http:
                 path: ${self:custom.versions.v1}/publications/{publicationId}/crosslinks
@@ -487,7 +490,7 @@ functions:
                 cors: true
     # Integrations
     incrementalAriIngestHttp:
-        handler: src/components/integration/routes.incrementalAriIngest
+        handler: dist/src/components/integration/routes.incrementalAriIngest
         timeout: 900
         events:
             - http:
@@ -496,9 +499,76 @@ functions:
                 cors: true
     # Commented out - for the time being ARI ingests will just be manually triggered.
     # incrementalAriIngestScheduled:
-    #     handler: src/components/integration/controller.incrementalAriIngest
+    #     handler: dist/src/components/integration/controller.incrementalAriIngest
     #     timeout: 900
     #     events:
     #         - schedule:
     #             rate: cron(0 5 ? * TUE *) # Every Tuesday at 5 a.m.
     #             enabled: ${self:custom.scheduledAriIngestEnabled.${opt:stage}, false}
+
+package:
+    defaultPatterns:
+        - '!.eslintrc.json'
+        - '!.localstack/**'
+        - '!.prettierrc.json'
+        - '!.swcrc'
+        - '!.vscode/**'
+        - '!Dockerfile'
+        - '!README.md'
+        - '!coverage/**'
+        - '!docker-compose.yml'
+        - '!docs/**'
+        - '!doi_example.json'
+        - '!jest*'
+        - '!lib/**'
+        - '!prisma/**'
+        - '!scripts/**'
+        - '!serverless*'
+        - '!src/**'
+        - '!tsconfig*'
+        - '!src/**/__tests__/**'
+        - '!node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.so.node'
+        - '!node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node'
+        - '!node_modules/@prisma/client/runtime/*.wasm'
+        - '!node_modules/@prisma/engines/**'
+        - '!node_modules/@sparticuz/chromium/**'
+        - '!node_modules/chromium-bidi/**'
+        - '!node_modules/prisma/engines/**'
+        - '!node_modules/prisma/libquery_engine-debian-openssl-3.0.x.so.node'
+        - '!node_modules/prisma/libquery_engine-rhel-openssl-1.0.x.so.node'
+        - '!node_modules/prisma/libquery_engine-rhel-openssl-3.0.x.so.node'
+        - '!node_modules/puppeteer-core/**'
+    pdfFunctionPatterns:
+        - '!.eslintrc.json'
+        - '!.localstack/**'
+        - '!.prettierrc.json'
+        - '!.swcrc'
+        - '!.vscode/**'
+        - '!Dockerfile'
+        - '!README.md'
+        - '!coverage/**'
+        - '!docker-compose.yml'
+        - '!docs/**'
+        - '!doi_example.json'
+        - '!jest*'
+        - '!lib/**'
+        - '!prisma/**'
+        - '!scripts/**'
+        - '!serverless*'
+        - '!src/**'
+        - '!tsconfig*'
+        - '!src/**/__tests__/**'
+        - '!node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.so.node'
+        - '!node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node'
+        - '!node_modules/@prisma/client/runtime/*.wasm'
+        - '!node_modules/@prisma/engines/**'
+        - '!node_modules/@sparticuz/chromium/**'
+        - '!node_modules/chromium-bidi/**'
+        - '!node_modules/prisma/engines/**'
+        - '!node_modules/prisma/libquery_engine-debian-openssl-3.0.x.so.node'
+        - '!node_modules/prisma/libquery_engine-rhel-openssl-1.0.x.so.node'
+        - '!node_modules/prisma/libquery_engine-rhel-openssl-3.0.x.so.node'
+        - '!node_modules/puppeteer-core/**'
+        - 'node_modules/chromium-bidi/**'
+        - 'node_modules/puppeteer-core/**'
+        - 'node_modules/@sparticuz/chromium/**'

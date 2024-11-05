@@ -53,7 +53,7 @@ Then you can seed the database and start the API:
 
 ```bash
 $ ~/api$ npm run seed:local
-$ ~/api$ npm run start:local
+$ ~/api$ npm run dev
 ```
 
 To run all tests locally (the API must be running first):
