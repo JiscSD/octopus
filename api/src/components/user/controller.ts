@@ -115,12 +115,14 @@ export const getUserControlRequests = async (event: I.AuthenticatedAPIRequest<un
     }
 };
 
-const validateOrganisationalAccountInput = async <
+type ValidationResult = { valid: true } | { valid: false; message: string };
+
+const commonOrganisationalAccountValidation = async <
     T extends Pick<I.CreateOrganisationalAccountInput, 'email' | 'url' | 'defaultTopic'>
 >(
     data: T,
     environment: I.Environment
-): Promise<{ valid: true } | { valid: false; message: string }> => {
+): Promise<ValidationResult> => {
     if (data.email && !Helpers.validateEmail(data.email)) {
         return { valid: false, message: 'Supplied email addresses must be valid.' };
     }
@@ -164,7 +166,7 @@ export const createOrganisationalAccounts = async (
             return 'Please provide a name for all accounts.';
         }
 
-        const validate = await validateOrganisationalAccountInput(user, environment);
+        const validate = await commonOrganisationalAccountValidation(user, environment);
 
         if (!validate.valid) {
             return validate.message;
@@ -184,37 +186,64 @@ export const createOrganisationalAccounts = async (
 };
 
 // Should only be called by a developer running a script.
-export const updateOrganisationalAccount = async (
-    id: string,
-    user: I.UpdateOrganisationalAccountInput,
-    regenerateApiKey = false,
+type UpdateOrganisationalAccountResult = string | Prisma.Result<typeof prisma.user, Prisma.UserUpdateArgs, 'update'>;
+
+export const updateOrganisationalAccounts = async (
+    data: I.UpdateOrganisationalAccountInput[],
     environment: I.Environment = 'int'
-): Promise<string | Prisma.Result<typeof prisma.user, Prisma.UserUpdateArgs, 'update'>> => {
-    // Verify that the user is an organisational user.
-    // Other types of user shouldn't be updatable other than by getting their latest data from orcid.
-    const dbUser = await userService.get(id);
+): Promise<string | Array<UpdateOrganisationalAccountResult>> => {
+    // Validate first.
+    const invalidMessages: string[] = [];
 
-    if (!dbUser || dbUser.role !== 'ORGANISATION') {
-        return 'The supplied user ID does not belong to an existing organisational account.';
+    for (const user of data) {
+        // Verify that the user is an organisational user.
+        // Other types of user shouldn't be updatable other than by getting their latest data from orcid.
+        const userId: string = user[environment + 'Id'];
+        const dbUser = await userService.get(userId);
+
+        if (!dbUser || dbUser.role !== 'ORGANISATION') {
+            invalidMessages.push('The supplied user ID does not belong to an existing organisational account.');
+        }
+
+        // Verify that at least one applicable field is being updated.
+        if (!(user.name || user.email || user.ror || user.url || user.defaultTopic || user.regenerateApiKey)) {
+            invalidMessages.push('No applicable field values have been supplied.');
+        }
+
+        // Validate field values.
+        const validateCommonFields = await commonOrganisationalAccountValidation(user, environment);
+
+        if (!validateCommonFields.valid) {
+            invalidMessages.push(validateCommonFields.message);
+        }
     }
 
-    const validate = await validateOrganisationalAccountInput(user, environment);
-
-    if (!validate.valid) {
-        return validate.message;
+    if (invalidMessages.length) {
+        return invalidMessages;
     }
 
-    // Verify that at least one applicable field is being updated.
-    if (!(user.name || user.email || user.ror || user.url || user.defaultTopic || regenerateApiKey)) {
-        return 'No applicable field values have been supplied.';
+    const output: Array<UpdateOrganisationalAccountResult> = [];
+
+    try {
+        for (const user of data) {
+            output.push(
+                await userService.updateUser(user[environment + 'Id'], {
+                    ...(user.name && { firstName: user.name }),
+                    ...(user.email && { email: user.email }),
+                    ...(user.ror && { ror: user.ror }),
+                    ...(user.url && { url: user.url }),
+                    ...(user.defaultTopic && { defaultTopicId: user.defaultTopic.ids[environment] }),
+                    ...(user.regenerateApiKey && { apiKey: crypto.randomUUID() })
+                })
+            );
+        }
+    } catch (error) {
+        console.log(error);
+
+        return 'Error updating organisational accounts.';
     }
 
-    return await userService.updateUser(id, {
-        ...(user.name && { firstName: user.name }),
-        ...(user.email && { email: user.email }),
-        ...(user.ror && { ror: user.ror }),
-        ...(user.url && { url: user.url }),
-        ...(user.defaultTopic && { defaultTopicId: user.defaultTopic.ids[environment] }),
-        ...(regenerateApiKey && { apiKey: crypto.randomUUID() })
-    });
+    console.log('Successfully updated organisational accounts.');
+
+    return output;
 };
