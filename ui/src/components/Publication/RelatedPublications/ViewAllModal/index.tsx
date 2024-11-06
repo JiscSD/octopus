@@ -27,7 +27,7 @@ const RelatedPublicationsViewAllModal: React.FC<Props> = (props): React.ReactEle
     const [ownLinks, setOwnLinks] = useState(false);
     const [offset, setOffset] = useState(0);
     const [genericError, setGenericError] = useState('');
-    const limit = 5;
+    const limit = 4;
     const swrKey = `${Config.endpoints.publications}/${props.publicationId}/crosslinks?order=${sortOrder}&search=${searchTerm}&own=${ownLinks}&offset=${offset}&limit=${limit}`;
     const {
         data: getCrosslinksResponse,
@@ -136,7 +136,7 @@ const RelatedPublicationsViewAllModal: React.FC<Props> = (props): React.ReactEle
             <div aria-live="polite" className="sr-only">
                 {!resultCount && !isValidating && 'No results found'}
             </div>
-            <div className="min-h-160">
+            <div className="min-h-128">
                 {!resultCount && !isValidating && (
                     <Components.Alert
                         severity="INFO"
