@@ -1,0 +1,62 @@
+on:
+  workflow_call:
+    inputs:
+      ENVIRONMENT:
+        required: true
+        type: string
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      AWS_REGION:
+        required: true
+      RDS_URL:
+        required: true
+      DATABASE_URL:
+        required: true
+
+jobs:
+  migrate_db:
+    name: Migrate Database
+    runs-on: ubuntu-latest
+    steps:
+      # - name: Authenticate to AWS
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-region: eu-west-1
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bastion
+        id: setup
+        working-directory: ./.github/scripts
+        run: |
+          chmod +x ./temp-bastion-setup.sh
+          ./temp-bastion-setup.sh ${{ inputs.ENVIRONMENT }} ${{ secrets.RDS_URL }} true
+          shell: bash
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Run prisma migrations
+        working-directory: ./api
+        run: |
+          # Replace the RDS URL with localhost, cheeky node usage to do it
+          export DATABASE_URL=$(node -e "console.log('${{ secrets.DATABASE_URL }}'.replace(/octopus-${{inputs.ENVIRONMENT}}.*amazonaws.com/, 'localhost'))")
+
+          npx prisma migrate deploy
+        env:
+          DB_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Cleanup Bastion
+        if: always()
+        working-directory: ./.github/scripts
+        run: |
+          chmod +x ./temp-bastion-cleanup.sh
+          ./temp-bastion-cleanup.sh ${{ steps.setup.outputs.BASTION_ID }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}

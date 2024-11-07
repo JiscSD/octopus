@@ -18,6 +18,8 @@
     "scripts": {
         "build": "swc src -d dist --copy-files -s false",
         "prepare": "cd .. && husky install",
+        "deploy:int": "sls deploy --stage int",
+        "deploy:prod": "sls deploy --stage prod",
         "dev": "concurrently npm:dev:start npm:dev:watch npm:dev:type",
         "dev:start": "sls offline start -c serverless-offline.yml --reloadHandler --httpPort 4003 --host 0.0.0.0 --stage local --aws-profile octopus-dev",
         "dev:type": "tsc --noEmit -w --preserveWatchOutput",

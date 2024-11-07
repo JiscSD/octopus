@@ -1,0 +1,72 @@
+name: Deploy dev API and UI
+
+# Run when int branch is updated
+on:
+  push:
+    branches:
+      - "int"
+      - "OC-321"
+
+env:
+  NODE_VERSION: "20.18.0"
+
+jobs:
+  migrate_db:
+    name: Migrate Database
+    uses: ./.github/workflows/migrate-db.yml
+    with:
+      ENVIRONMENT: "int"
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      RDS_URL: ${{ secrets.RDS_INSTANCE_INT }} # RDS DNS/Name
+      DATABASE_URL: ${{ secrets.DB_CONNECTION_INT }} # The entire connection string, including the RDS DNS, username, password and database
+
+  deploy_api:
+    name: Deploy API
+    runs-on: ubuntu-latest
+    needs: migrate_db
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        working-directory: ./api
+        run: |
+          PRISMA_ENGINE='["rhel-openssl-3.0.x"]' npm ci
+          npm i -g serverless@3.39.0
+
+      - name: Build Api
+        working-directory: ./api
+        run: |
+          npm run type
+          npm run build
+
+      - name: Deploy serverless app
+        working-directory: ./api
+        run: |
+          npm run deploy:int
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+#   deploy_ui:
+#     name: Deploy Jisc Login UI
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Deploy UI
+#         working-directory: ./scripts
+#         run: ./amplify-deploy.sh d184r4985i9bqi develop
+#         env:
+#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           AWS_REGION: ${{ secrets.AWS_REGION }}
