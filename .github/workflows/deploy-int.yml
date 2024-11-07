@@ -22,6 +22,7 @@ jobs:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       RDS_URL: ${{ secrets.RDS_INSTANCE_INT }} # RDS DNS/Name
       DATABASE_URL: ${{ secrets.DB_CONNECTION_INT }} # The entire connection string, including the RDS DNS, username, password and database
+      FINLAY_TEST: ${{ secrets.FINLAY_TEST }}
 
   deploy_api:
     name: Deploy API
