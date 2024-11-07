@@ -92,22 +92,22 @@ const VotingArea: React.FC<Props> = (props): React.ReactElement => {
                 <button
                     onClick={() => handleVote(true)}
                     title="Upvote"
-                    className={`bg-white-50 flex items-center rounded disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed ${userHasUpvoted ? 'text-green-700 font-medium' : 'text-grey-600'}`}
+                    className={`bg-white-50 flex items-center rounded disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed ${userHasUpvoted ? 'text-green-700 font-medium shadow-md shadow-green-400' : 'text-grey-600'}`}
                     disabled={!user}
                 >
                     <span className="p-2">
-                        <OutlineIcons.ChevronUpIcon className="w-4 stroke-2" />
+                        <OutlineIcons.HandThumbUpIcon className="w-4 stroke-2" />
                     </span>
                     <span className="p-2 border-l border-grey-200 min-w-8">{upvotes}</span>
                 </button>
                 <button
                     onClick={() => handleVote(false)}
                     title="Downvote"
-                    className={`bg-white-50 flex items-center rounded disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed ${userHasDownVoted ? 'text-red-800 font-medium' : 'text-grey-600'}`}
+                    className={`bg-white-50 flex items-center rounded disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed ${userHasDownVoted ? 'text-red-800 font-medium shadow-md shadow-red-500' : 'text-grey-600'}`}
                     disabled={!user}
                 >
                     <span className="p-2">
-                        <OutlineIcons.ChevronDownIcon className="w-4 stroke-2" />
+                        <OutlineIcons.HandThumbDownIcon className="w-4 stroke-2" />
                     </span>
                     <span className="p-2 border-l border-grey-200 min-w-8">{downvotes}</span>
                 </button>
