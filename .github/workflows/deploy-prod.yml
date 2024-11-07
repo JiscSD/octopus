@@ -18,7 +18,7 @@ jobs:
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       RDS_URL: ${{ secrets.RDS_INSTANCE_PROD }} # RDS DNS/Name
       DATABASE_URL: ${{ secrets.DB_CONNECTION_PROD }} # The entire connection string, including the RDS DNS, username, password and database
 
@@ -54,7 +54,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 #   deploy_ui:
 #     name: Deploy Jisc Login UI
 #     runs-on: ubuntu-latest
@@ -68,4 +68,4 @@ jobs:
 #         env:
 #           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
 #           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           AWS_REGION: ${{ secrets.AWS_REGION }}
+#           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
