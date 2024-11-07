@@ -10,6 +10,7 @@ plugins:
 
 provider:
     name: aws
+    architecture: arm64
     deploymentMethod: direct
     timeout: 30
     runtime: nodejs20.x
