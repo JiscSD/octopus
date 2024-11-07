@@ -19,8 +19,6 @@ function ctrl_c() {
     exit 0
 }
 
-echo testvar $FINLAY_TEST
-
 IMAGE_ID=$(aws ssm get-parameter --name /aws/service/ami-amazon-linux-latest/amzn2-ami-kernel-5.10-hvm-x86_64-gp2 --query "Parameter.Value" --output text)
 
 # Get subnet by name

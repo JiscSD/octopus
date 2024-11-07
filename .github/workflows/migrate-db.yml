@@ -9,13 +9,13 @@ on:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
+      AWS_SESSION_TOKEN:
+        required: true
       AWS_REGION:
         required: true
       RDS_URL:
         required: true
       DATABASE_URL:
-        required: true
-      FINLAY_TEST:
         required: true
 
 jobs:
@@ -40,8 +40,8 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-          FINLAY_TEST: ${{ secrets.FINLAY_TEST }}
 
       - name: Run prisma migrations
         working-directory: ./api
