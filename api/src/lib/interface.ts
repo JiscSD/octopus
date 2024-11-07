@@ -306,6 +306,8 @@ export interface CreateOrganisationalAccountInput {
 }
 
 export interface UpdateOrganisationalAccountInput {
+    intId: string;
+    prodId: string;
     name?: string;
     email?: string;
     ror?: string;
@@ -317,6 +319,7 @@ export interface UpdateOrganisationalAccountInput {
             prod: string;
         };
     };
+    regenerateApiKey?: boolean;
 }
 
 /**
