@@ -1,4 +1,4 @@
-name: Deploy dev API and UI
+name: Deploy int API
 
 # Run when int branch is updated
 on:

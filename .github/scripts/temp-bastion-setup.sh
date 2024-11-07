@@ -22,7 +22,7 @@ function ctrl_c() {
 IMAGE_ID=$(aws ssm get-parameter --name /aws/service/ami-amazon-linux-latest/amzn2-ami-kernel-5.10-hvm-x86_64-gp2 --query "Parameter.Value" --output text)
 
 # Get subnet by name
-SUBNET=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values='$ENV'_octopus_public_subnet*" --query "Subnets[0].SubnetId" --output text)
+SUBNET=$(aws ec2 describe-subnets --filters "Name=tag:Name,Values=${ENV}_octopus_public_subnet*" --query "Subnets[0].SubnetId" --output text)
 
 # Get instance profile by name
 INSTANCE_PROFILE=$(aws iam get-instance-profile --instance-profile-name "ec2_profile_$ENV" --query "InstanceProfile.Arn" --output text)

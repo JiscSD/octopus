@@ -1,4 +1,4 @@
-name: Deploy prod API and UI
+name: Deploy prod API
 
 # Run when prod branch is updated
 on:
