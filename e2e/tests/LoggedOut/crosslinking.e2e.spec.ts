@@ -61,9 +61,9 @@ test.describe('Crosslinking', () => {
         await expect(orderByRecency).toBeChecked();
         const orderByRelevance = page.getByRole('radio', { name: 'Most relevant' });
         await expect(orderByRelevance).not.toBeChecked();
-        // 5 results per page.
-        await expect(page.getByRole('link', { name: 'Visit publication' })).toHaveCount(5);
-        await expect(page.getByText(/Showing 1 - 5 of \d+/)).toBeVisible();
+        // 4 results per page.
+        await expect(page.getByRole('link', { name: 'Visit publication' })).toHaveCount(4);
+        await expect(page.getByText(/Showing 1 - 4 of \d+/)).toBeVisible();
         // Expect 6 total results (i.e. more than 1 page).
         const prevButton = page.getByRole('button', { name: 'Previous' });
         const nextButton = page.getByRole('button', { name: 'Next' });
@@ -72,11 +72,11 @@ test.describe('Crosslinking', () => {
         // Use pagination.
         await nextButton.click();
         await page.waitForResponse((response) => response.url().includes('/crosslinks') && response.ok());
-        await expect(page.getByRole('link', { name: 'Visit publication' })).toHaveCount(1);
+        await expect(page.getByRole('link', { name: 'Visit publication' })).toHaveCount(2);
         await expect(prevButton).toBeEnabled();
         await expect(nextButton).toBeDisabled();
         await prevButton.click();
-        await expect(page.getByRole('link', { name: 'Visit publication' })).toHaveCount(5);
+        await expect(page.getByRole('link', { name: 'Visit publication' })).toHaveCount(4);
         // Change order.
         await expect(page.getByRole('link', { name: 'Visit publication' }).first()).toHaveAttribute(
             'href',
@@ -100,6 +100,6 @@ test.describe('Crosslinking', () => {
         );
         await page.getByLabel('Search for suggested links').clear();
         await page.waitForResponse((response) => response.url().includes('/crosslinks') && response.ok());
-        await expect(page.getByRole('link', { name: 'Visit publication' })).toHaveCount(5);
+        await expect(page.getByRole('link', { name: 'Visit publication' })).toHaveCount(4);
     });
 });
