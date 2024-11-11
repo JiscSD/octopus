@@ -4,22 +4,8 @@ import * as Interfaces from '@/interfaces';
 import * as Config from '@/config';
 import * as Types from '@/types';
 
-export let baseURL: string;
-
-switch (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF) {
-    case 'local':
-        baseURL = 'http://127.0.0.1:4003/local/v1'; // https://github.com/node-fetch/node-fetch/issues/1624
-        break;
-    case 'main':
-        baseURL = 'https://api.octopus.ac/v1';
-        break;
-    default:
-        baseURL = `https://${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF}.api.octopus.ac/v1`;
-        break;
-}
-
 const api = axios.create({
-    baseURL
+    baseURL: Config.endpoints.base
 });
 
 export const get = async (url: string, token?: string): Promise<AxiosResponse> => {
