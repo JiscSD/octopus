@@ -20,7 +20,7 @@ jobs:
     with:
       ENVIRONMENT: "prod"
     secrets:
-      AWS_ROLE: ${{ secrets.AWS_ROLE }}
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       RDS_URL: ${{ secrets.RDS_INSTANCE_PROD }} # RDS DNS/Name
       DATABASE_URL: ${{ secrets.DB_CONNECTION_PROD }} # The entire connection string, including the RDS DNS, username, password and database
@@ -41,7 +41,7 @@ jobs:
       - name: Configure aws credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           role-session-name: github-actions-deploy-prod
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
