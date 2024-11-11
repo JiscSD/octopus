@@ -72,6 +72,7 @@ There are some parts of this project's infrastructure that are **not** managed/c
 - Certificates in Certificate Manager
 - AWS Amplify config
 - Cloudfront distributions that sit between API domains (e.g. int.api.octopus.ac) and the corresponding API gateway
+- An IAM identity provider, with an associated IAM role, to allow github actions to act on AWS
 
 ## Migration to separate int AWS account
 

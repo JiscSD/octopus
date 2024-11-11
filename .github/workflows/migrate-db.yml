@@ -5,11 +5,7 @@ on:
         required: true
         type: string
     secrets:
-      AWS_ACCESS_KEY_ID:
-        required: true
-      AWS_SECRET_ACCESS_KEY:
-        required: true
-      AWS_SESSION_TOKEN:
+      AWS_ROLE:
         required: true
       AWS_DEFAULT_REGION:
         required: true
@@ -23,12 +19,15 @@ jobs:
     name: Migrate Database
     runs-on: ubuntu-latest
     steps:
-      # - name: Authenticate to AWS
-      #   uses: aws-actions/configure-aws-credentials@v4
-      #   with:
-      #     aws-region: eu-west-1
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-session-name: github-actions-deploy-dev
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
       - name: Setup Bastion
         id: setup
@@ -37,11 +36,6 @@ jobs:
           chmod +x ./temp-bastion-setup.sh
           ./temp-bastion-setup.sh ${{ inputs.ENVIRONMENT }} ${{ secrets.RDS_URL }} true
         shell: bash
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
       - name: Run prisma migrations
         working-directory: ./api
@@ -59,7 +53,3 @@ jobs:
         run: |
           chmod +x ./temp-bastion-cleanup.sh
           ./temp-bastion-cleanup.sh ${{ steps.setup.outputs.BASTION_ID }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}

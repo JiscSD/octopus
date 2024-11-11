@@ -7,6 +7,10 @@ on:
       - "int"
       - "OC-321"
 
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
 env:
   NODE_VERSION: "20.18.0"
 
@@ -17,9 +21,7 @@ jobs:
     with:
       ENVIRONMENT: "int"
     secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }} # This is only needed while developing (using temporary credentials)
+      AWS_ROLE: ${{ secrets.AWS_ROLE }}
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       RDS_URL: ${{ secrets.RDS_INSTANCE_INT }} # RDS DNS/Name
       DATABASE_URL: ${{ secrets.DB_CONNECTION_INT }} # The entire connection string, including the RDS DNS, username, password and database
@@ -37,6 +39,13 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-session-name: github-actions-deploy-int
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
       - name: Install dependencies
         working-directory: ./api
         run: |
@@ -53,22 +62,3 @@ jobs:
         working-directory: ./api
         run: |
           npm run deploy:int
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }} # This is only needed while developing (using temporary credentials)
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-#   deploy_ui:
-#     name: Deploy Jisc Login UI
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
-
-#       - name: Deploy UI
-#         working-directory: ./scripts
-#         run: ./amplify-deploy.sh d184r4985i9bqi develop
-#         env:
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
