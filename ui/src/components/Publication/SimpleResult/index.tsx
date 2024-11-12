@@ -52,6 +52,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                 disabled={loadingControlRequest}
                 title="Take over editing"
                 variant="block-alt"
+                className="mt-5"
                 onClick={handleControlRequest}
                 endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
             />
@@ -64,6 +65,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
             endIcon={<OutlineIcons.EyeIcon className="h-4" />}
             title="View Draft"
             variant="block-alt"
+            className="mt-5"
         />
     );
 
@@ -147,6 +149,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                         href={`/author-link?email=${props.user.email}&publicationId=${props.publication.id}&versionId=${draftVersion.id}&approve=true`}
                                         title="Confirm Involvement"
                                         variant="block-alt"
+                                        className="mt-5"
                                     />
                                 </>
                             )
@@ -158,6 +161,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                 endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
                                 title="Edit Draft"
                                 variant="block-alt"
+                                className="mt-5"
                             />
                         )}
                     </div>
@@ -179,6 +183,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                 disabled={loadingNewVersion}
                                 title="Create Draft Version"
                                 variant="block-alt"
+                                className="mt-5"
                                 onClick={handleCreateNewVersion}
                                 endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
                             />
@@ -211,6 +216,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                 endIcon={<OutlineIcons.ArrowTopRightOnSquareIcon className="h-4" />}
                                 title="View"
                                 variant="block"
+                                className="mt-5"
                             />
                             <Components.EngagementCounts flagCount={flagCount} peerReviewCount={peerReviewCount} />
                         </div>
