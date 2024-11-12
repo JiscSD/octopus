@@ -72,6 +72,7 @@ export { default as PublicationCreationResearchProcess } from './Publication/Cre
 export { default as PublicationCreationStepTitle } from './Publication/Creation/StepTitle';
 export { default as PublicationLink } from './Publication/Link';
 export { default as PublicationPageCoAuthoringActions } from './Publication/PublicationPage/CoAuthoringActions';
+export { default as PublicationPageHeaderActions } from './Publication/PublicationPage/HeaderActions';
 export { default as PublicationSearchResult } from './Publication/SearchResult';
 export { default as PublicationSidebar } from './Publication/Sidebar';
 export { default as PublicationSidebarCardActions } from './Publication/SidebarCard/Actions';

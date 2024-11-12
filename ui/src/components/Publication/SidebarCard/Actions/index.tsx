@@ -1,7 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 import * as SWR from 'swr';
-import * as Router from 'next/router';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as Interfaces from '@/interfaces';
 import * as Components from '@/components';
@@ -19,7 +18,6 @@ type ActionProps = {
 };
 
 const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
-    const router = Router.useRouter();
     const SWRConfig = SWR.useSWRConfig();
     // Store
     const user = Stores.useAuthStore((state) => state.user);
@@ -35,6 +33,10 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
     // Misc state
     const [error, setError] = React.useState<string | undefined>();
     const [submitting, setSubmitting] = React.useState(false);
+
+    const authorIds = props.publicationVersion.coAuthors.flatMap((coAuthor) =>
+        coAuthor.linkedUser ? [coAuthor.linkedUser] : []
+    );
 
     const saveRedFlag = async () => {
         setError(undefined);
@@ -208,53 +210,12 @@ const Actions: React.FC<ActionProps> = (props): React.ReactElement => {
                                 Make your name visible on your ORCiD profile for more actions
                             </Components.Link>
                         ) : user && user.email ? (
-                            <>
-                                {/* if the publication is a peer review, no options shall be given to write a linked publication */}
-                                {props.publicationVersion.publication.type !== 'PEER_REVIEW' && (
-                                    <>
-                                        {Helpers.linkedPublicationTypes[
-                                            props.publicationVersion.publication
-                                                .type as keyof typeof Helpers.linkedPublicationTypes
-                                        ].map((item: any) => {
-                                            return (
-                                                <Components.PublicationSidebarCardActionsButton
-                                                    label={`Write a linked ${Helpers.formatPublicationType(item)}`}
-                                                    key={item}
-                                                    onClick={() => {
-                                                        router.push({
-                                                            pathname: `${Config.urls.createPublication.path}`,
-                                                            query: {
-                                                                for: props.publicationVersion.versionOf,
-                                                                type: item
-                                                            }
-                                                        });
-                                                    }}
-                                                />
-                                            );
-                                        })}
-                                        {props.publicationVersion.user.id !== user.id && (
-                                            <>
-                                                <Components.PublicationSidebarCardActionsButton
-                                                    label="Write a review"
-                                                    onClick={() => {
-                                                        router.push({
-                                                            pathname: `${Config.urls.createPublication.path}`,
-                                                            query: {
-                                                                for: props.publicationVersion.versionOf,
-                                                                type: 'PEER_REVIEW'
-                                                            }
-                                                        });
-                                                    }}
-                                                />
-                                                <Components.PublicationSidebarCardActionsButton
-                                                    label="Flag a concern with this publication"
-                                                    onClick={() => setShowRedFlagModal(true)}
-                                                />
-                                            </>
-                                        )}
-                                    </>
-                                )}
-                            </>
+                            !authorIds.includes(user.id) && (
+                                <Components.PublicationSidebarCardActionsButton
+                                    label="Flag a concern with this publication"
+                                    onClick={() => setShowRedFlagModal(true)}
+                                />
+                            )
                         ) : (
                             <>
                                 <Components.Link

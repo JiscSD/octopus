@@ -735,6 +735,15 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     )}
                     <header>
                         <div className="grid w-full grid-cols-8">
+                            {publicationVersion.isLatestLiveVersion && (
+                                <Components.PublicationPageHeaderActions
+                                    authorIds={authors.flatMap((coAuthor) =>
+                                        coAuthor.linkedUser ? [coAuthor.linkedUser] : []
+                                    )}
+                                    publicationId={publication.id}
+                                    publicationType={publication.type}
+                                />
+                            )}
                             <h1 className="col-span-7 mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-normal">
                                 {publicationVersion.title}
                             </h1>
