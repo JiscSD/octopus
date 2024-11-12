@@ -674,39 +674,37 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 <section className="col-span-12 lg:col-span-8 xl:col-span-9">
                     {alerts}
                     {showApprovalsTracker && (
-                        <Components.ActionBar
-                            publicationVersion={publicationVersion}
-                            isCorrespondingAuthor={isCorrespondingAuthor}
-                            isReadyForPublish={isReadyForPublish}
-                            isPublishing={isPublishing}
-                            onUnlockPublication={handleUnlock}
-                            onApprove={handleApproval}
-                            onCancelApproval={handleCancelApproval}
-                            onPublish={handlePublish}
-                            onEditAffiliations={handleOpenAffiliationsModal}
-                        />
-                    )}
-
-                    {showApprovalsTracker && (
-                        <div className="pb-16">
-                            <Components.ApprovalsTracker
+                        <>
+                            <Components.PublicationPageCoAuthoringActions
                                 publicationVersion={publicationVersion}
+                                isCorrespondingAuthor={isCorrespondingAuthor}
+                                isReadyForPublish={isReadyForPublish}
                                 isPublishing={isPublishing}
+                                onUnlockPublication={handleUnlock}
+                                onApprove={handleApproval}
+                                onCancelApproval={handleCancelApproval}
                                 onPublish={handlePublish}
-                                onError={setServerError}
                                 onEditAffiliations={handleOpenAffiliationsModal}
-                                refreshPublicationVersionData={mutatePublicationVersion}
                             />
-                        </div>
-                    )}
-
-                    {showApprovalsTracker && author && (
-                        <Components.EditAffiliationsModal
-                            author={author}
-                            autoUpdate={isCorrespondingAuthor || !author.confirmedCoAuthor}
-                            open={isEditingAffiliations}
-                            onClose={handleCloseAffiliationsModal}
-                        />
+                            <div className="pb-16">
+                                <Components.ApprovalsTracker
+                                    publicationVersion={publicationVersion}
+                                    isPublishing={isPublishing}
+                                    onPublish={handlePublish}
+                                    onError={setServerError}
+                                    onEditAffiliations={handleOpenAffiliationsModal}
+                                    refreshPublicationVersionData={mutatePublicationVersion}
+                                />
+                            </div>
+                            {author && (
+                                <Components.EditAffiliationsModal
+                                    author={author}
+                                    autoUpdate={isCorrespondingAuthor || !author.confirmedCoAuthor}
+                                    open={isEditingAffiliations}
+                                    onClose={handleCloseAffiliationsModal}
+                                />
+                            )}
+                        </>
                     )}
 
                     {!!uniqueRedFlagCategoryList.length && (
