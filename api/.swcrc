@@ -112,7 +112,7 @@
     },
     "minify": false,
     "exclude": [
-        "__tests__/", // Jest (and whatever other test runner we use) compiles these
+        "./**/__tests__/", // Jest (and whatever other test runner we use) compiles these
         "prisma"
     ]
 }
