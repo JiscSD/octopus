@@ -110,6 +110,16 @@ const userMappings: Prisma.UserMappingCreateManyInput[] = [
         userId: 'clyheq7kt0015eg48i58jtf3a',
         value: 'Department for Business, Energy & Industrial Strategy',
         source: 'ARI'
+    },
+    {
+        userId: 'cm3fzp3x80001i9po2idoiksv',
+        value: 'HMT',
+        source: 'ARI'
+    },
+    {
+        userId: 'cm3fzp3x80003i9po45lfun1h',
+        value: 'HMRC',
+        source: 'ARI'
     }
 ];
 
