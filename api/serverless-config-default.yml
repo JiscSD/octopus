@@ -3,9 +3,7 @@ app: octopus
 
 service: octopus-api
 
-frameworkVersion: '3'
-
-useDotenv: true
+frameworkVersion: '4'
 
 functions:
     # App
