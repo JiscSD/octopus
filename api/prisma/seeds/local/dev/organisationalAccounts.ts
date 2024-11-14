@@ -178,6 +178,20 @@ const userSeeds: Prisma.UserCreateManyInput[] = [
         defaultTopicId: 'cly46903l007x7ryzgan8igh3', // Regulation of industry
         ror: 'https://ror.org/019ya6433',
         url: 'https://www.gov.uk/government/organisations/department-for-business-energy-and-industrial-strategy'
+    },
+    {
+        id: 'cm3fzp3x80001i9po2idoiksv',
+        role: 'ORGANISATION',
+        firstName: 'HM Treasury (UK)',
+        email: 'ari.comment@go-science.gov.uk',
+        defaultTopicId: 'clkv6ulvw01dyl2rsjhplwtqo' // Expenditures. Government spending
+    },
+    {
+        id: 'cm3fzp3x80003i9po45lfun1h',
+        role: 'ORGANISATION',
+        firstName: 'HMRC (UK)',
+        email: 'ari.comment@go-science.gov.uk',
+        defaultTopicId: 'clkv6ulvm01dul2rs0q6u2yor' // Revenue. Taxation. Internal revenue
     }
 ];
 export default userSeeds;
