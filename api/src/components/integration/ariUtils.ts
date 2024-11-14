@@ -62,7 +62,9 @@ export const mapAriQuestionToPublicationVersion = async (
     const commonBoilerplateHTML =
         "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>";
     const titleHTML = `<p>${question}</p>`;
-    const backgroundInformationHTML = backgroundInformation ? `<p>${parseAriTextField(backgroundInformation)}</p>` : '';
+    const backgroundInformationHTML = backgroundInformation
+        ? `<p><strong>Background</strong></p><p>${parseAriTextField(backgroundInformation)}</p>`
+        : '';
     const contactDetailsHTML = contactDetails
         ? `<p><strong>Contact details</strong></p><p>${parseAriTextField(contactDetails)}</p>`
         : '';

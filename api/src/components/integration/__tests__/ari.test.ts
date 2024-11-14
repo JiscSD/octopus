@@ -62,7 +62,7 @@ describe('ARI Mapping', () => {
                     // ARI Question title
                     '<p>ARI Publication 1</p>' +
                     // Background information
-                    '<p>Sample background information.</p>' +
+                    '<p><strong>Background</strong></p><p>Sample background information.</p>' +
                     // Contact details
                     '<p><strong>Contact details</strong></p><p>Sample contact details.</p>' +
                     // Related UKRI projects
@@ -84,7 +84,7 @@ describe('ARI Mapping', () => {
                 content:
                     "<p><strong>Question group</strong></p><p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p><p>ARI Publication 1</p>" +
                     // Background information
-                    '<p>Background information line 1.<br>Background information line 2.<br><br>Background information line 3.</p>' +
+                    '<p><strong>Background</strong></p><p>Background information line 1.<br>Background information line 2.<br><br>Background information line 3.</p>' +
                     // Contact details
                     '<p><strong>Contact details</strong></p><p>Contact details line 1.<br>Contact details line 2.<br><br>Contact details line 3.</p>' +
                     '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>'
@@ -274,7 +274,7 @@ describe('ARI handling', () => {
                     '<p><strong>New question group</strong></p>' +
                     "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>" +
                     '<p>ARI Publication 1</p>' +
-                    '<p>New background information.</p>' +
+                    '<p><strong>Background</strong></p><p>New background information.</p>' +
                     '<p><strong>Contact details</strong></p><p>New contact details.</p>' +
                     '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://jisc.ac.uk">Test</a></li></ul>'
             }
@@ -364,7 +364,7 @@ describe('ARI handling', () => {
                     '<p><strong>Question group</strong></p>' +
                     "<p><em>This problem is a UK government area of research interest (ARI) that was originally posted at <a target='_blank' href='https://ari.org.uk/'>https://ari.org.uk/</a> by a UK government organisation to indicate that they are keen to see research related to this area.</em></p>" +
                     '<p>ARI Publication 1</p>' +
-                    '<p>Sample background information.</p>' +
+                    '<p><strong>Background</strong></p><p>Sample background information.</p>' +
                     '<p><strong>Contact details</strong></p><p>Sample contact details.</p>' +
                     '<p><strong>Related UKRI Projects</strong></p><ul><li><a href="https://gtr.ukri.org/projects?ref=ES%2FS007105%2F1">Urban Big Data Centre</a></li><li><a href="https://gtr.ukri.org/projects?ref=ES%2FL011921%2F1">Urban Big Data</a></li></ul>',
                 keywords: ['field of research 1', 'field of research 2', 'tag 1', 'tag 2'],

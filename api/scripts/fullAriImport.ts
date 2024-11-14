@@ -6,9 +6,33 @@ import { expand } from 'dotenv-expand';
 expand(dotenv.config());
 
 import * as ariUtils from 'integration/ariUtils';
+import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
 
-const fullAriImport = async (): Promise<string> => {
+// Can take an argument to run for all departments, rather than just the ones specified in the
+// PARTICIPATING_ARI_USER_IDS environment variable.
+// npm run fullAriImport -- allDepartments=true
+const parseArguments = (): { allDepartments: boolean } => {
+    const args = Helpers.parseNpmScriptArgs();
+
+    for (const arg of Object.keys(args)) {
+        if (!['allDepartments'].includes(arg)) {
+            throw new Error(`Unexpected argument: ${arg}`);
+        }
+    }
+
+    const allDepartmentsArg = args.allDepartments;
+
+    if (allDepartmentsArg && !(allDepartmentsArg === 'true' || allDepartmentsArg === 'false')) {
+        throw new Error('allDepartments must be "true" or "false"');
+    }
+
+    return {
+        allDepartments: !!allDepartmentsArg
+    };
+};
+
+const fullAriImport = async (allDepartments?: boolean): Promise<string> => {
     const startTime = performance.now();
 
     // Collect all ARIs in a variable.
@@ -48,7 +72,8 @@ const fullAriImport = async (): Promise<string> => {
 
     // Remove archived ARIs and ARIs from departments we are not importing.
     const aris = allAris.filter(
-        (ari) => !ari.isArchived && participatingDepartmentNames.includes(ari.department.toLowerCase())
+        (ari) =>
+            !ari.isArchived && (allDepartments || participatingDepartmentNames.includes(ari.department.toLowerCase()))
     );
 
     // Process all the ARIs.
@@ -111,6 +136,8 @@ const fullAriImport = async (): Promise<string> => {
     ).toFixed(1)} seconds.`;
 };
 
-fullAriImport()
+const { allDepartments } = parseArguments();
+
+fullAriImport(allDepartments)
     .then((message) => console.log(message))
     .catch((err) => console.log(err));

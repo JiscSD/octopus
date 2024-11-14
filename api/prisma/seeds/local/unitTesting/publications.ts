@@ -798,7 +798,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                     // ARI Question title
                     '<p>ARI Publication 1</p>' +
                     // Background information
-                    '<p>Sample background information.</p>' +
+                    '<p><strong>Background</strong></p><p>Sample background information.</p>' +
                     // Contact details
                     '<p><strong>Contact details</strong></p><p>Sample contact details.</p>' +
                     // Related UKRI projects
