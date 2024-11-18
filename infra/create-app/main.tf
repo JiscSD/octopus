@@ -45,6 +45,12 @@ module "elasticsearch" {
   instance_size      = var.elasticsearch_instance_size
 }
 
+module "oidc" {
+  source       = "../modules/oidc"
+  environment  = local.environment
+  project_name = local.project_name
+}
+
 module "s3" {
   source       = "../modules/s3"
   environment  = local.environment
