@@ -81,7 +81,11 @@ services:
             - '4005:4003'
         command: sh -c "npm run seed:local && npm run dev"
         environment:
-            - DATACITE_USER # this and next 3 come from calling environment
+            - AWS_ACCESS_KEY_ID
+            - AWS_SECRET_ACCESS_KEY
+            - AWS_REGION
+            - SERVERLESS_LICENSE_KEY
+            - DATACITE_USER
             - DATACITE_PASSWORD
             - ORCID_ID
             - ORCID_SECRET

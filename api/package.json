@@ -20,7 +20,7 @@
         "deploy:int": "sls deploy --stage int",
         "deploy:prod": "sls deploy --stage prod",
         "dev": "concurrently npm:dev:start npm:dev:watch npm:dev:type",
-        "dev:start": "sls offline start -c serverless-offline.yml --reloadHandler --httpPort 4003 --host 0.0.0.0 --stage local --aws-profile octopus-dev",
+        "dev:start": "sls offline start -c serverless-offline.yml --reloadHandler --httpPort 4003 --host 0.0.0.0 --stage local",
         "dev:type": "tsc --noEmit -w --preserveWatchOutput",
         "dev:watch": "swc prisma -d dist --copy-files & swc src -d dist --copy-files -w",
         "format:check": "npx prettier --check src/",
