@@ -5,10 +5,10 @@ switch (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF) {
         baseURL = 'http://127.0.0.1:4003/local/v1'; // https://github.com/node-fetch/node-fetch/issues/1624
         break;
     case 'main':
-        baseURL = 'https://octopus.ac/v1';
+        baseURL = 'https://api.octopus.ac/v1';
         break;
     default:
-        baseURL = `https://${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF}.octopus.ac/v1`;
+        baseURL = `https://${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF}.api.octopus.ac/v1`;
         break;
 }
 
