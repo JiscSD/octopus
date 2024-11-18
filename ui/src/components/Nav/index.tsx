@@ -45,13 +45,17 @@ const Nav: React.FC = (): React.ReactElement => {
         setOpen(false);
     }, []);
 
-    const handleLogOut = useCallback(async () => {
-        await router.push({
-            pathname: `${Config.urls.home.path}`
-        });
-        Helpers.clearJWT();
-        setUser(null);
-    }, [router, setUser]);
+    const handleLogOut = useCallback(
+        (event: React.MouseEvent<HTMLAnchorElement>) => {
+            event.preventDefault();
+            Helpers.clearJWT();
+            setUser(null);
+            router.push({
+                pathname: `${Config.urls.home.path}`
+            });
+        },
+        [router, setUser]
+    );
 
     const items = useMemo(() => {
         const menuItems: Interfaces.NavMenuItem[] = [
@@ -122,7 +126,7 @@ const Nav: React.FC = (): React.ReactElement => {
                     {
                         label: 'Log out',
                         value: '#log-out',
-                        onClick: () => handleLogOut()
+                        onClick: handleLogOut
                     }
                 ]
             });

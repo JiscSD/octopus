@@ -218,7 +218,7 @@ const About: NextPage = (): React.ReactElement => (
                             content="Review our FAQs to find out more about how the platform works."
                             icon={<OutlineIcons.QuestionMarkCircleIcon className="h-8 w-8 text-teal-500" />}
                             link={Config.urls.faq.path}
-                            linkText="See FAQ's"
+                            linkText="See FAQs"
                         />
                     </div>
                 </>
