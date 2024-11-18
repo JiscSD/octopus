@@ -259,36 +259,47 @@ export const handleIncomingARI = async (question: I.ARIQuestion, dryRun?: boolea
             };
         }
 
-        const newPublication = await publicationService.create(
-            { ...mappedData, type: 'PROBLEM', conflictOfInterestStatus: false },
-            user,
-            true
-        );
+        try {
+            const newPublication = await publicationService.create(
+                { ...mappedData, type: 'PROBLEM', conflictOfInterestStatus: false },
+                user,
+                true
+            );
 
-        if (!newPublication) {
+            if (!newPublication) {
+                return {
+                    ...baseReturnObject,
+                    actionTaken: 'create',
+                    success: false,
+                    message: `Failed to create a publication for ARI question: ${question.questionId}.`
+                };
+            }
+
+            const newVersion = await publicationVersionService.get(newPublication.id, 'latestLive');
+
+            if (newVersion) {
+                return {
+                    ...baseReturnObject,
+                    actionTaken: 'create',
+                    success: true,
+                    publicationVersion: newVersion
+                };
+            } else {
+                return {
+                    ...baseReturnObject,
+                    actionTaken: 'create',
+                    success: false,
+                    message: `Created a publication for ARI question: ${question.questionId}, but couldn't retrieve the latest live version.`
+                };
+            }
+        } catch (error) {
+            console.log(error);
+
             return {
                 ...baseReturnObject,
                 actionTaken: 'create',
                 success: false,
-                message: `Failed to create a publication for ARI question: ${question.questionId}.`
-            };
-        }
-
-        const newVersion = await publicationVersionService.get(newPublication.id, 'latestLive');
-
-        if (newVersion) {
-            return {
-                ...baseReturnObject,
-                actionTaken: 'create',
-                success: true,
-                publicationVersion: newVersion
-            };
-        } else {
-            return {
-                ...baseReturnObject,
-                actionTaken: 'create',
-                success: false,
-                message: `Created a publication for ARI question: ${question.questionId}, but couldn't retrieve the latest live version.`
+                message: `Failed to create a publication for ARI question: ${question.questionId}. Encountered error: ${error}`
             };
         }
     }
@@ -322,47 +333,59 @@ export const handleIncomingARI = async (question: I.ARIQuestion, dryRun?: boolea
         // Unlike manually created publications, these just have 1 version that
         // updates in-place so that we don't pollute datacite with lots of version DOIs.
         const now = new Date().toISOString();
-        let updatedVersion = await publicationVersionService.update(existingVersion.id, {
-            ...(changes.title && { title: mappedData.title }),
-            ...(changes.content && { content: mappedData.content }),
-            ...(changes.description && { description: mappedData.description }),
-            ...(changes.keywords && { keywords: mappedData.keywords }),
-            ...(changes.topics && { topics: { set: mappedData.topicIds.map((topicId) => ({ id: topicId })) } }),
-            ...(changes.userId && { user: { connect: { id: mappedData.userId } } }),
-            publishedDate: now,
-            updatedAt: now
-        });
 
-        // If user changed, update coAuthors.
-        if (changes.userId) {
-            // Create a coAuthor based on the userId of the publicationVersion.
-            // Get private version for compatibility with createCorrespondingCoAuthor.
-            const privateVersion = await publicationVersionService.privateGetById(updatedVersion.id);
+        try {
+            let updatedVersion = await publicationVersionService.update(existingVersion.id, {
+                ...(changes.title && { title: mappedData.title }),
+                ...(changes.content && { content: mappedData.content }),
+                ...(changes.description && { description: mappedData.description }),
+                ...(changes.keywords && { keywords: mappedData.keywords }),
+                ...(changes.topics && { topics: { set: mappedData.topicIds.map((topicId) => ({ id: topicId })) } }),
+                ...(changes.userId && { user: { connect: { id: mappedData.userId } } }),
+                publishedDate: now,
+                updatedAt: now
+            });
 
-            if (privateVersion) {
-                // Delete old coAuthor.
-                // There should only be one coAuthor but since this is an array, loop through to make it clean.
-                await Promise.all(
-                    existingVersion.coAuthors.map((coAuthor) => coAuthorService.deleteCoAuthor(coAuthor.id))
-                );
-                await coAuthorService.createCorrespondingCoAuthor(privateVersion);
-                const versionWithUpdatedCoAuthors = await publicationVersionService.getById(updatedVersion.id);
+            // If user changed, update coAuthors.
+            if (changes.userId) {
+                // Create a coAuthor based on the userId of the publicationVersion.
+                // Get private version for compatibility with createCorrespondingCoAuthor.
+                const privateVersion = await publicationVersionService.privateGetById(updatedVersion.id);
 
-                if (versionWithUpdatedCoAuthors) {
-                    updatedVersion = versionWithUpdatedCoAuthors;
+                if (privateVersion) {
+                    // Delete old coAuthor.
+                    // There should only be one coAuthor but since this is an array, loop through to make it clean.
+                    await Promise.all(
+                        existingVersion.coAuthors.map((coAuthor) => coAuthorService.deleteCoAuthor(coAuthor.id))
+                    );
+                    await coAuthorService.createCorrespondingCoAuthor(privateVersion);
+                    const versionWithUpdatedCoAuthors = await publicationVersionService.getById(updatedVersion.id);
+
+                    if (versionWithUpdatedCoAuthors) {
+                        updatedVersion = versionWithUpdatedCoAuthors;
+                    }
                 }
             }
+
+            // Everything is good, so ensure changes hit datacite and opensearch.
+            await publicationVersionService.postPublishHook(updatedVersion, true);
+
+            return {
+                ...baseReturnObject,
+                actionTaken: 'update',
+                success: true,
+                publicationVersion: updatedVersion
+            };
+        } catch (error) {
+            console.log(error);
+
+            return {
+                ...baseReturnObject,
+                actionTaken: 'update',
+                success: false,
+                message: `Failed to update publication for ARI question: ${question.questionId}. Encountered error: ${error}`
+            };
         }
-
-        // Everything is good, so ensure changes hit datacite and opensearch.
-        await publicationVersionService.postPublishHook(updatedVersion, true);
-
-        return {
-            ...baseReturnObject,
-            actionTaken: 'update',
-            success: true,
-            publicationVersion: updatedVersion
-        };
     } else {
         // No change found, so take no action.
         return {
