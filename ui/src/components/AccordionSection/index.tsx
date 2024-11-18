@@ -27,7 +27,8 @@ const AccordionSection: React.FC<Props> = (props) => {
                 <Components.Button
                     id={toggleId}
                     title={props.title}
-                    className={`w-full justify-between bg-grey-50 px-6 py-1 font-inter transition-all duration-300 children:border-0 dark:bg-grey-700 ${
+                    variant="block"
+                    className={`w-full justify-between bg-grey-50 px-6 py-1 font-inter transition-all duration-300 dark:bg-grey-700 ${
                         expanded ? 'rounded-none rounded-t' : ''
                     }`}
                     endIcon={

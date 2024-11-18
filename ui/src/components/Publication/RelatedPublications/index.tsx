@@ -81,7 +81,8 @@ const RelatedPublications: React.FC<Props> = (props) => {
                         <>
                             <Components.Button
                                 title="View All"
-                                className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50 justify-center w-full md:w-1/2 lg:w-full"
+                                variant="block"
+                                className="justify-center w-full md:w-1/2 lg:w-full"
                                 onClick={openViewAllModal}
                             />
                             <Components.RelatedPublicationsViewAllModal
@@ -96,7 +97,8 @@ const RelatedPublications: React.FC<Props> = (props) => {
                         <>
                             <Components.Button
                                 title="Suggest a link"
-                                className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50 justify-center w-full md:w-1/2 lg:w-full"
+                                variant="block"
+                                className="justify-center w-full md:w-1/2 lg:w-full"
                                 onClick={() => setSuggestModalVisibility((prevState) => !prevState)}
                             />
                             <Components.RelatedPublicationsSuggestModal
@@ -112,7 +114,8 @@ const RelatedPublications: React.FC<Props> = (props) => {
                     ) : (
                         <Components.Button
                             title="Sign in to suggest a link"
-                            className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50 justify-center w-full md:w-1/2 lg:w-full"
+                            variant="block"
+                            className="justify-center w-full md:w-1/2 lg:w-full"
                             href={`${Config.urls.orcidLogin.path}&state=${encodeURIComponent(router.asPath)}`}
                         />
                     )}
