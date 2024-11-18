@@ -1,0 +1,64 @@
+name: Deploy int API
+
+# Run when int branch is updated
+on:
+  push:
+    branches:
+      - "int"
+      - "OC-321"
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
+env:
+  NODE_VERSION: "20.18.0"
+
+jobs:
+  migrate_db:
+    name: Migrate Database
+    uses: ./.github/workflows/migrate-db.yml
+    with:
+      ENVIRONMENT: "int"
+    secrets:
+      AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      RDS_URL: ${{ secrets.RDS_INSTANCE_INT }} # RDS DNS/Name
+      DATABASE_URL: ${{ secrets.DB_CONNECTION_INT }} # The entire connection string, including the RDS DNS, username, password and database
+
+  deploy_api:
+    name: Deploy API
+    runs-on: ubuntu-latest
+    needs: migrate_db
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: github-actions-deploy-int
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+      - name: Install dependencies
+        working-directory: ./api
+        run: |
+          PRISMA_ENGINE='["rhel-openssl-3.0.x"]' npm ci
+          npm i -g serverless@3.39.0
+
+      - name: Build Api
+        working-directory: ./api
+        run: |
+          npm run type
+          npm run build
+
+      - name: Deploy serverless app
+        working-directory: ./api
+        run: |
+          npm run deploy:int

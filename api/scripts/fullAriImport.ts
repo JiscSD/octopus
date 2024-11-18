@@ -1,4 +1,5 @@
 import axios from 'axios';
+import * as fs from 'fs/promises';
 import * as dotenv from 'dotenv';
 import { expand } from 'dotenv-expand';
 
@@ -12,7 +13,7 @@ import * as I from 'interface';
 // Can take an argument to run for all departments, rather than just the ones specified in the
 // PARTICIPATING_ARI_USER_IDS environment variable.
 // npm run fullAriImport -- allDepartments=true
-const parseArguments = (): { allDepartments: boolean } => {
+const parseArguments = (): { importAllDepartments: boolean } => {
     const args = Helpers.parseNpmScriptArgs();
 
     for (const arg of Object.keys(args)) {
@@ -28,7 +29,7 @@ const parseArguments = (): { allDepartments: boolean } => {
     }
 
     return {
-        allDepartments: !!allDepartmentsArg
+        importAllDepartments: !!allDepartmentsArg
     };
 };
 
@@ -82,9 +83,19 @@ const fullAriImport = async (allDepartments?: boolean): Promise<string> => {
     let createdCount = 0;
     let updatedCount = 0;
     let skippedCount = 0;
+    const unrecognisedDepartments = new Set<string>();
+    const unrecognisedTopics = new Set<string>();
 
     for (const ari of aris) {
         const handleAri = await ariUtils.handleIncomingARI(ari);
+
+        if (handleAri.unrecognisedDepartment) {
+            unrecognisedDepartments.add(handleAri.unrecognisedDepartment);
+        }
+
+        if (handleAri.unrecognisedTopics) {
+            handleAri.unrecognisedTopics.forEach((topic) => unrecognisedTopics.add(topic));
+        }
 
         if (handleAri.success) {
             switch (handleAri.actionTaken) {
@@ -125,19 +136,36 @@ const fullAriImport = async (allDepartments?: boolean): Promise<string> => {
     }
 
     if (failed.length) {
-        console.log(`${failed.length} encountered some sort of issue and failed:`, failed);
+        console.log(`${failed.length} encountered some sort of issue and failed. Please check the report for details.`);
     }
 
     const endTime = performance.now();
 
-    return `Finished. Successfully handled ${aris.length - failed.length} of ${aris.length} ARIs in ${(
-        (endTime - startTime) /
-        1000
-    ).toFixed(1)} seconds.`;
+    // Write report file.
+    const duration = ((endTime - startTime) / 1000).toFixed(1);
+    const unrecognisedDepartmentsArray = Array.from(unrecognisedDepartments).sort();
+    const unrecognisedTopicsArray = Array.from(unrecognisedTopics).sort();
+    const reportBody = `\
+Duration: ${duration} seconds.
+Publications created: ${createdCount}.
+Publications updated: ${updatedCount}.
+Publications skipped: ${skippedCount}.\
+${
+    unrecognisedDepartmentsArray.length
+        ? '\nUnrecognised departments: "' + unrecognisedDepartmentsArray.join('", "') + '".'
+        : ''
+}\
+${unrecognisedTopicsArray.length ? '\nUnrecognised topics: "' + unrecognisedTopicsArray.join('", "') + '".' : ''}
+`;
+    await fs.writeFile('full-ari-import-report.txt', reportBody);
+
+    return `Finished. Successfully handled ${aris.length - failed.length} of ${
+        aris.length
+    } ARIs in ${duration} seconds.`;
 };
 
-const { allDepartments } = parseArguments();
+const { importAllDepartments } = parseArguments();
 
-fullAriImport(allDepartments)
+fullAriImport(importAllDepartments)
     .then((message) => console.log(message))
     .catch((err) => console.log(err));
