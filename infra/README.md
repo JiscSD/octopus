@@ -71,7 +71,6 @@ There are some parts of this project's infrastructure that are **not** managed/c
 - Route 53 config
 - Certificates in Certificate Manager
 - AWS Amplify config
-- Cloudfront distributions that sit between API domains (e.g. int.api.octopus.ac) and the corresponding API gateway
 - An IAM identity provider to allow github actions to act on AWS
 
 ## Migration to separate int AWS account

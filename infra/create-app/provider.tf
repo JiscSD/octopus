@@ -3,6 +3,12 @@ provider "aws" {
   profile = var.profile
 }
 
+provider "aws" {
+  alias   = "useast1"
+  region  = "us-east-1"
+  profile = var.profile
+}
+
 terraform {
   required_version = ">=1.5.1"
   backend "s3" {

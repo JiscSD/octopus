@@ -75,3 +75,12 @@ module "sns" {
   project_name = local.project_name
 }
 
+module "cloudfront" {
+  source       = "../modules/cloudfront"
+  environment  = local.environment
+  project_name = local.project_name
+  providers = {
+    aws           = aws
+    aws.us-east-1 = aws.useast1
+  }
+}
