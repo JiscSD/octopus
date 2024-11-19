@@ -3,4 +3,3 @@ export { default as keys } from './keys';
 export { default as screens } from './screens';
 export { default as endpoints } from './endpoints';
 export * as values from './values';
-export * as CustomErros from './errors';

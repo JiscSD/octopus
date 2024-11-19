@@ -707,7 +707,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                     onClick={handlePreview}
                                     disabled={!isReadyToPreview}
                                     endIcon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
-                                    className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50"
+                                    variant="block"
                                 >
                                     Preview
                                 </Components.Button>
@@ -717,7 +717,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         onClick={() => setRequestApprovalModalVisibility(true)}
                                         disabled={!isReadyToRequestApproval}
                                         endIcon={<OutlineIcons.CloudArrowUpIcon className="h-5 w-5 text-white-50" />}
-                                        className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50"
+                                        variant="block"
                                     />
                                 ) : (
                                     <Components.Button
@@ -725,13 +725,13 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         onClick={() => setPublishModalVisibility(true)}
                                         disabled={!isReadyToPublish}
                                         endIcon={<OutlineIcons.CloudArrowUpIcon className="h-5 w-5 text-white-50" />}
-                                        className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50"
+                                        variant="block"
                                     />
                                 )}
                                 <Components.Button
                                     title="Save"
                                     onClick={() => setSaveModalVisibility(true)}
-                                    className="border-0 bg-green-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50"
+                                    variant="block-alt"
                                     endIcon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-white-50" />}
                                 />
                                 <Components.Button
@@ -831,7 +831,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                             <Components.Button
                                 title="Save"
                                 onClick={() => setSaveModalVisibility(true)}
-                                className="border-0 bg-green-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50"
+                                variant="block-alt"
                                 endIcon={<ReactIconsFA.FaRegSave className="h-5 w-5 text-white-50" />}
                             />
                             <Components.Button
@@ -854,14 +854,14 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         }
                                         disabled={!isReadyToPreview}
                                         endIcon={<OutlineIcons.EyeIcon className="text-white-500 h-5 w-5" />}
-                                        className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50"
+                                        variant="block"
                                         onClick={handlePreview}
                                     >
                                         Preview
                                     </Components.Button>
                                     {hasUnconfirmedCoAuthors ? (
                                         <Components.Button
-                                            className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50"
+                                            variant="block"
                                             disabled={!isReadyToRequestApproval}
                                             endIcon={
                                                 <OutlineIcons.CloudArrowUpIcon className="h-5 w-5 text-white-50" />
@@ -871,7 +871,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                                         />
                                     ) : (
                                         <Components.Button
-                                            className="border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm focus:ring-offset-2 children:border-0 children:text-white-50"
+                                            variant="block"
                                             disabled={!isReadyToPublish}
                                             endIcon={
                                                 <OutlineIcons.CloudArrowUpIcon className="h-5 w-5 text-white-50" />
