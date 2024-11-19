@@ -42,6 +42,7 @@ jobs:
           ORCID_SECRET: ${{ secrets.ORCID_SECRET }}
         run: |
           export SERVERLESS_LICENSE_KEY=`aws ssm get-parameter --name ${{ secrets.SERVERLESS_LICENSE_KEY_SSM_PARAMETER_ARN }} --query "Parameter.Value" --output text`
+          printenv
           docker compose -f "docker-compose.yml" up -d --build
 
       - name: Wait for API and DB to be ready

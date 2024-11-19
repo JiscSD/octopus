@@ -1,5 +1,7 @@
 FROM node:20-alpine
 
+RUN printenv
+
 RUN apk update
 
 RUN apk add \
