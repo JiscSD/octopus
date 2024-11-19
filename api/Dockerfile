@@ -17,9 +17,6 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
     && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
     && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
-# Create a dummy set of credentials and config for test
-RUN mkdir /root/.aws && echo '[octopus-docker]\naws_access_key_id=setkey\naws_secret_access_key=asecret' >/root/.aws/credentials && echo '[profile octopus-docker]\nregion=eu-west-1' >/root/.aws/config
-
 # Create and move to app directory
 RUN mkdir -p /app
 WORKDIR /app
