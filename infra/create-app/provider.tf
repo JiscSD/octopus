@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias   = "useast1"
+  alias   = "us-east-1-provider"
   region  = "us-east-1"
   profile = var.profile
 }

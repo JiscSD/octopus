@@ -80,7 +80,7 @@ module "cloudfront" {
   environment  = local.environment
   project_name = local.project_name
   providers = {
-    aws           = aws
-    aws.us-east-1 = aws.useast1
+    aws                    = aws
+    aws.us-east-1-provider = aws.us-east-1-provider
   }
 }

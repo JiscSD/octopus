@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source                = "hashicorp/aws"
-      configuration_aliases = [aws.us-east-1]
+      configuration_aliases = [aws.us-east-1-provider]
     }
   }
 }
@@ -26,7 +26,7 @@ data "aws_cloudfront_origin_request_policy" "all_viewer_except_host_header" {
 }
 
 resource "aws_wafv2_web_acl" "api_web_acl" {
-  provider = aws.us-east-1
+  provider = aws.us-east-1-provider
   name     = "${var.project_name}-${var.environment}-web-ACL"
   scope    = "CLOUDFRONT"
   default_action {
