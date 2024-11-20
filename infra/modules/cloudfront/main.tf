@@ -85,8 +85,10 @@ resource "aws_wafv2_web_acl" "api_web_acl" {
         name        = "AWSManagedRulesCommonRuleSet"
         vendor_name = "AWS"
         version     = null
+        # Override default rule which rejects requests with bodies over 16KB.
         rule_action_override {
           action_to_use {
+            # The "count" action acknowledges the request without blocking it.
             count {}
           }
           name = "SizeRestrictions_BODY"
