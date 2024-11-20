@@ -46,6 +46,7 @@ functions:
                 cors: true
     getPDF:
         handler: dist/src/components/pdf/routes.getPublicationPDF
+        architecture: x86_64
         memorySize: 2048 # https://github.com/alixaxel/chrome-aws-lambda#:~:text=You%20should%20allocate%20at%20least%20512%20MB%20of%20RAM%20to%20your%20Lambda%2C%20however%201600%20MB%20(or%20more)%20is%20recommended
         events:
             - http:
