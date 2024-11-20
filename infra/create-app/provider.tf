@@ -3,6 +3,14 @@ provider "aws" {
   profile = var.profile
 }
 
+# Some resources need to be created in the "global" us-east-1 region.
+# This aliased provider allows us to use a different region on a per-resource basis.
+provider "aws" {
+  alias   = "us-east-1-provider"
+  region  = "us-east-1"
+  profile = var.profile
+}
+
 terraform {
   required_version = ">=1.5.1"
   backend "s3" {
