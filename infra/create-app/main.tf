@@ -79,8 +79,11 @@ module "cloudfront" {
   source       = "../modules/cloudfront"
   environment  = local.environment
   project_name = local.project_name
+  # Multiple providers are needed to create resources in different regions.
   providers = {
-    aws                    = aws
+    # Default provider (default region).
+    aws = aws
+    # Us-east-1 provider, required for cloudfront distribution's web ACL.
     aws.us-east-1-provider = aws.us-east-1-provider
   }
 }

@@ -26,6 +26,7 @@ data "aws_cloudfront_origin_request_policy" "all_viewer_except_host_header" {
 }
 
 resource "aws_wafv2_web_acl" "api_web_acl" {
+  # Web ACLs of scope CLOUDFRONT must be created in the us-east-1 region, so we use this alternative provider.
   provider = aws.us-east-1-provider
   name     = "${var.project_name}-${var.environment}-web-ACL"
   scope    = "CLOUDFRONT"
