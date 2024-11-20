@@ -93,6 +93,14 @@ resource "aws_wafv2_web_acl" "api_web_acl" {
           }
           name = "SizeRestrictions_BODY"
         }
+        # Override default rule which rejects requests with a body failing an XSS evaluation.
+        # This blocks legitimate publication updates with style attributes in the content HTML.
+        rule_action_override {
+          action_to_use {
+            count {}
+          }
+          name = "CrossSiteScripting_BODY"
+        }
       }
     }
     visibility_config {
