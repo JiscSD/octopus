@@ -8,8 +8,6 @@ stages:
     prod:
         observability: true
 
-useDotenv: ${file(./serverless-config-default.yml):useDotenv}
-
 plugins:
     - serverless-prune-plugin
     - serverless-plugin-split-stacks
