@@ -2,12 +2,6 @@ org: ${file(./serverless-config-default.yml):org}
 
 service: ${file(./serverless-config-default.yml):service}
 
-stages:
-    int:
-        observability: true
-    prod:
-        observability: true
-
 plugins:
     - serverless-prune-plugin
     - serverless-plugin-split-stacks
