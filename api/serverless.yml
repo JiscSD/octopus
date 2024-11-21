@@ -1,5 +1,4 @@
 org: ${file(./serverless-config-default.yml):org}
-app: ${file(./serverless-config-default.yml):app}
 
 service: ${file(./serverless-config-default.yml):service}
 
