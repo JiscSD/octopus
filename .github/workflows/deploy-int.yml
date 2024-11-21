@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - "int"
+      - "OC-963-fix"
 
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -61,4 +62,5 @@ jobs:
         working-directory: ./api
         run: |
           export SERVERLESS_LICENSE_KEY=`aws ssm get-parameter --name ${{ secrets.SERVERLESS_LICENSE_KEY_SSM_PARAMETER_ARN }} --query "Parameter.Value" --output text`
+          printenv
           npm run deploy:int
