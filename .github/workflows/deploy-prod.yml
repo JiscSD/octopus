@@ -60,4 +60,5 @@ jobs:
       - name: Deploy serverless app
         working-directory: ./api
         run: |
+          export SERVERLESS_LICENSE_KEY=`aws ssm get-parameter --name ${{ secrets.SERVERLESS_LICENSE_KEY_SSM_PARAMETER_ARN }} --query "Parameter.Value" --output text`
           npm run deploy:prod

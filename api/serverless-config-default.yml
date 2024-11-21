@@ -1,8 +1,9 @@
+org: jiscacuk
+app: octopus
+
 service: octopus-api
 
-frameworkVersion: '3'
-
-useDotenv: true
+frameworkVersion: '4'
 
 functions:
     # App
@@ -522,19 +523,16 @@ package:
         - '!doi_example.json'
         - '!jest*'
         - '!lib/**'
-        - '!prisma/**'
-        - '!scripts/**'
-        - '!serverless*'
-        - '!src/**'
-        - '!tsconfig*'
-        - '!src/**/__tests__/**'
         - '!node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.so.node'
         - '!node_modules/.prisma/client/libquery_engine-linux-arm64-openssl-1.0.x.so.node'
         - '!node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node'
         - '!node_modules/.prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node'
+        - '!node_modules/@aws-sdk/**'
         - '!node_modules/@prisma/client/runtime/*.wasm'
         - '!node_modules/@prisma/engines/**'
         - '!node_modules/@sparticuz/chromium/**'
+        - '!node_modules/@smithy/**'
+        - '!node_modules/@swc/**'
         - '!node_modules/aws-sdk/**'
         - '!node_modules/chromium-bidi/**'
         - '!node_modules/prisma/engines/**'
@@ -543,6 +541,13 @@ package:
         - '!node_modules/prisma/libquery_engine-rhel-openssl-1.0.x.so.node'
         - '!node_modules/prisma/libquery_engine-rhel-openssl-3.0.x.so.node'
         - '!node_modules/puppeteer-core/**'
+        - '!node_modules/typescript/**'
+        - '!prisma/**'
+        - '!scripts/**'
+        - '!serverless*'
+        - '!src/**'
+        - '!tsconfig*'
+    # Should be the same as above but just re-including stuff at the end.
     pdfFunctionPatterns:
         - '!.eslintrc.json'
         - '!.localstack/**'
@@ -557,19 +562,16 @@ package:
         - '!doi_example.json'
         - '!jest*'
         - '!lib/**'
-        - '!prisma/**'
-        - '!scripts/**'
-        - '!serverless*'
-        - '!src/**'
-        - '!tsconfig*'
-        - '!src/**/__tests__/**'
         - '!node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.so.node'
         - '!node_modules/.prisma/client/libquery_engine-linux-arm64-openssl-1.0.x.so.node'
         - '!node_modules/.prisma/client/libquery_engine-linux-arm64-openssl-3.0.x.so.node'
         - '!node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node'
+        - '!node_modules/@aws-sdk/**'
         - '!node_modules/@prisma/client/runtime/*.wasm'
         - '!node_modules/@prisma/engines/**'
         - '!node_modules/@sparticuz/chromium/**'
+        - '!node_modules/@smithy/**'
+        - '!node_modules/@swc/**'
         - '!node_modules/aws-sdk/**'
         - '!node_modules/chromium-bidi/**'
         - '!node_modules/prisma/engines/**'
@@ -578,8 +580,15 @@ package:
         - '!node_modules/prisma/libquery_engine-linux-arm64-openssl-3.0.x.so.node'
         - '!node_modules/prisma/libquery_engine-rhel-openssl-1.0.x.so.node'
         - '!node_modules/puppeteer-core/**'
-        - 'node_modules/chromium-bidi/**'
+        - '!node_modules/typescript/**'
+        - '!prisma/**'
+        - '!scripts/**'
+        - '!serverless*'
+        - '!src/**'
+        - '!tsconfig*'
+        # Re-include packages needed for PDF generation only.
+        - 'node_modules/@sparticuz/chromium/**'
         - 'node_modules/.prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node'
+        - 'node_modules/chromium-bidi/**'
         - 'node_modules/prisma/libquery_engine-rhel-openssl-3.0.x.so.node'
         - 'node_modules/puppeteer-core/**'
-        - 'node_modules/@sparticuz/chromium/**'
