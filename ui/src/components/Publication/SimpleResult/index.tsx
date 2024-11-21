@@ -51,9 +51,10 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
             <Components.Button
                 disabled={loadingControlRequest}
                 title="Take over editing"
+                variant="block-alt"
+                className="mt-5"
                 onClick={handleControlRequest}
                 endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
-                className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
             />
         </>
     );
@@ -63,7 +64,8 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
             href={`/publications/${props.publication.id}`}
             endIcon={<OutlineIcons.EyeIcon className="h-4" />}
             title="View Draft"
-            className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
+            variant="block-alt"
+            className="mt-5"
         />
     );
 
@@ -146,7 +148,8 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                     <Components.Button
                                         href={`/author-link?email=${props.user.email}&publicationId=${props.publication.id}&versionId=${draftVersion.id}&approve=true`}
                                         title="Confirm Involvement"
-                                        className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
+                                        variant="block-alt"
+                                        className="mt-5"
                                     />
                                 </>
                             )
@@ -157,7 +160,8 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                 href={`/publications/${props.publication.id}/edit?step=0`}
                                 endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
                                 title="Edit Draft"
-                                className="mt-5 w-fit bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
+                                variant="block-alt"
+                                className="mt-5"
                             />
                         )}
                     </div>
@@ -178,9 +182,10 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                             <Components.Button
                                 disabled={loadingNewVersion}
                                 title="Create Draft Version"
+                                variant="block-alt"
+                                className="mt-5"
                                 onClick={handleCreateNewVersion}
                                 endIcon={<OutlineIcons.PencilSquareIcon className="h-4" />}
-                                className="mt-5 bg-green-600 px-3 text-white-50 children:border-none children:text-white-50"
                             />
                         </>
                     )
@@ -210,7 +215,8 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
                                 href={`/publications/${props.publication.id}`}
                                 endIcon={<OutlineIcons.ArrowTopRightOnSquareIcon className="h-4" />}
                                 title="View"
-                                className="bg-teal-500 px-3 text-white-50 children:border-none children:text-white-50"
+                                variant="block"
+                                className="mt-5"
                             />
                             <Components.EngagementCounts flagCount={flagCount} peerReviewCount={peerReviewCount} />
                         </div>

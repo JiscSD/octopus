@@ -1,5 +1,4 @@
 export { default as AccordionSection } from './AccordionSection';
-export { default as ActionBar } from './Publication/ActionBar';
 export { default as ActionCard } from './ActionCard';
 export { default as AdditionalInformationCard } from './AdditionalInformationCard';
 export { default as AdditionalInformationForm } from './Publication/Creation/AdditionalInformation/Form';
@@ -72,6 +71,8 @@ export { default as PublicationCreationMainText } from './Publication/Creation/M
 export { default as PublicationCreationResearchProcess } from './Publication/Creation/ResearchProcess';
 export { default as PublicationCreationStepTitle } from './Publication/Creation/StepTitle';
 export { default as PublicationLink } from './Publication/Link';
+export { default as PublicationPageCoAuthoringActions } from './Publication/PublicationPage/CoAuthoringActions';
+export { default as PublicationPageHeaderActions } from './Publication/PublicationPage/HeaderActions';
 export { default as PublicationSearchResult } from './Publication/SearchResult';
 export { default as PublicationSidebar } from './Publication/Sidebar';
 export { default as PublicationSidebarCardActions } from './Publication/SidebarCard/Actions';

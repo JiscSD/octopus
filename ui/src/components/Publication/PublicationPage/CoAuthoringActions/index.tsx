@@ -18,7 +18,7 @@ type Props = {
     onEditAffiliations: () => void;
 };
 
-const ActionBar: React.FC<Props> = (props) => {
+const CoAuthoringActions: React.FC<Props> = (props) => {
     const { user } = Stores.useAuthStore();
 
     const author = React.useMemo(
@@ -167,7 +167,8 @@ const ActionBar: React.FC<Props> = (props) => {
 
                 {props.isCorrespondingAuthor ? (
                     <Components.Button
-                        className="inline-flex max-w-fit items-center border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm outline-0 focus:overflow-hidden focus:ring-offset-2 disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed children:border-0 children:text-white-50"
+                        className="max-w-fit"
+                        variant="block"
                         disabled={!props.isReadyForPublish || props.isPublishing}
                         endIcon={<OutlineIcons.CloudArrowUpIcon className="w-5 shrink-0 text-white-50" />}
                         title="Publish"
@@ -177,7 +178,8 @@ const ActionBar: React.FC<Props> = (props) => {
                     </Components.Button>
                 ) : isApproved ? (
                     <Components.Button
-                        className="inline-flex max-w-fit items-center border-2 bg-red-600 px-2.5 text-white-50 shadow-sm outline-0 focus:overflow-hidden focus:ring-offset-2 disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed children:border-0 children:text-white-50"
+                        className="max-w-fit"
+                        variant="block"
                         endIcon={<OutlineIcons.XMarkIcon className="w-5 shrink-0 text-white-50" />}
                         title="Cancel your approval"
                         onClick={props.onCancelApproval}
@@ -186,7 +188,8 @@ const ActionBar: React.FC<Props> = (props) => {
                     </Components.Button>
                 ) : (
                     <Components.Button
-                        className="inline-flex max-w-fit items-center border-2 bg-teal-600 px-2.5 text-white-50 shadow-sm outline-0 focus:overflow-hidden focus:ring-offset-2 disabled:select-none disabled:opacity-50 disabled:hover:cursor-not-allowed children:border-0 children:text-white-50"
+                        className="max-w-fit"
+                        variant="block"
                         disabled={!(author?.isIndependent || author?.affiliations.length)}
                         endIcon={<OutlineIcons.CheckIcon className="w-5 shrink-0 text-white-50" />}
                         title="Approve this publication"
@@ -200,4 +203,4 @@ const ActionBar: React.FC<Props> = (props) => {
     );
 };
 
-export default ActionBar;
+export default CoAuthoringActions;

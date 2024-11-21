@@ -74,7 +74,6 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                                     endIcon={
                                         <OutlineIcons.ArrowRightIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                     }
-                                    className="w-fit"
                                 />
                                 <Components.Button
                                     href={`${Config.urls.search.path}/authors`}
@@ -82,7 +81,6 @@ const Browse: Types.NextPage<Props> = (props): React.ReactElement => {
                                     endIcon={
                                         <OutlineIcons.UserIcon className="h-4 w-4 text-teal-500 transition-colors duration-500 dark:text-white-50" />
                                     }
-                                    className="w-fit"
                                 />
                             </div>
                             <h2 className="mb-6 block font-montserrat text-xl font-bold leading-none text-grey-800 transition-colors duration-500 dark:text-white-50">

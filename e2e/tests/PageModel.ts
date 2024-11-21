@@ -98,7 +98,7 @@ export const PageModel = {
         verifyEmailForMoreButton: 'text=Verify your email for more actions',
         addBookmark: '[title="Bookmark this publication"]',
         removeBookmark: '[title="Remove bookmark"]',
-        writeReview: 'button[aria-label="Write a review"]',
+        writeReview: 'a[aria-label="Write a review"]',
         flagConcern: 'button[aria-label="Flag a concern with this publication"]',
         redFlagComment: '#red-flag-comment',
         redFlagSubmit: '[aria-label="Submit"]',

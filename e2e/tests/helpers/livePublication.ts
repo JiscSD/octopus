@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test';
+import { BrowserContext, expect, Page } from '@playwright/test';
 import { PageModel } from '../PageModel';
 
 export const checkLivePublicationLayout = async (page: Page, id: string, loggedIn?: boolean) => {
@@ -20,8 +20,10 @@ export const checkLivePublicationLayout = async (page: Page, id: string, loggedI
     );
 
     if (loggedIn) {
-        // Confirm review link
-        await page.locator(PageModel.livePublication.writeReview).locator('visible=true').click();
-        await expect(page).toHaveURL(`/create?for=${id}&type=PEER_REVIEW`);
+        // Expect review link
+        await expect(page.locator(PageModel.livePublication.writeReview).locator('visible=true')).toHaveAttribute(
+            'href',
+            `/create?for=${id}&type=PEER_REVIEW`
+        );
     }
 };
