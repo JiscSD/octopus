@@ -508,7 +508,6 @@ functions:
     #             enabled: ${self:custom.scheduledAriIngestEnabled.${opt:stage}, false}
 
 package:
-    excludeDevDependencies: true
     defaultPatterns:
         - '!.eslintrc.json'
         - '!.localstack/**'
