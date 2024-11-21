@@ -46,6 +46,7 @@ functions:
                 cors: true
     getPDF:
         handler: dist/src/components/pdf/routes.getPublicationPDF
+        architecture: x86_64
         memorySize: 2048 # https://github.com/alixaxel/chrome-aws-lambda#:~:text=You%20should%20allocate%20at%20least%20512%20MB%20of%20RAM%20to%20your%20Lambda%2C%20however%201600%20MB%20(or%20more)%20is%20recommended
         events:
             - http:
@@ -564,8 +565,8 @@ package:
         - '!src/**/__tests__/**'
         - '!node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.so.node'
         - '!node_modules/.prisma/client/libquery_engine-linux-arm64-openssl-1.0.x.so.node'
+        - '!node_modules/.prisma/client/libquery_engine-linux-arm64-openssl-3.0.x.so.node'
         - '!node_modules/.prisma/client/libquery_engine-rhel-openssl-1.0.x.so.node'
-        - '!node_modules/.prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node'
         - '!node_modules/@prisma/client/runtime/*.wasm'
         - '!node_modules/@prisma/engines/**'
         - '!node_modules/@sparticuz/chromium/**'
@@ -574,9 +575,11 @@ package:
         - '!node_modules/prisma/engines/**'
         - '!node_modules/prisma/libquery_engine-debian-openssl-3.0.x.so.node'
         - '!node_modules/prisma/libquery_engine-linux-arm64-openssl-1.0.x.so.node'
+        - '!node_modules/prisma/libquery_engine-linux-arm64-openssl-3.0.x.so.node'
         - '!node_modules/prisma/libquery_engine-rhel-openssl-1.0.x.so.node'
-        - '!node_modules/prisma/libquery_engine-rhel-openssl-3.0.x.so.node'
         - '!node_modules/puppeteer-core/**'
         - 'node_modules/chromium-bidi/**'
+        - 'node_modules/.prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node'
+        - 'node_modules/prisma/libquery_engine-rhel-openssl-3.0.x.so.node'
         - 'node_modules/puppeteer-core/**'
         - 'node_modules/@sparticuz/chromium/**'
