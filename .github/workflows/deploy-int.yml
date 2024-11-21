@@ -62,4 +62,10 @@ jobs:
         working-directory: ./api
         run: |
           export SERVERLESS_LICENSE_KEY=`aws ssm get-parameter --name ${{ secrets.SERVERLESS_LICENSE_KEY_SSM_PARAMETER_ARN }} --query "Parameter.Value" --output text`
+          npx sls package --stage int
+          ls -lh .serverless
+          cd .serverless
+          unzip octopus-api.zip -d octopus-api
+          du -a octopus-api | sort -n -r | head -n 20
+          cd ..
           npm run deploy:int
