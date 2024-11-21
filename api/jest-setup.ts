@@ -1,7 +1,5 @@
-// Ensure that process.env values are defined when jest runs code, to match the behaviour
-// configured by serverless's "useDotenv" option (which also uses dotenv-expand).
+// Ensure that process.env values are defined when jest runs code, to match serverless's behaviour.
 
 import * as dotenv from 'dotenv';
-import { expand } from 'dotenv-expand';
 
-expand(dotenv.config());
+dotenv.config();

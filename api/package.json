@@ -54,7 +54,6 @@
         "aws-lambda": "^1.0.7",
         "cheerio": "^1.0.0-rc.12",
         "dotenv": "16.4.5",
-        "dotenv-expand": "11.0.7",
         "html-to-text": "^9.0.5",
         "isomorphic-dompurify": "^2.12.0",
         "jsonwebtoken": "^9.0.2",

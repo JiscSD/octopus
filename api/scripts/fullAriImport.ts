@@ -1,10 +1,9 @@
 import axios from 'axios';
 import * as fs from 'fs/promises';
 import * as dotenv from 'dotenv';
-import { expand } from 'dotenv-expand';
 
 // Important to do this so that environment variables are treated the same as in deployed code.
-expand(dotenv.config());
+dotenv.config();
 
 import * as ariUtils from 'integration/ariUtils';
 import * as Helpers from 'lib/helpers';
