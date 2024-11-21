@@ -588,8 +588,7 @@ package:
         - '!tsconfig*'
         # Re-include packages needed for PDF generation only.
         - 'node_modules/@sparticuz/chromium/**'
-        - 'node_modules/chromium-bidi/**'
         - 'node_modules/.prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node'
+        - 'node_modules/chromium-bidi/**'
         - 'node_modules/prisma/libquery_engine-rhel-openssl-3.0.x.so.node'
         - 'node_modules/puppeteer-core/**'
-        - 'node_modules/@sparticuz/chromium/**'
