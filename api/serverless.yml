@@ -1,15 +1,6 @@
 org: ${file(./serverless-config-default.yml):org}
-app: ${file(./serverless-config-default.yml):app}
 
 service: ${file(./serverless-config-default.yml):service}
-
-stages:
-    int:
-        observability: true
-    prod:
-        observability: true
-
-useDotenv: ${file(./serverless-config-default.yml):useDotenv}
 
 plugins:
     - serverless-prune-plugin
