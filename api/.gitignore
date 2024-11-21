@@ -14,3 +14,4 @@ prod.env
 coverage
 Octopus.postman_collection.json
 dist
+full-ari-import-report.txt

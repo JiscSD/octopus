@@ -3,6 +3,10 @@ on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
 
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
 jobs:
   api-tests:
     timeout-minutes: 15
@@ -12,6 +16,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: github-actions-api-tests
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
       # Note: this step is only required locally when using act since the ubuntu image
       # does not come with docker-compose installed, however the alternative to the reinstall
@@ -29,7 +40,9 @@ jobs:
           DATACITE_PASSWORD: ${{ secrets.DATACITE_PASSWORD }}
           ORCID_ID: ${{ secrets.ORCID_ID }}
           ORCID_SECRET: ${{ secrets.ORCID_SECRET }}
-        run: docker compose -f "docker-compose.yml" up -d --build
+        run: |
+          export SERVERLESS_LICENSE_KEY=`aws ssm get-parameter --name ${{ secrets.SERVERLESS_LICENSE_KEY_SSM_PARAMETER_ARN }} --query "Parameter.Value" --output text`
+          docker compose up -d --build
 
       - name: Wait for API and DB to be ready
         run: docker exec -t api-test dockerize -wait tcp://db:5432 -wait tcp://api-test:4003 -wait tcp://mailpit:8025 -wait tcp://localstack:4566 -timeout 120s
@@ -44,4 +57,4 @@ jobs:
 
       - name: Stop containers
         working-directory: ./api
-        run: docker compose -f docker-compose.yml down
+        run: docker compose down
