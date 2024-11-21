@@ -9,26 +9,38 @@ import * as ariUtils from 'integration/ariUtils';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
 
-// Can take an argument to run for all departments, rather than just the ones specified in the
-// PARTICIPATING_ARI_USER_IDS environment variable.
-// npm run fullAriImport -- allDepartments=true
-const parseArguments = (): { importAllDepartments: boolean } => {
+/**
+ * Can take the following arguments:
+ *  - allDepartments: If "true", the script will run for all departments,
+ *    rather than just the ones specified in the PARTICIPATING_ARI_USER_IDS environment variable.
+ *  - full: If "true", the script will import all ARIs from the ARI DB, instead of stopping when it
+ *    thinks it has found all the new ones (the incremental way).
+ *
+ * e.g.:
+ * npm run ariImport -- allDepartments=true full=true
+ */
+const parseArguments = (): { importAllDepartments: boolean; full: boolean } => {
     const args = Helpers.parseNpmScriptArgs();
 
     for (const arg of Object.keys(args)) {
-        if (!['allDepartments'].includes(arg)) {
+        if (!['allDepartments', 'full'].includes(arg)) {
             throw new Error(`Unexpected argument: ${arg}`);
         }
     }
 
-    const allDepartmentsArg = args.allDepartments;
+    const { allDepartments: allDepartmentsArg, full: fullArg } = args;
 
     if (allDepartmentsArg && !(allDepartmentsArg === 'true' || allDepartmentsArg === 'false')) {
-        throw new Error('allDepartments must be "true" or "false"');
+        throw new Error('"allDepartments" must be "true" or "false"');
+    }
+
+    if (fullArg && !(fullArg === 'true' || fullArg === 'false')) {
+        throw new Error('"full" must be "true" or "false"');
     }
 
     return {
-        importAllDepartments: !!allDepartmentsArg
+        importAllDepartments: !!allDepartmentsArg,
+        full: !!fullArg
     };
 };
 
