@@ -190,6 +190,34 @@ export const getVote = (crosslinkId: string, userId: string) =>
     });
 
 export const getPublicationCrosslinks = async (publicationId: string, options?: I.GetPublicationCrosslinksOptions) => {
+    /**
+     * Raw SQL query alternative:
+
+PREPARE getPublicationCrosslinks (text) AS
+    SELECT
+        c.id,
+        c."publicationToId" AS linkedPublicationId,
+        pv.title AS linkedPublicationTitle,
+        c."createdBy",
+        c."createdAt",
+        c.score
+    FROM "Crosslink" AS c
+    JOIN "PublicationVersion" AS pv ON c."publicationToId" = pv."publicationId"
+    WHERE c."publicationFromId" = $1 AND pv."isLatestLiveVersion"
+    UNION
+    SELECT
+        c.id,
+        c."publicationFromId" AS linkedPublicationId,
+        pv.title AS linkedPublicationTitle,
+        c."createdBy",
+        c."createdAt",
+        c.score
+    FROM "Crosslink" AS c
+    JOIN "PublicationVersion" AS pv ON c."publicationFromId" = pv."publicationId"
+    WHERE "publicationToId" = $1 AND pv."isLatestLiveVersion";
+
+EXECUTE getPublicationCrosslinks('publicationId');
+     */
     const { order, search, limit, offset, userIdFilter } = options || {};
     const publicationInclude = {
         select: {
