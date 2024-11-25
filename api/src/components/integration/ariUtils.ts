@@ -1,6 +1,7 @@
 import * as client from 'lib/client';
 import * as coAuthorService from 'coAuthor/service';
 import * as config from 'config';
+import * as email from 'email';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
 import * as publicationService from 'publication/service';
@@ -9,6 +10,7 @@ import * as topicMappingService from 'topicMapping/service';
 import * as userMappingService from 'userMapping/service';
 import * as userService from 'user/service';
 
+import * as fs from 'fs/promises';
 import { Prisma } from '@prisma/client';
 
 const parseAriTextField = (value: string): string => {
@@ -407,4 +409,85 @@ export const getParticipatingDepartmentNames = async (): Promise<string[]> => {
     );
 
     return queryResults.flatMap((userMappings) => userMappings.map((userMapping) => userMapping.value));
+};
+
+export const ingestReport = async (
+    format: 'email' | 'file',
+    ingestDetails: {
+        checkedCount: number;
+        durationSeconds: number;
+        createdCount: number;
+        updatedCount: number;
+        unrecognisedDepartments: string[];
+        unrecognisedTopics: string[];
+        dryRun: boolean;
+        full: boolean;
+    }
+): Promise<void> => {
+    const {
+        checkedCount,
+        durationSeconds,
+        createdCount,
+        updatedCount,
+        unrecognisedDepartments,
+        unrecognisedTopics,
+        dryRun,
+        full
+    } = ingestDetails;
+    const intro = `${full ? 'Full' : 'Incremental'} ARI import ${dryRun ? 'dry ' : ''}run completed.`;
+    const timingInfo =
+        `Duration: ${durationSeconds} seconds.` +
+        (dryRun && (createdCount || updatedCount)
+            ? ` A real run would have taken a minimum of ${
+                  createdCount + updatedCount / 2
+              } additional seconds due to datacite API rate limits while creating/updating publications.`
+            : '');
+    const detailsPrefix = `The ${dryRun ? 'simulated ' : ''}results of this run are as follows.`;
+    const text = `
+${intro}
+${timingInfo}
+${detailsPrefix} 
+ARIs checked: ${checkedCount}.
+Publications created: ${createdCount}.
+Publications updated: ${updatedCount}.
+${unrecognisedDepartments.length ? 'Unrecognised departments: "' + unrecognisedDepartments.join('", "') + '".' : ''}
+${unrecognisedTopics.length ? 'Unrecognised topics: "' + unrecognisedTopics.join('", "') + '".' : ''}`;
+
+    if (format === 'file') {
+        const fileName = 'ari-import-report.txt';
+        await fs.writeFile(fileName, text);
+        console.log(`Report file written to ${fileName}.`);
+    }
+
+    if (format === 'email') {
+        const cleanDepartments = unrecognisedDepartments.map((department) => Helpers.getSafeHTML(department));
+        const cleanTopics = unrecognisedTopics.map((topic) => Helpers.getSafeHTML(topic));
+        const html = `
+        <html>
+            <body>
+                <p>${intro}</p>
+                <p>${timingInfo}</p>
+                <p>${detailsPrefix}</p>
+                <ul>
+                    <li>ARIs checked: ${checkedCount}</li>
+                    <li>Publications created: ${createdCount}</li>
+                    <li>Publications updated: ${updatedCount}</li>
+                    ${
+                        cleanDepartments.length
+                            ? '<li>Unrecognised departments: <ul><li>' +
+                              cleanDepartments.join('</li><li>') +
+                              '</li></ul></li>'
+                            : ''
+                    }
+                    ${
+                        cleanTopics.length
+                            ? '<li>Unrecognised topics: <ul><li>' + cleanTopics.join('</li><li>') + '</li></ul></li>'
+                            : ''
+                    }
+                </ul>
+            </body>
+        </html>
+    `;
+        await email.ariIngestReport(html, text);
+    }
 };

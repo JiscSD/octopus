@@ -1,5 +1,4 @@
 import axios from 'axios';
-import * as fs from 'fs/promises';
 import * as dotenv from 'dotenv';
 
 // Important to do this so that environment variables are treated the same as in deployed code.
@@ -8,44 +7,58 @@ dotenv.config();
 import * as ariUtils from 'integration/ariUtils';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
+import * as integrationService from 'integration/service';
+
+const checkBooleanArgValue = (arg: string): void => {
+    if (arg && !(arg === 'true' || arg === 'false')) {
+        throw new Error(`"${arg}" must be "true" or "false"`);
+    }
+};
 
 /**
  * Can take the following arguments:
  *  - allDepartments: If "true", the script will run for all departments,
  *    rather than just the ones specified in the PARTICIPATING_ARI_USER_IDS environment variable.
+ *    - Has no effect unless "full" is "true".
+ *    - Default: false
+ *  - dryRun: If "true", the script will not actually create or update any publications,
+ *    and instead report on what it would have done.
+ *    - Default: false
  *  - full: If "true", the script will import all ARIs from the ARI DB, instead of stopping when it
  *    thinks it has found all the new ones (the incremental way).
+ *    - Default: false
  *
  * e.g.:
  * npm run ariImport -- allDepartments=true full=true
  */
-const parseArguments = (): { importAllDepartments: boolean; full: boolean } => {
+const parseArguments = (): { importAllDepartments: boolean; dryRun: boolean; full: boolean } => {
     const args = Helpers.parseNpmScriptArgs();
 
     for (const arg of Object.keys(args)) {
-        if (!['allDepartments', 'full'].includes(arg)) {
+        if (!['allDepartments', 'dryRun', 'full'].includes(arg)) {
             throw new Error(`Unexpected argument: ${arg}`);
         }
     }
 
-    const { allDepartments: allDepartmentsArg, full: fullArg } = args;
+    const { allDepartments: allDepartmentsArg, dryRun: dryRunArg, full: fullArg } = args;
 
-    if (allDepartmentsArg && !(allDepartmentsArg === 'true' || allDepartmentsArg === 'false')) {
-        throw new Error('"allDepartments" must be "true" or "false"');
-    }
-
-    if (fullArg && !(fullArg === 'true' || fullArg === 'false')) {
-        throw new Error('"full" must be "true" or "false"');
+    for (const arg of [allDepartmentsArg, dryRunArg, fullArg]) {
+        checkBooleanArgValue(arg);
     }
 
     return {
         importAllDepartments: !!allDepartmentsArg,
+        dryRun: !!dryRunArg,
         full: !!fullArg
     };
 };
 
-const ariImport = async (allDepartments?: boolean, full?: boolean): Promise<string> => {
-    console.log(full);
+/**
+ * Full ARI ingest.
+ * Differs from incremental ingest by fetching all ARIs before processing them.
+ * It will not stop until all ARIs have been processed.
+ */
+export const fullAriIngest = async (allDepartments: boolean, dryRun: boolean): Promise<string> => {
     const startTime = performance.now();
 
     // Collect all ARIs in a variable.
@@ -99,7 +112,7 @@ const ariImport = async (allDepartments?: boolean, full?: boolean): Promise<stri
     const unrecognisedTopics = new Set<string>();
 
     for (const ari of aris) {
-        const handleAri = await ariUtils.handleIncomingARI(ari);
+        const handleAri = await ariUtils.handleIncomingARI(ari, dryRun);
 
         if (handleAri.unrecognisedDepartment) {
             unrecognisedDepartments.add(handleAri.unrecognisedDepartment);
@@ -113,16 +126,24 @@ const ariImport = async (allDepartments?: boolean, full?: boolean): Promise<stri
             switch (handleAri.actionTaken) {
                 case 'create':
                     createdCount++;
+
                     // Datacite test has a firewall that only 750 request per IP across a 5 minute period.
                     // https://support.datacite.org/docs/is-there-a-rate-limit-for-making-requests-against-the-datacite-apis
                     // 5 minutes = 300 seconds. 300 / 750 = 0.4 seconds per request, so we take minimum 0.5s per hit to be safe.
                     // We hit datacite twice when creating an ARI, so wait 1 second.
-                    await new Promise((resolve) => setTimeout(resolve, 1000));
+                    if (!dryRun) {
+                        await new Promise((resolve) => setTimeout(resolve, 1000));
+                    }
+
                     break;
                 case 'update':
                     updatedCount++;
+
                     // We hit datacite once when updating an ARI in place, so wait half a second.
-                    await new Promise((resolve) => setTimeout(resolve, 500));
+                    if (!dryRun) {
+                        await new Promise((resolve) => setTimeout(resolve, 500));
+                    }
+
                     break;
                 case 'none':
                     skippedCount++;
@@ -152,32 +173,35 @@ const ariImport = async (allDepartments?: boolean, full?: boolean): Promise<stri
     }
 
     const endTime = performance.now();
+    const durationSeconds = Math.round((endTime - startTime) / 100) / 10;
 
     // Write report file.
-    const duration = ((endTime - startTime) / 1000).toFixed(1);
-    const unrecognisedDepartmentsArray = Array.from(unrecognisedDepartments).sort();
-    const unrecognisedTopicsArray = Array.from(unrecognisedTopics).sort();
-    const reportBody = `\
-Duration: ${duration} seconds.
-Publications created: ${createdCount}.
-Publications updated: ${updatedCount}.
-Publications skipped: ${skippedCount}.\
-${
-    unrecognisedDepartmentsArray.length
-        ? '\nUnrecognised departments: "' + unrecognisedDepartmentsArray.join('", "') + '".'
-        : ''
-}\
-${unrecognisedTopicsArray.length ? '\nUnrecognised topics: "' + unrecognisedTopicsArray.join('", "') + '".' : ''}
-`;
-    await fs.writeFile('full-ari-import-report.txt', reportBody);
+    await ariUtils.ingestReport('file', {
+        checkedCount: aris.length,
+        durationSeconds,
+        createdCount,
+        updatedCount,
+        unrecognisedDepartments: Array.from(unrecognisedDepartments).sort(),
+        unrecognisedTopics: Array.from(unrecognisedTopics).sort(),
+        dryRun,
+        full: true
+    });
 
-    return `Finished. Successfully handled ${aris.length - failed.length} of ${
+    return `${dryRun ? 'Dry run' : 'Real run'} finished. Successfully handled ${aris.length - failed.length} of ${
         aris.length
-    } ARIs in ${duration} seconds.`;
+    } ARIs in ${durationSeconds} seconds.`;
 };
 
-const { importAllDepartments, full } = parseArguments();
+const ariImport = async (allDepartments: boolean, dryRun: boolean, full: boolean): Promise<string> => {
+    if (!full) {
+        return await integrationService.incrementalAriIngest(dryRun, 'file');
+    } else {
+        return await fullAriIngest(allDepartments, dryRun);
+    }
+};
 
-ariImport(importAllDepartments, full)
+const { importAllDepartments, dryRun, full } = parseArguments();
+
+ariImport(importAllDepartments, dryRun, full)
     .then((message) => console.log(message))
     .catch((err) => console.log(err));
