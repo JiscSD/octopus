@@ -32,12 +32,12 @@
         "test:local": "STAGE=local jest --runInBand --testTimeout=60000",
         "test:watch": "npm run test:local -- --watch",
         "type": "tsc --noEmit",
-        "reindex": "ts-node scripts/reindex.ts",
+        "ariImport": "ts-node -r tsconfig-paths/register scripts/ariImport.ts",
         "createOrganisationalAccounts": "ts-node -r tsconfig-paths/register scripts/createOrganisationalAccounts.ts",
         "createTopicMappings": "ts-node -r tsconfig-paths/register scripts/createTopicMappings.ts",
         "createTopics": "ts-node -r tsconfig-paths/register scripts/createTopics.ts",
         "createUserMappings": "ts-node -r tsconfig-paths/register scripts/createUserMappings.ts",
-        "fullAriImport": "ts-node -r tsconfig-paths/register scripts/fullAriImport.ts",
+        "reindex": "ts-node scripts/reindex.ts",
         "updateOrganisationalAccounts": "ts-node -r tsconfig-paths/register scripts/updateOrganisationalAccounts.ts"
     },
     "dependencies": {

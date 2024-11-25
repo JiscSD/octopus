@@ -44,7 +44,8 @@ const parseArguments = (): { importAllDepartments: boolean; full: boolean } => {
     };
 };
 
-const fullAriImport = async (allDepartments?: boolean): Promise<string> => {
+const ariImport = async (allDepartments?: boolean, full?: boolean): Promise<string> => {
+    console.log(full);
     const startTime = performance.now();
 
     // Collect all ARIs in a variable.
@@ -175,8 +176,8 @@ ${unrecognisedTopicsArray.length ? '\nUnrecognised topics: "' + unrecognisedTopi
     } ARIs in ${duration} seconds.`;
 };
 
-const { importAllDepartments } = parseArguments();
+const { importAllDepartments, full } = parseArguments();
 
-fullAriImport(importAllDepartments)
+ariImport(importAllDepartments, full)
     .then((message) => console.log(message))
     .catch((err) => console.log(err));
