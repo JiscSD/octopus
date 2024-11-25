@@ -457,6 +457,8 @@ ${unrecognisedTopics.length ? 'Unrecognised topics: "' + unrecognisedTopics.join
         const fileName = 'ari-import-report.txt';
         await fs.writeFile(fileName, text);
         console.log(`Report file written to ${fileName}.`);
+
+        return;
     }
 
     if (format === 'email') {
@@ -489,5 +491,7 @@ ${unrecognisedTopics.length ? 'Unrecognised topics: "' + unrecognisedTopics.join
         </html>
     `;
         await email.ariIngestReport(html, text);
+
+        return;
     }
 };
