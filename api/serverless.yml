@@ -1,8 +1,6 @@
+org: ${file(./serverless-config-default.yml):org}
+
 service: ${file(./serverless-config-default.yml):service}
-
-frameworkVersion: ${file(./serverless-config-default.yml):frameworkVersion}
-
-useDotenv: ${file(./serverless-config-default.yml):useDotenv}
 
 plugins:
     - serverless-prune-plugin

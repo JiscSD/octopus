@@ -7,7 +7,7 @@ The Octopus API is a [Prisma](https://www.prisma.io/) project, using [PostgreSQL
 -   Install [Node](https://github.com/nodejs/node) `v20`.
 -   Recommended: use [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js versions.
 -   Install [Docker](https://docs.docker.com/get-docker).
--   Install [Serverless](https://www.serverless.com) `v3`, (`3.37` or higher).
+-   Install [Serverless](https://www.serverless.com) `v4`.
 -   Obtain credentials to allow access to the [ORCID Public/Member API](https://info.orcid.org/documentation/integration-guide/registering-a-public-api-client/).
 -   Obtain credentials to allow access to the [DataCite API](https://support.datacite.org/docs/api).
 -   Create your environment file as described below.
@@ -22,16 +22,21 @@ Make sure to update the values within to match your environment.
 
 When adding a new item to the .env file, make sure to update the environment variables in the docker-compose.yml file so the API tests can access them.
 
-### AWS Credentials File
+### AWS/Serverless credentials setup
 
-You will need an octopus credential profile to run locally. This can be populated with the dummy data below:
+You will need AWS credentials to run the app locally with [serverless-offline](https://www.serverless.com/plugins/serverless-offline). These should be exported as local environment variables, like this:
 
-```bash
-[octopus]
-aws_access_key_id=xxx
-aws_secret_access_key=yyy
-aws_session_token=zxcxczcx
 ```
+export AWS_ACCESS_KEY_ID="..."
+export AWS_SECRET_ACCESS_KEY="..."
+export AWS_SESSION_TOKEN="..."
+```
+
+You will also need to tell the system your serverless license key. This can be done by running (from the api directory) `npx sls login` and following the wizard.
+
+Alternatively you can just set it as an environment variable:
+
+`export SERVERLESS_LICENSE_KEY="..."`
 
 ## Getting started
 
