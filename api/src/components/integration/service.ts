@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as ariUtils from 'integration/ariUtils';
-import * as email from 'lib/email';
 import * as ingestLogService from 'ingestLog/service';
 
 /**
@@ -11,7 +10,7 @@ import * as ingestLogService from 'ingestLog/service';
  *   - It encounters an ARI with dateUpdated before the start time of the most
  *       recent successful ingest (if this start time is available).
  */
-export const incrementalAriIngest = async (dryRun: boolean): Promise<string> => {
+export const incrementalAriIngest = async (dryRun: boolean, reportFormat: 'email' | 'file'): Promise<string> => {
     const start = new Date();
     const MAX_UNCHANGED_STREAK = 5;
     // Get most start time of last successful run to help us know when to stop.
@@ -135,14 +134,15 @@ export const incrementalAriIngest = async (dryRun: boolean): Promise<string> => 
         await ingestLogService.setEndTime(logId, end);
     }
 
-    await email.incrementalAriIngestReport({
+    await ariUtils.ingestReport(reportFormat, {
         checkedCount,
         durationSeconds,
         createdCount,
         updatedCount,
         unrecognisedDepartments: Array.from(unrecognisedDepartments).sort(),
         unrecognisedTopics: Array.from(unrecognisedTopics).sort(),
-        dryRun
+        dryRun,
+        full: false
     });
 
     const writeCount = createdCount + updatedCount;
