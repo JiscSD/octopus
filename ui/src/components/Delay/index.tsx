@@ -1,7 +1,7 @@
 import React from 'react';
 
 type Props = {
-    children: React.ReactChildren | React.ReactChild | React.ReactElement;
+    children: React.ReactNode;
     delay: number;
 };
 

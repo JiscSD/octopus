@@ -36,7 +36,7 @@ export const incrementalAriIngest = async (
     }
 
     try {
-        const ingestResult = await integrationService.incrementalAriIngest(dryRun);
+        const ingestResult = await integrationService.incrementalAriIngest(dryRun, 'email');
 
         return response.json(
             200,
