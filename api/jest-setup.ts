@@ -2,6 +2,5 @@
 // way serverless interprets env files.
 
 import * as dotenv from 'dotenv';
-import { expand } from 'dotenv-expand';
 
-expand(dotenv.config());
+dotenv.config();
