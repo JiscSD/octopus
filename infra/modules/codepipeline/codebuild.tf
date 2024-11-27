@@ -54,7 +54,7 @@ resource "aws_codebuild_project" "deploy-docker-image" {
     }
   }
 
-  source_version = "main"
+  source_version = var.environment
 
   source {
     type      = "CODEPIPELINE"

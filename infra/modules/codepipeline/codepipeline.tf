@@ -28,7 +28,7 @@ resource "aws_codepipeline" "docker-image-codepipeline" {
       configuration = {
         ConnectionArn        = data.aws_ssm_parameter.github_codestar_connection_arn.value
         FullRepositoryId     = "JiscSD/octopus"
-        BranchName           = "main"
+        BranchName           = var.environment
         OutputArtifactFormat = "CODE_ZIP"
       }
     }
