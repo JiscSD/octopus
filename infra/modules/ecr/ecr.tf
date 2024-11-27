@@ -5,7 +5,7 @@ locals {
 }
 
 resource "aws_ecr_repository" "ecr" {
-  name                 = "${var.project_name}-ecr-${var.environment}"
+  name                 = "${var.project_name}-${var.environment}"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
