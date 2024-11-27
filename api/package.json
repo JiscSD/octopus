@@ -13,7 +13,7 @@
         "node": "20.x"
     },
     "prisma": {
-        "seed": "ts-node -r tsconfig-paths/register prisma/seed.ts"
+        "seed": "tsx prisma/seed.ts"
     },
     "scripts": {
         "build": "swc src -d dist --copy-files -s false",
@@ -32,13 +32,13 @@
         "test:local": "STAGE=local jest --runInBand --testTimeout=60000",
         "test:watch": "npm run test:local -- --watch",
         "type": "tsc --noEmit",
-        "reindex": "ts-node scripts/reindex.ts",
-        "createOrganisationalAccounts": "ts-node -r tsconfig-paths/register scripts/createOrganisationalAccounts.ts",
-        "createTopicMappings": "ts-node -r tsconfig-paths/register scripts/createTopicMappings.ts",
-        "createTopics": "ts-node -r tsconfig-paths/register scripts/createTopics.ts",
-        "createUserMappings": "ts-node -r tsconfig-paths/register scripts/createUserMappings.ts",
-        "fullAriImport": "ts-node -r tsconfig-paths/register scripts/fullAriImport.ts",
-        "updateOrganisationalAccounts": "ts-node -r tsconfig-paths/register scripts/updateOrganisationalAccounts.ts"
+        "ariImport": "tsx scripts/ariImport.ts",
+        "createOrganisationalAccounts": "tsx scripts/createOrganisationalAccounts.ts",
+        "createTopicMappings": "tsx scripts/createTopicMappings.ts",
+        "createTopics": "tsx scripts/createTopics.ts",
+        "createUserMappings": "tsx scripts/createUserMappings.ts",
+        "reindex": "tsx scripts/reindex.ts",
+        "updateOrganisationalAccounts": "tsx scripts/updateOrganisationalAccounts.ts"
     },
     "dependencies": {
         "@middy/core": "^4.7.0",
@@ -50,11 +50,10 @@
         "@sparticuz/chromium": "^119.0.2",
         "ajv": "^8.12.0",
         "ajv-formats": "^2.1.1",
-        "axios": "^1.7.4",
         "aws-lambda": "^1.0.7",
+        "axios": "^1.7.4",
         "cheerio": "^1.0.0-rc.12",
         "dotenv": "16.4.5",
-        "dotenv-expand": "11.0.7",
         "html-to-text": "^9.0.5",
         "isomorphic-dompurify": "^2.12.0",
         "jsonwebtoken": "^9.0.2",
@@ -98,6 +97,7 @@
         "serverless-prune-plugin": "^2.1.0",
         "ts-jest": "^29.1.1",
         "ts-loader": "^9.4.4",
+        "tsx": "^4.19.2",
         "typescript": "^5.2.2"
     },
     "optionalDependencies": {

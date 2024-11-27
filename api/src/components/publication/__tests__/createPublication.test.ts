@@ -500,13 +500,16 @@ describe('Create live publication', () => {
             });
 
         expect(createPublicationRequest.status).toEqual(201);
-        expect(createPublicationRequest.body.linkedTo).toHaveLength(2);
-        expect(createPublicationRequest.body.linkedTo[0].publicationToId).toEqual('publication-problem-live');
-        expect(createPublicationRequest.body.linkedTo[0].versionToId).toEqual('publication-problem-live-v2');
-        expect(createPublicationRequest.body.linkedTo[0].draft).toEqual(false);
-        expect(createPublicationRequest.body.linkedTo[1].publicationToId).toEqual('publication-problem-live-2');
-        expect(createPublicationRequest.body.linkedTo[1].versionToId).toEqual('publication-problem-live-2-v1');
-        expect(createPublicationRequest.body.linkedTo[1].draft).toEqual(false);
+        expect(
+            createPublicationRequest.body.linkedTo.sort((a, b) => a.publicationToId.localeCompare(b.publicationToId))
+        ).toMatchObject([
+            { publicationToId: 'publication-problem-live', versionToId: 'publication-problem-live-v2', draft: false },
+            {
+                publicationToId: 'publication-problem-live-2',
+                versionToId: 'publication-problem-live-2-v1',
+                draft: false
+            }
+        ]);
     });
 
     test('Invalid links cannot be created via direct publishing', async () => {
