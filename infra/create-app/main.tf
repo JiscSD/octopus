@@ -108,7 +108,6 @@ module "ecr" {
 }
 
 module "codepipeline" {
-  count        = local.environment == "prod" ? 1 : 0
   source       = "../modules/codepipeline"
   environment  = local.environment
   project_name = local.project_name
