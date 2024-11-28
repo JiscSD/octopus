@@ -1,7 +1,6 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import * as Framer from 'framer-motion';
 
 import * as Components from '@/components';
 import * as Layouts from '@/layouts';
@@ -20,7 +19,7 @@ const authorGuideSections: AuthorGuideSection[] = [
         content: (
             <>
                 <p className="mb-2">
-                    Octopus publications are different to traditional journal articles or papers. There are eight
+                    Octopus publications are different from traditional journal articles or papers. There are eight
                     smaller publication types aligned with the research process. A little like a &apos;patent
                     office&apos;, you can register all your work, including theories, data, and analyses. However, when
                     you start the publication process you’ll need to approach it as though you’re submitting to a
