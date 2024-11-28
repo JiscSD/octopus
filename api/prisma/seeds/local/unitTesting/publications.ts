@@ -980,38 +980,6 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
         }
     },
     {
-        id: 'research-topic',
-        doi: '10.82259/cty5-2g27',
-        type: 'PROBLEM',
-        linkedTo: {
-            create: {
-                publicationToId: 'publication-problem-live',
-                versionToId: 'publication-problem-live-v1',
-                draft: false
-            }
-        },
-        versions: {
-            create: {
-                id: 'research-topic-v1',
-                versionNumber: 1,
-                title: 'Music',
-                conflictOfInterestStatus: false,
-                conflictOfInterestText: '',
-                content:
-                    'This is an automatically-generated topic, produced in order to provide authors with a place to attach new Problem publications',
-                currentStatus: 'LIVE',
-                isLatestLiveVersion: true,
-                user: { connect: { id: 'octopus' } },
-                publicationStatus: {
-                    create: [
-                        { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
-                        { status: 'LIVE', createdAt: '2022-01-20T15:51:42.523Z' }
-                    ]
-                }
-            }
-        }
-    },
-    {
         id: 'publication-peer-review-draft',
         doi: '10.82259/cty5-2g28',
         type: 'PEER_REVIEW',

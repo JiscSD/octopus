@@ -84,32 +84,63 @@ export const openSearchSeed = async (): Promise<void> => {
             versions: {
                 where: {
                     isLatestLiveVersion: true
+                },
+                select: {
+                    title: true,
+                    description: true,
+                    keywords: true,
+                    content: true,
+                    publishedDate: true,
+                    user: {
+                        select: {
+                            role: true
+                        }
+                    }
                 }
             }
         }
     });
 
-    for (const publication of publications) {
-        const latestLiveVersion = publication.versions[0];
+    await Promise.all(
+        publications.map(async (publication) => {
+            const latestLiveVersion = publication.versions[0];
 
-        await client.search.create({
-            index: 'publications',
-            id: publication.id,
-            body: {
+            await client.search.create({
+                index: 'publications',
                 id: publication.id,
-                type: publication.type,
-                title: latestLiveVersion.title,
-                licence: latestLiveVersion.licence,
-                description: latestLiveVersion.description,
-                keywords: latestLiveVersion.keywords,
-                content: latestLiveVersion.content,
-                language: 'en',
-                currentStatus: latestLiveVersion.currentStatus,
-                publishedDate: latestLiveVersion.publishedDate,
-                cleanContent: convert(latestLiveVersion.content)
-            }
-        });
-    }
+                body: {
+                    id: publication.id,
+                    type: publication.type,
+                    title: latestLiveVersion.title,
+                    organisationalAuthor: latestLiveVersion.user.role === 'ORGANISATION',
+                    description: latestLiveVersion.description,
+                    keywords: latestLiveVersion.keywords,
+                    content: latestLiveVersion.content,
+                    publishedDate: latestLiveVersion.publishedDate,
+                    cleanContent: convert(latestLiveVersion.content)
+                }
+            });
+        })
+    );
+
+    // Wait until things show up in the index.
+    const maxWaitSeconds = 5;
+    let waitSeconds = 0;
+
+    do {
+        const allResults = await client.search.search({ index: 'publications', body: { query: { match_all: {} } } });
+
+        if (allResults.body.hits.total.value > 0) {
+            return;
+        } else {
+            // Wait a second before trying again.
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            waitSeconds++;
+        }
+    } while (waitSeconds < maxWaitSeconds);
+
+    // If index isn't populated by this time, something is wrong.
+    throw new Error('Index not populated after seeding.');
 };
 
 export const clearDB = async (): Promise<void> => {

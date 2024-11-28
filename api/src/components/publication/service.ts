@@ -350,7 +350,6 @@ export const getOpenSearchPublications = (filters: I.OpenSearchPublicationFilter
     const must: unknown[] = [];
 
     if (filters.search) {
-        // @ts-ignore
         must.push({
             multi_match: {
                 query: filters.search,
@@ -369,6 +368,14 @@ export const getOpenSearchPublications = (filters: I.OpenSearchPublicationFilter
                     gte: filters.dateFrom,
                     lte: filters.dateTo
                 }
+            }
+        });
+    }
+
+    if (filters.authorType) {
+        must.push({
+            term: {
+                organisationalAuthor: filters.authorType === 'organisational'
             }
         });
     }

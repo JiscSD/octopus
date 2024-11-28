@@ -9,6 +9,11 @@ const getAll: I.JSONSchemaType<I.OpenSearchPublicationFilters> = {
                 '^((PROBLEM|PROTOCOL|ANALYSIS|REAL_WORLD_APPLICATION|HYPOTHESIS|DATA|INTERPRETATION|PEER_REVIEW)(,)?)+$',
             default: 'PROBLEM,PROTOCOL,ANALYSIS,REAL_WORLD_APPLICATION,HYPOTHESIS,DATA,INTERPRETATION,PEER_REVIEW'
         },
+        authorType: {
+            type: 'string',
+            enum: ['individual', 'organisational'],
+            nullable: true
+        },
         limit: {
             type: 'number',
             default: 10

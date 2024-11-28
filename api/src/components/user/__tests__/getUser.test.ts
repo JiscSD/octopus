@@ -1,7 +1,7 @@
 import * as testUtils from 'lib/testUtils';
 
 describe('Get individual user', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
         await testUtils.clearDB();
         await testUtils.testSeed();
     });

@@ -1,7 +1,7 @@
 import * as testUtils from 'lib/testUtils';
 
 describe('get references', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
         await testUtils.clearDB();
         await testUtils.testSeed();
     });
