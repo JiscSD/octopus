@@ -93,10 +93,7 @@ export const getAll = async (filters: I.UserFilters) => {
             filters.role === 'ORGANISATION'
                 ? {
                       AND: [
-                          // Include Science Octopus user (which authored seed pubs, but is a USER type).
-                          {
-                              OR: [basicRoleFilter, { id: 'octopus' }]
-                          },
+                          basicRoleFilter,
                           {
                               publicationVersions: {
                                   some: {
