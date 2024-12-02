@@ -107,6 +107,15 @@ describe('Get many publication versions', () => {
         );
     });
 
+    test('Can filter by multiple publication types at once', async () => {
+        const getPublications = await testUtils.agent.get('/publication-versions?type=PROBLEM,PROTOCOL');
+
+        expect(getPublications.status).toEqual(200);
+        expect(
+            getPublications.body.data.every((version) => ['PROBLEM', 'PROTOCOL'].includes(version.publication.type))
+        ).toEqual(true);
+    });
+
     test('Type filtering rejects invalid types', async () => {
         const getPublications = await testUtils.agent.get('/publication-versions?type=DINOSAUR');
 
@@ -130,12 +139,20 @@ describe('Get many publication versions', () => {
         expect(getIndividualPublications.body.data).toHaveLength(10);
     });
 
+    test('Can filter by multiple author types at once', async () => {
+        const getPublications = await testUtils.agent.get('/publication-versions?authorType=individual,organisational');
+
+        expect(getPublications.status).toEqual(200);
+        // Includes everything.
+        expect(getPublications.body.metadata.total).toEqual(15);
+    });
+
     test('Author filtering rejects invalid types', async () => {
         const getPublications = await testUtils.agent.get('/publication-versions?authorType=dinosaur');
 
         expect(getPublications.status).toEqual(400);
         expect(getPublications.body.message).toHaveLength(1);
-        expect(getPublications.body.message[0].keyword).toEqual('enum');
+        expect(getPublications.body.message[0].keyword).toEqual('pattern');
     });
 
     test('Can filter by search term', async () => {

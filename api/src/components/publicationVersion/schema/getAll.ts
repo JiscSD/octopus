@@ -1,3 +1,4 @@
+import * as Enum from 'enum';
 import * as I from 'interface';
 
 const getAll: I.JSONSchemaType<I.OpenSearchPublicationFilters> = {
@@ -5,13 +6,12 @@ const getAll: I.JSONSchemaType<I.OpenSearchPublicationFilters> = {
     properties: {
         type: {
             type: 'string',
-            pattern:
-                '^((PROBLEM|PROTOCOL|ANALYSIS|REAL_WORLD_APPLICATION|HYPOTHESIS|DATA|INTERPRETATION|PEER_REVIEW)(,)?)+$',
+            pattern: `^((${Enum.publicationTypes.join('|')})(,)?)+$`,
             default: 'PROBLEM,PROTOCOL,ANALYSIS,REAL_WORLD_APPLICATION,HYPOTHESIS,DATA,INTERPRETATION,PEER_REVIEW'
         },
         authorType: {
             type: 'string',
-            enum: ['individual', 'organisational'],
+            pattern: `^((${Enum.authorTypes.join('|')})(,)?)+$`,
             nullable: true
         },
         limit: {

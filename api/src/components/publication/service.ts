@@ -372,7 +372,8 @@ export const getOpenSearchPublications = (filters: I.OpenSearchPublicationFilter
         });
     }
 
-    if (filters.authorType) {
+    // The endpoint does accept both author types at once, but this is the same as not filtering.
+    if (filters.authorType && Enum.authorTypes.includes(filters.authorType)) {
         must.push({
             term: {
                 organisationalAuthor: filters.authorType === 'organisational'
