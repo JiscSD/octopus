@@ -216,6 +216,13 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                     </fieldset>
 
                     <article className="col-span-12 min-h-screen">
+                        <div aria-live="polite" className="sr-only">
+                            {typeof results?.metadata?.total === 'number'
+                                ? `${results.metadata.total} result${results.metadata.total !== 1 ? 's' : ''}`
+                                : error && error.message
+                                  ? error.message
+                                  : ''}
+                        </div>
                         {props.error ? (
                             <Components.Alert severity="ERROR" title={props.error} />
                         ) : (
