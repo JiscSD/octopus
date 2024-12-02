@@ -75,6 +75,16 @@ const constructQueryParams = (params: {
         }
     }
 
+    if (authorTypes) {
+        paramString.push(
+            'authorType=' +
+                authorTypes
+                    .split(',')
+                    .filter((type) => Config.values.authorTypes.includes(type))
+                    .join(',')
+        );
+    }
+
     return paramString.join('&');
 };
 
@@ -162,8 +172,9 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             offset,
             dateFrom,
             dateTo,
+            authorTypes,
             fallback: {
-                [swrKey]: searchResults
+                [swrKey]: fallbackData
             },
             error
         }
@@ -178,6 +189,7 @@ type Props = {
     offset: string | null;
     dateFrom: string | null;
     dateTo: string | null;
+    authorTypes: string | null;
     error: string | null;
     fallback: { [key: string]: { data: Interfaces.PublicationVersion[] } & Interfaces.SearchResultMeta };
 };
@@ -187,7 +199,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     // params
     const [query, setQuery] = React.useState(props.query ? props.query : '');
-    const [authorTypes, setAuthorTypes] = React.useState(props.publicationTypes || '');
+    const [authorTypes, setAuthorTypes] = React.useState(props.authorTypes || '');
     const [publicationTypes, setPublicationTypes] = React.useState(props.publicationTypes || '');
     const [dateFrom, setDateFrom] = React.useState(props.dateFrom ? props.dateFrom : '');
     const [dateTo, setDateTo] = React.useState(props.dateTo ? props.dateTo : '');
@@ -260,6 +272,26 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
         setDate(newDate);
     };
 
+    const collateAuthorTypes = async (e: React.ChangeEvent<HTMLInputElement>, value: string): Promise<void> => {
+        const current = authorTypes ? authorTypes.split(',') : [];
+        const uniqueSet = new Set(current);
+        e.target.checked ? uniqueSet.add(value) : uniqueSet.delete(value);
+        const uniqueArray = Array.from(uniqueSet).join(',');
+
+        await router.push(
+            {
+                query: {
+                    ...router.query,
+                    authorType: uniqueArray
+                }
+            },
+            undefined,
+            { shallow: true }
+        );
+
+        setAuthorTypes(uniqueArray);
+    };
+
     const collatePublicationTypes = async (e: React.ChangeEvent<HTMLInputElement>, value: string): Promise<void> => {
         const current = publicationTypes ? publicationTypes.split(',') : [];
         const uniqueSet = new Set(current);
@@ -301,8 +333,6 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
             ? response.metadata.total
             : limit + offset
         : null;
-
-    const availableAuthorTypes = ['individual', 'organisational'];
 
     const checkBoxClasses =
         'h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed';
@@ -416,7 +446,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                                         <legend className="pb-2 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
                                             Author types
                                         </legend>
-                                        {availableAuthorTypes.map((type) => (
+                                        {Config.values.authorTypes.map((type) => (
                                             <div key={type} className={`flex items-center`}>
                                                 <input
                                                     id={type}
@@ -426,7 +456,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                                                     checked={
                                                         authorTypes ? authorTypes.split(',').includes(type) : false
                                                     }
-                                                    onChange={(e) => console.log(e, type)}
+                                                    onChange={(e) => collateAuthorTypes(e, type)}
                                                     disabled={!response}
                                                 />
                                                 <label
@@ -549,14 +579,28 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                     </aside>
 
                     <article className="col-span-12 min-h-screen lg:col-span-9">
+                        <div aria-live="polite" className="sr-only">
+                            {typeof response?.metadata?.total === 'number'
+                                ? `${response.metadata.total} result${response.metadata.total !== 1 ? 's' : ''}`
+                                : error && error.message
+                                  ? error.message
+                                  : ''}
+                        </div>
                         {props.error ? (
                             <Components.Alert severity="ERROR" title={props.error} />
                         ) : (
                             <Framer.AnimatePresence>
-                                {error && <Components.Alert severity="ERROR" title={error} />}
+                                {error && (
+                                    <Components.Alert
+                                        key="search-error"
+                                        severity="ERROR"
+                                        title={error.message || error}
+                                    />
+                                )}
 
                                 {!error && !response?.data?.length && !isValidating && (
                                     <Components.Alert
+                                        key="no-results"
                                         severity="INFO"
                                         title="No results found"
                                         details={[
