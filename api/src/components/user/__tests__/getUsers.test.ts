@@ -57,4 +57,34 @@ describe('Get Users', () => {
         expect(testResponse2.body.data.length).toEqual(1);
         expect(testResponse2.body.metadata.total).toEqual(1);
     });
+
+    test('Can filter by role', async () => {
+        const response = await testUtils.agent.get('/users?role=USER');
+        expect(response.status).toEqual(200);
+        expect(response.body.data.length).toEqual(10);
+        expect(response.body.metadata.total).toEqual(10);
+    });
+
+    test('Filtering by ORGANISATION role includes Science Octopus', async () => {
+        const response = await testUtils.agent.get('/users?role=ORGANISATION');
+        expect(response.status).toEqual(200);
+        expect(response.body.data.some((user) => user.id === 'octopus')).toBe(true);
+    });
+
+    test('Filtering by ORGANISATION role excludes accounts without any live publication versions', async () => {
+        const response = await testUtils.agent.get('/users?role=ORGANISATION');
+        expect(response.status).toEqual(200);
+        expect(response.body.data.some((user) => user.id === 'test-organisational-account-2')).toBe(false);
+    });
+
+    test('Can filter by role and name query at once', async () => {
+        const response = await testUtils.agent.get('/users?role=ORGANISATION&search=department');
+        expect(response.status).toEqual(200);
+        expect(response.body.data).toMatchObject([
+            {
+                id: 'test-organisational-account-1',
+                firstName: 'Test ARI Department (UK)'
+            }
+        ]);
+    });
 });

@@ -49,20 +49,27 @@ export const updateEmail = (orcid: string, email: string) =>
     });
 
 export const getAll = async (filters: I.UserFilters) => {
-    let where: Prisma.UserWhereInput = {};
+    const prismaFilters: Prisma.UserWhereInput[] = [];
 
     if (filters.search) {
         const searchQuery = Helpers.sanitizeSearchQuery(filters.search);
-        where = {
-            firstName: {
-                search: searchQuery + ':*'
-            },
-            lastName: {
-                search: searchQuery + ':*'
-            }
-        };
+        prismaFilters.push({
+            OR: [
+                {
+                    firstName: {
+                        search: searchQuery + ':*'
+                    }
+                },
+                {
+                    lastName: {
+                        search: searchQuery + ':*'
+                    }
+                }
+            ]
+        });
     } else {
-        where = {
+        // Exclude unnamed users.
+        prismaFilters.push({
             OR: [
                 {
                     firstName: {
@@ -75,8 +82,37 @@ export const getAll = async (filters: I.UserFilters) => {
                     }
                 }
             ]
-        };
+        });
     }
+
+    if (filters.role) {
+        const basicRoleFilter = {
+            role: filters.role
+        };
+        prismaFilters.push(
+            filters.role === 'ORGANISATION'
+                ? {
+                      AND: [
+                          // Include Science Octopus user (which authored seed pubs, but is a USER type).
+                          {
+                              OR: [basicRoleFilter, { id: 'octopus' }]
+                          },
+                          {
+                              publicationVersions: {
+                                  some: {
+                                      currentStatus: 'LIVE'
+                                  }
+                              }
+                          }
+                      ]
+                  }
+                : basicRoleFilter
+        );
+    }
+
+    const where = {
+        AND: prismaFilters
+    };
 
     const users = await client.prisma.user.findMany({
         take: Number(filters.limit) || 10,
