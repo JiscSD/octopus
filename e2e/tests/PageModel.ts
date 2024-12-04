@@ -93,7 +93,7 @@ export const PageModel = {
             'h2:has-text("Conflict of interest")'
         ],
         doiLink: 'aside [aria-label="DOI link: https://handle.test.datacite.org/10.82259/cl3fz14dr0001es6i5ji51rq4"]',
-        authorLink: 'a[href="/authors/octopus"]:has-text("S. Octopus")',
+        authorLink: 'a[href="/authors/octopus"]:has-text("Octopus")',
         signInForMoreButton: 'text=Sign in for more actions',
         verifyEmailForMoreButton: 'text=Verify your email for more actions',
         addBookmark: '[title="Bookmark this publication"]',
@@ -108,22 +108,25 @@ export const PageModel = {
         resolveFlag: 'text=Resolve flag',
         confirmResolve: 'button[aria-label="Resolve"]'
     },
-    authorInfo: {
-        name: 'text=Science Octopus',
+    organisationalUserInfo: {
+        name: 'text=Octopus',
         orcid: 'a:has-text("XXXX-XXXX-XXXX-XXXX")',
-        orcidData: [
+        octopusPublications: 'h2:has-text("Octopus publications")'
+    },
+    authorInfo: {
+        name: 'text=Grace Murphy'
+    },
+    profilePage: {
+        orcidDataSections: [
             'section > h2:has-text("Employment")',
             'section > h2:has-text("Education")',
             'section > h2:has-text("Works")'
         ],
-        showAll: 'button:has-text("Show More")',
-        result: '_react=SearchResult[publicationVersion.publication.id="cl3fz14dr0001es6i5ji51rq4"]'
-    },
-    profilePage: {
         employment: 'h2:has-text("Employment")',
         education: 'h2:has-text("Education")',
         works: 'h2:has-text("Works")',
-        octopusPublications: 'h2:has-text("Octopus publications")'
+        showAll: 'button:has-text("Show More")',
+        result: '_react=SearchResult[publicationVersion.publication.id="publication-user-6-hypothesis-1-live"]'
     },
     login: {
         username: '#username-input',

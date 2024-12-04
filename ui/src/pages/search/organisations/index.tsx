@@ -11,7 +11,7 @@ import * as Types from '@/types';
 import * as api from '@/api';
 import * as Helpers from '@/helpers';
 
-const baseEndpoint = '/users?role=USER';
+const baseEndpoint = '/users?role=ORGANISATION';
 
 /**
  *
@@ -20,7 +20,6 @@ const baseEndpoint = '/users?role=USER';
  */
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    const searchType: Types.SearchType = 'authors';
     let query: string | string[] | null = null;
     let limit: number | string | string[] | null = null;
     let offset: number | string | string[] | null = null;
@@ -61,7 +60,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     return {
         props: {
-            searchType,
             query,
             limit,
             offset,
@@ -74,7 +72,6 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    searchType: Types.SearchType;
     query: string | null;
     limit: string | null;
     offset: string | null;
@@ -115,17 +112,17 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
         setOffset(0);
     };
 
-    const pageTitle = Config.urls.searchAuthors.title;
+    const pageTitle = Config.urls.searchOrganisations.title;
 
     return (
         <>
             <Head>
                 <title>{pageTitle}</title>
-                <meta name="description" content={Config.urls.searchAuthors.description} />
+                <meta name="description" content={Config.urls.searchOrganisations.description} />
                 <meta name="og:title" content={pageTitle} />
-                <meta name="og:description" content={Config.urls.searchAuthors.description} />
-                <meta name="keywords" content={Config.urls.searchAuthors.keywords.join(', ')} />
-                <link rel="canonical" href={Config.urls.searchAuthors.canonical} />
+                <meta name="og:description" content={Config.urls.searchOrganisations.description} />
+                <meta name="keywords" content={Config.urls.searchOrganisations.keywords.join(', ')} />
+                <link rel="canonical" href={Config.urls.searchOrganisations.canonical} />
             </Head>
 
             <Layouts.Standard>
@@ -137,7 +134,7 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                     offset={offset}
                     query={query}
                     results={results?.data || []}
-                    searchType="authors"
+                    searchType={'organisations'}
                     setLimit={setLimit}
                     setOffset={setOffset}
                     total={results?.metadata.total || 0}

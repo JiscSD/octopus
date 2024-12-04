@@ -1,17 +1,16 @@
-import * as Helpers from '../helpers';
 import { expect, Page, test } from '@playwright/test';
 import { PageModel } from '../PageModel';
 
-test.describe('Science Octopus profile', () => {
+test.describe('Octopus profile', () => {
     let page: Page;
 
     test.beforeAll(async ({ browser }) => {
         page = await browser.newPage();
-        // navigate to Science Octopus profile page
+        // navigate to Octopus profile page
         await page.goto(`/authors/octopus`, {
             waitUntil: 'domcontentloaded'
         });
-        await expect(page).toHaveTitle('Author: XXXX-XXXX-XXXX-XXXX - Octopus | Built for Researchers');
+        await expect(page).toHaveTitle('Author: Octopus - Octopus | Built for Researchers');
     });
 
     test.afterAll(async () => {
@@ -19,11 +18,11 @@ test.describe('Science Octopus profile', () => {
     });
 
     test('Octopus publications pagination', async () => {
-        // check user full name
-        await expect(page.locator('h1')).toHaveText('Science Octopus');
+        // check user name
+        await expect(page.locator('h1')).toHaveText('Octopus');
 
         // check Octopus publications section
-        const octopusPublicationsHeader = page.locator(PageModel.profilePage.octopusPublications);
+        const octopusPublicationsHeader = page.locator(PageModel.organisationalUserInfo.octopusPublications);
 
         await expect(octopusPublicationsHeader).toBeVisible();
 
