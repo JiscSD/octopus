@@ -20,7 +20,7 @@ const base = {
 const urls = {
     base,
     // Search
-    search: {
+    searchPublications: {
         path: '/search',
         title: `Search publications - ${base.title}`,
         description: 'Find and read open access scientific research relevant to you.',
@@ -32,6 +32,21 @@ const urls = {
             'academic publications',
             'scientific publications'
         ],
+        canonical: `${base.host}/search`
+    },
+    searchAuthors: {
+        path: '/search/authors',
+        title: `Search authors - ${base.title}`,
+        canonical: `${base.host}/search`
+    },
+    searchTopics: {
+        path: '/search/topics',
+        title: `Search topics - ${base.title}`,
+        canonical: `${base.host}/search`
+    },
+    searchOrganisations: {
+        path: '/search/organisations',
+        title: `Search organisations - ${base.title}`,
         canonical: `${base.host}/search`
     },
     // Publications
