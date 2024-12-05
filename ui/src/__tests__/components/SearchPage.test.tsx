@@ -278,7 +278,8 @@ it('Error is shown when passed', () => {
             total={0}
         />
     );
-    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+    // Error is written to alert box and aria-live area.
+    expect(screen.getAllByText('Something went wrong')).toHaveLength(2);
 });
 
 it('Results are author page links when searchType is "authors"', () => {
