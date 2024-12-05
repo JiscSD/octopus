@@ -20,7 +20,6 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => {
         >
             <Components.Link
                 href={props.linkDestination}
-                role="button"
                 className={`
                     grid
                     min-h-[4rem]
