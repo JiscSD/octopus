@@ -322,6 +322,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
         setPublicationTypes('');
         setDateFrom('');
         setDateTo('');
+        setAuthorTypes('');
     };
 
     React.useEffect((): void => {

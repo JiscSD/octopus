@@ -38,14 +38,34 @@ test.describe('Publication search', () => {
         await Helpers.search.search(page, 'thisShouldProduceNoResults', PageModel.search.noPublicationsFound);
     });
 
-    test.skip('Search filters', async ({ browser }) => {
-        // test TODO
-        // Start up test
+    test('Search filters', async ({ browser }) => {
         const page = await browser.newPage();
-        await page.goto('/');
+        await page.goto('/search');
+        // Set filters that should reduce results down to one we know in advance.
+        await page.getByRole('checkbox', { name: 'Individual' }).click();
+        await page.waitForResponse(
+            (response) =>
+                response.url().includes('/publication-versions?limit=10&offset=0&authorType=individual') &&
+                response.ok()
+        );
+        await page.getByRole('checkbox', { name: 'Results' }).click();
+        await page.waitForResponse(
+            (response) =>
+                response.url().includes('/publication-versions?type=DATA&limit=10&offset=0&authorType=individual') &&
+                response.ok()
+        );
+        await Helpers.search.search(page, 'complicated', 'a[href="/publications/publication-user-5-data-1-live"]');
 
-        // Navigate to search page
-        await page.locator(PageModel.header.searchButton).click();
+        // Clear filters and check they are cleared
+        await page.getByRole('button', { name: 'Clear filters' }).click();
+        await page.waitForResponse(
+            (response) => response.url().includes('/publication-versions?limit=10&offset=0') && response.ok()
+        );
+        const checkboxes = await page.locator('input[type="checkbox"]').all();
+        for (const checkbox of checkboxes) {
+            await expect(checkbox).not.toBeChecked();
+        }
+        await expect(page.locator(PageModel.search.searchInput)).toHaveValue('');
     });
 });
 
