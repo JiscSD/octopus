@@ -660,6 +660,7 @@ const checkPublicationOnAccountPage = async (
     navigate?: boolean
 ) => {
     if (navigate) {
+        await page.waitForLoadState('networkidle');
         await page.goto(`/account`);
     }
     const publicationContainer = await page.getByTestId('publication-' + publicationDetails.id);

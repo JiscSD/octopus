@@ -12,6 +12,8 @@ export const publicationTypes: Types.PublicationType[] = [
     'PEER_REVIEW'
 ];
 
+export const authorTypes = ['individual', 'organisational'];
+
 export const octopusInformation: Interfaces.OctopusInformation = {
     publications: {
         PROBLEM: {

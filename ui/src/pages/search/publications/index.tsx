@@ -1,17 +1,17 @@
+import Head from 'next/head';
 import React from 'react';
 import useSWR from 'swr';
-import Head from 'next/head';
-
-import * as Router from 'next/router';
 import * as Framer from 'framer-motion';
+import * as Router from 'next/router';
 import * as SolidIcons from '@heroicons/react/24/solid';
-import * as Interfaces from '@/interfaces';
-import * as Components from '@/components';
-import * as Helpers from '@/helpers';
-import * as Layouts from '@/layouts';
-import * as Config from '@/config';
-import * as Types from '@/types';
+
 import * as api from '@/api';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Interfaces from '@/interfaces';
+import * as Layouts from '@/layouts';
+import * as Types from '@/types';
 
 // Takes an input date from context or form controls,
 // sets time to start or end of day as appropriate,
@@ -32,6 +32,62 @@ const formatDateForAPI = (rawDate: string, type: 'to' | 'from'): string | null =
     return date.toISOString();
 };
 
+const constructQueryParams = (params: {
+    [key in 'query' | 'publicationTypes' | 'limit' | 'offset' | 'dateFrom' | 'dateTo' | 'authorTypes']: string | null;
+}): string => {
+    const { query, publicationTypes, limit, offset, dateFrom, dateTo, authorTypes } = params;
+    const paramString: string[] = [];
+
+    if (query) {
+        paramString.push('search=' + encodeURIComponent(query));
+    }
+
+    if (publicationTypes) {
+        // filter valid publication types only
+        paramString.push(
+            'type=' +
+                publicationTypes
+                    .split(',')
+                    .filter((type) => Config.values.publicationTypes.includes(type as Types.PublicationType))
+                    .join(',')
+        );
+    }
+
+    // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
+    if (limit && !Number.isNaN(parseInt(limit, 10))) {
+        paramString.push('limit=' + limit);
+    }
+    if (offset && !Number.isNaN(parseInt(offset, 10))) {
+        paramString.push('offset=' + offset);
+    }
+
+    if (dateFrom) {
+        const dateFromFormatted = formatDateForAPI(dateFrom || '', 'from');
+        if (dateFromFormatted) {
+            paramString.push('dateFrom=' + dateFromFormatted);
+        }
+    }
+
+    if (dateTo) {
+        const dateToFormatted = formatDateForAPI(dateTo || '', 'to');
+        if (dateToFormatted) {
+            paramString.push('dateTo=' + dateToFormatted);
+        }
+    }
+
+    if (authorTypes) {
+        paramString.push(
+            'authorType=' +
+                authorTypes
+                    .split(',')
+                    .filter((type) => Config.values.authorTypes.includes(type))
+                    .join(',')
+        );
+    }
+
+    return paramString.join('&');
+};
+
 /**
  *
  * @TODO - refactor getServerSideProps
@@ -48,6 +104,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     let offset: number | string | string[] | null = null;
     let dateFrom: string | string[] | null = null;
     let dateTo: string | string[] | null = null;
+    let authorTypes: string | string[] | null = null;
 
     // defaults to results
     let searchResults: { data: Interfaces.PublicationVersion[]; metadata: Interfaces.SearchResultMeta } = {
@@ -69,6 +126,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (context.query.offset) offset = context.query.offset;
     if (context.query.dateFrom) dateFrom = context.query.dateFrom;
     if (context.query.dateTo) dateTo = context.query.dateTo;
+    if (context.query.authorType) authorTypes = context.query.authorType;
 
     if (Array.isArray(query)) query = query[0];
     if (Array.isArray(publicationTypes)) publicationTypes = publicationTypes[0];
@@ -76,45 +134,34 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     if (Array.isArray(offset)) offset = offset[0];
     if (Array.isArray(dateFrom)) dateFrom = dateFrom[0];
     if (Array.isArray(dateTo)) dateTo = dateTo[0];
+    if (Array.isArray(authorTypes)) authorTypes = authorTypes[0];
 
-    if (publicationTypes) {
-        // filter valid publication types only
-        publicationTypes = publicationTypes
-            .split(',')
-            .filter((type) => Config.values.publicationTypes.includes(type as Types.PublicationType))
-            .join(',');
-    }
+    const params = constructQueryParams({
+        query,
+        publicationTypes,
+        limit,
+        offset,
+        dateFrom,
+        dateTo,
+        authorTypes
+    });
 
-    // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
-    limit && !Number.isNaN(parseInt(limit, 10)) ? (limit = parseInt(limit, 10)) : (limit = null);
-    offset && !Number.isNaN(parseInt(offset, 10)) ? (offset = parseInt(offset, 10)) : (offset = null);
+    const swrKey = `/${searchType}?${params}`;
+    let fallbackData: Interfaces.SearchResults<Interfaces.PublicationVersion> = {
+        data: [],
+        metadata: {
+            offset: 0,
+            limit: 10,
+            total: 0
+        }
+    };
 
-    // ensure the value of the search type is acceptable
     try {
-        const response = await api.search<Interfaces.PublicationVersion>(
-            searchType,
-            encodeURIComponent(query || ''),
-            limit,
-            offset,
-            publicationTypes
-        );
-
-        searchResults = response;
-
-        error = null;
+        fallbackData = (await api.get(swrKey)).data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
     }
-
-    const dateFromFormatted = formatDateForAPI(dateFrom || '', 'from');
-    const dateToFormatted = formatDateForAPI(dateTo || '', 'to');
-
-    const swrKey = `/${searchType}?search=${encodeURIComponent(
-        (Array.isArray(query) ? query[0] : query) || ''
-    )}&type=${publicationTypes}&limit=${limit || '10'}&offset=${offset || '0'}${
-        dateFromFormatted ? `&dateFrom=${dateFromFormatted}` : ''
-    }${dateToFormatted ? `&dateTo=${dateToFormatted}` : ''}`;
 
     return {
         props: {
@@ -125,8 +172,9 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
             offset,
             dateFrom,
             dateTo,
+            authorTypes,
             fallback: {
-                [swrKey]: searchResults
+                [swrKey]: fallbackData
             },
             error
         }
@@ -141,6 +189,7 @@ type Props = {
     offset: string | null;
     dateFrom: string | null;
     dateTo: string | null;
+    authorTypes: string | null;
     error: string | null;
     fallback: { [key: string]: { data: Interfaces.PublicationVersion[] } & Interfaces.SearchResultMeta };
 };
@@ -150,6 +199,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     // params
     const [query, setQuery] = React.useState(props.query ? props.query : '');
+    const [authorTypes, setAuthorTypes] = React.useState(props.authorTypes || '');
     const [publicationTypes, setPublicationTypes] = React.useState(props.publicationTypes || '');
     const [dateFrom, setDateFrom] = React.useState(props.dateFrom ? props.dateFrom : '');
     const [dateTo, setDateTo] = React.useState(props.dateTo ? props.dateTo : '');
@@ -157,14 +207,17 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
 
-    const dateFromFormatted = formatDateForAPI(dateFrom, 'from');
-    const dateToFormatted = formatDateForAPI(dateTo, 'to');
+    const params = constructQueryParams({
+        query,
+        publicationTypes,
+        limit: limit.toString(),
+        offset: offset.toString(),
+        dateFrom,
+        dateTo,
+        authorTypes
+    });
 
-    const swrKey = `/${props.searchType}?search=${encodeURIComponent(query || '')}&type=${
-        publicationTypes || Config.values.publicationTypes.join(',')
-    }&limit=${limit || '10'}&offset=${offset || '0'}${dateFromFormatted ? `&dateFrom=${dateFromFormatted}` : ''}${
-        dateToFormatted ? `&dateTo=${dateToFormatted}` : ''
-    }`;
+    const swrKey = `/${props.searchType}?${params}`;
 
     const {
         data: response,
@@ -219,22 +272,27 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
         setDate(newDate);
     };
 
+    const collateAuthorTypes = async (e: React.ChangeEvent<HTMLInputElement>, value: string): Promise<void> => {
+        const current = authorTypes ? authorTypes.split(',') : [];
+        const uniqueSet = new Set(current);
+        e.target.checked ? uniqueSet.add(value) : uniqueSet.delete(value);
+        const uniqueArray = Array.from(uniqueSet).join(',');
+
+        await router.push(
+            {
+                query: {
+                    ...router.query,
+                    authorType: uniqueArray
+                }
+            },
+            undefined,
+            { shallow: true }
+        );
+
+        setAuthorTypes(uniqueArray);
+    };
+
     const collatePublicationTypes = async (e: React.ChangeEvent<HTMLInputElement>, value: string): Promise<void> => {
-        if (e.target.name === 'select-all') {
-            await router.push(
-                {
-                    query: {
-                        ...router.query,
-                        type: value
-                    }
-                },
-                undefined,
-                { shallow: true }
-            );
-
-            return setPublicationTypes(value);
-        }
-
         const current = publicationTypes ? publicationTypes.split(',') : [];
         const uniqueSet = new Set(current);
         e.target.checked ? uniqueSet.add(value) : uniqueSet.delete(value);
@@ -275,6 +333,9 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
             ? response.metadata.total
             : limit + offset
         : null;
+
+    const checkBoxClasses =
+        'h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed';
 
     return (
         <>
@@ -374,69 +435,86 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
 
                     <aside className="relative col-span-3 hidden lg:block">
                         <Framer.AnimatePresence>
-                            <Framer.motion.fieldset
+                            <Framer.motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 className="sticky top-16 space-y-6 divide-y divide-grey-100"
                             >
                                 <div className="space-y-5">
-                                    <legend className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                        Publication types
-                                    </legend>
-                                    <div className="space-y-3">
+                                    <fieldset className="space-y-3">
+                                        <legend className="pb-2 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                            Author types
+                                        </legend>
+                                        {Config.values.authorTypes.map((type) => (
+                                            <div key={type} className={`flex items-center`}>
+                                                <input
+                                                    id={type}
+                                                    name={type}
+                                                    type="checkbox"
+                                                    className={checkBoxClasses}
+                                                    checked={
+                                                        authorTypes ? authorTypes.split(',').includes(type) : false
+                                                    }
+                                                    onChange={(e) => collateAuthorTypes(e, type)}
+                                                    disabled={!response}
+                                                />
+                                                <label
+                                                    htmlFor={type}
+                                                    className="ml-3 text-sm select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
+                                                    aria-disabled={!response}
+                                                >
+                                                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                                                </label>
+                                            </div>
+                                        ))}
+                                    </fieldset>
+                                    <fieldset className="space-y-3">
+                                        <legend className="pb-2 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                            Publication types
+                                        </legend>
                                         {Config.values.publicationTypes.map((type) => (
-                                            <div key={type} className={`relative flex items-start`}>
-                                                <div className="flex h-5 items-center">
-                                                    <input
-                                                        id={type}
-                                                        aria-describedby={type}
-                                                        name={type}
-                                                        type="checkbox"
-                                                        className="h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed"
-                                                        checked={
-                                                            publicationTypes
-                                                                ? publicationTypes.split(',').includes(type)
-                                                                : false
-                                                        }
-                                                        onChange={(e) => collatePublicationTypes(e, type)}
-                                                        disabled={!response}
-                                                    />
-                                                </div>
-                                                <div className="ml-3 text-sm">
-                                                    <label
-                                                        htmlFor={type}
-                                                        className="select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
-                                                        aria-disabled={!response}
-                                                    >
-                                                        {Helpers.formatPublicationType(type)}
-                                                    </label>
-                                                </div>
+                                            <div key={type} className={`flex items-center`}>
+                                                <input
+                                                    id={type}
+                                                    name={type}
+                                                    type="checkbox"
+                                                    className={checkBoxClasses}
+                                                    checked={
+                                                        publicationTypes
+                                                            ? publicationTypes.split(',').includes(type)
+                                                            : false
+                                                    }
+                                                    onChange={(e) => collatePublicationTypes(e, type)}
+                                                    disabled={!response}
+                                                />
+                                                <label
+                                                    htmlFor={type}
+                                                    className="ml-3 text-sm select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
+                                                    aria-disabled={!response}
+                                                >
+                                                    {Helpers.formatPublicationType(type)}
+                                                </label>
                                             </div>
                                         ))}
 
-                                        <div className="relative flex items-start border-b border-t border-grey-100 py-3">
-                                            <div className="flex h-5 items-center">
-                                                <input
-                                                    id="select-all"
-                                                    aria-describedby="select-all"
-                                                    name="select-all"
-                                                    type="checkbox"
-                                                    className="h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed"
-                                                    checked={Config.values.publicationTypes.every((type) =>
-                                                        publicationTypes.includes(type)
-                                                    )}
-                                                    onChange={(e) =>
-                                                        collatePublicationTypes(
-                                                            e,
-                                                            e.target.checked
-                                                                ? Config.values.publicationTypes.join(',')
-                                                                : ''
-                                                        )
-                                                    }
-                                                    disabled={!response}
-                                                />
-                                            </div>
+                                        <div className="flex items-center border-b border-t border-grey-100 py-3">
+                                            <input
+                                                id="select-all"
+                                                aria-describedby="select-all"
+                                                name="select-all"
+                                                type="checkbox"
+                                                className={checkBoxClasses}
+                                                checked={Config.values.publicationTypes.every((type) =>
+                                                    publicationTypes.includes(type)
+                                                )}
+                                                onChange={(e) =>
+                                                    setPublicationTypes(
+                                                        e.target.checked ? Config.values.publicationTypes.join(',') : ''
+                                                    )
+                                                }
+                                                disabled={!response}
+                                            />
                                             <div className="ml-3 text-sm">
                                                 <label
                                                     htmlFor="select-all"
@@ -447,16 +525,9 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 </label>
                                             </div>
                                         </div>
-                                    </div>
-                                    <Framer.motion.form
-                                        name="date-form"
-                                        id="date-form"
-                                        className="col-span-12 lg:col-span-3 xl:col-span-4"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        exit={{ opacity: 0 }}
-                                    >
-                                        <legend className="pb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                    </fieldset>
+                                    <fieldset className="col-span-12 lg:col-span-3 xl:col-span-4 space-y-3">
+                                        <legend className="pb-2 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
                                             Date Range
                                         </legend>
                                         <label htmlFor="date-from" className="relative block w-full">
@@ -489,7 +560,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                                                 onChange={(e) => handleDateFormSubmit(e)}
                                             />
                                         </label>
-                                    </Framer.motion.form>
+                                    </fieldset>
                                 </div>
 
                                 <div className="pt-6">
@@ -503,19 +574,33 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                                         <SolidIcons.XCircleIcon className="h-5 w-4 text-teal-500" />
                                     </button>
                                 </div>
-                            </Framer.motion.fieldset>
+                            </Framer.motion.div>
                         </Framer.AnimatePresence>
                     </aside>
 
                     <article className="col-span-12 min-h-screen lg:col-span-9">
+                        <div aria-live="polite" className="sr-only">
+                            {typeof response?.metadata?.total === 'number'
+                                ? `${response.metadata.total} result${response.metadata.total !== 1 ? 's' : ''}`
+                                : error && error.message
+                                  ? error.message
+                                  : ''}
+                        </div>
                         {props.error ? (
                             <Components.Alert severity="ERROR" title={props.error} />
                         ) : (
                             <Framer.AnimatePresence>
-                                {error && <Components.Alert severity="ERROR" title={error} />}
+                                {error && (
+                                    <Components.Alert
+                                        key="search-error"
+                                        severity="ERROR"
+                                        title={error.message || error}
+                                    />
+                                )}
 
                                 {!error && !response?.data?.length && !isValidating && (
                                     <Components.Alert
+                                        key="no-results"
                                         severity="INFO"
                                         title="No results found"
                                         details={[
