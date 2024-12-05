@@ -70,27 +70,3 @@ export const destroy = async (url: string, token: string | undefined): Promise<A
     const response = await api.delete(url, token ? headers : undefined);
     return response;
 };
-
-export const search = async <T extends Types.SearchParameter>(
-    searchType: Types.SearchType,
-    search: string | null = null,
-    limit: number | null = null,
-    offset: number | null = null,
-    publicationType?: string | null
-): Promise<Interfaces.SearchResults<T>> => {
-    let endpoint: string = searchType === 'authors' ? Config.endpoints.users : Config.endpoints.publicationVersions;
-    let params: string = '';
-
-    // Global search params
-    limit && (params += '&limit=' + limit);
-    offset && (params += '&offset=' + offset);
-    search && (params += '&search=' + search);
-
-    // publication specific params
-    searchType === 'publication-versions' && publicationType && (params += '&type=' + publicationType);
-
-    params.includes('&') && (params = params.replace('&', '?'));
-
-    const response = await get(endpoint + params, undefined);
-    return response.data;
-};

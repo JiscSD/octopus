@@ -43,7 +43,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     offset && !Number.isNaN(parseInt(offset, 10)) ? (offset = parseInt(offset, 10)) : (offset = null);
 
     const swrKey = `/users?search=${encodeURIComponent(query || '')}&limit=${limit || '10'}&offset=${offset || '0'}`;
-    let fallbackData: Interfaces.AuthorsPaginatedResults = {
+    let fallbackData: Interfaces.SearchResults<Interfaces.User> = {
         data: [],
         metadata: {
             offset: 0,
@@ -53,7 +53,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     };
 
     try {
-        fallbackData = (await api.get(swrKey, undefined)).data;
+        fallbackData = (await api.get(swrKey)).data;
     } catch (err) {
         const { message } = err as Interfaces.JSONResponseError;
         error = message;
@@ -97,7 +97,7 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
         data: results,
         error,
         isValidating
-    } = useSWR<Interfaces.AuthorsPaginatedResults>(swrKey, {
+    } = useSWR<Interfaces.SearchResults<Interfaces.User>>(swrKey, {
         fallback: props.fallback,
         use: [Helpers.laggy]
     });
@@ -216,6 +216,13 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                     </fieldset>
 
                     <article className="col-span-12 min-h-screen">
+                        <div aria-live="polite" className="sr-only">
+                            {typeof results?.metadata?.total === 'number'
+                                ? `${results.metadata.total} result${results.metadata.total !== 1 ? 's' : ''}`
+                                : error && error.message
+                                  ? error.message
+                                  : ''}
+                        </div>
                         {props.error ? (
                             <Components.Alert severity="ERROR" title={props.error} />
                         ) : (

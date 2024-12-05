@@ -190,6 +190,13 @@ const Topics: Types.NextPage<Props> = (props): React.ReactElement => {
                     </fieldset>
 
                     <article className="col-span-12 min-h-screen">
+                        <div aria-live="polite" className="sr-only">
+                            {typeof data?.total === 'number'
+                                ? `${data.total} results`
+                                : error && error.message
+                                  ? error.message
+                                  : ''}
+                        </div>
                         {props.error ? (
                             <Components.Alert severity="ERROR" title={props.error} />
                         ) : (
