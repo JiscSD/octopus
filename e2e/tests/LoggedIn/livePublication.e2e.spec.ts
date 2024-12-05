@@ -104,24 +104,24 @@ test.describe('Live Publication', () => {
 
     test('Author profile', async ({ browser }) => {
         const page = await Helpers.users.getPageAsUser(browser);
-        await page.goto(`/publications/cl3fz14dr0001es6i5ji51rq4`, { waitUntil: 'domcontentloaded' });
+        await page.goto(`/publications/publication-user-6-hypothesis-1-live`, { waitUntil: 'domcontentloaded' });
 
         // Check and click author link
-        await page.locator(PageModel.livePublication.authorLink).click();
-        await page.waitForURL(`/authors/octopus`);
+        await page.getByRole('link', { name: 'G. Murphy' }).click();
+        await page.waitForURL(`/authors/test-user-6-grace-murphy`);
 
         // Check name
         await expect(page.locator(PageModel.authorInfo.name)).toBeVisible();
 
         // Check ORCID data sections
-        for await (const orcidDataSection of PageModel.authorInfo.orcidData) {
+        for await (const orcidDataSection of PageModel.profilePage.orcidDataSections) {
             await expect(page.locator(orcidDataSection)).toBeVisible();
         }
 
         // Check Author publications section
-        await page.locator(PageModel.authorInfo.showAll).click();
-        await page.waitForSelector(PageModel.authorInfo.result);
-        await expect(page.locator(PageModel.authorInfo.result)).toBeVisible();
+        await page.locator(PageModel.profilePage.showAll).click();
+        await page.waitForSelector(PageModel.profilePage.result);
+        await expect(page.locator(PageModel.profilePage.result)).toBeVisible();
     });
 
     test('Download pdf/json', async ({ browser, headless }) => {

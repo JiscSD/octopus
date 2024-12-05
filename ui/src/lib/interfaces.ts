@@ -493,11 +493,7 @@ export interface TopicsPaginatedResults {
     offset: number;
     limit: number;
     total: number;
-    results: {
-        id: string;
-        title: string;
-        createdAt: Date;
-    }[];
+    results: Pick<BaseTopic, 'id' | 'title' | 'createdAt'>[];
 }
 
 export interface TopicsPageQuery extends ParsedUrlQuery {

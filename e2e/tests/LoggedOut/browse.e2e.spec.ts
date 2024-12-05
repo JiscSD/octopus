@@ -10,10 +10,7 @@ test.describe('Browse', () => {
         await page.locator(PageModel.header.browseButton).click();
 
         // Check links
-        await expect(page.locator(PageModel.browse.viewAllPublications)).toHaveAttribute(
-            'href',
-            '/search/publications?type=PROBLEM,HYPOTHESIS,PROTOCOL,DATA,ANALYSIS,INTERPRETATION,REAL_WORLD_APPLICATION,PEER_REVIEW'
-        );
+        await expect(page.locator(PageModel.browse.viewAllPublications)).toHaveAttribute('href', '/search');
         await expect(page.locator(PageModel.browse.viewAllAuthors)).toHaveAttribute('href', '/search/authors');
 
         // Expect 5 cards

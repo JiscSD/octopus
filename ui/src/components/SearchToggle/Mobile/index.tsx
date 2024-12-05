@@ -8,7 +8,7 @@ const Mobile: React.FC = (): React.ReactElement => {
     return (
         <div className="flex items-center justify-center p-1 lg:hidden">
             <button
-                onClick={(e) => router.push(`${Config.urls.search.path}/publications`)}
+                onClick={() => router.push(`${Config.urls.searchPublications.path}`)}
                 aria-label="Search"
                 className="rounded border-transparent text-grey-800 outline-0 focus:ring-2 focus:ring-yellow-400"
             >

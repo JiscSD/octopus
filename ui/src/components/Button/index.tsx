@@ -59,7 +59,7 @@ const Button: React.FC<Props> = (props): React.ReactElement | null => {
             (props.padding ? ' ' + props.padding : ' py-2') +
             ` text-${props.textSize ? props.textSize : 'sm'} ${props.childClassName ?? ''}`
         );
-    }, [props.endIcon, props.padding, props.startIcon, props.textSize]);
+    }, [props.childClassName, props.endIcon, props.padding, props.startIcon, props.textSize, props.variant]);
 
     return props.href ? (
         <Components.Link

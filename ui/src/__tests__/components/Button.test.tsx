@@ -110,7 +110,7 @@ describe('Button as a Link', () => {
     });
 
     it('should have "target=_blank" attribute when "openNew" prop is provided', () => {
-        const { container } = render(<Components.Button title={title} href={href} openNew />);
+        render(<Components.Button title={title} href={href} openNew />);
         expect(screen.getByRole('link')).toHaveAttribute('target', '_blank'); // opens the link in a new tab
     });
 });

@@ -4,8 +4,8 @@ const userSeeds: Prisma.UserCreateInput[] = [
     {
         id: 'octopus',
         orcid: 'XXXX-XXXX-XXXX-XXXX',
-        firstName: 'Science',
-        lastName: 'Octopus',
+        firstName: 'Octopus',
+        role: 'ORGANISATION',
         email: 'octopus@jisc.ac.uk',
         apiKey: 'kjahskjhuhaushkjhaskjhjkahsd'
     },

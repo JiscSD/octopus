@@ -21,6 +21,10 @@ const getAllSchema: I.Schema = {
             enum: ['asc', 'desc'],
             default: 'desc'
         },
+        role: {
+            type: 'string',
+            enum: ['USER', 'ORGANISATION']
+        },
         search: {
             type: 'string',
             default: ''

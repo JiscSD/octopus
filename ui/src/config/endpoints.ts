@@ -12,7 +12,7 @@ switch (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF) {
         break;
 }
 
-export default {
+const endpoints = {
     authorization: `${baseURL}/authorization`,
     base: baseURL,
     bookmarks: `${baseURL}/bookmarks`,
@@ -28,3 +28,5 @@ export default {
     verification: `${baseURL}/verification`,
     verifyOrcidAccess: `${baseURL}/verify-orcid-access`
 };
+
+export default endpoints;
