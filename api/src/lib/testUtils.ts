@@ -124,8 +124,8 @@ export const openSearchSeed = async (): Promise<void> => {
     );
 
     // Wait until things show up in the index.
-    const maxWaitSeconds = 5;
-    let waitSeconds = 0;
+    const maxWaitAttempts = 5;
+    let waitAttempts = 0;
 
     do {
         const allResults = await client.search.search({ index: 'publications', body: { query: { match_all: {} } } });
@@ -135,9 +135,9 @@ export const openSearchSeed = async (): Promise<void> => {
         } else {
             // Wait a second before trying again.
             await new Promise((resolve) => setTimeout(resolve, 1000));
-            waitSeconds++;
+            waitAttempts++;
         }
-    } while (waitSeconds < maxWaitSeconds);
+    } while (waitAttempts < maxWaitAttempts);
 
     // If index isn't populated by this time, something is wrong.
     throw new Error('Index not populated after seeding.');
