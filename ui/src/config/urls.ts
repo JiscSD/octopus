@@ -37,16 +37,22 @@ const urls = {
     searchAuthors: {
         path: '/search/authors',
         title: `Search authors - ${base.title}`,
+        description: 'Find authors on Octopus',
+        keywords: ['authors', 'researchers', 'open access'],
         canonical: `${base.host}/search`
     },
     searchTopics: {
         path: '/search/topics',
         title: `Search topics - ${base.title}`,
+        description: 'Find research topics',
+        keywords: ['topics', 'research topics', 'open access'],
         canonical: `${base.host}/search`
     },
     searchOrganisations: {
         path: '/search/organisations',
         title: `Search organisations - ${base.title}`,
+        description: 'Find organisations who have publications on Octopus',
+        keywords: ['organisations', 'research organisations', 'open access'],
         canonical: `${base.host}/search`
     },
     // Publications
