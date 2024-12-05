@@ -524,15 +524,6 @@ export interface AdditionalInformation {
     description: string;
 }
 
-export interface AuthorsPaginatedResults {
-    data: CoreUser[];
-    metadata: {
-        total: number;
-        limit: number;
-        offset: number;
-    };
-}
-
 export interface AuthorSearchQuery extends ParsedUrlQuery {
     query?: string;
 }
