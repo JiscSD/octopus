@@ -31,7 +31,7 @@ test.describe('Octopus profile', () => {
         const octopusPublicationsSection = octopusPublicationsHeader.locator('xpath=..');
 
         // initially, only 10 publications should be visible
-        expect(await octopusPublicationsSection.locator('a[role=button]').count()).toEqual(10);
+        expect(await octopusPublicationsSection.locator('a').count()).toEqual(10);
 
         // press "Show More" button to see more publications
         await expect(page.locator("'Show More'")).toBeVisible();
@@ -46,7 +46,7 @@ test.describe('Octopus profile', () => {
         await page.waitForTimeout(500);
 
         // the next 10 pubs should be loaded
-        expect(await octopusPublicationsSection.locator('a[role=button]').count()).toEqual(20);
+        expect(await octopusPublicationsSection.locator('a').count()).toEqual(20);
 
         // press "Show More" button again
         await Promise.all([
@@ -60,6 +60,6 @@ test.describe('Octopus profile', () => {
         await page.waitForTimeout(500);
 
         // 30 publications should now be visible in the UI
-        expect(await octopusPublicationsSection.locator('a[role=button]').count()).toEqual(30);
+        expect(await octopusPublicationsSection.locator('a').count()).toEqual(30);
     });
 });
