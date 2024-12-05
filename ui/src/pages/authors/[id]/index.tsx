@@ -228,6 +228,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
 
                                     return (
                                         <Components.PublicationSearchResult
+                                            key={publication.id}
                                             publicationVersion={version}
                                             className={classes}
                                         />
