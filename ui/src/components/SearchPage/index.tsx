@@ -144,6 +144,9 @@ const SearchPage: React.FC<Props> = (props: Props): React.ReactElement => {
                     </aside>
                 )}
                 <article className={`col-span-12 min-h-screen ${props.filters && 'lg:col-span-9'}`}>
+                    <div aria-live="polite" className="sr-only">
+                        {props.error ? props.error : `${props.total} result${props.total !== 1 ? 's' : ''}`}
+                    </div>
                     {props.error ? (
                         <Components.Alert severity="ERROR" title={props.error} />
                     ) : (
