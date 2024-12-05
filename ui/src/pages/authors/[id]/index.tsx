@@ -227,12 +227,10 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                                     };
 
                                     return (
-                                        <Components.Delay key={publication.id} delay={50}>
-                                            <Components.PublicationSearchResult
-                                                publicationVersion={version}
-                                                className={classes}
-                                            />
-                                        </Components.Delay>
+                                        <Components.PublicationSearchResult
+                                            publicationVersion={version}
+                                            className={classes}
+                                        />
                                     );
                                 }
                             })}

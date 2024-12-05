@@ -56,7 +56,6 @@ const SearchPage: React.FC<Props> = (props: Props): React.ReactElement => {
                                 Searching
                             </span>
                             <select
-                                name="search-type"
                                 id="search-type"
                                 onChange={(e) => router.push(`/search/${e.target.value}`)}
                                 value={props.searchType}
@@ -200,41 +199,39 @@ const SearchPage: React.FC<Props> = (props: Props): React.ReactElement => {
                                     </div>
 
                                     {!props.isValidating && !!props.results.length && (
-                                        <Components.Delay delay={props.results.length * 50}>
-                                            <Framer.motion.div
-                                                initial={{ opacity: 0 }}
-                                                animate={{ opacity: 1 }}
-                                                exit={{ opacity: 0 }}
-                                                transition={{ type: 'tween', duration: 0.75 }}
-                                                className="mt-8 w-full justify-between lg:flex lg:flex-row-reverse"
+                                        <Framer.motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            transition={{ type: 'tween', duration: 0.75 }}
+                                            className="mt-8 w-full justify-between lg:flex lg:flex-row-reverse"
+                                        >
+                                            <div className="flex justify-between">
+                                                <Components.Button
+                                                    className="mr-6"
+                                                    onClick={() => {
+                                                        props.setOffset(props.offset - props.limit);
+                                                        Helpers.scrollTopSmooth();
+                                                    }}
+                                                    disabled={props.offset === 0}
+                                                    title="Previous"
+                                                />
+                                                <Components.Button
+                                                    onClick={() => {
+                                                        props.setOffset(props.offset + props.limit);
+                                                        Helpers.scrollTopSmooth();
+                                                    }}
+                                                    disabled={props.limit + props.offset >= props.total}
+                                                    title="Next"
+                                                />
+                                            </div>
+                                            <span
+                                                id="pagination-info"
+                                                className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50"
                                             >
-                                                <div className="flex justify-between">
-                                                    <Components.Button
-                                                        className="mr-6"
-                                                        onClick={() => {
-                                                            props.setOffset((prev) => prev - props.limit);
-                                                            Helpers.scrollTopSmooth();
-                                                        }}
-                                                        disabled={props.offset === 0}
-                                                        title="Previous"
-                                                    />
-                                                    <Components.Button
-                                                        onClick={() => {
-                                                            props.setOffset((prev) => prev + props.limit);
-                                                            Helpers.scrollTopSmooth();
-                                                        }}
-                                                        disabled={props.limit + props.offset >= props.total}
-                                                        title="Next"
-                                                    />
-                                                </div>
-                                                <span
-                                                    id="pagination-info"
-                                                    className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50"
-                                                >
-                                                    Showing {props.offset + 1} - {upperPageBound} of {props.total}
-                                                </span>
-                                            </Framer.motion.div>
-                                        </Components.Delay>
+                                                Showing {props.offset + 1} - {upperPageBound} of {props.total}
+                                            </span>
+                                        </Framer.motion.div>
                                     )}
                                 </>
                             )}
