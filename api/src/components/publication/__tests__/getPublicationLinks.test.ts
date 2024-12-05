@@ -1,7 +1,7 @@
 import * as testUtils from 'lib/testUtils';
 
 describe('Get links from a supplied publication', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
         await testUtils.clearDB();
         await testUtils.testSeed();
     });

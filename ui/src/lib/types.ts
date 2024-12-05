@@ -82,8 +82,6 @@ export type JSONValue = unknown;
 
 export type SearchType = 'publication-versions' | 'authors' | 'topics' | 'organisations';
 
-export type SearchParameter = Interfaces.PublicationVersion | Interfaces.User;
-
 export type PublicationOrderBySearchOption = 'title' | 'publishedDate';
 
 export type UserOrderBySearchOption = 'updatedAt' | 'createdAt';

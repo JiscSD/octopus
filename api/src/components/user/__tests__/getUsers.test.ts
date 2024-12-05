@@ -2,7 +2,7 @@ import * as testUtils from 'lib/testUtils';
 import * as I from 'lib/interface';
 
 describe('Get Users', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
         await testUtils.clearDB();
         await testUtils.testSeed();
     });
