@@ -87,3 +87,28 @@ module "cloudfront" {
     aws.us-east-1-provider = aws.us-east-1-provider
   }
 }
+
+module "ecs" {
+  source             = "../modules/ecs"
+  environment        = local.environment
+  private_subnet_ids = module.network.private_subnet_ids
+  project_name       = local.project_name
+  public_subnet_ids  = module.network.public_subnet_ids
+  vpc_id             = module.network.vpc_id
+}
+
+module "ecr" {
+  source                 = "../modules/ecr"
+  environment            = local.environment
+  private_route_table_id = module.network.private_route_table_id
+  private_subnet_ids     = module.network.private_subnet_ids
+  project_name           = local.project_name
+  task_security_group_id = module.ecs.task_security_group_id
+  vpc_id                 = module.network.vpc_id
+}
+
+module "codepipeline" {
+  source       = "../modules/codepipeline"
+  environment  = local.environment
+  project_name = local.project_name
+}

@@ -501,7 +501,9 @@ describe('Create live publication', () => {
 
         expect(createPublicationRequest.status).toEqual(201);
         expect(
-            createPublicationRequest.body.linkedTo.sort((a, b) => a.publicationToId.localeCompare(b.publicationToId))
+            createPublicationRequest.body.linkedTo.sort(
+                (a, b) => a.publicationToId.localeCompare(b.publicationToId) as string
+            )
         ).toMatchObject([
             { publicationToId: 'publication-problem-live', versionToId: 'publication-problem-live-v2', draft: false },
             {
