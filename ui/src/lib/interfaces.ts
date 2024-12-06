@@ -559,7 +559,6 @@ export interface Crosslink {
 export interface RelativeCrosslink {
     id: string;
     linkedPublication: {
-        id: string;
         latestLiveVersion: Pick<PublicationVersion, 'title'> & {
             publishedDate: string;
             user: Pick<PublicationVersionUser, 'id' | 'firstName' | 'lastName'>;

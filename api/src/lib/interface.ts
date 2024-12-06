@@ -82,6 +82,12 @@ export interface JSONResponse {
 
 export type Environment = 'int' | 'prod';
 
+export type SearchResultMeta = {
+    total: number;
+    limit: number;
+    offset: number;
+};
+
 /**
  * @description Publications
  */
@@ -933,10 +939,7 @@ export interface TopicsFilters {
     exclude?: string;
 }
 
-export interface TopicsPaginatedResults {
-    offset: number;
-    limit: number;
-    total: number;
+export interface TopicsPaginatedResults extends SearchResultMeta {
     results: {
         id: string;
         title: string;
