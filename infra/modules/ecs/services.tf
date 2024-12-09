@@ -26,7 +26,7 @@ resource "aws_ecs_service" "hello-world" {
 
   network_configuration {
     assign_public_ip = true
-    subnets          = var.public_subnet_ids
+    subnets          = var.private_subnet_ids
     security_groups  = [aws_security_group.hello-world-task-sg.id]
   }
 

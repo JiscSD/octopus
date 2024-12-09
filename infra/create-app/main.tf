@@ -93,7 +93,6 @@ module "ecs" {
   environment        = local.environment
   private_subnet_ids = module.network.private_subnet_ids
   project_name       = local.project_name
-  public_subnet_ids  = module.network.public_subnet_ids
   vpc_id             = module.network.vpc_id
 }
 
