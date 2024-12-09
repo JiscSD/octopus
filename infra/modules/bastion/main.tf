@@ -15,19 +15,21 @@ resource "aws_security_group" "ec2_sg" {
   }
 }
 
+data "aws_iam_policy_document" "allow_ssm_role_policy" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
 resource "aws_iam_role" "allow_ssm_role" {
   name               = "ssm-role-${var.environment}"
   description        = "Allow SSM access to EC2"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": {
-    "Effect": "Allow",
-    "Principal": {"Service": "ec2.amazonaws.com"},
-    "Action": "sts:AssumeRole"
-  }
-}
-EOF
+  assume_role_policy = data.aws_iam_policy_document.allow_ssm_role_policy.json
 }
 
 resource "aws_iam_instance_profile" "allow_ssm_iam_profile" {
