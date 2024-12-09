@@ -42,55 +42,51 @@ resource "aws_route53_record" "dkim_record" {
   records = ["${element(aws_ses_domain_dkim.octopus.dkim_tokens, count.index)}.dkim.amazonses.com"]
 }
 
-resource "aws_iam_role" "inbound_email_role" {
-  name        = "inbound_email_role-${var.environment}"
-  description = "IAM role for managing inbound emails"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Sid    = ""
-        Principal = {
-          Service = "lambda.amazonaws.com"
-        }
-      },
-    ]
-  })
-
-  inline_policy {
-    name = "inbound_email_role_policy"
-    policy = jsonencode({
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Sid" : "VisualEditor0",
-          "Effect" : "Allow",
-          "Action" : [
-            "logs:CreateLogStream",
-            "logs:CreateLogGroup",
-            "logs:PutLogEvents"
-          ],
-          "Resource" : "*"
-        },
-        {
-          "Sid" : "VisualEditor1",
-          "Effect" : "Allow",
-          "Action" : [
-            "s3:GetObject",
-            "ses:SendRawEmail"
-          ],
-          "Resource" : [
-            "arn:aws:s3:::email-forwarding-${var.environment}/*",
-            "arn:aws:ses:eu-west-1:${local.account_id}:identity/*"
-          ]
-        }
-      ]
-    })
+data "aws_iam_policy_document" "inbound_email_role_assume_role_policy" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
   }
 }
 
+data "aws_iam_policy_document" "inbound_email_role_policy" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "logs:CreateLogStream",
+      "logs:CreateLogGroup",
+      "logs:PutLogEvents"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "ses:SendRawEmail"
+    ]
+    resources = [
+      "arn:aws:s3:::email-forwarding-${var.environment}/*",
+      "arn:aws:ses:eu-west-1:${local.account_id}:identity/*"
+    ]
+  }
+}
+
+resource "aws_iam_role" "inbound_email_role" {
+  name               = "inbound_email_role-${var.environment}"
+  description        = "IAM role for managing inbound emails"
+  assume_role_policy = data.aws_iam_policy_document.inbound_email_role_assume_role_policy.json
+}
+
+resource "aws_iam_role_policy" "inbound_email_role_policy" {
+  name   = "inbound_email_role_policy-${var.environment}"
+  role   = aws_iam_role.inbound_email_role.id
+  policy = data.aws_iam_policy_document.inbound_email_role_policy.json
+}
 
 resource "aws_lambda_permission" "ses" {
   count         = length(keys(local.email_address_map))

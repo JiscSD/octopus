@@ -98,22 +98,21 @@ resource "aws_lambda_function" "pdf_processing_lambda" {
   }
 }
 
+data "aws_iam_policy_document" "pdf_processing_lambda_role_policy" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+  }
+}
+
 resource "aws_iam_role" "pdf_processing_lambda_role" {
   name = "octopus_${var.environment}_pdf_processing_lambda_role"
 
-  assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Sid" : "",
-        "Effect" : "Allow",
-        "Principal" : {
-          "Service" : "lambda.amazonaws.com"
-        },
-        "Action" : "sts:AssumeRole"
-      }
-    ]
-  })
+  assume_role_policy = data.aws_iam_policy_document.pdf_processing_lambda_role_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "pdf_processing_lambda_s3_policy" {
@@ -159,29 +158,25 @@ resource "aws_s3_bucket_public_access_block" "email_forwarding_bucket" {
   block_public_policy = true
 }
 
+data "aws_iam_policy_document" "email_forwarding_bucket_policy" {
+  statement {
+    sid    = "AllowSESPuts"
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["ses.amazonaws.com"]
+    }
+    actions   = ["s3:PutObject"]
+    resources = ["${aws_s3_bucket.email_forwarding_bucket.arn}/*"]
+    condition {
+      test     = "StringEquals"
+      variable = "aws:Referer"
+      values   = [local.account_id]
+    }
+  }
+}
 
 resource "aws_s3_bucket_policy" "email_forwarding_bucket" {
   bucket = aws_s3_bucket.email_forwarding_bucket.id
-
-  policy = <<EOF
-{  
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "AllowSESPuts",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "ses.amazonaws.com"
-      },
-      "Action": "s3:PutObject",
-      "Resource": "${aws_s3_bucket.email_forwarding_bucket.arn}/*",
-      "Condition": {
-        "StringEquals": {
-          "aws:Referer": "${local.account_id}"
-        }        
-      }
-    }
-  ]
-}
-EOF
+  policy = data.aws_iam_policy_document.email_forwarding_bucket_policy.json
 }
