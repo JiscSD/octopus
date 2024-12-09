@@ -6,6 +6,7 @@ import * as Config from '@/config';
 import * as Types from '@/types';
 
 const Home: Types.NextPage = (props): React.ReactElement => {
+    const buttonClasses = 'px-4 py-1 rounded-lg';
     return (
         <>
             <Head>
@@ -33,55 +34,47 @@ const Home: Types.NextPage = (props): React.ReactElement => {
                             community to build upon it.
                         </p>
                         <div className="mx-auto flex w-full flex-wrap gap-6 sm:w-fit sm:justify-between">
-                            <Components.Link
+                            <Components.Button
+                                className={buttonClasses}
                                 href={Config.urls.about.path}
-                                className="flex flex-1 items-center rounded-lg bg-grey-700 p-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600 sm:w-fit sm:flex-auto sm:px-4"
-                            >
-                                <span className="w-full text-center font-montserrat text-sm leading-none tracking-wide">
-                                    Learn more
-                                </span>
-                            </Components.Link>
-                            <Components.Link
+                                title="Learn more"
+                                variant="block"
+                            />
+                            <Components.Button
+                                className={buttonClasses}
                                 href={Config.urls.authorGuide.path}
-                                className="flex flex-1 items-center space-x-4 rounded-lg bg-grey-700 p-4 font-medium text-white-50 transition-colors duration-500 hover:bg-grey-600 dark:bg-teal-600 dark:hover:bg-teal-600 sm:w-fit sm:flex-auto sm:px-4"
-                            >
-                                <span className="w-full text-center font-montserrat text-sm leading-none tracking-wide">
-                                    Author Guide
-                                </span>
-                            </Components.Link>
-
-                            <Components.Link
+                                title="Author Guide"
+                                variant="block"
+                            />
+                            <Components.Button
+                                className={buttonClasses}
                                 href={`${Config.urls.search.path}/publications`}
-                                className="flex w-full items-center justify-between rounded-lg bg-teal-700 p-4 font-medium text-white-50 outline-0 transition-colors duration-300 hover:bg-teal-600 focus:ring-2 focus:ring-yellow-400 dark:bg-teal-600 dark:hover:bg-teal-600 sm:w-auto"
-                            >
-                                <span className="w-full text-center font-montserrat text-sm leading-none tracking-wide">
-                                    Find Publications
-                                </span>
-                            </Components.Link>
+                                title="Find Publications"
+                                variant="block"
+                            />
                         </div>
                     </div>
                 </section>
                 <section className="container mx-auto px-8 py-20 text-center">
                     <h2 className="mb-8 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-100 lg:text-3xl">
-                        Research Culture Report
+                        UK Government Areas of Research Interest
                     </h2>
                     <p className="mx-auto mb-6 text-center font-montserrat text-base font-medium leading-relaxed text-grey-700 transition-colors duration-500 dark:text-grey-100 lg:w-8/12 lg:text-lg">
-                        Researchers at the University of Bristol have recently conducted an investigation into the
-                        current state of the research culture. They found academic researchers demoralised by a culture
-                        that disincentivises sharing and collaboration, encourages questionable research practices, and
-                        increases the risk of bias. These findings underline the need for a platform such as Octopus.
-                        Their results are detailed in the report &quot;A snapshot of the academic research culture in
-                        2023 and how it might be improved&quot;.
+                        Octopus is now populated with research problems derived from Areas of Research Interest
+                        published by UK Government departments. To view these, click on the button below. Publishing a
+                        Rationale/Hypothesis linked to one of these Research Problems will give the option of passing
+                        your details to the relevant government department. We hope this helps collaboration between
+                        government and researchers.
                     </p>
 
-                    <Components.Link
-                        href={Config.urls.researchCultureReport.path}
-                        className="mx-auto flex w-full items-center justify-between rounded-lg bg-teal-700 p-4 font-medium text-white-50 outline-0 transition-colors duration-300 hover:bg-teal-600 focus:ring-2 focus:ring-yellow-400 dark:bg-teal-600 dark:hover:bg-teal-600 sm:w-auto sm:w-fit"
-                    >
-                        <span className="w-full text-center font-montserrat text-sm leading-none tracking-wide">
-                            Learn more
-                        </span>
-                    </Components.Link>
+                    <Components.Button
+                        className={buttonClasses}
+                        href={
+                            '/' // This needs to point to the organisation search when it has been merged
+                        }
+                        title="Browse by department"
+                        variant="block"
+                    />
                 </section>
                 <section className="container mx-auto px-8">
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 2xl:grid-cols-3">
