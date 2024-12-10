@@ -282,6 +282,7 @@ export interface User {
 
 export interface UserFilters {
     search?: string;
+    role?: Role;
     limit?: string;
     offset?: string;
     orderBy?: UserOrderBy;
