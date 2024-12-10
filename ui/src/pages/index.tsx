@@ -69,9 +69,7 @@ const Home: Types.NextPage = (props): React.ReactElement => {
 
                     <Components.Button
                         className={buttonClasses}
-                        href={
-                            '/' // This needs to point to the organisation search when it has been merged
-                        }
+                        href={Config.urls.searchOrganisations.path}
                         title="Browse by department"
                         variant="block"
                     />
