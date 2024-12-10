@@ -51,7 +51,7 @@
         "ajv": "^8.12.0",
         "ajv-formats": "^2.1.1",
         "aws-lambda": "^1.0.7",
-        "axios": "^1.7.4",
+        "axios": "^1.7.9",
         "cheerio": "^1.0.0-rc.12",
         "dotenv": "16.4.5",
         "html-to-text": "^9.0.5",

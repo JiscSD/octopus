@@ -48,7 +48,7 @@ const Home: Types.NextPage = (props): React.ReactElement => {
                             />
                             <Components.Button
                                 className={buttonClasses}
-                                href={`${Config.urls.search.path}/publications`}
+                                href={`${Config.urls.searchPublications.path}/publications`}
                                 title="Find Publications"
                                 variant="block"
                             />
@@ -89,7 +89,7 @@ const Home: Types.NextPage = (props): React.ReactElement => {
                             title="Read publications"
                             content="Anyone can read anything in Octopus &#8211; it's designed to make primary research openly available to all."
                             icon={<OutlineIcons.MagnifyingGlassIcon className="h-8 w-8 text-teal-500" />}
-                            link={Config.urls.search.path}
+                            link={Config.urls.searchPublications.path}
                             linkText="Read publications"
                         />
                         <Components.ActionCard
