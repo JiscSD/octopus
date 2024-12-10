@@ -1,17 +1,16 @@
-import * as Helpers from '../helpers';
 import { expect, Page, test } from '@playwright/test';
 import { PageModel } from '../PageModel';
 
-test.describe('Science Octopus profile', () => {
+test.describe('Octopus profile', () => {
     let page: Page;
 
     test.beforeAll(async ({ browser }) => {
         page = await browser.newPage();
-        // navigate to Science Octopus profile page
+        // navigate to Octopus profile page
         await page.goto(`/authors/octopus`, {
             waitUntil: 'domcontentloaded'
         });
-        await expect(page).toHaveTitle('Author: XXXX-XXXX-XXXX-XXXX - Octopus | Built for Researchers');
+        await expect(page).toHaveTitle('Author: Octopus - Octopus | Built for Researchers');
     });
 
     test.afterAll(async () => {
@@ -19,11 +18,11 @@ test.describe('Science Octopus profile', () => {
     });
 
     test('Octopus publications pagination', async () => {
-        // check user full name
-        await expect(page.locator('h1')).toHaveText('Science Octopus');
+        // check user name
+        await expect(page.locator('h1')).toHaveText('Octopus');
 
         // check Octopus publications section
-        const octopusPublicationsHeader = page.locator(PageModel.profilePage.octopusPublications);
+        const octopusPublicationsHeader = page.locator(PageModel.organisationalUserInfo.octopusPublications);
 
         await expect(octopusPublicationsHeader).toBeVisible();
 
@@ -32,7 +31,7 @@ test.describe('Science Octopus profile', () => {
         const octopusPublicationsSection = octopusPublicationsHeader.locator('xpath=..');
 
         // initially, only 10 publications should be visible
-        expect(await octopusPublicationsSection.locator('a[role=button]').count()).toEqual(10);
+        expect(await octopusPublicationsSection.locator('a').count()).toEqual(10);
 
         // press "Show More" button to see more publications
         await expect(page.locator("'Show More'")).toBeVisible();
@@ -47,7 +46,7 @@ test.describe('Science Octopus profile', () => {
         await page.waitForTimeout(500);
 
         // the next 10 pubs should be loaded
-        expect(await octopusPublicationsSection.locator('a[role=button]').count()).toEqual(20);
+        expect(await octopusPublicationsSection.locator('a').count()).toEqual(20);
 
         // press "Show More" button again
         await Promise.all([
@@ -61,6 +60,6 @@ test.describe('Science Octopus profile', () => {
         await page.waitForTimeout(500);
 
         // 30 publications should now be visible in the UI
-        expect(await octopusPublicationsSection.locator('a[role=button]').count()).toEqual(30);
+        expect(await octopusPublicationsSection.locator('a').count()).toEqual(30);
     });
 });

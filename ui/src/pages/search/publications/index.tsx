@@ -232,19 +232,15 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
         e: React.SyntheticEvent<HTMLFormElement, Event>
     ): Promise<void> => {
         e.preventDefault();
-        const searchTerm = searchInputRef.current?.value || '';
+        const searchTerm = e.currentTarget.searchTerm.value;
+        const newQuery = { ...router.query, query: searchTerm };
 
-        await router.push(
-            {
-                query: {
-                    ...router.query,
-                    query: searchTerm
-                }
-            },
-            undefined,
-            { shallow: true }
-        );
+        if (!searchTerm) {
+            delete newQuery.query; // remove query param from browser url
+        }
 
+        await router.push({ query: newQuery }, undefined, { shallow: true });
+        setOffset(0);
         setQuery(searchTerm);
     };
 
@@ -329,357 +325,150 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
         setOffset(0);
     }, [query, publicationTypes, limit]);
 
-    const upperPageBound = response
-        ? limit + offset > response.metadata.total
-            ? response.metadata.total
-            : limit + offset
-        : null;
-
     const checkBoxClasses =
         'h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed';
+
+    const filters = (
+        <>
+            <fieldset className="space-y-3">
+                <legend className="pb-2 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
+                    Author types
+                </legend>
+                {Config.values.authorTypes.map((type) => (
+                    <div key={type} className={`flex items-center`}>
+                        <input
+                            id={type}
+                            name={type}
+                            type="checkbox"
+                            className={checkBoxClasses}
+                            checked={authorTypes ? authorTypes.split(',').includes(type) : false}
+                            onChange={(e) => collateAuthorTypes(e, type)}
+                            disabled={!response}
+                        />
+                        <label
+                            htmlFor={type}
+                            className="ml-3 text-sm select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
+                            aria-disabled={!response}
+                        >
+                            {type.charAt(0).toUpperCase() + type.slice(1)}
+                        </label>
+                    </div>
+                ))}
+            </fieldset>
+            <fieldset className="space-y-3">
+                <legend className="pb-2 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
+                    Publication types
+                </legend>
+                {Config.values.publicationTypes.map((type) => (
+                    <div key={type} className={`flex items-center`}>
+                        <input
+                            id={type}
+                            name={type}
+                            type="checkbox"
+                            className={checkBoxClasses}
+                            checked={publicationTypes ? publicationTypes.split(',').includes(type) : false}
+                            onChange={(e) => collatePublicationTypes(e, type)}
+                            disabled={!response}
+                        />
+                        <label
+                            htmlFor={type}
+                            className="ml-3 text-sm select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
+                            aria-disabled={!response}
+                        >
+                            {Helpers.formatPublicationType(type)}
+                        </label>
+                    </div>
+                ))}
+
+                <div className="flex items-center border-b border-t border-grey-100 py-3">
+                    <input
+                        id="select-all"
+                        aria-describedby="select-all"
+                        name="select-all"
+                        type="checkbox"
+                        className={checkBoxClasses}
+                        checked={Config.values.publicationTypes.every((type) => publicationTypes.includes(type))}
+                        onChange={(e) =>
+                            setPublicationTypes(e.target.checked ? Config.values.publicationTypes.join(',') : '')
+                        }
+                        disabled={!response}
+                    />
+                    <div className="ml-3 text-sm">
+                        <label
+                            htmlFor="select-all"
+                            className="select-none font-medium italic text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
+                            aria-disabled={!response}
+                        >
+                            Select/deselect all
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset className="col-span-12 lg:col-span-3 xl:col-span-4 space-y-3">
+                <legend className="pb-2 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
+                    Date Range
+                </legend>
+                <label htmlFor="date-from" className="relative block w-full">
+                    <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
+                        Date From:
+                    </span>
+                    <input
+                        name="date-from"
+                        id="date-from"
+                        type="date"
+                        placeholder="Date from..."
+                        className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
+                        disabled={isValidating}
+                        value={dateFrom}
+                        onChange={(e) => handleDateFormSubmit(e)}
+                    />
+                </label>
+                <label htmlFor="date-to" className="relative block w-full">
+                    <span className="mb-1 block pt-2 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
+                        Date to:
+                    </span>
+                    <input
+                        name="date-to"
+                        id="date-to"
+                        type="date"
+                        placeholder="Date to..."
+                        className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
+                        disabled={isValidating}
+                        value={dateTo}
+                        onChange={(e) => handleDateFormSubmit(e)}
+                    />
+                </label>
+            </fieldset>
+        </>
+    );
 
     return (
         <>
             <Head>
-                <title>{Config.urls.search.title}</title>
-                <meta name="description" content={Config.urls.search.description} />
-                <meta name="og:title" content={Config.urls.search.title} />
-                <meta name="og:description" content={Config.urls.search.description} />
-                <meta name="keywords" content={Config.urls.search.keywords.join(', ')} />
-                <link rel="canonical" href={Config.urls.search.canonical} />
+                <title>{Config.urls.searchPublications.title}</title>
+                <meta name="description" content={Config.urls.searchPublications.description} />
+                <meta name="og:title" content={Config.urls.searchPublications.title} />
+                <meta name="og:description" content={Config.urls.searchPublications.description} />
+                <meta name="keywords" content={Config.urls.searchPublications.keywords.join(', ')} />
+                <link rel="canonical" href={Config.urls.searchPublications.canonical} />
             </Head>
 
             <Layouts.Standard>
-                <section className="container mx-auto px-8 py-8 lg:gap-4 lg:pb-0 lg:pt-16">
-                    <Components.PageTitle text={`Search results ${query ? `for ${query}` : ''}`} />
-                </section>
-                <section
-                    id="content"
-                    className="container mx-auto grid grid-cols-1 gap-x-6 px-8 lg:grid-cols-12 lg:gap-y-8 2xl:gap-x-10"
-                >
-                    <fieldset className="col-span-12 mb-8 grid w-full grid-cols-12 items-end gap-x-6 gap-y-4 lg:mb-0 lg:gap-x-6 2xl:gap-x-10">
-                        <legend className="sr-only">Search options</legend>
-
-                        <label htmlFor="search-type" className="relative col-span-8 block lg:col-span-3">
-                            <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                Searching
-                            </span>
-                            <select
-                                name="search-type"
-                                id="search-type"
-                                onChange={(e) => router.push(`/search/${e.target.value}`)}
-                                value={props.searchType}
-                                className="col-span-3 !mt-0 block w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
-                                disabled={isValidating}
-                            >
-                                <option value="publications">Publications</option>
-                                <option value="authors">Authors</option>
-                                <option value="topics">Topics</option>
-                            </select>
-                        </label>
-
-                        <label
-                            htmlFor="order-direction"
-                            className="relative col-span-4 block lg:col-span-2 xl:col-span-1"
-                        >
-                            <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                Showing
-                            </span>
-                            <select
-                                name="order-direction"
-                                id="order-direction"
-                                onChange={(e) => setLimit(parseInt(e.target.value, 10))}
-                                value={limit}
-                                className="w-full rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500"
-                                disabled={isValidating}
-                            >
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="15">15</option>
-                                <option value="20">20</option>
-                                <option value="50">50</option>
-                            </select>
-                        </label>
-
-                        <form
-                            name="query-form"
-                            id="query-form"
-                            className="col-span-12 lg:col-span-7 xl:col-span-8"
-                            onSubmit={handleSearchFormSubmit}
-                        >
-                            <label htmlFor="query" className="relative block w-full">
-                                <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                    Quick search
-                                </span>
-                                <input
-                                    ref={searchInputRef}
-                                    name="query"
-                                    id="query"
-                                    defaultValue={props.query ? props.query : ''}
-                                    type="text"
-                                    placeholder="Type here and press enter..."
-                                    className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
-                                    disabled={isValidating}
-                                />
-                                <button
-                                    type="submit"
-                                    form="query-form"
-                                    aria-label="Search"
-                                    className="absolute right-px rounded-md p-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
-                                    disabled={isValidating}
-                                >
-                                    <SolidIcons.MagnifyingGlassIcon className="h-6 w-6 text-teal-500" />
-                                </button>
-                            </label>
-                        </form>
-                    </fieldset>
-
-                    <aside className="relative col-span-3 hidden lg:block">
-                        <Framer.AnimatePresence>
-                            <Framer.motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="sticky top-16 space-y-6 divide-y divide-grey-100"
-                            >
-                                <div className="space-y-5">
-                                    <fieldset className="space-y-3">
-                                        <legend className="pb-2 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                            Author types
-                                        </legend>
-                                        {Config.values.authorTypes.map((type) => (
-                                            <div key={type} className={`flex items-center`}>
-                                                <input
-                                                    id={type}
-                                                    name={type}
-                                                    type="checkbox"
-                                                    className={checkBoxClasses}
-                                                    checked={
-                                                        authorTypes ? authorTypes.split(',').includes(type) : false
-                                                    }
-                                                    onChange={(e) => collateAuthorTypes(e, type)}
-                                                    disabled={!response}
-                                                />
-                                                <label
-                                                    htmlFor={type}
-                                                    className="ml-3 text-sm select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
-                                                    aria-disabled={!response}
-                                                >
-                                                    {type.charAt(0).toUpperCase() + type.slice(1)}
-                                                </label>
-                                            </div>
-                                        ))}
-                                    </fieldset>
-                                    <fieldset className="space-y-3">
-                                        <legend className="pb-2 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                            Publication types
-                                        </legend>
-                                        {Config.values.publicationTypes.map((type) => (
-                                            <div key={type} className={`flex items-center`}>
-                                                <input
-                                                    id={type}
-                                                    name={type}
-                                                    type="checkbox"
-                                                    className={checkBoxClasses}
-                                                    checked={
-                                                        publicationTypes
-                                                            ? publicationTypes.split(',').includes(type)
-                                                            : false
-                                                    }
-                                                    onChange={(e) => collatePublicationTypes(e, type)}
-                                                    disabled={!response}
-                                                />
-                                                <label
-                                                    htmlFor={type}
-                                                    className="ml-3 text-sm select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
-                                                    aria-disabled={!response}
-                                                >
-                                                    {Helpers.formatPublicationType(type)}
-                                                </label>
-                                            </div>
-                                        ))}
-
-                                        <div className="flex items-center border-b border-t border-grey-100 py-3">
-                                            <input
-                                                id="select-all"
-                                                aria-describedby="select-all"
-                                                name="select-all"
-                                                type="checkbox"
-                                                className={checkBoxClasses}
-                                                checked={Config.values.publicationTypes.every((type) =>
-                                                    publicationTypes.includes(type)
-                                                )}
-                                                onChange={(e) =>
-                                                    setPublicationTypes(
-                                                        e.target.checked ? Config.values.publicationTypes.join(',') : ''
-                                                    )
-                                                }
-                                                disabled={!response}
-                                            />
-                                            <div className="ml-3 text-sm">
-                                                <label
-                                                    htmlFor="select-all"
-                                                    className="select-none font-medium italic text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
-                                                    aria-disabled={!response}
-                                                >
-                                                    Select/deselect all
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                    <fieldset className="col-span-12 lg:col-span-3 xl:col-span-4 space-y-3">
-                                        <legend className="pb-2 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                            Date Range
-                                        </legend>
-                                        <label htmlFor="date-from" className="relative block w-full">
-                                            <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                                Date From:
-                                            </span>
-                                            <input
-                                                name="date-from"
-                                                id="date-from"
-                                                type="date"
-                                                placeholder="Date from..."
-                                                className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
-                                                disabled={isValidating}
-                                                value={dateFrom}
-                                                onChange={(e) => handleDateFormSubmit(e)}
-                                            />
-                                        </label>
-                                        <label htmlFor="date-to" className="relative block w-full">
-                                            <span className="mb-1 block pt-2 text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
-                                                Date to:
-                                            </span>
-                                            <input
-                                                name="date-to"
-                                                id="date-to"
-                                                type="date"
-                                                placeholder="Date to..."
-                                                className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
-                                                disabled={isValidating}
-                                                value={dateTo}
-                                                onChange={(e) => handleDateFormSubmit(e)}
-                                            />
-                                        </label>
-                                    </fieldset>
-                                </div>
-
-                                <div className="pt-6">
-                                    <button
-                                        onClick={resetFilters}
-                                        className="flex items-end rounded outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-50"
-                                    >
-                                        <span className="mr-2 font-semibold leading-relaxed text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 transition-colors duration-500 dark:text-white-50">
-                                            Clear filters
-                                        </span>
-                                        <SolidIcons.XCircleIcon className="h-5 w-4 text-teal-500" />
-                                    </button>
-                                </div>
-                            </Framer.motion.div>
-                        </Framer.AnimatePresence>
-                    </aside>
-
-                    <article className="col-span-12 min-h-screen lg:col-span-9">
-                        <div aria-live="polite" className="sr-only">
-                            {typeof response?.metadata?.total === 'number'
-                                ? `${response.metadata.total} result${response.metadata.total !== 1 ? 's' : ''}`
-                                : error && error.message
-                                  ? error.message
-                                  : ''}
-                        </div>
-                        {props.error ? (
-                            <Components.Alert severity="ERROR" title={props.error} />
-                        ) : (
-                            <Framer.AnimatePresence>
-                                {error && (
-                                    <Components.Alert
-                                        key="search-error"
-                                        severity="ERROR"
-                                        title={error.message || error}
-                                    />
-                                )}
-
-                                {!error && !response?.data?.length && !isValidating && (
-                                    <Components.Alert
-                                        key="no-results"
-                                        severity="INFO"
-                                        title="No results found"
-                                        details={[
-                                            'Try a different search criteria.',
-                                            'If you think something is wrong, please contact the helpdesk.'
-                                        ]}
-                                    />
-                                )}
-
-                                {response?.data?.length && (
-                                    <>
-                                        <div className="rounded">
-                                            {response.data.map((result, index: number) => {
-                                                let classes = '';
-
-                                                if (index === 0) {
-                                                    classes += 'rounded-t';
-                                                }
-
-                                                if (index === response.data.length - 1) {
-                                                    classes += '!border-b-transparent !rounded-b';
-                                                }
-
-                                                return (
-                                                    <Components.PublicationSearchResult
-                                                        key={`publication-${index}-${result.id}`}
-                                                        publicationVersion={result}
-                                                        className={classes}
-                                                    />
-                                                );
-                                            })}
-                                        </div>
-
-                                        {!isValidating && !!response.data.length && (
-                                            <Components.Delay delay={response.data.length * 50}>
-                                                <Framer.motion.div
-                                                    initial={{ opacity: 0 }}
-                                                    animate={{ opacity: 1 }}
-                                                    exit={{ opacity: 0 }}
-                                                    transition={{ type: 'tween', duration: 0.75 }}
-                                                    className="mt-8 w-full items-center justify-between lg:flex lg:flex-row-reverse"
-                                                >
-                                                    <div className="flex justify-between">
-                                                        <button
-                                                            onClick={(e) => {
-                                                                setOffset((prev) => prev - limit);
-                                                                Helpers.scrollTopSmooth();
-                                                            }}
-                                                            disabled={offset === 0}
-                                                            className="mr-6 rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
-                                                        >
-                                                            Previous
-                                                        </button>
-
-                                                        <button
-                                                            onClick={(e) => {
-                                                                setOffset((prev) => prev + limit);
-                                                                Helpers.scrollTopSmooth();
-                                                            }}
-                                                            className="rounded font-semibold text-grey-800 underline decoration-teal-500 decoration-2 underline-offset-4 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-500 disabled:decoration-teal-600 disabled:opacity-70 dark:text-white-50"
-                                                            disabled={limit + offset >= response.metadata.total}
-                                                        >
-                                                            Next
-                                                        </button>
-                                                    </div>
-                                                    <span className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50">
-                                                        Showing {offset + 1} - {upperPageBound} of{' '}
-                                                        {response.metadata.total}
-                                                    </span>
-                                                </Framer.motion.div>
-                                            </Components.Delay>
-                                        )}
-                                    </>
-                                )}
-                            </Framer.AnimatePresence>
-                        )}
-                    </article>
-                </section>
+                <Components.SearchPage
+                    error={error || props.error}
+                    filters={filters}
+                    handleSearchFormSubmit={handleSearchFormSubmit}
+                    isValidating={isValidating}
+                    limit={limit}
+                    offset={offset}
+                    query={query}
+                    resetFilters={resetFilters}
+                    results={response?.data || []}
+                    searchType="publication-versions"
+                    setLimit={setLimit}
+                    setOffset={setOffset}
+                    total={response?.metadata.total || 0}
+                />
             </Layouts.Standard>
         </>
     );

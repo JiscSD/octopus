@@ -33,7 +33,7 @@ test.describe('Live author page', () => {
         expect(page.locator(PageModel.profilePage.works)).toBeVisible();
 
         // check Octopus publications section
-        await expect(page.locator(PageModel.profilePage.octopusPublications)).toBeVisible();
+        await expect(page.locator(PageModel.organisationalUserInfo.octopusPublications)).toBeVisible();
     });
 
     test('ORCID profile link opens in a new tab', async () => {

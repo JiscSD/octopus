@@ -51,7 +51,7 @@ const Home: Types.NextPage = (props): React.ReactElement => {
                             </Components.Link>
 
                             <Components.Link
-                                href={`${Config.urls.search.path}/publications`}
+                                href={`${Config.urls.searchPublications.path}`}
                                 className="flex w-full items-center justify-between rounded-lg bg-teal-700 p-4 font-medium text-white-50 outline-0 transition-colors duration-300 hover:bg-teal-600 focus:ring-2 focus:ring-yellow-400 dark:bg-teal-600 dark:hover:bg-teal-600 sm:w-auto"
                             >
                                 <span className="w-full text-center font-montserrat text-sm leading-none tracking-wide">
@@ -96,7 +96,7 @@ const Home: Types.NextPage = (props): React.ReactElement => {
                             title="Read publications"
                             content="Anyone can read anything in Octopus &#8211; it's designed to make primary research openly available to all."
                             icon={<OutlineIcons.MagnifyingGlassIcon className="h-8 w-8 text-teal-500" />}
-                            link={Config.urls.search.path}
+                            link={Config.urls.searchPublications.path}
                             linkText="Read publications"
                         />
                         <Components.ActionCard

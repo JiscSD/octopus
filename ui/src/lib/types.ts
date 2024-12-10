@@ -80,7 +80,7 @@ export type PublicationCreationStoreType = PublicationVersionSlice & LinkedToSli
 
 export type JSONValue = unknown;
 
-export type SearchType = 'publication-versions' | 'authors' | 'topics';
+export type SearchType = 'publication-versions' | 'authors' | 'topics' | 'organisations';
 
 export type PublicationOrderBySearchOption = 'title' | 'publishedDate';
 
