@@ -7,3 +7,7 @@ import * as middleware from 'middleware';
 export const incrementalAriIngest = middy(integrationController.incrementalAriIngest)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.validator(integrationSchema.incrementalAriIngestHttp, 'queryStringParameters'));
+
+export const triggerECSTask = middy(integrationController.triggerECSTask).use(
+    middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true })
+);

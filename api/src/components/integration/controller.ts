@@ -48,3 +48,16 @@ export const incrementalAriIngest = async (
         return response.json(500, { message: 'Unknown server error.' });
     }
 };
+
+export const triggerECSTask = async (event: I.APIRequest): Promise<I.JSONResponse> => {
+    const apiKey = event.queryStringParameters?.apiKey;
+
+    // While this is a proof of concept just use the same API key as the ARI ingest.
+    if (apiKey !== process.env.TRIGGER_ARI_INGEST_API_KEY) {
+        return response.json(401, { message: "Please provide a valid 'apiKey'." });
+    }
+
+    const triggerTaskOutput = await integrationService.triggerECSTask();
+
+    return response.json(200, { message: triggerTaskOutput });
+};
