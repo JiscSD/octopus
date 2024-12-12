@@ -462,6 +462,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                     limit={limit}
                     offset={offset}
                     query={query}
+                    ref={searchInputRef}
                     resetFilters={resetFilters}
                     results={response?.data || []}
                     searchType="publication-versions"
