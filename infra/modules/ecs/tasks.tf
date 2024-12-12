@@ -48,7 +48,7 @@ resource "aws_ecs_task_definition" "hello-world" {
 
 resource "aws_security_group" "hello-world-task-sg" {
   name                   = "${var.project_name}-hello-world-task-sg-${var.environment}"
-  description            = "Security group for hello world ecs service"
+  description            = "Security group for hello world ecs task"
   vpc_id                 = var.vpc_id
   revoke_rules_on_delete = true
 
