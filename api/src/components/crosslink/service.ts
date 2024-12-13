@@ -222,7 +222,10 @@ interface GetPublicationCrosslinksQueryOptions extends I.GetPublicationCrosslink
 const getPublicationCrosslinksQuery = async (
     publicationId: string,
     options?: GetPublicationCrosslinksQueryOptions
-): Promise<RelativeCrosslink[]> => {
+): Promise<{
+    results: RelativeCrosslink[];
+    total: number;
+}> => {
     const { order, search, limit, offset, userIdFilter, excludedPublicationIds } = options || {};
 
     const conditionalFilterClauses: Prisma.Sql[] = [];
@@ -257,6 +260,26 @@ const getPublicationCrosslinksQuery = async (
             ? Prisma.sql`AND ${Prisma.join([...conditionalFilterClauses, ...conditionalFilterClausesFrom], ' AND ')}`
             : Prisma.empty;
 
+    const crosslinkedToQueryWithoutSelect = Prisma.sql`
+        FROM "Crosslink" AS c
+        JOIN "PublicationVersion" AS pv ON c."publicationToId" = pv."versionOf"
+        JOIN "User" AS pvu ON pvu.id = pv."createdBy"
+        WHERE
+            c."publicationFromId" = ${publicationId}
+            AND pv."isLatestLiveVersion" 
+            ${conditionalWhereTo}
+    `;
+
+    const crosslinkedFromQueryWithoutSelect = Prisma.sql`
+        FROM "Crosslink" AS c
+        JOIN "PublicationVersion" AS pv ON c."publicationFromId" = pv."versionOf"
+        JOIN "User" AS pvu ON pvu.id = pv."createdBy"
+        WHERE
+            c."publicationToId" = ${publicationId}
+            AND pv."isLatestLiveVersion"
+            ${conditionalWhereFrom}
+    `;
+
     const crosslinks = await client.prisma.$queryRaw<GetPublicationCrosslinksQueryResult[]>`
         SELECT * FROM (
             SELECT
@@ -271,13 +294,7 @@ const getPublicationCrosslinksQuery = async (
                 pvu.id AS "linkedPublicationAuthorId",
                 pvu."firstName" AS "linkedPublicationAuthorFirstName",
                 pvu."lastName" AS "linkedPublicationAuthorLastName"
-            FROM "Crosslink" AS c
-            JOIN "PublicationVersion" AS pv ON c."publicationToId" = pv."versionOf"
-            JOIN "User" AS pvu ON pvu.id = pv."createdBy"
-            WHERE
-                c."publicationFromId" = ${publicationId}
-                AND pv."isLatestLiveVersion" 
-                ${conditionalWhereTo}
+            ${crosslinkedToQueryWithoutSelect}
             UNION
             SELECT
                 c.id,
@@ -291,13 +308,7 @@ const getPublicationCrosslinksQuery = async (
                 pvu.id AS "linkedPublicationAuthorId",
                 pvu."firstName" AS "linkedPublicationAuthorFirstName",
                 pvu."lastName" AS "linkedPublicationAuthorlastName"
-            FROM "Crosslink" AS c
-            JOIN "PublicationVersion" AS pv ON c."publicationFromId" = pv."versionOf"
-            JOIN "User" AS pvu ON pvu.id = pv."createdBy"
-            WHERE
-                c."publicationToId" = ${publicationId}
-                AND pv."isLatestLiveVersion"
-                ${conditionalWhereFrom}
+            ${crosslinkedFromQueryWithoutSelect}
         ) AS crosslinks
         --- Recency order is default and also used to order results with the same score when
         --- sorting by relevance.
@@ -307,6 +318,19 @@ const getPublicationCrosslinksQuery = async (
         LIMIT ${limit || 10}
         OFFSET ${offset || 0};
     `;
+
+    const totalQueryResults = await client.prisma.$queryRaw<[{ count: number }]>`
+        SELECT count(*) FROM (
+            SELECT c.id
+            ${crosslinkedToQueryWithoutSelect}
+            UNION
+            SELECT c.id
+            ${crosslinkedFromQueryWithoutSelect}
+        ) AS crosslinks;
+    `;
+    // This looks bad but the count comes back as a "bigint" type.
+    // Treating it as a number right away causes errors in JSON serialization, so have to convert it properly.
+    const total = Number.parseInt(String(totalQueryResults[0].count));
 
     const versionIds = crosslinks.map((crosslink) => crosslink.linkedPublicationLatestLiveVersionId);
     const coAuthors = await client.prisma.coAuthors.findMany({
@@ -328,10 +352,8 @@ const getPublicationCrosslinksQuery = async (
         }
     });
 
-    // TODO: Confirm coauthors are returned properly (seed data doesn't have coauthors)
-    // TODO: Provide a total result count
-
-    return crosslinks.map((rawCrosslink) => ({
+    // Map SQL results to return format.
+    const results = crosslinks.map((rawCrosslink) => ({
         id: rawCrosslink.id,
         linkedPublication: {
             id: rawCrosslink.linkedPublicationId,
@@ -359,6 +381,11 @@ const getPublicationCrosslinksQuery = async (
         createdBy: rawCrosslink.createdBy,
         createdAt: rawCrosslink.createdAt
     }));
+
+    return {
+        results,
+        total
+    };
 };
 
 export const getPublicationCrosslinks = async (
@@ -381,27 +408,31 @@ export const getPublicationCrosslinks = async (
             order: 'recent',
             limit: 2
         });
-        console.log(recent);
         const relevant = await getPublicationCrosslinksQuery(publicationId, {
             ...options,
             order: 'relevant',
             limit: 3,
-            excludedPublicationIds: recent.map((crosslink) => crosslink.linkedPublication.id)
+            excludedPublicationIds: recent.results.map((crosslink) => crosslink.linkedPublication.id)
         });
 
         return {
             data: {
-                recent,
-                relevant
+                recent: recent.results,
+                relevant: relevant.results
+            },
+            metadata: {
+                total: recent.total, // Because IDs are excluded from the relevant query, use the count from the recent query.
+                limit: 5,
+                offset: 0
             }
         };
     } else {
         const crosslinks = await getPublicationCrosslinksQuery(publicationId, options);
 
         return {
-            data: crosslinks,
+            data: crosslinks.results,
             metadata: {
-                total: 0,
+                total: crosslinks.total,
                 limit: limit || 10,
                 offset: offset || 0
             }
