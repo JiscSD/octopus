@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client';
-// import { getPublicationCrosslinks } from '@prisma/client/sql';
 
 import * as client from 'lib/client';
 import * as I from 'interface';
