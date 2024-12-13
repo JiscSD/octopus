@@ -921,70 +921,12 @@ export const newAriChildPublication = async (options: {
     });
 };
 
-export const incrementalAriIngestReport = async (options: {
-    checkedCount: number;
-    durationSeconds: number;
-    createdCount: number;
-    updatedCount: number;
-    unrecognisedDepartments: string[];
-    unrecognisedTopics: string[];
-    dryRun: boolean;
-}): Promise<void> => {
-    const { createdCount, dryRun, updatedCount } = options;
-    const cleanDepartments = options.unrecognisedDepartments.map((department) => Helpers.getSafeHTML(department));
-    const cleanTopics = options.unrecognisedTopics.map((topic) => Helpers.getSafeHTML(topic));
-    const intro = `Incremental ARI import ${dryRun ? 'dry ' : ''}run completed.`;
-    const timingInfo =
-        `Duration: ${options.durationSeconds} seconds.` +
-        (dryRun && (createdCount || updatedCount)
-            ? ` A real run would have taken a minimum of ${
-                  createdCount + updatedCount / 2
-              } additional seconds due to datacite API rate limits while creating/updating publications.`
-            : '');
-    const detailsPrefix = `The ${dryRun ? 'simulated ' : ''}results of this run are as follows.`;
-    const html = `
-        <html>
-            <body>
-                <p>${intro}</p>
-                <p>${timingInfo}</p>
-                <p>${detailsPrefix}</p>
-                <ul>
-                    <li>ARIs checked: ${options.checkedCount}</li>
-                    <li>Publications created: ${createdCount}</li>
-                    <li>Publications updated: ${updatedCount}</li>
-                    ${
-                        cleanDepartments.length
-                            ? '<li>Unrecognised departments: <ul><li>' +
-                              cleanDepartments.join('</li><li>') +
-                              '</li></ul></li>'
-                            : ''
-                    }
-                    ${
-                        cleanTopics.length
-                            ? '<li>Unrecognised topics: <ul><li>' + cleanTopics.join('</li><li>') + '</li></ul></li>'
-                            : ''
-                    }
-                </ul>
-            </body>
-        </html>
-    `;
-    const text = `
-${intro}
-${timingInfo}
-${detailsPrefix} 
-ARIs checked: ${options.checkedCount}.
-Publications created: ${options.createdCount}.
-Publications updated: ${options.updatedCount}.
-${
-    options.unrecognisedDepartments.length
-        ? 'Unrecognised departments: "' + options.unrecognisedDepartments.join('", "') + '".'
-        : ''
-}
-${options.unrecognisedTopics.length ? 'Unrecognised topics: "' + options.unrecognisedTopics.join('", "') + '".' : ''}`;
+// See ariUtils file for body construction.
+export const ariIngestReport = async (html: string, text: string): Promise<void> => {
     await send({
         html,
         text,
         to: process.env.INGEST_REPORT_RECIPIENTS ? process.env.INGEST_REPORT_RECIPIENTS.split(',') : '',
-        subject: 'Incremental ARI ingest report'
+        subject: 'ARI ingest report'
     });
 };

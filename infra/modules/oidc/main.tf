@@ -40,50 +40,48 @@ resource "aws_iam_role" "github_actions_role" {
 
 }
 
-resource "aws_iam_policy" "deploy_backend" {
+data "aws_iam_policy_document" "deploy_backend_policy" {
   count = local.only_in_production
-  name  = "deploy-backend-${var.environment}-${var.project_name}"
-  policy = jsonencode(
-    {
-      "Version" : "2012-10-17",
-      "Statement" : [
-        {
-          "Effect" : "Allow",
-          "Action" : [
-            "apigateway:*",
-            "cloudformation:*",
-            "cloudwatch:*",
-            "ec2:DescribeSecurityGroups",
-            "ec2:DescribeSubnets",
-            "ec2:DescribeVpcs",
-            "ec2:RunInstances",
-            "events:ListTargetsByRule",
-            "events:DescribeRule",
-            "iam:ListRolePolicies",
-            "iam:ListAttachedRolePolicies",
-            "iam:GetRolePolicy",
-            "iam:GetRole",
-            "iam:GetInstanceProfile",
-            "iam:PassRole",
-            "kms:CreateGrant",
-            "kms:Decrypt",
-            "kms:DescribeKey",
-            "kms:Encrypt",
-            "lambda:*",
-            "logs:*",
-            "s3:*",
-            "ssm:DescribeInstanceInformation",
-            "ssm:GetParameter",
-            "ssm:PutParameter",
-            "ssm:StartSession",
-            "sts:GetCallerIdentity"
-          ],
-          "Resource" : [
-            "*"
-          ]
-        }
-      ]
-  })
+  statement {
+    effect = "Allow"
+    actions = [
+      "apigateway:*",
+      "cloudformation:*",
+      "cloudwatch:*",
+      "ec2:DescribeSecurityGroups",
+      "ec2:DescribeSubnets",
+      "ec2:DescribeVpcs",
+      "ec2:RunInstances",
+      "events:ListTargetsByRule",
+      "events:DescribeRule",
+      "iam:ListRolePolicies",
+      "iam:ListAttachedRolePolicies",
+      "iam:GetRolePolicy",
+      "iam:GetRole",
+      "iam:GetInstanceProfile",
+      "iam:PassRole",
+      "iam:PutRolePolicy",
+      "kms:CreateGrant",
+      "kms:Decrypt",
+      "kms:DescribeKey",
+      "kms:Encrypt",
+      "lambda:*",
+      "logs:*",
+      "s3:*",
+      "ssm:DescribeInstanceInformation",
+      "ssm:GetParameter",
+      "ssm:PutParameter",
+      "ssm:StartSession",
+      "sts:GetCallerIdentity"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "deploy_backend" {
+  count  = local.only_in_production
+  name   = "deploy-backend-${var.environment}-${var.project_name}"
+  policy = data.aws_iam_policy_document.deploy_backend_policy[local.only_in_production - 1].json
 }
 
 resource "aws_iam_role_policy_attachment" "trust_github_oidc" {

@@ -127,9 +127,9 @@ export interface OpenSearchPublication {
     id: string;
     type: PublicationType;
     title: string | null;
-    licence?: LicenceType | null;
+    organisationalAuthor: boolean;
+    keywords: string[];
     description?: string | null;
-    keywords?: string[];
     content?: string | null;
     cleanContent?: string | null;
     publishedDate?: Date | null;
@@ -204,6 +204,7 @@ export interface OpenSearchPublicationFilters {
     limit: number;
     offset: number;
     type: string;
+    authorType?: 'individual' | 'organisational';
     exclude?: string;
     dateFrom?: string;
     dateTo?: string;
@@ -287,6 +288,7 @@ export interface User {
 
 export interface UserFilters {
     search?: string;
+    role?: Role;
     limit?: string;
     offset?: string;
     orderBy?: UserOrderBy;

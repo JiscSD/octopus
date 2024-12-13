@@ -1,6 +1,17 @@
 provider "aws" {
   region  = "eu-west-1"
   profile = var.profile
+  # Jisc tagging policy - tags must be in PascalCase.
+  default_tags {
+    tags = {
+      Application = "Octopus"
+      Compliance  = "CE"
+      CostCentre  = "P10031"
+      Environment = title(terraform.workspace)
+      Owner       = "OctopusTeam"
+      Product     = "Octopus"
+    }
+  }
 }
 
 # Some resources need to be created in the "global" us-east-1 region.

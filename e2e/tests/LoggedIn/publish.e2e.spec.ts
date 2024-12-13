@@ -468,7 +468,7 @@ test.describe('Publication flow', () => {
 
         // Save and expect topic to be shown as a linked item
         await page.locator(PageModel.publish.createThisPublicationButton).click();
-        const response = await page.waitForResponse(
+        await page.waitForResponse(
             (response) => response.url().includes('/publications') && response.request().method() === 'POST'
         );
         await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
@@ -660,6 +660,7 @@ const checkPublicationOnAccountPage = async (
     navigate?: boolean
 ) => {
     if (navigate) {
+        await page.waitForLoadState('networkidle');
         await page.goto(`/account`);
     }
     const publicationContainer = await page.getByTestId('publication-' + publicationDetails.id);

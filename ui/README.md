@@ -22,6 +22,21 @@ $ ~/ui$ npm i
 $ ~/ui$ npm run dev
 ```
 
+### Warning about self-signed certificate generation
+
+Note: because of the `--experimental-https` flag, the process may prompt for your password in order to generate a self-signed certificate. Due to the use of concurrently to run multiple processes under one command, this can get a bit lost or unclear in the output, e.g.:
+
+```
+[next]  ⚠ Self-signed certificates are currently an experimental feature, use with caution.
+[next]    Downloading mkcert package...
+[next]    Download response was successful, writing to disk
+[next]    Attempting to generate self signed certificate. This may prompt for your password
+Sudo password:[types]
+[types] 12:02:13 PM - Found 0 errors. Watching for file changes.
+```
+
+From this output, you are free to type the password; the certificate will be generated and the command will proceed correctly.
+
 Open [https://localhost:3001](https://localhost:3001) with your browser to see the result.
 
 To view any dynamic pages, you will also need to start the API. More information can be found in the [API readme](../api/README.md).

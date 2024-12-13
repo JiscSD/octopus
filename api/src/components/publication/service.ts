@@ -350,7 +350,6 @@ export const getOpenSearchPublications = (filters: I.OpenSearchPublicationFilter
     const must: unknown[] = [];
 
     if (filters.search) {
-        // @ts-ignore
         must.push({
             multi_match: {
                 query: filters.search,
@@ -369,6 +368,15 @@ export const getOpenSearchPublications = (filters: I.OpenSearchPublicationFilter
                     gte: filters.dateFrom,
                     lte: filters.dateTo
                 }
+            }
+        });
+    }
+
+    // The endpoint does accept both author types at once, but this is the same as not filtering.
+    if (filters.authorType && Enum.authorTypes.includes(filters.authorType)) {
+        must.push({
+            term: {
+                organisationalAuthor: filters.authorType === 'organisational'
             }
         });
     }

@@ -160,7 +160,7 @@ const GetInvolved: NextPage = (): React.ReactElement => (
                                 <>
                                     For regular updates you can join our{' '}
                                     <Components.Link
-                                        href="https://www.jiscmail.ac.uk/cgi-bin/wa-jisc.exe?A0=OCTOPUSCOMMUNITY"
+                                        href="https://www.jisc.ac.uk/forms/sign-up-for-octopusac-news-and-updates"
                                         openNew={true}
                                         className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
                                     >
@@ -168,11 +168,19 @@ const GetInvolved: NextPage = (): React.ReactElement => (
                                     </Components.Link>
                                     , or follow us on{' '}
                                     <Components.Link
-                                        href="https://twitter.com/science_octopus"
+                                        href="https://twitter.com/octopus_ac"
                                         openNew={true}
                                         className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
                                     >
                                         Twitter
+                                    </Components.Link>{' '}
+                                    or{' '}
+                                    <Components.Link
+                                        href="https://bsky.app/profile/octopus-ac.bsky.social"
+                                        openNew={true}
+                                        className="rounded text-teal-600 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 dark:text-teal-300"
+                                    >
+                                        Bluesky
                                     </Components.Link>
                                     .
                                 </>

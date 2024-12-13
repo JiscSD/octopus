@@ -25,6 +25,18 @@ const reindex = async (): Promise<void> => {
             versions: {
                 where: {
                     isLatestLiveVersion: true
+                },
+                select: {
+                    title: true,
+                    description: true,
+                    keywords: true,
+                    content: true,
+                    publishedDate: true,
+                    user: {
+                        select: {
+                            role: true
+                        }
+                    }
                 }
             }
         }
@@ -43,12 +55,10 @@ const reindex = async (): Promise<void> => {
                     id: pub.id,
                     type: pub.type,
                     title: latestLiveVersion.title,
-                    licence: latestLiveVersion.licence,
+                    organisationalAuthor: latestLiveVersion.user.role === 'ORGANISATION',
                     description: latestLiveVersion.description,
                     keywords: latestLiveVersion.keywords,
                     content: latestLiveVersion.content,
-                    language: 'en',
-                    currentStatus: latestLiveVersion.currentStatus,
                     publishedDate: latestLiveVersion.publishedDate,
                     cleanContent: convert(latestLiveVersion.content)
                 }

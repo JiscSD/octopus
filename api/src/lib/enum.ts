@@ -232,3 +232,5 @@ export const publicationTypes: I.PublicationType[] = [
     'REAL_WORLD_APPLICATION',
     'PEER_REVIEW'
 ];
+
+export const authorTypes = ['individual', 'organisational'];

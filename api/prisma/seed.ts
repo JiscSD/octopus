@@ -15,6 +15,19 @@ const createPublications = async (publications: Prisma.PublicationCreateInput[])
                 versions: {
                     where: {
                         isLatestVersion: true
+                    },
+                    select: {
+                        title: true,
+                        description: true,
+                        keywords: true,
+                        content: true,
+                        currentStatus: true,
+                        publishedDate: true,
+                        user: {
+                            select: {
+                                role: true
+                            }
+                        }
                     }
                 }
             }
@@ -31,12 +44,10 @@ const createPublications = async (publications: Prisma.PublicationCreateInput[])
                     id: createdPublication.id,
                     type: createdPublication.type,
                     title: latestVersion.title,
-                    licence: latestVersion.licence,
+                    organisationalAuthor: latestVersion.user.role === 'ORGANISATION',
                     description: latestVersion.description,
                     keywords: latestVersion.keywords,
                     content: latestVersion.content,
-                    language: 'en',
-                    currentStatus: latestVersion.currentStatus,
                     publishedDate: latestVersion.publishedDate,
                     cleanContent: convert(latestVersion.content)
                 }
