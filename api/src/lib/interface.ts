@@ -733,6 +733,7 @@ export interface UpdateAffiliationsBody {
 export interface UserPublicationsFilters {
     offset: number;
     limit: number;
+    query?: string;
     versionStatus?: string;
 }
 
