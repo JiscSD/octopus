@@ -241,7 +241,7 @@ const getPublicationCrosslinksQuery = async (
         conditionalFilterClauses.push(Prisma.sql`to_tsvector('english', pv.title) @@ to_tsquery('english', ${search})`);
     }
 
-    if (excludedPublicationIds) {
+    if (excludedPublicationIds?.length) {
         conditionalFilterClausesTo.push(
             Prisma.sql`c."publicationToId" NOT IN (${Prisma.join(excludedPublicationIds)})`
         );
