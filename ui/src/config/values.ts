@@ -856,6 +856,18 @@ export const octopusInformation: Interfaces.OctopusInformation = {
         INAPPROPRIATE: {
             value: 'INAPPROPRIATE',
             nicename: 'Inappropriate'
+        },
+        UNDECLARED_AI: {
+            value: 'UNDECLARED_AI',
+            nicename: 'Undeclared use of generative AI'
+        },
+        NOT_IN_OCTOPUS_FORMAT: {
+            value: 'NOT_IN_OCTOPUS_FORMAT',
+            nicename: 'Not in Octopus format'
+        },
+        IRRELEVANT_LINKED_PUBLICATION: {
+            value: 'IRRELEVANT_LINKED_PUBLICATION',
+            nicename: 'Linked to irrelevant publication'
         }
     }
 };
