@@ -112,7 +112,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                           return version;
                       })
                 : [],
-        [response]
+        [response, props.user]
     );
 
     const handleSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (

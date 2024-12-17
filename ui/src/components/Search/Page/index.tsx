@@ -57,5 +57,6 @@ const SearchPage = React.forwardRef(
         );
     }
 );
+SearchPage.displayName = 'SearchPage';
 
 export default SearchPage;
