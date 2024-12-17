@@ -13,34 +13,12 @@ import * as Helpers from '@/helpers';
 
 const baseEndpoint = '/users?role=USER';
 
-/**
- *
- * @TODO - refactor getServerSideProps
- * remove unnecessary if statements
- */
-
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const searchType: Types.SearchType = 'authors';
-    let query: string | string[] | null = null;
-    let limit: number | string | string[] | null = null;
-    let offset: number | string | string[] | null = null;
-
-    // default error
     let error: string | null = null;
-
-    // setting params
-    if (context.query.query) query = context.query.query;
-    if (context.query.limit) limit = context.query.limit;
-    if (context.query.offset) offset = context.query.offset;
-
-    // If multiple of the same params are provided, pick the first
-    if (Array.isArray(query)) query = query[0];
-    if (Array.isArray(limit)) limit = limit[0];
-    if (Array.isArray(offset)) offset = offset[0];
-
-    // params come in as strings, so make sure the value of the string is parsable as a number or ignore it
-    limit && !Number.isNaN(parseInt(limit, 10)) ? (limit = parseInt(limit, 10)) : (limit = null);
-    offset && !Number.isNaN(parseInt(offset, 10)) ? (offset = parseInt(offset, 10)) : (offset = null);
+    const query = Helpers.extractNextQueryParam(context.query.query);
+    const limit = Helpers.extractNextQueryParam(context.query.limit, true);
+    const offset = Helpers.extractNextQueryParam(context.query.offset, true);
 
     const swrKey = `${baseEndpoint}&search=${encodeURIComponent(query || '')}&limit=${limit || '10'}&offset=${offset || '0'}`;
     let fallbackData: Interfaces.SearchResults<Interfaces.User> = {
@@ -140,6 +118,7 @@ const Authors: Types.NextPage<Props> = (props): React.ReactElement => {
                     searchType="authors"
                     setLimit={setLimit}
                     setOffset={setOffset}
+                    showSearchTypeSwitch={true}
                     total={results?.metadata.total || 0}
                 />
             </Layouts.Standard>

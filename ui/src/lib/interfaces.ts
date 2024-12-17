@@ -230,7 +230,7 @@ export interface User extends CoreUser {
     works: WorksRecord[];
 }
 
-export interface SearchResults<T extends PublicationVersion | User> {
+export interface SearchResults<T extends Publication | PublicationVersion | User> {
     data: T[];
     metadata: SearchResultMeta;
 }
@@ -411,13 +411,6 @@ export interface CreationStep {
 
 export interface CreationStepWithCompletenessStatus extends CreationStep {
     status: Types.TabCompletionStatus;
-}
-
-export interface UserPublicationsResult {
-    offset: number;
-    limit: number;
-    total: number;
-    results: Publication[];
 }
 
 export interface OrcidAffiliationDate {
