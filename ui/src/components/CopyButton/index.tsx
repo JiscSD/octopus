@@ -17,7 +17,7 @@ const CopyButton: React.FC<Props> = (props): React.ReactElement => {
 
     const confirmationMessage = 'Copied!';
 
-    const handleCopy = async () => {
+    const handleCopy = () => {
         navigator.clipboard.writeText(props.textToCopy).then(() => {
             setCopied(true);
             setToast({
