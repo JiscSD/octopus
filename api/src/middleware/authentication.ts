@@ -23,6 +23,11 @@ const authentication = (optional = false, requiresName = true, endpointSpecificK
                 // and then adds the user details to the request event.
                 const bearerToken = request.event.headers.Authorization;
 
+                // If unauthenticated user is accessing an optional endpoint, just skip.
+                if (optional && !apiKey && !bearerToken) {
+                    return;
+                }
+
                 if (apiKey) {
                     user = await userService.getByApiKey(apiKey);
                 } else if (bearerToken) {
