@@ -86,33 +86,42 @@ const General: React.FC<Props> = (props): React.ReactElement => {
             {showVersionDoi && (
                 <div className="flex w-full flex-wrap whitespace-normal">
                     <span className="mr-2 whitespace-nowrap text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                        DOI (This Version):
+                        <span id="version-doi-label">DOI (This Version)</span>:
                     </span>
-                    <Components.Link
-                        href={versionDoiUrl}
-                        ariaLabel={`DOI link: ${versionDoiUrl}`}
-                        className="flex items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
-                        openNew={true}
-                    >
-                        <p className="break-words break-all">{versionDoiUrl}</p>
-                        <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4 flex-shrink-0" />
-                    </Components.Link>
+                    <span className="flex gap-4">
+                        <Components.Link
+                            href={versionDoiUrl}
+                            aria-labelledby="version-doi-label"
+                            className="flex items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                            openNew={true}
+                        >
+                            <p className="break-words break-all">{versionDoiUrl}</p>
+                            <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4 flex-shrink-0" />
+                        </Components.Link>
+                        <Components.CopyButton textToCopy={versionDoiUrl} title="Copy this version's DOI" />
+                    </span>
                 </div>
             )}
 
             <div className={`flex w-full ${props.publicationVersion.doi ? 'flex-wrap' : ''} whitespace-normal`}>
                 <span className="mr-2 whitespace-nowrap text-sm font-semibold text-grey-800 transition-colors duration-500 dark:text-grey-100">
-                    {showVersionDoi ? 'DOI (All Versions):' : 'DOI:'}
+                    <span id="versionless-doi-label">{showVersionDoi ? 'DOI (All Versions)' : 'DOI'}</span>:
                 </span>
-                <Components.Link
-                    href={versionlessDoiUrl}
-                    ariaLabel={`DOI link: ${versionlessDoiUrl}`}
-                    className="flex items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
-                    openNew={true}
-                >
-                    <p className="break-words break-all">{versionlessDoiUrl}</p>
-                    <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4 flex-shrink-0" />
-                </Components.Link>
+                <span className="flex gap-4">
+                    <Components.Link
+                        href={versionlessDoiUrl}
+                        aria-labelledby="versionless-doi-label"
+                        className="flex items-center text-sm font-medium text-teal-600 transition-colors duration-500 hover:underline dark:text-teal-400"
+                        openNew={true}
+                    >
+                        <p className="break-words break-all">{versionlessDoiUrl}</p>
+                        <OutlineIcons.ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4 flex-shrink-0" />
+                    </Components.Link>
+                    <Components.CopyButton
+                        textToCopy={versionlessDoiUrl}
+                        title={`Copy ${showVersionDoi && 'all versions'} DOI`}
+                    />
+                </span>
             </div>
 
             {props.publicationVersion.publication.type !== 'PEER_REVIEW' && (
