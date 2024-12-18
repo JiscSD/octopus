@@ -1,12 +1,13 @@
 import * as cheerio from 'cheerio';
 import nodemailer from 'nodemailer';
-import * as Helpers from 'lib/helpers';
-import * as response from 'lib/response';
-import * as publicationService from 'publication/service';
-import * as flagService from 'flag/service';
-import * as userService from 'user/service';
-import * as I from 'interface';
+
 import * as email from 'lib/email';
+import * as flagService from 'flag/service';
+import * as Helpers from 'lib/helpers';
+import * as I from 'interface';
+import * as publicationService from 'publication/service';
+import * as response from 'lib/response';
+import * as userService from 'user/service';
 
 export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByID>): Promise<I.JSONResponse> => {
     try {
@@ -48,14 +49,19 @@ export const getUserFlags = async (
     }
 };
 
-const formatFlagType = (flagType: I.FlagCategory): string => {
-    const types = {
+const formatFlagType = (flagType: I.PublicationFlagCategoryEnum): string => {
+    const types: {
+        [key in I.PublicationFlagCategoryEnum]: string;
+    } = {
         PLAGIARISM: 'Plagiarism',
         ETHICAL_ISSUES: 'Ethical issues',
         MISREPRESENTATION: 'Misrepresentation',
         UNDECLARED_IMAGE_MANIPULATION: 'Undeclared image manipulation',
         COPYRIGHT: 'Copyright',
-        INAPPROPRIATE: 'Inappropriate'
+        INAPPROPRIATE: 'Inappropriate',
+        UNDECLARED_AI: 'Undeclared use of generative AI',
+        NOT_IN_OCTOPUS_FORMAT: 'Not in Octopus format',
+        IRRELEVANT_LINKED_PUBLICATION: 'Linked to irrelevant publication'
     };
 
     return types[flagType];
