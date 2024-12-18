@@ -112,7 +112,10 @@ export type RedFlagTypes =
     | 'MISREPRESENTATION'
     | 'UNDECLARED_IMAGE_MANIPULATION'
     | 'COPYRIGHT'
-    | 'INAPPROPRIATE';
+    | 'INAPPROPRIATE'
+    | 'UNDECLARED_AI'
+    | 'NOT_IN_OCTOPUS_FORMAT'
+    | 'IRRELEVANT_LINKED_PUBLICATION';
 
 export type Languages =
     | 'ab'
