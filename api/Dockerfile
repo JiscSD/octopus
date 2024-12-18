@@ -7,7 +7,10 @@ RUN apk add \
     curl \
     gnupg \
     lsb-release \
-    wget
+    wget \
+    openssl \
+    openssl-dev \
+    libc6-compat
 
 # Dockerize is needed to sync containers startup
 ENV DOCKERIZE_VERSION v0.6.1

@@ -1,7 +1,7 @@
 generator client {
     provider        = "prisma-client-js"
     previewFeatures = ["fullTextSearch"]
-    binaryTargets   = ["native", "rhel-openssl-3.0.x", "linux-arm64-openssl-3.0.x"]
+    binaryTargets   = ["native", "linux-musl", "rhel-openssl-3.0.x", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -354,6 +354,9 @@ enum PublicationFlagCategoryEnum {
     UNDECLARED_IMAGE_MANIPULATION
     COPYRIGHT
     INAPPROPRIATE
+    UNDECLARED_AI
+    NOT_IN_OCTOPUS_FORMAT
+    IRRELEVANT_LINKED_PUBLICATION
 }
 
 enum LicenceType {
