@@ -40,10 +40,10 @@ describe('Basic tests', () => {
         );
     });
     it('Shows DOI link', () => {
-        expect(screen.getByText('DOI:')).toBeInTheDocument();
+        expect(screen.getByText('DOI')).toBeInTheDocument();
         expect(
             screen.getByRole('link', {
-                name: `DOI link: ${versionlessDoiUrl}`
+                name: 'DOI'
             })
         ).toHaveAttribute('href', `${versionlessDoiUrl}`);
     });
@@ -93,18 +93,18 @@ describe('Multi-version publication with Peer Reviews, Flags and version DOI', (
         );
     });
     it('Shows version DOI link', () => {
-        expect(screen.getByText('DOI (This Version):')).toBeInTheDocument();
+        expect(screen.getByText('DOI (This Version)')).toBeInTheDocument();
         expect(
             screen.getByRole('link', {
-                name: `DOI link: ${versionDoiUrl}`
+                name: 'DOI (This Version)'
             })
         ).toHaveAttribute('href', versionDoiUrl);
     });
     it('Shows "versionless" DOI link', () => {
-        expect(screen.getByText('DOI (All Versions):')).toBeInTheDocument();
+        expect(screen.getByText('DOI (All Versions)')).toBeInTheDocument();
         expect(
             screen.getByRole('link', {
-                name: `DOI link: ${versionlessDoiUrl}`
+                name: 'DOI (All Versions)'
             })
         ).toHaveAttribute('href', versionlessDoiUrl);
     });
