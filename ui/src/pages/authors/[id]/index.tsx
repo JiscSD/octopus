@@ -85,33 +85,30 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
     const publicationVersions: Interfaces.PublicationVersion[] = useMemo(
         () =>
             response?.data
-                ? response.data
-                      // Explicitly specify our expectation about the first version being latest live for typescript.
-                      .filter((publication) => publication.versions[0].isLatestLiveVersion)
-                      .map((publication) => {
-                          const version = publication.versions[0];
-                          version.user = {
-                              id: props.user.id,
-                              createdAt: props.user.createdAt,
-                              email: props.user.email || '',
-                              firstName: props.user.firstName,
-                              lastName: props.user.lastName,
-                              orcid: props.user.orcid,
-                              updatedAt: props.user.updatedAt,
-                              role: props.user.role
-                          };
+                ?.filter((publication) => publication.versions[0].isLatestLiveVersion)
+                .map((publication) => {
+                    const version = publication.versions[0];
+                    version.user = {
+                        id: props.user.id,
+                        createdAt: props.user.createdAt,
+                        email: props.user.email || '',
+                        firstName: props.user.firstName,
+                        lastName: props.user.lastName,
+                        orcid: props.user.orcid,
+                        updatedAt: props.user.updatedAt,
+                        role: props.user.role
+                    };
 
-                          version.publication = {
-                              id: publication.id,
-                              type: publication.type,
-                              doi: publication.doi,
-                              url_slug: publication.url_slug,
-                              flagCount: publication.flagCount,
-                              peerReviewCount: publication.peerReviewCount
-                          };
-                          return version;
-                      })
-                : [],
+                    version.publication = {
+                        id: publication.id,
+                        type: publication.type,
+                        doi: publication.doi,
+                        url_slug: publication.url_slug,
+                        flagCount: publication.flagCount,
+                        peerReviewCount: publication.peerReviewCount
+                    };
+                    return version;
+                }) || [],
         [response, props.user]
     );
 
