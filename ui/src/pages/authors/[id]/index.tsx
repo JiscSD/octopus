@@ -1,25 +1,26 @@
 import React, { useMemo, useState } from 'react';
 import Head from 'next/head';
-import useSWRInfinite from 'swr/infinite';
+import useSWR from 'swr';
+import * as Router from 'next/router';
 
-import * as Framer from 'framer-motion';
-import * as Interfaces from '@/interfaces';
-import * as Components from '@/components';
-import * as Layouts from '@/layouts';
-import * as Config from '@/config';
-import * as Types from '@/types';
-import * as Assets from '@/assets';
-import * as Helpers from '@/helpers';
 import * as api from '@/api';
-
-const pageSize = 10;
+import * as Assets from '@/assets';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Interfaces from '@/interfaces';
+import * as Layouts from '@/layouts';
+import * as Types from '@/types';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const userId = context.query.id;
-    const userPublicationsUrl = `${Config.endpoints.users}/${userId}/publications?offset=0&limit=${pageSize}`;
+    const limit = Helpers.extractNextQueryParam(context.query.limit, true);
+    const offset = Helpers.extractNextQueryParam(context.query.offset, true);
+    const query = Helpers.extractNextQueryParam(context.query.query);
+    const userPublicationsUrl = `${Config.endpoints.users}/${userId}/publications?offset=${offset || 0}&limit=${limit || 20}&query=${query || ''}`;
     const token = Helpers.getJWT(context);
     let user: Interfaces.User | null = null;
-    let firstUserPublicationsPage: Interfaces.UserPublicationsResult | null = null;
+    let publications: Interfaces.SearchResults<Interfaces.Publication> | undefined = undefined;
     let error: string | null = null;
 
     try {
@@ -38,69 +39,99 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 
     try {
         const response = await api.get(userPublicationsUrl);
-        firstUserPublicationsPage = response.data;
+        publications = response.data;
     } catch (error) {
         console.log(error);
     }
 
     return {
         props: {
+            query,
             user,
             userPublicationsUrl,
-            fallbackData: firstUserPublicationsPage
+            fallbackData: publications
         }
     };
 };
 
 type Props = {
+    query: string | null;
     user: Interfaces.User;
     userPublicationsUrl: string;
-    fallbackData: Interfaces.UserPublicationsResult | null;
+    fallbackData: Interfaces.SearchResults<Interfaces.Publication> | undefined;
 };
 
 const Author: Types.NextPage<Props> = (props): React.ReactElement => {
-    const [hideShowMoreButton, setHideShowMoreButton] = useState(false);
-
-    const { data, setSize } = useSWRInfinite<Interfaces.UserPublicationsResult>(
-        (pageIndex, prevPageData) => {
-            if (pageIndex === 0) {
-                return props.userPublicationsUrl;
-            }
-
-            if (prevPageData && !prevPageData.results.length) {
-                return null; // reached the end
-            }
-
-            return props.userPublicationsUrl.replace('offset=0', `offset=${pageIndex * pageSize}`);
-        },
-        async (url) => {
-            const response = await api.get(url);
-            const data = response.data;
-            const { offset, limit, total } = data;
-
-            if (offset + limit >= total) {
-                setHideShowMoreButton(true);
-            }
-
-            return data;
-        },
-        {
-            fallbackData: props.fallbackData ? [props.fallbackData] : undefined
-        }
-    );
-
+    const router = Router.useRouter();
+    const [query, setQuery] = useState(props.query ? props.query : '');
+    const [limit, setLimit] = useState(20);
+    const [offset, setOffset] = useState(0);
+    const swrKey = `${Config.endpoints.users}/${props.user.id}/publications?offset=${offset}&limit=${limit}&query=${query}`;
+    const {
+        data: response,
+        error,
+        isValidating
+    } = useSWR<Interfaces.SearchResults<Interfaces.Publication>>(swrKey, null, {
+        fallbackData: props.fallbackData
+    });
+    const searchInputRef = React.useRef<HTMLInputElement>(null);
     const missingNames = !props.user.firstName && !props.user.lastName;
     const isOrganisationalAccount = props.user.role === 'ORGANISATION';
-    const userPublications = useMemo(() => data?.map((data) => data.results).flat() || [], [data]);
-
     const pageTitle = `Author: ${isOrganisationalAccount ? props.user.firstName : props.user.orcid} - ${Config.urls.viewUser.title}`;
+
+    // The result component expects a publication version.
+    // The endpoint is expected to return a publication with 1 version (the latest live one).
+    // So make an array of latest live publication versions from the response.
+    const publicationVersions: Interfaces.PublicationVersion[] = useMemo(
+        () =>
+            response?.data
+                ?.filter((publication) => publication.versions[0].isLatestLiveVersion)
+                .map((publication) => {
+                    const version = publication.versions[0];
+                    version.user = {
+                        id: props.user.id,
+                        createdAt: props.user.createdAt,
+                        email: props.user.email || '',
+                        firstName: props.user.firstName,
+                        lastName: props.user.lastName,
+                        orcid: props.user.orcid,
+                        updatedAt: props.user.updatedAt,
+                        role: props.user.role
+                    };
+
+                    version.publication = {
+                        id: publication.id,
+                        type: publication.type,
+                        doi: publication.doi,
+                        url_slug: publication.url_slug,
+                        flagCount: publication.flagCount,
+                        peerReviewCount: publication.peerReviewCount
+                    };
+                    return version;
+                }) || [],
+        [response, props.user]
+    );
+
+    const handleSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (
+        e: React.SyntheticEvent<HTMLFormElement, Event>
+    ): Promise<void> => {
+        e.preventDefault();
+        const searchTerm = e.currentTarget.searchTerm.value;
+        const newQuery = { ...router.query, query: searchTerm };
+
+        if (!searchTerm) {
+            delete newQuery.query; // remove query param from browser url
+        }
+
+        await router.push({ query: newQuery }, undefined, { shallow: true });
+        setOffset(0);
+        setQuery(searchTerm);
+    };
 
     return (
         <>
             <Head>
                 <title>{pageTitle}</title>
-                <meta name="description" content="" />
-                <meta name="keywords" content="" />
                 <meta name="og:title" content={pageTitle} />
                 <link rel="canonical" href={`${Config.urls.viewUser.canonical}/${props.user.id}`} />
             </Head>
@@ -191,74 +222,22 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                     <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
                         Octopus publications
                     </h2>
-                    {userPublications.length ? (
-                        <div className="rouned-md relative lg:w-2/3">
-                            {userPublications.map((publication, index) => {
-                                const version = publication.versions[0];
-                                if (version && version.isLatestLiveVersion && index <= userPublications.length) {
-                                    let classes = '';
-
-                                    if (index === 0) {
-                                        classes += 'rounded-t-lg ';
-                                    }
-
-                                    if (index === userPublications.length - 1) {
-                                        classes += 'rounded-b-lg';
-                                    }
-
-                                    version.user = {
-                                        id: props.user.id,
-                                        createdAt: props.user.createdAt,
-                                        email: props.user.email || '',
-                                        firstName: props.user.firstName,
-                                        lastName: props.user.lastName,
-                                        orcid: props.user.orcid,
-                                        updatedAt: props.user.updatedAt,
-                                        role: props.user.role
-                                    };
-
-                                    version.publication = {
-                                        id: publication.id,
-                                        type: publication.type,
-                                        doi: publication.doi,
-                                        url_slug: publication.url_slug,
-                                        flagCount: publication.flagCount,
-                                        peerReviewCount: publication.peerReviewCount
-                                    };
-
-                                    return (
-                                        <Components.PublicationSearchResult
-                                            key={publication.id}
-                                            publicationVersion={version}
-                                            className={classes}
-                                        />
-                                    );
-                                }
-                            })}
-
-                            {!hideShowMoreButton && (
-                                <Framer.motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    className="absolute -bottom-10 z-10 flex h-72 w-full items-end justify-center from-transparent to-teal-50 transition-colors duration-500 dark:to-grey-800 lg:bottom-0 lg:bg-gradient-to-b"
-                                >
-                                    <button
-                                        onClick={(e) => setSize((prevSize) => prevSize + 1)}
-                                        className="rounded px-2 py-1 text-sm font-semibold uppercase tracking-widest text-grey-600 outline-0 focus:ring-2 focus:ring-yellow-400 dark:text-grey-100"
-                                    >
-                                        Show More
-                                    </button>
-                                </Framer.motion.div>
-                            )}
-                        </div>
-                    ) : (
-                        <Components.Alert
-                            severity="INFO"
-                            title="This user does not currently have any live publications"
-                            className="w-fit"
-                        />
-                    )}
+                    <Components.SearchInterface
+                        error={error}
+                        handleSearchFormSubmit={handleSearchFormSubmit}
+                        isValidating={isValidating}
+                        limit={limit}
+                        noResultsMessage="This user does not currently have any live publications"
+                        offset={offset}
+                        pageSizes={[10, 20, 50]}
+                        query={query}
+                        ref={searchInputRef}
+                        results={publicationVersions}
+                        searchType="publication-versions"
+                        setLimit={setLimit}
+                        setOffset={setOffset}
+                        total={response?.metadata.total || 0}
+                    ></Components.SearchInterface>
                 </section>
             </Layouts.Standard>
         </>

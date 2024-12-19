@@ -4,3 +4,10 @@ functions:
         handler: dist/src/components/sqs/handler.generatePDFs
         events:
             - sqs: 'arn:aws:sqs:${aws:region}:${aws:accountId}:science-octopus-pdf-queue-${self:provider.stage}'
+    triggerECSTask:
+        handler: dist/src/components/integration/routes.triggerECSTask
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/integrations/simple-ecs-task
+                method: POST
+                cors: true

@@ -77,13 +77,7 @@ export const getPublications = async (
     }
 };
 
-export const getUserList = async (event: I.APIRequest): Promise<I.JSONResponse> => {
-    const apiKey = event.queryStringParameters?.apiKey;
-
-    if (apiKey !== process.env.LIST_USERS_API_KEY) {
-        return response.json(401, { message: "Please provide a valid 'apiKey'." });
-    }
-
+export const getUserList = async (): Promise<I.JSONResponse> => {
     try {
         const userList = await userService.getUserList();
 

@@ -28,7 +28,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 
     const promises: [
         Promise<Interfaces.User | void>,
-        Promise<Interfaces.UserPublicationsResult | void>,
+        Promise<Interfaces.SearchResults<Interfaces.Publication> | void>,
         Promise<Interfaces.ControlRequest[] | void>
     ] = [
         api
@@ -65,7 +65,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 
 type Props = {
     user: Interfaces.User;
-    userPublications: Interfaces.UserPublicationsResult;
+    userPublications: Interfaces.SearchResults<Interfaces.Publication>;
     controlRequests: Interfaces.ControlRequest[];
 };
 
@@ -87,7 +87,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
         { fallbackData: props.controlRequests, revalidateOnFocus: false }
     );
 
-    const { data: { results: userPublications = [] } = {} } = useSWR<Interfaces.UserPublicationsResult>(
+    const { data: { data: userPublications = [] } = {} } = useSWR<Interfaces.SearchResults<Interfaces.Publication>>(
         `${Config.endpoints.users}/${props.user.id}/publications?limit=999`.concat(
             versionStatusArray.length ? `&versionStatus=${versionStatusArray.join(',')}` : ''
         ),

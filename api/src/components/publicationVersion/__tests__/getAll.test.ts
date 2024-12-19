@@ -52,7 +52,7 @@ describe('Get many publication versions', () => {
         });
 
         expect(getPublications.status).toEqual(200);
-        const publicationDates = getPublications.body.data.map((version) => version.publishedDate);
+        const publicationDates = getPublications.body.data.map((version) => version.publishedDate as Date);
         // Sort a copy of the dates from the results to confirm order.
         const sortedPublicationDates = [...publicationDates].sort(
             (a, b) => new Date(b).getTime() - new Date(a).getTime()
@@ -67,9 +67,9 @@ describe('Get many publication versions', () => {
         });
 
         expect(getPublications.status).toEqual(200);
-        const publicationDates = getPublications.body.data.map((version) => version.publishedDate);
+        const publicationDates = getPublications.body.data.map((version) => version.publishedDate as Date);
         // Sort a copy of the dates from the results to confirm order.
-        const sortedPublicationDates = [...publicationDates].sort(
+        const sortedPublicationDates: Date[] = [...publicationDates].sort(
             (a, b) => new Date(a).getTime() - new Date(b).getTime()
         );
         expect(publicationDates).toEqual(sortedPublicationDates);
