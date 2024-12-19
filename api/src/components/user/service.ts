@@ -250,7 +250,20 @@ export const getPublications = async (
                   }
                 : {}
             : // But if the user is not the owner, get only publications that have a published version
-              { versions: { some: { isLatestLiveVersion: true } } })
+              { versions: { some: { isLatestLiveVersion: true } } }),
+        // And, if a query is supplied, where the query matches the latest live title.
+        ...(params.query
+            ? {
+                  versions: {
+                      some: {
+                          isLatestLiveVersion: true,
+                          title: {
+                              search: params.query + ':*'
+                          }
+                      }
+                  }
+              }
+            : {})
     };
 
     const userPublications = await client.prisma.publication.findMany({
@@ -391,7 +404,7 @@ export const getPublications = async (
               }
           });
 
-    return { offset, limit, total: totalUserPublications, results: sortedPublications };
+    return { data: sortedPublications, metadata: { offset, limit, total: totalUserPublications } };
 };
 
 export const getUserList = async () => {

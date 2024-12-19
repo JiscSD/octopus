@@ -3,7 +3,6 @@ import * as TestUtils from '@/testUtils';
 
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { resolve } from 'path';
 
 jest.mock('next/router', () => ({
     useRouter: jest.fn()
@@ -36,25 +35,9 @@ describe('Basic search page', () => {
         expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Search results');
     });
 
-    it('Search type select is present', () => {
-        expect(screen.getByRole('combobox', { name: 'Searching' })).toBeInTheDocument();
+    it('Search type select is not present', () => {
+        expect(screen.queryByRole('combobox', { name: 'Searching' })).not.toBeInTheDocument();
     });
-
-    it('Search type select has expected options', () => {
-        const searchTypeSelect = screen.getByRole('combobox', { name: 'Searching' });
-        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Publications' }));
-        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Authors' }));
-        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Topics' }));
-        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Organisations' }));
-        expect(searchTypeSelect.children).toHaveLength(4);
-    });
-
-    it('Search type select has value "publications"', () => {
-        expect(screen.getByRole('combobox', { name: 'Searching' })).toHaveValue('publications');
-    });
-
-    // TODO: test that changing search type select calls useRouter's push with the appropriate path.
-    // Couldn't get this to work.
 
     it('Page size select is present', () => {
         expect(screen.getByRole('combobox', { name: 'Showing' })).toBeInTheDocument();
@@ -108,6 +91,51 @@ describe('Basic search page', () => {
         expect(screen.getByText('Try some different search criteria.')).toBeInTheDocument();
         expect(screen.getByText('If you think something is wrong, please contact the helpdesk.')).toBeInTheDocument();
     });
+});
+
+describe('Search page with search type select', () => {
+    const handleSearchFormSubmit = jest.fn((e) => {
+        e.preventDefault();
+    });
+    const setLimit = jest.fn();
+
+    beforeEach(() => {
+        render(
+            <Components.SearchPage
+                handleSearchFormSubmit={handleSearchFormSubmit}
+                isValidating={false}
+                limit={10}
+                offset={0}
+                query={null}
+                results={[]}
+                searchType="publication-versions"
+                setLimit={setLimit}
+                setOffset={jest.fn}
+                showSearchTypeSwitch={true}
+                total={0}
+            />
+        );
+    });
+
+    it('Search type select is present', () => {
+        expect(screen.getByRole('combobox', { name: 'Searching' })).toBeInTheDocument();
+    });
+
+    it('Search type select has expected options', () => {
+        const searchTypeSelect = screen.getByRole('combobox', { name: 'Searching' });
+        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Publications' }));
+        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Authors' }));
+        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Topics' }));
+        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Organisations' }));
+        expect(searchTypeSelect.children).toHaveLength(4);
+    });
+
+    it('Search type select has value "publications"', () => {
+        expect(screen.getByRole('combobox', { name: 'Searching' })).toHaveValue('publications');
+    });
+
+    // TODO: test that changing search type select calls useRouter's push with the appropriate path.
+    // Couldn't get this to work.
 });
 
 describe('Search page with filters', () => {
