@@ -16,6 +16,7 @@ export { default as BookmarkedPublications } from './Publication/BookmarkedPubli
 export { default as BookmarkedTopics } from './Topic/BookmarkedTopics';
 export { default as Button } from './Button';
 export { default as ContentSection } from './GenericContent/ContentSection';
+export { default as CopyButton } from './CopyButton';
 export { default as EditAffiliationsModal } from './EditAffiliationsModal';
 export { default as EditReferenceModal } from './References/EditReferenceModal';
 export { default as EnableDarkMode } from './EnableDarkMode';
@@ -89,11 +90,12 @@ export { default as RelatedPublicationsViewAllModal } from './Publication/Relate
 export { default as RelatedPublicationsVotingArea } from './Publication/RelatedPublications/VotingArea';
 export { default as RequiredIndicator } from './RequiredIndicator';
 export { default as ScrollToTop } from './ScrollToTop';
-export { default as Search } from './SearchToggle';
-export { default as SearchDesktop } from './SearchToggle/Desktop';
-export { default as SearchMobile } from './SearchToggle/Mobile';
-export { default as SearchPage } from './SearchPage';
-export { default as SearchResult } from './SearchResult';
+export { default as Search } from './Search/Toggle';
+export { default as SearchInterface } from './Search/Interface';
+export { default as SearchPage } from './Search/Page';
+export { default as SearchResult } from './Search/Result';
+export { default as SearchToggleDesktop } from './Search/Toggle/Desktop';
+export { default as SearchToggleMobile } from './Search/Toggle/Mobile';
 export { default as SectionBreak } from './SectionBreak';
 export { default as Tabs } from './Tabs';
 export { default as TextEditor } from './TextEditor';

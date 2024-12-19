@@ -349,14 +349,6 @@ export interface ConfirmVerificationCodeBody {
 const prismaGeneratedFlagType = Prisma.validator<Prisma.PublicationFlagsDefaultArgs>()({});
 export type Flag = Prisma.PublicationFlagsGetPayload<typeof prismaGeneratedFlagType>;
 
-export type FlagCategory =
-    | 'PLAGIARISM'
-    | 'ETHICAL_ISSUES'
-    | 'MISREPRESENTATION'
-    | 'UNDECLARED_IMAGE_MANIPULATION'
-    | 'COPYRIGHT'
-    | 'INAPPROPRIATE';
-
 export interface CreateFlagPathParams {
     publicationId: string;
 }
@@ -733,6 +725,7 @@ export interface UpdateAffiliationsBody {
 export interface UserPublicationsFilters {
     offset: number;
     limit: number;
+    query?: string;
     versionStatus?: string;
 }
 

@@ -1,9 +1,7 @@
 import Head from 'next/head';
 import React from 'react';
 import useSWR from 'swr';
-import * as Framer from 'framer-motion';
 import * as Router from 'next/router';
-import * as SolidIcons from '@heroicons/react/24/solid';
 
 import * as api from '@/api';
 import * as Components from '@/components';
@@ -88,53 +86,16 @@ const constructQueryParams = (params: {
     return paramString.join('&');
 };
 
-/**
- *
- * @TODO - refactor getServerSideProps
- * 1. remove unnecessary if statements
- * 2. make sure correct publicationTypes are passed via props
- */
-
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    // defaults to possible query params
     const searchType: Types.SearchType = 'publication-versions';
-    let query: string | string[] | null = null;
-    let publicationTypes: string | string[] | null = null;
-    let limit: number | string | string[] | null = null;
-    let offset: number | string | string[] | null = null;
-    let dateFrom: string | string[] | null = null;
-    let dateTo: string | string[] | null = null;
-    let authorTypes: string | string[] | null = null;
-
-    // defaults to results
-    let searchResults: { data: Interfaces.PublicationVersion[]; metadata: Interfaces.SearchResultMeta } = {
-        data: [],
-        metadata: {
-            limit: 10,
-            offset: 0,
-            total: 0
-        }
-    };
-
-    // default error
     let error: string | null = null;
-
-    // setting params
-    if (context.query.query) query = context.query.query;
-    if (context.query.type) publicationTypes = context.query.type;
-    if (context.query.limit) limit = context.query.limit;
-    if (context.query.offset) offset = context.query.offset;
-    if (context.query.dateFrom) dateFrom = context.query.dateFrom;
-    if (context.query.dateTo) dateTo = context.query.dateTo;
-    if (context.query.authorType) authorTypes = context.query.authorType;
-
-    if (Array.isArray(query)) query = query[0];
-    if (Array.isArray(publicationTypes)) publicationTypes = publicationTypes[0];
-    if (Array.isArray(limit)) limit = limit[0];
-    if (Array.isArray(offset)) offset = offset[0];
-    if (Array.isArray(dateFrom)) dateFrom = dateFrom[0];
-    if (Array.isArray(dateTo)) dateTo = dateTo[0];
-    if (Array.isArray(authorTypes)) authorTypes = authorTypes[0];
+    const query = Helpers.extractNextQueryParam(context.query.query);
+    const publicationTypes = Helpers.extractNextQueryParam(context.query.type);
+    const limit = Helpers.extractNextQueryParam(context.query.limit, true);
+    const offset = Helpers.extractNextQueryParam(context.query.offset, true);
+    const dateFrom = Helpers.extractNextQueryParam(context.query.dateFrom);
+    const dateTo = Helpers.extractNextQueryParam(context.query.dateTo);
+    const authorTypes = Helpers.extractNextQueryParam(context.query.authorType);
 
     const params = constructQueryParams({
         query,
@@ -468,6 +429,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                     searchType="publication-versions"
                     setLimit={setLimit}
                     setOffset={setOffset}
+                    showSearchTypeSwitch={true}
                     total={response?.metadata.total || 0}
                 />
             </Layouts.Standard>

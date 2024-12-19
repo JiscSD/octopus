@@ -1,65 +1,76 @@
-import { expect, Page, test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { PageModel } from '../PageModel';
 
-test.describe('Octopus profile', () => {
-    let page: Page;
+test.describe('User profiles', () => {
+    test('Visit an author profile', async ({ browser }) => {
+        const page = await browser.newPage();
+        await page.goto(`/publications/publication-user-6-hypothesis-1-live`, { waitUntil: 'domcontentloaded' });
 
-    test.beforeAll(async ({ browser }) => {
-        page = await browser.newPage();
+        // Check and click author link
+        await page.getByRole('link', { name: 'G. Murphy' }).click();
+        await page.waitForURL(`/authors/test-user-6-grace-murphy`);
+
+        // Check name
+        await expect(page.locator(PageModel.authorInfo.name)).toBeVisible();
+
+        // Check ORCID data sections
+        for await (const orcidDataSection of PageModel.profilePage.orcidDataSections) {
+            await expect(page.locator(orcidDataSection)).toBeVisible();
+        }
+
+        // Check publications section
+        await expect(page.locator(PageModel.organisationalUserInfo.octopusPublications)).toBeVisible();
+    });
+
+    test("Explore a user's publications", async ({ browser }) => {
+        const page = await browser.newPage();
         // navigate to Octopus profile page
         await page.goto(`/authors/octopus`, {
             waitUntil: 'domcontentloaded'
         });
         await expect(page).toHaveTitle('Author: Octopus - Octopus | Built for Researchers');
-    });
-
-    test.afterAll(async () => {
-        await page.close();
-    });
-
-    test('Octopus publications pagination', async () => {
-        // check user name
+        // Check user name.
         await expect(page.locator('h1')).toHaveText('Octopus');
 
-        // check Octopus publications section
         const octopusPublicationsHeader = page.locator(PageModel.organisationalUserInfo.octopusPublications);
-
         await expect(octopusPublicationsHeader).toBeVisible();
-
-        await page.waitForLoadState('networkidle');
-
         const octopusPublicationsSection = octopusPublicationsHeader.locator('xpath=..');
 
-        // initially, only 10 publications should be visible
-        expect(await octopusPublicationsSection.locator('a').count()).toEqual(10);
+        // Initially, 20 publications should be visible.
+        await expect(await octopusPublicationsSection.locator('a').count()).toEqual(20);
+        await expect(page.getByText(/Showing 1 - 20 of \d+/)).toBeVisible();
 
-        // press "Show More" button to see more publications
-        await expect(page.locator("'Show More'")).toBeVisible();
-        await Promise.all([
-            page.waitForResponse(
-                (response) => response.url().includes('/users/octopus/publications?offset=10&limit=10') && response.ok()
-            ),
-            page.click("'Show More'")
-        ]);
+        // Change page size.
+        await page.getByLabel('Showing').selectOption('10');
+        await page.waitForResponse(
+            (response) =>
+                response.request().method() === 'GET' &&
+                response.url().includes('/users/octopus/publications?offset=0&limit=10')
+        );
+        await expect(await octopusPublicationsSection.locator('a').count()).toEqual(10);
+        await expect(page.getByText(/Showing 1 - 10 of \d+/)).toBeVisible();
 
-        // wait for publications to be rendered - 50ms per each
-        await page.waitForTimeout(500);
+        // Change page.
+        await page.getByLabel('Next').click();
+        await page.waitForResponse(
+            (response) =>
+                response.request().method() === 'GET' &&
+                response.url().includes('/users/octopus/publications?offset=10&limit=10')
+        );
+        await expect(page.getByText(/Showing 11 - 20 of \d+/)).toBeVisible();
 
-        // the next 10 pubs should be loaded
-        expect(await octopusPublicationsSection.locator('a').count()).toEqual(20);
+        // Enter a query term and filter results.
+        await page.getByLabel('Quick search').fill('muco-cutaneous');
+        await octopusPublicationsSection.getByRole('button', { name: 'Search' }).click();
+        await page.waitForResponse(
+            (response) =>
+                response.request().method() === 'GET' &&
+                response.url().includes('/users/octopus/publications?offset=0&limit=10&query=muco-cutaneous')
+        );
 
-        // press "Show More" button again
-        await Promise.all([
-            page.waitForResponse(
-                (response) => response.url().includes('/users/octopus/publications?offset=20&limit=10') && response.ok()
-            ),
-            page.click("'Show More'")
-        ]);
-
-        // wait for publications to be rendered - 50ms per each
-        await page.waitForTimeout(500);
-
-        // 30 publications should now be visible in the UI
-        expect(await octopusPublicationsSection.locator('a').count()).toEqual(30);
+        // Expect 1 result and disabled prev/next buttons.
+        await expect(await octopusPublicationsSection.locator('a').count()).toEqual(1);
+        await expect(page.getByLabel('Previous')).toBeDisabled();
+        await expect(page.getByLabel('Next')).toBeDisabled();
     });
 });

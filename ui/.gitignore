@@ -41,3 +41,6 @@ yarn-error.log*
 
 # playwright
 .env
+
+# Self-signed certificates from nextJS https flag
+certificates

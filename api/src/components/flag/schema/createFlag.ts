@@ -5,13 +5,16 @@ const updatedPublicationSchema: I.Schema = {
     properties: {
         category: {
             type: 'string',
-            enum: <I.FlagCategory[]>[
+            enum: <I.PublicationFlagCategoryEnum[]>[
                 'PLAGIARISM',
                 'ETHICAL_ISSUES',
                 'MISREPRESENTATION',
                 'UNDECLARED_IMAGE_MANIPULATION',
                 'COPYRIGHT',
-                'INAPPROPRIATE'
+                'INAPPROPRIATE',
+                'UNDECLARED_AI',
+                'NOT_IN_OCTOPUS_FORMAT',
+                'IRRELEVANT_LINKED_PUBLICATION'
             ]
         },
         comment: {

@@ -60,6 +60,7 @@ data "aws_iam_policy_document" "deploy_backend_policy" {
       "iam:GetRole",
       "iam:GetInstanceProfile",
       "iam:PassRole",
+      "iam:PutRolePolicy",
       "kms:CreateGrant",
       "kms:Decrypt",
       "kms:DescribeKey",

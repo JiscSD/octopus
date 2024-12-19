@@ -102,7 +102,7 @@
         "typescript": "^5.2.2"
     },
     "optionalDependencies": {
-        "swc.linux-x64-musl.node": "1.7.36"
+        "@swc/core-linux-x64-musl": "1.9.3"
     },
     "overrides": {
         "fast-xml-parser": "^4.2.5",
