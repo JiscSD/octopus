@@ -100,6 +100,7 @@ const Topics: Types.NextPage<Props> = (props): React.ReactElement => {
                     searchType="topics"
                     setLimit={setLimit}
                     setOffset={setOffset}
+                    showSearchTypeSwitch={true}
                     total={data?.total || 0}
                 />
             </Layouts.Standard>

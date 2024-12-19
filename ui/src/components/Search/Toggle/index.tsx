@@ -5,8 +5,8 @@ import * as Components from '@/components';
 const Search: React.FC = (): React.ReactElement => {
     return (
         <>
-            <Components.SearchMobile />
-            <Components.SearchDesktop />
+            <Components.SearchToggleMobile />
+            <Components.SearchToggleDesktop />
         </>
     );
 };

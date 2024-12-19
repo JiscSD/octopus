@@ -649,3 +649,14 @@ export const isPublicationVersionExemptFromReversioning = (publicationVersion: I
     const isARI = publication.externalSource === 'ARI';
     return isPeerReview || isARI;
 };
+
+// Get a nextJS context.query param as a string or null.
+export const extractNextQueryParam = (param: string | string[] | undefined, checkNumber?: boolean): string | null => {
+    const rawValue = Array.isArray(param) ? param[0] : param || null;
+    if (checkNumber) {
+        // Return null if value cannot be parsed as a number.
+        return rawValue && !Number.isNaN(parseInt(rawValue, 10)) ? rawValue : null;
+    } else {
+        return rawValue;
+    }
+};
