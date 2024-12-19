@@ -52,7 +52,7 @@ describe('Get many publication versions', () => {
         });
 
         expect(getPublications.status).toEqual(200);
-        const publicationDates: Date[] = getPublications.body.data.map((version) => version.publishedDate as Date);
+        const publicationDates = getPublications.body.data.map((version) => version.publishedDate as Date);
         // Sort a copy of the dates from the results to confirm order.
         const sortedPublicationDates = [...publicationDates].sort(
             (a, b) => new Date(b).getTime() - new Date(a).getTime()
