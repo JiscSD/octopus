@@ -48,3 +48,9 @@ resource "aws_ecs_cluster" "ecs" {
     namespace = aws_service_discovery_private_dns_namespace.namespace.arn
   }
 }
+
+resource "aws_ssm_parameter" "ecs-cluster-arn" {
+  name  = "ecs_cluster_arn_${var.environment}_${var.project_name}"
+  type  = "String"
+  value = aws_ecs_cluster.ecs.arn
+}

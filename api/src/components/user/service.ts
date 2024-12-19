@@ -258,7 +258,7 @@ export const getPublications = async (
                       some: {
                           isLatestLiveVersion: true,
                           title: {
-                              search: params.query + ':*'
+                              search: Helpers.sanitizeSearchQuery(params.query)
                           }
                       }
                   }

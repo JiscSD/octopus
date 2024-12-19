@@ -45,3 +45,33 @@ resource "aws_ecs_task_definition" "hello-world" {
     }
   ])
 }
+
+resource "aws_security_group" "hello-world-task-sg" {
+  name                   = "${var.project_name}-hello-world-task-sg-${var.environment}"
+  description            = "Security group for hello world ecs task"
+  vpc_id                 = var.vpc_id
+  revoke_rules_on_delete = true
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${var.project_name}-hello-world-task-sg-${var.environment}"
+  }
+}
+
+resource "aws_ssm_parameter" "ecs-security-group-id" {
+  name  = "ecs_task_security_group_id_${var.environment}_${var.project_name}"
+  type  = "String"
+  value = aws_security_group.hello-world-task-sg.id
+}
+
+resource "aws_ssm_parameter" "ecs-task-definition-id" {
+  name  = "ecs_task_definition_id_${var.environment}_${var.project_name}"
+  type  = "String"
+  value = "${aws_ecs_task_definition.hello-world.id}:${aws_ecs_task_definition.hello-world.revision}"
+}

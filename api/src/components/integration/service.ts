@@ -1,6 +1,8 @@
 import axios from 'axios';
 import * as ariUtils from 'integration/ariUtils';
+import * as ecs from 'lib/ecs';
 import * as ingestLogService from 'ingestLog/service';
+import * as Helpers from 'lib/helpers';
 
 /**
  * Incremental ARI ingest.
@@ -150,4 +152,15 @@ export const incrementalAriIngest = async (dryRun: boolean, reportFormat: 'email
     const preamble = dryRun ? 'Dry run complete. Would have updated' : 'Update complete. Updated';
 
     return `${preamble} ${writeCount} publication${writeCount !== 1 ? 's' : ''}.`;
+};
+
+export const triggerECSTask = async (): Promise<string> => {
+    await ecs.runFargateTask({
+        clusterArn: Helpers.checkEnvVariable('ECS_CLUSTER_ARN'),
+        securityGroups: [Helpers.checkEnvVariable('ECS_TASK_SECURITY_GROUP_ID')],
+        subnetIds: Helpers.checkEnvVariable('PRIVATE_SUBNET_IDS').split(','),
+        taskDefinitionId: Helpers.checkEnvVariable('ECS_TASK_DEFINITION_ID')
+    });
+
+    return 'Done';
 };
