@@ -3,12 +3,6 @@ services:
     ari-import-runner:
         build:
             context: .
-        command:
-            - /bin/sh
-            - -c
-            - |
-              npm run ariImport -- dryRun=true
-              cat ari-import-report.txt
         # So it can access the DB and opensearch that are exposed on host ports.
         network_mode: host
         environment:

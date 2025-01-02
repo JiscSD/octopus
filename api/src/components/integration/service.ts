@@ -3,6 +3,7 @@ import * as ariUtils from 'integration/ariUtils';
 import * as ecs from 'lib/ecs';
 import * as ingestLogService from 'ingestLog/service';
 import * as Helpers from 'lib/helpers';
+import * as I from 'interface';
 
 /**
  * Incremental ARI ingest.
@@ -12,7 +13,7 @@ import * as Helpers from 'lib/helpers';
  *   - It encounters an ARI with dateUpdated before the start time of the most
  *       recent successful ingest (if this start time is available).
  */
-export const incrementalAriIngest = async (dryRun: boolean, reportFormat: 'email' | 'file'): Promise<string> => {
+export const incrementalAriIngest = async (dryRun: boolean, reportFormat: I.IngestReportFormat): Promise<string> => {
     const start = new Date();
     const MAX_UNCHANGED_STREAK = 5;
     // Get most start time of last successful run to help us know when to stop.

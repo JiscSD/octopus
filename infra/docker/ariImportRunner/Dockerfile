@@ -10,4 +10,4 @@ RUN apk add \
 RUN git clone https://github.com/JiscSD/octopus /app
 WORKDIR /app/api
 RUN npm i
-CMD ["npm", "run", "ariImport", "--dryRun=true"]
+CMD ["npm", "run", "ariImport", "--", "dryRun=true", "reportFormat=email"]
