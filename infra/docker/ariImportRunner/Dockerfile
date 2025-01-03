@@ -7,7 +7,7 @@ RUN apk add \
     openssl \
     openssl-dev \
     libc6-compat
-RUN git clone https://github.com/JiscSD/octopus /app
+RUN git clone -b OC-926 --single-branch https://github.com/JiscSD/octopus /app
 WORKDIR /app/api
 RUN npm i
 CMD ["npm", "run", "ariImport", "--", "dryRun=true", "reportFormat=email"]
