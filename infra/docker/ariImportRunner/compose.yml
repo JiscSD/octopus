@@ -3,16 +3,7 @@ services:
     ari-import-runner:
         build:
             context: .
+        command: /app/infra/docker/ariImportRunner/local-ari-import.sh
+        env_file: ../../../api/.env
         # So it can access the DB and opensearch that are exposed on host ports.
         network_mode: host
-        environment:
-            - DATABASE_URL=postgresql://mydbuser:mydbpwd@host.docker.internal:5435/postgres
-            - ELASTICSEARCH_PROTOCOL=http
-            - ELASTICSEARCH_USER=admin
-            - ELASTICSEARCH_PASSWORD=admin
-            - ELASTICSEARCH_ENDPOINT=host.docker.internal:9200
-            # Sample of ARI user IDs - not a reflection of what is used in deployed environments.
-            - PARTICIPATING_ARI_USER_IDS=clyheq7ko0001eg48k2id2jao,clyheq7kp0003eg48dlp686sc,clyheq7kp0005eg48dlythcrr
-            # Not used but code will throw error if undefined.
-            - QUEUE_URL=placeholder
-            - SQS_ENDPOINT=placeholder
