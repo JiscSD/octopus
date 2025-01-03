@@ -3,7 +3,7 @@ services:
     ari-import-runner:
         build:
             context: .
-        command: /app/infra/docker/ariImportRunner/local-ari-import.sh
+        command: ["/bin/sh", "-c", "/app/infra/docker/ariImportRunner/local-ari-import.sh"]
         env_file: ../../../api/.env
         # So it can access the DB and opensearch that are exposed on host ports.
         network_mode: host
