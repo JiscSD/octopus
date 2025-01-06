@@ -50,6 +50,10 @@ resource "aws_ecs_task_definition" "ari-import" {
       ],
       "secrets" : [
         {
+          "name" : "BASE_URL",
+          "valueFrom" : "arn:aws:ssm:${local.region_name}:${local.account_id}:parameter/base_url_${var.environment}_${var.project_name}"
+        },
+        {
           "name" : "DATABASE_URL",
           "valueFrom" : "arn:aws:ssm:${local.region_name}:${local.account_id}:parameter/db_connection_string_${var.environment}_${var.project_name}"
         },

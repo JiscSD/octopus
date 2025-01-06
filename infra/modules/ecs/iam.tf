@@ -31,6 +31,7 @@ data "aws_iam_policy_document" "task-exec-policy" {
       "ssm:GetParameters"
     ]
     resources = [
+      "arn:aws:ssm:${local.region_name}:${local.account_id}:parameter/base_url_${var.environment}_${var.project_name}",
       "arn:aws:ssm:${local.region_name}:${local.account_id}:parameter/datacite_endpoint_${var.environment}_${var.project_name}",
       "arn:aws:ssm:${local.region_name}:${local.account_id}:parameter/datacite_password_${var.environment}_${var.project_name}",
       "arn:aws:ssm:${local.region_name}:${local.account_id}:parameter/datacite_user_${var.environment}_${var.project_name}",
