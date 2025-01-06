@@ -1,9 +1,10 @@
 # For testing the ARI import runner docker image locally.
 services:
-    ari-import-runner:
-        build:
-            context: .
-        command: ["/bin/sh", "-c", "/app/infra/docker/ariImportRunner/local-ari-import.sh"]
-        env_file: ../../../api/.env
-        # So it can access the DB and opensearch that are exposed on host ports.
-        network_mode: host
+  ari-import-runner:
+    build:
+      context: .
+    command:
+      ["/bin/sh", "-c", "/app/infra/docker/ariImportRunner/local-ari-import.sh"]
+    env_file: ../../../api/.env
+    # So it can access the DB and opensearch that are exposed on host ports.
+    network_mode: host
