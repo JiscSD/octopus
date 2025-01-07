@@ -2,7 +2,8 @@
 services:
   ari-import-runner:
     build:
-      context: .
+      context: ../../..
+      dockerfile: infra/docker/ariImportRunner/Dockerfile
     command:
       ["/bin/sh", "-c", "/app/infra/docker/ariImportRunner/local-ari-import.sh"]
     env_file: ../../../api/.env
