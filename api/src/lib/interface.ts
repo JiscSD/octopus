@@ -358,6 +358,34 @@ export interface CreateFlagRequestBody {
     comment: string;
 }
 
+export interface CreateFlagCommentBody {
+    comment: string;
+}
+
+export interface CreateFlagCommentPathParams {
+    id: string;
+}
+
+export interface ResolveFlagPathParams {
+    id: string;
+}
+
+export interface GetFlagPathParams {
+    id: string;
+}
+
+export interface GetUserFlagsPathParams {
+    userId: string;
+}
+
+export interface GetUserFlagsQueryParams {
+    includeResolved?: boolean;
+}
+
+export interface GetPublicationFlagsPathParams {
+    publicationId: string;
+}
+
 export interface AuthorizeRequestBody {
     code: string;
 }
@@ -646,18 +674,6 @@ export interface CreateReferencePathParams {
     publicationVersionId: string;
 }
 
-export interface CreateFlagCommentBody {
-    comment: string;
-}
-
-export interface CreateFlagCommentPathParams {
-    id: string;
-}
-
-export interface ResolveFlagPathParams {
-    id: string;
-}
-
 export interface DestroyImagePathParams {
     id: string;
 }
@@ -685,18 +701,6 @@ export interface CreateFunderRequestBody {
     country: string;
     link: string;
     grantId?: string;
-}
-
-export interface GetFlagByID {
-    id: string;
-}
-
-export interface GetUserFlagsPathParams {
-    userId: string;
-}
-
-export interface GetPublicationFlagsPathParams {
-    publicationId: string;
 }
 
 export interface DOIResponse {

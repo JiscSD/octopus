@@ -71,37 +71,45 @@ export const getByPublicationID = (id: string) =>
  * This gets the flags created by a user
  * keeping as this can be useful for profile pages
  */
-export const getByUserID = (id: string) =>
+export const getByUserID = (id: string, includeResolved: boolean) =>
     client.prisma.publicationFlags.findMany({
-        include: {
-            user: {
-                select: {
-                    id: true,
-                    orcid: true,
-                    firstName: true,
-                    lastName: true,
-                    createdAt: true,
-                    updatedAt: true
-                }
-            },
-            flagComments: {
-                include: {
-                    user: {
-                        select: {
-                            id: true,
-                            orcid: true,
-                            firstName: true,
-                            lastName: true,
-                            createdAt: true,
-                            updatedAt: true
-                        }
-                    }
-                }
-            }
-        },
         where: {
             user: {
                 id
+            },
+            ...(includeResolved ? {} : { resolved: false })
+        },
+        select: {
+            id: true,
+            category: true,
+            resolved: true,
+            createdAt: true,
+            publication: {
+                select: {
+                    id: true,
+                    type: true,
+                    versions: {
+                        where: {
+                            isLatestLiveVersion: true
+                        },
+                        select: {
+                            coAuthors: {
+                                select: {
+                                    user: {
+                                        select: {
+                                            firstName: true,
+                                            lastName: true
+                                        }
+                                    }
+                                }
+                            },
+                            content: true,
+                            description: true,
+                            publishedDate: true,
+                            title: true
+                        }
+                    }
+                }
             }
         }
     });

@@ -9,7 +9,7 @@ import * as publicationService from 'publication/service';
 import * as response from 'lib/response';
 import * as userService from 'user/service';
 
-export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagByID>): Promise<I.JSONResponse> => {
+export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagPathParams>): Promise<I.JSONResponse> => {
     try {
         const flag = await flagService.get(event.pathParameters.id);
 
@@ -36,10 +36,13 @@ export const getPublicationFlags = async (
 };
 
 export const getUserFlags = async (
-    event: I.APIRequest<undefined, undefined, I.GetUserFlagsPathParams>
+    event: I.APIRequest<undefined, I.GetUserFlagsQueryParams, I.GetUserFlagsPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const flags = await flagService.getByUserID(event.pathParameters.userId);
+        const flags = await flagService.getByUserID(
+            event.pathParameters.userId,
+            !!event.queryStringParameters.includeResolved
+        );
 
         return response.json(200, flags);
     } catch (err) {
