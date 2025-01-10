@@ -39,7 +39,9 @@ const SearchInterface = React.forwardRef(
         return (
             <div className="mx-auto grid grid-cols-1 gap-x-6 lg:grid-cols-12 lg:gap-y-8 2xl:gap-x-10">
                 <div className="col-span-12 mb-8 grid w-full grid-cols-12 gap-x-6 gap-y-4 lg:mb-0 2xl:gap-x-10">
-                    <fieldset className="col-span-12 lg:col-span-5 xl:col-span-4 grid grid-cols-12 gap-x-6 2xl:gap-x-10">
+                    <fieldset
+                        className={`col-span-12 ${props.showSearchTypeSwitch ? 'grid grid-cols-12 gap-x-6 2xl:gap-x-10 lg:col-span-5 xl:col-span-4' : 'lg:col-span-3 xl:col-span-2'}`}
+                    >
                         <legend className="sr-only">Search options</legend>
 
                         {props.showSearchTypeSwitch && (
@@ -61,7 +63,10 @@ const SearchInterface = React.forwardRef(
                                 </select>
                             </label>
                         )}
-                        <label className="block col-span-4 xl:col-span-3" htmlFor="pageSize">
+                        <label
+                            className={`block ${props.showSearchTypeSwitch ? 'col-span-4 xl:col-span-3' : 'col-span-12'}`}
+                            htmlFor="pageSize"
+                        >
                             <span className="mb-1 block text-xxs font-bold uppercase tracking-widest text-grey-600 transition-colors duration-500 dark:text-grey-300">
                                 Showing
                             </span>
@@ -70,7 +75,7 @@ const SearchInterface = React.forwardRef(
                                 id="pageSize"
                                 onChange={(e) => props.setLimit(parseInt(e.target.value, 10))}
                                 value={props.limit}
-                                className="w-full rounded-md border border-grey-200 focus:ring-2 focus:ring-yellow-500"
+                                className={`w-full rounded-md border border-grey-200 focus:ring-2 focus:ring-yellow-500 ${!props.showSearchTypeSwitch && 'sm:w-1/4 lg:w-full'}`}
                                 disabled={props.isValidating}
                             >
                                 {props.pageSizes?.length ? (
@@ -94,7 +99,7 @@ const SearchInterface = React.forwardRef(
                     <form
                         name="query-form"
                         id="query-form"
-                        className="col-span-12 lg:col-span-7 xl:col-span-8"
+                        className={`col-span-12 ${props.showSearchTypeSwitch ? 'lg:col-span-7 xl:col-span-8' : 'lg:col-span-9 xl:col-span-10'}`}
                         onSubmit={props.handleSearchFormSubmit}
                     >
                         <label htmlFor="searchTerm" className="relative w-full">
