@@ -248,6 +248,84 @@ export const getAllByPublicationIds = async (ids: string[]) => {
     return mappedResults;
 };
 
+export const getAllForReporting = async (options: I.GetPublicationVersionsReportingOptions) => {
+    const where: Prisma.PublicationVersionWhereInput = {
+        currentStatus: 'LIVE',
+        user: {
+            NOT: {
+                id: 'octopus'
+            }
+        },
+        ...(options.dateFrom && options.dateTo
+            ? {
+                  AND: [
+                      {
+                          publishedDate: {
+                              gte: new Date(options.dateFrom)
+                          }
+                      },
+                      {
+                          publishedDate: {
+                              lte: new Date(options.dateTo)
+                          }
+                      }
+                  ]
+              }
+            : options.dateTo
+            ? {
+                  publishedDate: {
+                      lte: new Date(options.dateTo)
+                  }
+              }
+            : options.dateFrom
+            ? {
+                  publishedDate: {
+                      gte: new Date(options.dateFrom)
+                  }
+              }
+            : {}),
+        ...(options.authorType === 'individual' && {
+            user: {
+                role: 'USER'
+            }
+        }),
+        ...(options.authorType === 'organisational' && {
+            user: {
+                role: 'ORGANISATION'
+            }
+        })
+    };
+
+    const [publicationVersions, total] = await Promise.all([
+        client.prisma.publicationVersion.findMany({
+            where,
+            select: {
+                doi: true,
+                publishedDate: true,
+                versionNumber: true,
+                publication: {
+                    select: {
+                        doi: true,
+                        type: true
+                    }
+                }
+            },
+            skip: options.offset,
+            take: options.limit
+        }),
+        client.prisma.publicationVersion.count({ where })
+    ]);
+
+    return {
+        data: publicationVersions,
+        metadata: {
+            total,
+            limit: options.limit,
+            offset: options.offset
+        }
+    };
+};
+
 export const update = (id: string, data: Prisma.PublicationVersionUpdateInput) =>
     client.prisma.publicationVersion.update({
         where: {

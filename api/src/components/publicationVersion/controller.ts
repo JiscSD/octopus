@@ -83,27 +83,53 @@ export const get = async (
 };
 
 export const getAll = async (
-    event: I.AuthenticatedAPIRequest<undefined, I.OpenSearchPublicationFilters>
+    event: I.AuthenticatedAPIRequest<undefined, I.GetPublicationVersionsQueryParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const openSearchPublications = await publicationService.getOpenSearchPublications(event.queryStringParameters);
+        if (event.queryStringParameters.format === 'reporting') {
+            // Reject incompatible query parameters.
+            const compatibleParams: Array<keyof I.GetPublicationVersionsQueryParams> = [
+                'limit',
+                'offset',
+                'format',
+                'authorType',
+                'dateFrom',
+                'dateTo'
+            ];
 
-        const publicationIds: string[] = openSearchPublications.body.hits.hits.map((hit) => hit._id as string);
-
-        const publicationVersions = await publicationVersionService.getAllByPublicationIds(publicationIds);
-
-        const versionsOrderedBySearch = publicationIds.map((publicationId) =>
-            publicationVersions.find((version) => version.versionOf === publicationId)
-        );
-
-        return response.json(200, {
-            data: versionsOrderedBySearch,
-            metadata: {
-                total: openSearchPublications.body.hits.total.value,
-                limit: Number(event.queryStringParameters.limit) || 10,
-                offset: Number(event.queryStringParameters.offset) || 0
+            for (const param of Object.keys(event.queryStringParameters)) {
+                if (!compatibleParams.includes(param as keyof I.GetPublicationVersionsQueryParams)) {
+                    return response.json(400, {
+                        message: `The query parameter "${param}" is not compatible with the "reporting" format.`
+                    });
+                }
             }
-        });
+
+            const responseData = await publicationVersionService.getAllForReporting(event.queryStringParameters);
+
+            return response.json(200, responseData);
+        } else {
+            const openSearchPublications = await publicationService.getOpenSearchPublications(
+                event.queryStringParameters
+            );
+
+            const publicationIds: string[] = openSearchPublications.body.hits.hits.map((hit) => hit._id as string);
+
+            const publicationVersions = await publicationVersionService.getAllByPublicationIds(publicationIds);
+
+            const versionsOrderedBySearch = publicationIds.map((publicationId) =>
+                publicationVersions.find((version) => version.versionOf === publicationId)
+            );
+
+            return response.json(200, {
+                data: versionsOrderedBySearch,
+                metadata: {
+                    total: openSearchPublications.body.hits.total.value,
+                    limit: Number(event.queryStringParameters.limit) || 10,
+                    offset: Number(event.queryStringParameters.offset) || 0
+                }
+            });
+        }
     } catch (err) {
         console.log(err);
 

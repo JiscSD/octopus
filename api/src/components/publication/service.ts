@@ -328,7 +328,7 @@ export const getOpenSearchPublications = (filters: I.OpenSearchPublicationFilter
                     filter: {
                         terms: {
                             type: (filters.type
-                                .split(',')
+                                ?.split(',')
                                 .map((type) => type.toLowerCase()) as I.PublicationType[]) || [
                                 'problem',
                                 'protocol',
