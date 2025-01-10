@@ -1,13 +1,13 @@
 import * as Enum from 'enum';
 import * as I from 'interface';
 
-const getAll: I.JSONSchemaType<I.OpenSearchPublicationFilters> = {
+const getAll: I.JSONSchemaType<I.GetPublicationVersionsQueryParams> = {
     type: 'object',
     properties: {
         type: {
             type: 'string',
             pattern: `^((${Enum.publicationTypes.join('|')})(,)?)+$`,
-            default: 'PROBLEM,PROTOCOL,ANALYSIS,REAL_WORLD_APPLICATION,HYPOTHESIS,DATA,INTERPRETATION,PEER_REVIEW'
+            nullable: true
         },
         authorType: {
             type: 'string',
@@ -46,6 +46,11 @@ const getAll: I.JSONSchemaType<I.OpenSearchPublicationFilters> = {
         orderDirection: {
             type: 'string',
             enum: ['asc', 'desc'],
+            nullable: true
+        },
+        format: {
+            type: 'string',
+            enum: ['reporting'],
             nullable: true
         }
     },
