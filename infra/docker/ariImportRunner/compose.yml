@@ -2,10 +2,9 @@
 services:
   ari-import-runner:
     build:
-      context: ../../..
-      dockerfile: infra/docker/ariImportRunner/Dockerfile
-    command:
-      ["/bin/sh", "-c", "/app/infra/docker/ariImportRunner/local-ari-import.sh"]
+      context: ../../../api
+      dockerfile: ../infra/docker/ariImportRunner/Dockerfile
+    command: /bin/sh -cx "npm run ariImport -- dryRun=true reportFormat=file && cat ari-import-report.txt"
     env_file: ../../../api/.env
     # So it can access the DB and opensearch that are exposed on host ports.
     network_mode: host
