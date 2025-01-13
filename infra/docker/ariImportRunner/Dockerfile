@@ -12,7 +12,7 @@ RUN apk add \
 
 WORKDIR /app
 
-COPY package.json .
+COPY package.json package-lock.json ./
 RUN npm i
 COPY --exclude=**/node_modules . .
 RUN npx prisma generate
