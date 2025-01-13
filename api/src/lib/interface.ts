@@ -1077,3 +1077,5 @@ export interface HandledARI {
     unrecognisedDepartment?: string;
     unrecognisedTopics?: string[];
 }
+
+export type IngestReportFormat = 'email' | 'file';
