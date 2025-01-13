@@ -15,6 +15,14 @@ Publications imported via an integration with another system should have the fol
 
 They should also always be owned by an organisational user account. That is, a user with the value `ORGANISATION` for the `role` field.
 
+### Where/how does this run?
+
+On deployed environments, integrations are run in containers on AWS Elastic Container Service. These containers are defined in the infrastructure code (see [Dockerfile](../../../../infra/docker/ariImportRunner/Dockerfile)), so they can be built and tested locally from the `infra/docker/ariImportRunner` directory with `docker compose up` (see [compose.yml](../../../../infra/docker/ariImportRunner/compose.yml)).
+
+They can also be run ad hoc on the local environment via npm scripts, for example (from the `api` directory):
+
+`npm run ariImport -- dryRun=true allDepartments=true full=false`
+
 ## Specific integrations
 
 ### ARI DB

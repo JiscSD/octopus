@@ -197,13 +197,22 @@ export interface OpenSearchPublicationFilters {
     search?: string;
     limit: number;
     offset: number;
-    type: string;
+    type?: string;
     authorType?: 'individual' | 'organisational';
     exclude?: string;
     dateFrom?: string;
     dateTo?: string;
     orderBy?: PublicationOrderBy;
     orderDirection?: OrderDirection;
+}
+
+export type GetPublicationVersionsReportingOptions = Pick<
+    OpenSearchPublicationFilters,
+    'limit' | 'offset' | 'authorType' | 'dateFrom' | 'dateTo'
+>;
+
+export interface GetPublicationVersionsQueryParams extends OpenSearchPublicationFilters {
+    format?: 'reporting';
 }
 
 export type PublicationVersion = Exclude<Prisma.PromiseReturnType<typeof publicationVersionService.get>, null>;
@@ -1072,3 +1081,5 @@ export interface HandledARI {
     unrecognisedDepartment?: string;
     unrecognisedTopics?: string[];
 }
+
+export type IngestReportFormat = 'email' | 'file';
