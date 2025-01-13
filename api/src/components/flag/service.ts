@@ -1,5 +1,6 @@
 import * as client from 'lib/client';
 import * as I from 'interface';
+import { Prisma } from '@prisma/client';
 
 export const get = (id: string) =>
     client.prisma.publicationFlags.findFirst({
@@ -71,48 +72,71 @@ export const getByPublicationID = (id: string) =>
  * This gets the flags created by a user
  * keeping as this can be useful for profile pages
  */
-export const getByUserID = (id: string, includeResolved: boolean) =>
-    client.prisma.publicationFlags.findMany({
-        where: {
-            user: {
-                id
-            },
-            ...(includeResolved ? {} : { resolved: false })
+export const getByUserID = async (
+    id: string,
+    options: { limit: number; offset: number; includeResolved?: boolean }
+) => {
+    const where: Prisma.PublicationFlagsWhereInput = {
+        user: {
+            id
         },
-        select: {
-            id: true,
-            category: true,
-            resolved: true,
-            createdAt: true,
-            publication: {
-                select: {
-                    id: true,
-                    type: true,
-                    versions: {
-                        where: {
-                            isLatestLiveVersion: true
-                        },
-                        select: {
-                            coAuthors: {
-                                select: {
-                                    user: {
-                                        select: {
-                                            firstName: true,
-                                            lastName: true
+        ...(options.includeResolved ? {} : { resolved: false })
+    };
+
+    const [flags, total] = await Promise.all([
+        client.prisma.publicationFlags.findMany({
+            where,
+            select: {
+                id: true,
+                category: true,
+                resolved: true,
+                createdAt: true,
+                publication: {
+                    select: {
+                        id: true,
+                        type: true,
+                        versions: {
+                            where: {
+                                isLatestLiveVersion: true
+                            },
+                            select: {
+                                coAuthors: {
+                                    select: {
+                                        user: {
+                                            select: {
+                                                firstName: true,
+                                                lastName: true
+                                            }
                                         }
                                     }
-                                }
-                            },
-                            content: true,
-                            description: true,
-                            publishedDate: true,
-                            title: true
+                                },
+                                content: true,
+                                description: true,
+                                publishedDate: true,
+                                title: true
+                            }
                         }
                     }
                 }
+            },
+            take: options.limit,
+            skip: options.offset,
+            orderBy: {
+                createdAt: 'desc'
             }
+        }),
+        client.prisma.publicationFlags.count({ where })
+    ]);
+
+    return {
+        data: flags,
+        metadata: {
+            total,
+            limit: options.limit,
+            offset: options.offset
         }
-    });
+    };
+};
 
 export const createFlag = (
     publication: string,

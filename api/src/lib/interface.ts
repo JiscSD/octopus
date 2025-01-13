@@ -389,6 +389,8 @@ export interface GetUserFlagsPathParams {
 
 export interface GetUserFlagsQueryParams {
     includeResolved?: boolean;
+    limit: number;
+    offset: number;
 }
 
 export interface GetPublicationFlagsPathParams {

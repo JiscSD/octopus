@@ -137,24 +137,6 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                             comment: 'This is a comment'
                         }
                     }
-                },
-                {
-                    id: 'publication-problem-live-flag-2',
-                    createdBy: 'test-user-2',
-                    category: 'COPYRIGHT',
-                    resolved: true,
-                    flagComments: {
-                        create: [
-                            {
-                                createdBy: 'test-user-2',
-                                comment: 'This is my work'
-                            },
-                            {
-                                createdBy: 'test-user-1',
-                                comment: 'No it is not'
-                            }
-                        ]
-                    }
                 }
             ]
         }
