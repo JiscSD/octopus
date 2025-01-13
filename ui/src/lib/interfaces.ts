@@ -383,6 +383,18 @@ export interface FlagWithComments extends Flag {
     flagComments: FlagComment[];
 }
 
+export interface FlagByUser extends Omit<Flag, 'publicationId' | 'user' | 'createdBy'> {
+    publication: Pick<CorePublication, 'id' | 'type'> & {
+        versions: [
+            Pick<PublicationVersion, 'content' | 'description' | 'publishedDate' | 'title'> & {
+                coAuthors: {
+                    user: Pick<CoreUser, 'firstName' | 'lastName'>;
+                }[];
+            }
+        ];
+    };
+}
+
 export interface PublicationUpdateRequestBody extends JSON {
     title: string;
     content: string | null;

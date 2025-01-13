@@ -15,6 +15,7 @@ type SearchResults =
 type Props = {
     error?: string;
     filters?: React.ReactNode;
+    fullScreen?: boolean;
     handleSearchFormSubmit: React.ReactEventHandler<HTMLFormElement>;
     isValidating: boolean;
     limit: number;
@@ -146,7 +147,9 @@ const SearchInterface = React.forwardRef(
                         </Framer.AnimatePresence>
                     </aside>
                 )}
-                <article className={`col-span-12 min-h-screen ${props.filters && 'lg:col-span-9'}`}>
+                <article
+                    className={`col-span-12 ${props.fullScreen && 'min-h-screen'} ${props.filters && 'lg:col-span-9'}`}
+                >
                     <div aria-live="polite" className="sr-only">
                         {props.error ? props.error : `${props.total} result${props.total !== 1 ? 's' : ''}`}
                     </div>
@@ -179,30 +182,57 @@ const SearchInterface = React.forwardRef(
                                         }
 
                                         if (index === props.results.length - 1) {
-                                            classes += '!border-b-transparent !rounded-b';
+                                            classes += ' !border-b-transparent !rounded-b';
                                         }
 
-                                        return props.searchType === 'publication-versions' ? (
-                                            <Components.PublicationSearchResult
-                                                key={`publication-${index}-${result.id}`}
-                                                publicationVersion={result as Interfaces.PublicationVersion}
-                                                className={classes}
-                                            />
-                                        ) : props.searchType === 'authors' || props.searchType === 'organisations' ? (
-                                            <Components.UserSearchResult
-                                                key={`user-${index}-${result.id}`}
-                                                user={result as Interfaces.User}
-                                                className={classes}
-                                            />
-                                        ) : props.searchType == 'topics' ? (
-                                            <Components.TopicSearchResult
-                                                key={`topic-${index}-${result.id}`}
-                                                topic={result as Interfaces.BaseTopic}
-                                                className={classes}
-                                            />
-                                        ) : (
-                                            <></>
-                                        );
+                                        if (props.searchType === 'publication-versions') {
+                                            const {
+                                                coAuthors,
+                                                content,
+                                                description,
+                                                publication,
+                                                publishedDate,
+                                                title,
+                                                versionOf
+                                            } = result as Interfaces.PublicationVersion;
+                                            return (
+                                                <Components.PublicationSearchResult
+                                                    key={`publication-${index}-${result.id}`}
+                                                    coAuthors={coAuthors}
+                                                    content={content}
+                                                    description={description}
+                                                    flagCount={publication.flagCount}
+                                                    peerReviewCount={publication.peerReviewCount}
+                                                    publicationId={versionOf}
+                                                    publishedDate={publishedDate}
+                                                    title={title}
+                                                    type={publication.type}
+                                                    className={classes}
+                                                />
+                                            );
+                                        }
+
+                                        if (props.searchType === 'authors' || props.searchType === 'organisations') {
+                                            return (
+                                                <Components.UserSearchResult
+                                                    key={`user-${index}-${result.id}`}
+                                                    user={result as Interfaces.User}
+                                                    className={classes}
+                                                />
+                                            );
+                                        }
+
+                                        if (props.searchType == 'topics') {
+                                            return (
+                                                <Components.TopicSearchResult
+                                                    key={`topic-${index}-${result.id}`}
+                                                    topic={result as Interfaces.BaseTopic}
+                                                    className={classes}
+                                                />
+                                            );
+                                        }
+
+                                        return <></>;
                                     })}
                                 </div>
                             ) : null}

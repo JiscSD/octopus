@@ -37,6 +37,7 @@ const SearchPage = React.forwardRef(
                     <Components.SearchInterface
                         error={props.error}
                         filters={props.filters}
+                        fullScreen={true}
                         handleSearchFormSubmit={props.handleSearchFormSubmit}
                         isValidating={props.isValidating}
                         limit={props.limit}
