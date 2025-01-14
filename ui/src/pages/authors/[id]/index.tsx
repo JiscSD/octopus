@@ -71,36 +71,47 @@ type Props = {
     query: string | null;
     user: Interfaces.User;
     publications: Interfaces.SearchResults<Interfaces.Publication> | null;
-    flags: Interfaces.FlagByUser[] | null;
+    flags: Interfaces.SearchResults<Interfaces.FlagByUser> | null;
 };
 
 const Author: Types.NextPage<Props> = (props): React.ReactElement => {
     const router = Router.useRouter();
-    const [query, setQuery] = useState(props.query ? props.query : '');
-    const [limit, setLimit] = useState(20);
-    const [offset, setOffset] = useState(0);
-    const swrKey = `${Config.endpoints.users}/${props.user.id}/publications?offset=${offset}&limit=${limit}&query=${query}`;
+    const [publicationsQuery, setPublicationsQuery] = useState(props.query ? props.query : '');
+    const [publicationsLimit, setPublicationsLimit] = useState(20);
+    const [publicationsOffset, setPublicationsOffset] = useState(0);
+    const [flagsOffset, setFlagsOffset] = useState(0);
+    const [includeResolvedFlags, setIncludeResolvedFlags] = useState(false);
+
+    const publicationsSwrKey = `${Config.endpoints.users}/${props.user.id}/publications?offset=${publicationsOffset}&limit=${publicationsLimit}&query=${publicationsQuery}`;
     const {
-        data: response,
+        data: getPublicationsResponse,
         error: getPublicationsError,
-        isValidating
-    } = useSWR<Interfaces.SearchResults<Interfaces.Publication>>(swrKey, null, {
+        isValidating: getPublicationsIsValidating
+    } = useSWR<Interfaces.SearchResults<Interfaces.Publication>>(publicationsSwrKey, null, {
         fallbackData: props.publications || undefined
     });
     const getPublicationsErrorMessage = axios.isAxiosError(getPublicationsError)
         ? getPublicationsError.message
         : undefined;
+
+    const flagsSwrKey = `${Config.endpoints.users}/${props.user.id}/flags?offset=${flagsOffset}&includeResolved=${includeResolvedFlags}`;
+    const { data: getFlagsResponse, isValidating: getFlagsIsValidating } = useSWR<
+        Interfaces.SearchResults<Interfaces.FlagByUser>
+    >(flagsSwrKey, null, {
+        fallbackData: props.flags || undefined
+    });
+
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     const missingNames = !props.user.firstName && !props.user.lastName;
     const isOrganisationalAccount = props.user.role === 'ORGANISATION';
     const pageTitle = `Author: ${isOrganisationalAccount ? props.user.firstName : props.user.orcid} - ${Config.urls.viewUser.title}`;
 
-    // The result component expects a publication version.
+    // The search interface component expects a publication version.
     // The endpoint is expected to return a publication with 1 version (the latest live one).
     // So make an array of latest live publication versions from the response.
     const publicationVersions: Interfaces.PublicationVersion[] = useMemo(
         () =>
-            response?.data
+            getPublicationsResponse?.data
                 ?.filter((publication) => publication.versions[0].isLatestLiveVersion)
                 .map((publication) => {
                     const version = publication.versions[0];
@@ -125,10 +136,10 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                     };
                     return version;
                 }) || [],
-        [response, props.user]
+        [getPublicationsResponse, props.user]
     );
 
-    const handleSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (
+    const handlePublicationsSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (
         e: React.SyntheticEvent<HTMLFormElement, Event>
     ): Promise<void> => {
         e.preventDefault();
@@ -140,9 +151,57 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
         }
 
         await router.push({ query: newQuery }, undefined, { shallow: true });
-        setOffset(0);
-        setQuery(searchTerm);
+        setPublicationsOffset(0);
+        setPublicationsQuery(searchTerm);
     };
+
+    const flags = getFlagsResponse?.data || [];
+    const flagResults = getFlagsResponse ? (
+        <div className="rounded">
+            {flags.map((flag, index: number) => {
+                let classes = '';
+
+                if (index === 0) {
+                    classes += 'rounded-t';
+                }
+
+                if (index === flags.length - 1) {
+                    classes += ' !border-b-transparent !rounded-b';
+                }
+
+                const publication = flag.publication;
+                const { coAuthors, content, description, publishedDate, title } = publication.versions[0];
+
+                return (
+                    <Components.PublicationSearchResult
+                        key={publication.id}
+                        className={classes}
+                        coAuthors={coAuthors}
+                        content={content}
+                        description={description}
+                        linkDestination={`${Config.urls.viewPublication.path}/${publication.id}/flag/${flag.id}`}
+                        preface={
+                            <div className="flex gap-4 leading-none">
+                                <SolidIcons.FlagIcon className="h-4 w-4 text-red-500" />
+                                <span>
+                                    Raised on <time suppressHydrationWarning>{Helpers.formatDate(flag.createdAt)}</time>{' '}
+                                    for{' '}
+                                    {Config.values.octopusInformation.redFlagReasons[
+                                        flag.category
+                                    ].nicename.toLowerCase()}{' '}
+                                    against the following publication:
+                                </span>
+                            </div>
+                        }
+                        publicationId={publication.id}
+                        publishedDate={publishedDate}
+                        title={title}
+                        type={publication.type}
+                    />
+                );
+            })}
+        </div>
+    ) : null;
 
     return (
         <>
@@ -240,75 +299,43 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                     </h2>
                     <Components.SearchInterface
                         error={getPublicationsErrorMessage}
-                        handleSearchFormSubmit={handleSearchFormSubmit}
-                        isValidating={isValidating}
-                        limit={limit}
+                        handleSearchFormSubmit={handlePublicationsSearchFormSubmit}
+                        isValidating={getPublicationsIsValidating}
+                        limit={publicationsLimit}
                         noResultsMessage="This user does not currently have any live publications"
-                        offset={offset}
+                        offset={publicationsOffset}
                         pageSizes={[10, 20, 50]}
-                        query={query}
+                        query={publicationsQuery}
                         ref={searchInputRef}
                         results={publicationVersions}
                         searchType="publication-versions"
-                        setLimit={setLimit}
-                        setOffset={setOffset}
-                        total={response?.metadata.total || 0}
+                        setLimit={setPublicationsLimit}
+                        setOffset={setPublicationsOffset}
+                        total={getPublicationsResponse?.metadata.total || 0}
                     ></Components.SearchInterface>
                 </section>
 
-                {props.flags && props.flags.length ? (
+                {getFlagsResponse && flags.length ? (
                     <section className="container mx-auto px-8">
                         <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
                             Red flags raised by this user
                         </h2>
-                        <div className="rounded">
-                            {props.flags.map((flag, index: number, flags) => {
-                                let classes = '';
-
-                                if (index === 0) {
-                                    classes += 'rounded-t';
-                                }
-
-                                if (index === flags.length - 1) {
-                                    classes += ' !border-b-transparent !rounded-b';
-                                }
-
-                                const publication = flag.publication;
-                                const { coAuthors, content, description, publishedDate, title } =
-                                    publication.versions[0];
-
-                                return (
-                                    <Components.PublicationSearchResult
-                                        key={publication.id}
-                                        className={classes}
-                                        coAuthors={coAuthors}
-                                        content={content}
-                                        description={description}
-                                        linkDestination={`${Config.urls.viewPublication.path}/${publication.id}/flag/${flag.id}`}
-                                        preface={
-                                            <div className="flex gap-4 leading-none">
-                                                <SolidIcons.FlagIcon className="h-4 w-4 text-red-500" />
-                                                <span>
-                                                    Raised on{' '}
-                                                    <time suppressHydrationWarning>
-                                                        {Helpers.formatDate(flag.createdAt)}
-                                                    </time>{' '}
-                                                    for{' '}
-                                                    {Config.values.octopusInformation.redFlagReasons[
-                                                        flag.category
-                                                    ].nicename.toLowerCase()}{' '}
-                                                    against the following publication:
-                                                </span>
-                                            </div>
-                                        }
-                                        publicationId={publication.id}
-                                        publishedDate={publishedDate}
-                                        title={title}
-                                        type={publication.type}
-                                    />
-                                );
-                            })}
-                        </div>
+                        <Components.Checkbox
+                            checked={includeResolvedFlags}
+                            className="mb-4 lg:mb-8"
+                            id="include-resolved-flags"
+                            label="Include resolved flags"
+                            name="include-resolved-flags"
+                            onChange={(e) => setIncludeResolvedFlags(e.target.checked)}
+                        />
+                        <Components.PaginatedResults
+                            isValidating={getFlagsIsValidating}
+                            limit={10}
+                            offset={flagsOffset}
+                            results={flagResults}
+                            setOffset={setFlagsOffset}
+                            total={getFlagsResponse.metadata.total}
+                        />
                     </section>
                 ) : null}
             </Layouts.Standard>
