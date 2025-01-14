@@ -4,7 +4,6 @@ import * as Router from 'next/router';
 import * as SolidIcons from '@heroicons/react/24/solid';
 
 import * as Components from '@/components';
-import * as Helpers from '@/helpers';
 import * as Interfaces from '@/interfaces';
 import * as Types from '@/types';
 
@@ -35,7 +34,64 @@ type Props = {
 const SearchInterface = React.forwardRef(
     (props: Props, searchInputRef: React.ForwardedRef<HTMLInputElement>): React.ReactElement => {
         const router = Router.useRouter();
-        const upperPageBound = props.limit + props.offset > props.total ? props.total : props.limit + props.offset;
+
+        const results = (
+            <div className="rounded">
+                {props.results.map((result, index: number) => {
+                    let classes = '';
+
+                    if (index === 0) {
+                        classes += 'rounded-t';
+                    }
+
+                    if (index === props.results.length - 1) {
+                        classes += ' !border-b-transparent !rounded-b';
+                    }
+
+                    if (props.searchType === 'publication-versions') {
+                        const { coAuthors, content, description, publication, publishedDate, title, versionOf } =
+                            result as Interfaces.PublicationVersion;
+                        return (
+                            <Components.PublicationSearchResult
+                                key={`publication-${index}-${result.id}`}
+                                coAuthors={coAuthors}
+                                content={content}
+                                description={description}
+                                flagCount={publication.flagCount}
+                                peerReviewCount={publication.peerReviewCount}
+                                publicationId={versionOf}
+                                publishedDate={publishedDate}
+                                title={title}
+                                type={publication.type}
+                                className={classes}
+                            />
+                        );
+                    }
+
+                    if (props.searchType === 'authors' || props.searchType === 'organisations') {
+                        return (
+                            <Components.UserSearchResult
+                                key={`user-${index}-${result.id}`}
+                                user={result as Interfaces.User}
+                                className={classes}
+                            />
+                        );
+                    }
+
+                    if (props.searchType == 'topics') {
+                        return (
+                            <Components.TopicSearchResult
+                                key={`topic-${index}-${result.id}`}
+                                topic={result as Interfaces.BaseTopic}
+                                className={classes}
+                            />
+                        );
+                    }
+
+                    return <></>;
+                })}
+            </div>
+        );
 
         return (
             <div className="mx-auto grid grid-cols-1 gap-x-6 lg:grid-cols-12 lg:gap-y-8 2xl:gap-x-10">
@@ -152,134 +208,17 @@ const SearchInterface = React.forwardRef(
                         </Framer.AnimatePresence>
                     </aside>
                 )}
-                <article
+                <Components.PaginatedResults
                     className={`col-span-12 ${props.fullScreen && 'min-h-screen'} ${props.filters && 'lg:col-span-9'}`}
-                >
-                    <div aria-live="polite" className="sr-only">
-                        {props.error ? props.error : `${props.total} result${props.total !== 1 ? 's' : ''}`}
-                    </div>
-                    {props.error ? (
-                        <Components.Alert severity="ERROR" title={props.error} />
-                    ) : (
-                        <Framer.AnimatePresence>
-                            {!props.error && props.total === 0 && !props.isValidating && (
-                                <Components.Alert
-                                    key="no-results-alert"
-                                    severity="INFO"
-                                    title="No results found"
-                                    details={
-                                        props.noResultsMessage
-                                            ? [props.noResultsMessage]
-                                            : [
-                                                  'Try some different search criteria.',
-                                                  'If you think something is wrong, please contact the helpdesk.'
-                                              ]
-                                    }
-                                />
-                            )}
-                            {props.results.length ? (
-                                <div className="rounded">
-                                    {props.results.map((result, index: number) => {
-                                        let classes = '';
-
-                                        if (index === 0) {
-                                            classes += 'rounded-t';
-                                        }
-
-                                        if (index === props.results.length - 1) {
-                                            classes += ' !border-b-transparent !rounded-b';
-                                        }
-
-                                        if (props.searchType === 'publication-versions') {
-                                            const {
-                                                coAuthors,
-                                                content,
-                                                description,
-                                                publication,
-                                                publishedDate,
-                                                title,
-                                                versionOf
-                                            } = result as Interfaces.PublicationVersion;
-                                            return (
-                                                <Components.PublicationSearchResult
-                                                    key={`publication-${index}-${result.id}`}
-                                                    coAuthors={coAuthors}
-                                                    content={content}
-                                                    description={description}
-                                                    flagCount={publication.flagCount}
-                                                    peerReviewCount={publication.peerReviewCount}
-                                                    publicationId={versionOf}
-                                                    publishedDate={publishedDate}
-                                                    title={title}
-                                                    type={publication.type}
-                                                    className={classes}
-                                                />
-                                            );
-                                        }
-
-                                        if (props.searchType === 'authors' || props.searchType === 'organisations') {
-                                            return (
-                                                <Components.UserSearchResult
-                                                    key={`user-${index}-${result.id}`}
-                                                    user={result as Interfaces.User}
-                                                    className={classes}
-                                                />
-                                            );
-                                        }
-
-                                        if (props.searchType == 'topics') {
-                                            return (
-                                                <Components.TopicSearchResult
-                                                    key={`topic-${index}-${result.id}`}
-                                                    topic={result as Interfaces.BaseTopic}
-                                                    className={classes}
-                                                />
-                                            );
-                                        }
-
-                                        return <></>;
-                                    })}
-                                </div>
-                            ) : null}
-                            {!props.isValidating && props.total > 0 && (
-                                <Framer.motion.div
-                                    key="pagination-controls"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ type: 'tween', duration: 0.75 }}
-                                    className="mt-8 w-full justify-between lg:flex lg:flex-row-reverse"
-                                >
-                                    <div className="flex justify-between">
-                                        <Components.Button
-                                            className="mr-6"
-                                            onClick={() => {
-                                                props.setOffset(props.offset - props.limit);
-                                                Helpers.scrollTopSmooth();
-                                            }}
-                                            disabled={props.offset === 0}
-                                            title="Previous"
-                                        />
-                                        <Components.Button
-                                            onClick={() => {
-                                                props.setOffset(props.offset + props.limit);
-                                                Helpers.scrollTopSmooth();
-                                            }}
-                                            disabled={props.limit + props.offset >= props.total}
-                                            title="Next"
-                                        />
-                                    </div>
-                                    <span
-                                        id="pagination-info"
-                                        className="mt-4 block font-medium text-grey-800 transition-colors duration-500 dark:text-white-50"
-                                    >
-                                        Showing {props.offset + 1} - {upperPageBound} of {props.total}
-                                    </span>
-                                </Framer.motion.div>
-                            )}
-                        </Framer.AnimatePresence>
-                    )}
-                </article>
+                    error={props.error}
+                    isValidating={props.isValidating}
+                    limit={props.limit}
+                    noResultsMessage={props.noResultsMessage}
+                    offset={props.offset}
+                    results={results}
+                    setOffset={props.setOffset}
+                    total={props.total}
+                />
             </div>
         );
     }

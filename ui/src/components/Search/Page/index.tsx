@@ -14,8 +14,8 @@ type Props = {
     handleSearchFormSubmit: React.ReactEventHandler<HTMLFormElement>;
     isValidating: boolean;
     limit: number;
-    offset: number;
     noResultsMessage?: string;
+    offset: number;
     query: string | null;
     resetFilters?: () => void;
     results: SearchResults;

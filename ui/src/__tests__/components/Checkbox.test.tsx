@@ -1,5 +1,3 @@
-import '@testing-library/jest-dom';
-
 import * as Components from '@/components';
 
 import { render, screen } from '@testing-library/react';
