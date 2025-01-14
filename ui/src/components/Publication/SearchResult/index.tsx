@@ -39,13 +39,13 @@ const SearchResult: React.FC<Props> = (props): React.ReactElement => {
                     {props.title}
                 </p>
 
-                <p className="mb-4 block text-xs text-grey-700 transition-colors duration-500 dark:text-grey-50">
+                <div className="mb-4 block text-xs text-grey-700 transition-colors duration-500 dark:text-grey-50">
                     {props.description ? (
                         <p>{props.description}</p>
                     ) : props.content ? (
                         Helpers.truncateString(Helpers.htmlToText(props.content), 370)
                     ) : null}
-                </p>
+                </div>
             </div>
 
             <div className="flex justify-between">
