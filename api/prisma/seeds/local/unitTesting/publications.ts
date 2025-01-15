@@ -126,19 +126,17 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
             ]
         },
         publicationFlags: {
-            create: [
-                {
-                    id: 'publication-problem-live-flag-1',
-                    createdBy: 'test-user-2',
-                    category: 'PLAGIARISM',
-                    flagComments: {
-                        create: {
-                            createdBy: 'test-user-2',
-                            comment: 'This is a comment'
-                        }
+            create: {
+                id: 'publication-problem-live-flag-1',
+                createdBy: 'test-user-2',
+                category: 'PLAGIARISM',
+                flagComments: {
+                    create: {
+                        createdBy: 'test-user-2',
+                        comment: 'This is a comment'
                     }
                 }
-            ]
+            }
         }
     },
     {

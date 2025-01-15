@@ -25,7 +25,8 @@ describe('Get flags created by a user', () => {
             includeResolved: true
         });
         const flags = getUserFlags.body.data;
-        expect(flags.some((flag: { resolved: boolean; [key: string]: any }) => flag.resolved)).toEqual(true);
+        // Not the actual type but just to avoid implicit "any" typed value.
+        expect(flags.some((flag: { resolved: boolean }) => flag.resolved)).toEqual(true);
     });
 
     test('Invalid values for includeResolved param are rejected', async () => {

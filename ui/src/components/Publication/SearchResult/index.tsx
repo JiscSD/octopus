@@ -5,8 +5,9 @@ import * as Helpers from '@/helpers';
 import * as Config from '@/config';
 import * as Types from '@/types';
 
-type Props = {
-    coAuthors: { user?: { firstName: string; lastName: string; [key: string]: any }; [key: string]: any }[];
+type GenericCoAuthor = { user?: { firstName: string; lastName: string } };
+type Props<T extends GenericCoAuthor> = {
+    coAuthors: T[];
     content: string | null;
     description: string | null;
     flagCount?: number;
@@ -20,7 +21,7 @@ type Props = {
     className?: string;
 };
 
-const SearchResult: React.FC<Props> = (props): React.ReactElement => {
+const SearchResult: React.FC<Props<GenericCoAuthor>> = (props): React.ReactElement => {
     const authors = React.useMemo(() => {
         return props.coAuthors.map((author) => Helpers.abbreviateUserName(author.user)).join(', ');
     }, [props.coAuthors]);
