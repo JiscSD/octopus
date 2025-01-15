@@ -127,7 +127,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
         },
         publicationFlags: {
             create: {
-                id: 'publication-problem-live-flag-1',
+                id: 'publication-problem-live-flag',
                 createdBy: 'test-user-2',
                 category: 'PLAGIARISM',
                 flagComments: {
