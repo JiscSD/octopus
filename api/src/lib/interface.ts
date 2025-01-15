@@ -1079,3 +1079,8 @@ export interface HandledARI {
 }
 
 export type IngestReportFormat = 'email' | 'file';
+
+export interface TriggerAriIngestQueryParams {
+    apiKey: string;
+    dryRun?: boolean;
+}
