@@ -7,7 +7,7 @@ describe('Resolve a flag', () => {
     });
 
     test('The flagger can resolve the flag', async () => {
-        const resolveFlag = await testUtils.agent.post('/flags/publication-problem-live-flag-1/resolve').query({
+        const resolveFlag = await testUtils.agent.post('/flags/publication-problem-live-flag/resolve').query({
             apiKey: '987654321'
         });
 
@@ -15,7 +15,7 @@ describe('Resolve a flag', () => {
     });
 
     test('Only the flagger or super user can resolve the flag', async () => {
-        const resolveFlag = await testUtils.agent.post('/flags/publication-problem-live-flag-1/resolve').query({
+        const resolveFlag = await testUtils.agent.post('/flags/publication-problem-live-flag/resolve').query({
             apiKey: '123456789'
         });
 
@@ -23,7 +23,7 @@ describe('Resolve a flag', () => {
     });
 
     test('A super user can resolve the flag', async () => {
-        const resolveFlag = await testUtils.agent.post('/flags/publication-problem-live-flag-1/resolve').query({
+        const resolveFlag = await testUtils.agent.post('/flags/publication-problem-live-flag/resolve').query({
             apiKey: '000000004'
         });
 
@@ -31,7 +31,7 @@ describe('Resolve a flag', () => {
     });
 
     test('An unrelated user cannot resolve a flag', async () => {
-        const resolveFlag = await testUtils.agent.post('/flags/publication-problem-live-flag-1/resolve').query({
+        const resolveFlag = await testUtils.agent.post('/flags/publication-problem-live-flag/resolve').query({
             apiKey: '000000003'
         });
 

@@ -8,7 +8,7 @@ describe('Create flags comments on a flag', () => {
 
     test('User who created the flag can leave comments', async () => {
         const createFlagComment = await testUtils.agent
-            .post('/flags/publication-problem-live-flag-1/comment')
+            .post('/flags/publication-problem-live-flag/comment')
             .query({
                 apiKey: '987654321'
             })
@@ -21,7 +21,7 @@ describe('Create flags comments on a flag', () => {
 
     test('Owner of the publication can leave comments', async () => {
         const createFlagComment = await testUtils.agent
-            .post('/flags/publication-problem-live-flag-1/comment')
+            .post('/flags/publication-problem-live-flag/comment')
             .query({
                 apiKey: '123456789'
             })
@@ -59,7 +59,7 @@ describe('Create flags comments on a flag', () => {
 
     test('You can only leave a comment if you are either the author of the publication or the flagger', async () => {
         const createFlagComment = await testUtils.agent
-            .post('/flags/publication-problem-live-flag-1/comment')
+            .post('/flags/publication-problem-live-flag/comment')
             .query({
                 apiKey: '000000003'
             })
@@ -72,7 +72,7 @@ describe('Create flags comments on a flag', () => {
 
     test('The body of the request is invalid', async () => {
         const createFlagComment = await testUtils.agent
-            .post('/flags/publication-problem-live-flag-1/comment')
+            .post('/flags/publication-problem-live-flag/comment')
             .query({
                 apiKey: '123456789'
             })
