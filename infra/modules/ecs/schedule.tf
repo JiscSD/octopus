@@ -79,15 +79,6 @@ resource "aws_scheduler_schedule" "int_ari_import_cron" {
     arn      = aws_ecs_cluster.ecs.arn
     role_arn = aws_iam_role.scheduler.arn
 
-    input = jsonencode({
-      containerOverrides = [
-        {
-          command = ["npm", "run", "ariImport", "--", "dryRun=true", "reportFormat=email"]
-          name    = "ari-import"
-        }
-      ]
-    })
-
     dead_letter_config {
       arn = aws_sqs_queue.scheduler-dlq.arn
     }
@@ -121,6 +112,8 @@ resource "aws_scheduler_schedule" "prod_ari_import_cron" {
     arn      = aws_ecs_cluster.ecs.arn
     role_arn = aws_iam_role.scheduler.arn
 
+    # Override container command to do a dry run instead of a real one.
+    # The output will be checked before manually triggering a real run using the API.
     input = jsonencode({
       containerOverrides = [
         {
@@ -129,6 +122,10 @@ resource "aws_scheduler_schedule" "prod_ari_import_cron" {
         }
       ]
     })
+
+    dead_letter_config {
+      arn = aws_sqs_queue.scheduler-dlq.arn
+    }
 
     ecs_parameters {
       # Trimming the revision suffix here so that schedule always uses latest revision
