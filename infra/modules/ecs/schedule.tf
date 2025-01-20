@@ -1,18 +1,4 @@
-locals {
-  only_on_int_mapping = {
-    int  = 1
-    prod = 0
-  }
-  only_on_int = local.only_on_int_mapping[terraform.workspace]
-  only_on_prod_mapping = {
-    int  = 0
-    prod = 1
-  }
-  only_on_prod = local.only_on_prod_mapping[terraform.workspace]
-}
-
 # Code adapted from https://medium.com/@igorkachmaryk/using-terraform-to-setup-aws-eventbridge-scheduler-and-a-scheduled-ecs-task-1208ae077360
-
 resource "aws_iam_role" "scheduler" {
   name = "cron-scheduler-role-${var.environment}-${var.project_name}"
   assume_role_policy = jsonencode({
@@ -65,9 +51,8 @@ resource "aws_iam_policy" "scheduler" {
   })
 }
 
-resource "aws_scheduler_schedule" "int_ari_import_cron" {
-  count = local.only_on_int
-  name  = "ari-import-schedule-int"
+resource "aws_scheduler_schedule" "ari_import_cron" {
+  name = "ari-import-schedule-int"
 
   flexible_time_window {
     mode = "OFF"
@@ -79,49 +64,16 @@ resource "aws_scheduler_schedule" "int_ari_import_cron" {
     arn      = aws_ecs_cluster.ecs.arn
     role_arn = aws_iam_role.scheduler.arn
 
-    dead_letter_config {
-      arn = aws_sqs_queue.scheduler-dlq.arn
-    }
-
-    ecs_parameters {
-      # Trimming the revision suffix here so that schedule always uses latest revision
-      task_definition_arn = trimsuffix(aws_ecs_task_definition.ari-import.arn, ":${aws_ecs_task_definition.ari-import.revision}")
-      launch_type         = "FARGATE"
-
-      network_configuration {
-        security_groups = [aws_security_group.ari-import-task-sg.id]
-        subnets         = var.private_subnet_ids
-      }
-    }
-  }
-}
-
-# This should be the same as the int schedule, but override the container command to do a dry run,
-# and only be deployed to prod (using the count attribute)
-resource "aws_scheduler_schedule" "prod_ari_import_cron" {
-  count = local.only_on_prod
-  name  = "ari-import-schedule-prod"
-
-  flexible_time_window {
-    mode = "OFF"
-  }
-
-  schedule_expression = "cron(0 5 ? * TUE *)" # Run every Tuesday at 5AM
-
-  target {
-    arn      = aws_ecs_cluster.ecs.arn
-    role_arn = aws_iam_role.scheduler.arn
-
-    # Override container command to do a dry run instead of a real one.
+    # On prod, override container command to do a dry run instead of a real one.
     # The output will be checked before manually triggering a real run using the API.
-    input = jsonencode({
+    input = terraform.workspace == "prod" ? jsonencode({
       containerOverrides = [
         {
           command = ["npm", "run", "ariImport", "--", "dryRun=true", "reportFormat=email"]
           name    = "ari-import"
         }
       ]
-    })
+    }) : null
 
     dead_letter_config {
       arn = aws_sqs_queue.scheduler-dlq.arn
