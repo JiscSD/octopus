@@ -14,6 +14,19 @@ import * as I from 'interface';
  *       recent successful ingest (if this start time is available).
  */
 export const incrementalAriIngest = async (dryRun: boolean, reportFormat: I.IngestReportFormat): Promise<string> => {
+    // Check if a process is currently running.
+    const lastLog = await ingestLogService.getMostRecentLog('ARI', true);
+
+    if (lastLog && !lastLog.end) {
+        if (dryRun) {
+            console.log(
+                'This run would have been cancelled because another run is currently in progress. However, the run has still been simulated.'
+            );
+        } else {
+            return 'Did not run ingest. Either an import is already in progress or the last import failed.';
+        }
+    }
+
     const start = new Date();
     const MAX_UNCHANGED_STREAK = 5;
     // Get most start time of last successful run to help us know when to stop.
@@ -155,13 +168,20 @@ export const incrementalAriIngest = async (dryRun: boolean, reportFormat: I.Inge
     return `${preamble} ${writeCount} publication${writeCount !== 1 ? 's' : ''}.`;
 };
 
-export const triggerECSTask = async (): Promise<string> => {
-    await ecs.runFargateTask({
-        clusterArn: Helpers.checkEnvVariable('ECS_CLUSTER_ARN'),
-        securityGroups: [Helpers.checkEnvVariable('ECS_TASK_SECURITY_GROUP_ID')],
-        subnetIds: Helpers.checkEnvVariable('PRIVATE_SUBNET_IDS').split(','),
-        taskDefinitionId: Helpers.checkEnvVariable('ECS_TASK_DEFINITION_ID')
-    });
+export const triggerAriIngest = async (dryRun?: boolean): Promise<string> => {
+    if (process.env.STAGE !== 'local') {
+        // If not local, trigger task to run in ECS.
+        await ecs.runFargateTask({
+            clusterArn: Helpers.checkEnvVariable('ECS_CLUSTER_ARN'),
+            ...(dryRun && { commandOverride: ['npm', 'run', 'ariImport', '--', 'dryRun=true', 'reportFormat=email'] }),
+            securityGroups: [Helpers.checkEnvVariable('ECS_TASK_SECURITY_GROUP_ID')],
+            subnetIds: Helpers.checkEnvVariable('PRIVATE_SUBNET_IDS').split(','),
+            taskDefinitionId: Helpers.checkEnvVariable('ECS_TASK_DEFINITION_ID')
+        });
 
-    return 'Done';
+        return 'Task triggered.';
+    } else {
+        // If local, just run the ingest directly.
+        return await incrementalAriIngest(!!dryRun, 'file');
+    }
 };
