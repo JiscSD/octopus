@@ -1,1 +1,1 @@
-export { default as incrementalAriIngestHttp } from './incrementalAriIngestHttp';
+export { default as triggerAriIngest } from './triggerAriIngest';

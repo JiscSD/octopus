@@ -428,9 +428,10 @@ describe('ARI import processes', () => {
             .post('/integrations/ari/incremental')
             .query({ apiKey: process.env.TRIGGER_ARI_INGEST_API_KEY });
 
-        expect(triggerImport.status).toEqual(202);
+        // May not seem right but the service task has technically been triggered, hence 200.
+        expect(triggerImport.status).toEqual(200);
         expect(triggerImport.body).toMatchObject({
-            message: 'Cancelling ingest. Either an import is already in progress or the last import failed.'
+            message: 'Did not run ingest. Either an import is already in progress or the last import failed.'
         });
     });
 });
