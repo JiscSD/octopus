@@ -16,10 +16,6 @@ export const handler = async (event) => {
   const bucket = event.Records[0].s3.bucket.name;
   const key = event.Records[0].s3.object.key;
 
-  // Whether we are validating our metadata (using the pubrouter validate endpoint), as opposed to sending it for real.
-  // As of OC-898 we are using the real (notification) endpoint on int and prod.
-  const validate = false;
-
   const pdfUrl = `https://${bucket}.s3.amazonaws.com/${key}`;
 
   const publicationId = key.replace(/\.pdf$/, "");
@@ -52,44 +48,40 @@ export const handler = async (event) => {
 
     console.log("PDF metadata: ", JSON.stringify(pdfMetadata));
 
-    const apiResponse = await postToPubrouter(pdfMetadata, validate);
+    const apiResponse = await postToPubrouter(pdfMetadata);
     const apiResponseJSON = await apiResponse.json();
 
     console.log("Pubrouter response JSON: ", apiResponseJSON);
 
     // Check the API response and handle failures
-    // If validating, don't retry on a validation failure.
-    if (
-      apiResponse.ok ||
-      (validate && apiResponseJSON.summary.startsWith("Validation failed"))
-    ) {
+    if (apiResponse.ok) {
       return baseJSONResponse(
         200,
-        "Successfully submitted to publication router"
+        "Successfully submitted to publications router"
       );
     } else {
       // Retry once
       console.log("First attempt failed; retrying");
-      const retry = await postToPubrouter(pdfMetadata, validate);
+      const retry = await postToPubrouter(pdfMetadata);
       if (retry.ok) {
         return baseJSONResponse(
           200,
-          "Successfully submitted to publication router"
+          "Successfully submitted to publications router"
         );
       } else {
         const retryJSON = await retry.json();
         await sendFailureEmail(JSON.stringify(retryJSON), event, publicationId);
-        return baseJSONResponse(500, "Failed to submit to publication router");
+        return baseJSONResponse(500, "Failed to submit to publications router");
       }
     }
   } catch (error) {
     console.log("Error uploading to pubrouter: ", error.message);
     await sendFailureEmail(error, event, publicationId);
-    return baseJSONResponse(500, "Error submitting to publication router");
+    return baseJSONResponse(500, "Error submitting to publications router");
   }
 };
 
-const postToPubrouter = async (pdfMetadata, validate = false) => {
+const postToPubrouter = async (pdfMetadata) => {
   const publicationType = pdfMetadata.metadata.article.type.replace(
     publicationTypePrefix,
     ""
@@ -102,10 +94,10 @@ const postToPubrouter = async (pdfMetadata, validate = false) => {
     );
   } else {
     const apiKey = apiKeys[publicationType];
-    // Temporarily using the validation endpoint, instead of the notification one
-    const apiEndpoint = validate
-      ? `https://uat.pubrouter.jisc.ac.uk/api/v4/validate?api_key=${apiKey}`
-      : `https://uat.pubrouter.jisc.ac.uk/api/v4/notification?api_key=${apiKey}`;
+    // Hit UAT endpoint if not running on prod.
+    const apiEndpoint = `https://${
+      process.env.ENVIRONMENT !== "prod" ? "uat." : ""
+    }pubrouter.jisc.ac.uk/api/v4/notification?api_key=${apiKey}`;
 
     const response = await fetch(apiEndpoint, {
       method: "POST",
