@@ -671,7 +671,14 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                         : undefined
                 }
             >
-                <section className="col-span-12 lg:col-span-8 xl:col-span-9">
+                <section
+                    id={
+                        publicationVersion.user.role === 'ORGANISATION'
+                            ? `organisation-${publicationVersion.user.id}-publication`
+                            : undefined
+                    }
+                    className="col-span-12 lg:col-span-8 xl:col-span-9"
+                >
                     {alerts}
                     {showApprovalsTracker && (
                         <>

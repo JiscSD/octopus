@@ -2,7 +2,7 @@
 const isLocal = process.env.NODE_ENV === 'development';
 const CSPDirectives = [
     "default-src 'none';",
-    `script-src 'self' https://live.matomo.jisc.ac.uk ${isLocal ? "'unsafe-eval'" : ''};`,
+    `script-src 'self' https://live.matomo.jisc.ac.uk 'sha256-i6f/49srVFuOjNVfFr0wuerEVL1EPOoBwnrjWDUm1UA=' ${isLocal ? "'unsafe-eval'" : ''};`,
     "style-src 'self' 'unsafe-inline';",
     `connect-src 'self' https://*.api.octopus.ac http://127.0.0.1:4003 https://api.octopus.ac https://api.ror.org https://cdn.contentful.com https://live.matomo.jisc.ac.uk;`,
     `img-src https: data: ${isLocal ? 'http:' : ''};`,
