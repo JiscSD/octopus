@@ -46,7 +46,7 @@ const App = ({ Component, pageProps }: Types.AppProps<CustomProps>) => {
                     content="Free, fast and fair: the global primary research record where researchers publish their work in full detail."
                 />
             </Head>
-            <Script>
+            <Script id="matomo-tag-manager-init">
                 {`
                 var _mtm = window._mtm = window._mtm || [];
                 _mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
