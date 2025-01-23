@@ -40,6 +40,7 @@ jobs:
           DATACITE_PASSWORD: ${{ secrets.DATACITE_PASSWORD }}
           ORCID_ID: ${{ secrets.ORCID_ID }}
           ORCID_SECRET: ${{ secrets.ORCID_SECRET }}
+          PUBROUTER_API_KEYS: ${{ secrets.PUBROUTER_API_KEYS }}
         run: |
           export SERVERLESS_LICENSE_KEY=`aws ssm get-parameter --name ${{ secrets.SERVERLESS_LICENSE_KEY_SSM_PARAMETER_ARN }} --query "Parameter.Value" --output text`
           docker compose up -d --build

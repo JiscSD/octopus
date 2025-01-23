@@ -1084,3 +1084,7 @@ export interface TriggerAriIngestQueryParams {
     apiKey: string;
     dryRun?: boolean;
 }
+
+export interface LocalNotifyPubRouterPathParams {
+    publicationId: string;
+}

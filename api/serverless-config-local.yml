@@ -1,0 +1,9 @@
+# Config only used locally
+functions:
+    notifyPubRouter:
+        handler: dist/src/components/pubRouter/controller.notifyPubRouter
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publications/{publicationId}/notifyPubRouter
+                method: POST
+                cors: true 
