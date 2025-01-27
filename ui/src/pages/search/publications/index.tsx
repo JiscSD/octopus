@@ -401,6 +401,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                     />
                 </label>
                 <Components.Button
+                    className="w-full justify-center"
                     endIcon={<SolidIcons.CheckCircleIcon className="h-5 w-5 text-teal-500" />}
                     onClick={applyDateFilter}
                     variant="block"
