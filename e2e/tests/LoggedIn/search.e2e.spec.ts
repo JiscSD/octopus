@@ -45,8 +45,8 @@ test.describe('Search term is persisted in URL query string', () => {
 });
 
 const testDateInput = async (page: Page, dateFromInput: Locator, dateToInput: Locator): Promise<void> => {
-    await expect(dateFromInput).toHaveAttribute('value', PageModel.search.dateFrom);
-    await expect(dateToInput).toHaveAttribute('value', PageModel.search.dateTo);
+    await expect(dateFromInput).toHaveValue(PageModel.search.dateFrom);
+    await expect(dateToInput).toHaveValue(PageModel.search.dateTo);
 
     await page.waitForURL(
         `**/search/publications?dateTo=${PageModel.search.dateTo}&dateFrom=${PageModel.search.dateFrom}`
@@ -65,10 +65,8 @@ test.describe('dateTo and dateFrom fields are persisted in URL query string', ()
         const dateToInput = page.locator(PageModel.search.dateToInput);
 
         await dateFromInput.fill(PageModel.search.dateFrom);
-        // Wait for request because filling the dateFrom field will trigger it, and filling in the next field
-        // before it's ready will stop it being added to the URL.
-        await page.waitForResponse((response) => response.url().includes('/publication-versions'));
         await dateToInput.fill(PageModel.search.dateTo);
+        await page.getByRole('button', { name: 'Apply date filter' }).click();
 
         // expect dateFrom/dateTo input and URL to match selections
         await testDateInput(page, dateFromInput, dateToInput);

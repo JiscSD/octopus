@@ -2,6 +2,7 @@ import Head from 'next/head';
 import React from 'react';
 import useSWR from 'swr';
 import * as Router from 'next/router';
+import * as SolidIcons from '@heroicons/react/24/solid';
 
 import * as api from '@/api';
 import * as Components from '@/components';
@@ -164,6 +165,8 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
     const [publicationTypes, setPublicationTypes] = React.useState(props.publicationTypes || '');
     const [dateFrom, setDateFrom] = React.useState(props.dateFrom ? props.dateFrom : '');
     const [dateTo, setDateTo] = React.useState(props.dateTo ? props.dateTo : '');
+    const dateFromRef = React.useRef<HTMLInputElement>(null);
+    const dateToRef = React.useRef<HTMLInputElement>(null);
     // param for pagination
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
@@ -205,28 +208,24 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
         setQuery(searchTerm);
     };
 
-    const handleDateFormSubmit = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
-        e.preventDefault();
-        const newDate = e.target.value;
-
-        const [dateFrom, dateTo, setDate] =
-            e.target.getAttribute('id') === 'date-from'
-                ? [newDate, router.query.dateTo, setDateFrom]
-                : [router.query.dateFrom, newDate, setDateTo];
-
+    const applyDateFilter = async (): Promise<void> => {
         await router.push(
             {
                 query: {
                     ...router.query,
-                    dateTo,
-                    dateFrom
+                    dateTo: dateToRef.current?.value || '',
+                    dateFrom: dateFromRef.current?.value || ''
                 }
             },
             undefined,
             { shallow: true }
         );
-
-        setDate(newDate);
+        if (dateFromRef.current?.value) {
+            setDateFrom(dateFromRef.current.value);
+        }
+        if (dateToRef.current?.value) {
+            setDateTo(dateToRef.current.value);
+        }
     };
 
     const collateAuthorTypes = async (e: React.ChangeEvent<HTMLInputElement>, value: string): Promise<void> => {
@@ -278,7 +277,9 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
         setLimit(10);
         setPublicationTypes('');
         setDateFrom('');
+        dateFromRef.current && (dateFromRef.current.value = '');
         setDateTo('');
+        dateToRef.current && (dateToRef.current.value = '');
         setAuthorTypes('');
     };
 
@@ -365,7 +366,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                     </div>
                 </div>
             </fieldset>
-            <fieldset className="col-span-12 lg:col-span-3 xl:col-span-4 space-y-3">
+            <fieldset className="col-span-12 lg:col-span-3 xl:col-span-4 space-y-4">
                 <legend className="pb-2 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
                     Date Range
                 </legend>
@@ -380,8 +381,8 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                         placeholder="Date from..."
                         className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                         disabled={isValidating}
-                        value={dateFrom}
-                        onChange={(e) => handleDateFormSubmit(e)}
+                        ref={dateFromRef}
+                        defaultValue={dateFrom}
                     />
                 </label>
                 <label htmlFor="date-to" className="relative block w-full">
@@ -395,10 +396,16 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                         placeholder="Date to..."
                         className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                         disabled={isValidating}
-                        value={dateTo}
-                        onChange={(e) => handleDateFormSubmit(e)}
+                        ref={dateToRef}
+                        defaultValue={dateTo}
                     />
                 </label>
+                <Components.Button
+                    endIcon={<SolidIcons.CheckCircleIcon className="h-5 w-5 text-teal-500" />}
+                    onClick={applyDateFilter}
+                    variant="block"
+                    title="Apply date filter"
+                />
             </fieldset>
         </>
     );
