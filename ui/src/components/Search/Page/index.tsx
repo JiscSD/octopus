@@ -14,8 +14,8 @@ type Props = {
     handleSearchFormSubmit: React.ReactEventHandler<HTMLFormElement>;
     isValidating: boolean;
     limit: number;
-    offset: number;
     noResultsMessage?: string;
+    offset: number;
     query: string | null;
     resetFilters?: () => void;
     results: SearchResults;
@@ -37,6 +37,7 @@ const SearchPage = React.forwardRef(
                     <Components.SearchInterface
                         error={props.error}
                         filters={props.filters}
+                        fullScreen={true}
                         handleSearchFormSubmit={props.handleSearchFormSubmit}
                         isValidating={props.isValidating}
                         limit={props.limit}

@@ -21,8 +21,8 @@ test.describe('My account page', () => {
     test('My account page filters are enabled by default', async () => {
         await expect(page.locator(`h1:has-text("${Helpers.users.user1.fullName}")`)).toBeVisible();
 
-        const includeLiveVersion = page.locator('input#include-live-version');
-        const includeDraftVersion = page.locator('input#include-draft-version');
+        const includeLiveVersion = page.locator('input#include-live-versions');
+        const includeDraftVersion = page.locator('input#include-draft-versions');
 
         await expect(includeLiveVersion).toBeVisible();
         await expect(includeDraftVersion).toBeVisible();
@@ -44,7 +44,7 @@ test.describe('My account page', () => {
         await expect(page.getByText('Never published').first()).toBeVisible();
 
         // uncheck DRAFT
-        const includeLiveVersion = page.locator('input#include-draft-version');
+        const includeLiveVersion = page.locator('input#include-draft-versions');
         await includeLiveVersion.uncheck();
         await page.waitForResponse((response) => response.url().includes('&versionStatus=LIVE') && response.ok());
 
@@ -60,7 +60,7 @@ test.describe('My account page', () => {
         await expect(page.locator('button[title="Create Draft Version"]').first()).toBeVisible();
 
         // uncheck LIVE
-        const includeLiveVersion = page.locator('input#include-live-version');
+        const includeLiveVersion = page.locator('input#include-live-versions');
         await includeLiveVersion.uncheck();
         await page.waitForResponse(
             (response) => response.url().includes('&versionStatus=DRAFT,LOCKED') && response.ok()
@@ -75,14 +75,14 @@ test.describe('My account page', () => {
         await page.reload();
 
         // uncheck LIVE
-        const includeLiveVersion = page.locator('input#include-live-version');
+        const includeLiveVersion = page.locator('input#include-live-versions');
         await includeLiveVersion.uncheck();
         await page.waitForResponse(
             (response) => response.url().includes('&versionStatus=DRAFT,LOCKED') && response.ok()
         );
 
         // uncheck DRAFT
-        const includeDraftVersion = page.locator('input#include-draft-version');
+        const includeDraftVersion = page.locator('input#include-draft-versions');
         await includeDraftVersion.uncheck();
         await page.waitForResponse((response) => response.url().includes('/publications?limit=') && response.ok());
     });

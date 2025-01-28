@@ -107,18 +107,14 @@ const RelatedPublicationsViewAllModal: React.FC<Props> = (props): React.ReactEle
                     </div>
                 </fieldset>
                 {user && (
-                    <label htmlFor={ownFilterInputId} className="flex items-center sm:w-1/2 sm:justify-end sm:pt-5">
-                        <input
-                            type="checkbox"
-                            id={ownFilterInputId}
-                            className="rounded-sm"
-                            checked={ownLinks}
-                            onChange={(event) => setOwnLinks(event.target.checked)}
-                        />
-                        <span className="text-gray-700 ml-3 block text-sm font-medium sm:text-nowrap">
-                            View my suggestions
-                        </span>
-                    </label>
+                    <Components.Checkbox
+                        checked={ownLinks}
+                        className="sm:w-1/2 sm:justify-end sm:pt-5"
+                        id={ownFilterInputId}
+                        label="View my suggestions"
+                        name="view-own"
+                        onChange={(event) => setOwnLinks(event.target.checked)}
+                    />
                 )}
             </div>
             <h4 className="sr-only">Results</h4>

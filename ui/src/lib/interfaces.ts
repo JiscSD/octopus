@@ -230,7 +230,7 @@ export interface User extends CoreUser {
     works: WorksRecord[];
 }
 
-export interface SearchResults<T extends Publication | PublicationVersion | User> {
+export interface SearchResults<T extends FlagByUser | Publication | PublicationVersion | User> {
     data: T[];
     metadata: SearchResultMeta;
 }
@@ -381,6 +381,18 @@ export interface Flag {
 
 export interface FlagWithComments extends Flag {
     flagComments: FlagComment[];
+}
+
+export interface FlagByUser extends Omit<Flag, 'publicationId' | 'user' | 'createdBy'> {
+    publication: Pick<CorePublication, 'id' | 'type'> & {
+        versions: [
+            Pick<PublicationVersion, 'content' | 'description' | 'publishedDate' | 'title'> & {
+                coAuthors: {
+                    user: Pick<CoreUser, 'firstName' | 'lastName'>;
+                }[];
+            }
+        ];
+    };
 }
 
 export interface PublicationUpdateRequestBody extends JSON {

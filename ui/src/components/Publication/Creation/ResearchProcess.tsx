@@ -48,28 +48,22 @@ const ResearchProcess: React.FC = () => {
                 </>
             )}
             <fieldset className="my-8 space-y-4">
-                <label htmlFor="self-declaration" className="flex items-center space-x-2 hover:cursor-pointer">
-                    <input
-                        id="self-declaration"
-                        aria-describedby={publicationVersion.publication.type}
-                        name="self-declaration"
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed"
-                        checked={publicationVersion.selfDeclaration}
-                        onChange={() =>
-                            updatePublicationVersion({
-                                ...publicationVersion,
-                                selfDeclaration: !publicationVersion.selfDeclaration
-                            })
-                        }
-                    />
-                    <span className="ml-2 text-grey-800 transition-colors duration-500 dark:text-white-50">
-                        {publicationVersion.publication.type === 'PROTOCOL' &&
-                            'Results have not yet been collected according to this method.'}
-                        {publicationVersion.publication.type === 'HYPOTHESIS' &&
-                            'Results have not yet been collected to test this hypothesis (i.e. this is a pre-registration).'}
-                    </span>
-                </label>
+                <Components.Checkbox
+                    checked={publicationVersion.selfDeclaration}
+                    id="self-declaration"
+                    label={
+                        publicationVersion.publication.type === 'PROTOCOL'
+                            ? 'Results have not yet been collected according to this method.'
+                            : 'Results have not yet been collected to test this hypothesis (i.e. this is a pre-registration).'
+                    }
+                    name="self-declaration"
+                    onChange={() =>
+                        updatePublicationVersion({
+                            ...publicationVersion,
+                            selfDeclaration: !publicationVersion.selfDeclaration
+                        })
+                    }
+                />
             </fieldset>
         </>
     );

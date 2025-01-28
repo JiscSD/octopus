@@ -51,7 +51,7 @@ test.describe('User profiles', () => {
         await expect(page.getByText(/Showing 1 - 10 of \d+/)).toBeVisible();
 
         // Change page.
-        await page.getByLabel('Next').click();
+        await octopusPublicationsSection.getByLabel('Next').click();
         await page.waitForResponse(
             (response) =>
                 response.request().method() === 'GET' &&
@@ -60,7 +60,7 @@ test.describe('User profiles', () => {
         await expect(page.getByText(/Showing 11 - 20 of \d+/)).toBeVisible();
 
         // Enter a query term and filter results.
-        await page.getByLabel('Quick search').fill('muco-cutaneous');
+        await octopusPublicationsSection.getByLabel('Quick search').fill('muco-cutaneous');
         await octopusPublicationsSection.getByRole('button', { name: 'Search' }).click();
         await page.waitForResponse(
             (response) =>
@@ -70,7 +70,7 @@ test.describe('User profiles', () => {
 
         // Expect 1 result and disabled prev/next buttons.
         await expect(await octopusPublicationsSection.locator('a').count()).toEqual(1);
-        await expect(page.getByLabel('Previous')).toBeDisabled();
-        await expect(page.getByLabel('Next')).toBeDisabled();
+        await expect(octopusPublicationsSection.getByLabel('Previous')).toBeDisabled();
+        await expect(octopusPublicationsSection.getByLabel('Next')).toBeDisabled();
     });
 });

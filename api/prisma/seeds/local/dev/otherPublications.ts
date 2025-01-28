@@ -33,6 +33,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 createdAt: '2020-05-22T15:51:42.523Z',
                 updatedAt: '2020-05-22T15:51:42.523Z',
                 user: { connect: { id: users.user1 } },
+                coAuthors: {
+                    create: { linkedUser: users.user1, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
@@ -67,6 +70,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] },
                 coAuthors: {
                     create: [
+                        { linkedUser: users.user1, email: '', confirmedCoAuthor: true, approvalRequested: false },
                         {
                             email: 'example_1@jisc.ac.uk',
                             code: 'random_bad_code_not_needed',
@@ -112,6 +116,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 createdAt: '2021-03-13T15:51:42.523Z',
                 updatedAt: '2021-03-13T15:51:42.523Z',
                 user: { connect: { id: users.user1 } },
+                coAuthors: {
+                    create: { linkedUser: users.user1, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-22T15:51:42.523Z' },
@@ -144,6 +151,7 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-21T10:00:42.523Z' }] },
                 coAuthors: {
                     create: [
+                        { linkedUser: users.user1, email: '', confirmedCoAuthor: true, approvalRequested: false },
                         {
                             email: 'example_1@jisc.ac.uk',
                             code: 'random_bad_code_not_needed',
@@ -188,6 +196,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 createdAt: '2021-09-08T15:51:42.523Z',
                 updatedAt: '2021-09-08T15:51:42.523Z',
                 user: { connect: { id: users.user1 } },
+                coAuthors: {
+                    create: { linkedUser: users.user1, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-22T15:51:42.523Z' },
@@ -208,6 +219,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Draft Protocol of Improving the quality of life for sustainable development',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: users.user1 } },
+                coAuthors: {
+                    create: { linkedUser: users.user1, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-21T10:00:42.523Z' }] }
             }
         }
@@ -236,6 +250,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 description: 'Description: Table.',
                 keywords: ['science', 'technology'],
                 user: { connect: { id: users.user1 } },
+                coAuthors: {
+                    create: { linkedUser: users.user1, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -256,6 +273,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Draft Data attached to Improving the quality of life for sustainable development',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: users.user1 } },
+                coAuthors: {
+                    create: { linkedUser: users.user1, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-21T10:00:42.523Z' }] }
             }
         }
@@ -284,6 +304,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 description: 'Description: Improving quality of life on fragile environment',
                 keywords: ['science', 'technology'],
                 user: { connect: { id: users.user1 } },
+                coAuthors: {
+                    create: { linkedUser: users.user1, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -304,6 +327,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Draft Analysis of Improving the quality of life for sustainable development',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: users.user1 } },
+                coAuthors: {
+                    create: { linkedUser: users.user1, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-21T10:00:42.523Z' }] }
             }
         }
@@ -335,6 +361,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                     'Description: During 1960s and 1970s, many countries in Southeast Asia were in the phase of new town growth.',
                 keywords: ['science', 'technology'],
                 user: { connect: { id: users.user1 } },
+                coAuthors: {
+                    create: { linkedUser: users.user1, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -355,6 +384,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Draft Interpretation of Improving the quality of life for sustainable development',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: users.user1 } },
+                coAuthors: {
+                    create: { linkedUser: users.user1, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-21T10:00:42.523Z' }] }
             }
         }
@@ -384,6 +416,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                     'Description: Sustainable development means to protect, preserve and conserve the natural environment for the future needs.',
                 keywords: ['science', 'technology'],
                 user: { connect: { id: users.user1 } },
+                coAuthors: {
+                    create: { linkedUser: users.user1, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -404,6 +439,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Draft Conclusion of Improving the quality of life for sustainable development',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: users.user1 } },
+                coAuthors: {
+                    create: { linkedUser: users.user1, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-21T10:00:42.523Z' }] }
             }
         }
@@ -432,6 +470,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2019-01-25T15:51:42.523Z',
                 user: { connect: { id: users.user2 } },
+                coAuthors: {
+                    create: { linkedUser: users.user2, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
@@ -452,6 +493,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'How can we model the epidemiology of COVID-19?',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: users.user2 } },
+                coAuthors: {
+                    create: { linkedUser: users.user2, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
         }
@@ -478,6 +522,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: users.user2 } },
+                coAuthors: {
+                    create: { linkedUser: users.user2, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-22T15:51:42.523Z' },
@@ -504,6 +551,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Are patients with hypertension and diabetes mellitus at increased risk for COVID-19 infection?',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: users.user2 } },
+                coAuthors: {
+                    create: { linkedUser: users.user2, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-21T10:00:42.523Z' }] }
             }
         }
@@ -532,6 +582,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: users.user2 } },
+                coAuthors: {
+                    create: { linkedUser: users.user2, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-22T15:51:42.523Z' },
@@ -558,6 +611,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Relations are contingent upon the level of community access to these places',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: users.user2 } },
+                coAuthors: {
+                    create: { linkedUser: users.user2, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-21T10:00:42.523Z' }] }
             }
         }
@@ -584,6 +640,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2018-04-28T15:51:42.523Z',
                 user: { connect: { id: users.user2 } },
+                coAuthors: {
+                    create: { linkedUser: users.user2, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -611,6 +670,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 content: 'Results of review - *add in* Table 5-10 and Appendices.',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: users.user2 } },
+                coAuthors: {
+                    create: { linkedUser: users.user2, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-21T10:00:42.523Z' }] }
             }
         }
@@ -640,6 +702,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2021-09-27T15:51:42.523Z',
                 user: { connect: { id: users.user2 } },
+                coAuthors: {
+                    create: { linkedUser: users.user2, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -666,6 +731,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Meta-analysis of COVID-19 cases',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: users.user2 } },
+                coAuthors: {
+                    create: { linkedUser: users.user2, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-21T10:00:42.523Z' }] }
             }
         }
@@ -692,6 +760,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: users.user2 } },
+                coAuthors: {
+                    create: { linkedUser: users.user2, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -718,6 +789,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Could treatment for COPD be protective against COVID-19 symptoms?',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: users.user2 } },
+                coAuthors: {
+                    create: { linkedUser: users.user2, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-21T10:00:42.523Z' }] }
             }
         }
@@ -744,6 +818,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2021-06-25T15:51:42.523Z',
                 user: { connect: { id: users.user2 } },
+                coAuthors: {
+                    create: { linkedUser: users.user2, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -770,6 +847,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Corticosteroid treatment may help prevent ARDS development in COVID-19 patients',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: users.user2 } },
+                coAuthors: {
+                    create: { linkedUser: users.user2, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-21T10:00:42.523Z' }] }
             }
         }
@@ -801,6 +881,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 createdAt: '2020-04-30T16:51:42.523Z',
                 updatedAt: '2020-05-15T16:51:42.523Z',
                 user: { connect: { id: users.user4 } },
+                coAuthors: {
+                    create: { linkedUser: users.user4, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -834,6 +917,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 createdAt: '2020-04-30T16:51:42.523Z',
                 updatedAt: '2022-05-21T16:51:42.523Z',
                 user: { connect: { id: users.user4 } },
+                coAuthors: {
+                    create: { linkedUser: users.user4, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -879,6 +965,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2022-03-01T15:51:42.523Z',
                 user: { connect: { id: users.user4 } },
+                coAuthors: {
+                    create: { linkedUser: users.user4, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -935,6 +1024,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 createdAt: '2021-04-30T16:51:42.523Z',
                 updatedAt: '2021-09-13T16:51:42.523Z',
                 user: { connect: { id: users.user5 } },
+                coAuthors: {
+                    create: { linkedUser: users.user5, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2021-09-20T16:51:42.523Z' },
@@ -1017,6 +1109,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 createdAt: '2021-09-25T16:51:42.523Z',
                 updatedAt: '2021-09-25T16:51:42.523Z',
                 user: { connect: { id: users.user5 } },
+                coAuthors: {
+                    create: { linkedUser: users.user5, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -1084,6 +1179,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 createdAt: '2021-09-25T16:51:42.523Z',
                 updatedAt: '2021-09-25T16:51:42.523Z',
                 user: { connect: { id: users.user6 } },
+                coAuthors: {
+                    create: { linkedUser: users.user6, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -1114,6 +1212,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 createdAt: '2021-09-25T16:51:42.523Z',
                 updatedAt: '2021-09-25T16:51:42.523Z',
                 user: { connect: { id: users.user6 } },
+                coAuthors: {
+                    create: { linkedUser: users.user6, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' }] }
             }
         }
@@ -1208,6 +1309,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 createdAt: '2022-01-23T15:51:42.523Z',
                 updatedAt: '2022-01-25T15:51:42.523Z',
                 user: { connect: { id: users.user7 } },
+                coAuthors: {
+                    create: { linkedUser: users.user7, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
@@ -1253,6 +1357,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2009-06-23T15:51:42.523Z',
                 user: { connect: { id: users.user7 } },
+                coAuthors: {
+                    create: { linkedUser: users.user7, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -1282,6 +1389,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 createdAt: '2021-09-25T16:51:42.523Z',
                 updatedAt: '2021-09-25T16:51:42.523Z',
                 user: { connect: { id: users.user7 } },
+                coAuthors: {
+                    create: { linkedUser: users.user7, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' }] }
             }
         }
@@ -1310,6 +1420,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 createdAt: '2021-09-25T16:51:42.523Z',
                 updatedAt: '2021-09-25T16:51:42.523Z',
                 user: { connect: { id: users.user7 } },
+                coAuthors: {
+                    create: { linkedUser: users.user7, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -1341,6 +1454,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2021-09-29T15:51:42.523Z',
                 user: { connect: { id: users.user3 } },
+                coAuthors: {
+                    create: { linkedUser: users.user3, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -1372,6 +1488,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2012-01-29T15:51:42.523Z',
                 user: { connect: { id: users.user3 } },
+                coAuthors: {
+                    create: { linkedUser: users.user3, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -1402,6 +1521,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2020-01-15T15:51:42.523Z',
                 user: { connect: { id: users.user3 } },
+                coAuthors: {
+                    create: { linkedUser: users.user3, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -1433,6 +1555,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2020-02-14T15:51:42.523Z',
                 user: { connect: { id: users.user3 } },
+                coAuthors: {
+                    create: { linkedUser: users.user3, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -1464,6 +1589,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: users.user3 } },
+                coAuthors: {
+                    create: { linkedUser: users.user3, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -1495,6 +1623,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2019-01-01T15:51:42.523Z',
                 user: { connect: { id: users.user3 } },
+                coAuthors: {
+                    create: { linkedUser: users.user3, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -1526,6 +1657,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: users.user3 } },
+                coAuthors: {
+                    create: { linkedUser: users.user3, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -1556,6 +1690,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2021-01-02T15:51:42.523Z',
                 user: { connect: { id: users.user3 } },
+                coAuthors: {
+                    create: { linkedUser: users.user3, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -1586,6 +1723,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: users.user3 } },
+                coAuthors: {
+                    create: { linkedUser: users.user3, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T16:51:42.523Z' },
@@ -1612,6 +1752,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Review of Interpretation of the results from pathology of a patient who died of COVID-19 in Wuhan',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: users.user3 } },
+                coAuthors: {
+                    create: { linkedUser: users.user3, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-21T10:00:42.523Z' }] }
             }
         }
@@ -1637,6 +1780,9 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: users.user3 } },
+                coAuthors: {
+                    create: { linkedUser: users.user3, email: '', confirmedCoAuthor: true, approvalRequested: false }
+                },
                 publicationStatus: { create: [{ status: 'LIVE', createdAt: '2022-01-21T10:00:42.523Z' }] }
             }
         }
@@ -1662,6 +1808,14 @@ const newPublicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2024-04-09T13:54:00.000Z',
                 user: { connect: { id: 'test-organisational-account-1' } },
+                coAuthors: {
+                    create: {
+                        linkedUser: 'test-organisational-account-1',
+                        email: '',
+                        confirmedCoAuthor: true,
+                        approvalRequested: false
+                    }
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2024-04-09T12:54:00.000Z' },
