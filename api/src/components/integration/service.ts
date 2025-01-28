@@ -173,7 +173,12 @@ export const triggerAriIngest = async (dryRun?: boolean): Promise<string> => {
         // If not local, trigger task to run in ECS.
         await ecs.runFargateTask({
             clusterArn: Helpers.checkEnvVariable('ECS_CLUSTER_ARN'),
-            ...(dryRun && { commandOverride: ['npm', 'run', 'ariImport', '--', 'dryRun=true', 'reportFormat=email'] }),
+            ...(dryRun && {
+                containerOverride: {
+                    command: ['npm', 'run', 'ariImport', '--', 'dryRun=true', 'reportFormat=email'],
+                    name: 'ari-import'
+                }
+            }),
             securityGroups: [Helpers.checkEnvVariable('ECS_TASK_SECURITY_GROUP_ID')],
             subnetIds: Helpers.checkEnvVariable('PRIVATE_SUBNET_IDS').split(','),
             taskDefinitionId: Helpers.checkEnvVariable('ECS_TASK_DEFINITION_ID')
