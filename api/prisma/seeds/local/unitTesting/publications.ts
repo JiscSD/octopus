@@ -1242,6 +1242,30 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 }
             }
         }
+    },
+    {
+        id: 'seed-publication',
+        doi: '10.82259/cty5-2g34',
+        type: 'PROBLEM',
+        versions: {
+            create: {
+                id: 'seed-publication-v1',
+                doi: '10.82259/ver1-2g34',
+                versionNumber: 1,
+                title: 'Seed publication',
+                content: 'Seed publication content',
+                currentStatus: 'LIVE',
+                isLatestLiveVersion: true,
+                publishedDate: '2025-01-23T10:42:00.000Z',
+                user: { connect: { id: 'octopus' } },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2025-01-23T09:42:00.000Z' },
+                        { status: 'LIVE', createdAt: '2025-01-23T10:42:00.000Z' }
+                    ]
+                }
+            }
+        }
     }
 ];
 

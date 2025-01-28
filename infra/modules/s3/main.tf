@@ -4,14 +4,6 @@ locals {
   account_id = data.aws_caller_identity.current.account_id
 }
 
-data "aws_ssm_parameter" "pubrouter_api_keys" {
-  name = "pubrouter_api_keys_${var.environment}_${var.project_name}"
-}
-
-data "aws_ssm_parameter" "pubrouter_failure_channel" {
-  name = "pubrouter_failure_channel_${var.environment}_${var.project_name}"
-}
-
 resource "aws_s3_bucket" "image_bucket" {
   bucket = "science-octopus-publishing-images-${var.environment}"
 }
@@ -72,79 +64,6 @@ resource "aws_s3_bucket_policy" "allow_public_access" {
   for_each = { for idx, bucket in local.buckets : idx => bucket }
   bucket   = each.value.id
   policy   = data.aws_iam_policy_document.allow_public_access[each.key].json
-}
-
-data "archive_file" "pdf_processing_lambda_code" {
-  type        = "zip"
-  source_dir  = "${path.module}/pdf-processing-lambda-src"
-  output_path = "${path.module}/pdf-processing-lambda.zip"
-}
-
-resource "aws_lambda_function" "pdf_processing_lambda" {
-  filename         = data.archive_file.pdf_processing_lambda_code.output_path
-  source_code_hash = data.archive_file.pdf_processing_lambda_code.output_base64sha256
-  function_name    = "octopus-api-${var.environment}-pdfProcessingLambda"
-  role             = aws_iam_role.pdf_processing_lambda_role.arn
-  handler          = "index.handler"
-  runtime          = "nodejs20.x"
-  timeout          = 10 // if a retry is needed, this function can hit the 3 second default timeout
-
-  environment {
-    variables = {
-      ENVIRONMENT        = var.environment
-      EMAIL_RECIPIENT    = data.aws_ssm_parameter.pubrouter_failure_channel.value
-      PUBROUTER_API_KEYS = data.aws_ssm_parameter.pubrouter_api_keys.value
-    }
-  }
-}
-
-data "aws_iam_policy_document" "pdf_processing_lambda_role_policy" {
-  statement {
-    effect  = "Allow"
-    actions = ["sts:AssumeRole"]
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-  }
-}
-
-resource "aws_iam_role" "pdf_processing_lambda_role" {
-  name = "octopus_${var.environment}_pdf_processing_lambda_role"
-
-  assume_role_policy = data.aws_iam_policy_document.pdf_processing_lambda_role_policy.json
-}
-
-resource "aws_iam_role_policy_attachment" "pdf_processing_lambda_s3_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-  role       = aws_iam_role.pdf_processing_lambda_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "pdf_processing_lambda_ses_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSESFullAccess"
-  role       = aws_iam_role.pdf_processing_lambda_role.name
-}
-
-resource "aws_iam_role_policy_attachment" "pdf_processing_lambda_execution_policy" {
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-  role       = aws_iam_role.pdf_processing_lambda_role.name
-}
-
-resource "aws_lambda_permission" "s3_trigger_permission" {
-  statement_id  = "AllowS3Invocation"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.pdf_processing_lambda.function_name
-  principal     = "s3.amazonaws.com"
-
-  source_arn = aws_s3_bucket.pdf_bucket.arn
-}
-
-resource "aws_s3_bucket_notification" "s3-lambda-trigger" {
-  bucket = aws_s3_bucket.pdf_bucket.id
-  lambda_function {
-    lambda_function_arn = aws_lambda_function.pdf_processing_lambda.arn
-    events              = ["s3:ObjectCreated:*"]
-  }
 }
 
 resource "aws_s3_bucket" "email_forwarding_bucket" {

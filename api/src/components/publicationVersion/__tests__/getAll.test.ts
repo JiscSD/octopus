@@ -42,7 +42,7 @@ describe('Get many publication versions', () => {
             offset: 10
         });
         // This will change if we add more live seed publications.
-        expect(getPublications.body.data.length).toEqual(5);
+        expect(getPublications.body.data.length).toEqual(6);
     });
 
     test('Can order by publication date, descending', async () => {
@@ -131,7 +131,7 @@ describe('Get many publication versions', () => {
 
         expect(getOrganisationalPublications.status).toEqual(200);
         // User role isn't returned in body so differentiate results by length (there are fewer organisational publications).
-        expect(getOrganisationalPublications.body.data).toHaveLength(2);
+        expect(getOrganisationalPublications.body.data).toHaveLength(3);
 
         const getIndividualPublications = await testUtils.agent.get('/publication-versions?authorType=individual');
 
@@ -144,7 +144,7 @@ describe('Get many publication versions', () => {
 
         expect(getPublications.status).toEqual(200);
         // Includes everything.
-        expect(getPublications.body.metadata.total).toEqual(15);
+        expect(getPublications.body.metadata.total).toEqual(16);
     });
 
     test('Author filtering rejects invalid types', async () => {
