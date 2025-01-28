@@ -52,7 +52,7 @@ resource "aws_iam_policy" "scheduler" {
 }
 
 resource "aws_scheduler_schedule" "ari_import_cron" {
-  name = "ari-import-schedule-int"
+  name = "ari-import-schedule-${var.environment}-${var.project_name}"
 
   flexible_time_window {
     mode = "OFF"
