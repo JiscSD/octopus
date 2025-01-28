@@ -165,6 +165,8 @@ export const notifyPubRouter = async (
                 return successResponse;
             } else {
                 // Retry once
+                // Wait 2 seconds
+                await new Promise((resolve) => setTimeout(resolve, 2000));
                 console.log('First attempt failed; retrying');
                 const retry = await postToPubRouter(pdfMetadata, apiEndpoint);
 
