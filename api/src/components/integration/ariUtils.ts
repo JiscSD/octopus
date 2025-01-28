@@ -412,7 +412,7 @@ export const getParticipatingDepartmentNames = async (): Promise<string[]> => {
 };
 
 export const ingestReport = async (
-    format: 'email' | 'file',
+    format: I.IngestReportFormat,
     ingestDetails: {
         checkedCount: number;
         durationSeconds: number;

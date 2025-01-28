@@ -1,13 +1,14 @@
 import * as I from 'interface';
 
-const incrementalAriIngestHttpSchema: I.Schema = {
+const incrementalAriIngestHttpSchema: I.JSONSchemaType<I.TriggerAriIngestQueryParams> = {
     type: 'object',
     properties: {
         apiKey: {
             type: 'string'
         },
         dryRun: {
-            type: 'boolean'
+            type: 'boolean',
+            nullable: true
         }
     },
     additionalProperties: false,

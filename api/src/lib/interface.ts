@@ -1077,3 +1077,10 @@ export interface HandledARI {
     unrecognisedDepartment?: string;
     unrecognisedTopics?: string[];
 }
+
+export type IngestReportFormat = 'email' | 'file';
+
+export interface TriggerAriIngestQueryParams {
+    apiKey: string;
+    dryRun?: boolean;
+}

@@ -19,8 +19,8 @@ resource "aws_codebuild_project" "deploy-docker-image" {
 
   environment {
     compute_type    = "BUILD_GENERAL1_SMALL"
-    image           = "aws/codebuild/standard:5.0"
-    type            = "LINUX_CONTAINER"
+    image           = "aws/codebuild/amazonlinux-aarch64-standard:3.0"
+    type            = "ARM_CONTAINER"
     privileged_mode = true
 
     environment_variable {

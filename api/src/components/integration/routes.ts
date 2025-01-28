@@ -7,11 +7,7 @@ import * as middleware from 'middleware';
 
 const triggerAriIngestApiKey = Helpers.checkEnvVariable('TRIGGER_ARI_INGEST_API_KEY');
 
-export const incrementalAriIngest = middy(integrationController.incrementalAriIngest)
+export const triggerARIIngest = middy(integrationController.triggerAriIngest)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.authentication(false, false, triggerAriIngestApiKey))
-    .use(middleware.validator(integrationSchema.incrementalAriIngestHttp, 'queryStringParameters'));
-
-export const triggerECSTask = middy(integrationController.triggerECSTask)
-    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
-    .use(middleware.authentication(false, false, triggerAriIngestApiKey));
+    .use(middleware.validator(integrationSchema.triggerAriIngest, 'queryStringParameters'));

@@ -27,29 +27,43 @@ const checkBooleanArgValue = (arg: string): void => {
  *  - full: If "true", the script will import all ARIs from the ARI DB, instead of stopping when it
  *    thinks it has found all the new ones (the incremental way).
  *    - Default: false
+ *  - reportFormat: Controls how the output of the job is reported. Can be "email" or "file". Emails
+ *    are sent to the addresses listed in the INGEST_REPORT_RECIPIENTS environment variable. Files are
+ *    written to "ari-import-report.txt".
+ *    - Default: "file"
  *
  * e.g.:
  * npm run ariImport -- allDepartments=true full=true
  */
-const parseArguments = (): { importAllDepartments: boolean; dryRun: boolean; full: boolean } => {
+const parseArguments = (): {
+    importAllDepartments: boolean;
+    dryRun: boolean;
+    full: boolean;
+    reportFormat: I.IngestReportFormat;
+} => {
     const args = Helpers.parseNpmScriptArgs();
 
     for (const arg of Object.keys(args)) {
-        if (!['allDepartments', 'dryRun', 'full'].includes(arg)) {
+        if (!['allDepartments', 'dryRun', 'full', 'reportFormat'].includes(arg)) {
             throw new Error(`Unexpected argument: ${arg}`);
         }
     }
 
-    const { allDepartments: allDepartmentsArg, dryRun: dryRunArg, full: fullArg } = args;
+    const { allDepartments: allDepartmentsArg, dryRun: dryRunArg, full: fullArg, reportFormat: reportFormatArg } = args;
 
     for (const arg of [allDepartmentsArg, dryRunArg, fullArg]) {
         checkBooleanArgValue(arg);
     }
 
+    if (reportFormatArg && !(reportFormatArg === 'email' || reportFormatArg === 'file')) {
+        throw new Error(`"reportFormat" must be "email" or "file"`);
+    }
+
     return {
-        importAllDepartments: !!allDepartmentsArg,
-        dryRun: !!dryRunArg,
-        full: !!fullArg
+        importAllDepartments: allDepartmentsArg === 'true',
+        dryRun: dryRunArg === 'true',
+        full: fullArg === 'true',
+        reportFormat: reportFormatArg ? (reportFormatArg as I.IngestReportFormat) : 'file'
     };
 };
 
@@ -58,7 +72,11 @@ const parseArguments = (): { importAllDepartments: boolean; dryRun: boolean; ful
  * Differs from incremental ingest by fetching all ARIs before processing them.
  * It will not stop until all ARIs have been processed.
  */
-export const fullAriIngest = async (allDepartments: boolean, dryRun: boolean): Promise<string> => {
+export const fullAriIngest = async (
+    allDepartments: boolean,
+    dryRun: boolean,
+    reportFormat: I.IngestReportFormat
+): Promise<string> => {
     const startTime = performance.now();
 
     // Collect all ARIs in a variable.
@@ -176,7 +194,7 @@ export const fullAriIngest = async (allDepartments: boolean, dryRun: boolean): P
     const durationSeconds = Math.round((endTime - startTime) / 100) / 10;
 
     // Write report file.
-    await ariUtils.ingestReport('file', {
+    await ariUtils.ingestReport(reportFormat, {
         checkedCount: aris.length,
         durationSeconds,
         createdCount,
@@ -192,16 +210,21 @@ export const fullAriIngest = async (allDepartments: boolean, dryRun: boolean): P
     } ARIs in ${durationSeconds} seconds.`;
 };
 
-const ariImport = async (allDepartments: boolean, dryRun: boolean, full: boolean): Promise<string> => {
+const ariImport = async (
+    allDepartments: boolean,
+    dryRun: boolean,
+    full: boolean,
+    reportFormat: I.IngestReportFormat
+): Promise<string> => {
     if (!full) {
-        return await integrationService.incrementalAriIngest(dryRun, 'file');
+        return await integrationService.incrementalAriIngest(dryRun, reportFormat);
     } else {
-        return await fullAriIngest(allDepartments, dryRun);
+        return await fullAriIngest(allDepartments, dryRun, reportFormat);
     }
 };
 
-const { importAllDepartments, dryRun, full } = parseArguments();
+const { importAllDepartments, dryRun, full, reportFormat } = parseArguments();
 
-ariImport(importAllDepartments, dryRun, full)
+ariImport(importAllDepartments, dryRun, full, reportFormat)
     .then((message) => console.log(message))
     .catch((err) => console.log(err));

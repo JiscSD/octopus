@@ -4,6 +4,10 @@ const client = new ECSClient();
 
 export const runFargateTask = async (config: {
     clusterArn: string;
+    containerOverride?: {
+        command: string[];
+        name: string;
+    };
     securityGroups: string[];
     subnetIds: string[];
     taskDefinitionId: string;
@@ -17,6 +21,16 @@ export const runFargateTask = async (config: {
                 subnets: config.subnetIds
             }
         },
+        ...(config.containerOverride && {
+            overrides: {
+                containerOverrides: [
+                    {
+                        command: config.containerOverride.command,
+                        name: config.containerOverride.name
+                    }
+                ]
+            }
+        }),
         taskDefinition: config.taskDefinitionId
     };
     const command = new RunTaskCommand(input);

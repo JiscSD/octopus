@@ -1,0 +1,10 @@
+# For testing the ARI import runner docker image locally.
+services:
+  ari-import-runner:
+    build:
+      context: ../../../api
+      dockerfile: ../infra/docker/ariImportRunner/Dockerfile
+    command: /bin/sh -cx "npm run ariImport -- dryRun=true reportFormat=file && cat ari-import-report.txt"
+    env_file: ../../../api/.env
+    # So it can access the DB and opensearch that are exposed on host ports.
+    network_mode: host

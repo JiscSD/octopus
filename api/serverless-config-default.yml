@@ -490,22 +490,13 @@ functions:
                 method: GET
                 cors: true
     # Integrations
-    incrementalAriIngestHttp:
-        handler: dist/src/components/integration/routes.incrementalAriIngest
-        timeout: 900
+    triggerARIIngest:
+        handler: dist/src/components/integration/routes.triggerARIIngest
         events:
             - http:
                 path: ${self:custom.versions.v1}/integrations/ari/incremental
                 method: POST
                 cors: true
-    # Commented out - for the time being ARI ingests will just be manually triggered.
-    # incrementalAriIngestScheduled:
-    #     handler: dist/src/components/integration/controller.incrementalAriIngest
-    #     timeout: 900
-    #     events:
-    #         - schedule:
-    #             rate: cron(0 5 ? * TUE *) # Every Tuesday at 5 a.m.
-    #             enabled: ${self:custom.scheduledAriIngestEnabled.${opt:stage}, false}
 
 package:
     defaultPatterns:
