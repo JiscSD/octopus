@@ -126,7 +126,7 @@ const getPubRouterMetadata = (publicationVersion: I.PublicationVersion, pdfUrl: 
     };
 };
 
-const postToPubRouter = async (pdfMetadata: ReturnType<typeof getPubRouterMetadata>, endpoint: string) =>
+const postToPubRouter = (pdfMetadata: ReturnType<typeof getPubRouterMetadata>, endpoint: string) =>
     fetch(endpoint, {
         method: 'POST',
         headers: {
