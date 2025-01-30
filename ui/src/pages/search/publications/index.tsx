@@ -287,9 +287,6 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
         setOffset(0);
     }, [query, publicationTypes, limit]);
 
-    const checkBoxClasses =
-        'h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed';
-
     const filters = (
         <>
             <fieldset className="space-y-3">
@@ -297,24 +294,15 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                     Author types
                 </legend>
                 {Config.values.authorTypes.map((type) => (
-                    <div key={type} className={`flex items-center`}>
-                        <input
-                            id={type}
-                            name={type}
-                            type="checkbox"
-                            className={checkBoxClasses}
-                            checked={authorTypes ? authorTypes.split(',').includes(type) : false}
-                            onChange={(e) => collateAuthorTypes(e, type)}
-                            disabled={!response}
-                        />
-                        <label
-                            htmlFor={type}
-                            className="ml-3 text-sm select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
-                            aria-disabled={!response}
-                        >
-                            {type.charAt(0).toUpperCase() + type.slice(1)}
-                        </label>
-                    </div>
+                    <Components.Checkbox
+                        key={type}
+                        checked={authorTypes ? authorTypes.split(',').includes(type) : false}
+                        disabled={!response}
+                        id={type}
+                        label={type.charAt(0).toUpperCase() + type.slice(1)}
+                        name={type}
+                        onChange={(e) => collateAuthorTypes(e, type)}
+                    />
                 ))}
             </fieldset>
             <fieldset className="space-y-3">
@@ -322,49 +310,27 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                     Publication types
                 </legend>
                 {Config.values.publicationTypes.map((type) => (
-                    <div key={type} className={`flex items-center`}>
-                        <input
-                            id={type}
-                            name={type}
-                            type="checkbox"
-                            className={checkBoxClasses}
-                            checked={publicationTypes ? publicationTypes.split(',').includes(type) : false}
-                            onChange={(e) => collatePublicationTypes(e, type)}
-                            disabled={!response}
-                        />
-                        <label
-                            htmlFor={type}
-                            className="ml-3 text-sm select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
-                            aria-disabled={!response}
-                        >
-                            {Helpers.formatPublicationType(type)}
-                        </label>
-                    </div>
-                ))}
-
-                <div className="flex items-center border-b border-t border-grey-100 py-3">
-                    <input
-                        id="select-all"
-                        aria-describedby="select-all"
-                        name="select-all"
-                        type="checkbox"
-                        className={checkBoxClasses}
-                        checked={Config.values.publicationTypes.every((type) => publicationTypes.includes(type))}
-                        onChange={(e) =>
-                            setPublicationTypes(e.target.checked ? Config.values.publicationTypes.join(',') : '')
-                        }
+                    <Components.Checkbox
+                        key={type}
+                        checked={publicationTypes ? publicationTypes.split(',').includes(type) : false}
                         disabled={!response}
+                        id={type}
+                        label={Helpers.formatPublicationType(type)}
+                        name={type}
+                        onChange={(e) => collatePublicationTypes(e, type)}
                     />
-                    <div className="ml-3 text-sm">
-                        <label
-                            htmlFor="select-all"
-                            className="select-none font-medium italic text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
-                            aria-disabled={!response}
-                        >
-                            Select/deselect all
-                        </label>
-                    </div>
-                </div>
+                ))}
+                <Components.Checkbox
+                    className="border-b border-t border-grey-100 py-3"
+                    checked={Config.values.publicationTypes.every((type) => publicationTypes.includes(type))}
+                    disabled={!response}
+                    id="select-all"
+                    label="Select/deselect all"
+                    name="select-all"
+                    onChange={(e) =>
+                        setPublicationTypes(e.target.checked ? Config.values.publicationTypes.join(',') : '')
+                    }
+                />
             </fieldset>
             <fieldset className="col-span-12 lg:col-span-3 xl:col-span-4 space-y-4">
                 <legend className="pb-2 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">

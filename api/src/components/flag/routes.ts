@@ -32,4 +32,5 @@ export const getPublicationFlags = middy(flagController.getPublicationFlags)
 
 export const getUserFlags = middy(flagController.getUserFlags)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
-    .use(middleware.httpJsonBodyParser());
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.validator(flagSchema.getUserFlags, 'queryStringParameters'));
