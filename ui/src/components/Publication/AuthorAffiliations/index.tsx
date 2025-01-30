@@ -98,23 +98,15 @@ const AuthorAffiliations: React.FC<AuthorAffiliationsProps> = (props) => {
                                 <Outline.ExclamationCircleIcon className="mr-1 inline w-5 flex-shrink-0" />
                                 No affiliations have been added
                             </p>
-                            <label
-                                htmlFor="confirm-independent-author"
-                                className="flex cursor-pointer items-center gap-4 text-sm"
-                            >
-                                <input
-                                    required
-                                    id="confirm-independent-author"
-                                    name="confirm"
-                                    type="checkbox"
-                                    checked={props.isIndependentAuthor}
-                                    onChange={(event) => props.onIndependentAuthorChange(event.target.checked)}
-                                    className="cursor-pointer rounded-sm border-teal-500 bg-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
-                                />
-                                <span className="text-grey-800 transition-colors dark:text-white-50">
-                                    I am an independent author and do not need to enter any affiliations
-                                </span>
-                            </label>
+                            <Components.Checkbox
+                                checked={props.isIndependentAuthor}
+                                id={'confirm-independent-author'}
+                                inputClassName="border-teal-500"
+                                label={'I am an independent author and do not need to enter any affiliations'}
+                                name="confirm"
+                                onChange={(event) => props.onIndependentAuthorChange(event.target.checked)}
+                                required={true}
+                            />
                         </li>
                     )}
                 </ul>
