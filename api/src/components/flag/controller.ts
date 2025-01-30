@@ -39,7 +39,7 @@ export const getUserFlags = async (
     event: I.APIRequest<undefined, I.GetUserFlagsQueryParams, I.GetUserFlagsPathParams>
 ): Promise<I.JSONResponse> => {
     try {
-        const flags = await flagService.getByUserID(event.pathParameters.userId, event.queryStringParameters);
+        const flags = await flagService.getByUserID(event.pathParameters.id, event.queryStringParameters);
 
         return response.json(200, flags);
     } catch (err) {
