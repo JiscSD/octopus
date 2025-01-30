@@ -41,6 +41,8 @@ provider:
         TRIGGER_ARI_INGEST_API_KEY: ${env:TRIGGER_ARI_INGEST_API_KEY}
         INGEST_REPORT_RECIPIENTS: ${env:INGEST_REPORT_RECIPIENTS}
         PARTICIPATING_ARI_USER_IDS: ${env:PARTICIPATING_ARI_USER_IDS}
+        PUBROUTER_API_KEYS: ${env:PUBROUTER_API_KEYS}
+        PUBROUTER_FAILURE_CHANNEL: ${env:PUBROUTER_FAILURE_CHANNEL}
     deploymentBucket:
         tags:
             Project: Octopus
@@ -72,5 +74,6 @@ custom:
         useChildProcesses: true
 functions:
     - ${file(./serverless-config-default.yml):functions}
+    - ${file(./serverless-config-local.yml):functions}
 package:
     patterns: ${file(./serverless-config-default.yml):package.defaultPatterns}

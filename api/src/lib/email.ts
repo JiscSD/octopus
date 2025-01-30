@@ -930,3 +930,13 @@ export const ariIngestReport = async (html: string, text: string): Promise<void>
         subject: 'ARI ingest report'
     });
 };
+
+export const pubRouterFailure = async (publicationId: string, error: string): Promise<void> => {
+    const content = `Publication Id: ${publicationId}, Error: ${error}`;
+    await send({
+        html: `<p>${content}</p>`,
+        text: content,
+        to: Helpers.checkEnvVariable('PUBROUTER_FAILURE_CHANNEL'),
+        subject: 'A PubRouter delivery has failed.'
+    });
+};
