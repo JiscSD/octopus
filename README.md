@@ -31,7 +31,18 @@ To run this application locally you will need:
 - [UI instructions](./ui/README.md)
 - [E2E instructions](./e2e/README.md)
 
+### Architecture diagrams
+
 You might also find it useful to get an overview of Octopus's architecture by reading our [system context](./architecture-diagrams/system-context-diagram.png) and [container](./architecture-diagrams/container-diagram.png) diagrams. These are based on the [C4 Model](https://c4model.com/).
+
+#### How to update the C4 diagrams
+
+As the architecture evolves, the C4 diagrams need to be updated.
+
+- Download the PlantUML jar file from its [download page](https://plantuml.com/download).
+- Edit the `.puml` files as desired to add new systems and relationships between them.
+- Use the PlantUML jar to generate a new image from the edited `.puml` file, e.g.
+  - `java -jar {path to plantuml.jar} container.puml`
 
 ## Authentication
 
