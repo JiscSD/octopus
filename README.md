@@ -37,12 +37,20 @@ You might also find it useful to get an overview of Octopus's architecture by re
 
 #### How to update the C4 diagrams
 
-As the architecture evolves, the C4 diagrams need to be updated.
+As the architecture evolves, the C4 diagrams need to be updated. This can be done in VS code:
 
-- Download the PlantUML jar file from its [download page](https://plantuml.com/download).
-- Edit the `.puml` files as desired to add new systems and relationships between them.
-- Use the PlantUML jar to generate a new image from the edited `.puml` file, e.g.
-  - `java -jar {path to plantuml.jar} container.puml`
+- Install the [PlantUML extension](https://marketplace.visualstudio.com/items?itemName=jebbs.plantuml)
+- Pull and run the [PlantUML server docker image](https://hub.docker.com/r/plantuml/plantuml-server)
+  - E.g. `docker run -d -p 8080:8080 plantuml/plantuml-server:tomcat`
+  - This will do the transforming of the `.puml` file into an image.
+- Configure the VS code extension to use the server by adding to your VS code settings.json file:
+
+```
+    "plantuml.server": "http://127.0.0.1:8080",
+    "plantuml.render": "PlantUMLServer",
+```
+
+- With a `.puml` file open, press `Alt` + `D` to open the preview which will auto-update as you save the file.
 
 ## Authentication
 
