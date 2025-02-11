@@ -384,7 +384,7 @@ export interface GetFlagPathParams {
 }
 
 export interface GetUserFlagsPathParams {
-    userId: string;
+    id: string;
 }
 
 export interface GetUserFlagsQueryParams {

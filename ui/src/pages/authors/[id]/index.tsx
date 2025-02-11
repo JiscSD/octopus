@@ -315,29 +315,27 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                     ></Components.SearchInterface>
                 </section>
 
-                {getFlagsResponse && flags.length ? (
-                    <section className="container mx-auto px-8">
-                        <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
-                            Red flags raised by this user
-                        </h2>
-                        <Components.Checkbox
-                            checked={includeResolvedFlags}
-                            className="mb-4 lg:mb-8"
-                            id="include-resolved-flags"
-                            label="Include resolved flags"
-                            name="include-resolved-flags"
-                            onChange={(e) => setIncludeResolvedFlags(e.target.checked)}
-                        />
-                        <Components.PaginatedResults
-                            isValidating={getFlagsIsValidating}
-                            limit={10}
-                            offset={flagsOffset}
-                            results={flagResults}
-                            setOffset={setFlagsOffset}
-                            total={getFlagsResponse.metadata.total}
-                        />
-                    </section>
-                ) : null}
+                <section className="container mx-auto px-8">
+                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
+                        Red flags raised by this user
+                    </h2>
+                    <Components.Checkbox
+                        checked={includeResolvedFlags}
+                        className="mb-4 lg:mb-8"
+                        id="include-resolved-flags"
+                        label="Include resolved flags"
+                        name="include-resolved-flags"
+                        onChange={(e) => setIncludeResolvedFlags(e.target.checked)}
+                    />
+                    <Components.PaginatedResults
+                        isValidating={getFlagsIsValidating}
+                        limit={10}
+                        offset={flagsOffset}
+                        results={flagResults}
+                        setOffset={setFlagsOffset}
+                        total={getFlagsResponse?.metadata.total || 0}
+                    />
+                </section>
             </Layouts.Standard>
         </>
     );
