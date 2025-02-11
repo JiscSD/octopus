@@ -13,6 +13,9 @@ type Props = {
     waves: boolean;
 };
 
+const linkClasses = 'mb-1 block max-w-fit p-1';
+const linkInnerClasses = 'font-montserrat font-semibold text-white-50 dark:text-teal-200';
+
 const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
     <>
         {props.waves && (
@@ -49,7 +52,7 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                 </div>
                 {/* contact us section */}
                 <div className="col-span-1 mb-6 md:col-span-4">
-                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
+                    <h3 className={linkInnerClasses}>
                         Contact us: <Components.Link href="mailto:help@jisc.ac.uk">help@jisc.ac.uk</Components.Link>
                     </h3>
                 </div>
@@ -58,59 +61,34 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                     process.env.NEXT_PUBLIC_MAINTENANCE_MODE !== 'true' && (
                         <>
                             <div className="col-span-1 mb-14 md:col-span-2 lg:col-span-1">
-                                <Components.Link
-                                    href={Config.urls.browsePublications.path}
-                                    className="mb-1 block max-w-fit p-1"
-                                >
-                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
-                                        Browse
-                                    </h3>
+                                <Components.Link href={Config.urls.browsePublications.path} className={linkClasses}>
+                                    <h3 className={linkInnerClasses}>Browse</h3>
                                 </Components.Link>
-                                <Components.Link
-                                    href={Config.urls.createPublication.path}
-                                    className="mb-1 block max-w-fit p-1"
-                                >
-                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
-                                        Publish
-                                    </h3>
+                                <Components.Link href={Config.urls.createPublication.path} className={linkClasses}>
+                                    <h3 className={linkInnerClasses}>Publish</h3>
                                 </Components.Link>
-                                <Components.Link href={Config.urls.about.path} className="mb-1 block max-w-fit p-1">
-                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
-                                        About
-                                    </h3>
+                                <Components.Link href={Config.urls.about.path} className={linkClasses}>
+                                    <h3 className={linkInnerClasses}>About</h3>
                                 </Components.Link>
-                                <Components.Link href={Config.urls.faq.path} className="mb-1 block max-w-fit p-1">
-                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
-                                        FAQs
-                                    </h3>
+                                <Components.Link href={Config.urls.faq.path} className={linkClasses}>
+                                    <h3 className={linkInnerClasses}>FAQs</h3>
                                 </Components.Link>
-                                <Components.Link
-                                    href={Config.urls.getInvolved.path}
-                                    className="mb-1 block max-w-fit p-1"
-                                >
-                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
-                                        Get involved
-                                    </h3>
+                                <Components.Link href={Config.urls.getInvolved.path} className={linkClasses}>
+                                    <h3 className={linkInnerClasses}>Get involved</h3>
                                 </Components.Link>
                             </div>
                             <div className="col-span-1 mb-4 md:col-span-2 lg:col-span-3">
-                                <Components.Link href={Config.urls.terms.path} className="mb-1 block max-w-fit p-1">
-                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
-                                        Terms
-                                    </h3>
+                                <Components.Link href={Config.urls.terms.path} className={linkClasses}>
+                                    <h3 className={linkInnerClasses}>Terms</h3>
                                 </Components.Link>
-                                <Components.Link href={Config.urls.privacy.path} className="mb-1 block max-w-fit p-1">
-                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
-                                        Privacy
-                                    </h3>
+                                <Components.Link href={Config.urls.privacy.path} className={linkClasses}>
+                                    <h3 className={linkInnerClasses}>Privacy</h3>
                                 </Components.Link>
-                                <Components.Link
-                                    href={Config.urls.accessibility.path}
-                                    className="mb-1 block max-w-fit p-1 "
-                                >
-                                    <h3 className="font-montserrat font-semibold text-white-50 dark:text-teal-200">
-                                        Accessibility
-                                    </h3>
+                                <Components.Link href={Config.urls.accessibility.path} className={linkClasses}>
+                                    <h3 className={linkInnerClasses}>Accessibility</h3>
+                                </Components.Link>
+                                <Components.Link href={Config.urls.cookiePolicy.path} className={linkClasses}>
+                                    <h3 className={linkInnerClasses}>Cookie Policy</h3>
                                 </Components.Link>
                             </div>
                         </>
