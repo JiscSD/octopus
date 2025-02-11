@@ -46,24 +46,24 @@ const TableRow: React.FC<RowProps> = (props): React.ReactElement => {
     return (
         <>
             <tr key={props.item.id} className="h-12 align-middle">
-                <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                     {props.item.name}
                 </td>
-                <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                     <Components.Link href={props.item.link} openNew>
                         {props.item.link}
                     </Components.Link>
                 </td>
-                <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                     {props.item.city + (props.item.country && ', ' + props.item.country)}
                 </td>
-                <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                     {props.item.ror}
                 </td>
-                <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                     {props.item.grantId}
                 </td>
-                <td className="space-nowrap h-full items-center justify-center py-4 text-center">
+                <td className="whitespace-nowrap h-full items-center justify-center py-4 text-center">
                     {isLoading ? (
                         <Components.IconButton
                             className="p-2"
