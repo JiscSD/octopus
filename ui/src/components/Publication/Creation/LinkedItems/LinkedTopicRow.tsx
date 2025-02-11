@@ -19,10 +19,10 @@ const LinkedTopicRow: React.FC<Props> = (props): React.ReactElement => {
 
     return (
         <tr key={props.topic.id}>
-            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                 <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">{props.topic.title}</p>
             </td>
-            <td className="space-nowrap px-8 py-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+            <td className="whitespace-nowrap px-8 py-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
                 {props.topic.draft ? (
                     loading ? (
                         <Components.IconButton

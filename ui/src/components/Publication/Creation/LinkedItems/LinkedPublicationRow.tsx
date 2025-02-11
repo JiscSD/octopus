@@ -19,7 +19,7 @@ const LinkedPublicationRow: React.FC<Props> = (props): React.ReactElement => {
 
     return (
         <tr key={props.linkedPublication.id}>
-            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                 <div className="space-y-2">
                     <span className="font-montserrat text-sm font-medium text-teal-600 transition-colors duration-500 dark:text-teal-100">
                         {Helpers.formatPublicationType(props.linkedPublication.type)}
@@ -43,7 +43,7 @@ const LinkedPublicationRow: React.FC<Props> = (props): React.ReactElement => {
                     </div>
                 </div>
             </td>
-            <td className="space-nowrap px-8 py-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+            <td className="whitespace-nowrap px-8 py-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
                 {props.linkedPublication.draft ? (
                     loading ? (
                         <Components.IconButton
