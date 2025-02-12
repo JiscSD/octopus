@@ -283,7 +283,7 @@ functions:
         handler: dist/src/components/flag/routes.getUserFlags
         events:
             - http:
-                path: ${self:custom.versions.v1}/user/{userId}/flags
+                path: ${self:custom.versions.v1}/users/{id}/flags
                 method: GET
                 cors: true
     # Images
