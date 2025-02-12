@@ -1,12 +1,34 @@
 import { expect, test } from '@playwright/test';
 import { PageModel } from '../PageModel';
-import * as Helpers from '../helpers';
 
 test.describe('Static pages, logged out', () => {
     test('Check homepage', async ({ browser }) => {
         // Start up test
         const page = await browser.newPage();
         await page.goto('/');
+
+        // Check initial focus order
+        await page.keyboard.press('Tab');
+        // Cookie message and its dismiss button
+        await expect(page.locator('*:focus')).toHaveText('Cookie Policy');
+        await expect(page.locator('*:focus')).toHaveAttribute('href', '/cookie-policy');
+        await page.keyboard.press('Tab');
+        await expect(page.locator('*:focus')).toHaveText('Dismiss');
+        await page.keyboard.press('Tab');
+        // Skip to content link
+        await expect(page.locator('*:focus')).toHaveText('Skip to content');
+        await expect(page.locator('*:focus')).toHaveAttribute('href', '#content');
+        await page.keyboard.press('Tab');
+        // Feedback banner - form link and mailto link
+        await expect(page.locator('*:focus')).toHaveText('feedback');
+        await expect(page.locator('*:focus')).toHaveAttribute('href', 'https://forms.office.com/e/80g02emciH');
+        await page.keyboard.press('Tab');
+        await expect(page.locator('*:focus')).toHaveText('help@jisc.ac.uk');
+        await expect(page.locator('*:focus')).toHaveAttribute('href', 'mailto:help@jisc.ac.uk');
+        await page.keyboard.press('Tab');
+        // Confirm that we are into header and stop there
+        await expect(page.locator('*:focus')).toHaveAccessibleName('Octopus');
+        await expect(page.locator('*:focus')).toHaveAttribute('href', '/');
 
         // Expect elements to be visible
         await expect(page.locator('h1').first()).toHaveText(
@@ -24,9 +46,8 @@ test.describe('Static pages, logged out', () => {
             await expect(page.locator(link)).toBeVisible();
         }
 
-        // Check dark/light toggle - TODO, sort out localStorage
+        // Check dark/light toggle
         await expect(page.locator('h1').first()).toHaveCSS('color', 'rgb(255, 255, 255)');
-
         await page.locator(PageModel.homepage.darkModeToggle).click();
         await expect(page.locator('h1').first()).toHaveCSS('color', 'rgb(52, 61, 76)');
     });
