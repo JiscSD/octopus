@@ -16,8 +16,8 @@ export type { AxiosError } from 'axios';
 export type PreferencesStoreTypes = {
     darkMode: boolean;
     toggleDarkMode: () => void;
-    feedback: boolean;
-    toggleFeedback: () => void;
+    showCookieMessage: boolean;
+    toggleCookieMessage: () => void;
 };
 
 export type UserRole = 'USER' | 'ORGANISATION' | 'SUPER_USER';

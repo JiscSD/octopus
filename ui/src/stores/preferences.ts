@@ -10,11 +10,11 @@ const usePreferencesStore = create<Types.PreferencesStoreTypes>()(
             (set) => ({
                 darkMode: true,
                 toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
-                feedback: true,
-                toggleFeedback: () => set((state) => ({ feedback: !state.feedback }))
+                showCookieMessage: true,
+                toggleCookieMessage: () => set((state) => ({ showCookieMessage: !state.showCookieMessage }))
             }),
             {
-                name: Config.keys.localStorage.darkMode,
+                name: Config.keys.localStorage.preferences,
                 skipHydration: true
             }
         )

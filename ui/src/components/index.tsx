@@ -17,6 +17,7 @@ export { default as BookmarkedTopics } from './Topic/BookmarkedTopics';
 export { default as Button } from './Button';
 export { default as Checkbox } from './Checkbox';
 export { default as ContentSection } from './GenericContent/ContentSection';
+export { default as CookieMessage } from './CookieMessage';
 export { default as CopyButton } from './CopyButton';
 export { default as EditAffiliationsModal } from './EditAffiliationsModal';
 export { default as EditReferenceModal } from './References/EditReferenceModal';

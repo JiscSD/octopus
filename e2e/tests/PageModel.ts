@@ -19,7 +19,8 @@ export const PageModel = {
             'footer > div > div > a[href="/get-involved"]',
             'footer > div > div > a[href="/user-terms"]',
             'footer > div > div > a[href="/privacy"]',
-            'footer > div > div > a[href="/accessibility"]'
+            'footer > div > div > a[href="/accessibility"]',
+            'footer > div > div > a[href="/cookie-policy"]'
         ]
     },
     homepage: {

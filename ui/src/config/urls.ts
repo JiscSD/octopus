@@ -292,6 +292,14 @@ const urls = {
         documentTitle: `Research Culture Report - ${base.title}`,
         keywords: ['research', 'culture', 'report'],
         canonical: `${base.host}/research-culture-report`
+    },
+    cookiePolicy: {
+        path: '/cookie-policy',
+        title: 'Cookie Policy',
+        description: 'Octopus cookie policy',
+        documentTitle: `Cookie Policy - ${base.title}`,
+        keywords: ['cookies', 'policy', 'cookie policy'],
+        canonical: `${base.host}/cookie-policy`
     }
 };
 

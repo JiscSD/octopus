@@ -2,6 +2,7 @@ import React from 'react';
 import * as SolidIcons from '@heroicons/react/24/solid';
 import * as Framer from 'framer-motion';
 import * as Helpers from '@/helpers';
+import * as Stores from '@/stores';
 
 const getButtonVisibility = () =>
     document.documentElement.scrollTop > 0 &&
@@ -11,6 +12,7 @@ const getButtonVisibility = () =>
 
 const ScrollToTop: React.FC = (): React.ReactElement => {
     const [visible, setVisible] = React.useState(getButtonVisibility());
+    const { showCookieMessage } = Stores.usePreferencesStore();
 
     React.useEffect(() => {
         const handleScroll = () => {
@@ -33,7 +35,7 @@ const ScrollToTop: React.FC = (): React.ReactElement => {
             whileInView={{ scale: visible ? 1 : 0, type: 'spring' }}
             transition={{ duration: 0.3 }}
             type="button"
-            className="fixed bottom-24 right-4 z-20 h-fit rounded-full border-transparent outline-0 focus:ring-2 focus:ring-yellow-400 print:hidden lg:bottom-12 lg:right-12"
+            className={`fixed bottom-24 right-4 z-20 h-fit rounded-full border-transparent outline-0 focus:ring-2 focus:ring-yellow-400 print:hidden ${showCookieMessage ? '' : 'lg:bottom-12 lg:right-12'}`}
             onClick={Helpers.scrollTopSmooth}
         >
             <SolidIcons.ArrowUpCircleIcon className="h-14 w-14 text-teal-300" />

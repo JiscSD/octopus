@@ -31,7 +31,7 @@ const HistoryTable: React.FC<Props> = (props) => (
                         <tbody className="divide-y divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
                             {props.records.map((record, index) => (
                                 <tr key={index}>
-                                    <td className="space-nowrap py-4 pl-4 pr-3 text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                                         {record.organisation}
                                     </td>
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-500 transition-colors duration-500 dark:text-grey-100">
