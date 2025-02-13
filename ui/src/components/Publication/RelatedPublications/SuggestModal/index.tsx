@@ -187,7 +187,7 @@ const RelatedPublicationsSuggestModal: React.FC<Props> = (props): React.ReactEle
                                                     title={authorNames}
                                                 >
                                                     By {authorNames} |{' '}
-                                                    {Helpers.relativeDate(publicationVersion.publishedDate || '')}
+                                                    {Helpers.formatDate(publicationVersion.publishedDate || '')}
                                                 </span>
                                             </div>
                                         </HeadlessUI.Combobox.Option>
@@ -212,7 +212,7 @@ const RelatedPublicationsSuggestModal: React.FC<Props> = (props): React.ReactEle
                                 title={selectedPublicationVersionAuthorNames}
                             >
                                 By {selectedPublicationVersionAuthorNames} |{' '}
-                                {Helpers.relativeDate(selectedPublicationVersion.publishedDate || '')}
+                                {Helpers.formatDate(selectedPublicationVersion.publishedDate || '')}
                             </span>
                         </div>
                         <Components.Button
