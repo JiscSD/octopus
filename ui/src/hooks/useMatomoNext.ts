@@ -9,8 +9,8 @@ const useMatomoNext = () => {
 
         if (stage === 'prod' && matomoUrl && matomoSiteId) {
             // Cookieless Tracking
-            push(['disableCookies', 'trackPageView', 'enableLinkTracking']);
-            init({ url: matomoUrl, siteId: matomoSiteId });
+            push(['trackPageView', 'enableLinkTracking']);
+            init({ url: matomoUrl, siteId: matomoSiteId, disableCookies: true });
         }
     }, []);
 };
