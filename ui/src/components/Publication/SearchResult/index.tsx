@@ -54,7 +54,7 @@ const SearchResult: React.FC<Props<GenericCoAuthor>> = (props): React.ReactEleme
                     className="overflow-hidden text-ellipsis whitespace-nowrap text-xs tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100"
                     title={authors}
                 >
-                    {props.publishedDate ? `Published ${Helpers.relativeDate(props.publishedDate)}` : 'Draft'}, by{' '}
+                    {props.publishedDate ? `Published ${Helpers.formatDate(props.publishedDate)}` : 'Draft'}, by{' '}
                     {authors}
                 </p>
                 <Components.EngagementCounts flagCount={props.flagCount} peerReviewCount={props.peerReviewCount} />

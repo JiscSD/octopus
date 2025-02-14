@@ -52,15 +52,6 @@ export const formatDateTime = (value: string, formatType?: 'short' | 'long'): st
 };
 
 /**
- * @description Formats a ISO string date to a relative to now string
- */
-export const relativeDate = (value: string): string | null => {
-    const date = luxon.DateTime.fromISO(value, { zone: 'utc' }).toRelativeCalendar();
-
-    return date === 'Invalid DateTime' ? 'N/A' : date;
-};
-
-/**
  * @description Format a publication type returned from the DB
  */
 export const formatPublicationType = (publicationType: Types.PublicationType): string => {
