@@ -88,6 +88,7 @@ const Privacy: Types.NextPage = (): React.ReactElement => {
                         platform T&Cs
                     </Components.Link>
                 </p>
+                <p className="mb-4 font-bold">This statement was last reviewed on 28 Jan 2025.</p>
             </Layouts.Information>
         </>
     );
