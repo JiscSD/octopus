@@ -25,7 +25,7 @@ const FileUpload: React.FC<Props> = (props): React.ReactElement => {
         }
     }, []);
 
-    const { getRootProps, getInputProps, isDragActive } = DropZone.useDropzone({ onDrop });
+    const { getRootProps, getInputProps, isDragActive } = DropZone.useDropzone({ noClick: true, onDrop });
 
     return (
         <section className="relative">
