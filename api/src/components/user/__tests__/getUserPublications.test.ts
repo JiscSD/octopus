@@ -1,4 +1,6 @@
+import { Prisma } from '@prisma/client';
 import * as testUtils from 'lib/testUtils';
+import * as userService from 'user/service';
 
 describe("Get a given user's publications", () => {
     beforeAll(async () => {
@@ -56,14 +58,15 @@ describe("Get a given user's publications", () => {
 
     test('Results can be filtered by a query term', async () => {
         const queryTerm = 'interpretation';
+        type UserPublications = Prisma.PromiseReturnType<typeof userService.getPublications>;
         const publications = await testUtils.agent.get('/users/test-user-1/publications').query({ query: queryTerm });
 
         expect(publications.status).toEqual(200);
         expect(publications.body.data.length).toEqual(1);
         expect(
-            publications.body.data.every((publication) =>
+            (publications.body as UserPublications).data.every((publication) =>
                 publication.versions.some(
-                    (version) => version.isLatestLiveVersion && version.title.toLowerCase().includes(queryTerm)
+                    (version) => version.isLatestLiveVersion && version.title?.toLowerCase().includes(queryTerm)
                 )
             )
         ).toEqual(true);
