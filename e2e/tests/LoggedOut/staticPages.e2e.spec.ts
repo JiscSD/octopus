@@ -93,5 +93,10 @@ test.describe('Static pages, logged out', () => {
         await page.locator(PageModel.footer.links[7]).click();
         await expect(page).toHaveURL(`/accessibility`);
         await page.goBack();
+
+        // Check cookie policy
+        await page.locator(PageModel.footer.links[8]).click();
+        await expect(page).toHaveURL(`/cookie-policy`);
+        await page.goBack();
     });
 });

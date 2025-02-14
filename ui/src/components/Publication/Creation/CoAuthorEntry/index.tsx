@@ -22,7 +22,7 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
 
     return (
         <tr {...props.entryProps}>
-            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                 <span
                     {...props.dragHandleProps}
                     className="rounded-sm outline-2 outline-offset-2 outline-yellow-400"
@@ -31,7 +31,7 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
                     <OutlineIcons.Bars3Icon className="h-5 w-5 text-teal-700 transition-colors duration-500 dark:text-white-50" />
                 </span>
             </td>
-            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                 <div className="space-y-2">
                     {props.isMainAuthor ? (
                         <span className="leading-10">N/A</span>
@@ -50,7 +50,7 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
                     )}
                 </div>
             </td>
-            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                 <div className="space-y-2">
                     {props.isMainAuthor ? (
                         'N/A'
@@ -69,14 +69,14 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
                     )}
                 </div>
             </td>
-            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                 <div className="space-y-2">
                     <p className="text-grey-800 transition-colors duration-500 dark:text-white-50">
                         {props.coAuthor.email}
                     </p>
                 </div>
             </td>
-            <td className="space-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                 <div className="space-y-2">
                     {props.coAuthor.user ? (
                         <Components.Link
@@ -96,7 +96,7 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
                     )}
                 </div>
             </td>
-            <td className="space-nowrap px-8 py-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
+            <td className="whitespace-nowrap px-8 py-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
                 {!props.isMainAuthor && (
                     <Components.IconButton
                         className="p-2"
