@@ -14,6 +14,7 @@ System(datacite, "Datacite", "Provides persistent publication identifiers (DOIs)
 System(doiOrg, "doi.org", "Governs the Digital Object Identifier (DOI) system")
 System(rorOrg, "ror.org", "Registry of identifiers for research organizations")
 System(pubRouter, "Publications Router", "Forwards publications and metadata to other repositories")
+System(ariDb, "ARI DB", "Repository for UK government bodies' Areas of Research Interest")
 
 Rel(octopusUser, octopus, "Manages and browses publications using")
 Rel(octopusUser, orcid, "Logs in via")
@@ -23,5 +24,6 @@ Rel(octopus, rorOrg, "Pulls funder details from")
 Rel(octopus, doiOrg, "Pulls reference data from")
 Rel_D(datacite, doiOrg, "Registers octopus publication DOIs with")
 Rel(octopus, pubRouter, "Notifies about publications")
+Rel(octopus, ariDb, "Imports ARIs as publications")
 
 @enduml
