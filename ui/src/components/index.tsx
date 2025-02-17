@@ -6,6 +6,7 @@ export { default as AdditionalInformationTable } from './Publication/Creation/Ad
 export { default as AddReferences } from './References/AddReferences';
 export { default as AffiliationCard } from './Publication/AffiliationCard';
 export { default as Alert } from './Alert';
+export { default as AnnouncementBanner } from './AnnouncementBanner';
 export { default as ApprovalsTracker } from './ApprovalsTracker';
 export { default as AuthorAffiliations } from './Publication/AuthorAffiliations';
 export { default as AuthorList } from './Publication/AuthorList';

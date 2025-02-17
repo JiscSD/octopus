@@ -2,7 +2,7 @@ const prefix = `${process.env.NODE_ENV}-octopus`;
 
 const keys = {
     localStorage: {
-        darkMode: `${prefix}-dark-mode`,
+        preferences: `${prefix}-preferences`,
         token: `${prefix}-token`,
         user: `${prefix}-user`
     },

@@ -24,18 +24,24 @@ const Header: React.FC<Props> = (props): React.ReactElement => {
     return (
         <>
             <Components.Banner>
-                Help us improve by providing{' '}
-                <Components.Link
-                    href="https://forms.office.com/e/80g02emciH"
-                    className="w-fit underline  underline-offset-4"
-                    openNew
-                >
-                    feedback
-                </Components.Link>{' '}
-                or contacting{' '}
-                <Components.Link href="mailto:help@jisc.ac.uk" openNew className="w-fit underline  underline-offset-4">
-                    help@jisc.ac.uk
-                </Components.Link>
+                <span className="font-montserrat">
+                    Help us improve by providing{' '}
+                    <Components.Link
+                        href="https://forms.office.com/e/80g02emciH"
+                        className="w-fit underline  underline-offset-4"
+                        openNew
+                    >
+                        feedback
+                    </Components.Link>{' '}
+                    or contacting{' '}
+                    <Components.Link
+                        href="mailto:help@jisc.ac.uk"
+                        openNew
+                        className="w-fit underline  underline-offset-4"
+                    >
+                        help@jisc.ac.uk
+                    </Components.Link>
+                </span>
             </Components.Banner>
             {/* Missing info banner */}
             {(showConfirmEmailBanner || showMissingNamesBanner) && (

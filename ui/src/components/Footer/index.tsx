@@ -25,7 +25,7 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                 bottom="fill-teal-700 dark:fill-grey-800"
             />
         )}
-        <footer className="relative bg-teal-700 py-28 transition-all duration-500 dark:bg-grey-800 print:hidden">
+        <footer className="bg-teal-700 py-28 transition-all duration-500 dark:bg-grey-800 print:hidden">
             <div className="container mx-auto grid grid-cols-1 gap-8 px-8 md:grid-cols-4">
                 {/** Title and social icons */}
                 <h2 className="col-span-1 block font-montserrat text-4xl font-bold text-white-50 lg:mb-12">Octopus</h2>
