@@ -26,7 +26,7 @@ describe('Related publication result', () => {
     it('Author attribution is shown', () => {
         expect(
             screen.getByText(
-                `By ${Helpers.abbreviateUserName(crosslink.linkedPublication.latestLiveVersion.user)} | ${Helpers.relativeDate(crosslink.linkedPublication.latestLiveVersion.publishedDate)}`
+                `By ${Helpers.abbreviateUserName(crosslink.linkedPublication.latestLiveVersion.user)} | ${Helpers.formatDate(crosslink.linkedPublication.latestLiveVersion.publishedDate)}`
             )
         ).toBeInTheDocument();
     });
