@@ -286,6 +286,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         { title: 'Conflict of interest', href: 'coi' }
     ];
 
+    const languageIfNotEnglish = React.useMemo(
+        () => (publicationVersion?.language ? Helpers.languageIfNotEnglish(publicationVersion.language) : undefined),
+        [publicationVersion?.language]
+    );
+
     const currentCoAuthor = React.useMemo(
         () => publicationVersion?.coAuthors?.find((coAuthor) => coAuthor.linkedUser === user?.id),
         [publicationVersion, user?.id]
@@ -652,11 +657,23 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     return publication && publicationVersion ? (
         <>
             <Head>
-                <title>{pageTitle}</title>
-                <meta name="description" content={props.publicationVersion.description || ''} />
-                <meta name="og:title" content={Helpers.truncateString(pageTitle, 70)} />
-                <meta name="og:description" content={Helpers.truncateString(contentText, 200)} />
-                <meta name="keywords" content={props.publicationVersion.keywords?.join(', ') || ''} />
+                <title lang={languageIfNotEnglish}>{pageTitle}</title>
+                <meta
+                    name="description"
+                    lang={languageIfNotEnglish}
+                    content={props.publicationVersion.description || ''}
+                />
+                <meta name="og:title" lang={languageIfNotEnglish} content={Helpers.truncateString(pageTitle, 70)} />
+                <meta
+                    name="og:description"
+                    lang={languageIfNotEnglish}
+                    content={Helpers.truncateString(contentText, 200)}
+                />
+                <meta
+                    name="keywords"
+                    lang={languageIfNotEnglish}
+                    content={props.publicationVersion.keywords?.join(', ') || ''}
+                />
                 <link
                     rel="canonical"
                     href={`${Config.urls.viewPublication.canonical}/${props.publicationVersion.versionOf}`}
@@ -751,7 +768,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     publicationType={publication.type}
                                 />
                             )}
-                            <h1 className="col-span-7 mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-normal">
+                            <h1
+                                lang={languageIfNotEnglish}
+                                className="col-span-7 mb-4 block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-normal"
+                            >
                                 {publicationVersion.title}
                             </h1>
                             {isBookmarkButtonVisible && (
@@ -822,7 +842,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                     {/** Full text */}
                     <Components.ContentSection id="main-text" hasBreak isMainText>
-                        <div>
+                        <div lang={languageIfNotEnglish}>
                             <Components.ParseHTML content={publicationVersion.content ?? ''} />
                         </div>
                     </Components.ContentSection>
@@ -839,6 +859,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     <Components.AdditionalInformationCard
                                         key={additionalInfoEntry.id}
                                         additionalInformation={additionalInfoEntry}
+                                        publicationLanguage={languageIfNotEnglish}
                                     />
                                 ))}
                             </div>
@@ -849,7 +870,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {showReferences && (
                         <Components.ContentSection id="references" title="References" hasBreak>
                             {references.map((reference) => (
-                                <div key={reference.id} className="py-2 break-anywhere">
+                                <div lang={languageIfNotEnglish} key={reference.id} className="py-2 break-anywhere">
                                     <Components.ParseHTML content={reference.text} />
                                     {reference.location && (
                                         <div className="break-all underline dark:text-white-50">
@@ -953,11 +974,17 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {showEthicalStatement && (
                         <Components.ContentSection id="ethical-statement" title="Ethical statement" hasBreak>
                             <>
-                                <p className="block text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                <p
+                                    lang={languageIfNotEnglish}
+                                    className="block text-grey-800 transition-colors duration-500 dark:text-white-50"
+                                >
                                     {publicationVersion.ethicalStatement && parse(publicationVersion.ethicalStatement)}
                                 </p>
                                 {!!publicationVersion.ethicalStatementFreeText && (
-                                    <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
+                                    <p
+                                        lang={languageIfNotEnglish}
+                                        className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100"
+                                    >
                                         {parse(publicationVersion.ethicalStatementFreeText)}
                                     </p>
                                 )}
@@ -973,11 +1000,17 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                             hasBreak
                         >
                             <>
-                                <p className="mb-2 block text-grey-800 transition-colors duration-500 dark:text-white-50">
+                                <p
+                                    lang={languageIfNotEnglish}
+                                    className="mb-2 block text-grey-800 transition-colors duration-500 dark:text-white-50"
+                                >
                                     {parse(publicationVersion.dataPermissionsStatement)}
                                 </p>
                                 {publicationVersion.dataPermissionsStatementProvidedBy?.length && (
-                                    <p className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
+                                    <p
+                                        lang={languageIfNotEnglish}
+                                        className="mt-4 block text-sm text-grey-700 transition-colors duration-500 dark:text-white-100"
+                                    >
                                         {parse(publicationVersion.dataPermissionsStatementProvidedBy)}
                                     </p>
                                 )}
@@ -988,7 +1021,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {/* Data access statement */}
                     {!!publicationVersion.dataAccessStatement && (
                         <Components.ContentSection id="data-access-statement" title="Data access statement" hasBreak>
-                            <p className="block text-grey-800 transition-colors duration-500 dark:text-white-50">
+                            <p
+                                lang={languageIfNotEnglish}
+                                className="block text-grey-800 transition-colors duration-500 dark:text-white-50"
+                            >
                                 {parse(publicationVersion.dataAccessStatement)}
                             </p>
                         </Components.ContentSection>
@@ -1078,7 +1114,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                     </>
                                 ) : null}
                                 {publicationVersion.fundersStatement ? (
-                                    <p className="block pt-2 leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                                    <p
+                                        lang={languageIfNotEnglish}
+                                        className="block pt-2 leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100"
+                                    >
                                         {parse(publicationVersion.fundersStatement)}
                                     </p>
                                 ) : null}
@@ -1088,7 +1127,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                     {/** Conflict of interest */}
                     <Components.ContentSection id="coi" title="Conflict of interest">
-                        <p className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100">
+                        <p
+                            lang={publicationVersion.conflictOfInterestText ? languageIfNotEnglish : undefined}
+                            className="block leading-relaxed text-grey-800 transition-colors duration-500 dark:text-grey-100"
+                        >
                             {publicationVersion.conflictOfInterestStatus
                                 ? publicationVersion.conflictOfInterestText
                                 : `This ${Helpers.formatPublicationType(
