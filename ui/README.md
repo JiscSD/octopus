@@ -15,22 +15,26 @@ NEXT_PUBLIC_ORCID_APP_ID=PUT_ORCID_APP_ID_HERE
 
 Leave the rest of the file as is.
 
-To start the UI, in the **UI directory** run:
+We use the math extension for the tiptap rich text editor, which comes from an authenticated repository. Create a `.npmrc` file in this directory and give it the following contents, replacing `${TIPTAP_PRO_TOKEN}` with our token:
 
-```bash
-$ ~/ui$ npm i
-$ ~/ui$ npm run dev
 ```
+@tiptap-pro:registry=https://registry.tiptap.dev/
+//registry.tiptap.dev/:_authToken=${TIPTAP_PRO_TOKEN}
+```
+
+Then the dependencies can all be installed by running `npm i`.
+
+To start the UI application, run: `npm run dev`.
 
 ### Warning about self-signed certificate generation
 
 Note: because of the `--experimental-https` flag, the process may prompt for your password in order to generate a self-signed certificate. Due to the use of concurrently to run multiple processes under one command, this can get a bit lost or unclear in the output, e.g.:
 
 ```
-[next]  ⚠ Self-signed certificates are currently an experimental feature, use with caution.
-[next]    Downloading mkcert package...
-[next]    Download response was successful, writing to disk
-[next]    Attempting to generate self signed certificate. This may prompt for your password
+[next] ⚠ Self-signed certificates are currently an experimental feature, use with caution.
+[next] Downloading mkcert package...
+[next] Download response was successful, writing to disk
+[next] Attempting to generate self signed certificate. This may prompt for your password
 Sudo password:[types]
 [types] 12:02:13 PM - Found 0 errors. Watching for file changes.
 ```

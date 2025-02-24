@@ -12,6 +12,7 @@ import * as Stores from '@/stores';
 import Mammoth from 'mammoth';
 import TipTapImage from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
+import Mathematics from '@tiptap-pro/extension-mathematics';
 import Table from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
@@ -118,12 +119,6 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         }
         closeLinkModal();
     }, [props.editor, linkUrl, closeLinkModal]);
-
-    // TODO wire up remove link if we want to add this in the near future.
-    const removeLink = React.useCallback(() => {
-        props.editor.chain().focus().extendMarkRange('link').unsetLink().run();
-        closeLinkModal();
-    }, [props.editor, closeLinkModal]);
 
     // For File upload
     const handleUploadImage = async (files: Interfaces.ImagePreview[]) => {
@@ -702,6 +697,10 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
         autofocus: true,
         extensions: [
             StarterKit,
+            Mathematics.configure({
+                regex: Config.values.latexRegex,
+                shouldRender: () => true
+            }),
             Link.configure({
                 openOnClick: false
             }),
