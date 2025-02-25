@@ -651,3 +651,9 @@ export const extractNextQueryParam = (param: string | string[] | undefined, chec
         return rawValue;
     }
 };
+
+// Return a language value if it is not english, otherwise undefined.
+// Useful for setting the HTML lang attribute - if it's underfined it won't be added.
+export const languageIfNotEnglish = (language: Types.Languages): Types.Languages | undefined => {
+    return language !== 'en' ? language : undefined;
+};
