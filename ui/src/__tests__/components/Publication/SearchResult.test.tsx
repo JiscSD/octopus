@@ -51,7 +51,7 @@ describe('Publication search result', () => {
 
     it('Shows pubished date with author list', () => {
         expect(
-            screen.getByText(`Published ${Helpers.relativeDate(publishedDate)}, by E. User, A. One`)
+            screen.getByText(`Published ${Helpers.formatDate(publishedDate)}, by E. User, A. One`)
         ).toBeInTheDocument();
     });
 });

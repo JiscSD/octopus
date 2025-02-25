@@ -80,7 +80,7 @@ const RelatedPublicationsResult: React.FC<Props> = (props): React.ReactElement =
                     className="block overflow-hidden text-ellipsis whitespace-nowrap text-xs tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100"
                     title={authorNames}
                 >
-                    By {authorNames} | {Helpers.relativeDate(publicationVersion.publishedDate)}
+                    By {authorNames} | {Helpers.formatDate(publicationVersion.publishedDate)}
                 </span>
                 <span className="flex">
                     <Components.Link
