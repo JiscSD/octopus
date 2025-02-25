@@ -50,6 +50,9 @@ const createPublicationHTMLTemplate = (
     // parsing the publication content can sometimes help with unpaired opening/closing tags
     const mainText = content ? cheerio.load(content).html() : '';
 
+    // For setting lang attribute on HTML
+    const languageIfNotEnglish = language !== 'en' ? language : undefined;
+
     const authors = coAuthors.filter((author) => Boolean(author.confirmedCoAuthor && author.linkedUser));
 
     // If corresponding author is not found in coauthors list, and we have the necessary fields, mock them up
@@ -306,7 +309,7 @@ const createPublicationHTMLTemplate = (
                 </style>
             </head>
             <body>
-            <h1 id="title">${title}</h1>
+            <h1 id="title" lang=${languageIfNotEnglish}>${title}</h1>
                 <p class="metadata">
                     <strong>Authors:</strong> ${authorsWithAffiliationNumbers
                         .map(
@@ -344,7 +347,7 @@ const createPublicationHTMLTemplate = (
                     </a>
                 </p>
     
-                <div id="main-text">
+                <div id="main-text" lang=${languageIfNotEnglish}>
                     ${mainText}
                 </div>
     
@@ -357,10 +360,12 @@ const createPublicationHTMLTemplate = (
                             .map(
                                 (additionalInfoEntry) =>
                                     `<li>
-                                        <h3 class="section-subtitle"><b>${additionalInfoEntry.title}</b></h3>
+                                        <h3 class="section-subtitle" lang=${languageIfNotEnglish}><b>${
+                                        additionalInfoEntry.title
+                                    }</b></h3>
                                         ${
                                             additionalInfoEntry.description &&
-                                            `<p>${additionalInfoEntry.description}</p>`
+                                            `<p lang=${languageIfNotEnglish}>${additionalInfoEntry.description}</p>`
                                         }
                                         <p><a href="${additionalInfoEntry.url}" aria-label="${
                                         additionalInfoEntry.title
@@ -446,8 +451,12 @@ const createPublicationHTMLTemplate = (
                     ethicalStatement
                         ? ` <div class="section">
                                 <h2 class="section-title">Ethical statement</h2>
-                                <p>${ethicalStatement}</p>
-                                ${ethicalStatementFreeText ? `<p>${ethicalStatementFreeText}</p>` : ''}
+                                <p lang=${languageIfNotEnglish}>${ethicalStatement}</p>
+                                ${
+                                    ethicalStatementFreeText
+                                        ? `<p lang=${languageIfNotEnglish}>${ethicalStatementFreeText}</p>`
+                                        : ''
+                                }
                             </div>`
                         : ''
                 }
@@ -456,7 +465,7 @@ const createPublicationHTMLTemplate = (
                     dataPermissionsStatement
                         ? ` <div class="section">
                                 <h2 class="section-title">Data permissions statement</h2>
-                                <p>${dataPermissionsStatement}</p>
+                                <p lang=${languageIfNotEnglish}>${dataPermissionsStatement}</p>
                                 ${
                                     dataPermissionsStatementProvidedBy
                                         ? `<p>${dataPermissionsStatementProvidedBy}</p>`
@@ -470,7 +479,7 @@ const createPublicationHTMLTemplate = (
                     dataAccessStatement
                         ? ` <div class="section">
                                 <h2 class="section-title">Data access statement</h2>
-                                <p>${dataAccessStatement}</p>
+                                <p lang=${languageIfNotEnglish}>${dataAccessStatement}</p>
                             </div>`
                         : ''
                 }
@@ -497,7 +506,7 @@ const createPublicationHTMLTemplate = (
                     <h2 class="section-title">Conflict of interest</h2>
                     ${
                         conflictOfInterestText
-                            ? `<p>${conflictOfInterestText}</p>`
+                            ? `<p lang=${languageIfNotEnglish}>${conflictOfInterestText}</p>`
                             : '<p>This publication does not have any specified conflicts of interest.</p>'
                     }
                 </div>   
