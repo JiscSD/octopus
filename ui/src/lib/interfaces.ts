@@ -292,11 +292,12 @@ export interface BookmarkedTopic {
 }
 
 export interface OctopusInformation {
-    publications: {
+    publicationTypes: {
         [key in Types.PublicationType]: {
             id: Types.PublicationType;
-            heading: string;
-            content: string;
+            label: string;
+            inlineDescription: string;
+            faqDescription: string;
         };
     };
     licences: {

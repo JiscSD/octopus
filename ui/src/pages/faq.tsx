@@ -6,7 +6,10 @@ import { NextPage } from 'next';
 import * as Components from '@/components';
 import * as Layouts from '@/layouts';
 import * as Config from '@/config';
+import * as Types from '@/types';
 
+const publicationTypes = Config.values.octopusInformation.publicationTypes;
+const publicationTypeIds: Types.PublicationType[] = Object.keys(publicationTypes) as Types.PublicationType[];
 const faqContents = [
     {
         title: 'What is Octopus?',
@@ -65,25 +68,14 @@ const faqContents = [
         href: 'pub_type_octopus',
         id: 'pub_type_octopus',
         heading: 'Which publication type should I use?',
-        content: `
-            <p className='mb-2'>Below are the eight publication types. You should select the one which matches where you are in the research process.</p>
-            <p className='mb-2 font-bold'>Research problem</p>
-            <p className='mb-2'>A &apos;research problem&apos; publication defines a research problem or question. You will need to explain what is known so far about the problem, rather like the &apos;introduction&apos; to a traditional paper.</p>
-            <p className='mb-2 font-bold'>Rationale/Hypothesis:</p>
-            <p className='mb-2'>A &apos;rationale/hypothesis&apos; publication sets out the theoretical basis for a potential solution, or partial solution, to the &apos;research problem&apos; it is linked to. In some fields a formal hypothesis is appropriate, in other fields it might be a description of an approach that might be taken.</p>
-            <p className='mb-2 font-bold'>Method:</p>
-            <p className='mb-2'>A &apos;method&apos; publication is a detailed description of ways of testing a hypothesis, or carrying out a theoretical rationale. You can include links to sites such as <a href='https://protocols.io' className='underline' target='_blank'>protocols.io</a> to give more detail of the method if that would be helpful to readers.</p>
-            <p className='mb-2 font-bold'>Results:</p>
-            <p className='mb-2'>A &apos;results&apos; publication comprises raw data or summarised results collected according to an existing published &apos;method&apos;. It should describe the data or results themselves, without any analysis. It should provide details of the exact conditions under which the method was carried out and anything needed for an analysis or interpretation of the results. You can include links to the raw data files if they are in a specialist repository. Octopus is not a data repository itself.</p>
-            <p className='mb-2 font-bold'>Analysis:</p>
-            <p className='mb-2'>An &apos;analysis&apos; publication describes manipulations of results to help draw conclusions from them. For example, thematic or statistical analysis.</p>
-            <p className='mb-2 font-bold'>Interpretation:</p>
-            <p className='mb-2'>An &apos;interpretation&apos; publication describes conclusions drawn from an &apos;analysis&apos; of results.</p>
-            <p className='mb-2 font-bold'>Real World Application:</p>
-            <p className='mb-2'>A &apos;real world application&apos; publication describes how findings might have (or have had) an impact in the real world. This might be through a practical or policy application, and would be the appropriate publication type for case studies.</p>
-            <p className='mb-2 font-bold'>Peer Review:</p>
-            <p>A &apos;peer review&apos; publication is open and post-publication. It should be a carefully considered and constructive critique of an existing publication by someone else. Your review should help other readers assess the publication, and should be written in the same style as any other kind of publication, with relevant references. Authors may reversion publications in the light of reviews.</p>
-        `
+        content:
+            `<p className='mb-2'>Below are the eight publication types. You should select the one which matches where you are in the research process.</p>` +
+            publicationTypeIds
+                .map(
+                    (type, index) =>
+                        `<p className='mb-2 font-bold'>${publicationTypes[type].label}:</p><p ${index !== publicationTypeIds.length - 1 ? 'className="mb-2"' : ''}>${publicationTypes[type].faqDescription}</p>`
+                )
+                .join('')
     },
     {
         title: 'How do I format my publications?',

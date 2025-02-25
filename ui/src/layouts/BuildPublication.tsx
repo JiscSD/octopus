@@ -88,7 +88,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             if (publicationVersion.conflictOfInterestStatus === null) {
                 ready = { ready: false, message: 'You must select a conflict of interest option' };
             }
-            if (publicationVersion.publication.type === Config.values.octopusInformation.publications.DATA.id) {
+            if (publicationVersion.publication.type === Config.values.octopusInformation.publicationTypes.DATA.id) {
                 if (publicationVersion.ethicalStatement === null)
                     ready = { ready: false, message: 'You must select an ethical statement option' };
                 if (publicationVersion.dataPermissionsStatement === null)
@@ -143,7 +143,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             if (publicationVersion.conflictOfInterestStatus === null) {
                 ready = { ready: false, message: 'You must select a conflict of interest option' };
             }
-            if (publicationVersion.publication.type === Config.values.octopusInformation.publications.DATA.id) {
+            if (publicationVersion.publication.type === Config.values.octopusInformation.publicationTypes.DATA.id) {
                 if (publicationVersion.ethicalStatement === null)
                     ready = { ready: false, message: 'You must select an ethical statement option' };
                 if (publicationVersion.dataPermissionsStatement === null)

@@ -191,7 +191,8 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                             )}
                         </select>
                         <SupportText>
-                            Definition: {Config.values.octopusInformation.publications[publicationType].content}
+                            Definition:{' '}
+                            {Config.values.octopusInformation.publicationTypes[publicationType].inlineDescription}
                         </SupportText>
                     </div>
                     <Components.Checkbox
