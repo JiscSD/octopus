@@ -75,6 +75,7 @@
         "@types/cheerio": "^0.22.32",
         "@types/jest": "^29.5.4",
         "@types/jsonwebtoken": "^9.0.2",
+        "@types/katex": "^0.16.7",
         "@types/luxon": "^3.3.2",
         "@types/node": "^20.16.10",
         "@types/nodemailer": "^6.4.10",
