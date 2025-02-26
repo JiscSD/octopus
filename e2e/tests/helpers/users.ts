@@ -63,7 +63,7 @@ export const login = async (page: Page, browser: Browser, user: TestUser) => {
     ]);
 
     // check if need to authorize access
-    const needsAuthorization = page.url().includes('/oauth/authorize');
+    const needsAuthorization = await page.locator(PageModel.login.authorizeHeading).isVisible();
 
     if (needsAuthorization) {
         await Promise.all([page.waitForNavigation(), page.click(PageModel.login.authorizeButton)]);
