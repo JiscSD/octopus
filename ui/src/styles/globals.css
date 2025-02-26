@@ -55,7 +55,7 @@
 
     /* Mathematics extension styles */
     .tiptap-editor .Tiptap-mathematics-editor {
-    /* .Tiptap-mathematics-editor { */
+        /* .Tiptap-mathematics-editor { */
         @apply bg-grey-800 text-white-50 px-1 py-2 rounded-md;
     }
 
