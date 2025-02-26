@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useId } from 'react';
 import * as Framer from 'framer-motion';
 
 import * as Components from '@/components';
-import * as Helpers from '@/helpers';
 
 type Props = {
     className?: string;
@@ -16,9 +15,12 @@ type Props = {
     total: number;
 };
 const PaginatedResults: React.FC<Props> = (props: Props) => {
+    const articleId = useId();
     const upperPageBound = props.limit + props.offset > props.total ? props.total : props.limit + props.offset;
+    const scrollToTop = () =>
+        setTimeout(() => document.getElementById(articleId)?.scrollIntoView({ behavior: 'smooth' }));
     return (
-        <article className={props.className}>
+        <article id={articleId} className={props.className}>
             <div aria-live="polite" className="sr-only">
                 {props.error ? props.error : `${props.total} result${props.total !== 1 ? 's' : ''}`}
             </div>
@@ -56,7 +58,7 @@ const PaginatedResults: React.FC<Props> = (props: Props) => {
                                     className="mr-6"
                                     onClick={() => {
                                         props.setOffset(props.offset - props.limit);
-                                        Helpers.scrollTopSmooth();
+                                        scrollToTop();
                                     }}
                                     disabled={props.offset === 0}
                                     title="Previous"
@@ -64,7 +66,7 @@ const PaginatedResults: React.FC<Props> = (props: Props) => {
                                 <Components.Button
                                     onClick={() => {
                                         props.setOffset(props.offset + props.limit);
-                                        Helpers.scrollTopSmooth();
+                                        scrollToTop();
                                     }}
                                     disabled={props.limit + props.offset >= props.total}
                                     title="Next"
