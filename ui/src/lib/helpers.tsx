@@ -581,7 +581,9 @@ export const htmlToText = (htmlString: string): string => {
         for (const node of nodesToRemove) {
             node.remove();
         }
-        return htmlDoc.documentElement.textContent || '';
+        const text = htmlDoc.documentElement.textContent || '';
+        // Remove LaTeX expressions.
+        return text.replace(Config.values.latexRegex, '');
     } else {
         // Server-side fallback method
         const $ = cheerio.load(htmlString);
