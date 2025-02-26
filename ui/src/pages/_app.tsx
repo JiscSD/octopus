@@ -20,7 +20,6 @@ type CustomProps = {
 };
 
 const App = ({ Component, pageProps }: Types.AppProps<CustomProps>) => {
-    const { user } = Stores.useAuthStore();
     const { darkMode } = Stores.usePreferencesStore();
 
     // check authentication client side
@@ -75,6 +74,10 @@ const App = ({ Component, pageProps }: Types.AppProps<CustomProps>) => {
                     <div className={darkMode ? 'dark' : ''}>
                         <div className="bg-teal-50 transition-colors duration-500 dark:bg-grey-800">
                             <Components.Toast />
+                            {/* Uncomment to show announcement banner at the bottom of all pages.
+                            <Components.AnnouncementBanner>
+                                Announcement placeholder
+                            </Components.AnnouncementBanner> */}
                             <Component {...pageProps} />
                         </div>
                     </div>
