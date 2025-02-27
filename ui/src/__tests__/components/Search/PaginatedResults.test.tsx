@@ -25,8 +25,8 @@ describe('With no results', () => {
 });
 
 describe('With results', () => {
-    const setOffset = jest.fn();
-    global.scrollTo = jest.fn();
+    const scrollFunction = jest.fn();
+    const setOffset = jest.fn(() => console.log('scroll function'));
     beforeEach(() => {
         render(
             <Components.PaginatedResults
@@ -34,6 +34,7 @@ describe('With results', () => {
                 limit={10}
                 offset={0}
                 results={<p>Placeholder</p>}
+                scrollFunction={scrollFunction}
                 setOffset={setOffset}
                 total={50}
             />
@@ -60,15 +61,17 @@ describe('With results', () => {
         expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled();
     });
 
-    it('Next button calls setOffset with next page offset', async () => {
+    it('Next button calls setOffset with next page offset and custom scroll function', async () => {
         await userEvent.click(screen.getByRole('button', { name: 'Next' }));
+        expect(setOffset).toHaveBeenCalledTimes(1);
         expect(setOffset).toHaveBeenCalledWith(10);
+        expect(scrollFunction).toHaveBeenCalledTimes(1);
     });
 });
 
 describe('Last page of results', () => {
+    const scrollFunction = jest.fn();
     const setOffset = jest.fn();
-    global.scrollTo = jest.fn();
     beforeEach(() => {
         render(
             <Components.PaginatedResults
@@ -76,6 +79,7 @@ describe('Last page of results', () => {
                 limit={10}
                 offset={40}
                 results={<p>Placeholder</p>}
+                scrollFunction={scrollFunction}
                 setOffset={setOffset}
                 total={50}
             />
@@ -94,9 +98,11 @@ describe('Last page of results', () => {
         expect(screen.getByRole('button', { name: 'Previous' })).toBeEnabled();
     });
 
-    it('Previous button calls setOffset with previous page offset', async () => {
+    it('Previous button calls setOffset with previous page offset and custom scroll function', async () => {
         await userEvent.click(screen.getByRole('button', { name: 'Previous' }));
+        expect(setOffset).toHaveBeenCalledTimes(1);
         expect(setOffset).toHaveBeenCalledWith(30);
+        expect(scrollFunction).toHaveBeenCalledTimes(1);
     });
 
     it('Next button is shown', () => {

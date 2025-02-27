@@ -52,10 +52,17 @@ const SearchResult: React.FC<Props<GenericCoAuthor>> = (props): React.ReactEleme
             <div className="flex justify-between">
                 <p
                     className="overflow-hidden text-ellipsis whitespace-nowrap text-xs tracking-wide text-grey-800 transition-colors duration-500 dark:text-grey-100"
+                    data-testid="published-date-with-authors"
                     title={authors}
                 >
-                    {props.publishedDate ? `Published ${Helpers.formatDate(props.publishedDate)}` : 'Draft'}, by{' '}
-                    {authors}
+                    {props.publishedDate ? (
+                        <>
+                            Published <time suppressHydrationWarning>{Helpers.formatDate(props.publishedDate)}</time>
+                        </>
+                    ) : (
+                        'Draft'
+                    )}
+                    , by {authors}
                 </p>
                 <Components.EngagementCounts flagCount={props.flagCount} peerReviewCount={props.peerReviewCount} />
             </div>
