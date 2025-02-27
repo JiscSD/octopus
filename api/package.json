@@ -16,13 +16,13 @@
         "seed": "tsx prisma/seed.ts"
     },
     "scripts": {
-        "build": "bash ./scripts/build.sh",
+        "build": "swc src -d dist --copy-files -s false && ./scripts/copy-katex-assets.sh",
         "deploy:int": "sls deploy --stage int",
         "deploy:prod": "sls deploy --stage prod",
         "dev": "concurrently npm:dev:start npm:dev:watch npm:dev:type",
         "dev:start": "sls offline start -c serverless-offline.yml --reloadHandler --httpPort 4003 --host 0.0.0.0 --stage local",
         "dev:type": "tsc --noEmit -w --preserveWatchOutput",
-        "dev:watch": "bash ./scripts/dev-watch.sh",
+        "dev:watch": "swc prisma -d dist --copy-files && ./scripts/copy-katex-assets.sh && swc src -d dist --copy-files -w",
         "format:check": "npx prettier --check src/",
         "format:write": "npx prettier --write src/",
         "lint:check": "eslint src/",
