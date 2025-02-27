@@ -133,6 +133,7 @@ export const PageModel = {
         password: '#password',
         signInButton: '#signin-button',
         authorizeButton: '#authorize-button',
+        authorizeHeading: 'h1:has-text("Authorize access")',
         rejectCookies: '#onetrust-reject-all-handler'
     },
     confirmEmail: {},
