@@ -34,6 +34,7 @@ type Props = {
 const SearchInterface = React.forwardRef(
     (props: Props, searchInputRef: React.ForwardedRef<HTMLInputElement>): React.ReactElement => {
         const router = Router.useRouter();
+        const scrollTargetRef = React.useRef<HTMLDivElement>(null);
 
         const results = (
             <div className="rounded">
@@ -95,7 +96,10 @@ const SearchInterface = React.forwardRef(
 
         return (
             <div className="mx-auto grid grid-cols-1 gap-x-6 lg:grid-cols-12 lg:gap-y-8 2xl:gap-x-10">
-                <div className="col-span-12 mb-8 grid w-full grid-cols-12 gap-x-6 gap-y-4 lg:mb-0 2xl:gap-x-10">
+                <div
+                    className="col-span-12 mb-8 grid w-full grid-cols-12 gap-x-6 gap-y-4 lg:mb-0 2xl:gap-x-10"
+                    ref={scrollTargetRef}
+                >
                     <fieldset
                         className={`col-span-12 ${props.showSearchTypeSwitch ? 'grid grid-cols-12 gap-x-6 2xl:gap-x-10 lg:col-span-5 xl:col-span-4' : 'lg:col-span-3 xl:col-span-2'}`}
                     >
@@ -216,6 +220,11 @@ const SearchInterface = React.forwardRef(
                     noResultsMessage={props.noResultsMessage}
                     offset={props.offset}
                     results={results}
+                    scrollFunction={
+                        scrollTargetRef.current
+                            ? () => scrollTargetRef.current?.scrollIntoView({ behavior: 'smooth' })
+                            : undefined
+                    }
                     setOffset={props.setOffset}
                     total={props.total}
                 />

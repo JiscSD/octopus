@@ -11,14 +11,22 @@ type Props = {
     noResultsMessage?: string;
     offset: number;
     results: React.ReactNode;
+    scrollFunction?: () => void;
     setOffset: (offset: React.SetStateAction<number>) => void;
     total: number;
 };
-const PaginatedResults: React.FC<Props> = (props: Props) => {
+const PaginatedResults: React.FC<Props> = (props: Props, scrollTargetRef?: React.ForwardedRef<HTMLElement>) => {
     const articleId = useId();
     const upperPageBound = props.limit + props.offset > props.total ? props.total : props.limit + props.offset;
     const scrollToTop = () =>
-        setTimeout(() => document.getElementById(articleId)?.scrollIntoView({ behavior: 'smooth' }));
+        setTimeout(
+            () =>
+                props.scrollFunction
+                    ? props.scrollFunction()
+                    : // If no custom scroll function is passed, scroll to the top of the results.
+                      document.getElementById(articleId)?.scrollIntoView({ behavior: 'smooth' }),
+            0
+        );
     return (
         <article id={articleId} className={props.className}>
             <div aria-live="polite" className="sr-only">
