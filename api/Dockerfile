@@ -33,3 +33,4 @@ RUN npm i
 RUN npm i -g serverless@latest
 
 COPY . /app
+RUN ls scripts
