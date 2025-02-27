@@ -16,6 +16,7 @@ export const getServerSideProps: Types.GetServerSideProps = async ({ res }) => {
         'author-guide',
         'blog',
         'browse',
+        'cookie-policy',
         'create',
         'faq',
         'get-involved',

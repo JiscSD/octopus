@@ -528,6 +528,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         [author?.linkedUser, publicationVersion?.createdBy]
     );
 
+    const processedContent = useMemo(
+        () => Helpers.renderLatexInHTMLString(publicationVersion?.content || ''),
+        [publicationVersion?.content]
+    );
+
     const pageTitle = publicationVersion ? `${publicationVersion.title} - ${Config.urls.viewPublication.title}` : '';
     const contentText = publicationVersion?.content ? Helpers.htmlToText(publicationVersion.content) : '';
 
@@ -843,7 +848,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                     {/** Full text */}
                     <Components.ContentSection id="main-text" hasBreak isMainText>
                         <div lang={languageIfNotEnglish}>
-                            <Components.ParseHTML content={publicationVersion.content ?? ''} />
+                            <Components.ParseHTML content={processedContent} />
                         </div>
                     </Components.ContentSection>
 

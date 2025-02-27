@@ -117,6 +117,7 @@ const createPublicationHTMLTemplate = (
     const base64InterSemiBold = fs.readFileSync('assets/fonts/Inter-SemiBold.ttf', { encoding: 'base64' });
     const base64InterBold = fs.readFileSync('assets/fonts/Inter-Bold.ttf', { encoding: 'base64' });
     const base64MontserratMedium = fs.readFileSync('assets/fonts/Montserrat-Medium.ttf', { encoding: 'base64' });
+    const katexCSS = fs.readFileSync('assets/katex/katex.min.css', { encoding: 'utf-8' });
 
     const htmlTemplate = `
         <!DOCTYPE html>
@@ -307,6 +308,7 @@ const createPublicationHTMLTemplate = (
                         margin-bottom: 1rem;
                     }
                 </style>
+                <style>${katexCSS}</style>
             </head>
             <body>
             <h1 id="title" lang=${languageIfNotEnglish}>${title}</h1>
@@ -348,7 +350,7 @@ const createPublicationHTMLTemplate = (
                 </p>
     
                 <div id="main-text" lang=${languageIfNotEnglish}>
-                    ${mainText}
+                    ${Helpers.renderLatexInHTMLString(mainText)}
                 </div>
     
                 ${
