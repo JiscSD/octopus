@@ -4,21 +4,21 @@ CREATE FUNCTION get_publication_crosslinks (
   search text DEFAULT null,
   excluded_publication_ids text[] DEFAULT array[]::text[],
   order_on text DEFAULT null,
-  limit_to integer DEFAULT 10,
+  limit_to integer DEFAULT null,
   offset_by integer DEFAULT 0
 )
 RETURNS TABLE (
   id text,
-  linkedPublicationId text,
-  createdBy text,
-  createdAt timestamp with time zone,
+  linked_publication_id text,
+  created_by text,
+  created_at timestamp with time zone,
   score integer,
-  linkedPublicationLatestLiveVersionId text,
-  linkedPublicationTitle text,
-  linkedPublicationPublishedDate timestamp with time zone,
-  linkedPublicationAuthorId text,
-  linkedPublicationAuthorFirstName text,
-  linkedPublicationAuthorLastName text
+  linked_publication_latest_live_version_id text,
+  linked_publication_title text,
+  linked_publication_published_date timestamp with time zone,
+  linked_publication_author_id text,
+  linked_publication_author_first_name text,
+  linked_publication_author_last_name text
 )
 LANGUAGE SQL AS $func$
 SELECT
@@ -27,16 +27,16 @@ FROM
   (
     SELECT
       c.id,
-      c."publicationToId" AS "linkedPublicationId",
-      c."createdBy",
-      c."createdAt",
+      c."publicationToId" AS linked_publication_id,
+      c."createdBy" AS created_by,
+      c."createdAt" AS created_at,
       c.score,
-      pv.id AS "linkedPublicationLatestLiveVersionId",
-      pv.title AS "linkedPublicationTitle",
-      pv."publishedDate" AS "linkedPublicationPublishedDate",
-      pvu.id AS "linkedPublicationAuthorId",
-      pvu."firstName" AS "linkedPublicationAuthorFirstName",
-      pvu."lastName" AS "linkedPublicationAuthorLastName"
+      pv.id AS linked_publication_latest_live_version_id,
+      pv.title AS linked_publication_title,
+      pv."publishedDate" AS linked_publication_published_date,
+      pvu.id AS linked_publication_author_id,
+      pvu."firstName" AS linked_publication_author_first_name,
+      pvu."lastName" AS linked_publication_author_last_name
     FROM
       "Crosslink" AS c
       JOIN "PublicationVersion" AS pv ON c."publicationToId" = pv."versionOf"
@@ -60,16 +60,16 @@ FROM
     UNION
     SELECT
       c.id,
-      c."publicationFromId" AS linkedPublicationId,
-      c."createdBy",
-      c."createdAt",
+      c."publicationFromId" AS linked_publication_id,
+      c."createdBy" AS created_by,
+      c."createdAt" AS created_at,
       c.score,
-      pv.id AS "linkedPublicationLatestLiveVersionId",
-      pv.title AS linkedPublicationTitle,
-      pv."publishedDate" AS "linkedPublicationPublishedDate",
-      pvu.id AS "linkedPublicationAuthorId",
-      pvu."firstName" AS "linkedPublicationAuthorFirstName",
-      pvu."lastName" AS "linkedPublicationAuthorlastName"
+      pv.id AS linked_publication_latest_live_version_id,
+      pv.title AS linked_publication_title,
+      pv."publishedDate" AS linked_publication_published_date,
+      pvu.id AS linked_publication_author_id,
+      pvu."firstName" AS linked_publication_author_first_name,
+      pvu."lastName" AS linked_publication_author_last_name
     FROM
       "Crosslink" AS c
       JOIN "PublicationVersion" AS pv ON c."publicationFromId" = pv."versionOf"
@@ -99,7 +99,7 @@ ORDER BY
       WHEN order_on = 'relevant' THEN score
     END
   ) DESC,
-  "createdAt" DESC
+  created_at DESC
 LIMIT
   limit_to
 OFFSET
