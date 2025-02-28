@@ -236,11 +236,11 @@ const getPublicationCrosslinksQuery = async (
     results: RelativeCrosslink[];
     total: number;
 }> => {
-    // Get crosslinks and count using stored function.
+    // Get crosslinks.
     const fromClause = buildPublicationCrosslinksFromClause({ publicationId, ...options, limit: options?.limit || 10 });
     const crosslinks = await client.prisma.$queryRaw<GetPublicationCrosslinksQueryResult[]>`SELECT * ${fromClause}`;
 
-    // Get total count.
+    // Get total count regardless of limit.
     const totalFromClause = buildPublicationCrosslinksFromClause({ publicationId, ...options, limit: undefined });
     const totalQueryResults = await client.prisma.$queryRaw<[{ count: number }]>`SELECT count(*) ${totalFromClause}`;
 
