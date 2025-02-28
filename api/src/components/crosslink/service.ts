@@ -189,187 +189,170 @@ export const getVote = (crosslinkId: string, userId: string) =>
         }
     });
 
-export const getPublicationCrosslinks = async (publicationId: string, options?: I.GetPublicationCrosslinksOptions) => {
-    const { order, search, limit, offset, userIdFilter } = options || {};
-    const publicationInclude = {
+type GetPublicationCrosslinksQueryResult = {
+    id: string;
+    linked_publication_id: string;
+    created_by: string;
+    created_at: string;
+    score: number;
+    linked_publication_latest_live_version_id: string;
+    linked_publication_title: string;
+    linked_publication_published_date: string;
+    linked_publication_author_id: string;
+    linked_publication_author_first_name: string;
+    linked_publication_author_last_name: string;
+};
+
+type RelativeCrosslink = {
+    id: string;
+    score: number;
+    createdBy: string;
+    createdAt: string;
+    linkedPublication: Pick<I.Publication, 'id'> & {
+        latestLiveVersion: Pick<I.PublicationVersion, 'title'> & {
+            user: Pick<I.User, 'id' | 'firstName' | 'lastName'>;
+        };
+    };
+};
+interface GetPublicationCrosslinksQueryOptions extends I.GetPublicationCrosslinksOptions {
+    excludedPublicationIds?: string[];
+}
+
+const buildPublicationCrosslinksFromClause = (
+    options: { publicationId: string } & GetPublicationCrosslinksQueryOptions
+): Prisma.Sql => {
+    const { publicationId, order, search, limit, offset, userIdFilter, excludedPublicationIds } = options;
+
+    return Prisma.sql`FROM get_publication_crosslinks(${publicationId}, ${userIdFilter || null}, ${search || null}, ${
+        excludedPublicationIds || []
+    }, ${order || null}, ${limit || null}::INTEGER, ${offset || 0}::INTEGER);
+    `;
+};
+
+const getPublicationCrosslinksQuery = async (
+    publicationId: string,
+    options?: GetPublicationCrosslinksQueryOptions
+): Promise<{
+    results: RelativeCrosslink[];
+    total: number;
+}> => {
+    // Get crosslinks.
+    const fromClause = buildPublicationCrosslinksFromClause({ publicationId, ...options, limit: options?.limit || 10 });
+    const crosslinks = await client.prisma.$queryRaw<GetPublicationCrosslinksQueryResult[]>`SELECT * ${fromClause}`;
+
+    // Get total count regardless of limit.
+    const totalFromClause = buildPublicationCrosslinksFromClause({ publicationId, ...options, limit: undefined });
+    const totalQueryResults = await client.prisma.$queryRaw<[{ count: number }]>`SELECT count(*) ${totalFromClause}`;
+
+    // This looks bad but the count comes back as a "bigint" type.
+    // Treating it as a number right away causes errors in JSON serialization, so have to convert it properly.
+    const total = Number.parseInt(String(totalQueryResults[0].count));
+
+    // Get CoAuthors.
+    const versionIds = crosslinks.map((crosslink) => crosslink.linked_publication_latest_live_version_id);
+    const coAuthors = await client.prisma.coAuthors.findMany({
+        where: {
+            publicationVersionId: {
+                in: versionIds
+            }
+        },
         select: {
-            id: true,
-            versions: {
-                where: {
-                    isLatestLiveVersion: true
-                },
+            publicationVersionId: true,
+            linkedUser: true,
+            user: {
                 select: {
-                    title: true,
-                    publishedDate: true,
-                    user: {
-                        select: {
-                            id: true,
-                            firstName: true,
-                            lastName: true
-                        }
-                    },
-                    coAuthors: {
-                        select: {
-                            linkedUser: true,
-                            user: {
-                                select: {
-                                    firstName: true,
-                                    lastName: true,
-                                    role: true
-                                }
-                            }
-                        }
-                    }
+                    firstName: true,
+                    lastName: true,
+                    role: true
                 }
             }
         }
-    };
-
-    // If a query term is supplied, match against the latest live title of the
-    // crosslinked publication, i.e. not the one whose publicationId was supplied.
-    const where: Prisma.CrosslinkWhereInput = {
-        ...(search
-            ? {
-                  OR: [
-                      {
-                          publicationFromId: publicationId,
-                          publicationTo: {
-                              versions: {
-                                  some: {
-                                      isLatestLiveVersion: true,
-                                      title: {
-                                          search: search + ':*'
-                                      }
-                                  }
-                              }
-                          }
-                      },
-                      {
-                          publicationToId: publicationId,
-                          publicationFrom: {
-                              versions: {
-                                  some: {
-                                      isLatestLiveVersion: true,
-                                      title: {
-                                          search: search + ':*'
-                                      }
-                                  }
-                              }
-                          }
-                      }
-                  ]
-              }
-            : {
-                  OR: [
-                      {
-                          publicationFromId: publicationId
-                      },
-                      {
-                          publicationToId: publicationId
-                      }
-                  ]
-              }),
-        ...(userIdFilter ? { createdBy: userIdFilter } : {})
-    };
-
-    let rawCrosslinks;
-
-    if (order === 'mix') {
-        const recent = await client.prisma.crosslink.findMany({
-            where,
-            include: {
-                publicationFrom: publicationInclude,
-                publicationTo: publicationInclude
-            },
-            orderBy: {
-                createdAt: 'desc'
-            },
-            take: 2
-        });
-        const recentIds = recent.map((crosslink) => crosslink.id);
-        const relevant = await client.prisma.crosslink.findMany({
-            where: {
-                ...where,
-                id: {
-                    not: {
-                        in: recentIds
-                    }
-                }
-            },
-            include: {
-                publicationFrom: publicationInclude,
-                publicationTo: publicationInclude
-            },
-            orderBy: {
-                score: 'desc'
-            },
-            take: 3
-        });
-        rawCrosslinks = [...recent, ...relevant];
-    } else {
-        const orderBy: Prisma.CrosslinkOrderByWithRelationAndSearchRelevanceInput =
-            order === 'relevant'
-                ? {
-                      score: 'desc'
-                  }
-                : {
-                      createdAt: 'desc'
-                  };
-        rawCrosslinks = await client.prisma.crosslink.findMany({
-            where,
-            include: {
-                publicationFrom: publicationInclude,
-                publicationTo: publicationInclude
-            },
-            orderBy,
-            take: limit,
-            skip: offset
-        });
-    }
-
-    // Simplify data.
-    const crosslinks = rawCrosslinks.map((crosslink) => {
-        // Only return the other publication's details; we already know about the one whose ID was passed.
-        const linkedPublication =
-            crosslink.publicationFromId === publicationId ? crosslink.publicationTo : crosslink.publicationFrom;
-        const { versions, ...linkedPublicationRest } = linkedPublication;
-        const linkedPublicationWithSquashedVersion = {
-            ...linkedPublicationRest,
-            latestLiveVersion: versions[0] // Only the latest live version comes from the query.
-        };
-
-        return {
-            id: crosslink.id,
-            linkedPublication: linkedPublicationWithSquashedVersion,
-            score: crosslink.score,
-            createdBy: crosslink.createdBy,
-            createdAt: crosslink.createdAt
-        };
     });
 
-    // Sort data.
-    const sortedCrosslinks =
-        order === 'mix'
-            ? crosslinks.length <= 2
-                ? {
-                      recent: crosslinks,
-                      relevant: []
-                  }
-                : {
-                      recent: [crosslinks[0], crosslinks[1]],
-                      relevant: [...crosslinks.slice(2).sort((a, b) => b.score - a.score)]
-                  }
-            : crosslinks;
+    // Map SQL results to return format.
+    const results = crosslinks.map((rawCrosslink) => ({
+        id: rawCrosslink.id,
+        linkedPublication: {
+            id: rawCrosslink.linked_publication_id,
+            latestLiveVersion: {
+                title: rawCrosslink.linked_publication_title,
+                publishedDate: rawCrosslink.linked_publication_published_date,
+                user: {
+                    id: rawCrosslink.linked_publication_author_id,
+                    firstName: rawCrosslink.linked_publication_author_first_name,
+                    lastName: rawCrosslink.linked_publication_author_last_name
+                },
+                coAuthors: coAuthors
+                    .filter(
+                        (coAuthor) =>
+                            coAuthor.publicationVersionId === rawCrosslink.linked_publication_latest_live_version_id
+                    )
+                    .map((coAuthor) => {
+                        const { publicationVersionId, ...rest } = coAuthor;
 
-    // Get total count.
-    const totalCrosslinks = await client.prisma.crosslink.count({ where });
+                        return rest;
+                    })
+            }
+        },
+        score: rawCrosslink.score,
+        createdBy: rawCrosslink.created_by,
+        createdAt: rawCrosslink.created_at
+    }));
 
     return {
-        data: sortedCrosslinks,
-        metadata: {
-            total: totalCrosslinks,
-            limit,
-            offset
-        }
+        results,
+        total
     };
+};
+
+export const getPublicationCrosslinks = async (
+    publicationId: string,
+    options?: I.GetPublicationCrosslinksOptions
+): Promise<{
+    data:
+        | {
+              recent: RelativeCrosslink[];
+              relevant: RelativeCrosslink[];
+          }
+        | RelativeCrosslink[];
+    metadata: I.SearchResultMeta;
+}> => {
+    const { order, limit, offset } = options || {};
+
+    if (order === 'mix') {
+        const recent = await getPublicationCrosslinksQuery(publicationId, {
+            ...options,
+            order: 'recent',
+            limit: 2
+        });
+        const relevant = await getPublicationCrosslinksQuery(publicationId, {
+            ...options,
+            order: 'relevant',
+            limit: 3,
+            excludedPublicationIds: recent.results.map((crosslink) => crosslink.linkedPublication.id)
+        });
+
+        return {
+            data: {
+                recent: recent.results,
+                relevant: relevant.results
+            },
+            metadata: {
+                total: recent.total, // Because IDs are excluded from the relevant query, use the count from the recent query.
+                limit: 5,
+                offset: 0
+            }
+        };
+    } else {
+        const crosslinks = await getPublicationCrosslinksQuery(publicationId, options);
+
+        return {
+            data: crosslinks.results,
+            metadata: {
+                total: crosslinks.total,
+                limit: limit || 10,
+                offset: offset || 0
+            }
+        };
+    }
 };
