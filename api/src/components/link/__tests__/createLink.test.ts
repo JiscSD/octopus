@@ -66,20 +66,20 @@ describe('Create links', () => {
         );
     });
 
-    test('User cannot create a link from HYPOTHESIS (in DRAFT) to PROBLEM (in DRAFT)', async () => {
+    test('User cannot create a link from HYPOTHESIS (in DRAFT) to PROBLEM (in DRAFT) if they are not an author on the PROBLEM', async () => {
         const link = await testUtils.agent
             .post('/links')
             .query({
-                apiKey: '000000005'
+                apiKey: '123456789'
             })
             .send({
-                to: 'publication-hypothesis-draft',
-                from: 'publication-problem-draft'
+                to: 'publication-problem-draft',
+                from: 'publication-hypothesis-draft-problem-live'
             });
 
         expect(link.statusCode).toEqual(400);
         expect(link.body.message).toEqual(
-            'Publication with id publication-hypothesis-draft is not LIVE, so a link cannot be created to it.'
+            'Publication with id publication-problem-draft is not LIVE, and you are not an author on the DRAFT, so a link cannot be created to it.'
         );
     });
 

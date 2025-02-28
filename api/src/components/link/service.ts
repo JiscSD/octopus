@@ -224,15 +224,31 @@ export const createLinkValidation = async (
 
         // Check if publication to be linked to has a live version
         const toLatestLiveVersion = toPublication.versions.find((version) => version.isLatestLiveVersion);
+        const toLatestVersion = toPublication.versions.find((version) => version.isLatestVersion);
 
-        if (!toLatestLiveVersion) {
-            return {
-                valid: false,
-                details: {
-                    code: 400,
-                    message: `Publication with id ${toPublicationId} is not LIVE, so a link cannot be created to it.`
-                }
-            };
+        if (!toLatestVersion) {
+            throw Error(`Publication to be linked to with ID ${toPublicationId} does not have a latest version.`);
+        }
+
+        let toVersionId: string;
+
+        if (toLatestLiveVersion === undefined) {
+            // This publication has not been made live.
+
+            // If the user is a coauthor on the current version of the publication, they can link to it even if it's a draft.
+            if (toLatestVersion.coAuthors.some((coAuthor) => coAuthor.linkedUser === creatorUserId)) {
+                toVersionId = toLatestVersion.id;
+            } else {
+                return {
+                    valid: false,
+                    details: {
+                        code: 400,
+                        message: `Publication with id ${toPublicationId} is not LIVE, and you are not an author on the DRAFT, so a link cannot be created to it.`
+                    }
+                };
+            }
+        } else {
+            toVersionId = toLatestLiveVersion.id;
         }
 
         const validPublicationTypes = canLinkBeCreatedBetweenPublicationTypes(fromType, toPublication.type);
@@ -251,7 +267,7 @@ export const createLinkValidation = async (
             valid: true,
             toPublication: {
                 publicationId: toPublication.id,
-                versionId: toLatestLiveVersion.id
+                versionId: toVersionId
             }
         };
     } catch (err) {
