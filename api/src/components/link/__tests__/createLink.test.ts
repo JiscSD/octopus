@@ -83,6 +83,20 @@ describe('Create links', () => {
         );
     });
 
+    test('User can create a link from HYPOTHESIS (in DRAFT) to PROBLEM (in DRAFT) if they are an author on the problem', async () => {
+        const link = await testUtils.agent
+            .post('/links')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                to: 'publication-problem-draft-with-coi-but-no-text',
+                from: 'publication-hypothesis-draft-problem-live'
+            });
+
+        expect(link.statusCode).toEqual(200);
+    });
+
     test('Cannot create a link from HYPOTHESIS (in DRAFT) to PROBLEM (LIVE) if no auth', async () => {
         const link = await testUtils.agent.post('/links').send({
             to: 'publication-hypothesis-live',
