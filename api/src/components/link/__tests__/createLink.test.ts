@@ -97,6 +97,21 @@ describe('Create links', () => {
         expect(link.statusCode).toEqual(200);
     });
 
+    test('Where a linked to publication has a live version and a draft that could also be linked to, the versionTo recorded is the live version', async () => {
+        const link = await testUtils.agent
+            .post('/links')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                to: 'publication-problem-live-2',
+                from: 'publication-hypothesis-draft-problem-live'
+            });
+
+        expect(link.statusCode).toEqual(200);
+        expect(link.body.versionToId).toEqual('publication-problem-live-2-v1');
+    });
+
     test('Cannot create a link from HYPOTHESIS (in DRAFT) to PROBLEM (LIVE) if no auth', async () => {
         const link = await testUtils.agent.post('/links').send({
             to: 'publication-hypothesis-live',
