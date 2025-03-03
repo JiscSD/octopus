@@ -12,6 +12,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Publication 1',
                 content: 'Publication 1',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: { create: { status: 'DRAFT' } }
             }
         }
@@ -27,6 +37,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Publication 2',
                 content: 'Publication 2',
                 user: { connect: { id: 'test-user-2' } },
+                // Note: this version intentionally has no co-authors to test an edge case.
                 publicationStatus: { create: { status: 'DRAFT' } }
             }
         }
@@ -460,6 +471,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
@@ -504,6 +525,12 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 coAuthors: {
                     create: [
                         {
+                            email: 'test-user-5@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-5',
+                            isIndependent: true
+                        },
+                        {
                             id: 'coauthor-test-user-6-hypothesis-draft',
                             email: 'test-user-6@jisc.ac.uk',
                             code: 'test-code-user-6',
@@ -534,6 +561,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
@@ -599,6 +636,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
@@ -621,6 +668,17 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 content: 'Publication DATA-DRAFT',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            id: 'coauthor-test-user-1-publication-data-draft',
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
         }
@@ -639,6 +697,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
@@ -692,6 +760,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
@@ -713,6 +791,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 content: 'Publication INTERPRETATION-DRAFT',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
         }
@@ -731,6 +819,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2022-01-22T15:51:42.523Z',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
@@ -844,6 +942,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 content: 'Publication HYPOTHESIS-DRAFT',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
         }
@@ -862,6 +970,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 title: 'Publication PROBLEM-DRAFT',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
         }
@@ -886,6 +1004,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 currentStatus: 'LIVE',
                 isLatestLiveVersion: true,
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: { create: [{ status: 'LIVE', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
         },
@@ -913,6 +1041,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 content: '<p>This is the content</p>',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
         }
@@ -934,6 +1072,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 content: '<p>This is the content</p>',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
         }
@@ -954,6 +1102,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 content: '<p>This is the content</p>',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
         }
@@ -975,6 +1133,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 content: '<p>This is the content</p>',
                 currentStatus: 'DRAFT',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
         }
@@ -1037,6 +1205,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2024-02-27T10:50:00.000Z',
                 user: { connect: { id: 'test-user-10' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-10@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-10',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2024-02-27T09:50:00.000Z' },
@@ -1060,6 +1238,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2024-04-09T10:45:00.000Z',
                 user: { connect: { id: 'test-organisational-account-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-organisational-account-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-organisational-account-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2024-04-09T09:45:00.000Z' },
@@ -1083,6 +1271,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2024-04-09T10:45:00.000Z',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2024-04-09T09:45:00.000Z' },
@@ -1141,6 +1339,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2024-04-09T10:45:00.000Z',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2024-04-09T09:45:00.000Z' },
@@ -1199,6 +1407,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2024-04-09T10:45:00.000Z',
                 user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2024-04-09T09:45:00.000Z' },
@@ -1258,6 +1476,16 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 isLatestLiveVersion: true,
                 publishedDate: '2025-01-23T10:42:00.000Z',
                 user: { connect: { id: 'octopus' } },
+                coAuthors: {
+                    create: [
+                        {
+                            email: 'octopus@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'octopus',
+                            isIndependent: true
+                        }
+                    ]
+                },
                 publicationStatus: {
                     create: [
                         { status: 'DRAFT', createdAt: '2025-01-23T09:42:00.000Z' },
