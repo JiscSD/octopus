@@ -1,3 +1,4 @@
+import * as client from 'lib/client';
 import * as testUtils from 'lib/testUtils';
 
 describe('Batch update co-authors', () => {
@@ -170,5 +171,53 @@ describe('Batch update co-authors', () => {
 
         expect(updateCoAuthors.status).toEqual(403);
         expect(updateCoAuthors.body.message).toEqual('You do not have the right permissions for this action.');
+    });
+
+    test('Invalid links are removed if deleting a co-author makes them invalid', async () => {
+        // Confirm that a link exists between the 2 draft publications.
+        // test-user-1 is corresponding author on data-draft and co-author on protocol-draft.
+        const queryCondition = {
+            publicationToId: 'publication-protocol-draft',
+            publicationFromId: 'publication-data-draft',
+            draft: true
+        };
+        const linkCountBefore = await client.prisma.links.count({
+            where: queryCondition
+        });
+        expect(linkCountBefore).toEqual(1);
+
+        // Update co-authors to remove test-user-1 from protocol-draft.
+        const updateCoAuthors = await testUtils.agent
+            .put('/publication-versions/publication-protocol-draft-v1/coauthors')
+            .send([
+                {
+                    id: 'coauthor-test-user-5-protocol-draft',
+                    email: 'test-user-5@jisc.ac.uk',
+                    code: 'test-code-user-5',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-5',
+                    affiliations: [],
+                    isIndependent: true
+                },
+                {
+                    id: 'coauthor-test-user-6-protocol-draft',
+                    email: 'test-user-6@jisc.ac.uk',
+                    code: 'test-code-user-6',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-6',
+                    affiliations: [],
+                    isIndependent: true
+                }
+            ])
+            .query({ apiKey: '000000005' });
+
+        expect(updateCoAuthors.status).toEqual(200);
+
+        // Count links again.
+        // test-user-1 is no longer on protocol-draft, so the link to it should be removed.
+        const linkCountAfter = await client.prisma.links.count({
+            where: queryCondition
+        });
+        expect(linkCountAfter).toEqual(0);
     });
 });

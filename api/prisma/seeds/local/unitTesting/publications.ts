@@ -157,7 +157,8 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             create: {
                 publicationToId: 'publication-problem-live',
-                versionToId: 'publication-problem-live-v1'
+                versionToId: 'publication-problem-live-v1',
+                draft: false
             }
         },
         versions: {
@@ -623,6 +624,15 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                             linkedUser: 'test-user-6',
                             affiliations: [],
                             isIndependent: true
+                        },
+                        {
+                            id: 'coauthor-test-user-1-protocol-draft',
+                            email: 'test-user-1@jisc.ac.uk',
+                            code: 'test-code-user-1',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            affiliations: [],
+                            isIndependent: true
                         }
                     ]
                 }
@@ -666,6 +676,13 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-data-draft',
         doi: '10.82259/cty5-2g13',
         type: 'DATA',
+        linkedTo: {
+            create: {
+                publicationToId: 'publication-protocol-draft',
+                versionToId: 'publication-protocol-draft-v1',
+                draft: true
+            }
+        },
         versions: {
             create: {
                 id: 'publication-data-draft-v1',
@@ -1199,7 +1216,8 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
         linkedTo: {
             create: {
                 publicationToId: 'publication-problem-live-2',
-                versionToId: 'publication-problem-live-2-v1'
+                versionToId: 'publication-problem-live-2-v1',
+                draft: false
             }
         },
         versions: {
