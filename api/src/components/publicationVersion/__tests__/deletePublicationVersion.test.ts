@@ -70,4 +70,30 @@ describe('Delete publication versions', () => {
 
         expect(deletePublicationVersion.status).toEqual(401);
     });
+
+    test('Draft links to a sole, draft version are also deleted', async () => {
+        const queryCondition = {
+            publicationToId: 'publication-problem-draft',
+            draft: true
+        };
+        const checkForLinksBefore = await client.prisma.links.count({
+            where: queryCondition
+        });
+
+        expect(checkForLinksBefore).toEqual(1);
+
+        const deletePublicationVersion = await testUtils.agent
+            .delete('/publication-versions/publication-problem-draft-v1')
+            .query({
+                apiKey: '000000005'
+            });
+
+        expect(deletePublicationVersion.status).toEqual(200);
+
+        const checkForLinksAfter = await client.prisma.links.count({
+            where: queryCondition
+        });
+
+        expect(checkForLinksAfter).toEqual(0);
+    });
 });

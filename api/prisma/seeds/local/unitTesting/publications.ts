@@ -509,7 +509,12 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
         doi: '10.82259/cty5-2g09',
         type: 'HYPOTHESIS',
         linkedTo: {
-            create: { publicationToId: 'publication-problem-live', versionToId: 'publication-problem-live-v1' }
+            createMany: {
+                data: [
+                    { publicationToId: 'publication-problem-live', versionToId: 'publication-problem-live-v1' },
+                    { publicationToId: 'publication-problem-draft', versionToId: 'publication-problem-draft-v1' }
+                ]
+            }
         },
         versions: {
             create: {
