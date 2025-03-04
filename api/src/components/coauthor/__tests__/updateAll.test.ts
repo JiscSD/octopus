@@ -43,6 +43,120 @@ describe('Batch update co-authors', () => {
         expect(updateCoAuthors.status).toEqual(200);
     });
 
+    test('Co-authors order can be changed', async () => {
+        const differentOrder = [
+            ...problemDraft1DefaultCoAuthors.slice(0, 2),
+            problemDraft1DefaultCoAuthors[3],
+            problemDraft1DefaultCoAuthors[2]
+        ];
+        const updateCoAuthors = await testUtils.agent
+            .put('/publication-versions/publication-problem-draft-v1/coauthors')
+            .send(differentOrder)
+            .query({ apiKey: '000000005' });
+
+        expect(updateCoAuthors.status).toEqual(200);
+
+        const getCoAuthors = await testUtils.agent
+            .get('/publication-versions/publication-problem-draft-v1/coauthors')
+            .query({ apiKey: '000000005' });
+
+        expect(getCoAuthors.status).toEqual(200);
+        expect(getCoAuthors.body).toMatchObject(differentOrder);
+    });
+
+    test('Co-authors can be added', async () => {
+        const newCoAuthors = [
+            ...problemDraft1DefaultCoAuthors,
+            {
+                id: 'brand-new-co-author',
+                email: 'brand-new-co-author@jisc.ac.uk'
+            }
+        ];
+
+        const updateCoAuthors = await testUtils.agent
+            .put('/publication-versions/publication-problem-draft-v1/coauthors')
+            .send(newCoAuthors)
+            .query({ apiKey: '000000005' });
+
+        expect(updateCoAuthors.status).toEqual(200);
+
+        const getCoAuthors = await testUtils.agent
+            .get('/publication-versions/publication-problem-draft-v1/coauthors')
+            .query({ apiKey: '000000005' });
+
+        expect(getCoAuthors.status).toEqual(200);
+        expect(getCoAuthors.body[4]).toHaveProperty('email', newCoAuthors[4].email);
+    });
+
+    test('Co-authors can be removed', async () => {
+        const newCoAuthors = problemDraft1DefaultCoAuthors.slice(0, 2);
+
+        const updateCoAuthors = await testUtils.agent
+            .put('/publication-versions/publication-problem-draft-v1/coauthors')
+            .send(newCoAuthors)
+            .query({ apiKey: '000000005' });
+
+        expect(updateCoAuthors.status).toEqual(200);
+
+        const getCoAuthors = await testUtils.agent
+            .get('/publication-versions/publication-problem-draft-v1/coauthors')
+            .query({ apiKey: '000000005' });
+
+        expect(getCoAuthors.status).toEqual(200);
+        expect(getCoAuthors.body).toMatchObject(newCoAuthors);
+    });
+
+    test('Co-authors can be added and removed at the same time', async () => {
+        const newCoAuthors = [
+            ...problemDraft1DefaultCoAuthors.slice(0, 3),
+            {
+                id: 'brand-new-co-author',
+                email: 'brand-new-co-author@jisc.ac.uk'
+            }
+        ];
+
+        const updateCoAuthors = await testUtils.agent
+            .put('/publication-versions/publication-problem-draft-v1/coauthors')
+            .send(newCoAuthors)
+            .query({ apiKey: '000000005' });
+
+        expect(updateCoAuthors.status).toEqual(200);
+
+        const getCoAuthors = await testUtils.agent
+            .get('/publication-versions/publication-problem-draft-v1/coauthors')
+            .query({ apiKey: '000000005' });
+
+        expect(getCoAuthors.status).toEqual(200);
+        expect(getCoAuthors.body.slice(0, 3)).toMatchObject(problemDraft1DefaultCoAuthors.slice(0, 3));
+        expect(getCoAuthors.body[3]).toHaveProperty('email', newCoAuthors[3].email);
+    });
+
+    test('Co-authors details can be edited, such as email', async () => {
+        const newCoAuthors = [
+            ...problemDraft1DefaultCoAuthors.slice(0, 2),
+            {
+                ...problemDraft1DefaultCoAuthors[2],
+                email: 'i-changed-email-provider@shiny.new.domain'
+            },
+            problemDraft1DefaultCoAuthors[3]
+        ];
+
+        const updateCoAuthors = await testUtils.agent
+            .put('/publication-versions/publication-problem-draft-v1/coauthors')
+            .send(newCoAuthors)
+            .query({ apiKey: '000000005' });
+
+        expect(updateCoAuthors.status).toEqual(200);
+
+        const getCoAuthors = await testUtils.agent
+            .get('/publication-versions/publication-problem-draft-v1/coauthors')
+            .query({ apiKey: '000000005' });
+
+        expect(getCoAuthors.status).toEqual(200);
+        expect(getCoAuthors.body).not.toMatchObject(problemDraft1DefaultCoAuthors);
+        expect(getCoAuthors.body).not.toMatchObject(newCoAuthors);
+    });
+
     test('Data must be array', async () => {
         const updateCoAuthors = await testUtils.agent
             .put('/publication-versions/publication-problem-draft-v1/coauthors')
