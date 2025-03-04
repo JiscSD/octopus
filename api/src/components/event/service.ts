@@ -1,11 +1,12 @@
 import { Prisma } from '@prisma/client';
 import * as client from 'lib/client';
+import * as coAuthorService from 'coAuthor/service';
+import * as email from 'lib/email';
 import * as Helpers from 'lib/helpers';
 import * as I from 'lib/interface';
-import * as email from 'lib/email';
-import * as userService from 'user/service';
+import * as linkService from 'link/service';
 import * as publicationVersionService from 'publicationVersion/service';
-import * as coAuthorService from 'coAuthor/service';
+import * as userService from 'user/service';
 
 export const getMany = (where: Prisma.EventWhereInput = {}) =>
     client.prisma.event.findMany({
@@ -88,6 +89,9 @@ export const processRequestControlEvents = async (requestControlEvents: I.Reques
                     requester.id,
                     requester.email || ''
                 );
+
+                // In case this change has invalidated any draft links, delete them.
+                await linkService.removeInvalidLinksFromPublication(publicationVersion.versionOf);
 
                 // reset co-authors in order to enforce adding affiliations and confirm their involvement
                 await coAuthorService.resetCoAuthors(publicationVersion.id);

@@ -700,6 +700,13 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                             confirmedCoAuthor: true,
                             linkedUser: 'test-user-1',
                             isIndependent: true
+                        },
+                        {
+                            id: 'coauthor-test-user-2-publication-data-draft',
+                            email: 'test-user-2@jisc.ac.uk',
+                            code: 'test-code-user-2',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-2'
                         }
                     ]
                 },

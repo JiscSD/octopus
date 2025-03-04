@@ -2,7 +2,7 @@ import * as client from 'lib/client';
 import * as linkService from 'link/service';
 import * as testUtils from 'lib/testUtils';
 
-describe('Removing invalid links', () => {
+describe('Removing invalid links to a publication', () => {
     beforeEach(async () => {
         await testUtils.clearDB();
         await testUtils.testSeed();
@@ -71,5 +71,75 @@ describe('Removing invalid links', () => {
             where: queryCondition
         });
         expect(linkCountAfter).toEqual(3);
+    });
+});
+
+describe('Removing invalid links from a publication', () => {
+    beforeEach(async () => {
+        await testUtils.clearDB();
+        await testUtils.testSeed();
+    });
+
+    test('Function removes invalid links between drafts', async () => {
+        // A valid link exists between publication-data-draft and publication-protocol-draft.
+        const queryCondition = {
+            publicationToId: 'publication-protocol-draft',
+            publicationFromId: 'publication-data-draft',
+            draft: true
+        };
+        const linkCountBefore = await client.prisma.links.count({
+            where: queryCondition
+        });
+        expect(linkCountBefore).toEqual(1);
+
+        // Make it invalid by deleting corresponding author of data-draft from protocol-draft's co-authors.
+        await client.prisma.coAuthors.delete({
+            where: {
+                id: 'coauthor-test-user-1-protocol-draft'
+            }
+        });
+
+        await linkService.removeInvalidLinksFromPublication('publication-data-draft');
+
+        const linkCountAfter = await client.prisma.links.count({
+            where: queryCondition
+        });
+        expect(linkCountAfter).toEqual(0);
+    });
+
+    test('Function does not remove valid links between drafts', async () => {
+        const queryCondition = {
+            publicationToId: 'publication-protocol-draft',
+            publicationFromId: 'publication-data-draft',
+            draft: true
+        };
+        const linkCountBefore = await client.prisma.links.count({
+            where: queryCondition
+        });
+        expect(linkCountBefore).toEqual(1);
+
+        await linkService.removeInvalidLinksFromPublication('publication-data-draft');
+
+        const linkCountAfter = await client.prisma.links.count({
+            where: queryCondition
+        });
+        expect(linkCountAfter).toEqual(1);
+    });
+
+    test('Function does not remove other valid links', async () => {
+        const queryCondition = {
+            publicationFromId: 'publication-hypothesis-draft'
+        };
+        const linkCountBefore = await client.prisma.links.count({
+            where: queryCondition
+        });
+        expect(linkCountBefore).toEqual(2);
+
+        await linkService.removeInvalidLinksFromPublication('publication-hypothesis-draft');
+
+        const linkCountAfter = await client.prisma.links.count({
+            where: queryCondition
+        });
+        expect(linkCountAfter).toEqual(2);
     });
 });
