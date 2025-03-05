@@ -604,7 +604,10 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
         doi: '10.82259/cty5-2g11',
         type: 'PROTOCOL',
         linkedTo: {
-            create: { publicationToId: 'publication-hypothesis-live', versionToId: 'publication-hypothesis-live-v1' }
+            create: [
+                { publicationToId: 'publication-hypothesis-live', versionToId: 'publication-hypothesis-live-v1' },
+                { publicationToId: 'publication-hypothesis-draft', versionToId: 'publication-hypothesis-draft-v1' }
+            ]
         },
         versions: {
             create: {
@@ -632,6 +635,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                             email: 'test-user-6@jisc.ac.uk',
                             code: 'test-code-user-6',
                             confirmedCoAuthor: true,
+                            approvalRequested: true,
                             linkedUser: 'test-user-6',
                             affiliations: [],
                             isIndependent: true
@@ -641,6 +645,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                             email: 'test-user-1@jisc.ac.uk',
                             code: 'test-code-user-1',
                             confirmedCoAuthor: true,
+                            approvalRequested: true,
                             linkedUser: 'test-user-1',
                             affiliations: [],
                             isIndependent: true
@@ -1579,6 +1584,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                             email: 'test-user-6@jisc.ac.uk',
                             code: 'test-code-user-6',
                             confirmedCoAuthor: true,
+                            approvalRequested: true,
                             linkedUser: 'test-user-6',
                             isIndependent: true,
                             affiliations: []
