@@ -522,6 +522,8 @@ package:
         - '!node_modules/@swc/**'
         - '!node_modules/aws-sdk/**'
         - '!node_modules/chromium-bidi/**'
+        - '!node_modules/entities/**'
+        - '!node_modules/katex/**'
         - '!node_modules/prisma/engines/**'
         - '!node_modules/prisma/libquery_engine-*'
         - '!node_modules/puppeteer-core/**'
@@ -534,8 +536,10 @@ package:
     # Inclusions.
         - 'node_modules/.prisma/client/libquery_engine-linux-arm64-*'
 
-    # Mostly as above but with a different prisma engine (due to different architecture - chromium binary
-    # doesn't work on arm64) and included chromium binary.
+    # Mostly as above but:
+    # - With a different prisma engine (due to different architecture - chromium binary doesn't work on arm64)
+    # - Included chromium binary
+    # - Didn't exclude Katex and entities (used for rendering latex in PDFs)
     pdfFunctionPatterns:
         - '!.eslintrc.json'
         - '!.localstack/**'
