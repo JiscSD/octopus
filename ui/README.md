@@ -24,6 +24,10 @@ We use the math extension for the tiptap rich text editor, which comes from an a
 
 Then the dependencies can all be installed by running `npm i`.
 
+Alternatively, as a one-off, this can be done in one command, again replacing `${TIPTAP_PRO_TOKEN}` with our token. However, this won't persist in the same way using the `.npmrc` file will. This is mainly intended for installing dependencies in CI tasks. Example usage:
+
+`npm run customInstall --tiptap_token=${TIPTAP_PRO_TOKEN}`
+
 To start the UI application, run: `npm run dev`.
 
 ### Warning about self-signed certificate generation

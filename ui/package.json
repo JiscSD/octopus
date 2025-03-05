@@ -16,6 +16,7 @@
         "dev": "concurrently npm:dev:*",
         "dev:next": "NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF=local next dev --experimental-https -p 3001",
         "dev:types": "tsc --noEmit --incremental -w --preserveWatchOutput",
+        "customInstall": "npm config set \"@tiptap-pro:registry\" https://registry.tiptap.dev/ && npm config set \"//registry.tiptap.dev/:_authToken\" ${npm_config_tiptap_token} && npm ci",
         "build": "next build",
         "start": "next start -p 3000",
         "start:int": "NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF=int next start -p 3000",

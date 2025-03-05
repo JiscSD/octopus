@@ -26,10 +26,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./ui
-        run: |
-          npm config set "@tiptap-pro:registry" https://registry.tiptap.dev/
-          npm config set "//registry.tiptap.dev/:_authToken" ${{secrets.TIPTAP_REGISTRY_ACCESS_TOKEN}}
-          npm ci
+        run: npm run customInstall --tiptap_token=${{secrets.TIPTAP_REGISTRY_ACCESS_TOKEN}}
 
       - name: Run prettier check
         working-directory: ./ui
@@ -49,10 +46,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./ui
-        run: |
-          npm config set "@tiptap-pro:registry" https://registry.tiptap.dev/
-          npm config set "//registry.tiptap.dev/:_authToken" ${{secrets.TIPTAP_REGISTRY_ACCESS_TOKEN}}
-          npm ci
+        run: npm run customInstall --tiptap_token=${{secrets.TIPTAP_REGISTRY_ACCESS_TOKEN}}
 
       - name: Run lint
         working-directory: ./ui
@@ -73,9 +67,7 @@ jobs:
       - name: Install dependencies
         working-directory: ./ui
         run: |
-          npm config set "@tiptap-pro:registry" https://registry.tiptap.dev/
-          npm config set "//registry.tiptap.dev/:_authToken" ${{secrets.TIPTAP_REGISTRY_ACCESS_TOKEN}}
-          npm ci
+          npm run customInstall --tiptap_token=${{secrets.TIPTAP_REGISTRY_ACCESS_TOKEN}}
           npm install -g @lhci/cli@0.8.x
 
       - name: Run build
@@ -100,10 +92,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./ui
-        run: |
-          npm config set "@tiptap-pro:registry" https://registry.tiptap.dev/
-          npm config set "//registry.tiptap.dev/:_authToken" ${{secrets.TIPTAP_REGISTRY_ACCESS_TOKEN}}
-          npm ci
+        run: npm run customInstall --tiptap_token=${{secrets.TIPTAP_REGISTRY_ACCESS_TOKEN}}
 
       - name: Run Unit tests
         working-directory: ./ui
@@ -123,10 +112,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./ui
-        run: |
-          npm config set "@tiptap-pro:registry" https://registry.tiptap.dev/
-          npm config set "//registry.tiptap.dev/:_authToken" ${{secrets.TIPTAP_REGISTRY_ACCESS_TOKEN}}
-          npm ci
+        run: npm run customInstall --tiptap_token=${{secrets.TIPTAP_REGISTRY_ACCESS_TOKEN}}
 
       - name: Run tsc to check for typescript errors
         working-directory: ./ui
