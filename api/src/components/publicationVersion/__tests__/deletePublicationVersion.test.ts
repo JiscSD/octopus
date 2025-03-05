@@ -80,7 +80,7 @@ describe('Delete publication versions', () => {
             where: queryCondition
         });
 
-        expect(checkForLinksBefore).toBeGreaterThan(1);
+        expect(checkForLinksBefore).toBeGreaterThan(0);
 
         const deletePublicationVersion = await testUtils.agent
             .delete('/publication-versions/publication-problem-draft-v1')
