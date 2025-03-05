@@ -909,7 +909,7 @@ export const HTMLStyles = `
     .join(' ');
 
 export const HTMLStylesTiptapEditor = `
-    custom-table-tiptap-editor
+    tiptap-editor
     prose
     w-full
     max-w-none
@@ -939,3 +939,6 @@ export const topicDescription =
 export const blogContentType = 'octopusBlog';
 
 export const doiBaseUrl = `https://${process.env.NEXT_PUBLIC_STAGE === 'prod' ? 'doi.org' : 'handle.test.datacite.org'}/`;
+
+// Defines the boundaries for LaTeX expressions in publication content. Expressions are enclosed on both ends by "$$".
+export const latexRegex = /\$\$([^$]*)\$\$/gi;
