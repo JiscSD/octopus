@@ -141,7 +141,7 @@ export const updateAll = async (
             }
 
             // Remove any links to this publication that are made invalid by this change.
-            await linkService.removeInvalidLinksToPublication(version.versionOf);
+            await linkService.removeInvalidLinksForPublication(version.versionOf, 'to');
         }
 
         await coAuthorService.updateAll(version.id, newCoAuthorsArray);

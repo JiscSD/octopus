@@ -401,27 +401,38 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
         }
     },
     {
-        id: 'publication-problem-locked',
+        id: 'publication-problem-locked-1',
         doi: '10.82259/cty5-2g07',
         type: 'PROBLEM',
         linkedTo: {
-            create: { publicationToId: 'publication-problem-live', versionToId: 'publication-problem-live-v1' }
+            create: [
+                { publicationToId: 'publication-problem-live', versionToId: 'publication-problem-live-v1' },
+                { publicationToId: 'publication-problem-draft', versionToId: 'publication-problem-draft-v1' }
+            ]
         },
         versions: {
             create: {
-                id: 'publication-problem-locked-v1',
+                id: 'publication-problem-locked-1-v1',
                 versionNumber: 1,
-                title: 'Publication PROBLEM-LOCKED',
+                title: 'Publication PROBLEM-LOCKED 1',
                 conflictOfInterestStatus: false,
-                content: 'Publication PROBLEM-LOCKED',
+                content: 'Publication PROBLEM-LOCKED 1',
                 currentStatus: 'LOCKED',
                 keywords: ['science', 'technology'],
                 user: { connect: { id: 'test-user-5' } },
-                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
+                        {
+                            status: 'LOCKED',
+                            createdAt: '2022-01-22T15:52:42.523Z'
+                        }
+                    ]
+                },
                 coAuthors: {
                     create: [
                         {
-                            id: 'coauthor-test-user-5-problem-locked',
+                            id: 'coauthor-test-user-5-problem-locked-1',
                             email: 'test-user-5@jisc.ac.uk',
                             code: 'test-code-user-5',
                             confirmedCoAuthor: true,
@@ -430,7 +441,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                             affiliations: []
                         },
                         {
-                            id: 'coauthor-test-user-6-problem-locked',
+                            id: 'coauthor-test-user-6-problem-locked-1',
                             email: 'test-user-6@jisc.ac.uk',
                             code: 'test-code-user-6',
                             confirmedCoAuthor: true,
@@ -439,7 +450,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                             affiliations: []
                         },
                         {
-                            id: 'coauthor-test-user-7-problem-locked',
+                            id: 'coauthor-test-user-7-problem-locked-1',
                             email: 'test-user-7@jisc.ac.uk',
                             code: 'test-code-user-7',
                             confirmedCoAuthor: false,
@@ -450,7 +461,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 },
                 funders: {
                     create: {
-                        id: 'publication-problem-locked-funder',
+                        id: 'publication-problem-locked-1-funder',
                         name: 'name',
                         country: 'country',
                         city: 'city',
@@ -1522,6 +1533,56 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                     create: [
                         { status: 'DRAFT', createdAt: '2025-01-23T09:42:00.000Z' },
                         { status: 'LIVE', createdAt: '2025-01-23T10:42:00.000Z' }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        id: 'publication-problem-locked-2',
+        doi: '10.82259/cty5-2g35',
+        type: 'PROBLEM',
+        linkedTo: {
+            create: [{ publicationToId: 'publication-problem-draft', versionToId: 'publication-problem-draft-v1' }]
+        },
+        versions: {
+            create: {
+                id: 'publication-problem-locked-2-v1',
+                versionNumber: 1,
+                title: 'Publication PROBLEM-LOCKED 2',
+                conflictOfInterestStatus: false,
+                content: 'Publication PROBLEM-LOCKED 2',
+                currentStatus: 'LOCKED',
+                user: { connect: { id: 'test-user-5' } },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
+                        {
+                            status: 'LOCKED',
+                            createdAt: '2022-01-22T15:52:42.523Z'
+                        }
+                    ]
+                },
+                coAuthors: {
+                    create: [
+                        {
+                            id: 'coauthor-test-user-5-problem-locked-2',
+                            email: 'test-user-5@jisc.ac.uk',
+                            code: 'test-code-user-5',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-5',
+                            isIndependent: true,
+                            affiliations: []
+                        },
+                        {
+                            id: 'coauthor-test-user-6-problem-locked-2',
+                            email: 'test-user-6@jisc.ac.uk',
+                            code: 'test-code-user-6',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-6',
+                            isIndependent: true,
+                            affiliations: []
+                        }
                     ]
                 }
             }

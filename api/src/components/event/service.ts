@@ -91,7 +91,7 @@ export const processRequestControlEvents = async (requestControlEvents: I.Reques
                 );
 
                 // In case this change has invalidated any draft links, delete them.
-                await linkService.removeInvalidLinksFromPublication(publicationVersion.versionOf);
+                await linkService.removeInvalidLinksForPublication(publicationVersion.versionOf, 'from');
 
                 // reset co-authors in order to enforce adding affiliations and confirm their involvement
                 await coAuthorService.resetCoAuthors(publicationVersion.id);
