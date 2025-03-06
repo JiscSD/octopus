@@ -265,18 +265,18 @@ export const getPublications = async (
         ...authorshipFilter,
         ...versionStatusFilter,
         // If a query is supplied, the query matches the latest live title.
-        ...(params.query
-            ? {
-                  versions: {
-                      some: {
-                          isLatestLiveVersion: true,
-                          title: {
-                              search: Helpers.sanitizeSearchQuery(params.query)
-                          }
-                      }
-                  }
-              }
-            : {})
+        ...(params.query && {
+            versions: {
+                some: {
+                    isLatestLiveVersion: true,
+                    title: {
+                        search: Helpers.sanitizeSearchQuery(params.query)
+                    }
+                }
+            }
+        }),
+        // If a publication is to be excluded, it is not included in the results.
+        ...(params.exclude && { id: { notIn: params.exclude.split(',') } })
     };
 
     const userPublications = await client.prisma.publication.findMany({

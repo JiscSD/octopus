@@ -123,4 +123,49 @@ describe("Get a given user's publications", () => {
             )
         ).toEqual(true);
     });
+
+    test('Publications with their ID provided to "exclude" param can be excluded from results', async () => {
+        const firstRequest = await testUtils.agent.get('/users/test-user-1/publications').query({ apiKey: 123456789 });
+
+        expect(firstRequest.status).toEqual(200);
+        const firstTotal = firstRequest.body.metadata.total;
+        expect(firstTotal).toBeGreaterThan(0);
+
+        const publicationIdToExclude = firstRequest.body.data[0].id;
+
+        const secondRequest = await testUtils.agent
+            .get('/users/test-user-1/publications')
+            .query({ apiKey: 123456789, exclude: publicationIdToExclude });
+
+        expect(secondRequest.status).toEqual(200);
+        expect(secondRequest.body.metadata.total).toEqual(firstTotal - 1);
+        expect(
+            (secondRequest.body as UserPublications).data.every(
+                (publication) => publication.id !== publicationIdToExclude
+            )
+        ).toEqual(true);
+    });
+
+    test('Multiple, comma-separated publications can be excluded from results', async () => {
+        const firstRequest = await testUtils.agent.get('/users/test-user-1/publications').query({ apiKey: 123456789 });
+
+        expect(firstRequest.status).toEqual(200);
+        const firstTotal = firstRequest.body.metadata.total;
+        expect(firstTotal).toBeGreaterThan(1);
+
+        const publicationIdsToExclude = [firstRequest.body.data[0].id, firstRequest.body.data[1].id];
+        const exclusionString = publicationIdsToExclude.join(',');
+
+        const secondRequest = await testUtils.agent
+            .get('/users/test-user-1/publications')
+            .query({ apiKey: 123456789, exclude: exclusionString });
+
+        expect(secondRequest.status).toEqual(200);
+        expect(secondRequest.body.metadata.total).toEqual(firstTotal - 2);
+        expect(
+            (secondRequest.body as UserPublications).data.every(
+                (publication) => !publicationIdsToExclude.includes(publication.id)
+            )
+        ).toEqual(true);
+    });
 });

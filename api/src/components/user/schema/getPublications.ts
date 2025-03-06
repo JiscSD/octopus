@@ -25,6 +25,10 @@ const getPublicationsSchema: I.JSONSchemaType<I.UserPublicationsFilters> = {
             type: 'boolean',
             default: false,
             nullable: true
+        },
+        exclude: {
+            type: 'string',
+            nullable: true
         }
     },
     required: []
