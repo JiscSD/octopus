@@ -21,8 +21,8 @@ const getPubRouterMetadata = (publicationVersion: I.PublicationVersion, pdfUrl: 
                     id: coAuthor.user.orcid
                 }
             ],
-            affiliations: coAuthor.affiliations?.map((rawAffiliationJson) => {
-                const affiliation: I.MappedOrcidAffiliation = JSON.parse(rawAffiliationJson as string);
+            affiliations: coAuthor.affiliations?.map((untypedAffiliation) => {
+                const affiliation = untypedAffiliation as unknown as I.MappedOrcidAffiliation;
 
                 return {
                     identifier: [
