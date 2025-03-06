@@ -742,6 +742,7 @@ export interface UserPublicationsFilters {
     limit: number;
     query?: string;
     versionStatus?: string;
+    initialDraftsOnly?: boolean;
 }
 
 export interface SendApprovalReminderPathParams {

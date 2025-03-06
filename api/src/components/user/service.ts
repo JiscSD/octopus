@@ -182,7 +182,7 @@ export const getPublications = async (
     isAccountOwner: boolean,
     versionStatusArray?: I.PublicationStatusEnum[]
 ) => {
-    const { offset, limit } = params;
+    const { offset, limit, initialDraftsOnly } = params;
 
     const user = await client.prisma.user.findUnique({
         where: {
@@ -190,8 +190,11 @@ export const getPublications = async (
         }
     });
 
-    // Get publications where:
-    const where: Prisma.PublicationWhereInput = {
+    const requestingNonLiveVersions =
+        versionStatusArray?.some((status) => status === 'DRAFT' || status === 'LOCKED') || initialDraftsOnly;
+
+    // WHERE clauses related to the user's authorship of a publication.
+    const authorshipFilter: Prisma.PublicationWhereInput = {
         OR: [
             // User is corresponding author on at least one version, or
             {
@@ -214,10 +217,8 @@ export const getPublications = async (
                 }
             },
             // They are an unconfirmed coauthor on at least one version
-            // (if the user is requesting their own publications and including DRAFT/LOCKED ones)
-            ...(isAccountOwner &&
-            user?.email &&
-            versionStatusArray?.some((status) => status === 'DRAFT' || status === 'LOCKED')
+            // (if the user is requesting their own publications and including non-live ones)
+            ...(isAccountOwner && user?.email && requestingNonLiveVersions
                 ? [
                       {
                           versions: {
@@ -234,24 +235,36 @@ export const getPublications = async (
                       }
                   ]
                 : [])
-        ],
-        // And, if the user is the account owner and filters have been provided,
-        // where there is a version with current status matching the given filters
-        ...(isAccountOwner
-            ? versionStatusArray
-                ? {
-                      versions: {
-                          some: {
-                              currentStatus: {
-                                  in: versionStatusArray
-                              }
+        ]
+    };
+
+    // WHERE clauses related to the requested publication status of publications.
+    const versionStatusFilter: Prisma.PublicationWhereInput =
+        // If the requester is not the account owner, get only publications that have a published version.
+        !isAccountOwner
+            ? { versions: { some: { isLatestLiveVersion: true } } }
+            : // Otherwise...
+            // If only initial drafts are requested, return only these.
+            initialDraftsOnly
+            ? { versions: { every: { currentStatus: 'DRAFT', versionNumber: 1 } } }
+            : // If another version status filter has been supplied, get publications with at least one version with a current status matching the given filters.
+            versionStatusArray
+            ? {
+                  versions: {
+                      some: {
+                          currentStatus: {
+                              in: versionStatusArray
                           }
                       }
                   }
-                : {}
-            : // But if the user is not the owner, get only publications that have a published version
-              { versions: { some: { isLatestLiveVersion: true } } }),
-        // And, if a query is supplied, where the query matches the latest live title.
+              }
+            : {};
+
+    // Get publications where:
+    const where: Prisma.PublicationWhereInput = {
+        ...authorshipFilter,
+        ...versionStatusFilter,
+        // If a query is supplied, the query matches the latest live title.
         ...(params.query
             ? {
                   versions: {
