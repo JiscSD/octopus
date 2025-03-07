@@ -70,4 +70,56 @@ describe('Delete publication versions', () => {
 
         expect(deletePublicationVersion.status).toEqual(401);
     });
+
+    test('Draft links to a sole, draft version are also deleted', async () => {
+        const queryCondition = {
+            publicationToId: 'publication-problem-draft',
+            draft: true
+        };
+        const checkForLinksBefore = await client.prisma.links.count({
+            where: queryCondition
+        });
+
+        expect(checkForLinksBefore).toBeGreaterThan(0);
+
+        const deletePublicationVersion = await testUtils.agent
+            .delete('/publication-versions/publication-problem-draft-v1')
+            .query({
+                apiKey: '000000005'
+            });
+
+        expect(deletePublicationVersion.status).toEqual(200);
+
+        const checkForLinksAfter = await client.prisma.links.count({
+            where: queryCondition
+        });
+
+        expect(checkForLinksAfter).toEqual(0);
+    });
+
+    test('When a non-first version is deleted, links to the publication are retained', async () => {
+        const queryCondition = {
+            publicationToId: 'publication-problem-live-2',
+            draft: true
+        };
+        const checkForLinksBefore = await client.prisma.links.count({
+            where: queryCondition
+        });
+
+        expect(checkForLinksBefore).toBeGreaterThan(0);
+
+        const deletePublicationVersion = await testUtils.agent
+            .delete('/publication-versions/publication-problem-live-2-v2')
+            .query({
+                apiKey: '123456789'
+            });
+
+        expect(deletePublicationVersion.status).toEqual(200);
+
+        const checkForLinksAfter = await client.prisma.links.count({
+            where: queryCondition
+        });
+
+        expect(checkForLinksAfter).toEqual(checkForLinksBefore);
+    });
 });

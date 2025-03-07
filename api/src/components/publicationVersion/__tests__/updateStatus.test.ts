@@ -378,4 +378,27 @@ describe('Update publication version status', () => {
 
         expect(updatePublicationVersionAttempt.status).toEqual(200);
     });
+
+    test('A publication linked to a draft can be LOCKED', async () => {
+        const updatePublicationVersionAttempt = await testUtils.agent
+            .put('/publication-versions/publication-protocol-draft-v1/status/LOCKED')
+            .query({
+                apiKey: '000000005'
+            });
+
+        expect(updatePublicationVersionAttempt.status).toEqual(200);
+    });
+
+    test('A publication linked to a draft cannot be made LIVE', async () => {
+        const updatePublicationVersionAttempt = await testUtils.agent
+            .put('/publication-versions/publication-problem-locked-2-v1/status/LIVE')
+            .query({
+                apiKey: '000000005'
+            });
+
+        expect(updatePublicationVersionAttempt.status).toEqual(403);
+        expect(updatePublicationVersionAttempt.body.message).toEqual(
+            'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
+        );
+    });
 });
