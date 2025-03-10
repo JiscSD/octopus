@@ -15,7 +15,7 @@ type Props = {
     setOffset: (offset: React.SetStateAction<number>) => void;
     total: number;
 };
-const PaginatedResults: React.FC<Props> = (props: Props, scrollTargetRef?: React.ForwardedRef<HTMLElement>) => {
+const PaginatedResults: React.FC<Props> = (props: Props) => {
     const articleId = useId();
     const upperPageBound = props.limit + props.offset > props.total ? props.total : props.limit + props.offset;
     const scrollToTop = () =>
