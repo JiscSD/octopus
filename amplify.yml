@@ -5,6 +5,7 @@ applications:
         preBuild:
           commands:
             - nvm use 18
+            - npm run customInstall --tiptap_token=${TIPTAP_REGISTRY_ACCESS_TOKEN}
             - npm ci
         build:
           commands:
