@@ -940,3 +940,33 @@ export const pubRouterFailure = async (publicationId: string, error: string): Pr
         subject: 'A PubRouter delivery has failed.'
     });
 };
+
+export const automaticUnlock = async (options: {
+    correspondingAuthorEmail: string;
+    publication: {
+        title: string;
+        url: string;
+    };
+}): Promise<void> => {
+    const html = `
+        <p>Your publication, <strong><i>${options.publication.title}</i></strong>, has been automatically unlocked and reverted to draft state.</p>
+        <br>
+        <p>Due to another change, a link from this publication to another publication has been removed, and this publication is no longer linked to any others. This means that this publication no longer meets the criteria to be locked.</p>
+        <br>
+        <p>The link was removed because the publication linked to was in draft state, and you are not a co-author on it, so you would not be allowed to link to it.</p>
+        <br>
+        <p>Any co-author approvals on this locked publication have been reset. Please review the publication, add a new link and re-request co-author approval as necessary.</p>
+        <br>
+        <p style="text-align: center;"><a style="${styles.button}" href="${options.publication.url}">View publication</a></p>
+    `;
+
+    const text = `Your publication, "${options.publication.title}", has been automatically unlocked and reverted to draft state. Due to another change, a link from this publication to another publication has been removed, and this publication is no longer linked to any others. This means that this publication no longer meets the criteria to be locked. The link was removed because the publication linked to was in draft state, and you are not a co-author on it, so you would not be allowed to link to it. Any co-author approvals on this locked publication have been reset. Please review the publication, add a new link and re-request co-author approval as necessary.`;
+
+    const subject = 'Your publication has been unlocked due to another change';
+    await send({
+        html: standardHTMLEmailTemplate(subject, html, 'The publication is now in draft state'),
+        text,
+        to: options.correspondingAuthorEmail,
+        subject
+    });
+};

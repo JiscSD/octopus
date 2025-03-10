@@ -132,6 +132,16 @@ describe('create coauthor', () => {
             .put('/publication-versions/publication-data-draft-v1/coauthors')
             .query({ apiKey: '123456789' })
             .send([
+                // First entry is the pre-existing co-author record for the corresponding author.
+                {
+                    id: 'coauthor-test-user-1-publication-data-draft',
+                    publicationVersionId: 'publication-problem-draft-v1',
+                    email: 'test-user-1@jisc.ac.uk',
+                    confirmedCoAuthor: true,
+                    linkedUser: 'test-user-1',
+                    isIndependent: true
+                },
+                // Second entry is the new co-author.
                 {
                     id: createId(),
                     publicationVersionId: 'publication-problem-draft-v1',

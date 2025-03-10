@@ -1,7 +1,10 @@
 import * as client from 'lib/client';
-import * as I from 'interface';
-import * as publicationService from 'publication/service';
+import * as coAuthorService from 'coAuthor/service';
+import * as email from 'lib/email';
+import * as Helpers from 'lib/helpers';
+import * as I from 'lib/interface';
 import * as publicationVersionService from 'publicationVersion/service';
+import { Prisma } from '@prisma/client';
 
 export const create = async (fromPublicationId: string, toPublicationId: string, toVersionId: string) => {
     const link = await client.prisma.links.create({
@@ -94,172 +97,205 @@ export const get = (id: string) =>
         }
     });
 
-export const canLinkBeCreatedBetweenPublicationTypes = (fromType, toType) => {
-    const publicationTypes = [
-        'PROBLEM',
-        'HYPOTHESIS',
-        'PROTOCOL',
-        'DATA',
-        'ANALYSIS',
-        'INTERPRETATION',
-        'REAL_WORLD_APPLICATION'
-    ];
+type LinksForInvalidCheck = {
+    id: string;
+    versionFrom: {
+        createdBy: string;
+        currentStatus: I.PublicationStatusEnum;
+        isLatestVersion: boolean;
+        id: string;
+        title: string | null;
+        user: {
+            email: string | null;
+        };
+        versionOf: string;
+    };
+    versionTo: {
+        coAuthors: {
+            linkedUser: string | null;
+        }[];
+        versionNumber: number;
+        isLatestVersion: boolean;
+        isLatestLiveVersion: boolean;
+    };
+}[];
 
-    // problems can link to anything
-    if (fromType === 'PROBLEM') {
-        return true;
+const deleteInvalidLinks = async (links: LinksForInvalidCheck) => {
+    // For any draft links to this publication, delete them if the conditions for their creation
+    // are no longer met.
+    for (const link of links) {
+        // If the "from" publication is still in draft/locked
+        const versionFrom = link.versionFrom;
+
+        if (
+            (versionFrom.currentStatus === 'DRAFT' || versionFrom.currentStatus === 'LOCKED') &&
+            versionFrom.isLatestVersion
+        ) {
+            const versionTo = link.versionTo;
+
+            if (
+                // And the "to" publication is a first-time version that hasn't gone live
+                versionTo.isLatestVersion &&
+                !versionTo.isLatestLiveVersion &&
+                versionTo.versionNumber === 1 &&
+                // And the corresponding author of the "from" publication is not a co-author of the "to" publication,
+                // (for example, after updating co-authors or transferring ownership)
+                !versionTo.coAuthors.some((coAuthor) => coAuthor.linkedUser === versionFrom.createdBy)
+            ) {
+                // Delete the link, because the corresponding author on the "from" has no permission to see the "to" draft.
+                await deleteLink(link.id);
+
+                // If the "from" publication was locked and now has no links, revert it to draft state.
+                if (versionFrom.currentStatus === 'LOCKED') {
+                    const linkCount = await client.prisma.links.count({
+                        where: {
+                            publicationFromId: versionFrom.versionOf
+                        }
+                    });
+
+                    if (linkCount === 0) {
+                        await Promise.all([
+                            publicationVersionService.updateStatus(versionFrom.id, 'DRAFT'),
+                            coAuthorService.resetCoAuthors(versionFrom.id)
+                        ]);
+
+                        if (versionFrom.user.email && versionFrom.title) {
+                            await email.automaticUnlock({
+                                correspondingAuthorEmail: versionFrom.user.email,
+                                publication: {
+                                    title: versionFrom.title,
+                                    url: Helpers.getPublicationUrl(versionFrom.versionOf)
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        }
     }
-
-    // peer reviews can link to anything other than another peer review
-    if (fromType === 'PEER_REVIEW' && toType !== 'PEER_REVIEW') {
-        return true;
-    }
-
-    const fromIndex = publicationTypes.indexOf(fromType);
-    const toIndex = publicationTypes.indexOf(toType);
-
-    // fromIndex is the "next" publication type in the chain
-    // if fromIndex is +1 of toIndex, fromState proceeds the toState
-    if (fromIndex - toIndex === 1) {
-        return true;
-    }
-
-    return false;
 };
 
-/**
- * Validates whether a link can be created between two publications.
- * The "from" publication can be existing or new.
- * If invalid, returns suggested response code and message.
- * If valid, for convenience, additionally returns target version ID, ready to use in creation.
- * */
-export const createLinkValidation = async (
-    from: { existing: true; publicationId: string } | { existing: false; type: I.PublicationType },
-    toPublicationId: string,
-    creatorUserId: string
-): Promise<
-    | { valid: false; details: { code: number; message: string } }
-    | {
-          valid: true;
-          toPublication: { publicationId: string; versionId: string };
-      }
-> => {
-    let fromType: I.PublicationType;
-
-    try {
-        if (from.existing) {
-            const fromPublication = await publicationService.get(from.publicationId);
-
-            if (!fromPublication) {
-                return {
-                    valid: false,
-                    details: { code: 404, message: `Publication to link from with id ${from.publicationId} not found.` }
+const flattenDraftLinkData = (
+    links: {
+        id: string;
+        publicationFrom: {
+            versions: {
+                createdBy: string;
+                currentStatus: I.PublicationStatusEnum;
+                id: string;
+                isLatestVersion: boolean;
+                title: string | null;
+                user: {
+                    email: string | null;
                 };
-            }
-
-            fromType = fromPublication.type;
-
-            const fromLatestVersion = fromPublication.versions.find((version) => version.isLatestVersion);
-
-            if (!fromLatestVersion) {
-                return {
-                    valid: false,
-                    details: {
-                        code: 404,
-                        message: `Cannot find latest version of ${from.publicationId} in order to create a link from it.`
-                    }
-                };
-            }
-
-            if (fromLatestVersion.currentStatus === 'LIVE') {
-                return {
-                    valid: false,
-                    details: {
-                        code: 400,
-                        message: `Publication with id ${from.publicationId} is LIVE, so a link cannot be created from it.`
-                    }
-                };
-            }
-
-            // The link creator is not the owner of the publication
-            if (fromLatestVersion.user.id !== creatorUserId) {
-                return {
-                    valid: false,
-                    details: {
-                        code: 403,
-                        message: `You cannot create a link from the publication with id ${from.publicationId}.`
-                    }
-                };
-            }
-
-            // Peer reviews can only be linked to one thing
-            if (fromPublication.type === 'PEER_REVIEW' && fromPublication.linkedTo.length !== 0) {
-                return {
-                    valid: false,
-                    details: {
-                        code: 403,
-                        message: 'You cannot create another link from a peer review that already has one.'
-                    }
-                };
-            }
-
-            // does a link already exist?
-            const linkExists = await doesLinkExist(from.publicationId, toPublicationId);
-
-            if (linkExists) {
-                return { valid: false, details: { code: 400, message: 'Link already exists.' } };
-            }
-        } else {
-            fromType = from.type;
-        }
-
-        const toPublication = await publicationService.get(toPublicationId);
-
-        if (!toPublication) {
-            return {
-                valid: false,
-                details: { code: 404, message: `Publication to link to with id ${toPublicationId} not found.` }
-            };
-        }
-
-        // Check if publication to be linked to has a live version
-        const toLatestLiveVersion = toPublication.versions.find((version) => version.isLatestLiveVersion);
-
-        if (!toLatestLiveVersion) {
-            return {
-                valid: false,
-                details: {
-                    code: 400,
-                    message: `Publication with id ${toPublicationId} is not LIVE, so a link cannot be created to it.`
-                }
-            };
-        }
-
-        const validPublicationTypes = canLinkBeCreatedBetweenPublicationTypes(fromType, toPublication.type);
-
-        if (!validPublicationTypes) {
-            return {
-                valid: false,
-                details: {
-                    code: 400,
-                    message: `A link cannot be created from a publication of type ${fromType} to a publication of type ${toPublication.type}.`
-                }
-            };
-        }
-
-        return {
-            valid: true,
-            toPublication: {
-                publicationId: toPublication.id,
-                versionId: toLatestLiveVersion.id
-            }
+                versionOf: string;
+            }[];
         };
-    } catch (err) {
-        console.log(err);
-
-        return {
-            valid: false,
-            details: { code: 500, message: 'Link validation failed because of an unexpected error.' }
+        publicationTo: {
+            versions: {
+                coAuthors: {
+                    linkedUser: string | null;
+                }[];
+                versionNumber: number;
+                isLatestVersion: boolean;
+                isLatestLiveVersion: boolean;
+            }[];
         };
-    }
+    }[]
+): LinksForInvalidCheck => {
+    return links.map((link) => {
+        return {
+            id: link.id,
+            versionFrom: link.publicationFrom.versions[0],
+            versionTo: link.publicationTo.versions[0]
+        };
+    });
+};
+
+export const removeInvalidLinksForPublication = async (publicationId: string, direction?: 'to' | 'from') => {
+    const directionFilter: Prisma.LinksWhereInput =
+        direction === 'to'
+            ? {
+                  publicationToId: publicationId
+              }
+            : direction === 'from'
+            ? {
+                  publicationFromId: publicationId
+              }
+            : {
+                  // If no direction is provided, get both.
+                  OR: [
+                      {
+                          publicationToId: publicationId
+                      },
+                      {
+                          publicationFromId: publicationId
+                      }
+                  ]
+              };
+
+    const draftLinksForPublication = await client.prisma.links.findMany({
+        where: {
+            draft: true,
+            ...directionFilter,
+            publicationTo: {
+                versions: {
+                    every: {
+                        isLatestVersion: true,
+                        OR: [{ currentStatus: 'DRAFT' }, { currentStatus: 'LOCKED' }],
+                        versionNumber: 1
+                    }
+                }
+            }
+        },
+        select: {
+            id: true,
+            publicationFrom: {
+                select: {
+                    versions: {
+                        where: {
+                            isLatestVersion: true,
+                            OR: [{ currentStatus: 'DRAFT' }, { currentStatus: 'LOCKED' }]
+                        },
+                        select: {
+                            createdBy: true,
+                            currentStatus: true,
+                            id: true,
+                            isLatestVersion: true,
+                            title: true,
+                            user: {
+                                select: {
+                                    email: true
+                                }
+                            },
+                            versionOf: true
+                        }
+                    }
+                }
+            },
+            publicationTo: {
+                select: {
+                    versions: {
+                        where: {
+                            isLatestVersion: true,
+                            OR: [{ currentStatus: 'DRAFT' }, { currentStatus: 'LOCKED' }],
+                            versionNumber: 1
+                        },
+                        select: {
+                            isLatestVersion: true,
+                            isLatestLiveVersion: true,
+                            versionNumber: true,
+                            coAuthors: {
+                                select: {
+                                    linkedUser: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    await deleteInvalidLinks(flattenDraftLinkData(draftLinksForPublication));
 };

@@ -34,7 +34,7 @@ describe('Request co-authors approvals', () => {
         // test LOCKED
         const lockedPublicationVersionResponse = await testUtils.agent
             .post(
-                '/publication-versions/publication-problem-locked-v1/coauthors/coauthor-test-user-7-problem-locked/approval-reminder'
+                '/publication-versions/publication-problem-locked-1-v1/coauthors/coauthor-test-user-7-problem-locked-1/approval-reminder'
             )
             .query({ apiKey: '000000005' });
 
@@ -67,7 +67,7 @@ describe('Request co-authors approvals', () => {
     test('Cannot send approval reminder to the same co-author twice', async () => {
         const response1 = await testUtils.agent
             .post(
-                '/publication-versions/publication-problem-locked-v1/coauthors/coauthor-test-user-7-problem-locked/approval-reminder'
+                '/publication-versions/publication-problem-locked-1-v1/coauthors/coauthor-test-user-7-problem-locked-1/approval-reminder'
             )
             .query({ apiKey: '000000005' });
 
@@ -76,7 +76,7 @@ describe('Request co-authors approvals', () => {
 
         const response2 = await testUtils.agent
             .post(
-                '/publication-versions/publication-problem-locked-v1/coauthors/coauthor-test-user-7-problem-locked/approval-reminder'
+                '/publication-versions/publication-problem-locked-1-v1/coauthors/coauthor-test-user-7-problem-locked-1/approval-reminder'
             )
             .query({ apiKey: '000000005' });
 

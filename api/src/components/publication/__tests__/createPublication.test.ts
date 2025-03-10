@@ -530,7 +530,7 @@ describe('Create live publication', () => {
 
         expect(createPublicationRequest.status).toEqual(400);
         expect(createPublicationRequest.body.message).toEqual(
-            'Publication with id publication-hypothesis-draft is not LIVE, so a link cannot be created to it.'
+            'Publication with id publication-hypothesis-draft is not LIVE, and you are not an author on the DRAFT, so a link cannot be created to it.'
         );
     });
 
