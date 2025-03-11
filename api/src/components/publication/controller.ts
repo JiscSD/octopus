@@ -1,6 +1,6 @@
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
-import * as linkService from 'link/service';
+import * as linkController from 'link/controller';
 import * as publicationService from 'publication/service';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as response from 'lib/response';
@@ -112,7 +112,7 @@ export const create = async (
             // All proposed links must be valid.
             if (linkedPublicationIds) {
                 for (const linkTargetId of linkedPublicationIds) {
-                    const validateLink = await linkService.createLinkValidation(
+                    const validateLink = await linkController.createLinkValidation(
                         {
                             existing: false,
                             type: type

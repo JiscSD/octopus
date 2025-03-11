@@ -14,7 +14,7 @@ describe('Request co-authors approvals', () => {
         expect(draftPublicationVersionResponse.status).toEqual(200);
 
         const lockedPublicationVersionResponse = await testUtils.agent
-            .put('/publication-versions/publication-problem-locked-v1/coauthors/request-approval')
+            .put('/publication-versions/publication-problem-locked-1-v1/coauthors/request-approval')
             .query({ apiKey: '000000005' });
 
         expect(lockedPublicationVersionResponse.status).toEqual(200);

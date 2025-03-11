@@ -2,6 +2,7 @@ import * as coAuthorService from 'coAuthor/service';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
 import * as email from 'email';
+import * as linkService from 'link/service';
 import * as response from 'lib/response';
 import * as publicationVersionService from 'publicationVersion/service';
 
@@ -112,22 +113,22 @@ export const updateAll = async (
             (oldCoAuthor) => !newCoAuthorsArray.find((newCoAuthor) => oldCoAuthor.email === newCoAuthor.email)
         );
 
-        // check if corresponding author is trying to remove themselves
+        // Check if corresponding author is trying to remove themselves
         if (removedCoAuthors.some((author) => author.linkedUser === event.user.id)) {
             return response.json(403, {
                 message: 'You are not allowed to remove yourself from the publication version.'
             });
         }
 
-        // verify if any of the previously added co-authors have been removed
+        // Verify if any of the previously added co-authors have been removed
         if (removedCoAuthors.length) {
-            // notify co-authors that they've been removed (if their approval has been requested)
+            // Notify co-authors that they've been removed (if their approval has been requested)
             for (const coAuthor of removedCoAuthors) {
-                // remove co-author from this publication
+                // Remove co-author from this publication
                 await coAuthorService.deleteCoAuthorByEmail(version.id, coAuthor.email);
 
                 if (coAuthor.approvalRequested) {
-                    // notify co-author that they've been removed
+                    // Notify co-author that they've been removed
                     await email.notifyCoAuthorRemoval({
                         coAuthor: {
                             email: coAuthor.email
@@ -138,6 +139,9 @@ export const updateAll = async (
                     });
                 }
             }
+
+            // Remove any links to this publication that are made invalid by this change.
+            await linkService.removeInvalidLinksForPublication(version.versionOf, 'to');
         }
 
         await coAuthorService.updateAll(version.id, newCoAuthorsArray);
