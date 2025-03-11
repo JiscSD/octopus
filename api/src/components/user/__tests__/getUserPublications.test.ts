@@ -14,7 +14,7 @@ describe("Get a given user's publications", () => {
             .query({ apiKey: 123456789, offset: 0, limit: 100 });
 
         expect(publications.status).toEqual(200);
-        expect(publications.body.data.length).toEqual(25);
+        expect(publications.body.data.length).toEqual(26);
         expect(
             publications.body.data.some(
                 (publication) => publication.versions.some((version) => version.currentStatus === 'DRAFT') as boolean
