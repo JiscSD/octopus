@@ -47,9 +47,15 @@ export const getPublications = async (
     const versionStatus = event.queryStringParameters?.versionStatus;
     const versionStatusArray = versionStatus ? versionStatus.split(',') : [];
 
+    if (event.queryStringParameters.initialDraftsOnly && versionStatusArray.length) {
+        return response.json(400, {
+            message: 'The "versionStatus" query parameter cannot be used when "initialDraftsOnly" is set to true.'
+        });
+    }
+
     if (versionStatusArray.length && versionStatusArray.some((status) => !I.PublicationStatusEnum[status])) {
         return response.json(400, {
-            message: "Invalid version status provided. Valid values include 'DRAFT', 'LIVE', 'LOCKED"
+            message: "Invalid version status provided. Valid values include 'DRAFT', 'LIVE', and 'LOCKED'."
         });
     }
 
