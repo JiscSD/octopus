@@ -49,10 +49,10 @@ describe('Publication search result', () => {
         expect(screen.queryByText(Helpers.truncateString(Helpers.htmlToText(content), 370))).not.toBeInTheDocument();
     });
 
-    it('Shows pubished date with author list', () => {
-        expect(
-            screen.getByText(`Published ${Helpers.formatDate(publishedDate)}, by E. User, A. One`)
-        ).toBeInTheDocument();
+    it('Shows published date with author list', () => {
+        expect(screen.getByTestId('published-date-with-authors')).toHaveTextContent(
+            `Published ${Helpers.formatDate(publishedDate)}, by E. User, A. One`
+        );
     });
 });
 
