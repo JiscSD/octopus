@@ -104,7 +104,7 @@ describe('update coAuthor affiliations per publication', () => {
 
     test('Author needs to fill out affiliations if the publication is LOCKED', async () => {
         const updateAffiliationsResponse = await testUtils.agent
-            .put('/publication-versions/publication-problem-locked-v1/my-affiliations')
+            .put('/publication-versions/publication-problem-locked-1-v1/my-affiliations')
             .query({ apiKey: '000000005' })
             .send({
                 affiliations: [],
