@@ -640,72 +640,6 @@ export const transferOwnership = (publicationVersionId: string, requesterId: str
         }
     });
 
-const updatePreviousPublicationVersionDOI = async (
-    previousPublicationVersion: I.PublicationVersion,
-    newPublicationVersionDOI: string
-): Promise<I.DOIResponse> => {
-    if (!previousPublicationVersion.doi) {
-        throw Error("Supplied version doesn't have a valid DOI");
-    }
-
-    let previousVersionDoi: string | undefined;
-
-    // check if there's a previous version of this previous version
-    if (previousPublicationVersion.versionNumber > 1) {
-        // get the previous version DOI of this previous version
-        const previousVersion = await get(
-            previousPublicationVersion.versionOf,
-            (previousPublicationVersion.versionNumber - 1).toString()
-        );
-
-        if (previousVersion?.doi) {
-            previousVersionDoi = previousVersion.doi;
-        }
-    }
-
-    const payload = await doi.createDOIPayload({
-        payloadType: 'previousVersion',
-        newPublicationVersionDOI,
-        publicationVersion: previousPublicationVersion,
-        previousPublicationVersionDOI: previousVersionDoi
-    });
-
-    const response = await doi.updateDOI(previousPublicationVersion.doi, payload);
-
-    return response.data;
-};
-
-// Create a separate DOI for a specific publication version.
-// Returns the updated version with a DOI, or null if this publication doesn't use reversioning,
-// and thus doesn't have versioned DOIs.
-const generateNewVersionDOI = async (
-    publicationVersion: I.PublicationVersion,
-    previousPublicationVersion?: I.PublicationVersion | null
-) => {
-    if (Helpers.isPublicationExemptFromReversioning(publicationVersion.publication)) {
-        return null;
-    } else {
-        const newPublicationVersionDOI = await doi.createPublicationVersionDOI(
-            publicationVersion,
-            previousPublicationVersion?.doi as string
-        );
-
-        if (previousPublicationVersion && previousPublicationVersion.doi) {
-            // Update previous version DOI
-            // This will indicate that the new version follows the previous one
-            await updatePreviousPublicationVersionDOI(
-                previousPublicationVersion,
-                newPublicationVersionDOI.data.attributes.doi
-            );
-        }
-
-        // Save the DOI to the database
-        return await update(publicationVersion.id, {
-            doi: newPublicationVersionDOI.data.attributes.doi
-        });
-    }
-};
-
 // Actions that run after a version is published (changes status to LIVE).
 // Pulled out to a separate function because things may need to run when something is
 // published immediately (i.e. not going through full drafting workflow) and bypasses the updateStatus function.
@@ -785,7 +719,19 @@ export const postPublishHook = async (publicationVersion: I.PublicationVersion, 
         let versionWithDOI: I.PublicationVersion | null = null;
 
         if (!Helpers.isPublicationExemptFromReversioning(publicationVersion.publication)) {
-            versionWithDOI = await generateNewVersionDOI(publicationVersion, previousVersion);
+            // Generate a DOI for this version.
+            const newDOIResponse = await doi.createPublicationVersionDOI(publicationVersion);
+            const newDOI = newDOIResponse?.data.attributes.doi;
+
+            // Update the DB record with the new DOI.
+            versionWithDOI = await update(publicationVersion.id, {
+                doi: newDOI
+            });
+
+            // Update the previous version's DOI to add a relationship to this one.
+            if (previousVersion && previousVersion.doi) {
+                await doi.updateRelatedIdentifiers(previousVersion.doi, previousVersion);
+            }
         }
 
         // Update the canonical DOI with the latest details from this version.
