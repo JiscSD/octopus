@@ -648,37 +648,55 @@ export const postPublishHook = async (publicationVersion: I.PublicationVersion, 
         // Tasks specific to peer reviews.
         if (publicationVersion.publication.type === 'PEER_REVIEW') {
             // Ensure links made from a PEER_REVIEW version point to the latest live version of the target publication.
-            const outdatedDraftLinks = await client.prisma.links.findMany({
+            const linkedTo = await client.prisma.links.findMany({
                 where: {
                     publicationFromId: publicationVersion.versionOf,
-                    draft: true,
+                    draft: true
+                },
+                select: {
+                    id: true,
+                    publicationToId: true,
+                    publicationTo: {
+                        select: {
+                            doi: true
+                        }
+                    },
                     versionTo: {
-                        isLatestLiveVersion: false
+                        include: defaultPublicationVersionInclude
                     }
                 }
             });
 
-            for (const outdatedDraftLink of outdatedDraftLinks) {
-                const latestVersionTo = await client.prisma.publicationVersion.findFirst({
-                    where: {
-                        versionOf: outdatedDraftLink.publicationToId,
-                        isLatestLiveVersion: true
-                    }
-                });
+            for (const link of linkedTo) {
+                let reviewedVersion: I.PublicationVersion = link.versionTo;
 
-                if (latestVersionTo) {
-                    await client.prisma.links.update({
+                if (!link.versionTo.isLatestLiveVersion) {
+                    // If the link is outdated (a newer version of the target publication exists),
+                    // update the link to refer to the newest live version.
+                    const latestVersionTo = await client.prisma.publicationVersion.findFirst({
                         where: {
-                            id: outdatedDraftLink.id
+                            versionOf: link.publicationToId,
+                            isLatestLiveVersion: true
                         },
-                        data: {
-                            versionToId: latestVersionTo.id
-                        }
+                        include: defaultPublicationVersionInclude
                     });
-                }
-            }
 
-            // Update canonical and version DOI for the reviewed publication to show the ReviewedBy relationship.
+                    if (latestVersionTo) {
+                        await client.prisma.links.update({
+                            where: {
+                                id: link.id
+                            },
+                            data: {
+                                versionToId: latestVersionTo.id
+                            }
+                        });
+                        reviewedVersion = latestVersionTo;
+                    }
+                }
+
+                // Update canonical DOI of the reviewed publication to show the ReviewedBy relationship.
+                await doi.updateRelatedIdentifiers('canonical', link.publicationTo.doi, reviewedVersion);
+            }
         }
 
         // Update "draft" links.
@@ -730,7 +748,7 @@ export const postPublishHook = async (publicationVersion: I.PublicationVersion, 
 
             // Update the previous version's DOI to add a relationship to this one.
             if (previousVersion && previousVersion.doi) {
-                await doi.updateRelatedIdentifiers(previousVersion.doi, previousVersion);
+                await doi.updateRelatedIdentifiers('version', previousVersion.doi, previousVersion);
             }
         }
 

@@ -21,7 +21,7 @@ type RelatedIdentifier = {
     resourceTypeGeneral?: ResourceTypeGeneral;
 };
 
-const createCreatorObject = (user: I.DataCiteUser): I.DataCiteCreator => {
+export const createCreatorObject = (user: I.DataCiteUser): I.DataCiteCreator => {
     return {
         name: Helpers.abbreviateUserName(user), // datacite expects full name in lastname, firstname order
         givenName: user?.firstName,
@@ -29,7 +29,7 @@ const createCreatorObject = (user: I.DataCiteUser): I.DataCiteCreator => {
         nameType: user.role === 'ORGANISATION' ? 'Organizational' : 'Personal',
         nameIdentifiers: [
             {
-                nameIdentifier: user?.orcid ? user?.orcid : 'ORCID iD not provided',
+                nameIdentifier: user?.orcid ? user?.orcid : 'ORCID ID not provided',
                 nameIdentifierScheme: 'ORCID',
                 schemeUri: 'https://orcid.org/'
             }
@@ -66,6 +66,7 @@ const getDOIPayload = (attributes: Record<string, unknown>): DOIPayload => ({
 
 const getRelatedIdentifiers = async (
     doiType: DOIType,
+    linkedFrom: I.LinkedFromPublication[],
     linkedTo: I.LinkedToPublication[],
     publicationVersion: I.PublicationVersion,
     references: I.Reference[]
@@ -85,6 +86,19 @@ const getRelatedIdentifiers = async (
         relationType: publicationVersion.publication.type === 'PEER_REVIEW' ? 'Reviews' : 'Continues'
     }));
 
+    // If peer reviews have been linked to this publication, add them with relationType "ReviewedBy".
+    const peerReviewEntries = linkedFrom.flatMap((link) =>
+        link.type === 'PEER_REVIEW'
+            ? [
+                  {
+                      relatedIdentifier: link.doi,
+                      relatedIdentifierType: 'DOI',
+                      relationType: 'IsReviewedBy'
+                  }
+              ]
+            : []
+    );
+
     // For each reference that is a DOI type, add it with relationType "References".
     const referenceEntries = references
         .filter((reference) => reference.type === 'DOI' && reference.location)
@@ -102,7 +116,11 @@ const getRelatedIdentifiers = async (
                 : [];
         });
 
-    const relatedIdentifiers: RelatedIdentifier[] = [...linkedPublicationEntries, ...referenceEntries];
+    const relatedIdentifiers: RelatedIdentifier[] = [
+        ...linkedPublicationEntries,
+        ...peerReviewEntries,
+        ...referenceEntries
+    ];
 
     const resourceTypeGeneral = getResourceTypeGeneral(publicationVersion.publication.type);
 
@@ -189,7 +207,10 @@ export const createFullDOIPayload = async (data: {
 }): Promise<DOIPayload> => {
     const { doi, doiType, publicationVersion } = data;
     const references = await referenceService.getAllByPublicationVersion(publicationVersion.id);
-    const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
+    const { linkedFrom, linkedTo } = await publicationService.getDirectLinksForPublication(
+        publicationVersion.versionOf,
+        true
+    );
 
     // Create a creator object for each CoAuthor.
     const creators: I.DataCiteCreator[] = [];
@@ -207,7 +228,13 @@ export const createFullDOIPayload = async (data: {
         }
     });
 
-    const relatedIdentifiers = await getRelatedIdentifiers(doiType, linkedTo, publicationVersion, references);
+    const relatedIdentifiers = await getRelatedIdentifiers(
+        doiType,
+        linkedFrom,
+        linkedTo,
+        publicationVersion,
+        references
+    );
 
     // Create a relatedItem for each reference that isn't a DOI (those go to relatedIdentifiers).
     const referenceRelatedItems = references
@@ -285,7 +312,7 @@ export const createFullDOIPayload = async (data: {
                 ]
             }
         ],
-        language: 'en',
+        language: publicationVersion.language,
         types: {
             resourceTypeGeneral: publicationVersion.publication.type === 'PEER_REVIEW' ? 'PeerReview' : 'Other',
             resourceType: publicationVersion.publication.type
@@ -396,12 +423,22 @@ export const updateCanonicalDOI = async (
 // Even if we only want to update one related identifier, we have to supply the whole list, which involves getting
 // linked publications and references.
 export const updateRelatedIdentifiers = async (
+    doiType: DOIType,
     doi: string,
     publicationVersion: I.PublicationVersion
 ): Promise<AxiosResponse<I.DOIResponse>> => {
     const references = await referenceService.getAllByPublicationVersion(publicationVersion.id);
-    const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
-    const relatedIdentifiers = await getRelatedIdentifiers('version', linkedTo, publicationVersion, references);
+    const { linkedFrom, linkedTo } = await publicationService.getDirectLinksForPublication(
+        publicationVersion.versionOf,
+        true
+    );
+    const relatedIdentifiers = await getRelatedIdentifiers(
+        doiType,
+        linkedFrom,
+        linkedTo,
+        publicationVersion,
+        references
+    );
 
     return updateDOI(doi, getDOIPayload({ relatedIdentifiers }));
 };
