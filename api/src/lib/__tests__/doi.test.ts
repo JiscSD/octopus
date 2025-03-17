@@ -130,13 +130,7 @@ describe('Create full DOI payload', () => {
             publicationVersion: version
         });
 
-        expect(payload).toMatchObject({
-            data: {
-                attributes: {
-                    url: Helpers.getPublicationUrl(version.versionOf)
-                }
-            }
-        });
+        expect(payload.data.attributes.url).toEqual(Helpers.getPublicationUrl(version.versionOf));
     });
 
     test('Version DOI URL points to the version', async () => {
@@ -149,12 +143,303 @@ describe('Create full DOI payload', () => {
             publicationVersion: version
         });
 
-        expect(payload).toMatchObject({
-            data: {
-                attributes: {
-                    url: `${Helpers.getPublicationUrl(version.versionOf)}/versions/${version.versionNumber}`
+        expect(payload.data.attributes.url).toEqual(
+            `${Helpers.getPublicationUrl(version.versionOf)}/versions/${version.versionNumber}`
+        );
+    });
+
+    test('A creator exists for each coAuthor', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const payload = await doi.createFullDOIPayload({
+            doiType: 'version',
+            publicationVersion: version
+        });
+
+        const creators = version.coAuthors.flatMap((coAuthor) =>
+            coAuthor.user
+                ? [
+                      doi.createCreatorObject({
+                          firstName: coAuthor.user.firstName,
+                          lastName: coAuthor.user.lastName,
+                          orcid: coAuthor.user.orcid,
+                          affiliations: coAuthor.affiliations as unknown as I.MappedOrcidAffiliation[],
+                          role: coAuthor.user.role
+                      })
+                  ]
+                : []
+        );
+
+        expect(payload.data.attributes.creators).toEqual(creators);
+    });
+
+    test('Title is publication version title, with language', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const payload = await doi.createFullDOIPayload({
+            doiType: 'canonical',
+            publicationVersion: version
+        });
+
+        expect(payload.data.attributes.titles).toEqual([{ title: version.title, lang: version.language }]);
+    });
+
+    test('Publication year is year of published date', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const payload = await doi.createFullDOIPayload({
+            doiType: 'canonical',
+            publicationVersion: version
+        });
+
+        expect(payload.data.attributes.publicationYear).toEqual(version.publishedDate?.getFullYear());
+    });
+
+    test('Contributor exists for corresponding author', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const payload = await doi.createFullDOIPayload({
+            doiType: 'canonical',
+            publicationVersion: version
+        });
+
+        expect(payload.data.attributes.contributors).toEqual([
+            {
+                name: Helpers.abbreviateUserName(version.user),
+                contributorType: 'ContactPerson',
+                nameType: 'Personal',
+                givenName: version.user.firstName,
+                familyName: version.user.lastName,
+                nameIdentifiers: [
+                    {
+                        nameIdentifier: version.user.orcid,
+                        nameIdentifierScheme: 'ORCID',
+                        schemeUri: 'https://orcid.org/'
+                    }
+                ]
+            }
+        ]);
+    });
+
+    test('Contributor nameType is Organizational if corresponding author has ORGANISATION role', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const payload = await doi.createFullDOIPayload({
+            doiType: 'canonical',
+            publicationVersion: {
+                ...version,
+                user: { ...version.user, role: 'ORGANISATION' }
+            }
+        });
+
+        expect(payload.data.attributes.contributors).toMatchObject([
+            {
+                nameType: 'Organizational'
+            }
+        ]);
+    });
+
+    test('Language is publication language', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const payload = await doi.createFullDOIPayload({
+            doiType: 'canonical',
+            publicationVersion: version
+        });
+
+        expect(payload.data.attributes.language).toEqual(version.language);
+    });
+
+    test('Publications of type peer review reflect this in the types object', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const payload = await doi.createFullDOIPayload({
+            doiType: 'canonical',
+            publicationVersion: {
+                ...version,
+                publication: {
+                    ...version.publication,
+                    type: 'PEER_REVIEW'
                 }
             }
         });
+
+        expect(payload.data.attributes.types).toEqual({
+            resourceTypeGeneral: 'PeerReview',
+            resourceType: 'PEER_REVIEW'
+        });
+    });
+
+    test('Non peer-review publications have resourceTypeGeneral set to Other', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const payload = await doi.createFullDOIPayload({
+            doiType: 'canonical',
+            publicationVersion: version
+        });
+
+        expect(payload.data.attributes.types).toEqual({
+            resourceTypeGeneral: 'Other',
+            resourceType: 'PROBLEM'
+        });
+    });
+
+    test('A relatedItem exists for each reference that is not of type "DOI"', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        // References are retrieved from the DB by the function.
+        const payload = await doi.createFullDOIPayload({
+            doiType: 'canonical',
+            publicationVersion: version
+        });
+
+        expect(payload.data.attributes.relatedItems).toMatchObject([
+            {
+                titles: [{ title: 'text reference' }],
+                relationType: 'References',
+                relatedItemType: 'Other'
+            },
+            {
+                titles: [{ title: 'URL reference' }],
+                relationType: 'References',
+                relatedItemType: 'Other',
+                relatedItemIdentifier: {
+                    relatedItemIdentifier: 'https://example.url',
+                    relatedItemIdentifierType: 'URL'
+                }
+            }
+        ]);
+    });
+
+    test('A relatedItem exists for each piece of additional information', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const payload = await doi.createFullDOIPayload({
+            doiType: 'canonical',
+            publicationVersion: {
+                ...version,
+                additionalInformation: [
+                    {
+                        id: 'test-1',
+                        title: 'test additional info',
+                        url: 'https://additional.info',
+                        description: 'test description'
+                    }
+                ]
+            }
+        });
+
+        // Expect this to be the third additional item after the 2 references.
+        expect(payload.data.attributes.relatedItems).toHaveLength(3);
+        const relatedItems = payload.data.attributes.relatedItems as Record<string, unknown>[];
+        expect(relatedItems[2]).toMatchObject({
+            titles: [{ title: 'test additional info' }],
+            relationType: 'HasPart',
+            relatedItemType: 'Other',
+            relatedItemIdentifier: {
+                relatedItemIdentifier: 'https://additional.info',
+                relatedItemIdentifierType: 'URL'
+            }
+        });
+    });
+
+    test('A fundingReference exists for each funder', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const payload = await doi.createFullDOIPayload({
+            doiType: 'canonical',
+            publicationVersion: {
+                ...version,
+                funders: [
+                    {
+                        id: 'test-1',
+                        name: 'Test Funder',
+                        link: 'https://test.funder',
+                        ror: 'test-ror',
+                        city: 'Test City',
+                        country: 'Test Country',
+                        grantId: 'test-grant-id'
+                    },
+                    {
+                        id: 'test-2',
+                        name: 'Test Funder 2',
+                        link: 'https://second-test.funder',
+                        ror: '',
+                        city: 'Test City 2',
+                        country: 'Test Country 2',
+                        grantId: 'test-grant-id-2'
+                    }
+                ]
+            }
+        });
+
+        expect(payload.data.attributes.fundingReferences).toMatchObject([
+            {
+                funderName: 'Test Funder',
+                funderIdentifier: 'test-ror', // ROR is preferred if available
+                funderIdentifierType: 'ROR'
+            },
+            {
+                funderName: 'Test Funder 2',
+                funderIdentifier: 'https://second-test.funder', // Falls back to link
+                funderIdentifierType: 'Other' // Fallback if not ROR
+            }
+        ]);
+    });
+
+    test('doi and identifiers are set if doi is provided in data parameter', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const payload = await doi.createFullDOIPayload({
+            doi: '10.82259/ver2-2g03',
+            doiType: 'canonical',
+            publicationVersion: version
+        });
+
+        expect(payload.data.attributes.doi).toEqual('10.82259/ver2-2g03');
+        expect(payload.data.attributes.identifiers).toEqual([
+            {
+                identifier: 'https://doi.org/10.82259/ver2-2g03',
+                identifierType: 'DOI'
+            }
+        ]);
+    });
+
+    test('doi and identifiers are not set if doi is not provided in data parameter', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const payload = await doi.createFullDOIPayload({
+            doiType: 'canonical',
+            publicationVersion: version
+        });
+
+        expect(payload.data.attributes).not.toHaveProperty('doi');
+        expect(payload.data.attributes).not.toHaveProperty('identifiers');
     });
 });

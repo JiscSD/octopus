@@ -58,7 +58,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                     isLatestVersion: false,
                     isLatestLiveVersion: false,
                     publishedDate: '2022-01-22T15:51:42.523Z',
-                    user: { connect: { id: 'test-user-1' } },
+                    createdBy: 'test-user-1',
                     publicationStatus: {
                         create: [
                             { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
@@ -110,7 +110,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                     isLatestLiveVersion: true,
                     isLatestVersion: true,
                     publishedDate: '2022-01-22T15:51:42.523Z',
-                    user: { connect: { id: 'test-user-1' } },
+                    createdBy: 'test-user-1',
                     publicationStatus: {
                         create: [
                             { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
@@ -132,6 +132,27 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                                 code: 'test-code-user-6',
                                 confirmedCoAuthor: true,
                                 linkedUser: 'test-user-6'
+                            }
+                        ]
+                    },
+                    References: {
+                        create: [
+                            {
+                                id: 'publication-problem-live-reference-1',
+                                type: 'DOI',
+                                text: 'doi reference',
+                                location: 'https://example.doi.url'
+                            },
+                            {
+                                id: 'publication-problem-live-reference-2',
+                                type: 'TEXT',
+                                text: 'text reference'
+                            },
+                            {
+                                id: 'publication-problem-live-reference-3',
+                                type: 'URL',
+                                text: 'URL reference',
+                                location: 'https://example.url'
                             }
                         ]
                     }

@@ -291,11 +291,11 @@ export const createFullDOIPayload = async (data: {
         titles: [
             {
                 title: publicationVersion.title,
-                lang: 'en'
+                lang: publicationVersion.language
             }
         ],
         publisher: 'Octopus',
-        publicationYear: publicationVersion.createdAt.getFullYear(),
+        publicationYear: publicationVersion.publishedDate?.getFullYear(),
         contributors: [
             {
                 name: Helpers.abbreviateUserName(publicationVersion.user),
