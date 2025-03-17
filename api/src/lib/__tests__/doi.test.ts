@@ -89,6 +89,298 @@ describe('Create creator object', () => {
     });
 });
 
+describe('Get related identifiers', () => {
+    let version: I.PublicationVersion | null;
+    const testLinkedPublication: I.LinkedToPublication = {
+        linkId: 'test',
+        draft: true,
+        childPublication: 'some-other-id',
+        childPublicationType: 'PROBLEM',
+        externalSource: null,
+        id: 'test',
+        type: 'PROBLEM',
+        doi: 'test-doi',
+        title: 'test',
+        publishedDate: '2022-01-01T00:00:00.000Z',
+        currentStatus: 'LIVE',
+        createdBy: 'test-user',
+        authorFirstName: 'test',
+        authorLastName: 'user',
+        authors: [],
+        flagCount: 0,
+        peerReviewCount: 0
+    };
+    const testLinkedToPublication: I.LinkedToPublication = {
+        ...testLinkedPublication,
+        linkId: 'link-to',
+        draft: false,
+        childPublication: 'publication-problem-live',
+        childPublicationType: 'PROBLEM',
+        externalSource: null
+    };
+    const testLinkedFromPublication: I.LinkedFromPublication = {
+        ...testLinkedPublication,
+        linkId: 'link-from',
+        parentPublication: 'publication-problem-live',
+        parentPublicationType: 'PROBLEM'
+    };
+
+    beforeAll(async () => {
+        await testUtils.clearDB();
+        await testUtils.testSeed();
+        version = await publicationVersionService.get('publication-problem-live', 'latestLive');
+    });
+
+    test('Non-peer review publications have a "Continues" relationship to other publications they have linked to', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const relatedIdentifiers = await doi.getRelatedIdentifiers(
+            'canonical',
+            [],
+            // One linked publication, a problem.
+            [testLinkedToPublication],
+            version,
+            []
+        );
+
+        expect(relatedIdentifiers).toEqual(
+            expect.arrayContaining([
+                {
+                    relatedIdentifier: 'test-doi',
+                    relatedIdentifierType: 'DOI',
+                    relationType: 'Continues'
+                }
+            ])
+        );
+    });
+
+    test('Peer review publications have a "Reviews" relationship to other publications they have linked to', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const relatedIdentifiers = await doi.getRelatedIdentifiers(
+            'canonical',
+            [],
+            // One linked publication, a peer review.
+            [{ ...testLinkedToPublication, childPublicationType: 'PEER_REVIEW' }],
+            {
+                ...version,
+                publication: {
+                    ...version.publication,
+                    type: 'PEER_REVIEW'
+                }
+            },
+            []
+        );
+
+        expect(relatedIdentifiers).toEqual(
+            expect.arrayContaining([
+                {
+                    relatedIdentifier: 'test-doi',
+                    relatedIdentifierType: 'DOI',
+                    relationType: 'Reviews'
+                }
+            ])
+        );
+    });
+
+    test('Publications with a peer review linked to them have a "IsReviewedBy" relationship to the peer review', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const relatedIdentifiers = await doi.getRelatedIdentifiers(
+            'canonical',
+            // One publication has linked to this one: a peer review.
+            [
+                {
+                    ...testLinkedFromPublication,
+                    type: 'PEER_REVIEW'
+                }
+            ],
+            [],
+            version,
+            []
+        );
+
+        expect(relatedIdentifiers).toEqual(
+            expect.arrayContaining([
+                {
+                    relatedIdentifier: 'test-doi',
+                    relatedIdentifierType: 'DOI',
+                    relationType: 'IsReviewedBy'
+                }
+            ])
+        );
+    });
+
+    test('References are included when they have type "DOI", a location and a doi string in the location', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const relatedIdentifiers = await doi.getRelatedIdentifiers(
+            'canonical',
+            [],
+            [],
+            version,
+            // Sample reference
+            [
+                {
+                    id: 'publication-problem-live-reference-1',
+                    type: 'DOI',
+                    text: 'doi reference',
+                    location: '10.123/abcd-1234',
+                    publicationVersionId: 'publication-problem-live-v2'
+                }
+            ]
+        );
+
+        expect(relatedIdentifiers).toEqual(
+            expect.arrayContaining([
+                {
+                    relatedIdentifier: '10.123/abcd-1234',
+                    relatedIdentifierType: 'DOI',
+                    relationType: 'References'
+                }
+            ])
+        );
+    });
+
+    test('References are not included when they do not have type "DOI" or a DOI string in the location field', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const relatedIdentifiers = await doi.getRelatedIdentifiers(
+            'canonical',
+            [],
+            [],
+            version,
+            // Sample references - only one should get a relatedIdentifier.
+            [
+                {
+                    id: 'publication-problem-live-reference-1',
+                    type: 'TEXT', // Wrong type.
+                    text: 'text reference',
+                    location: '10.123/abcd-1234', // Valid DOI string but should still be ignored.
+                    publicationVersionId: 'publication-problem-live-v2'
+                },
+                {
+                    id: 'publication-problem-live-reference-2',
+                    type: 'DOI', // Right type.
+                    text: 'text reference',
+                    location: 'not a doi', // Does not contain a DOI.
+                    publicationVersionId: 'publication-problem-live-v2'
+                }
+            ]
+        );
+
+        expect(
+            relatedIdentifiers.filter((relatedIdentifier) => relatedIdentifier.relationType === 'References')
+        ).toHaveLength(0);
+    });
+
+    test("Canonical non-peer review DOIs have a 'HasVersion' relationship to each live version's DOI", async () => {
+        // This version has 1 live and 1 non-live version, so we expect one relatedIdentifier.
+        const version = await publicationVersionService.get('publication-problem-live-2', 'latestLive');
+
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const relatedIdentifiers = await doi.getRelatedIdentifiers('canonical', [], [], version, []);
+
+        expect(relatedIdentifiers).toEqual([
+            {
+                relatedIdentifier: '10.82259/ver1-2g04',
+                relatedIdentifierType: 'DOI',
+                relationType: 'HasVersion',
+                resourceTypeGeneral: 'Other'
+            }
+        ]);
+    });
+
+    // Peer reviews are exempt from reversioning so they should have no version DOIs, nor relations indicating any.
+    test('Canonical peer review DOIs have no "HasVersion" relatedIdentifiers', async () => {
+        const version = await publicationVersionService.get('publication-peer-review-live', 'latestLive');
+
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const relatedIdentifiers = await doi.getRelatedIdentifiers('canonical', [], [], version, []);
+
+        expect(
+            relatedIdentifiers.filter((relatedIdentifier) => relatedIdentifier.relationType === 'HasVersion')
+        ).toHaveLength(0);
+    });
+
+    test('Version DOIs have a "IsVersionOf" relationship to the canonical DOI', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const relatedIdentifiers = await doi.getRelatedIdentifiers('version', [], [], version, []);
+
+        expect(relatedIdentifiers).toEqual(
+            expect.arrayContaining([
+                {
+                    relatedIdentifier: '10.82259/cty5-2g03',
+                    relatedIdentifierType: 'DOI',
+                    relationType: 'IsVersionOf',
+                    resourceTypeGeneral: 'Other'
+                }
+            ])
+        );
+    });
+
+    test('Version DOIs at version 2 or above have a "IsNewVersionOf" relationship to the previous version DOI', async () => {
+        // Version is the second of 2 live versions.
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const relatedIdentifiers = await doi.getRelatedIdentifiers('version', [], [], version, []);
+
+        expect(relatedIdentifiers).toEqual(
+            expect.arrayContaining([
+                {
+                    relatedIdentifier: '10.82259/ver1-2g03',
+                    relatedIdentifierType: 'DOI',
+                    relationType: 'IsNewVersionOf',
+                    resourceTypeGeneral: 'Other'
+                }
+            ])
+        );
+    });
+
+    test('Version DOIs have a "IsPreviousVersionOf" relationship a subsequent live version DOI if it exists', async () => {
+        // First version of 2
+        const version = await publicationVersionService.get('publication-problem-live', '1');
+
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const relatedIdentifiers = await doi.getRelatedIdentifiers('version', [], [], version, []);
+
+        expect(relatedIdentifiers).toEqual(
+            expect.arrayContaining([
+                {
+                    relatedIdentifier: '10.82259/ver2-2g03',
+                    relatedIdentifierType: 'DOI',
+                    relationType: 'IsPreviousVersionOf',
+                    resourceTypeGeneral: 'Other'
+                }
+            ])
+        );
+    });
+});
+
 describe('Create full DOI payload', () => {
     let version: I.PublicationVersion | null;
 
@@ -298,6 +590,33 @@ describe('Create full DOI payload', () => {
             resourceTypeGeneral: 'Other',
             resourceType: 'PROBLEM'
         });
+    });
+
+    // The permutations for the identifiers returned are covered in other tests.
+    test('Related identifiers are set as expected', async () => {
+        if (!version) {
+            fail('Could not find publication version');
+        }
+
+        const payload = await doi.createFullDOIPayload({
+            doiType: 'canonical',
+            publicationVersion: version
+        });
+
+        expect(payload.data.attributes.relatedIdentifiers).toMatchObject([
+            {
+                relatedIdentifier: '10.82259/ver1-2g03',
+                relatedIdentifierType: 'DOI',
+                relationType: 'HasVersion',
+                resourceTypeGeneral: 'Other'
+            },
+            {
+                relatedIdentifier: '10.82259/ver2-2g03',
+                relatedIdentifierType: 'DOI',
+                relationType: 'HasVersion',
+                resourceTypeGeneral: 'Other'
+            }
+        ]);
     });
 
     test('A relatedItem exists for each reference that is not of type "DOI"', async () => {

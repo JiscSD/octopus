@@ -64,7 +64,7 @@ const getDOIPayload = (attributes: Record<string, unknown>): DOIPayload => ({
     }
 });
 
-const getRelatedIdentifiers = async (
+export const getRelatedIdentifiers = async (
     doiType: DOIType,
     linkedFrom: I.LinkedFromPublication[],
     linkedTo: I.LinkedToPublication[],
@@ -176,17 +176,14 @@ const getRelatedIdentifiers = async (
         if (!Helpers.isPublicationExemptFromReversioning(publication)) {
             // Add "HasVersion" relationship to all version DOIs.
             for (const version of publication.versions) {
-                if (version.currentStatus === 'LIVE')
-                    if (!version.doi) {
-                        throw Error('Live version ' + version.id + ' does not have a DOI');
-                    } else {
-                        relatedIdentifiers.push({
-                            relatedIdentifier: version.doi,
-                            relatedIdentifierType: 'DOI',
-                            relationType: 'HasVersion',
-                            resourceTypeGeneral
-                        });
-                    }
+                if (version.currentStatus === 'LIVE' && version.doi) {
+                    relatedIdentifiers.push({
+                        relatedIdentifier: version.doi,
+                        relatedIdentifierType: 'DOI',
+                        relationType: 'HasVersion',
+                        resourceTypeGeneral
+                    });
+                }
             }
         }
     }
