@@ -50,6 +50,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
             create: [
                 {
                     id: 'publication-problem-live-v1',
+                    doi: '10.82259/ver1-2g03',
                     versionNumber: 1,
                     title: 'Publication PROBLEM-LIVE',
                     content: 'Publication PROBLEM-LIVE',
@@ -101,6 +102,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 },
                 {
                     id: 'publication-problem-live-v2',
+                    doi: '10.82259/ver2-2g03',
                     versionNumber: 2,
                     title: 'Publication PROBLEM-LIVE v2',
                     content: 'Publication PROBLEM-LIVE v2',
