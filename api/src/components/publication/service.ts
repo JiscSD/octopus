@@ -1,7 +1,7 @@
-import axios from 'axios';
-import * as I from 'interface';
 import * as client from 'lib/client';
+import * as doi from 'lib/doi';
 import * as Enum from 'enum';
+import * as I from 'interface';
 import * as publicationVersionService from 'publicationVersion/service';
 import { Prisma } from '@prisma/client';
 
@@ -406,22 +406,8 @@ export const create = async (
     }[]
 ) => {
     // Create empty DOI
-    const payload = {
-        data: {
-            type: 'dois',
-            attributes: {
-                prefix: process.env.DOI_PREFIX
-            }
-        }
-    };
-
-    const doiRequest = await axios.post<I.DOIResponse>(process.env.DATACITE_ENDPOINT as string, payload, {
-        auth: {
-            username: process.env.DATACITE_USER as string,
-            password: process.env.DATACITE_PASSWORD as string
-        }
-    });
-    const doi = doiRequest.data;
+    const doiRequest = await doi.createEmptyDOI();
+    const newDoi = doiRequest.data;
 
     // If topics are provided, associate the publication to those.
     const topics = e.topicIds?.length
@@ -438,15 +424,15 @@ export const create = async (
     const now = new Date().toISOString();
     const publication = await client.prisma.publication.create({
         data: {
-            id: doi.data.attributes.suffix,
-            doi: doi.data.attributes.doi,
+            id: newDoi.data.attributes.suffix,
+            doi: newDoi.data.attributes.doi,
             type: e.type,
             externalId: e.externalId,
             externalSource: e.externalSource,
             // Create first version when publication is created
             versions: {
                 create: {
-                    id: doi.data.attributes.suffix + '-v1',
+                    id: newDoi.data.attributes.suffix + '-v1',
                     versionNumber: 1,
                     isLatestLiveVersion: directPublish,
                     currentStatus,
@@ -1122,7 +1108,7 @@ export const getDirectLinksForPublication = async (
 
     const linkedTo: I.LinkedToPublication[] = publication.linkedTo.map((link) => {
         const { id: linkId, publicationTo, versionTo, draft } = link;
-        const { id, type, versions, doi, publicationFlags, linkedFrom, externalSource } = publicationTo;
+        const { id, type, versions, doi: publicationDoi, publicationFlags, linkedFrom, externalSource } = publicationTo;
         const { createdBy, user, currentStatus, publishedDate, title } = versions[0];
 
         return {
@@ -1130,7 +1116,7 @@ export const getDirectLinksForPublication = async (
             draft,
             linkId,
             type,
-            doi,
+            doi: publicationDoi,
             childPublication: publication.id,
             childPublicationType: publication.type,
             parentVersionId: versionTo.id,
@@ -1151,7 +1137,7 @@ export const getDirectLinksForPublication = async (
 
     const linkedFrom: I.LinkedFromPublication[] = publication.linkedFrom.map((link) => {
         const { id: linkId, publicationFrom, versionTo, draft } = link;
-        const { id, type, versions, doi, publicationFlags, linkedFrom } = publicationFrom;
+        const { id, type, versions, doi: publicationDoi, publicationFlags, linkedFrom } = publicationFrom;
         const { createdBy, user, currentStatus, publishedDate, title } = versions[0];
 
         return {
@@ -1159,7 +1145,7 @@ export const getDirectLinksForPublication = async (
             draft,
             linkId,
             type,
-            doi,
+            doi: publicationDoi,
             parentPublication: publication.id,
             parentPublicationType: publication.type,
             parentVersionId: versionTo.id,
