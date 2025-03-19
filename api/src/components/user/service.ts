@@ -239,26 +239,40 @@ export const getPublications = async (
     };
 
     // WHERE clauses related to the requested publication status of publications.
-    const versionStatusFilter: Prisma.PublicationWhereInput =
-        // If the requester is not the account owner, get only publications that have a published version.
-        !isAccountOwner
-            ? { versions: { some: { isLatestLiveVersion: true } } }
-            : // Otherwise...
-            // If only initial drafts are requested, return only these.
-            initialDraftsOnly
-            ? { versions: { every: { currentStatus: 'DRAFT', versionNumber: 1 } } }
-            : // If another version status filter has been supplied, get publications with at least one version with a current status matching the given filters.
-            versionStatusArray
-            ? {
-                  versions: {
-                      some: {
-                          currentStatus: {
-                              in: versionStatusArray
-                          }
-                      }
-                  }
-              }
-            : {};
+    let versionStatusFilter: Prisma.PublicationWhereInput;
+
+    if (!isAccountOwner) {
+        versionStatusFilter = {
+            versions: {
+                some: {
+                    isLatestLiveVersion: true
+                }
+            }
+        };
+    } else {
+        if (initialDraftsOnly) {
+            versionStatusFilter = {
+                versions: {
+                    every: {
+                        currentStatus: 'DRAFT',
+                        versionNumber: 1
+                    }
+                }
+            };
+        } else if (versionStatusArray) {
+            versionStatusFilter = {
+                versions: {
+                    some: {
+                        currentStatus: {
+                            in: versionStatusArray
+                        }
+                    }
+                }
+            };
+        } else {
+            versionStatusFilter = {};
+        }
+    }
 
     // Get publications where:
     const where: Prisma.PublicationWhereInput = {
