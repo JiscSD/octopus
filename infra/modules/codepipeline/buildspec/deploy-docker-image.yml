@@ -16,4 +16,4 @@ phases:
       - echo Pushing docker image...
       - docker push $ACCOUNT_ID.dkr.ecr.$DEFAULT_REGION.amazonaws.com/$PROJECT_NAME-$ENVIRONMENT:$IMAGE_NAME
       - docker push $ACCOUNT_ID.dkr.ecr.$DEFAULT_REGION.amazonaws.com/$PROJECT_NAME-$ENVIRONMENT:$COMMIT_ID
-# Dev work - Comment to trigger build
+# Dev work - Comment to trigger build. Edit
