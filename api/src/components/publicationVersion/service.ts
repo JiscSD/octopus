@@ -356,11 +356,16 @@ export const checkIsReadyToPublish = async (publicationVersion: I.PublicationVer
         return false;
     }
 
-    const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
+    const { linkedTo } = await publicationService.getDirectLinksForPublication(
+        publicationVersion.versionOf,
+        null,
+        true
+    );
 
-    const hasAtLeastOneLinkOrTopic =
-        linkedTo.length !== 0 ||
-        (publicationVersion.publication.type === 'PROBLEM' && publicationVersion.topics.length !== 0);
+    const hasLiveLinks =
+        linkedTo.length !== 0 && linkedTo.every((linkedPublication) => linkedPublication.currentStatus === 'LIVE');
+    const hasLinkedTopic = publicationVersion.publication.type === 'PROBLEM' && publicationVersion.topics.length !== 0;
+    const isLinkedToLivePublicationsOrTopic = hasLiveLinks || hasLinkedTopic;
     const hasFilledRequiredFields =
         ['title', 'licence'].every((field) => publicationVersion[field]) &&
         !Helpers.isEmptyContent(publicationVersion.content || '');
@@ -376,7 +381,7 @@ export const checkIsReadyToPublish = async (publicationVersion: I.PublicationVer
     );
 
     return (
-        hasAtLeastOneLinkOrTopic &&
+        isLinkedToLivePublicationsOrTopic &&
         hasFilledRequiredFields &&
         conflictOfInterest &&
         !hasPublishDate &&
@@ -396,7 +401,11 @@ export const checkIsReadyToRequestApprovals = async (publicationVersion: I.Publi
         return false;
     }
 
-    const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
+    const { linkedTo } = await publicationService.getDirectLinksForPublication(
+        publicationVersion.versionOf,
+        null,
+        true
+    );
 
     const hasAtLeastOneLinkOrTopic =
         linkedTo.length !== 0 ||
@@ -693,7 +702,11 @@ const createDOIPayload = async (
     const { payloadType, publicationVersion } = data;
 
     const references = await referenceService.getAllByPublicationVersion(publicationVersion.id);
-    const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
+    const { linkedTo } = await publicationService.getDirectLinksForPublication(
+        publicationVersion.versionOf,
+        null,
+        false
+    );
 
     const creators: I.DataCiteCreator[] = [];
     publicationVersion.coAuthors.forEach((author) => {
