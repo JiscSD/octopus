@@ -1,10 +1,10 @@
-import axios, { AxiosResponse } from 'axios';
 import nodemailer from 'nodemailer';
 import { convert } from 'html-to-text';
 import { createId } from '@paralleldrive/cuid2';
 import { Prisma } from '@prisma/client';
 
 import * as client from 'lib/client';
+import * as doi from 'lib/doi';
 import * as email from 'lib/email';
 import * as eventService from 'event/service';
 import * as Helpers from 'lib/helpers';
@@ -649,485 +649,62 @@ export const transferOwnership = (publicationVersionId: string, requesterId: str
         }
     });
 
-// DOI functions
-const createCreatorObject = (user: I.DataCiteUser): I.DataCiteCreator => {
-    return {
-        name: Helpers.abbreviateUserName(user), // datacite expects full name in lastname, firstname order
-        givenName: user?.firstName,
-        familyName: user?.lastName,
-        nameType: user.role === 'ORGANISATION' ? 'Organizational' : 'Personal',
-        nameIdentifiers: [
-            {
-                nameIdentifier: user?.orcid ? user?.orcid : 'ORCID iD not provided',
-                nameIdentifierScheme: 'ORCID',
-                schemeUri: 'https://orcid.org/'
-            }
-        ],
-        affiliation: user.affiliations.map((affiliation) => ({
-            name: affiliation.organization.name,
-            nameType: 'Organizational',
-            affiliationIdentifier:
-                affiliation.organization['disambiguated-organization']?.['disambiguated-organization-identifier'] || '',
-            affiliationIdentifierScheme:
-                affiliation.organization['disambiguated-organization']?.['disambiguation-source'] || ''
-        }))
-    };
-};
-
-const getFullDOIsStrings = (text: string): [] | RegExpMatchArray =>
-    text.match(
-        /(\s+)?(\(|\(\s+)?(?:DOI((\s+)?([:-])?(\s+)?))?(10\.[0-9a-zA-Z]+\/(?:(?!["&\'])\S)+)\b(\)|\s+\))?(\.)?/gi //eslint-disable-line
-    ) || [];
-
-const createDOIPayload = async (
-    data:
-        | {
-              payloadType: 'canonical';
-              doi: string;
-              publicationVersion: I.PublicationVersion;
-              oldPublicationVersionDOIs: string[];
-          }
-        | {
-              payloadType: 'newVersion';
-              publicationVersion: I.PublicationVersion;
-              previousPublicationVersionDOI?: string;
-          }
-        | {
-              payloadType: 'previousVersion';
-              publicationVersion: I.PublicationVersion;
-              newPublicationVersionDOI: string;
-              previousPublicationVersionDOI?: string;
-          }
-): Promise<Record<string, unknown>> => {
-    const { payloadType, publicationVersion } = data;
-
-    const references = await referenceService.getAllByPublicationVersion(publicationVersion.id);
-    const { linkedTo } = await publicationService.getDirectLinksForPublication(
-        publicationVersion.versionOf,
-        null,
-        false
-    );
-
-    const creators: I.DataCiteCreator[] = [];
-    publicationVersion.coAuthors.forEach((author) => {
-        if (author.user) {
-            creators.push(
-                createCreatorObject({
-                    firstName: author.user.firstName,
-                    lastName: author.user.lastName,
-                    orcid: author.user.orcid,
-                    affiliations: author.affiliations as unknown as I.MappedOrcidAffiliation[],
-                    role: author.user.role
-                })
-            );
-        }
-    });
-
-    // check if the creator of this version of the publication is not listed as an author
-    if (!publicationVersion.coAuthors.find((author) => author.linkedUser === publicationVersion.createdBy)) {
-        // add creator to authors list as first author
-        creators?.unshift(
-            createCreatorObject({
-                firstName: publicationVersion.user.firstName,
-                lastName: publicationVersion.user.lastName,
-                orcid: publicationVersion.user.orcid,
-                affiliations: [],
-                role: publicationVersion.user.role
-            })
-        );
-    }
-
-    const linkedPublicationDOIs = linkedTo.map((link) => ({
-        relatedIdentifier: link.doi,
-        relatedIdentifierType: 'DOI',
-        relationType: link.type === 'PEER_REVIEW' ? 'Reviews' : 'Continues'
-    }));
-
-    const referenceDOIs = references
-        .filter((reference) => reference.type === 'DOI' && reference.location)
-        .map((reference) => {
-            const doi = getFullDOIsStrings(reference.location as string);
-
-            return {
-                relatedIdentifier: doi[0],
-                relatedIdentifierType: 'DOI',
-                relationType: 'References'
-            };
-        });
-
-    const otherReferences = references
-        .filter((reference) => reference.type !== 'DOI')
-        .map((reference) => {
-            const mutatedReference = {
-                titles: [
-                    {
-                        title: reference.text.replace(/(<([^>]+)>)/gi, '')
-                    }
-                ],
-                relationType: 'References',
-                relatedItemType: 'Other'
-            };
-
-            return reference.location
-                ? {
-                      ...mutatedReference,
-                      relatedItemIdentifier: {
-                          relatedItemIdentifier: reference.location,
-                          relatedItemIdentifierType: 'URL'
-                      }
-                  }
-                : mutatedReference;
-        });
-
-    const additionalInformation = publicationVersion.additionalInformation.map((additionalInfoEntry) => ({
-        titles: [
-            {
-                title: additionalInfoEntry.title
-            }
-        ],
-        relationType: 'HasPart',
-        relatedItemType: 'Other',
-        relatedItemIdentifier: {
-            relatedItemIdentifier: additionalInfoEntry.url,
-            relatedItemIdentifierType: 'URL'
-        }
-    }));
-
-    const payload = {
-        data: {
-            type: 'dois',
-            attributes: {
-                event: 'publish',
-                url:
-                    payloadType === 'canonical'
-                        ? Helpers.getPublicationUrl(publicationVersion.versionOf)
-                        : `${Helpers.getPublicationUrl(publicationVersion.versionOf)}/versions/${
-                              publicationVersion.versionNumber
-                          }`,
-                creators,
-                titles: [
-                    {
-                        title: publicationVersion.title,
-                        lang: 'en'
-                    }
-                ],
-                publisher: 'Octopus',
-                publicationYear: publicationVersion.createdAt.getFullYear(),
-                contributors: [
-                    {
-                        name: Helpers.abbreviateUserName(publicationVersion.user),
-                        contributorType: 'ContactPerson',
-                        nameType: publicationVersion.user.role === 'ORGANISATION' ? 'Organizational' : 'Personal',
-                        givenName: publicationVersion.user.firstName,
-                        familyName: publicationVersion.user.lastName,
-                        nameIdentifiers: [
-                            {
-                                nameIdentifier: publicationVersion.user.orcid,
-                                nameIdentifierScheme: 'ORCID',
-                                schemeUri: 'https://orcid.org/'
-                            }
-                        ]
-                    }
-                ],
-                language: 'en',
-                types: {
-                    resourceTypeGeneral: publicationVersion.publication.type === 'PEER_REVIEW' ? 'PeerReview' : 'Other',
-                    resourceType: publicationVersion.publication.type
-                },
-                relatedIdentifiers: [...linkedPublicationDOIs, ...referenceDOIs],
-                relatedItems: [...otherReferences, ...additionalInformation],
-                fundingReferences: publicationVersion.funders.map((funder) => ({
-                    funderName: funder.name,
-                    funderIdentifier: funder.ror || funder.link,
-                    funderIdentifierType: funder.ror ? 'ROR' : 'Other'
-                }))
-            }
-        }
-    };
-
-    switch (payloadType) {
-        case 'newVersion': {
-            const { previousPublicationVersionDOI } = data;
-
-            const publicationVersionDOIs = [
-                {
-                    relatedIdentifier: publicationVersion.publication.doi,
-                    relatedIdentifierType: 'DOI',
-                    relationType: 'IsVersionOf',
-                    resourceTypeGeneral: payload.data.attributes.types.resourceTypeGeneral
-                }
-            ];
-
-            if (previousPublicationVersionDOI) {
-                publicationVersionDOIs.push({
-                    relatedIdentifier: previousPublicationVersionDOI,
-                    relatedIdentifierType: 'DOI',
-                    relationType: 'IsNewVersionOf',
-                    resourceTypeGeneral: payload.data.attributes.types.resourceTypeGeneral
-                });
-            }
-
-            Object.assign(payload.data.attributes, {
-                prefix: process.env.DOI_PREFIX,
-                relatedIdentifiers: [...payload.data.attributes.relatedIdentifiers, ...publicationVersionDOIs],
-                version: publicationVersion.versionNumber
-            });
-
-            break;
-        }
-
-        case 'previousVersion': {
-            const { newPublicationVersionDOI, previousPublicationVersionDOI } = data;
-
-            const publicationVersionDOIs = [
-                {
-                    relatedIdentifier: publicationVersion.publication.doi,
-                    relatedIdentifierType: 'DOI',
-                    relationType: 'IsVersionOf',
-                    resourceTypeGeneral: payload.data.attributes.types.resourceTypeGeneral
-                },
-                {
-                    relatedIdentifier: newPublicationVersionDOI,
-                    relatedIdentifierType: 'DOI',
-                    relationType: 'IsPreviousVersionOf',
-                    resourceTypeGeneral: payload.data.attributes.types.resourceTypeGeneral
-                }
-            ];
-
-            if (previousPublicationVersionDOI) {
-                publicationVersionDOIs.push({
-                    relatedIdentifier: previousPublicationVersionDOI,
-                    relatedIdentifierType: 'DOI',
-                    relationType: 'IsNewVersionOf',
-                    resourceTypeGeneral: payload.data.attributes.types.resourceTypeGeneral
-                });
-            }
-
-            Object.assign(payload.data.attributes, {
-                relatedIdentifiers: [...payload.data.attributes.relatedIdentifiers, ...publicationVersionDOIs],
-                version: publicationVersion.versionNumber
-            });
-
-            break;
-        }
-
-        default: {
-            // canonical
-            const { oldPublicationVersionDOIs } = data;
-
-            // It's possible there will be no versioned DOIs at all.
-            // Some types of publication only get a canonical DOI. In this case, skip this part.
-            if (oldPublicationVersionDOIs.length || publicationVersion.doi) {
-                const publicationVersionDOIs = [...oldPublicationVersionDOIs, publicationVersion.doi].map((doi) => ({
-                    relatedIdentifier: doi,
-                    relatedIdentifierType: 'DOI',
-                    relationType: 'HasVersion',
-                    resourceTypeGeneral: payload.data.attributes.types.resourceTypeGeneral
-                }));
-
-                Object.assign(payload.data.attributes, {
-                    doi: data.doi,
-                    identifiers: [
-                        {
-                            identifier: `https://doi.org/${data.doi}`,
-                            identifierType: 'DOI'
-                        }
-                    ],
-                    relatedIdentifiers: [...payload.data.attributes.relatedIdentifiers, ...publicationVersionDOIs]
-                });
-            }
-        }
-    }
-
-    return payload;
-};
-
-const createDOI = (payload: Record<string, unknown>): Promise<AxiosResponse<I.DOIResponse>> =>
-    axios.post<I.DOIResponse>(`${process.env.DATACITE_ENDPOINT}`, payload, {
-        auth: {
-            username: process.env.DATACITE_USER as string,
-            password: process.env.DATACITE_PASSWORD as string
-        }
-    });
-
-const createPublicationVersionDOI = async (
-    publicationVersion: I.PublicationVersion,
-    previousPublicationVersionDOI?: string
-): Promise<I.DOIResponse> => {
-    if (!publicationVersion.isLatestVersion) {
-        throw Error('Supplied version is not current');
-    }
-
-    const payload = await createDOIPayload({
-        payloadType: 'newVersion',
-        publicationVersion,
-        previousPublicationVersionDOI
-    });
-
-    const response = await createDOI(payload);
-
-    return response.data;
-};
-
-const updateDOI = (doi: string, payload: Record<string, unknown>): Promise<AxiosResponse<I.DOIResponse>> =>
-    axios.put<I.DOIResponse>(`${process.env.DATACITE_ENDPOINT}/${doi}`, payload, {
-        auth: {
-            username: process.env.DATACITE_USER as string,
-            password: process.env.DATACITE_PASSWORD as string
-        }
-    });
-
-const updatePreviousPublicationVersionDOI = async (
-    previousPublicationVersion: I.PublicationVersion,
-    newPublicationVersionDOI: string
-): Promise<I.DOIResponse> => {
-    if (!previousPublicationVersion.doi) {
-        throw Error("Supplied version doesn't have a valid DOI");
-    }
-
-    let previousVersionDoi: string | undefined;
-
-    // check if there's a previous version of this previous version
-    if (previousPublicationVersion.versionNumber > 1) {
-        // get the previous version DOI of this previous version
-        const previousVersion = await get(
-            previousPublicationVersion.versionOf,
-            (previousPublicationVersion.versionNumber - 1).toString()
-        );
-
-        if (previousVersion?.doi) {
-            previousVersionDoi = previousVersion.doi;
-        }
-    }
-
-    const payload = await createDOIPayload({
-        payloadType: 'previousVersion',
-        newPublicationVersionDOI,
-        publicationVersion: previousPublicationVersion,
-        previousPublicationVersionDOI: previousVersionDoi
-    });
-
-    const response = await updateDOI(previousPublicationVersion.doi, payload);
-
-    return response.data;
-};
-
-const isExemptFromReversioning = (publicationVersion: I.PublicationVersion) => {
-    const isPeerReview = publicationVersion.publication.type === 'PEER_REVIEW';
-    const isARI = publicationVersion.publication.externalSource === 'ARI';
-
-    return isPeerReview || isARI;
-};
-
-// Create a separate DOI for a specific publication version.
-// Returns the updated version with a DOI, or null if this publication doesn't use reversioning,
-// and thus doesn't have versioned DOIs.
-export const generateNewVersionDOI = async (
-    publicationVersion: I.PublicationVersion,
-    previousPublicationVersion?: I.PublicationVersion | null
-) => {
-    if (isExemptFromReversioning(publicationVersion)) {
-        return null;
-    } else {
-        const newPublicationVersionDOI = await createPublicationVersionDOI(
-            publicationVersion,
-            previousPublicationVersion?.doi as string
-        );
-
-        if (previousPublicationVersion && previousPublicationVersion.doi) {
-            // Update previous version DOI
-            // This will indicate that the new version follows the previous one
-            await updatePreviousPublicationVersionDOI(
-                previousPublicationVersion,
-                newPublicationVersionDOI.data.attributes.doi
-            );
-        }
-
-        // Save the DOI to the database
-        return await update(publicationVersion.id, {
-            doi: newPublicationVersionDOI.data.attributes.doi
-        });
-    }
-};
-
-export const updateCanonicalDOI = async (
-    doi: string,
-    latestPublicationVersion: I.PublicationVersion
-): Promise<I.DOIResponse> => {
-    if (!latestPublicationVersion.isLatestVersion) {
-        throw Error('Supplied version is not current');
-    }
-
-    // Unless this is exempt from reversioning (so doesn't get versioned DOIs),
-    // we need to have the DOI of the version so we can reference it in the canonical DOI's metadata.
-    if (!latestPublicationVersion.doi && !isExemptFromReversioning(latestPublicationVersion)) {
-        throw Error("Supplied version doesn't have a valid DOI.");
-    }
-
-    const oldPublicationVersionDOIs: string[] = [];
-
-    if (latestPublicationVersion.versionNumber > 1) {
-        // get all the other versions DOIs for this publication
-        const publication = await publicationService.get(latestPublicationVersion.versionOf);
-
-        if (publication) {
-            publication.versions
-                .filter((version) => version.id !== latestPublicationVersion.id)
-                .forEach((version) => {
-                    if (version.doi) {
-                        oldPublicationVersionDOIs.push(version.doi);
-                    }
-                });
-        }
-    }
-
-    const payload = await createDOIPayload({
-        payloadType: 'canonical',
-        doi,
-        publicationVersion: latestPublicationVersion,
-        oldPublicationVersionDOIs
-    });
-
-    const response = await updateDOI(doi, payload);
-
-    return response.data;
-};
-
 // Actions that run after a version is published (changes status to LIVE).
 // Pulled out to a separate function because things may need to run when something is
 // published immediately (i.e. not going through full drafting workflow) and bypasses the updateStatus function.
 export const postPublishHook = async (publicationVersion: I.PublicationVersion, skipPdfGeneration?: boolean) => {
     try {
-        // Ensure links made from a PEER_REVIEW version point to the latest live version of the target publication.
+        // Tasks specific to peer reviews.
         if (publicationVersion.publication.type === 'PEER_REVIEW') {
-            const outdatedDraftLinks = await client.prisma.links.findMany({
+            // Ensure links made from a PEER_REVIEW version point to the latest live version of the target publication.
+            const linkedTo = await client.prisma.links.findMany({
                 where: {
                     publicationFromId: publicationVersion.versionOf,
-                    draft: true,
+                    draft: true
+                },
+                select: {
+                    id: true,
+                    publicationToId: true,
+                    publicationTo: {
+                        select: {
+                            doi: true
+                        }
+                    },
                     versionTo: {
-                        isLatestLiveVersion: false
+                        include: defaultPublicationVersionInclude
                     }
                 }
             });
 
-            for (const outdatedDraftLink of outdatedDraftLinks) {
-                const latestVersionTo = await client.prisma.publicationVersion.findFirst({
-                    where: {
-                        versionOf: outdatedDraftLink.publicationToId,
-                        isLatestLiveVersion: true
-                    }
-                });
+            for (const link of linkedTo) {
+                let reviewedVersion: I.PublicationVersion = link.versionTo;
 
-                if (latestVersionTo) {
-                    await client.prisma.links.update({
+                if (!link.versionTo.isLatestLiveVersion) {
+                    // If the link is outdated (a newer version of the target publication exists),
+                    // update the link to refer to the newest live version.
+                    const latestVersionTo = await client.prisma.publicationVersion.findFirst({
                         where: {
-                            id: outdatedDraftLink.id
+                            versionOf: link.publicationToId,
+                            isLatestLiveVersion: true
                         },
-                        data: {
-                            versionToId: latestVersionTo.id
-                        }
+                        include: defaultPublicationVersionInclude
                     });
+
+                    if (latestVersionTo) {
+                        await client.prisma.links.update({
+                            where: {
+                                id: link.id
+                            },
+                            data: {
+                                versionToId: latestVersionTo.id
+                            }
+                        });
+                        reviewedVersion = latestVersionTo;
+                    }
                 }
+
+                // Update canonical DOI of the reviewed publication to show the ReviewedBy relationship.
+                await doi.updateRelatedIdentifiers('canonical', link.publicationTo.doi, reviewedVersion);
             }
         }
 
@@ -1168,13 +745,25 @@ export const postPublishHook = async (publicationVersion: I.PublicationVersion, 
 
         let versionWithDOI: I.PublicationVersion | null = null;
 
-        if (!isExemptFromReversioning(publicationVersion)) {
-            versionWithDOI = await generateNewVersionDOI(publicationVersion, previousVersion);
+        if (!Helpers.isPublicationExemptFromReversioning(publicationVersion.publication)) {
+            // Generate a DOI for this version.
+            const newDOIResponse = await doi.createPublicationVersionDOI(publicationVersion);
+            const newDOI = newDOIResponse?.data.attributes.doi;
+
+            // Update the DB record with the new DOI.
+            versionWithDOI = await update(publicationVersion.id, {
+                doi: newDOI
+            });
+
+            // Update the previous version's DOI to add a relationship to this one.
+            if (previousVersion && previousVersion.doi) {
+                await doi.updateRelatedIdentifiers('version', previousVersion.doi, previousVersion);
+            }
         }
 
         // Update the canonical DOI with the latest details from this version.
         // If we have a version with a DOI, pass that, but if not just pass one without.
-        await updateCanonicalDOI(publicationVersion.publication.doi, versionWithDOI || publicationVersion);
+        await doi.updateCanonicalDOI(publicationVersion.publication.doi, versionWithDOI || publicationVersion);
 
         // (Re)index publication in opensearch.
         // TODO: remove this extra logging if we don't observe ARI imports stalling here for some time.
