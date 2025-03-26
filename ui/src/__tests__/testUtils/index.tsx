@@ -117,7 +117,7 @@ export const testLinkedFromPublication: Interfaces.LinkedFromPublication = {
     ...testLinkedPublication,
     linkId: 'testlink',
     draft: false,
-    parentPublication: 'test',
+    parentPublicationId: 'test',
     parentPublicationType: 'PROBLEM'
 };
 

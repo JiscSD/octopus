@@ -622,12 +622,12 @@ export const getSitemapIndexXML = async (category: 'publications' | 'users'): Pr
 };
 
 export const abbreviateUserName = <
-    T extends { firstName: string; lastName: string; role?: Types.UserRole } | undefined
+    T extends { firstName: string | null; lastName: string | null; role?: Types.UserRole } | undefined
 >(
     user: T
 ): string => {
     // Should not occur, but just in case, better to present something than nothing.
-    if (!user || (!user.firstName && !user.lastName)) {
+    if (!user || !user.firstName) {
         return 'Anon. User';
     }
     // Majority of cases: user is not an organisational account, and has requisite data for default abbreviation.

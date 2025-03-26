@@ -94,7 +94,7 @@ describe('Get related identifiers', () => {
     const testLinkedPublication: I.LinkedToPublication = {
         linkId: 'test',
         draft: true,
-        childPublication: 'some-other-id',
+        childPublicationId: 'some-other-id',
         childPublicationType: 'PROBLEM',
         externalSource: null,
         id: 'test',
@@ -114,14 +114,14 @@ describe('Get related identifiers', () => {
         ...testLinkedPublication,
         linkId: 'link-to',
         draft: false,
-        childPublication: 'publication-problem-live',
+        childPublicationId: 'publication-problem-live',
         childPublicationType: 'PROBLEM',
         externalSource: null
     };
     const testLinkedFromPublication: I.LinkedFromPublication = {
         ...testLinkedPublication,
         linkId: 'link-from',
-        parentPublication: 'publication-problem-live',
+        parentPublicationId: 'publication-problem-live',
         parentPublicationType: 'PROBLEM'
     };
 

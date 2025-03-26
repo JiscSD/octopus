@@ -657,7 +657,11 @@ export const generatePublicationVersionPDF = async (
     publicationVersion: I.PublicationVersion
 ): Promise<string | null> => {
     const references = await referenceService.getAllByPublicationVersion(publicationVersion.id);
-    const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf);
+    const { linkedTo } = await publicationService.getDirectLinksForPublication(
+        publicationVersion.versionOf,
+        null,
+        true
+    );
     const htmlTemplate = createPublicationHTMLTemplate(publicationVersion, references, linkedTo);
     const isLocal = process.env.STAGE === 'local';
 
