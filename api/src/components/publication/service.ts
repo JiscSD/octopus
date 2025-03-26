@@ -970,7 +970,7 @@ const populateRawLinkedPublicationData = async (
                 doi: draftVersion.publication.doi,
                 title: draftVersion.title,
                 publishedDate: null,
-                currentStatus: draftVersion.currentStatus ,
+                currentStatus: draftVersion.currentStatus,
                 createdBy: draftVersion.createdBy
             };
 
@@ -1001,7 +1001,7 @@ const populateRawLinkedPublicationData = async (
                 doi: latestLiveVersion.publication.doi,
                 title: latestLiveVersion.title,
                 publishedDate: latestLiveVersion.publishedDate?.toISOString() || null,
-                currentStatus: latestLiveVersion.currentStatus ,
+                currentStatus: latestLiveVersion.currentStatus,
                 createdBy: latestLiveVersion.createdBy
             };
             authorFields = {
@@ -1138,7 +1138,7 @@ export const getLinksForPublication = async (
         conditionalFields = {
             title: latestVersion.title,
             publishedDate: null,
-            currentStatus: latestVersion.currentStatus ,
+            currentStatus: latestVersion.currentStatus,
             createdBy: latestVersion.createdBy,
             authorFirstName: latestVersion.user.firstName,
             authorLastName: latestVersion.user.lastName,
@@ -1152,7 +1152,7 @@ export const getLinksForPublication = async (
         conditionalFields = {
             title: latestLiveVersion.title,
             publishedDate: latestLiveVersion.publishedDate?.toISOString() || null,
-            currentStatus: latestLiveVersion.currentStatus ,
+            currentStatus: latestLiveVersion.currentStatus,
             createdBy: latestLiveVersion.createdBy || '',
             authorFirstName: latestLiveVersion.user.firstName,
             authorLastName: latestLiveVersion.user.lastName,
