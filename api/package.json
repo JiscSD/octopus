@@ -48,7 +48,7 @@
         "@opensearch-project/opensearch": "^2.5.0",
         "@paralleldrive/cuid2": "^2.2.2",
         "@prisma/client": "^5.11.0",
-        "@sparticuz/chromium": "^119.0.2",
+        "@sparticuz/chromium": "^132.0.0",
         "ajv": "^8.12.0",
         "ajv-formats": "^2.1.1",
         "aws-lambda": "^1.0.7",
@@ -62,7 +62,7 @@
         "katex": "^0.16.21",
         "luxon": "^3.4.3",
         "nodemailer": "^6.9.9",
-        "puppeteer-core": "^22.12.0",
+        "puppeteer-core": "^24.2.0",
         "supertest": "^6.3.3"
     },
     "devDependencies": {
@@ -95,7 +95,7 @@
         "lint-staged": "^13.3.0",
         "prettier": "^2.8.8",
         "prisma": "^5.11.0",
-        "puppeteer": "^22.12.0",
+        "puppeteer": "^24.2.0",
         "serverless": "^4.4.7",
         "serverless-offline": "^14.3.4",
         "serverless-plugin-split-stacks": "^1.14.0",
