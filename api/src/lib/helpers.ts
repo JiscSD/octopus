@@ -1,4 +1,6 @@
 import * as DOMPurify from 'isomorphic-dompurify';
+import * as entities from 'entities';
+import * as katex from 'katex';
 import * as I from 'interface';
 import { webcrypto } from 'crypto';
 
@@ -234,4 +236,30 @@ export const parseNpmScriptArgs = (): { [key: string]: string } => {
 
 export const getPublicationUrl = (id: string): string => {
     return `${process.env.BASE_URL}/publications/${id}`;
+};
+
+// Find LaTeX expressions in a string and replace them with the rendered HTML.
+export const renderLatexInHTMLString = (htmlString: string): string => {
+    // Defines the boundaries for LaTeX expressions in publication content. Expressions are enclosed on both ends by "$$".
+    const latexRegex = /\$\$([^$]*)\$\$/gi;
+    // The regex provides a capturing group for the expression, accessible as p1 in the callback function.
+    const replaced = htmlString.replace(latexRegex, (_match, p1) => {
+        // We are decoding HTML entities here as the text editor sometimes saves characters used in LaTeX
+        // expressions in escaped form. The katex rendering should make it safe from injection: https://katex.org/docs/security.
+        const decoded = entities.decodeHTML(p1);
+        const rendered = katex.renderToString(decoded);
+
+        return rendered;
+    });
+
+    return replaced;
+};
+
+export const isPublicationExemptFromReversioning = <T extends Pick<I.Publication, 'type' | 'externalSource'>>(
+    publication: T
+): boolean => {
+    const isPeerReview = publication.type === 'PEER_REVIEW';
+    const isARI = publication.externalSource === 'ARI';
+
+    return isPeerReview || isARI;
 };

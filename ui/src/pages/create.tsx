@@ -191,29 +191,20 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                             )}
                         </select>
                         <SupportText>
-                            Definition: {Config.values.octopusInformation.publications[publicationType].content}
+                            Definition:{' '}
+                            {Config.values.octopusInformation.publicationTypes[publicationType].inlineDescription}
                         </SupportText>
                     </div>
-
-                    <label htmlFor="confirm" className="mb-2 flex items-center">
-                        <input
-                            required
-                            id="confirm"
-                            name="confirm"
-                            type="checkbox"
-                            checked={confirmed}
-                            disabled={!publicationType || !title.length}
-                            onChange={() => setConfirmed((prev) => !prev)}
-                            className="rounded-sm border-teal-500 bg-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50"
-                        />
-                        <span
-                            className={`ml-2 block text-grey-800 transition-colors duration-500 dark:text-white-50 ${
-                                !publicationType || !title.length ? 'text-grey-500 dark:text-grey-200' : ''
-                            }`}
-                        >
-                            I confirm this is the correct publication type.
-                        </span>
-                    </label>
+                    <Components.Checkbox
+                        checked={confirmed}
+                        className="mb-2"
+                        disabled={!publicationType || !title.length}
+                        id="confirm"
+                        label="I confirm this is the correct publication type."
+                        name="confirm"
+                        onChange={() => setConfirmed((prev) => !prev)}
+                        required
+                    />
                     <Components.Button
                         title="Create this publication"
                         disabled={!publicationType || !title.length || !confirmed || createPublicationLoading}

@@ -1,5 +1,6 @@
 @import url('./fonts/montsrrat.css');
 @import url('./fonts/inter.css');
+@import 'katex/dist/katex.min.css';
 
 @tailwind base;
 @tailwind components;
@@ -7,7 +8,7 @@
 
 @layer base {
     ::selection {
-        @apply bg-grey-800 text-grey-100 dark:bg-teal-500;
+        @apply bg-grey-800 text-grey-100 dark:bg-teal-700;
     }
     .scrollbar::-webkit-scrollbar {
         @apply h-2 w-0 rounded-lg bg-transparent;
@@ -36,20 +37,38 @@
         @apply border border-teal-500 px-1 py-0 lg:px-2;
     }
 
-    /* Defined separately as the custom table was casuing errors on
+    /* Defined separately as the custom table was causing errors on
     tiptap editors tables */
-    .custom-table-tiptap-editor table {
+    .tiptap-editor table {
         @apply table-fixed;
     }
-    .custom-table-tiptap-editor tr:nth-child(event) {
+    .tiptap-editor tr:nth-child(event) {
         @apply bg-white-50;
     }
-    .custom-table-tiptap-editor tr:nth-child(odd) {
+    .tiptap-editor tr:nth-child(odd) {
         @apply bg-grey-50;
     }
-    .custom-table-tiptap-editor th,
-    .custom-table-tiptap-editor td {
+    .tiptap-editor th,
+    .tiptap-editor td {
         @apply border border-teal-500 px-1 py-0 lg:px-2;
+    }
+
+    /* Mathematics extension styles */
+    .tiptap-editor .Tiptap-mathematics-editor {
+        /* .Tiptap-mathematics-editor { */
+        @apply bg-grey-800 text-white-50 px-1 py-2 rounded-md;
+    }
+
+    .tiptap-editor .Tiptap-mathematics-render {
+        @apply py-1 rounded-md;
+    }
+
+    .tiptap-editor .Tiptap-mathematics-render--editable {
+        @apply cursor-pointer transition-colors duration-200;
+    }
+
+    .tiptap-editor .Tiptap-mathematics-render--editable:hover {
+        @apply bg-grey-100;
     }
 }
 

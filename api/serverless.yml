@@ -50,6 +50,12 @@ provider:
         TRIGGER_ARI_INGEST_API_KEY: ${ssm:/trigger_ari_ingest_api_key_${self:provider.stage}_octopus}
         INGEST_REPORT_RECIPIENTS: ${ssm:/ingest_report_recipients_${self:provider.stage}_octopus}
         PARTICIPATING_ARI_USER_IDS: ${ssm:/participating_ari_user_ids_${self:provider.stage}_octopus}
+        ECS_CLUSTER_ARN: ${ssm:/ecs_cluster_arn_${self:provider.stage}_octopus}
+        ECS_TASK_DEFINITION_ID: ${ssm:/ecs_task_definition_id_${self:provider.stage}_octopus}
+        ECS_TASK_SECURITY_GROUP_ID: ${ssm:/ecs_task_security_group_id_${self:provider.stage}_octopus}
+        PRIVATE_SUBNET_IDS: ${ssm:/${self:provider.stage}_octopus_private_subnet_az1},${ssm:/${self:provider.stage}_octopus_private_subnet_az2},${ssm:/${self:provider.stage}_octopus_private_subnet_az3}
+        PUBROUTER_API_KEYS: ${ssm:/pubrouter_api_keys_${self:provider.stage}_octopus}
+        PUBROUTER_FAILURE_CHANNEL: ${ssm:/pubrouter_failure_channel_${self:provider.stage}_octopus}
     deploymentBucket:
         tags:
             Project: Octopus
@@ -84,6 +90,15 @@ provider:
               - 'sqs:GetQueueAttributes'
               - 'sqs:ReceiveMessage'
               - 'sqs:SendMessage'
+        # Required to trigger ECS tasks
+        - Effect: 'Allow'
+          Resource: "arn:aws:ecs:${aws:region}:${aws:accountId}:task-definition/${ssm:/ecs_task_definition_id_${self:provider.stage}_octopus}"
+          Action: 'ecs:RunTask'
+        - Effect: 'Allow'
+          Resource:
+              - 'arn:aws:iam::${aws:accountId}:role/octopus-ecs-task-role-${self:provider.stage}'
+              - 'arn:aws:iam::${aws:accountId}:role/octopus-ecs-task-exec-role-${self:provider.stage}'
+          Action: 'iam:PassRole'
 custom:
     splitStacks:
         perFunction: true

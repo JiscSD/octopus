@@ -27,6 +27,6 @@ let store: any = (set: any): Types.ToastStoreType => ({
 
 if (process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF === 'local') store = zustandMiddleware.devtools(store);
 
-const useNoficiationStore = create<Types.ToastStoreType>(store);
+const useNotificiationStore = create<Types.ToastStoreType>(store);
 
-export default useNoficiationStore;
+export default useNotificiationStore;

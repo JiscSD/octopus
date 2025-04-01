@@ -31,7 +31,26 @@ To run this application locally you will need:
 - [UI instructions](./ui/README.md)
 - [E2E instructions](./e2e/README.md)
 
+### Architecture diagrams
+
 You might also find it useful to get an overview of Octopus's architecture by reading our [system context](./architecture-diagrams/system-context-diagram.png) and [container](./architecture-diagrams/container-diagram.png) diagrams. These are based on the [C4 Model](https://c4model.com/).
+
+#### How to update the C4 diagrams
+
+As the architecture evolves, the C4 diagrams need to be updated. This can be done in VS code:
+
+- Install the [PlantUML extension](https://marketplace.visualstudio.com/items?itemName=jebbs.plantuml)
+- Pull and run the [PlantUML server docker image](https://hub.docker.com/r/plantuml/plantuml-server)
+  - E.g. `docker run -d -p 8080:8080 plantuml/plantuml-server:tomcat`
+  - This will do the transforming of the `.puml` file into an image.
+- Configure the VS code extension to use the server by adding to your VS code settings.json file:
+
+```
+    "plantuml.server": "http://127.0.0.1:8080",
+    "plantuml.render": "PlantUMLServer",
+```
+
+- With a `.puml` file open, press `Alt` + `D` to open the preview which will auto-update as you save the file.
 
 ## Authentication
 

@@ -3,13 +3,12 @@ import * as TestUtils from '@/testUtils';
 
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { resolve } from 'path';
 
 jest.mock('next/router', () => ({
     useRouter: jest.fn()
 }));
 
-describe('Basic search page', () => {
+describe('Basic search interface', () => {
     const handleSearchFormSubmit = jest.fn((e) => {
         e.preventDefault();
     });
@@ -17,7 +16,7 @@ describe('Basic search page', () => {
 
     beforeEach(() => {
         render(
-            <Components.SearchPage
+            <Components.SearchInterface
                 handleSearchFormSubmit={handleSearchFormSubmit}
                 isValidating={false}
                 limit={10}
@@ -32,29 +31,9 @@ describe('Basic search page', () => {
         );
     });
 
-    it('Title is as expected', () => {
-        expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Search results');
+    it('Search type select is not present', () => {
+        expect(screen.queryByRole('combobox', { name: 'Searching' })).not.toBeInTheDocument();
     });
-
-    it('Search type select is present', () => {
-        expect(screen.getByRole('combobox', { name: 'Searching' })).toBeInTheDocument();
-    });
-
-    it('Search type select has expected options', () => {
-        const searchTypeSelect = screen.getByRole('combobox', { name: 'Searching' });
-        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Publications' }));
-        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Authors' }));
-        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Topics' }));
-        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Organisations' }));
-        expect(searchTypeSelect.children).toHaveLength(4);
-    });
-
-    it('Search type select has value "publications"', () => {
-        expect(screen.getByRole('combobox', { name: 'Searching' })).toHaveValue('publications');
-    });
-
-    // TODO: test that changing search type select calls useRouter's push with the appropriate path.
-    // Couldn't get this to work.
 
     it('Page size select is present', () => {
         expect(screen.getByRole('combobox', { name: 'Showing' })).toBeInTheDocument();
@@ -103,19 +82,63 @@ describe('Basic search page', () => {
         expect(screen.queryByRole('button', { name: 'Clear filters' })).not.toBeInTheDocument();
     });
 
-    it('No results message is shown', () => {
-        expect(screen.getByText('No results found')).toBeInTheDocument();
-        expect(screen.getByText('Try some different search criteria.')).toBeInTheDocument();
-        expect(screen.getByText('If you think something is wrong, please contact the helpdesk.')).toBeInTheDocument();
+    // Negative test for absence of full screen prop.
+    it('Results area does not have min-h-screen class', () => {
+        expect(screen.getByRole('article')).not.toHaveClass('min-h-screen');
     });
 });
 
-describe('Search page with filters', () => {
+describe('Search interface with search type select', () => {
+    const handleSearchFormSubmit = jest.fn((e) => {
+        e.preventDefault();
+    });
+    const setLimit = jest.fn();
+
+    beforeEach(() => {
+        render(
+            <Components.SearchInterface
+                handleSearchFormSubmit={handleSearchFormSubmit}
+                isValidating={false}
+                limit={10}
+                offset={0}
+                query={null}
+                results={[]}
+                searchType="publication-versions"
+                setLimit={setLimit}
+                setOffset={jest.fn}
+                showSearchTypeSwitch={true}
+                total={0}
+            />
+        );
+    });
+
+    it('Search type select is present', () => {
+        expect(screen.getByRole('combobox', { name: 'Searching' })).toBeInTheDocument();
+    });
+
+    it('Search type select has expected options', () => {
+        const searchTypeSelect = screen.getByRole('combobox', { name: 'Searching' });
+        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Publications' }));
+        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Authors' }));
+        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Topics' }));
+        expect(searchTypeSelect).toContainElement(screen.getByRole('option', { name: 'Organisations' }));
+        expect(searchTypeSelect.children).toHaveLength(4);
+    });
+
+    it('Search type select has value "publications"', () => {
+        expect(screen.getByRole('combobox', { name: 'Searching' })).toHaveValue('publications');
+    });
+
+    // TODO: test that changing search type select calls useRouter's push with the appropriate path.
+    // Couldn't get this to work.
+});
+
+describe('Search interface with filters', () => {
     const resetFilters = jest.fn();
 
     beforeEach(() => {
         render(
-            <Components.SearchPage
+            <Components.SearchInterface
                 filters={<p>React node holding the place of some filter JSX</p>}
                 handleSearchFormSubmit={jest.fn}
                 isValidating={false}
@@ -146,12 +169,12 @@ describe('Search page with filters', () => {
     });
 });
 
-describe('First page of several results', () => {
+describe('Interface with results', () => {
     const setOffset = jest.fn();
     global.scrollTo = jest.fn();
     beforeEach(() => {
         render(
-            <Components.SearchPage
+            <Components.SearchInterface
                 handleSearchFormSubmit={jest.fn}
                 isValidating={false}
                 limit={10}
@@ -184,107 +207,11 @@ describe('First page of several results', () => {
             '/publications/test-publication-0'
         );
     });
-
-    // Pagination
-    it('Pagination status is shown', () => {
-        expect(screen.getByText('Showing 1 - 10 of 100')).toBeInTheDocument();
-    });
-
-    it('Previous button is shown', () => {
-        expect(screen.getByRole('button', { name: 'Previous' })).toBeInTheDocument();
-    });
-
-    it('Previous button is disabled on first page', () => {
-        expect(screen.getByRole('button', { name: 'Previous' })).toBeDisabled();
-    });
-
-    it('Next button is shown', () => {
-        expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
-    });
-
-    it('Next button is enabled when not on last page', () => {
-        expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled();
-    });
-
-    it('Next button calls setOffset with next page offset', async () => {
-        await userEvent.click(screen.getByRole('button', { name: 'Next' }));
-        expect(setOffset).toHaveBeenCalledWith(10);
-    });
-});
-
-describe('Last page of several results', () => {
-    const setOffset = jest.fn();
-    global.scrollTo = jest.fn();
-    beforeEach(() => {
-        render(
-            <Components.SearchPage
-                handleSearchFormSubmit={jest.fn}
-                isValidating={false}
-                limit={10}
-                offset={90}
-                query={null}
-                results={[...Array(9).keys()].map((idx) => ({
-                    ...TestUtils.testPublicationVersion,
-                    versionOf: 'test-publication-' + idx,
-                    title: 'Test publication ' + idx
-                }))}
-                searchType="publication-versions"
-                setLimit={jest.fn}
-                setOffset={setOffset}
-                total={99}
-            />
-        );
-    });
-
-    it('Pagination status is shown', () => {
-        expect(screen.getByText('Showing 91 - 99 of 99', {})).toBeInTheDocument();
-    });
-
-    it('Previous button is shown', () => {
-        expect(screen.getByRole('button', { name: 'Previous' })).toBeInTheDocument();
-    });
-
-    it('Previous button is enabled when not on first page', () => {
-        expect(screen.getByRole('button', { name: 'Previous' })).toBeEnabled();
-    });
-
-    it('Previous button calls setOffset with previous page offset', async () => {
-        await userEvent.click(screen.getByRole('button', { name: 'Previous' }));
-        expect(setOffset).toHaveBeenCalledWith(80);
-    });
-
-    it('Next button is shown', () => {
-        expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
-    });
-
-    it('Next button is disabled when not on last page', () => {
-        expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
-    });
-});
-
-it('Error is shown when passed', () => {
-    render(
-        <Components.SearchPage
-            error="Something went wrong"
-            handleSearchFormSubmit={jest.fn}
-            isValidating={false}
-            limit={10}
-            offset={0}
-            query={null}
-            results={[]}
-            searchType="publication-versions"
-            setLimit={jest.fn}
-            setOffset={jest.fn}
-            total={0}
-        />
-    );
-    // Error is written to alert box and aria-live area.
-    expect(screen.getAllByText('Something went wrong')).toHaveLength(2);
 });
 
 it('Results are author page links when searchType is "authors"', () => {
     render(
-        <Components.SearchPage
+        <Components.SearchInterface
             handleSearchFormSubmit={jest.fn}
             isValidating={false}
             limit={10}
@@ -308,7 +235,7 @@ it('Results are author page links when searchType is "authors"', () => {
 
 it('Results are author page links when searchType is "organisations"', () => {
     render(
-        <Components.SearchPage
+        <Components.SearchInterface
             handleSearchFormSubmit={jest.fn}
             isValidating={false}
             limit={10}
@@ -332,7 +259,7 @@ it('Results are author page links when searchType is "organisations"', () => {
 
 it('Results are topic page links when searchType is "topics"', () => {
     render(
-        <Components.SearchPage
+        <Components.SearchInterface
             handleSearchFormSubmit={jest.fn}
             isValidating={false}
             limit={10}
@@ -352,4 +279,66 @@ it('Results are topic page links when searchType is "topics"', () => {
         />
     );
     expect(screen.getByRole('link', { name: 'Test topic 0' })).toHaveAttribute('href', '/topics/test-topic-0');
+});
+
+it('Page size options are configurable', () => {
+    render(
+        <Components.SearchInterface
+            handleSearchFormSubmit={jest.fn}
+            isValidating={false}
+            limit={10}
+            offset={0}
+            pageSizes={[1, 7, 27, 2109845]}
+            query={null}
+            results={[]}
+            searchType="publication-versions"
+            setLimit={jest.fn}
+            setOffset={jest.fn}
+            total={0}
+        />
+    );
+    const pageSizeSelect = screen.getByRole('combobox', { name: 'Showing' });
+    expect(pageSizeSelect).toContainElement(screen.getByRole('option', { name: '1' }));
+    expect(pageSizeSelect).toContainElement(screen.getByRole('option', { name: '7' }));
+    expect(pageSizeSelect).toContainElement(screen.getByRole('option', { name: '27' }));
+    expect(pageSizeSelect).toContainElement(screen.getByRole('option', { name: '2109845' }));
+    expect(pageSizeSelect.children).toHaveLength(4);
+});
+
+it('Fullscreen parameter sets min height of results area', () => {
+    render(
+        <Components.SearchInterface
+            fullScreen={true}
+            handleSearchFormSubmit={jest.fn}
+            isValidating={false}
+            limit={10}
+            offset={0}
+            query={null}
+            results={[]}
+            searchType="publication-versions"
+            setLimit={jest.fn}
+            setOffset={jest.fn}
+            total={0}
+        />
+    );
+    expect(screen.getByRole('article')).toHaveClass('min-h-screen');
+});
+
+it('Search input has value of query prop', () => {
+    const query = 'Cereal';
+    render(
+        <Components.SearchInterface
+            handleSearchFormSubmit={jest.fn}
+            isValidating={false}
+            limit={10}
+            offset={0}
+            query={query}
+            results={[]}
+            searchType="publication-versions"
+            setLimit={jest.fn}
+            setOffset={jest.fn}
+            total={0}
+        />
+    );
+    expect(screen.getByRole('textbox', { name: 'Quick search' })).toHaveValue(query);
 });

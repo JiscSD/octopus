@@ -15,6 +15,16 @@ Publications imported via an integration with another system should have the fol
 
 They should also always be owned by an organisational user account. That is, a user with the value `ORGANISATION` for the `role` field.
 
+### Where/how does this run?
+
+On deployed environments, integrations are run in containers on AWS Elastic Container Service. These containers are defined in the infrastructure code (see [Dockerfile](../../../../infra/docker/ariImportRunner/Dockerfile)), so they can be built and tested locally from the `infra/docker/ariImportRunner` directory with `docker compose up` (see [compose.yml](../../../../infra/docker/ariImportRunner/compose.yml)).
+
+These task containers may be triggered using an API key protected API endpoint that in turn triggers the task to spin up (e.g. the `triggerARIIngest` endpoint), or automatically at a specified time by an Eventbridge scheduler (see this in the [infra code](../../../../infra/modules/ecs/schedule.tf)).
+
+They can also be run ad hoc on the local environment via npm scripts, for example (from the `api` directory):
+
+`npm run ariImport -- dryRun=true allDepartments=true full=false`
+
 ## Specific integrations
 
 ### ARI DB
@@ -34,7 +44,7 @@ On import, ARIs go through a handling flow:
 
 -   If no publication exists with the ARI's question ID in its `externalId` field, it is created as a new publication.
 -   If a publication does exist with the ARI's question ID in its `externalId` field, it is compared to the existing publication for changes.
-    -   If changes are found, the existing publication is reversioned with those changes applied.
+    -   If changes are found, the existing publication is updated with those changes applied. Note that this is not a reversioning - ARI publications always have only one version.
     -   If no changes are found, no action is taken.
 
 #### How ARI data is mapped to octopus data

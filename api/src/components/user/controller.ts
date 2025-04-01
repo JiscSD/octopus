@@ -47,9 +47,15 @@ export const getPublications = async (
     const versionStatus = event.queryStringParameters?.versionStatus;
     const versionStatusArray = versionStatus ? versionStatus.split(',') : [];
 
+    if (event.queryStringParameters.initialDraftsOnly && versionStatusArray.length) {
+        return response.json(400, {
+            message: 'The "versionStatus" query parameter cannot be used when "initialDraftsOnly" is set to true.'
+        });
+    }
+
     if (versionStatusArray.length && versionStatusArray.some((status) => !I.PublicationStatusEnum[status])) {
         return response.json(400, {
-            message: "Invalid version status provided. Valid values include 'DRAFT', 'LIVE', 'LOCKED"
+            message: "Invalid version status provided. Valid values include 'DRAFT', 'LIVE', and 'LOCKED'."
         });
     }
 
@@ -77,13 +83,7 @@ export const getPublications = async (
     }
 };
 
-export const getUserList = async (event: I.APIRequest): Promise<I.JSONResponse> => {
-    const apiKey = event.queryStringParameters?.apiKey;
-
-    if (apiKey !== process.env.LIST_USERS_API_KEY) {
-        return response.json(401, { message: "Please provide a valid 'apiKey'." });
-    }
-
+export const getUserList = async (): Promise<I.JSONResponse> => {
     try {
         const userList = await userService.getUserList();
 

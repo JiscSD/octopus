@@ -1,106 +1,212 @@
 import React, { useMemo, useState } from 'react';
+import axios from 'axios';
 import Head from 'next/head';
-import useSWRInfinite from 'swr/infinite';
+import useSWR from 'swr';
+import * as Router from 'next/router';
+import * as SolidIcons from '@heroicons/react/24/solid';
 
-import * as Framer from 'framer-motion';
-import * as Interfaces from '@/interfaces';
-import * as Components from '@/components';
-import * as Layouts from '@/layouts';
-import * as Config from '@/config';
-import * as Types from '@/types';
-import * as Assets from '@/assets';
-import * as Helpers from '@/helpers';
 import * as api from '@/api';
-
-const pageSize = 10;
+import * as Assets from '@/assets';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Interfaces from '@/interfaces';
+import * as Layouts from '@/layouts';
+import * as Types from '@/types';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const userId = context.query.id;
-    const userPublicationsUrl = `${Config.endpoints.users}/${userId}/publications?offset=0&limit=${pageSize}`;
+    const limit = Helpers.extractNextQueryParam(context.query.limit, true);
+    const offset = Helpers.extractNextQueryParam(context.query.offset, true);
+    const query = Helpers.extractNextQueryParam(context.query.query);
+    const userPublicationsUrl = `${Config.endpoints.users}/${userId}/publications?offset=${offset || 0}&limit=${limit || 20}&query=${query || ''}`;
     const token = Helpers.getJWT(context);
     let user: Interfaces.User | null = null;
-    let firstUserPublicationsPage: Interfaces.UserPublicationsResult | null = null;
-    let error: string | null = null;
+    let publications: Interfaces.SearchResults<Interfaces.Publication> | null = null;
+    let flags: Interfaces.FlagByUser[] | null = null;
+    let getUserError: string | null = null;
 
-    try {
-        const response = await api.get(`${Config.endpoints.users}/${userId}`, token);
-        user = response.data;
-    } catch (err) {
-        const { message } = err as Interfaces.JSONResponseError;
-        error = message;
-    }
+    [user, publications, flags] = await Promise.all([
+        api
+            .get(`${Config.endpoints.users}/${userId}`, token)
+            .then((res) => res.data)
+            .catch((error) => {
+                const { message } = error as Interfaces.JSONResponseError;
+                getUserError = message;
+                console.log(error);
+            }),
+        api
+            .get(userPublicationsUrl)
+            .then((res) => res.data)
+            .catch((error) => {
+                console.log(error);
+                return null;
+            }),
+        api
+            .get(`${Config.endpoints.users}/${userId}/flags`)
+            .then((res) => res.data)
+            .catch((error) => {
+                console.log(error);
+                return null;
+            })
+    ]);
 
-    if (!user || error) {
+    if (!user || getUserError) {
         return {
             notFound: true
         };
     }
 
-    try {
-        const response = await api.get(userPublicationsUrl);
-        firstUserPublicationsPage = response.data;
-    } catch (error) {
-        console.log(error);
-    }
-
     return {
         props: {
+            query,
             user,
-            userPublicationsUrl,
-            fallbackData: firstUserPublicationsPage
+            publications,
+            flags
         }
     };
 };
 
 type Props = {
+    query: string | null;
     user: Interfaces.User;
-    userPublicationsUrl: string;
-    fallbackData: Interfaces.UserPublicationsResult | null;
+    publications: Interfaces.SearchResults<Interfaces.Publication> | null;
+    flags: Interfaces.SearchResults<Interfaces.FlagByUser> | null;
 };
 
 const Author: Types.NextPage<Props> = (props): React.ReactElement => {
-    const [hideShowMoreButton, setHideShowMoreButton] = useState(false);
+    const router = Router.useRouter();
+    const [publicationsQuery, setPublicationsQuery] = useState(props.query ? props.query : '');
+    const [publicationsLimit, setPublicationsLimit] = useState(20);
+    const [publicationsOffset, setPublicationsOffset] = useState(0);
+    const [flagsOffset, setFlagsOffset] = useState(0);
+    const [includeResolvedFlags, setIncludeResolvedFlags] = useState(false);
 
-    const { data, setSize } = useSWRInfinite<Interfaces.UserPublicationsResult>(
-        (pageIndex, prevPageData) => {
-            if (pageIndex === 0) {
-                return props.userPublicationsUrl;
-            }
+    const publicationsSwrKey = `${Config.endpoints.users}/${props.user.id}/publications?offset=${publicationsOffset}&limit=${publicationsLimit}&query=${publicationsQuery}`;
+    const {
+        data: getPublicationsResponse,
+        error: getPublicationsError,
+        isValidating: getPublicationsIsValidating
+    } = useSWR<Interfaces.SearchResults<Interfaces.Publication>>(publicationsSwrKey, null, {
+        fallbackData: props.publications || undefined
+    });
+    const getPublicationsErrorMessage = axios.isAxiosError(getPublicationsError)
+        ? getPublicationsError.message
+        : undefined;
 
-            if (prevPageData && !prevPageData.results.length) {
-                return null; // reached the end
-            }
+    const flagsSwrKey = `${Config.endpoints.users}/${props.user.id}/flags?offset=${flagsOffset}&includeResolved=${includeResolvedFlags}`;
+    const { data: getFlagsResponse, isValidating: getFlagsIsValidating } = useSWR<
+        Interfaces.SearchResults<Interfaces.FlagByUser>
+    >(flagsSwrKey, null, {
+        fallbackData: props.flags || undefined
+    });
 
-            return props.userPublicationsUrl.replace('offset=0', `offset=${pageIndex * pageSize}`);
-        },
-        async (url) => {
-            const response = await api.get(url);
-            const data = response.data;
-            const { offset, limit, total } = data;
-
-            if (offset + limit >= total) {
-                setHideShowMoreButton(true);
-            }
-
-            return data;
-        },
-        {
-            fallbackData: props.fallbackData ? [props.fallbackData] : undefined
-        }
-    );
-
+    const searchInputRef = React.useRef<HTMLInputElement>(null);
     const missingNames = !props.user.firstName && !props.user.lastName;
     const isOrganisationalAccount = props.user.role === 'ORGANISATION';
-    const userPublications = useMemo(() => data?.map((data) => data.results).flat() || [], [data]);
-
     const pageTitle = `Author: ${isOrganisationalAccount ? props.user.firstName : props.user.orcid} - ${Config.urls.viewUser.title}`;
+
+    // The search interface component expects a publication version.
+    // The endpoint is expected to return a publication with 1 version (the latest live one).
+    // So make an array of latest live publication versions from the response.
+    const publicationVersions: Interfaces.PublicationVersion[] = useMemo(
+        () =>
+            getPublicationsResponse?.data
+                ?.filter((publication) => publication.versions[0].isLatestLiveVersion)
+                .map((publication) => {
+                    const version = publication.versions[0];
+                    version.user = {
+                        id: props.user.id,
+                        createdAt: props.user.createdAt,
+                        email: props.user.email || '',
+                        firstName: props.user.firstName,
+                        lastName: props.user.lastName,
+                        orcid: props.user.orcid,
+                        updatedAt: props.user.updatedAt,
+                        role: props.user.role
+                    };
+
+                    version.publication = {
+                        id: publication.id,
+                        type: publication.type,
+                        doi: publication.doi,
+                        url_slug: publication.url_slug,
+                        flagCount: publication.flagCount,
+                        peerReviewCount: publication.peerReviewCount
+                    };
+                    return version;
+                }) || [],
+        [getPublicationsResponse, props.user]
+    );
+
+    const handlePublicationsSearchFormSubmit: React.ReactEventHandler<HTMLFormElement> = async (
+        e: React.SyntheticEvent<HTMLFormElement, Event>
+    ): Promise<void> => {
+        e.preventDefault();
+        const searchTerm = e.currentTarget.searchTerm.value;
+        const newQuery = { ...router.query, query: searchTerm };
+
+        if (!searchTerm) {
+            delete newQuery.query; // remove query param from browser url
+        }
+
+        await router.push({ query: newQuery }, undefined, { shallow: true });
+        setPublicationsOffset(0);
+        setPublicationsQuery(searchTerm);
+    };
+
+    const flags = getFlagsResponse?.data || [];
+    const flagResults = getFlagsResponse ? (
+        <div className="rounded">
+            {flags.map((flag, index: number) => {
+                let classes = '';
+
+                if (index === 0) {
+                    classes += 'rounded-t';
+                }
+
+                if (index === flags.length - 1) {
+                    classes += ' !border-b-transparent !rounded-b';
+                }
+
+                const publication = flag.publication;
+                const { coAuthors, content, description, publishedDate, title } = publication.versions[0];
+
+                return (
+                    <Components.PublicationSearchResult
+                        key={publication.id}
+                        className={classes}
+                        coAuthors={coAuthors}
+                        content={content}
+                        description={description}
+                        linkDestination={`${Config.urls.viewPublication.path}/${publication.id}/flag/${flag.id}`}
+                        preface={
+                            <div className="flex gap-4 leading-none">
+                                <SolidIcons.FlagIcon className="h-4 w-4 text-red-500" />
+                                <span>
+                                    Raised on <time suppressHydrationWarning>{Helpers.formatDate(flag.createdAt)}</time>{' '}
+                                    for{' '}
+                                    {Config.values.octopusInformation.redFlagReasons[
+                                        flag.category
+                                    ].nicename.toLowerCase()}{' '}
+                                    against the following publication:
+                                </span>
+                            </div>
+                        }
+                        publicationId={publication.id}
+                        publishedDate={publishedDate}
+                        title={title}
+                        type={publication.type}
+                    />
+                );
+            })}
+        </div>
+    ) : null;
 
     return (
         <>
             <Head>
                 <title>{pageTitle}</title>
-                <meta name="description" content="" />
-                <meta name="keywords" content="" />
                 <meta name="og:title" content={pageTitle} />
                 <link rel="canonical" href={`${Config.urls.viewUser.canonical}/${props.user.id}`} />
             </Head>
@@ -187,78 +293,48 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                     </>
                 )}
 
-                <section className="container mx-auto mb-16 px-8">
+                <section className="container mx-auto pb-12 lg:pb-24 px-8">
                     <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
                         Octopus publications
                     </h2>
-                    {userPublications.length ? (
-                        <div className="rouned-md relative lg:w-2/3">
-                            {userPublications.map((publication, index) => {
-                                const version = publication.versions[0];
-                                if (version && version.isLatestLiveVersion && index <= userPublications.length) {
-                                    let classes = '';
+                    <Components.SearchInterface
+                        error={getPublicationsErrorMessage}
+                        handleSearchFormSubmit={handlePublicationsSearchFormSubmit}
+                        isValidating={getPublicationsIsValidating}
+                        limit={publicationsLimit}
+                        noResultsMessage="This user does not currently have any live publications"
+                        offset={publicationsOffset}
+                        pageSizes={[10, 20, 50]}
+                        query={publicationsQuery}
+                        ref={searchInputRef}
+                        results={publicationVersions}
+                        searchType="publication-versions"
+                        setLimit={setPublicationsLimit}
+                        setOffset={setPublicationsOffset}
+                        total={getPublicationsResponse?.metadata.total || 0}
+                    ></Components.SearchInterface>
+                </section>
 
-                                    if (index === 0) {
-                                        classes += 'rounded-t-lg ';
-                                    }
-
-                                    if (index === userPublications.length - 1) {
-                                        classes += 'rounded-b-lg';
-                                    }
-
-                                    version.user = {
-                                        id: props.user.id,
-                                        createdAt: props.user.createdAt,
-                                        email: props.user.email || '',
-                                        firstName: props.user.firstName,
-                                        lastName: props.user.lastName,
-                                        orcid: props.user.orcid,
-                                        updatedAt: props.user.updatedAt,
-                                        role: props.user.role
-                                    };
-
-                                    version.publication = {
-                                        id: publication.id,
-                                        type: publication.type,
-                                        doi: publication.doi,
-                                        url_slug: publication.url_slug,
-                                        flagCount: publication.flagCount,
-                                        peerReviewCount: publication.peerReviewCount
-                                    };
-
-                                    return (
-                                        <Components.PublicationSearchResult
-                                            key={publication.id}
-                                            publicationVersion={version}
-                                            className={classes}
-                                        />
-                                    );
-                                }
-                            })}
-
-                            {!hideShowMoreButton && (
-                                <Framer.motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    className="absolute -bottom-10 z-10 flex h-72 w-full items-end justify-center from-transparent to-teal-50 transition-colors duration-500 dark:to-grey-800 lg:bottom-0 lg:bg-gradient-to-b"
-                                >
-                                    <button
-                                        onClick={(e) => setSize((prevSize) => prevSize + 1)}
-                                        className="rounded px-2 py-1 text-sm font-semibold uppercase tracking-widest text-grey-600 outline-0 focus:ring-2 focus:ring-yellow-400 dark:text-grey-100"
-                                    >
-                                        Show More
-                                    </button>
-                                </Framer.motion.div>
-                            )}
-                        </div>
-                    ) : (
-                        <Components.Alert
-                            severity="INFO"
-                            title="This user does not currently have any live publications"
-                            className="w-fit"
-                        />
-                    )}
+                <section className="container mx-auto px-8">
+                    <h2 className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
+                        Red flags raised by this user
+                    </h2>
+                    <Components.Checkbox
+                        checked={includeResolvedFlags}
+                        className="mb-4 lg:mb-8"
+                        id="include-resolved-flags"
+                        label="Include resolved flags"
+                        name="include-resolved-flags"
+                        onChange={(e) => setIncludeResolvedFlags(e.target.checked)}
+                    />
+                    <Components.PaginatedResults
+                        isValidating={getFlagsIsValidating}
+                        limit={10}
+                        offset={flagsOffset}
+                        results={flagResults}
+                        setOffset={setFlagsOffset}
+                        total={getFlagsResponse?.metadata.total || 0}
+                    />
                 </section>
             </Layouts.Standard>
         </>

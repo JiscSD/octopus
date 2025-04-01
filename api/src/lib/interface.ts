@@ -203,13 +203,22 @@ export interface OpenSearchPublicationFilters {
     search?: string;
     limit: number;
     offset: number;
-    type: string;
+    type?: string;
     authorType?: 'individual' | 'organisational';
     exclude?: string;
     dateFrom?: string;
     dateTo?: string;
     orderBy?: PublicationOrderBy;
     orderDirection?: OrderDirection;
+}
+
+export type GetPublicationVersionsReportingOptions = Pick<
+    OpenSearchPublicationFilters,
+    'limit' | 'offset' | 'authorType' | 'dateFrom' | 'dateTo'
+>;
+
+export interface GetPublicationVersionsQueryParams extends OpenSearchPublicationFilters {
+    format?: 'reporting';
 }
 
 export type PublicationVersion = Exclude<Prisma.PromiseReturnType<typeof publicationVersionService.get>, null>;
@@ -355,14 +364,6 @@ export interface ConfirmVerificationCodeBody {
 const prismaGeneratedFlagType = Prisma.validator<Prisma.PublicationFlagsDefaultArgs>()({});
 export type Flag = Prisma.PublicationFlagsGetPayload<typeof prismaGeneratedFlagType>;
 
-export type FlagCategory =
-    | 'PLAGIARISM'
-    | 'ETHICAL_ISSUES'
-    | 'MISREPRESENTATION'
-    | 'UNDECLARED_IMAGE_MANIPULATION'
-    | 'COPYRIGHT'
-    | 'INAPPROPRIATE';
-
 export interface CreateFlagPathParams {
     publicationId: string;
 }
@@ -370,6 +371,36 @@ export interface CreateFlagPathParams {
 export interface CreateFlagRequestBody {
     category: PublicationFlagCategoryEnum;
     comment: string;
+}
+
+export interface CreateFlagCommentBody {
+    comment: string;
+}
+
+export interface CreateFlagCommentPathParams {
+    id: string;
+}
+
+export interface ResolveFlagPathParams {
+    id: string;
+}
+
+export interface GetFlagPathParams {
+    id: string;
+}
+
+export interface GetUserFlagsPathParams {
+    id: string;
+}
+
+export interface GetUserFlagsQueryParams {
+    includeResolved?: boolean;
+    limit: number;
+    offset: number;
+}
+
+export interface GetPublicationFlagsPathParams {
+    publicationId: string;
 }
 
 export interface AuthorizeRequestBody {
@@ -660,18 +691,6 @@ export interface CreateReferencePathParams {
     publicationVersionId: string;
 }
 
-export interface CreateFlagCommentBody {
-    comment: string;
-}
-
-export interface CreateFlagCommentPathParams {
-    id: string;
-}
-
-export interface ResolveFlagPathParams {
-    id: string;
-}
-
 export interface DestroyImagePathParams {
     id: string;
 }
@@ -701,18 +720,6 @@ export interface CreateFunderRequestBody {
     grantId?: string;
 }
 
-export interface GetFlagByID {
-    id: string;
-}
-
-export interface GetUserFlagsPathParams {
-    userId: string;
-}
-
-export interface GetPublicationFlagsPathParams {
-    publicationId: string;
-}
-
 export interface DOIResponse {
     data: {
         id: string;
@@ -739,7 +746,10 @@ export interface UpdateAffiliationsBody {
 export interface UserPublicationsFilters {
     offset: number;
     limit: number;
+    query?: string;
     versionStatus?: string;
+    initialDraftsOnly?: boolean;
+    exclude?: string;
 }
 
 export interface SendApprovalReminderPathParams {
@@ -1077,4 +1087,15 @@ export interface HandledARI {
     publicationVersion?: PublicationVersion;
     unrecognisedDepartment?: string;
     unrecognisedTopics?: string[];
+}
+
+export type IngestReportFormat = 'email' | 'file';
+
+export interface TriggerAriIngestQueryParams {
+    apiKey: string;
+    dryRun?: boolean;
+}
+
+export interface LocalNotifyPubRouterPathParams {
+    publicationId: string;
 }

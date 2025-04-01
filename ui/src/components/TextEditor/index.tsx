@@ -12,6 +12,7 @@ import * as Stores from '@/stores';
 import Mammoth from 'mammoth';
 import TipTapImage from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
+import Mathematics from '@tiptap-pro/extension-mathematics';
 import Table from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
@@ -118,12 +119,6 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         }
         closeLinkModal();
     }, [props.editor, linkUrl, closeLinkModal]);
-
-    // TODO wire up remove link if we want to add this in the near future.
-    const removeLink = React.useCallback(() => {
-        props.editor.chain().focus().extendMarkRange('link').unsetLink().run();
-        closeLinkModal();
-    }, [props.editor, closeLinkModal]);
 
     // For File upload
     const handleUploadImage = async (files: Interfaces.ImagePreview[]) => {
@@ -301,9 +296,9 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
     return (
         props.editor && (
             <>
-                <div className="flex">
+                <div className="flex sticky top-0 w-full pt-2 bg-white-50 z-10 border-b-2 border-grey-300">
                     <HeadlessUi.Listbox value={selected} onChange={setSelected}>
-                        <div className="relative mt-1">
+                        <div className="relative my-1">
                             <HeadlessUi.Listbox.Button className="relative w-full cursor-default rounded-lg py-2 pl-3 pr-10 text-left hover:cursor-pointer hover:bg-grey-100 focus:outline-yellow-500 sm:text-sm">
                                 <span className="block truncate">{selected.name}</span>
                                 <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -346,7 +341,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                         </div>
                     </HeadlessUi.Listbox>
 
-                    <div className="flex max-w-full items-center overflow-x-auto lg:max-w-md xl:max-w-xl 2xl:max-w-full">
+                    <div className="flex max-w-full items-center overflow-x-auto">
                         <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
                             type="button"
@@ -702,6 +697,10 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
         autofocus: true,
         extensions: [
             StarterKit,
+            Mathematics.configure({
+                regex: Config.values.latexRegex,
+                shouldRender: () => true
+            }),
             Link.configure({
                 openOnClick: false
             }),
@@ -744,7 +743,7 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
                 <span>Import from Microsoft Word (.docx)</span>
             </button>
 
-            <div className="mb-4 rounded-md border border-grey-100 bg-white-50 px-4 pb-4 pt-2 shadow focus-within:ring-2 focus-within:ring-yellow-500">
+            <div className="mb-4 rounded-md border border-grey-100 bg-white-50 shadow focus-within:ring-2 focus-within:ring-yellow-500">
                 <MenuBar
                     editor={textEditor}
                     loading={loading}
@@ -752,8 +751,9 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
                     importModalVisible={importModalVisible}
                     setImportModalVisible={setImportModalVisible}
                 />
-
-                <tiptap.EditorContent editor={textEditor} />
+                <div className="px-4 pb-2">
+                    <tiptap.EditorContent editor={textEditor} />
+                </div>
             </div>
         </>
     ) : null;

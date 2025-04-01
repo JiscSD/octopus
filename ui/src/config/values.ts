@@ -15,49 +15,64 @@ export const publicationTypes: Types.PublicationType[] = [
 export const authorTypes = ['individual', 'organisational'];
 
 export const octopusInformation: Interfaces.OctopusInformation = {
-    publications: {
+    publicationTypes: {
         PROBLEM: {
             id: 'PROBLEM',
-            heading: 'Research Problem',
-            content: 'A neatly defined scientific problem.'
+            label: 'Research Problem',
+            inlineDescription: 'A neatly defined scientific problem.',
+            faqDescription:
+                'A &apos;research problem&apos; publication defines a research problem or question. You will need to explain what is known so far about the problem, rather like the &apos;introduction&apos; to a traditional paper.'
         },
         HYPOTHESIS: {
             id: 'HYPOTHESIS',
-            heading: 'Rationale/Hypothesis',
-            content:
-                'An original hypothesis relating to an existing published Research Problem or the rationale for how you think the Research Problem could be addressed.'
+            label: 'Rationale/Hypothesis',
+            inlineDescription:
+                'An original hypothesis relating to an existing published Research Problem or the rationale for how you think the Research Problem could be addressed.',
+            faqDescription:
+                'A &apos;rationale/hypothesis&apos; publication sets out the theoretical basis for a potential solution, or partial solution, to the &apos;research problem&apos; it is linked to. In some fields a formal hypothesis is appropriate, in other fields it might be a description of an approach that might be taken.'
         },
         PROTOCOL: {
             id: 'PROTOCOL',
-            heading: 'Method',
-            content: 'A practical method of testing an existing published Rationale/Hypothesis.'
+            label: 'Method',
+            inlineDescription: 'A practical method of testing an existing published Rationale/Hypothesis.',
+            faqDescription: `A &apos;method&apos; publication is a detailed description of ways of testing a hypothesis, or carrying out a theoretical rationale. You can include links to sites such as <a href='https://protocols.io' className='underline' target='_blank'>protocols.io</a> to give more detail of the method if that would be helpful to readers.`
         },
         DATA: {
             id: 'DATA',
-            heading: 'Results',
-            content:
-                'Raw data or summarised results collected according to an existing published Method (can be linked to a data repository).'
+            label: 'Results',
+            inlineDescription:
+                'Raw data or summarised results collected according to an existing published Method (can be linked to a data repository).',
+            faqDescription:
+                'A &apos;results&apos; publication comprises raw data or summarised results collected according to an existing published &apos;method&apos;. It should describe the data or results themselves, without any analysis. It should provide details of the exact conditions under which the method was carried out and anything needed for an analysis or interpretation of the results. You can include links to the raw data files if they are in a specialist repository. Octopus is not a data repository itself.'
         },
         ANALYSIS: {
             id: 'ANALYSIS',
-            heading: 'Analysis',
-            content: 'A statistical or thematic analysis of existing published Results.'
+            label: 'Analysis',
+            inlineDescription: 'A statistical or thematic analysis of existing published Results.',
+            faqDescription:
+                'An &apos;analysis&apos; publication describes manipulations of results to help draw conclusions from them. For example, thematic or statistical analysis.'
         },
         INTERPRETATION: {
             id: 'INTERPRETATION',
-            heading: 'Interpretation',
-            content: 'A discussion around an existing published Analysis.'
+            label: 'Interpretation',
+            inlineDescription: 'A discussion around an existing published Analysis.',
+            faqDescription:
+                'An &apos;interpretation&apos; publication describes conclusions drawn from an &apos;analysis&apos; of results.'
         },
         REAL_WORLD_APPLICATION: {
             id: 'REAL_WORLD_APPLICATION',
-            heading: 'Real World Application',
-            content: 'Real World Applications arising from an existing published Interpretation.'
+            label: 'Real World Application',
+            inlineDescription: 'Real World Applications arising from an existing published Interpretation.',
+            faqDescription:
+                'A &apos;real world application&apos; publication describes how findings might have (or have had) an impact in the real world. This might be through a practical or policy application, and would be the appropriate publication type for case studies.'
         },
         PEER_REVIEW: {
             id: 'PEER_REVIEW',
-            heading: 'Review',
-            content:
-                'A considered, detailed peer review of one of the other kinds of publication. Octopus reviews are open and post-publication.'
+            label: 'Review',
+            inlineDescription:
+                'A considered, detailed peer review of one of the other kinds of publication. Octopus reviews are open and post-publication.',
+            faqDescription:
+                'A &apos;peer review&apos; publication is open and post-publication. It should be a carefully considered and constructive critique of an existing publication by someone else. Your review should help other readers assess the publication, and should be written in the same style as any other kind of publication, with relevant references. Authors may reversion publications in the light of reviews.'
         }
     },
     licences: {
@@ -856,6 +871,18 @@ export const octopusInformation: Interfaces.OctopusInformation = {
         INAPPROPRIATE: {
             value: 'INAPPROPRIATE',
             nicename: 'Inappropriate'
+        },
+        UNDECLARED_AI: {
+            value: 'UNDECLARED_AI',
+            nicename: 'Undeclared use of generative AI'
+        },
+        NOT_IN_OCTOPUS_FORMAT: {
+            value: 'NOT_IN_OCTOPUS_FORMAT',
+            nicename: 'Not in Octopus format'
+        },
+        IRRELEVANT_LINKED_PUBLICATION: {
+            value: 'IRRELEVANT_LINKED_PUBLICATION',
+            nicename: 'Linked to irrelevant publication'
         }
     }
 };
@@ -897,7 +924,7 @@ export const HTMLStyles = `
     .join(' ');
 
 export const HTMLStylesTiptapEditor = `
-    custom-table-tiptap-editor
+    tiptap-editor
     prose
     w-full
     max-w-none
@@ -927,3 +954,6 @@ export const topicDescription =
 export const blogContentType = 'octopusBlog';
 
 export const doiBaseUrl = `https://${process.env.NEXT_PUBLIC_STAGE === 'prod' ? 'doi.org' : 'handle.test.datacite.org'}/`;
+
+// Defines the boundaries for LaTeX expressions in publication content. Expressions are enclosed on both ends by "$$".
+export const latexRegex = /\$\$([^$]*)\$\$/gi;

@@ -28,7 +28,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 
     const promises: [
         Promise<Interfaces.User | void>,
-        Promise<Interfaces.UserPublicationsResult | void>,
+        Promise<Interfaces.SearchResults<Interfaces.Publication> | void>,
         Promise<Interfaces.ControlRequest[] | void>
     ] = [
         api
@@ -65,7 +65,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 
 type Props = {
     user: Interfaces.User;
-    userPublications: Interfaces.UserPublicationsResult;
+    userPublications: Interfaces.SearchResults<Interfaces.Publication>;
     controlRequests: Interfaces.ControlRequest[];
 };
 
@@ -87,7 +87,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
         { fallbackData: props.controlRequests, revalidateOnFocus: false }
     );
 
-    const { data: { results: userPublications = [] } = {} } = useSWR<Interfaces.UserPublicationsResult>(
+    const { data: { data: userPublications = [] } = {} } = useSWR<Interfaces.SearchResults<Interfaces.Publication>>(
         `${Config.endpoints.users}/${props.user.id}/publications?limit=999`.concat(
             versionStatusArray.length ? `&versionStatus=${versionStatusArray.join(',')}` : ''
         ),
@@ -217,47 +217,34 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
                             Include publications with:
                         </legend>
                         <div className="flex flex-wrap gap-4 sm:gap-12">
-                            <label htmlFor="include-live-version" className="flex cursor-pointer items-center gap-2">
-                                <input
-                                    id="include-live-version"
-                                    name="LIVE"
-                                    type="checkbox"
-                                    checked={versionStatusArray.includes('LIVE')}
-                                    onChange={(e) =>
-                                        setVersionStatusArray(
-                                            e.target.checked
-                                                ? [...versionStatusArray, 'LIVE']
-                                                : versionStatusArray.filter((status) => status !== 'LIVE')
-                                        )
-                                    }
-                                    className="cursor-pointer rounded border-teal-500 bg-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
-                                />
-                                <span className="text-grey-800 transition-colors dark:text-white-50">
-                                    A live version
-                                </span>
-                            </label>
-
-                            <label htmlFor="include-draft-version" className="flex cursor-pointer items-center gap-2">
-                                <input
-                                    id="include-draft-version"
-                                    name="DRAFT"
-                                    type="checkbox"
-                                    checked={versionStatusArray.includes('DRAFT')}
-                                    onChange={(e) =>
-                                        setVersionStatusArray(
-                                            e.target.checked
-                                                ? [...versionStatusArray, 'DRAFT', 'LOCKED']
-                                                : versionStatusArray.filter(
-                                                      (status) => !['DRAFT', 'LOCKED'].includes(status)
-                                                  )
-                                        )
-                                    }
-                                    className="cursor-pointer rounded border-teal-500 bg-white-50 outline-0 transition-colors duration-500 focus:ring-2 focus:ring-yellow-400"
-                                />
-                                <span className="text-grey-800 transition-colors dark:text-white-50">
-                                    A draft version
-                                </span>
-                            </label>
+                            <Components.Checkbox
+                                checked={versionStatusArray.includes('LIVE')}
+                                id="include-live-versions"
+                                label="A live version"
+                                name="LIVE"
+                                onChange={(e) =>
+                                    setVersionStatusArray(
+                                        e.target.checked
+                                            ? [...versionStatusArray, 'LIVE']
+                                            : versionStatusArray.filter((status) => status !== 'LIVE')
+                                    )
+                                }
+                            />
+                            <Components.Checkbox
+                                checked={versionStatusArray.includes('DRAFT')}
+                                id="include-draft-versions"
+                                label="A draft version"
+                                name="DRAFT"
+                                onChange={(e) =>
+                                    setVersionStatusArray(
+                                        e.target.checked
+                                            ? [...versionStatusArray, 'DRAFT', 'LOCKED']
+                                            : versionStatusArray.filter(
+                                                  (status) => !['DRAFT', 'LOCKED'].includes(status)
+                                              )
+                                    )
+                                }
+                            />
                         </div>
                     </fieldset>
 

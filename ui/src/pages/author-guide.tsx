@@ -1,16 +1,21 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
+import parse from 'html-react-parser';
 
 import * as Components from '@/components';
 import * as Layouts from '@/layouts';
 import * as Config from '@/config';
+import * as Types from '@/types';
 
 type AuthorGuideSection = {
     title: string;
     id: string;
     content: React.ReactNode;
 };
+
+const publicationTypes = Config.values.octopusInformation.publicationTypes;
+const publicationTypeIds: Types.PublicationType[] = Object.keys(publicationTypes) as Types.PublicationType[];
 
 const authorGuideSections: AuthorGuideSection[] = [
     {
@@ -87,18 +92,30 @@ const authorGuideSections: AuthorGuideSection[] = [
         )
     },
     {
-        title: 'Publication types',
-        id: 'publication-types',
+        title: 'Choosing a publication type',
+        id: 'choosing-a-publication-type',
         content: (
-            <p>
-                The eight publication types in Octopus are intended to align with the research process, so select the
-                stage which matches where you are in your work.{' '}
-                <a href="/faq" target="_blank" className="underline">
-                    See our FAQ
-                </a>{' '}
-                for more information on the publication types. You can publish each stage as it happens, publish when
-                the project is finished, or adapt existing papers to record prior work to Octopus.
-            </p>
+            <>
+                <p>
+                    The eight publication types in Octopus are intended to align with the research process, so select
+                    the stage which matches where you are in your work. If you would like to publish work that does not
+                    build on a publication that is already on Octopus, you will need to start with a research problem.
+                    You can publish each stage as it happens, publish when the project is finished, or adapt existing
+                    papers to record prior work to Octopus.
+                </p>
+                <p className="mb-2">
+                    Below are the eight publication types. You should select the one which matches where you are in the
+                    research process.
+                </p>
+                {publicationTypeIds.map((type, index) => (
+                    <>
+                        <p className="mb-2 font-bold">{publicationTypes[type].label}:</p>
+                        <p className={index !== publicationTypeIds.length - 1 ? 'mb-2' : ''}>
+                            {parse(publicationTypes[type].faqDescription)}
+                        </p>
+                    </>
+                ))}
+            </>
         )
     },
     {

@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import JWT from 'jsonwebtoken';
+import * as entities from 'entities';
+import * as katex from 'katex';
 
 import * as cheerio from 'cheerio';
 import * as luxon from 'luxon';
@@ -49,15 +51,6 @@ export const formatDateTime = (value: string, formatType?: 'short' | 'long'): st
     });
 
     return date === 'Invalid DateTime' ? 'N/A' : `${date} GMT`;
-};
-
-/**
- * @description Formats a ISO string date to a relative to now string
- */
-export const relativeDate = (value: string): string | null => {
-    const date = luxon.DateTime.fromISO(value, { zone: 'utc' }).toRelativeCalendar();
-
-    return date === 'Invalid DateTime' ? 'N/A' : date;
 };
 
 /**
@@ -588,7 +581,9 @@ export const htmlToText = (htmlString: string): string => {
         for (const node of nodesToRemove) {
             node.remove();
         }
-        return htmlDoc.documentElement.textContent || '';
+        const text = htmlDoc.documentElement.textContent || '';
+        // Remove LaTeX expressions.
+        return text.replace(Config.values.latexRegex, '');
     } else {
         // Server-side fallback method
         const $ = cheerio.load(htmlString);
@@ -648,4 +643,34 @@ export const isPublicationVersionExemptFromReversioning = (publicationVersion: I
     const isPeerReview = publication.type === 'PEER_REVIEW';
     const isARI = publication.externalSource === 'ARI';
     return isPeerReview || isARI;
+};
+
+// Get a nextJS context.query param as a string or null.
+export const extractNextQueryParam = (param: string | string[] | undefined, checkNumber?: boolean): string | null => {
+    const rawValue = Array.isArray(param) ? param[0] : param || null;
+    if (checkNumber) {
+        // Return null if value cannot be parsed as a number.
+        return rawValue && !Number.isNaN(parseInt(rawValue, 10)) ? rawValue : null;
+    } else {
+        return rawValue;
+    }
+};
+
+// Find LaTeX expressions in a string and replace them with the rendered HTML.
+export const renderLatexInHTMLString = (htmlString: string): string => {
+    // The regex provides a capturing group for the expression, accessible as p1 in the callback function.
+    const replaced = htmlString.replace(Config.values.latexRegex, (_match, p1) => {
+        // We are decoding HTML entities here as the text editor sometimes saves characters used in LaTeX
+        // expressions in escaped form. The katex rendering should make it safe from injection: https://katex.org/docs/security.
+        const decoded = entities.decodeHTML(p1);
+        const rendered = katex.renderToString(decoded);
+        return rendered;
+    });
+    return replaced;
+};
+
+// Return a language value if it is not english, otherwise undefined.
+// Useful for setting the HTML lang attribute - if it's underfined it won't be added.
+export const languageIfNotEnglish = (language: Types.Languages): Types.Languages | undefined => {
+    return language !== 'en' ? language : undefined;
 };

@@ -19,7 +19,8 @@ export const PageModel = {
             'footer > div > div > a[href="/get-involved"]',
             'footer > div > div > a[href="/user-terms"]',
             'footer > div > div > a[href="/privacy"]',
-            'footer > div > div > a[href="/accessibility"]'
+            'footer > div > div > a[href="/accessibility"]',
+            'footer > div > div > a[href="/cookie-policy"]'
         ]
     },
     homepage: {
@@ -92,7 +93,6 @@ export const PageModel = {
             // coi
             'h2:has-text("Conflict of interest")'
         ],
-        doiLink: 'aside [aria-label="DOI link: https://handle.test.datacite.org/10.82259/cl3fz14dr0001es6i5ji51rq4"]',
         authorLink: 'a[href="/authors/octopus"]:has-text("Octopus")',
         signInForMoreButton: 'text=Sign in for more actions',
         verifyEmailForMoreButton: 'text=Verify your email for more actions',

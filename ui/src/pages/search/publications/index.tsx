@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import React from 'react';
 import useSWR from 'swr';
-import * as Framer from 'framer-motion';
 import * as Router from 'next/router';
 import * as SolidIcons from '@heroicons/react/24/solid';
 
@@ -88,53 +87,16 @@ const constructQueryParams = (params: {
     return paramString.join('&');
 };
 
-/**
- *
- * @TODO - refactor getServerSideProps
- * 1. remove unnecessary if statements
- * 2. make sure correct publicationTypes are passed via props
- */
-
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    // defaults to possible query params
     const searchType: Types.SearchType = 'publication-versions';
-    let query: string | string[] | null = null;
-    let publicationTypes: string | string[] | null = null;
-    let limit: number | string | string[] | null = null;
-    let offset: number | string | string[] | null = null;
-    let dateFrom: string | string[] | null = null;
-    let dateTo: string | string[] | null = null;
-    let authorTypes: string | string[] | null = null;
-
-    // defaults to results
-    let searchResults: { data: Interfaces.PublicationVersion[]; metadata: Interfaces.SearchResultMeta } = {
-        data: [],
-        metadata: {
-            limit: 10,
-            offset: 0,
-            total: 0
-        }
-    };
-
-    // default error
     let error: string | null = null;
-
-    // setting params
-    if (context.query.query) query = context.query.query;
-    if (context.query.type) publicationTypes = context.query.type;
-    if (context.query.limit) limit = context.query.limit;
-    if (context.query.offset) offset = context.query.offset;
-    if (context.query.dateFrom) dateFrom = context.query.dateFrom;
-    if (context.query.dateTo) dateTo = context.query.dateTo;
-    if (context.query.authorType) authorTypes = context.query.authorType;
-
-    if (Array.isArray(query)) query = query[0];
-    if (Array.isArray(publicationTypes)) publicationTypes = publicationTypes[0];
-    if (Array.isArray(limit)) limit = limit[0];
-    if (Array.isArray(offset)) offset = offset[0];
-    if (Array.isArray(dateFrom)) dateFrom = dateFrom[0];
-    if (Array.isArray(dateTo)) dateTo = dateTo[0];
-    if (Array.isArray(authorTypes)) authorTypes = authorTypes[0];
+    const query = Helpers.extractNextQueryParam(context.query.query);
+    const publicationTypes = Helpers.extractNextQueryParam(context.query.type);
+    const limit = Helpers.extractNextQueryParam(context.query.limit, true);
+    const offset = Helpers.extractNextQueryParam(context.query.offset, true);
+    const dateFrom = Helpers.extractNextQueryParam(context.query.dateFrom);
+    const dateTo = Helpers.extractNextQueryParam(context.query.dateTo);
+    const authorTypes = Helpers.extractNextQueryParam(context.query.authorType);
 
     const params = constructQueryParams({
         query,
@@ -203,6 +165,8 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
     const [publicationTypes, setPublicationTypes] = React.useState(props.publicationTypes || '');
     const [dateFrom, setDateFrom] = React.useState(props.dateFrom ? props.dateFrom : '');
     const [dateTo, setDateTo] = React.useState(props.dateTo ? props.dateTo : '');
+    const dateFromRef = React.useRef<HTMLInputElement>(null);
+    const dateToRef = React.useRef<HTMLInputElement>(null);
     // param for pagination
     const [limit, setLimit] = React.useState(props.limit ? parseInt(props.limit, 10) : 10);
     const [offset, setOffset] = React.useState(props.offset ? parseInt(props.offset, 10) : 0);
@@ -244,28 +208,24 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
         setQuery(searchTerm);
     };
 
-    const handleDateFormSubmit = async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
-        e.preventDefault();
-        const newDate = e.target.value;
-
-        const [dateFrom, dateTo, setDate] =
-            e.target.getAttribute('id') === 'date-from'
-                ? [newDate, router.query.dateTo, setDateFrom]
-                : [router.query.dateFrom, newDate, setDateTo];
-
+    const applyDateFilter = async (): Promise<void> => {
         await router.push(
             {
                 query: {
                     ...router.query,
-                    dateTo,
-                    dateFrom
+                    dateTo: dateToRef.current?.value || '',
+                    dateFrom: dateFromRef.current?.value || ''
                 }
             },
             undefined,
             { shallow: true }
         );
-
-        setDate(newDate);
+        if (dateFromRef.current?.value) {
+            setDateFrom(dateFromRef.current.value);
+        }
+        if (dateToRef.current?.value) {
+            setDateTo(dateToRef.current.value);
+        }
     };
 
     const collateAuthorTypes = async (e: React.ChangeEvent<HTMLInputElement>, value: string): Promise<void> => {
@@ -317,16 +277,15 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
         setLimit(10);
         setPublicationTypes('');
         setDateFrom('');
+        dateFromRef.current && (dateFromRef.current.value = '');
         setDateTo('');
+        dateToRef.current && (dateToRef.current.value = '');
         setAuthorTypes('');
     };
 
     React.useEffect((): void => {
         setOffset(0);
     }, [query, publicationTypes, limit]);
-
-    const checkBoxClasses =
-        'h-4 w-4 rounded border-grey-300 text-teal-600 outline-none transition-colors duration-150 hover:cursor-pointer focus:ring-yellow-500 disabled:text-grey-300 hover:disabled:cursor-not-allowed';
 
     const filters = (
         <>
@@ -335,24 +294,15 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                     Author types
                 </legend>
                 {Config.values.authorTypes.map((type) => (
-                    <div key={type} className={`flex items-center`}>
-                        <input
-                            id={type}
-                            name={type}
-                            type="checkbox"
-                            className={checkBoxClasses}
-                            checked={authorTypes ? authorTypes.split(',').includes(type) : false}
-                            onChange={(e) => collateAuthorTypes(e, type)}
-                            disabled={!response}
-                        />
-                        <label
-                            htmlFor={type}
-                            className="ml-3 text-sm select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
-                            aria-disabled={!response}
-                        >
-                            {type.charAt(0).toUpperCase() + type.slice(1)}
-                        </label>
-                    </div>
+                    <Components.Checkbox
+                        key={type}
+                        checked={authorTypes ? authorTypes.split(',').includes(type) : false}
+                        disabled={!response}
+                        id={type}
+                        label={type.charAt(0).toUpperCase() + type.slice(1)}
+                        name={type}
+                        onChange={(e) => collateAuthorTypes(e, type)}
+                    />
                 ))}
             </fieldset>
             <fieldset className="space-y-3">
@@ -360,51 +310,29 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                     Publication types
                 </legend>
                 {Config.values.publicationTypes.map((type) => (
-                    <div key={type} className={`flex items-center`}>
-                        <input
-                            id={type}
-                            name={type}
-                            type="checkbox"
-                            className={checkBoxClasses}
-                            checked={publicationTypes ? publicationTypes.split(',').includes(type) : false}
-                            onChange={(e) => collatePublicationTypes(e, type)}
-                            disabled={!response}
-                        />
-                        <label
-                            htmlFor={type}
-                            className="ml-3 text-sm select-none font-medium text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
-                            aria-disabled={!response}
-                        >
-                            {Helpers.formatPublicationType(type)}
-                        </label>
-                    </div>
-                ))}
-
-                <div className="flex items-center border-b border-t border-grey-100 py-3">
-                    <input
-                        id="select-all"
-                        aria-describedby="select-all"
-                        name="select-all"
-                        type="checkbox"
-                        className={checkBoxClasses}
-                        checked={Config.values.publicationTypes.every((type) => publicationTypes.includes(type))}
-                        onChange={(e) =>
-                            setPublicationTypes(e.target.checked ? Config.values.publicationTypes.join(',') : '')
-                        }
+                    <Components.Checkbox
+                        key={type}
+                        checked={publicationTypes ? publicationTypes.split(',').includes(type) : false}
                         disabled={!response}
+                        id={type}
+                        label={Helpers.formatPublicationType(type)}
+                        name={type}
+                        onChange={(e) => collatePublicationTypes(e, type)}
                     />
-                    <div className="ml-3 text-sm">
-                        <label
-                            htmlFor="select-all"
-                            className="select-none font-medium italic text-grey-700 transition-colors duration-500 hover:cursor-pointer dark:text-white-50"
-                            aria-disabled={!response}
-                        >
-                            Select/deselect all
-                        </label>
-                    </div>
-                </div>
+                ))}
+                <Components.Checkbox
+                    className="border-b border-t border-grey-100 py-3"
+                    checked={Config.values.publicationTypes.every((type) => publicationTypes.includes(type))}
+                    disabled={!response}
+                    id="select-all"
+                    label="Select/deselect all"
+                    name="select-all"
+                    onChange={(e) =>
+                        setPublicationTypes(e.target.checked ? Config.values.publicationTypes.join(',') : '')
+                    }
+                />
             </fieldset>
-            <fieldset className="col-span-12 lg:col-span-3 xl:col-span-4 space-y-3">
+            <fieldset className="col-span-12 lg:col-span-3 xl:col-span-4 space-y-4">
                 <legend className="pb-2 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
                     Date Range
                 </legend>
@@ -419,8 +347,8 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                         placeholder="Date from..."
                         className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                         disabled={isValidating}
-                        value={dateFrom}
-                        onChange={(e) => handleDateFormSubmit(e)}
+                        ref={dateFromRef}
+                        defaultValue={dateFrom}
                     />
                 </label>
                 <label htmlFor="date-to" className="relative block w-full">
@@ -434,10 +362,17 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                         placeholder="Date to..."
                         className="w-full rounded-md border border-grey-200 px-4 py-2 outline-none focus:ring-2 focus:ring-yellow-500 disabled:opacity-70"
                         disabled={isValidating}
-                        value={dateTo}
-                        onChange={(e) => handleDateFormSubmit(e)}
+                        ref={dateToRef}
+                        defaultValue={dateTo}
                     />
                 </label>
+                <Components.Button
+                    className="w-full justify-center"
+                    endIcon={<SolidIcons.CheckCircleIcon className="h-5 w-5 text-teal-500" />}
+                    onClick={applyDateFilter}
+                    variant="block"
+                    title="Apply date filter"
+                />
             </fieldset>
         </>
     );
@@ -468,6 +403,7 @@ const Publications: Types.NextPage<Props> = (props): React.ReactElement => {
                     searchType="publication-versions"
                     setLimit={setLimit}
                     setOffset={setOffset}
+                    showSearchTypeSwitch={true}
                     total={response?.metadata.total || 0}
                 />
             </Layouts.Standard>

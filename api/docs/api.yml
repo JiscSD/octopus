@@ -509,6 +509,162 @@ paths:
           $ref: "#/components/responses/Forbidden"
         '404':
           $ref: "#/components/responses/NotFound"
+  /publication-versions:
+    get:
+      summary: Get many publication versions
+      tags:
+        - PublicationVersions
+      parameters:
+        - in: query
+          name: authorType
+          schema:
+            type: string
+            enum: [individual, organisational]
+            nullable: true
+        - in: query
+          name: dateFrom
+          schema:
+            type: string
+            format: date-time
+            nullable: true
+        - in: query
+          name: dateTo
+          schema:
+            type: string
+            format: date-time
+            nullable: true
+        - in: query
+          name: exclude
+          schema:
+            type: string
+            description: The IDs of any publications whose versions you want to exclude from results.
+            nullable: true
+        - in: query
+          name: format
+          schema:
+            type: string
+            enum: [reporting]
+            description: |
+              If "reporting", the format of results is changed to one used for reporting on publication statistics. In this case, only the following other parameters are supported:
+              - authorType
+              - dateFrom
+              - dateTo
+              - limit
+              - offset
+            nullable: true
+        - $ref: "#/components/parameters/SearchLimit"
+        - $ref: "#/components/parameters/SearchOffset"
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+            enum: [publishedDate]
+            nullable: true
+        - in: query
+          name: orderDirection
+          schema:
+            type: string
+            enum: [asc, desc]
+            nullable: true
+        - in: query
+          name: search
+          schema:
+            type: string
+            nullable: true
+        - in: query
+          name: type
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/PublicationTypeEnum"
+              - nullable: true
+      responses:
+        '200':
+          description: Request successful
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          allOf:
+                            - $ref: "#/components/schemas/BasePublicationVersionResponse"
+                            - type: object
+                              properties:
+                                publication:
+                                  type: object
+                                  properties:
+                                    id:
+                                      $ref: "#/components/schemas/PublicationId"
+                                    type:
+                                      $ref: "#/components/schemas/PublicationTypeEnum"
+                                    doi:
+                                      $ref: "#/components/schemas/PublicationDoi"
+                                    url_slug:
+                                      $ref: "#/components/schemas/PublicationUrlSlug"
+                                    flagCount:
+                                      type: integer
+                                      minimum: 0
+                                    peerReviewCount:
+                                      type: integer
+                                      minimum: 0
+                                user:
+                                  type: object
+                                  properties:
+                                    firstName:
+                                      $ref: "#/components/schemas/UserFirstName"
+                                    lastName:
+                                      $ref: "#/components/schemas/UserLastName"
+                                    id:
+                                      $ref: "#/components/schemas/UserId"
+                                    orcid:
+                                      $ref: "#/components/schemas/UserOrcid"
+                                coAuthors:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      id:
+                                        $ref: "#/components/schemas/CoAuthorId"
+                                      linkedUser:
+                                        $ref: "#/components/schemas/CoAuthorLinkedUser"
+                                      user:
+                                        type: object
+                                        properties:
+                                          orcid:
+                                            $ref: "#/components/schemas/UserOrcid"
+                                          firstName:
+                                            $ref: "#/components/schemas/UserFirstName"
+                                          lastName:
+                                            $ref: "#/components/schemas/UserLastName"
+                      metadata:
+                        $ref: "#/components/schemas/SearchMetadata"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            doi:
+                              $ref: "#/components/schemas/PublicationVersionDoi"
+                            publishedDate:
+                              $ref: "#/components/schemas/PublicationVersionPublishedDate"
+                            versionNumber:
+                              $ref: "#/components/schemas/PublicationVersionVersionNumber"
+                            publication:
+                              type: object
+                              properties:
+                                doi:
+                                  $ref: "#/components/schemas/PublicationDoi"
+                                type:
+                                  $ref: "#/components/schemas/PublicationTypeEnum"
+                      metadata:
+                        $ref: "#/components/schemas/SearchMetadata"
+        '400':
+          $ref: "#/components/responses/BadRequest"
   /publication-versions/{publicationVersionId}:
     patch:
       summary: Update a publication version
@@ -906,14 +1062,8 @@ paths:
           schema:
             type: string
           required: true
-        - in: query
-          name: offset
-          schema:
-            $ref: "#/components/schemas/SearchOffset"
-        - in: query
-          name: limit
-          schema:
-            $ref: "#/components/schemas/SearchLimit"
+        - $ref: "#/components/parameters/SearchOffset"
+        - $ref: "#/components/parameters/SearchLimit"
         - in: query
           name: versionStatus
           description: Used to filter results by publication state. Multiple values should be comma-separated. Publications that have a version with a `currentStatus` in the provided values will be returned. Only works if the requestor is the user specified in the `userId` path parameter.
@@ -994,6 +1144,16 @@ components:
       schema:
         type: string
       required: true
+    SearchLimit:
+      in: query
+      name: limit
+      schema:
+        $ref: "#/components/schemas/SearchLimit"
+    SearchOffset:
+      in: query
+      name: offset
+      schema:
+        $ref: "#/components/schemas/SearchOffset"
   responses:
     BadRequest:
       description: Bad request
@@ -1128,16 +1288,13 @@ components:
       type: object
       properties:
         id:
-          type: string
-          description: Publication ID.
+          $ref: "#/components/schemas/PublicationId"
         url_slug:
-          type: string
-          description: Unused legacy field.
+          $ref: "#/components/schemas/PublicationUrlSlug"
         type:
           $ref: "#/components/schemas/PublicationTypeEnum"
         doi:
-          type: string
-          description: Digital Object Identifier, minted with Datacite upon publication creation.
+          $ref: "#/components/schemas/PublicationDoi"
         externalId:
           $ref: "#/components/schemas/PublicationExternalId"
         externalSource:
@@ -1149,15 +1306,12 @@ components:
           type: string
           description: Publication version ID.
         doi:
-          type: string
-          description: Digital Object Identifier specific to this version, related to the publication's DOI. Null until the version is published.
-          nullable: true
+          $ref: "#/components/schemas/PublicationVersionDoi"
         versionOf:
           type: string
           description: ID of the publication this is a version of.
         versionNumber:
-          type: integer
-          minimum: 1
+          $ref: "#/components/schemas/PublicationVersionVersionNumber"
         isLatestVersion:
           type: boolean
         isLatestLiveVersion:
@@ -1391,6 +1545,9 @@ components:
                 $ref: "#/components/schemas/PublicationVersionDescription"
               keywords:
                 $ref: "#/components/schemas/PublicationVersionKeywords"
+    PublicationDoi:
+      type: string
+      description: Digital Object Identifier, minted with Datacite upon publication creation.
     PublicationExternalId:
       type: string
       nullable: true
@@ -1400,6 +1557,9 @@ components:
       nullable: true
       enum: [ARI]
       description: An external system the publication has been imported from. Must be accompanied by the externalId field.
+    PublicationId:
+      type: string
+      description: Publication ID.
     PublicationStatusEnum:
       type: string
       enum: [DRAFT,LOCKED,LIVE]
@@ -1423,6 +1583,9 @@ components:
         - HYPOTHESIS = Rationale / Hypothesis
         - PROTOCOL = Method
         - DATA = Results
+    PublicationUrlSlug:
+      type: string
+      description: Unused legacy field.
     PublicationVersionConflictOfInterestStatus:
       type: boolean
       description: Whether the publication has any conflict of interest.
@@ -1454,6 +1617,10 @@ components:
       type: string
       maxLength: 160
       description: A short description of the publication.
+      nullable: true
+    PublicationVersionDoi:
+      type: string
+      description: Digital Object Identifier specific to this version, related to the publication's DOI. Null until the version is published.
       nullable: true
     PublicationVersionEthicalStatement:
       type: string
@@ -1502,6 +1669,9 @@ components:
       description: |
         The IDs of one or more topics the publication is linked to. This should only be used where a publication cannot be linked to another publication (see [Links](#/tagName/Links)). Only PROBLEM publications can be linked to a topic.
       nullable: true
+    PublicationVersionVersionNumber:
+      type: integer
+      minimum: 1
     Reference:
       type: object
       properties:
@@ -1526,6 +1696,16 @@ components:
       type: integer
       minimum: 1
       default: 10
+    SearchMetadata:
+      type: object
+      properties:
+        total:
+          type: integer
+          minimum: 0
+        limit:
+          $ref: "#/components/schemas/SearchLimit"
+        offset:
+          $ref: "#/components/schemas/SearchOffset"
     SearchOffset:
       type: integer
       minimum: 0

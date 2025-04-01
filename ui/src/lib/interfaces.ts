@@ -230,7 +230,7 @@ export interface User extends CoreUser {
     works: WorksRecord[];
 }
 
-export interface SearchResults<T extends PublicationVersion | User> {
+export interface SearchResults<T extends FlagByUser | Publication | PublicationVersion | User> {
     data: T[];
     metadata: SearchResultMeta;
 }
@@ -292,11 +292,12 @@ export interface BookmarkedTopic {
 }
 
 export interface OctopusInformation {
-    publications: {
+    publicationTypes: {
         [key in Types.PublicationType]: {
             id: Types.PublicationType;
-            heading: string;
-            content: string;
+            label: string;
+            inlineDescription: string;
+            faqDescription: string;
         };
     };
     licences: {
@@ -383,6 +384,18 @@ export interface FlagWithComments extends Flag {
     flagComments: FlagComment[];
 }
 
+export interface FlagByUser extends Omit<Flag, 'publicationId' | 'user' | 'createdBy'> {
+    publication: Pick<CorePublication, 'id' | 'type'> & {
+        versions: [
+            Pick<PublicationVersion, 'content' | 'description' | 'publishedDate' | 'title'> & {
+                coAuthors: {
+                    user: Pick<CoreUser, 'firstName' | 'lastName'>;
+                }[];
+            }
+        ];
+    };
+}
+
 export interface PublicationUpdateRequestBody extends JSON {
     title: string;
     content: string | null;
@@ -411,13 +424,6 @@ export interface CreationStep {
 
 export interface CreationStepWithCompletenessStatus extends CreationStep {
     status: Types.TabCompletionStatus;
-}
-
-export interface UserPublicationsResult {
-    offset: number;
-    limit: number;
-    total: number;
-    results: Publication[];
 }
 
 export interface OrcidAffiliationDate {

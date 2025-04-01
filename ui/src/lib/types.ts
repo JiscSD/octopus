@@ -16,8 +16,8 @@ export type { AxiosError } from 'axios';
 export type PreferencesStoreTypes = {
     darkMode: boolean;
     toggleDarkMode: () => void;
-    feedback: boolean;
-    toggleFeedback: () => void;
+    showAnnouncementBanner: boolean;
+    toggleAnnouncementBanner: () => void;
 };
 
 export type UserRole = 'USER' | 'ORGANISATION' | 'SUPER_USER';
@@ -112,7 +112,10 @@ export type RedFlagTypes =
     | 'MISREPRESENTATION'
     | 'UNDECLARED_IMAGE_MANIPULATION'
     | 'COPYRIGHT'
-    | 'INAPPROPRIATE';
+    | 'INAPPROPRIATE'
+    | 'UNDECLARED_AI'
+    | 'NOT_IN_OCTOPUS_FORMAT'
+    | 'IRRELEVANT_LINKED_PUBLICATION';
 
 export type Languages =
     | 'ab'

@@ -415,16 +415,9 @@ describe('ARI import processes', () => {
     test('Incremental import endpoint requires API key', async () => {
         const triggerImport = await testUtils.agent.post('/integrations/ari/incremental');
 
-        expect(triggerImport.status).toEqual(400);
+        expect(triggerImport.status).toEqual(401);
         expect(triggerImport.body).toMatchObject({
-            message: [
-                {
-                    keyword: 'required',
-                    params: {
-                        missingProperty: 'apiKey'
-                    }
-                }
-            ]
+            message: "Please provide a valid 'apiKey'."
         });
     });
 
@@ -435,9 +428,10 @@ describe('ARI import processes', () => {
             .post('/integrations/ari/incremental')
             .query({ apiKey: process.env.TRIGGER_ARI_INGEST_API_KEY });
 
-        expect(triggerImport.status).toEqual(202);
+        // May not seem right but the service task has technically been triggered, hence 200.
+        expect(triggerImport.status).toEqual(200);
         expect(triggerImport.body).toMatchObject({
-            message: 'Cancelling ingest. Either an import is already in progress or the last import failed.'
+            message: 'Did not run ingest. Either an import is already in progress or the last import failed.'
         });
     });
 });

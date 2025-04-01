@@ -1,4 +1,4 @@
-import { BrowserContext, expect, Page } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import { PageModel } from '../PageModel';
 
 export const checkLivePublicationLayout = async (page: Page, id: string, loggedIn?: boolean) => {
@@ -14,7 +14,7 @@ export const checkLivePublicationLayout = async (page: Page, id: string, loggedI
     }
 
     // Expect DOI link
-    await expect(page.locator(PageModel.livePublication.doiLink)).toHaveAttribute(
+    await expect(page.getByRole('link', { name: 'DOI' })).toHaveAttribute(
         'href',
         `https://handle.test.datacite.org/10.82259/${id}`
     );

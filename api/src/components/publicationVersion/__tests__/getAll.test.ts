@@ -42,7 +42,7 @@ describe('Get many publication versions', () => {
             offset: 10
         });
         // This will change if we add more live seed publications.
-        expect(getPublications.body.data.length).toEqual(5);
+        expect(getPublications.body.data.length).toEqual(6);
     });
 
     test('Can order by publication date, descending', async () => {
@@ -52,7 +52,7 @@ describe('Get many publication versions', () => {
         });
 
         expect(getPublications.status).toEqual(200);
-        const publicationDates = getPublications.body.data.map((version) => version.publishedDate);
+        const publicationDates = getPublications.body.data.map((version) => version.publishedDate as Date);
         // Sort a copy of the dates from the results to confirm order.
         const sortedPublicationDates = [...publicationDates].sort(
             (a, b) => new Date(b).getTime() - new Date(a).getTime()
@@ -67,9 +67,9 @@ describe('Get many publication versions', () => {
         });
 
         expect(getPublications.status).toEqual(200);
-        const publicationDates = getPublications.body.data.map((version) => version.publishedDate);
+        const publicationDates = getPublications.body.data.map((version) => version.publishedDate as Date);
         // Sort a copy of the dates from the results to confirm order.
-        const sortedPublicationDates = [...publicationDates].sort(
+        const sortedPublicationDates: Date[] = [...publicationDates].sort(
             (a, b) => new Date(a).getTime() - new Date(b).getTime()
         );
         expect(publicationDates).toEqual(sortedPublicationDates);
@@ -131,7 +131,7 @@ describe('Get many publication versions', () => {
 
         expect(getOrganisationalPublications.status).toEqual(200);
         // User role isn't returned in body so differentiate results by length (there are fewer organisational publications).
-        expect(getOrganisationalPublications.body.data).toHaveLength(2);
+        expect(getOrganisationalPublications.body.data).toHaveLength(3);
 
         const getIndividualPublications = await testUtils.agent.get('/publication-versions?authorType=individual');
 
@@ -144,7 +144,7 @@ describe('Get many publication versions', () => {
 
         expect(getPublications.status).toEqual(200);
         // Includes everything.
-        expect(getPublications.body.metadata.total).toEqual(15);
+        expect(getPublications.body.metadata.total).toEqual(16);
     });
 
     test('Author filtering rejects invalid types', async () => {
@@ -182,5 +182,137 @@ describe('Get many publication versions', () => {
 
         expect(getMostPublications.status).toEqual(200);
         expect(getMostPublications.body.metadata.total).toEqual(allPubsCount - 1);
+    });
+});
+
+describe('Get publication versions for reporting', () => {
+    beforeAll(async () => {
+        await testUtils.clearDB();
+        await testUtils.testSeed();
+    });
+
+    test('Reporting format is accepted', async () => {
+        const getPublications = await testUtils.agent.get('/publication-versions').query({
+            format: 'reporting'
+        });
+
+        expect(getPublications.status).toEqual(200);
+    });
+
+    test('Invalid format is rejected', async () => {
+        const getPublications = await testUtils.agent.get('/publication-versions').query({
+            format: 'my-favourite-format'
+        });
+
+        expect(getPublications.status).toEqual(400);
+        expect(getPublications.body.message).toHaveLength(1);
+        expect(getPublications.body.message[0].keyword).toEqual('enum');
+    });
+
+    test('Invalid parameters are rejected', async () => {
+        const params: {
+            name: string;
+            value: string;
+        }[] = [
+            {
+                name: 'search',
+                value: 'test'
+            },
+            {
+                name: 'exclude',
+                value: 'test'
+            },
+            {
+                name: 'orderBy',
+                value: 'publishedDate'
+            },
+            {
+                name: 'orderDirection',
+                value: 'asc'
+            },
+            {
+                name: 'type',
+                value: 'PROBLEM'
+            }
+        ];
+
+        for (const param of params) {
+            const getPublications = await testUtils.agent.get('/publication-versions').query({
+                format: 'reporting',
+                [param.name]: param.value
+            });
+
+            expect(getPublications.status).toEqual(400);
+            expect(getPublications.body.message).toEqual(
+                `The query parameter "${param.name}" is not compatible with the "reporting" format.`
+            );
+        }
+    });
+
+    test('Results match expected format', async () => {
+        const getPublications = await testUtils.agent.get('/publication-versions').query({
+            format: 'reporting'
+        });
+
+        expect(getPublications.body).toMatchObject({
+            data: expect.any(Object),
+            metadata: {
+                total: expect.any(Number),
+                limit: expect.any(Number),
+                offset: expect.any(Number)
+            }
+        });
+
+        const results = getPublications.body.data;
+        results.forEach((result) => {
+            expect(result).toHaveProperty('doi');
+            expect(result).toHaveProperty('publishedDate');
+            expect(result).toHaveProperty('versionNumber');
+            expect(result).toHaveProperty('publication');
+            expect(result.publication).toHaveProperty('doi');
+            expect(result.publication).toHaveProperty('type');
+        });
+    });
+
+    test('Can filter by dateFrom', async () => {
+        const dateFrom = '2023-01-01';
+        const getPublications = await testUtils.agent.get('/publication-versions').query({
+            format: 'reporting',
+            dateFrom
+        });
+
+        const results = getPublications.body.data;
+        results.forEach((result) => {
+            expect(new Date(result.publishedDate).getTime()).toBeGreaterThanOrEqual(new Date(dateFrom).getTime());
+        });
+    });
+
+    test('Can filter by dateTo', async () => {
+        const dateTo = '2023-01-01';
+        const getPublications = await testUtils.agent.get('/publication-versions').query({
+            format: 'reporting',
+            dateTo
+        });
+
+        const results = getPublications.body.data;
+        results.forEach((result) => {
+            expect(new Date(result.publishedDate).getTime()).toBeLessThanOrEqual(new Date(dateTo).getTime());
+        });
+    });
+
+    test('Can filter by date range', async () => {
+        const dateFrom = '2023-01-01';
+        const dateTo = '2023-01-01';
+        const getPublications = await testUtils.agent.get('/publication-versions').query({
+            format: 'reporting',
+            dateFrom,
+            dateTo
+        });
+
+        const results = getPublications.body.data;
+        results.forEach((result) => {
+            expect(new Date(result.publishedDate).getTime()).toBeGreaterThanOrEqual(new Date(dateFrom).getTime());
+            expect(new Date(result.publishedDate).getTime()).toBeLessThanOrEqual(new Date(dateTo).getTime());
+        });
     });
 });

@@ -13,7 +13,20 @@ const getPublicationsSchema: I.JSONSchemaType<I.UserPublicationsFilters> = {
             minimum: 1,
             default: 10
         },
+        query: {
+            type: 'string',
+            nullable: true
+        },
         versionStatus: {
+            type: 'string',
+            nullable: true
+        },
+        initialDraftsOnly: {
+            type: 'boolean',
+            default: false,
+            nullable: true
+        },
+        exclude: {
             type: 'string',
             nullable: true
         }

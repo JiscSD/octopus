@@ -157,13 +157,13 @@ const Edit: Types.NextPage<Props> = (props): React.ReactElement => {
             steps.FUNDERS
         ];
         switch (props.publicationVersion.publication.type) {
-            case Config.values.octopusInformation.publications.DATA.id:
+            case Config.values.octopusInformation.publicationTypes.DATA.id:
                 arr = [...arr, steps.DATA_STATEMENT, steps.CO_AUTHORS];
                 break;
-            case Config.values.octopusInformation.publications.PROTOCOL.id:
+            case Config.values.octopusInformation.publicationTypes.PROTOCOL.id:
                 arr = [...arr, steps.RESEARCH_PROCESS, steps.CO_AUTHORS];
                 break;
-            case Config.values.octopusInformation.publications.HYPOTHESIS.id:
+            case Config.values.octopusInformation.publicationTypes.HYPOTHESIS.id:
                 arr = [...arr, steps.RESEARCH_PROCESS, steps.CO_AUTHORS];
                 break;
             default:

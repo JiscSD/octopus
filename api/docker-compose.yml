@@ -113,6 +113,8 @@ services:
             - TRIGGER_ARI_INGEST_API_KEY=123456789
             - INGEST_REPORT_RECIPIENTS=example.jisc@mailinator.com
             - PARTICIPATING_ARI_USER_IDS=
+            - PUBROUTER_API_KEYS
+            - PUBROUTER_FAILURE_CHANNEL=test@mailinator.com
 
 volumes:
     opensearch-data1:
