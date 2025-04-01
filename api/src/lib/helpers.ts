@@ -254,3 +254,12 @@ export const renderLatexInHTMLString = (htmlString: string): string => {
 
     return replaced;
 };
+
+export const isPublicationExemptFromReversioning = <T extends Pick<I.Publication, 'type' | 'externalSource'>>(
+    publication: T
+): boolean => {
+    const isPeerReview = publication.type === 'PEER_REVIEW';
+    const isARI = publication.externalSource === 'ARI';
+
+    return isPeerReview || isARI;
+};
