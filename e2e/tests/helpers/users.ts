@@ -109,7 +109,7 @@ export const login = async (page: Page, browser: Browser, user: TestUser) => {
 export const logout = async (page: Page) => {
     await page.click(PageModel.header.usernameButton);
     await page.click(PageModel.header.logoutButton);
-    await page.waitForLoadState();
+    await page.waitForSelector(PageModel.header.loginButton);
     await expect(page.locator(PageModel.header.loginButton)).toBeVisible();
 };
 
