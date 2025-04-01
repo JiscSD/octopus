@@ -14,23 +14,27 @@ describe('Batch update co-authors', () => {
             confirmedCoAuthor: true,
             linkedUser: 'test-user-5',
             isIndependent: true,
-            affiliations: []
+            affiliations: [],
+            retainApproval: true
         },
         {
             id: 'coauthor-test-user-6-problem-draft',
             email: 'test-user-6@jisc.ac.uk',
             confirmedCoAuthor: true,
-            linkedUser: 'test-user-6'
+            linkedUser: 'test-user-6',
+            retainApproval: true
         },
         {
             id: 'coauthor-test-user-7-problem-draft',
             email: 'test-user-7@jisc.ac.uk',
-            confirmedCoAuthor: false
+            confirmedCoAuthor: false,
+            retainApproval: true
         },
         {
             id: 'coauthor-test-user-8-problem-draft',
             email: 'test-user-8@jisc.ac.uk',
-            confirmedCoAuthor: false
+            confirmedCoAuthor: false,
+            retainApproval: true
         }
     ];
 
@@ -131,7 +135,7 @@ describe('Batch update co-authors', () => {
         expect(getCoAuthors.body[3]).toHaveProperty('email', newCoAuthors[3].email);
     });
 
-    test('Co-authors details can be edited, such as email', async () => {
+    test('Email can be edited', async () => {
         const newCoAuthors = [
             ...problemDraft1DefaultCoAuthors.slice(0, 2),
             {
@@ -155,6 +159,42 @@ describe('Batch update co-authors', () => {
         expect(getCoAuthors.status).toEqual(200);
         expect(getCoAuthors.body).not.toMatchObject(problemDraft1DefaultCoAuthors);
         expect(getCoAuthors.body).not.toMatchObject(newCoAuthors);
+    });
+
+    test('Other than email and position, no other fields can be changed', async () => {
+        const changedCoAuthor = {
+            ...problemDraft1DefaultCoAuthors[3],
+            // Attempting to change these fields.
+            confirmedCoAuthor: true,
+            approvalRequested: true,
+            retainApproval: false,
+            linkedUser: 'some-user',
+            createdAt: '2000-01-01T00:00:00.000Z',
+            reminderDate: '2010-01-01T00:00:00.000Z',
+            isIndependent: true
+        };
+        const newCoAuthors = [...problemDraft1DefaultCoAuthors.slice(0, 3), changedCoAuthor];
+
+        const updateCoAuthors = await testUtils.agent
+            .put('/publication-versions/publication-problem-draft-v1/coauthors')
+            .send(newCoAuthors)
+            .query({ apiKey: '000000005' });
+
+        expect(updateCoAuthors.status).toEqual(200);
+
+        const coAuthorAttemptedToChange = await client.prisma.coAuthors.findUnique({
+            where: {
+                id: changedCoAuthor.id
+            }
+        });
+
+        expect(coAuthorAttemptedToChange?.confirmedCoAuthor).not.toEqual(changedCoAuthor.confirmedCoAuthor);
+        expect(coAuthorAttemptedToChange?.approvalRequested).not.toEqual(changedCoAuthor.approvalRequested);
+        expect(coAuthorAttemptedToChange?.retainApproval).not.toEqual(changedCoAuthor.retainApproval);
+        expect(coAuthorAttemptedToChange?.linkedUser).not.toEqual(changedCoAuthor.linkedUser);
+        expect(coAuthorAttemptedToChange?.createdAt).not.toEqual(changedCoAuthor.createdAt);
+        expect(coAuthorAttemptedToChange?.reminderDate).not.toEqual(changedCoAuthor.reminderDate);
+        expect(coAuthorAttemptedToChange?.isIndependent).not.toEqual(changedCoAuthor.isIndependent);
     });
 
     test('Data must be array', async () => {

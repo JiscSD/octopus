@@ -565,6 +565,7 @@ export interface CoAuthor {
     linkedUser: null | string;
     confirmedCoAuthor: boolean;
     approvalRequested: boolean;
+    retainApproval: boolean;
     email: string;
     publicationVersionId: string;
     createdAt?: string;
@@ -605,6 +606,7 @@ export interface ConfirmCoAuthorBody {
 
 export interface ChangeCoAuthorRequestBody {
     confirm: boolean;
+    retainApproval: boolean;
 }
 export interface UpdateCoAuthorPathParams {
     publicationVersionId: string;

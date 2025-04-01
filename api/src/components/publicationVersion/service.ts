@@ -52,6 +52,7 @@ export const defaultPublicationVersionInclude = {
             publicationVersionId: true,
             confirmedCoAuthor: true,
             approvalRequested: true,
+            retainApproval: true,
             createdAt: true,
             reminderDate: true,
             isIndependent: true,
