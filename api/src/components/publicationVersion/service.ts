@@ -510,19 +510,6 @@ export const create = async (previousVersion: I.PrivatePublicationVersion, user:
               }
     );
 
-    if (!previousVersionCoAuthors.find((coAuthor) => coAuthor.linkedUser === user.id)) {
-        // enforce adding the new corresponding author to coAuthors list - mainly used for seed data eg. tests..
-        previousVersionCoAuthors.unshift({
-            email: user.email ?? '',
-            linkedUser: user.id,
-            confirmedCoAuthor: true,
-            approvalRequested: false,
-            affiliations: [],
-            isIndependent: false,
-            position: 0
-        });
-    }
-
     // create new version based on the previous one
     const newPublicationVersion = await client.prisma.publicationVersion.create({
         data: {
