@@ -57,6 +57,22 @@ resource "aws_codepipeline" "docker-image-codepipeline" {
       }
     }
   }
+
+  trigger {
+    provider_type = "CodeStarSourceConnection"
+    git_configuration {
+      source_action_name = "Source"
+      push {
+        branches {
+          includes = [var.environment]
+        }
+        file_paths {
+          # Whenever something to do with the ARI ingest code or this docker container is changed.
+          includes = ["infra/modules/codepipeline/buildspec/deploy-docker-image.yml", "api"]
+        }
+      }
+    }
+  }
 }
 
 data "aws_iam_policy_document" "codepipeline_role_policy" {
