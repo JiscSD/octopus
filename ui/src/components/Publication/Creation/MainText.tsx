@@ -152,7 +152,6 @@ const MainText: React.FC = (): React.ReactElement | null => {
                     <Components.TextEditor
                         defaultContent={publicationVersion.content || ''}
                         contentChangeHandler={updateContent}
-                        references={references}
                     />
                 )}
             </div>
