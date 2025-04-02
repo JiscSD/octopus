@@ -8,6 +8,18 @@ resource "aws_s3_bucket" "image_bucket" {
   bucket = "science-octopus-publishing-images-${var.environment}"
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "image_bucket_lifecycle" {
+  bucket = aws_s3_bucket.image_bucket.id
+
+  rule {
+    id     = "image_bucket_intelligent_tiering"
+    status = "Enabled"
+    transition {
+      storage_class = "INTELLIGENT_TIERING"
+    }
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "image_bucket_allow_public" {
   bucket = aws_s3_bucket.image_bucket.id
 
@@ -19,6 +31,18 @@ resource "aws_s3_bucket" "pdf_bucket" {
   bucket = "science-octopus-publishing-pdfs-${var.environment}"
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "pdf_bucket_lifecycle" {
+  bucket = aws_s3_bucket.pdf_bucket.id
+
+  rule {
+    id     = "pdf_bucket_intelligent_tiering"
+    status = "Enabled"
+    transition {
+      storage_class = "INTELLIGENT_TIERING"
+    }
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "pdf_bucket_allow_public" {
   bucket = aws_s3_bucket.pdf_bucket.id
 
@@ -28,6 +52,18 @@ resource "aws_s3_bucket_public_access_block" "pdf_bucket_allow_public" {
 
 resource "aws_s3_bucket" "sitemap_bucket" {
   bucket = "science-octopus-publishing-sitemaps-${var.environment}"
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "sitemap_bucket_lifecycle" {
+  bucket = aws_s3_bucket.sitemap_bucket.id
+
+  rule {
+    id     = "sitemap_bucket_intelligent_tiering"
+    status = "Enabled"
+    transition {
+      storage_class = "INTELLIGENT_TIERING"
+    }
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "sitemap_bucket_allow_public" {
