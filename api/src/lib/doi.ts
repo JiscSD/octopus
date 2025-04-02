@@ -206,6 +206,7 @@ export const createFullDOIPayload = async (data: {
     const references = await referenceService.getAllByPublicationVersion(publicationVersion.id);
     const { linkedFrom, linkedTo } = await publicationService.getDirectLinksForPublication(
         publicationVersion.versionOf,
+        null,
         true
     );
 
@@ -427,6 +428,7 @@ export const updateRelatedIdentifiers = async (
     const references = await referenceService.getAllByPublicationVersion(publicationVersion.id);
     const { linkedFrom, linkedTo } = await publicationService.getDirectLinksForPublication(
         publicationVersion.versionOf,
+        null,
         true
     );
     const relatedIdentifiers = await getRelatedIdentifiers(

@@ -85,6 +85,7 @@ export { default as PublicationSidebarCardSections } from './Publication/Sidebar
 export { default as PublicationSimpleResult } from './Publication/SimpleResult';
 export { default as PublicationSkeleton } from './Publication/Skeleton';
 export { default as PublicationVisualization } from './Publication/Visualization';
+export { default as PublicationVisualizationBox } from './Publication/Visualization/Box';
 export { default as RelatedPublications } from './Publication/RelatedPublications';
 export { default as RelatedPublicationsCard } from './Publication/RelatedPublications/Card';
 export { default as RelatedPublicationsResult } from './Publication/RelatedPublications/Result';
