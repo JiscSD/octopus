@@ -3,8 +3,9 @@ import * as testUtils from 'lib/testUtils';
 import * as eventService from 'event/service';
 
 describe('Process request control events', () => {
-    const fifteenDaysAgo = new Date();
-    fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+    // 16 to be safe - if UTC to BST changes within this time frame, 15 may not be enough
+    const sixteenDaysAgo = new Date();
+    sixteenDaysAgo.setDate(sixteenDaysAgo.getDate() - 16);
 
     beforeEach(async () => {
         await testUtils.clearDB();
@@ -28,7 +29,7 @@ describe('Process request control events', () => {
         await eventService.processRequestControlEvents([
             {
                 id: 'test-control-request',
-                createdAt: fifteenDaysAgo,
+                createdAt: sixteenDaysAgo,
                 type: 'REQUEST_CONTROL',
                 data: {
                     requesterId: 'test-user-2',
