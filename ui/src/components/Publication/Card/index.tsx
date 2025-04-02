@@ -16,29 +16,6 @@ type Props = {
 const Card: React.FC<Props> = (props): React.ReactElement => {
     const authors = React.useMemo(() => {
         const authors = props.publicationVersion.coAuthors.filter((author) => author.confirmedCoAuthor && author.user);
-
-        // make sure authors list include the corresponding author
-        const correspondingUser = props.publicationVersion.user;
-        if (!authors.find((author) => author.linkedUser === correspondingUser.id)) {
-            authors.unshift({
-                id: correspondingUser.id,
-                approvalRequested: false,
-                confirmedCoAuthor: true,
-                email: correspondingUser.email || '',
-                publicationVersionId: props.publicationVersion.id,
-                linkedUser: correspondingUser.id,
-                isIndependent: true,
-                affiliations: [],
-                user: {
-                    orcid: correspondingUser.orcid,
-                    firstName: correspondingUser.firstName,
-                    lastName: correspondingUser.lastName,
-                    role: correspondingUser.role,
-                    url: correspondingUser.url
-                }
-            });
-        }
-
         return authors;
     }, [props.publicationVersion]);
 

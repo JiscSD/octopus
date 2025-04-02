@@ -25,7 +25,8 @@ describe('create coauthor', () => {
                     email: 'emailtest@emailtest.com',
                     linkedUser: null,
                     approvalRequested: false,
-                    confirmedCoAuthor: false
+                    confirmedCoAuthor: false,
+                    retainApproval: true
                 }
             ]);
 

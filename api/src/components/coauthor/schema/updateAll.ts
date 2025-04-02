@@ -23,6 +23,9 @@ const updateAll: I.Schema = {
             approvalRequested: {
                 type: 'boolean'
             },
+            retainApproval: {
+                type: 'boolean'
+            },
             linkedUser: {
                 type: ['string', 'null']
             },

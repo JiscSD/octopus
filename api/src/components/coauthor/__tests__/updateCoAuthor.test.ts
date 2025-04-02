@@ -1,3 +1,4 @@
+import * as client from 'lib/client';
 import * as testUtils from 'lib/testUtils';
 
 describe('Update co-author status', () => {
@@ -48,5 +49,24 @@ describe('Update co-author status', () => {
             });
 
         expect(coAuthor.status).toEqual(403);
+    });
+
+    test('Co-author can choose whether their approval is retained', async () => {
+        const confirmation = await testUtils.agent
+            .patch('/publication-versions/publication-problem-locked-1-v1/coauthor-confirmation')
+            .query({ apiKey: '000000006' })
+            .send({
+                confirm: true,
+                retainApproval: false
+            });
+
+        expect(confirmation.status).toEqual(200);
+        const coAuthor = await client.prisma.coAuthors.findFirst({
+            where: {
+                publicationVersionId: 'publication-problem-locked-1-v1',
+                linkedUser: 'test-user-6'
+            }
+        });
+        expect(coAuthor?.retainApproval).toEqual(false);
     });
 });
