@@ -115,11 +115,19 @@ export const createLinkValidation = async (
                 };
             }
 
-            // does a link already exist?
+            // Does a link already exist?
             const linkExists = await linkService.doesLinkExist(from.publicationId, toPublicationId);
 
             if (linkExists) {
                 return { valid: false, details: { code: 400, message: 'Link already exists.' } };
+            }
+
+            // Publications cannot link to themselves.
+            if (from.publicationId === toPublicationId) {
+                return {
+                    valid: false,
+                    details: { code: 400, message: 'You cannot link a publication to itself.' }
+                };
             }
         } else {
             fromType = from.type;

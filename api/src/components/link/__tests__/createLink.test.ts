@@ -137,6 +137,21 @@ describe('Create links', () => {
             'You cannot create a link from the publication with id publication-hypothesis-draft.'
         );
     });
+
+    test('Cannot create a link from a publication to itself', async () => {
+        const link = await testUtils.agent
+            .post('/links')
+            .query({
+                apiKey: '000000005'
+            })
+            .send({
+                to: 'publication-problem-draft',
+                from: 'publication-problem-draft'
+            });
+
+        expect(link.statusCode).toEqual(400);
+        expect(link.body.message).toEqual('You cannot link a publication to itself.');
+    });
 });
 
 describe('canLinkBeCreatedBetweenPublicationTypes', () => {
