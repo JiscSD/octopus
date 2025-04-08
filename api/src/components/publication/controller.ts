@@ -118,7 +118,7 @@ export const create = async (
                             type: type
                         },
                         linkTargetId,
-                        event.user.id
+                        event.user
                     );
 
                     if (!validateLink.valid) {
