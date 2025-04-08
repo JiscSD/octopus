@@ -447,10 +447,11 @@ test.describe('Publication flow', () => {
         );
         // Go to Linked Items tab
         await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
-        // Topic related controls should not be visible
-        await expect(page.locator(PageModel.publish.linkedItems.entityTypeSelect)).not.toBeVisible();
-        await expect(page.locator(PageModel.publish.linkedItems.publicationInput)).toBeVisible();
-        await expect(page.locator(PageModel.publish.linkedItems.topicInput)).not.toBeVisible();
+        // Topic option should not be visible
+        const options = await page.getByRole('option').all();
+        await expect(options.length).toBe(2);
+        await expect(options[0]).toHaveAccessibleName('Publications');
+        await expect(options[1]).toHaveAccessibleName('Drafts');
     });
 
     test('Create a problem from an existing research topic', async ({ browser }) => {
