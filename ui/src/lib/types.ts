@@ -102,7 +102,7 @@ export type Severity = 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR' | 'RED_FLAG';
 
 export type LicenceType = 'CC_BY' | 'CC_BY_SA' | 'CC_BY_NC' | 'CC_BY_NC_SA';
 
-export type PublicationStatuses = 'DRAFT' | 'LIVE' | 'HIDDEN' | 'LOCKED';
+export type PublicationStatus = 'DRAFT' | 'LIVE' | 'HIDDEN' | 'LOCKED';
 
 export type ImageUploadTypes = 'FILE_UPLOAD' | 'URL_SOURCE' | 'IMAGE_LIBRARY';
 
@@ -320,7 +320,12 @@ export type CreationSteps = {
 
 export type TabCompletionStatus = 'COMPLETE' | 'INCOMPLETE';
 
-export type LinkedEntityType = 'PUBLICATION' | 'TOPIC';
+export type LinkedEntityType = 'DRAFT_PUBLICATION' | 'LIVE_PUBLICATION' | 'TOPIC';
+
+export type LinkedPublicationComboboxOptionValue = {
+    id: string;
+    title: string;
+};
 
 export type BookmarkType = 'PUBLICATION' | 'TOPIC';
 

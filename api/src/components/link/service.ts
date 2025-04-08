@@ -112,6 +112,7 @@ type LinksForInvalidCheck = {
     };
     versionTo: {
         coAuthors: {
+            email: string;
             linkedUser: string | null;
         }[];
         versionNumber: number;
@@ -139,8 +140,12 @@ const deleteInvalidLinks = async (links: LinksForInvalidCheck) => {
                 !versionTo.isLatestLiveVersion &&
                 versionTo.versionNumber === 1 &&
                 // And the corresponding author of the "from" publication is not a co-author of the "to" publication,
-                // (for example, after updating co-authors or transferring ownership)
-                !versionTo.coAuthors.some((coAuthor) => coAuthor.linkedUser === versionFrom.createdBy)
+                // (for example, after updating co-authors or transferring ownership).
+                // Unconfirmed coauthors are allowed to retain links - they are checked by email.
+                !versionTo.coAuthors.some(
+                    (coAuthor) =>
+                        coAuthor.linkedUser === versionFrom.createdBy || coAuthor.email === versionFrom.user.email
+                )
             ) {
                 // Delete the link, because the corresponding author on the "from" has no permission to see the "to" draft.
                 await deleteLink(link.id);
@@ -194,6 +199,7 @@ const flattenDraftLinkData = (
         publicationTo: {
             versions: {
                 coAuthors: {
+                    email: string;
                     linkedUser: string | null;
                 }[];
                 versionNumber: number;
@@ -287,6 +293,7 @@ export const removeInvalidLinksForPublication = async (publicationId: string, di
                             versionNumber: true,
                             coAuthors: {
                                 select: {
+                                    email: true,
                                     linkedUser: true
                                 }
                             }

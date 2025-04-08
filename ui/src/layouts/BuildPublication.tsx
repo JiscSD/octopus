@@ -71,11 +71,13 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
 
             if (!publicationVersion.title) ready = { ready: false, message: 'You must provide a title' };
             if (!publicationVersion.content) ready = { ready: false, message: 'You must provide main text' };
+            const hasLiveLinks =
+                linkedTo.length && linkedTo.every((linkedPublication) => linkedPublication.currentStatus === 'LIVE');
             if (
                 (publicationVersion.publication.type === 'PROBLEM' &&
-                    !linkedTo.length &&
+                    !hasLiveLinks &&
                     !publicationVersion.topics.length) ||
-                (publicationVersion.publication.type !== 'PROBLEM' && !store.linkedTo?.length)
+                (publicationVersion.publication.type !== 'PROBLEM' && !hasLiveLinks)
             )
                 ready = { ready: false, message: 'You must link this publication to at least one other item' };
 

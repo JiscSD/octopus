@@ -957,3 +957,9 @@ export const doiBaseUrl = `https://${process.env.NEXT_PUBLIC_STAGE === 'prod' ? 
 
 // Defines the boundaries for LaTeX expressions in publication content. Expressions are enclosed on both ends by "$$".
 export const latexRegex = /\$\$([^$]*)\$\$/gi;
+
+export const linkedEntityTypeLabels: Record<Types.LinkedEntityType, string> = {
+    LIVE_PUBLICATION: 'Publications',
+    TOPIC: 'Research topics',
+    DRAFT_PUBLICATION: 'Drafts'
+};

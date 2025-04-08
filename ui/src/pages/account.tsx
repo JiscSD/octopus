@@ -75,7 +75,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
     const { setUser } = Stores.useAuthStore();
     const [revokeAccessError, setRevokeAccessError] = useState<string | null>(null);
     const [isRevokingAccess, setIsRevokingAccess] = useState(false);
-    const [versionStatusArray, setVersionStatusArray] = useState<Types.PublicationStatuses[]>([
+    const [versionStatusArray, setVersionStatusArray] = useState<Types.PublicationStatus[]>([
         'LIVE',
         'DRAFT',
         'LOCKED'

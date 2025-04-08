@@ -48,7 +48,7 @@ export const canLinkBeCreatedBetweenPublicationTypes = (
 export const createLinkValidation = async (
     from: { existing: true; publicationId: string } | { existing: false; type: I.PublicationType },
     toPublicationId: string,
-    creatorUserId: string
+    creator: I.User
 ): Promise<
     | { valid: false; details: { code: number; message: string } }
     | {
@@ -94,7 +94,7 @@ export const createLinkValidation = async (
             }
 
             // The link creator is not the owner of the publication
-            if (fromLatestVersion.user.id !== creatorUserId) {
+            if (fromLatestVersion.user.id !== creator.id) {
                 return {
                     valid: false,
                     details: {
@@ -115,17 +115,25 @@ export const createLinkValidation = async (
                 };
             }
 
-            // does a link already exist?
+            // Does a link already exist?
             const linkExists = await linkService.doesLinkExist(from.publicationId, toPublicationId);
 
             if (linkExists) {
                 return { valid: false, details: { code: 400, message: 'Link already exists.' } };
             }
+
+            // Publications cannot link to themselves.
+            if (from.publicationId === toPublicationId) {
+                return {
+                    valid: false,
+                    details: { code: 400, message: 'You cannot link a publication to itself.' }
+                };
+            }
         } else {
             fromType = from.type;
         }
 
-        const toPublication = await publicationService.get(toPublicationId);
+        const toPublication = await publicationService.privateGet(toPublicationId);
 
         if (!toPublication) {
             return {
@@ -147,8 +155,23 @@ export const createLinkValidation = async (
         if (toLatestLiveVersion === undefined) {
             // This publication has not been made live.
 
+            // Peer reviews cannot link to a draft.
+            if (fromType === 'PEER_REVIEW') {
+                return {
+                    valid: false,
+                    details: {
+                        code: 400,
+                        message: `Publication with id ${toPublicationId} is not LIVE, and peer reviews cannot link to drafts.`
+                    }
+                };
+            }
+
             // If the user is a coauthor on the current version of the publication, they can link to it even if it's a draft.
-            if (toLatestVersion.coAuthors.some((coAuthor) => coAuthor.linkedUser === creatorUserId)) {
+            if (
+                toLatestVersion.coAuthors.some(
+                    (coAuthor) => coAuthor.linkedUser === creator.id || coAuthor.email === creator.email
+                )
+            ) {
                 toVersionId = toLatestVersion.id;
             } else {
                 return {
@@ -197,7 +220,7 @@ export const create = async (event: I.AuthenticatedAPIRequest<I.CreateLinkBody>)
         const validate = await createLinkValidation(
             { existing: true, publicationId: event.body.from },
             event.body.to,
-            event.user.id
+            event.user
         );
 
         if (!validate.valid) {

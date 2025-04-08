@@ -16,7 +16,7 @@ interface BoxEntry {
     createdBy: string;
     authorFirstName: string;
     authorLastName: string;
-    publishedDate: string;
+    publishedDate: string | null;
     authors: Interfaces.LinkedPublication['authors'];
     pointers: string[];
     flagCount: number;
@@ -98,14 +98,16 @@ const Box: React.FC<BoxProps> = (props): React.ReactElement => {
                         >
                             {Helpers.abbreviateUserName(mainAuthor)}
                         </span>
-                        <time
-                            className={`${
-                                props.isSelected ? 'text-teal-50' : 'text-grey-600'
-                            } block text-xxs transition-colors duration-500 dark:text-grey-200 2xl:text-xs`}
-                            suppressHydrationWarning
-                        >
-                            {Helpers.formatDate(props.publishedDate, 'short')}
-                        </time>
+                        {props.publishedDate && (
+                            <time
+                                className={`${
+                                    props.isSelected ? 'text-teal-50' : 'text-grey-600'
+                                } block text-xxs transition-colors duration-500 dark:text-grey-200 2xl:text-xs`}
+                                suppressHydrationWarning
+                            >
+                                {Helpers.formatDate(props.publishedDate, 'short')}
+                            </time>
+                        )}
                     </div>
                     <Components.EngagementCounts
                         flagCount={props.flagCount}

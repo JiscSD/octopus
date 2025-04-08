@@ -140,9 +140,9 @@ describe('Update publication version status', () => {
 
     test('Publication owner can publish if all co-authors are confirmed', async () => {
         const updatePublicationVersion = await testUtils.agent
-            .put('/publication-versions/publication-protocol-draft-v1/status/LIVE')
+            .put('/publication-versions/locked-publication-problem-confirmed-co-authors-v1/status/LIVE')
             .query({
-                apiKey: '000000005'
+                apiKey: '123456789'
             });
 
         expect(updatePublicationVersion.status).toEqual(200);
@@ -152,7 +152,7 @@ describe('Update publication version status', () => {
 
     test('Publication owner cannot publish if not all co-authors are confirmed', async () => {
         const updatePublicationVersion = await testUtils.agent
-            .put('/publication-versions/publication-hypothesis-draft-v1/status/LIVE')
+            .put('/publication-versions/publication-problem-draft-v1/status/LIVE')
             .query({
                 apiKey: '000000005'
             });
@@ -163,7 +163,7 @@ describe('Update publication version status', () => {
         );
 
         const getPublicationVersion = await testUtils.agent
-            .get('/publications/publication-hypothesis-draft/publication-versions/latest')
+            .get('/publications/publication-problem-draft/publication-versions/latest')
             .query({
                 apiKey: '000000005'
             });
@@ -398,7 +398,7 @@ describe('Update publication version status', () => {
 
         expect(updatePublicationVersionAttempt.status).toEqual(403);
         expect(updatePublicationVersionAttempt.body.message).toEqual(
-            'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
+            'One or more linked publications are still in draft. Please ensure all linked publications are live before publishing this one.'
         );
     });
 });
