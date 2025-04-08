@@ -155,6 +155,17 @@ export const createLinkValidation = async (
         if (toLatestLiveVersion === undefined) {
             // This publication has not been made live.
 
+            // Peer reviews cannot link to a draft.
+            if (fromType === 'PEER_REVIEW') {
+                return {
+                    valid: false,
+                    details: {
+                        code: 400,
+                        message: `Publication with id ${toPublicationId} is not LIVE, and peer reviews cannot link to drafts.`
+                    }
+                };
+            }
+
             // If the user is a coauthor on the current version of the publication, they can link to it even if it's a draft.
             if (
                 toLatestVersion.coAuthors.some(

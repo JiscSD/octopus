@@ -78,11 +78,19 @@ const Links: React.FC = (): React.ReactElement => {
     // When making a research problem, we refer to "items" to link to (because it could be a topic), and not just "publications"
     const isProblem = type === 'PROBLEM';
     const linkableEntityLabel = isProblem ? 'item' : 'publication';
-    const linkableEntityTypes = isProblem
-        ? (Object.keys(Config.values.linkedEntityTypeLabels) as Types.LinkedEntityType[])
-        : (Object.keys(Config.values.linkedEntityTypeLabels).filter(
-              (type) => type !== 'TOPIC'
-          ) as Types.LinkedEntityType[]);
+    let linkableEntityTypes: Types.LinkedEntityType[];
+
+    // Problems can link to all entity types.
+    if (isProblem) {
+        linkableEntityTypes = Object.keys(Config.values.linkedEntityTypeLabels) as Types.LinkedEntityType[];
+    } else {
+        // Peer reviews can't link to drafts.
+        if (type === 'PEER_REVIEW') {
+            linkableEntityTypes = ['LIVE_PUBLICATION'];
+        } else {
+            linkableEntityTypes = ['LIVE_PUBLICATION', 'DRAFT_PUBLICATION'];
+        }
+    }
 
     return (
         <div className="space-y-6 lg:space-y-10 2xl:w-10/12">
@@ -126,22 +134,24 @@ const Links: React.FC = (): React.ReactElement => {
             <div className="relative">
                 <Components.PublicationCreationStepTitle text="Add links" required />
                 <div className="flex flex-col flex-wrap gap-4 sm:flex-row sm:items-center">
-                    <select
-                        name="linked-entity-type"
-                        id="linked-entity-type"
-                        onChange={(e) => {
-                            const value: Types.LinkedEntityType = e.target.value as Types.LinkedEntityType;
-                            setEntityType(value);
-                        }}
-                        value={entityType}
-                        className="block rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500 sm:mr-0"
-                    >
-                        {linkableEntityTypes.map((type) => (
-                            <option key={type} value={type}>
-                                {Config.values.linkedEntityTypeLabels[type]}
-                            </option>
-                        ))}
-                    </select>
+                    {type !== 'PEER_REVIEW' && (
+                        <select
+                            name="linked-entity-type"
+                            id="linked-entity-type"
+                            onChange={(e) => {
+                                const value: Types.LinkedEntityType = e.target.value as Types.LinkedEntityType;
+                                setEntityType(value);
+                            }}
+                            value={entityType}
+                            className="block rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500 sm:mr-0"
+                        >
+                            {linkableEntityTypes.map((type) => (
+                                <option key={type} value={type}>
+                                    {Config.values.linkedEntityTypeLabels[type]}
+                                </option>
+                            ))}
+                        </select>
+                    )}
                     <div className="flex-1">
                         {entityType === 'TOPIC' ? (
                             <Components.LinkedTopicsCombobox
