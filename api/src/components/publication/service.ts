@@ -975,7 +975,7 @@ export const getDirectLinksForPublication = async (
                     publicationTo: {
                         versions: {
                             some: {
-                                isLatestLiveVersion: true
+                                isLatestLiveVersion: includeDraftVersion ? undefined : true
                             }
                         }
                     }
@@ -998,7 +998,7 @@ export const getDirectLinksForPublication = async (
                             externalSource: true,
                             versions: {
                                 where: {
-                                    isLatestLiveVersion: true
+                                    isLatestLiveVersion: includeDraftVersion ? undefined : true
                                 },
                                 include: {
                                     user: true
@@ -1031,7 +1031,7 @@ export const getDirectLinksForPublication = async (
                     publicationFrom: {
                         versions: {
                             some: {
-                                isLatestLiveVersion: true
+                                isLatestLiveVersion: includeDraftVersion ? undefined : true
                             }
                         }
                     }
@@ -1053,7 +1053,7 @@ export const getDirectLinksForPublication = async (
                             type: true,
                             versions: {
                                 where: {
-                                    isLatestLiveVersion: true
+                                    isLatestLiveVersion: includeDraftVersion ? undefined : true
                                 },
                                 include: {
                                     user: true
