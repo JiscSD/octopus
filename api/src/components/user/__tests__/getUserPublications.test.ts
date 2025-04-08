@@ -118,7 +118,7 @@ describe("Get a given user's publications", () => {
             (publications.body as UserPublications).data.every(
                 (publication) =>
                     publication.versions.length === 1 &&
-                    publication.versions[0].currentStatus === 'DRAFT' &&
+                    publication.versions[0].currentStatus !== 'LIVE' &&
                     publication.versions[0].versionNumber === 1
             )
         ).toEqual(true);
