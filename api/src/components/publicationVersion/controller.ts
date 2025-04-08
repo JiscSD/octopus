@@ -312,9 +312,9 @@ export const updateStatus = async (
             if (newStatus === 'LIVE') {
                 const isReadyToPublish = await publicationVersionService.checkIsReadyToPublish(publicationVersion);
 
-                if (!isReadyToPublish) {
+                if (!isReadyToPublish.ready) {
                     return response.json(403, {
-                        message: 'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
+                        message: isReadyToPublish.reason
                     });
                 }
             }
@@ -336,9 +336,9 @@ export const updateStatus = async (
             if (newStatus === 'LIVE') {
                 const isReadyToPublish = await publicationVersionService.checkIsReadyToPublish(publicationVersion);
 
-                if (!isReadyToPublish) {
+                if (!isReadyToPublish.ready) {
                     return response.json(403, {
-                        message: 'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
+                        message: isReadyToPublish.reason
                     });
                 }
             }
