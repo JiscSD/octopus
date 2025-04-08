@@ -1,18 +1,18 @@
 import React, { useCallback } from 'react';
+import axios from 'axios';
 
+import * as api from '@/api';
 import * as Components from '@/components';
+import * as Config from '@/config';
 import * as Helpers from '@/helpers';
 import * as Stores from '@/stores';
 import * as Types from '@/types';
-import * as api from '@/api';
-import * as Config from '@/config';
-import axios from 'axios';
 
 /**
  * @description Edit links
  */
 const Links: React.FC = (): React.ReactElement => {
-    const [entityType, setEntityType] = React.useState<Types.LinkedEntityType>('PUBLICATION');
+    const [entityType, setEntityType] = React.useState<Types.LinkedEntityType>('LIVE_PUBLICATION');
     const { publicationVersionId, topics, updateTopics, linkedTo, updateLinkedTo, error, setError } =
         Stores.usePublicationCreationStore((state) => ({
             publicationVersionId: state.publicationVersion.id,
@@ -27,7 +27,7 @@ const Links: React.FC = (): React.ReactElement => {
     const user = Stores.useAuthStore((state) => state.user);
 
     const type = Stores.usePublicationCreationStore((state) => state.publicationVersion.publication.type);
-    const availableLinkTypes = Helpers.publicationsAvailabletoPublication(type);
+    const linkablePublicationTypes = Helpers.publicationsAvailabletoPublication(type);
 
     const [loading, setLoading] = React.useState<boolean>(false);
 
@@ -78,6 +78,11 @@ const Links: React.FC = (): React.ReactElement => {
     // When making a research problem, we refer to "items" to link to (because it could be a topic), and not just "publications"
     const isProblem = type === 'PROBLEM';
     const linkableEntityLabel = isProblem ? 'item' : 'publication';
+    const linkableEntityTypes = isProblem
+        ? (Object.keys(Config.values.linkedEntityTypeLabels) as Types.LinkedEntityType[])
+        : (Object.keys(Config.values.linkedEntityTypeLabels).filter(
+              (type) => type !== 'TOPIC'
+          ) as Types.LinkedEntityType[]);
 
     return (
         <div className="space-y-6 lg:space-y-10 2xl:w-10/12">
@@ -96,9 +101,13 @@ const Links: React.FC = (): React.ReactElement => {
                 <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
                     Your {Helpers.formatPublicationType(type)} must be linked from at least one other{' '}
                     {linkableEntityLabel} on Octopus. {Helpers.formatPublicationType(type)} can be linked from{' '}
-                    {availableLinkTypes.map((type, index) => {
+                    {linkablePublicationTypes.map((type, index) => {
                         return `${Helpers.formatPublicationType(type)}${
-                            index !== availableLinkTypes.length - 1 ? ', ' : isProblem ? ' and Research Topic. ' : '. '
+                            index !== linkablePublicationTypes.length - 1
+                                ? ', '
+                                : isProblem
+                                  ? ' and Research Topic. '
+                                  : '. '
                         }`;
                     })}
                     For more information on publication types, please see the{' '}
@@ -117,21 +126,22 @@ const Links: React.FC = (): React.ReactElement => {
             <div className="relative">
                 <Components.PublicationCreationStepTitle text="Add links" required />
                 <div className="flex flex-col flex-wrap gap-4 sm:flex-row sm:items-center">
-                    {isProblem && (
-                        <select
-                            name="linked-entity-type"
-                            id="linked-entity-type"
-                            onChange={(e) => {
-                                const value: Types.LinkedEntityType = e.target.value as Types.LinkedEntityType;
-                                setEntityType(value);
-                            }}
-                            value={entityType}
-                            className="block rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500 sm:mr-0"
-                        >
-                            <option value="PUBLICATION">Publications</option>
-                            <option value="TOPIC">Research topics</option>
-                        </select>
-                    )}
+                    <select
+                        name="linked-entity-type"
+                        id="linked-entity-type"
+                        onChange={(e) => {
+                            const value: Types.LinkedEntityType = e.target.value as Types.LinkedEntityType;
+                            setEntityType(value);
+                        }}
+                        value={entityType}
+                        className="block rounded-md border border-grey-200 outline-none focus:ring-2 focus:ring-yellow-500 sm:mr-0"
+                    >
+                        {linkableEntityTypes.map((type) => (
+                            <option key={type} value={type}>
+                                {Config.values.linkedEntityTypeLabels[type]}
+                            </option>
+                        ))}
+                    </select>
                     <div className="flex-1">
                         {entityType === 'TOPIC' ? (
                             <Components.LinkedTopicsCombobox
@@ -142,6 +152,7 @@ const Links: React.FC = (): React.ReactElement => {
                             />
                         ) : (
                             <Components.LinkedPublicationsCombobox
+                                draftsOnly={entityType === 'DRAFT_PUBLICATION'}
                                 setError={setError}
                                 loading={loading}
                                 setLoading={setLoading}
@@ -155,7 +166,7 @@ const Links: React.FC = (): React.ReactElement => {
                 <Components.LinkedItemTable
                     deleteLink={deletePublicationLink}
                     entities={linkedTo}
-                    entityType="PUBLICATION"
+                    entityType="LIVE_PUBLICATION"
                 />
             )}
             {!!topics?.length && (
