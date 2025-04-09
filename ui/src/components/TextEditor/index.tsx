@@ -1,6 +1,7 @@
 import React from 'react';
 import * as HeadlessUi from '@headlessui/react';
 import * as SolidIcon from '@heroicons/react/24/solid';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 import * as tiptap from '@tiptap/react';
 import * as FAIcons from 'react-icons/fa';
 import * as api from '@/api';
@@ -728,20 +729,32 @@ const TextEditor: React.FC<TextEditorProps> = (props) => {
         content: props.defaultContent
     });
 
+    const guidanceButtonClasses = `flex items-center space-x-2 rounded-sm text-sm font-medium text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50`;
+
     return textEditor ? (
         <>
             <span className="mb-2 block text-sm leading-snug text-grey-700 transition-colors duration-500 dark:text-white-50">
                 Your publication can be added via the main text editor, or imported via a Word document (.docx). Once
                 imported, your publication can be further edited in the text field.
             </span>
-            <button
-                onClick={() => setImportModalVisible(true)}
-                title="Import from Microsoft Word (.docx)"
-                className={`my-4 flex items-center space-x-2 rounded-sm text-sm font-medium text-grey-800 outline-none transition-colors duration-500 focus:ring-2 focus:ring-yellow-400 disabled:opacity-50 disabled:hover:cursor-not-allowed dark:text-white-50`}
-            >
-                <img src="/images/docx.svg" alt="Word Document" className="h-6 w-6" />
-                <span>Import from Microsoft Word (.docx)</span>
-            </button>
+            <span className="flex flex-col space-y-4 space-x-0 sm:flex-row sm:space-y-0 sm:space-x-8 my-4">
+                <button
+                    onClick={() => setImportModalVisible(true)}
+                    title="Import from Microsoft Word (.docx)"
+                    className={guidanceButtonClasses}
+                >
+                    <img src="/images/docx.svg" alt="Word Document" className="h-6 w-6" />
+                    <span>Import from Microsoft Word (.docx)</span>
+                </button>
+                <Components.Link
+                    href="https://katex.org/docs/supported"
+                    className={guidanceButtonClasses}
+                    openNew={true}
+                >
+                    <span>Help using KaTeX for formulae</span>
+                    <OutlineIcons.ArrowTopRightOnSquareIcon className="h-4 w-4" />
+                </Components.Link>
+            </span>
 
             <div className="mb-4 rounded-md border border-grey-100 bg-white-50 shadow focus-within:ring-2 focus-within:ring-yellow-500">
                 <MenuBar
