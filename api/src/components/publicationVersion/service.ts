@@ -212,6 +212,7 @@ export const getAllByPublicationIds = async (ids: string[]) => {
                 select: {
                     id: true,
                     linkedUser: true,
+                    confirmedCoAuthor: true,
                     user: {
                         select: {
                             orcid: true,
