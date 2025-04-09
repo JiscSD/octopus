@@ -70,8 +70,6 @@ export const updateAll = async (publicationVersionId: string, authors: I.CoAutho
                 },
                 create: {
                     email: author.email.toLowerCase(),
-                    approvalRequested: false,
-                    confirmedCoAuthor: false,
                     publicationVersionId,
                     position: index
                 },
@@ -158,14 +156,20 @@ export const removeFromPublicationVersion = async (publicationVersionId: string,
     return removeCoAuthor;
 };
 
-export const updateConfirmation = async (publicationVersionId: string, userId: string, confirm: boolean) => {
+export const updateConfirmation = async (
+    publicationVersionId: string,
+    userId: string,
+    confirm: boolean,
+    retainApproval: boolean
+) => {
     const updateCoAuthor = await client.prisma.coAuthors.updateMany({
         where: {
             publicationVersionId,
             linkedUser: userId
         },
         data: {
-            confirmedCoAuthor: confirm
+            confirmedCoAuthor: confirm,
+            retainApproval
         }
     });
     await publicationVersionService.update(publicationVersionId, {

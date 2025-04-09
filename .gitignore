@@ -20,3 +20,6 @@ coverage
 
 # Docker
 volume
+
+# Playwright puts things at project root depending on VS code config
+playwright

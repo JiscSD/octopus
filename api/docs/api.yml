@@ -630,6 +630,8 @@ paths:
                                         $ref: "#/components/schemas/CoAuthorId"
                                       linkedUser:
                                         $ref: "#/components/schemas/CoAuthorLinkedUser"
+                                      confirmedCoAuthor:
+                                        $ref: "#/components/schemas/CoAuthorConfirmedCoAuthor"
                                       user:
                                         type: object
                                         properties:
