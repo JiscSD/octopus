@@ -3,6 +3,9 @@ const updateConfirmationSchema = {
     properties: {
         confirm: {
             type: 'boolean'
+        },
+        retainApproval: {
+            type: 'boolean'
         }
     },
     required: ['confirm'],

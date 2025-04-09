@@ -471,37 +471,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         [activeFlags]
     );
 
-    const authors = React.useMemo(() => {
-        if (!publicationVersion) {
-            return [];
-        }
-
-        const authors = [...publicationVersion.coAuthors];
-
-        // make sure authors list include the corresponding author
-        const correspondingUser = publicationVersion.user;
-        if (!authors.find((author) => author.linkedUser === correspondingUser.id)) {
-            authors.unshift({
-                id: correspondingUser.id,
-                approvalRequested: false,
-                confirmedCoAuthor: true,
-                email: correspondingUser.email || '',
-                publicationVersionId: publicationVersion.id,
-                linkedUser: correspondingUser.id,
-                isIndependent: true,
-                affiliations: [],
-                user: {
-                    orcid: correspondingUser.orcid,
-                    firstName: correspondingUser.firstName,
-                    lastName: correspondingUser.lastName,
-                    role: correspondingUser.role,
-                    url: correspondingUser.url
-                }
-            });
-        }
-
-        return authors;
-    }, [publicationVersion]);
+    const authors = publicationVersion?.coAuthors || [];
 
     const confirmedAuthors = useMemo(
         () => authors.filter((author) => author.confirmedCoAuthor && author.user),

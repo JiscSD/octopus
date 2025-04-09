@@ -19,23 +19,27 @@ describe('Get co-authors of a publication version', () => {
                 confirmedCoAuthor: true,
                 linkedUser: 'test-user-5',
                 isIndependent: true,
-                affiliations: []
+                affiliations: [],
+                retainApproval: true
             },
             {
                 id: 'coauthor-test-user-6-problem-draft',
                 email: 'test-user-6@jisc.ac.uk',
                 confirmedCoAuthor: true,
-                linkedUser: 'test-user-6'
+                linkedUser: 'test-user-6',
+                retainApproval: true
             },
             {
                 id: 'coauthor-test-user-7-problem-draft',
                 email: 'test-user-7@jisc.ac.uk',
-                confirmedCoAuthor: false
+                confirmedCoAuthor: false,
+                retainApproval: true
             },
             {
                 id: 'coauthor-test-user-8-problem-draft',
                 email: 'test-user-8@jisc.ac.uk',
-                confirmedCoAuthor: false
+                confirmedCoAuthor: false,
+                retainApproval: true
             }
         ]);
     });
