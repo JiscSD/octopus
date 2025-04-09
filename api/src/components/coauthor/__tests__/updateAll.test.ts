@@ -20,7 +20,7 @@ describe('Batch update co-authors', () => {
         {
             id: 'coauthor-test-user-6-problem-draft',
             email: 'test-user-6@jisc.ac.uk',
-            confirmedCoAuthor: true,
+            confirmedCoAuthor: false,
             linkedUser: 'test-user-6',
             retainApproval: true
         },

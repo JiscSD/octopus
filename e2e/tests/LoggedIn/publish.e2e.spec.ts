@@ -1256,8 +1256,56 @@ test.describe('Publication flow + co-authors', () => {
         await page.close();
     });
 
-    test('Editing a publication removes existing approvals', async ({ browser }) => {
-        test.slow();
+    // TODO: uncomment these tests once it is possible to disable approval retention with the UI.
+
+    // test('Editing a publication removes existing approvals', async ({ browser }) => {
+    //     test.slow();
+    //     const page = await Helpers.users.getPageAsUser(browser);
+
+    //     await Helpers.publicationCreation.createPublishReadyPublication(page);
+    //     await addCoAuthorsAndRequestApproval(page, [Helpers.users.user2]);
+
+    //     await confirmCoAuthorInvitation(browser, Helpers.users.user2);
+
+    //     await page.reload();
+    //     await expect(page.getByText('All authors have approved this publication').first()).toBeVisible();
+
+    //     await unlockPublication(page);
+
+    //     // Request approval from co author
+    //     await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+    //     await requestApproval(page);
+
+    //     await expect(page.getByText('Approval Pending')).toBeVisible();
+
+    //     await page.close();
+    // });
+
+    // test('Co-authors are notified if the publication was edited after they confirmed their involvement', async ({
+    //     browser
+    // }) => {
+    //     test.slow();
+    //     const page = await Helpers.users.getPageAsUser(browser);
+
+    //     await Helpers.publicationCreation.createPublishReadyPublication(page);
+    //     await addCoAuthorsAndRequestApproval(page, [Helpers.users.user2]);
+
+    //     await confirmCoAuthorInvitation(browser, Helpers.users.user2);
+
+    //     // unlock and request approvals again
+    //     await unlockPublication(page);
+    //     await requestApproval(page);
+
+    //     await verifyLastEmailNotification(
+    //         browser,
+    //         Helpers.users.user2,
+    //         'Changes have been made to a publication that you are an author on'
+    //     );
+
+    //     await page.close();
+    // });
+
+    test('Co-author approval is retained by default', async ({ browser }) => {
         const page = await Helpers.users.getPageAsUser(browser);
 
         await Helpers.publicationCreation.createPublishReadyPublication(page);
@@ -1270,36 +1318,8 @@ test.describe('Publication flow + co-authors', () => {
 
         await unlockPublication(page);
 
-        // Request approval from co author
-        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
-        await requestApproval(page);
-
-        await expect(page.getByText('Approval Pending')).toBeVisible();
-
-        await page.close();
-    });
-
-    test('Co-authors are notified if the publication was edited after they confirmed their involvement', async ({
-        browser
-    }) => {
-        test.slow();
-        const page = await Helpers.users.getPageAsUser(browser);
-
-        await Helpers.publicationCreation.createPublishReadyPublication(page);
-        await addCoAuthorsAndRequestApproval(page, [Helpers.users.user2]);
-
-        await confirmCoAuthorInvitation(browser, Helpers.users.user2);
-
-        // unlock and request approvals again
-        await unlockPublication(page);
-        await requestApproval(page);
-
-        await verifyLastEmailNotification(
-            browser,
-            Helpers.users.user2,
-            'Changes have been made to a publication that you are an author on'
-        );
-
+        // Because co-authors have approved, there is no need to re-request approval.
+        await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
         await page.close();
     });
 
