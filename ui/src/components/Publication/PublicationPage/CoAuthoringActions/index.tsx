@@ -64,7 +64,7 @@ const CoAuthoringActions: React.FC<Props> = (props) => {
                                     await props.onUnlockPublication();
                                 }}
                             >
-                                Cancel all authorship requests and unlock for editing
+                                Cancel pending authorship requests and unlock for editing
                             </Components.Link>
                         </div>
                     </div>
