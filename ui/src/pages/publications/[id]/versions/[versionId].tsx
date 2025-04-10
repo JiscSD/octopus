@@ -397,9 +397,52 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             return;
         }
 
+        const allCoAuthorsApprovedWithRetention = publicationVersion?.coAuthors.every(
+            (coAuthor) => coAuthor.confirmedCoAuthor && coAuthor.retainApproval
+        );
+        const hasAnApprovalWithoutRetention = publicationVersion?.coAuthors.some(
+            (coAuthor) => coAuthor.confirmedCoAuthor && !coAuthor.retainApproval
+        );
+        const hasUnapprovedCoAuthor = publicationVersion?.coAuthors.some((coAuthor) => !coAuthor.confirmedCoAuthor);
+
+        let modalDescription: React.ReactNode[] = [];
+
+        if (allCoAuthorsApprovedWithRetention) {
+            modalDescription.push(
+                <p key="all-coauthors-retained-approval">
+                    All of your co-authors have approved and are happy for you to make further edits without needing
+                    their re-approval. After unlocking this publication, you will be able to publish immediately after
+                    you have finished making your changes.
+                </p>
+            );
+        } else {
+            if (hasAnApprovalWithoutRetention) {
+                modalDescription.push(
+                    <p key="unretained-approval-description">
+                        One or more of your authors have requested to review any further changes to this publication.
+                        They will be invited to re-approve the publication after you have made your changes before it
+                        can be published.
+                    </p>
+                );
+            }
+
+            if (hasUnapprovedCoAuthor) {
+                modalDescription.push(
+                    <p
+                        key="unapproved-coauthor-description"
+                        className={hasAnApprovalWithoutRetention ? 'mt-4' : undefined}
+                    >
+                        At least one of your authors has not approved this publication yet. Please be aware that
+                        unlocking your publication will prevent them from approving it until you have finished making
+                        your changes.
+                    </p>
+                );
+            }
+        }
+
         const confirmed = await confirmation(
             'Are you sure you want to cancel and unlock?',
-            'Unlocking this publication for editing will invalidate all existing author approvals. Authors will be invited to approve your new changes once you have finished editing',
+            modalDescription,
             <OutlineIcons.LockOpenIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />,
             'Unlock',
             'Cancel'
