@@ -684,6 +684,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 onCancelApproval={handleCancelApproval}
                                 onPublish={handlePublish}
                                 onEditAffiliations={handleOpenAffiliationsModal}
+                                setServerError={setServerError}
                             />
                             <div className="pb-16">
                                 <Components.ApprovalsTracker

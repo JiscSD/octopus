@@ -176,6 +176,7 @@ export interface CoAuthor {
     reminderDate?: string | null;
     affiliations: MappedOrcidAffiliation[];
     isIndependent: boolean;
+    retainApproval: boolean;
     user?: {
         firstName: string;
         lastName: string;
