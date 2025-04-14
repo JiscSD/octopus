@@ -156,21 +156,17 @@ export const removeFromPublicationVersion = async (publicationVersionId: string,
     return removeCoAuthor;
 };
 
-export const updateConfirmation = async (
+export const updateCoAuthor = async (
     publicationVersionId: string,
     userId: string,
-    confirm: boolean,
-    retainApproval: boolean
+    data: Prisma.CoAuthorsUpdateInput
 ) => {
     const updateCoAuthor = await client.prisma.coAuthors.updateMany({
         where: {
             publicationVersionId,
             linkedUser: userId
         },
-        data: {
-            confirmedCoAuthor: confirm,
-            retainApproval
-        }
+        data
     });
     await publicationVersionService.update(publicationVersionId, {
         updatedAt: new Date().toISOString()

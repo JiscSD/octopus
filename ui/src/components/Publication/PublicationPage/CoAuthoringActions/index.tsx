@@ -10,7 +10,7 @@ type Props = {
     publicationVersion: Interfaces.PublicationVersion;
     isReadyForPublish: boolean;
     isCorrespondingAuthor: boolean;
-    isPublishing: boolean;
+    isLoading: boolean;
     onUnlockPublication: () => Promise<void>;
     onApprove: () => Promise<void>;
     onCancelApproval: () => Promise<void>;
@@ -169,7 +169,7 @@ const CoAuthoringActions: React.FC<Props> = (props) => {
                     <Components.Button
                         className="max-w-fit"
                         variant="block"
-                        disabled={!props.isReadyForPublish || props.isPublishing}
+                        disabled={!props.isReadyForPublish || props.isLoading}
                         endIcon={<OutlineIcons.CloudArrowUpIcon className="w-5 shrink-0 text-white-50" />}
                         title="Publish"
                         onClick={props.onPublish}
@@ -190,7 +190,7 @@ const CoAuthoringActions: React.FC<Props> = (props) => {
                     <Components.Button
                         className="max-w-fit"
                         variant="block"
-                        disabled={!(author?.isIndependent || author?.affiliations.length)}
+                        disabled={!(author?.isIndependent || author?.affiliations.length) || props.isLoading}
                         endIcon={<OutlineIcons.CheckIcon className="w-5 shrink-0 text-white-50" />}
                         title="Approve this publication"
                         onClick={props.onApprove}

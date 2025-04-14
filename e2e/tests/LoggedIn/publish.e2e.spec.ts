@@ -1376,9 +1376,7 @@ test.describe('Publication flow + co-authors', () => {
         await Promise.all([
             page.waitForResponse(
                 (response) =>
-                    response.url().includes('/my-affiliations') &&
-                    response.request().method() === 'PUT' &&
-                    response.ok()
+                    response.url().includes('/coauthors/') && response.request().method() === 'PATCH' && response.ok()
             ),
             page.waitForResponse(
                 (response) =>
