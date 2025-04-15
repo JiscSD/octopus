@@ -156,25 +156,6 @@ export const removeFromPublicationVersion = async (publicationVersionId: string,
     return removeCoAuthor;
 };
 
-export const updateCoAuthor = async (
-    publicationVersionId: string,
-    userId: string,
-    data: Prisma.CoAuthorsUpdateInput
-) => {
-    const updateCoAuthor = await client.prisma.coAuthors.updateMany({
-        where: {
-            publicationVersionId,
-            linkedUser: userId
-        },
-        data
-    });
-    await publicationVersionService.update(publicationVersionId, {
-        updatedAt: new Date().toISOString()
-    });
-
-    return updateCoAuthor;
-};
-
 export const resetCoAuthors = async (publicationVersionId: string) => {
     const publicationVersion = await client.prisma.publicationVersion.findFirst({
         where: {

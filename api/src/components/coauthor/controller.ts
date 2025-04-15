@@ -426,7 +426,7 @@ export const updateCoAuthor = async (
             isIndependent: event.body.isIndependent,
             affiliations: (event.body.affiliations as unknown[] as Prisma.InputJsonValue[]) || undefined
         };
-        await coAuthorService.updateCoAuthor(version.id, event.user.id, updateData);
+        await coAuthorService.update(coAuthor.id, updateData);
 
         if (event.body.confirm) {
             // notify main author about confirmation
