@@ -17,8 +17,6 @@ import { createId } from '@paralleldrive/cuid2';
 
 type Props = {
     publicationVersion: Interfaces.PublicationVersion;
-    isPublishing: boolean;
-    onPublish: () => void;
     onError: (message: string) => void;
     onEditAffiliations: () => void;
     refreshPublicationVersionData: KeyedMutator<Interfaces.PublicationVersion>;
