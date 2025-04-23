@@ -140,9 +140,9 @@ describe('Update publication version status', () => {
 
     test('Publication owner can publish if all co-authors are confirmed', async () => {
         const updatePublicationVersion = await testUtils.agent
-            .put('/publication-versions/publication-protocol-draft-v1/status/LIVE')
+            .put('/publication-versions/locked-publication-problem-confirmed-co-authors-v1/status/LIVE')
             .query({
-                apiKey: '000000005'
+                apiKey: '123456789'
             });
 
         expect(updatePublicationVersion.status).toEqual(200);
