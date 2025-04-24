@@ -1,8 +1,9 @@
 import React from 'react';
-import * as OutlineIcons from '@heroicons/react/24/outline';
-import * as Interfaces from '@/interfaces';
-import * as Helpers from '@/helpers';
 import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Interfaces from '@/interfaces';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
 type Props = {
     linkedPublication: Interfaces.LinkedToPublication;
@@ -11,15 +12,18 @@ type Props = {
 
 const LinkedPublicationRow: React.FC<Props> = (props): React.ReactElement => {
     const [loading, setLoading] = React.useState(false);
-    const handleClick = async () => {
+    const handleDelete = async () => {
         setLoading(true);
         await props.deleteLink(props.linkedPublication.linkId);
         setLoading(false);
     };
+    const iconClasses = 'h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400';
+    const tdClasses =
+        'whitespace-nowrap py-4 px-3 sm:px-6 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50';
 
     return (
         <tr key={props.linkedPublication.id}>
-            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
+            <td className={`w-3/5 ${tdClasses}`}>
                 <div className="space-y-2">
                     <span className="font-montserrat text-sm font-medium text-teal-600 transition-colors duration-500 dark:text-teal-100">
                         {Helpers.formatPublicationType(props.linkedPublication.type)}
@@ -45,46 +49,46 @@ const LinkedPublicationRow: React.FC<Props> = (props): React.ReactElement => {
                     </div>
                 </div>
             </td>
-            <td className="whitespace-nowrap px-8 py-4 text-center text-sm font-medium text-grey-900 transition-colors duration-500 dark:text-white-50">
-                {props.linkedPublication.draft ? (
-                    loading ? (
-                        <Components.IconButton
-                            className="p-2"
-                            title="Refresh"
-                            icon={
-                                <OutlineIcons.ArrowPathIcon
-                                    className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400"
-                                    aria-hidden="true"
-                                />
-                            }
-                            onClick={handleClick}
-                        />
-                    ) : (
+            <td className={`w-1/5 text-center font-medium ${tdClasses}`}>
+                <div className="flex items-center justify-center">
+                    <Components.Link
+                        href={`${Config.urls.viewPublication.path}/${props.linkedPublication.id}`}
+                        openNew={true}
+                        ariaLabel={'Visit publication'}
+                        className="p-2"
+                    >
+                        <OutlineIcons.ArrowTopRightOnSquareIcon className={iconClasses} />
+                    </Components.Link>
+                </div>
+            </td>
+            <td className={`w-1/5 text-center font-medium ${tdClasses}`}>
+                <div className="flex items-center justify-center">
+                    {props.linkedPublication.draft ? (
                         <Components.IconButton
                             className="p-2"
                             title="Delete"
                             icon={
-                                <OutlineIcons.TrashIcon
-                                    className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400"
-                                    aria-hidden="true"
-                                />
+                                loading ? (
+                                    <OutlineIcons.ArrowPathIcon
+                                        className={iconClasses + ' animate-spin'}
+                                        aria-hidden="true"
+                                    />
+                                ) : (
+                                    <OutlineIcons.TrashIcon className={iconClasses} aria-hidden="true" />
+                                )
                             }
-                            onClick={handleClick}
+                            onClick={handleDelete}
+                            disabled={loading}
                         />
-                    )
-                ) : (
-                    <Components.IconButton
-                        className="p-2"
-                        disabled
-                        title="Deletion forbidden as link is inherited from previous version"
-                        icon={
-                            <OutlineIcons.NoSymbolIcon
-                                className="h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400"
-                                aria-hidden="true"
-                            />
-                        }
-                    />
-                )}
+                    ) : (
+                        <Components.IconButton
+                            className="p-2"
+                            disabled
+                            title="Deletion forbidden as link is inherited from previous version"
+                            icon={<OutlineIcons.NoSymbolIcon className={iconClasses} aria-hidden="true" />}
+                        />
+                    )}
+                </div>
             </td>
         </tr>
     );

@@ -12,6 +12,9 @@ type LinkedEntityTableProps = {
 };
 
 const LinkedEntityTable: React.FC<LinkedEntityTableProps> = (props): React.ReactElement => {
+    const thClasses =
+        'whitespace-pre py-3.5 px-3 sm:px-6 text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50';
+    const showingPublications = props.entityType === 'PUBLICATION';
     return (
         <Framer.motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }} className="mt-8 flex flex-col">
             <div className="inline-block min-w-full py-2 align-middle">
@@ -22,12 +25,11 @@ const LinkedEntityTable: React.FC<LinkedEntityTableProps> = (props): React.React
                     >
                         <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
                             <tr>
-                                <th className="w-4/5 whitespace-pre py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6">
+                                <th className={`${showingPublications ? 'w-3/5' : 'w-4/5'} text-left ${thClasses}`}>
                                     {props.entityType.charAt(0).toUpperCase() + props.entityType.slice(1).toLowerCase()}
                                 </th>
-                                <th className="whitespace-pre py-3.5 pl-4 pr-3 text-center text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50 sm:pl-6 ">
-                                    Delete
-                                </th>
+                                {showingPublications && <th className={`w-1/5 text-center ${thClasses}`}>View</th>}
+                                <th className={`w-1/5 text-center ${thClasses}`}>Delete</th>
                             </tr>
                         </thead>
                         <tbody className="my-4 divide-grey-100 bg-white-50 transition-colors duration-500 dark:divide-teal-300 dark:bg-grey-600">
