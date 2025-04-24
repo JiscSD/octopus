@@ -293,6 +293,12 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
         }
     }, [props.loading, props.setLoading, props.editor, headingOptions]);
 
+    const buttonIconProps = {
+        className: 'h-3 w-3 text-grey-700',
+        ['aria-hidden']: true
+    };
+    const formulaPlaceholder = 'Enter KaTeX expression';
+
     return (
         props.editor && (
             <>
@@ -349,7 +355,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             onClick={() => props.editor.chain().focus().toggleBold().run()}
                             className={props.editor.isActive('bold') ? activeMenuIconStyles : menuIconStyles}
                         >
-                            <FAIcons.FaBold className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaBold {...buttonIconProps} />
                         </button>
                         <button
                             type="button"
@@ -357,7 +363,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             onClick={() => props.editor.chain().focus().toggleItalic().run()}
                             className={props.editor.isActive('italic') ? activeMenuIconStyles : menuIconStyles}
                         >
-                            <FAIcons.FaItalic className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaItalic {...buttonIconProps} />
                         </button>
                         <button
                             type="button"
@@ -365,7 +371,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             onClick={() => props.editor.chain().focus().toggleStrike().run()}
                             className={props.editor.isActive('strike') ? activeMenuIconStyles : menuIconStyles}
                         >
-                            <FAIcons.FaStrikethrough className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaStrikethrough {...buttonIconProps} />
                         </button>
                         <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
@@ -376,7 +382,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                 props.editor.isActive({ textAlign: 'left' }) ? activeMenuIconStyles : menuIconStyles
                             }
                         >
-                            <FAIcons.FaAlignLeft className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaAlignLeft {...buttonIconProps} />
                         </button>
                         <button
                             type="button"
@@ -386,7 +392,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                 props.editor.isActive({ textAlign: 'center' }) ? activeMenuIconStyles : menuIconStyles
                             }
                         >
-                            <FAIcons.FaAlignCenter className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaAlignCenter {...buttonIconProps} />
                         </button>
                         <button
                             type="button"
@@ -396,7 +402,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                 props.editor.isActive({ textAlign: 'right' }) ? activeMenuIconStyles : menuIconStyles
                             }
                         >
-                            <FAIcons.FaAlignRight className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaAlignRight {...buttonIconProps} />
                         </button>
                         <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
@@ -405,7 +411,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             onClick={() => props.editor.chain().focus().toggleBulletList().run()}
                             className={props.editor.isActive('bulletList') ? activeMenuIconStyles : menuIconStyles}
                         >
-                            <FAIcons.FaListUl className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaListUl {...buttonIconProps} />
                         </button>
                         <button
                             type="button"
@@ -413,7 +419,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             onClick={() => props.editor.chain().focus().toggleOrderedList().run()}
                             className={props.editor.isActive('orderedList') ? activeMenuIconStyles : menuIconStyles}
                         >
-                            <FAIcons.FaListOl className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaListOl {...buttonIconProps} />
                         </button>
                         <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
@@ -422,7 +428,23 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             onClick={() => props.editor.chain().focus().toggleCodeBlock().run()}
                             className={props.editor.isActive('codeBlock') ? activeMenuIconStyles : menuIconStyles}
                         >
-                            <FAIcons.FaCode className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaCode {...buttonIconProps} />
+                        </button>
+                        <button
+                            type="button"
+                            title="Add formula"
+                            onClick={() => {
+                                props.editor.chain().focus().insertContent(`$$${formulaPlaceholder}$$`).run();
+                                // Select placeholder text that has just been inserted (excluding delimiters).
+                                const cursorPosition = props.editor.state.selection.$anchor.pos;
+                                props.editor.commands.setTextSelection({
+                                    from: cursorPosition - formulaPlaceholder.length - 2,
+                                    to: cursorPosition - 2
+                                });
+                            }}
+                            className={props.editor.isActive('formula') ? activeMenuIconStyles : menuIconStyles}
+                        >
+                            <FAIcons.FaSquareRootAlt {...buttonIconProps} />
                         </button>
                         <button
                             type="button"
@@ -430,7 +452,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             onClick={() => props.editor.chain().focus().toggleBlockquote().run()}
                             className={props.editor.isActive('blockquote') ? activeMenuIconStyles : menuIconStyles}
                         >
-                            <FAIcons.FaQuoteRight className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaQuoteRight {...buttonIconProps} />
                         </button>
                         <span className="mx-2 inline-block h-6 w-[1px] bg-grey-300" />
                         <button
@@ -439,7 +461,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             onClick={openLinkModal}
                             className={props.editor.isActive('link') ? activeMenuIconStyles : menuIconStyles}
                         >
-                            <FAIcons.FaLink className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaLink {...buttonIconProps} />
                         </button>
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
@@ -458,7 +480,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             }}
                             className={props.editor.isActive('image') ? activeMenuIconStyles : menuIconStyles}
                         >
-                            <FAIcons.FaImage className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaImage {...buttonIconProps} />
                         </button>
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
@@ -467,7 +489,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             className={props.editor.isActive('horizontalRule') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor.chain().focus().setHorizontalRule().run()}
                         >
-                            <FAIcons.FaRulerHorizontal className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaRulerHorizontal {...buttonIconProps} />
                         </button>
                         <span className="mx-2 inline-block h-6 w-px bg-grey-300" />
                         <button
@@ -482,7 +504,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                                     .run()
                             }
                         >
-                            <FAIcons.FaTable className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaTable {...buttonIconProps} />
                         </button>
                         <button
                             type="button"
@@ -490,15 +512,15 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             className={props.editor.isActive('addColumnBefore') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor?.chain().focus().addColumnBefore().run()}
                         >
-                            <FAIcons.FaColumns className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaColumns {...buttonIconProps} />
                         </button>
                         <button
                             type="button"
-                            title="Stop"
+                            title="Delete column"
                             className={props.editor.isActive('deleteColumn') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor?.chain().focus().deleteColumn().run()}
                         >
-                            <FAIcons.FaStop className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaStop {...buttonIconProps} />
                         </button>
                         <button
                             type="button"
@@ -506,7 +528,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             className={props.editor.isActive('addRowBefore') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor?.chain().focus().addRowBefore().run()}
                         >
-                            <FAIcons.FaPlusSquare className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaPlusSquare {...buttonIconProps} />
                         </button>
                         <button
                             type="button"
@@ -514,7 +536,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             className={props.editor.isActive('deleteRow') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor?.chain().focus().deleteRow().run()}
                         >
-                            <FAIcons.FaMinusSquare className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaMinusSquare {...buttonIconProps} />
                         </button>
                         <button
                             type="button"
@@ -531,7 +553,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             className={props.editor.isActive('undo') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor.chain().focus().undo().run()}
                         >
-                            <FAIcons.FaUndo className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaUndo {...buttonIconProps} />
                         </button>
                         <button
                             type="button"
@@ -539,7 +561,7 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
                             className={props.editor.isActive('redo') ? activeMenuIconStyles : menuIconStyles}
                             onClick={() => props.editor.chain().focus().redo().run()}
                         >
-                            <FAIcons.FaRedo className="h-3 w-3 text-grey-700" aria-hidden="true" />
+                            <FAIcons.FaRedo {...buttonIconProps} />
                         </button>
                     </div>
                 </div>
@@ -686,7 +708,6 @@ const MenuBar: React.FC<MenuBarProps> = (props) => {
 interface TextEditorProps {
     contentChangeHandler: (htmlString: string) => void;
     defaultContent: string;
-    references?: Interfaces.Reference[];
 }
 
 const TextEditor: React.FC<TextEditorProps> = (props) => {
