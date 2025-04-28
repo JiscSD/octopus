@@ -1,37 +1,20 @@
-import { S3CreateEvent } from 'aws-lambda';
-
-import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
+import * as pdfService from 'pdf/service';
 import * as pubRouterService from './service';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as response from 'lib/response';
-import * as s3 from 'lib/s3';
 
 /**
  * Fires a notification to the PubRouter API with details of a new publication when it has a PDF generated.
- * @param event When a file is deposited into the PDF S3 bucket (on deployed environments), or when
- *              a request is made to the API to trigger this function (locally).
+ * This can only be triggered locally - on deployed environments the service function is programatically called upon publish.
+ * @param event When a request is made to the API to trigger this function locally.
  * @returns A response object with a status code and message.
  */
 export const notifyPubRouter = async (
-    event: S3CreateEvent | I.APIRequest<undefined, undefined, I.LocalNotifyPubRouterPathParams>
+    event: I.APIRequest<undefined, undefined, I.LocalNotifyPubRouterPathParams>
 ): Promise<I.JSONResponse> => {
-    let publicationId: string;
-    let pdfUrl: string;
-
-    // If this is running locally, get details from lambda event.
-    if (process.env.STAGE === 'local' && Object.hasOwn(event, 'pathParameters')) {
-        const lambdaEvent = event as I.APIRequest<undefined, undefined, I.LocalNotifyPubRouterPathParams>;
-        publicationId = lambdaEvent.pathParameters.publicationId;
-        pdfUrl = Helpers.checkEnvVariable('LOCALSTACK_SERVER') + s3.buckets.pdfs + `/${publicationId}.pdf`;
-    } else {
-        // Otherwise, the "real" way, get details from S3 event.
-        const s3Event = event as S3CreateEvent;
-        const bucket = s3Event.Records[0].s3.bucket.name;
-        const key = s3Event.Records[0].s3.object.key;
-        pdfUrl = `https://${bucket}.s3.amazonaws.com/${key}`;
-        publicationId = key.replace(/\.pdf$/, '');
-    }
+    const publicationId = event.pathParameters.publicationId;
+    const pdfUrl = pdfService.getPDFURL(publicationId);
 
     try {
         const publicationVersion = await publicationVersionService.get(publicationId, 'latest');

@@ -9,7 +9,9 @@ import * as email from 'lib/email';
 import * as eventService from 'event/service';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
+import * as pdfService from 'pdf/service';
 import * as publicationService from 'publication/service';
+import * as pubRouterService from 'pubRouter/service';
 import * as referenceService from 'reference/service';
 import * as sqs from 'lib/sqs';
 
@@ -779,12 +781,15 @@ export const postPublishHook = async (publicationVersion: I.PublicationVersion, 
             }
         });
 
-        // Send message to the pdf generation queue.
-        // Skipped locally, as there is not an SQS que in localstack.
+        // Send message to the pdf generation queue and notify publications router of the new pdf.
+        // Skipped locally, as there is not an SQS queue in localstack.
         // Option to skip, e.g. in bulk import scripts, where instant pdf generation is not a priority.
         // In both cases, the pdf will still be generated the first time it's requested.
-        if (process.env.STAGE !== 'local' && !skipPdfGeneration) {
-            await sqs.sendMessage(publicationVersion.versionOf);
+        if (publicationVersion.versionNumber === 1 && process.env.STAGE !== 'local' && !skipPdfGeneration) {
+            await Promise.all([
+                sqs.sendMessage(publicationVersion.versionOf),
+                pubRouterService.notifyPubRouter(publicationVersion, pdfService.getPDFURL(publicationVersion.versionOf))
+            ]);
         }
     } catch (err) {
         console.log('Error in post-publish hook: ', err);
