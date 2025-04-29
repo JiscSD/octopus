@@ -598,7 +598,7 @@ export interface CreateCoAuthorPathParams {
 
 export interface DeleteCoAuthorPathParams {
     publicationVersionId: string;
-    coauthorId: string;
+    coAuthorId: string;
 }
 
 export interface LinkCoAuthorPathParams {
@@ -611,12 +611,15 @@ export interface ConfirmCoAuthorBody {
     code?: string;
 }
 
-export interface ChangeCoAuthorRequestBody {
-    confirm: boolean;
-    retainApproval: boolean;
+export interface UpdateCoAuthorRequestBody {
+    confirm?: boolean;
+    retainApproval?: boolean;
+    affiliations?: MappedOrcidAffiliation[];
+    isIndependent?: boolean;
 }
 export interface UpdateCoAuthorPathParams {
     publicationVersionId: string;
+    coAuthorId: string;
 }
 
 export interface ImageSentBody {
@@ -736,16 +739,6 @@ export interface DOIResponse {
 }
 
 //affiliations
-
-export interface UpdateAffiliationsPathParams {
-    publicationVersionId: string;
-}
-
-export interface UpdateAffiliationsBody {
-    affiliations: MappedOrcidAffiliation[];
-    isIndependent: boolean;
-}
-
 export interface UserPublicationsFilters {
     offset: number;
     limit: number;
@@ -757,7 +750,7 @@ export interface UserPublicationsFilters {
 
 export interface SendApprovalReminderPathParams {
     publicationVersionId: string;
-    coauthorId: string;
+    coAuthorId: string;
 }
 
 type NameType = 'Personal' | 'Organizational';

@@ -1,6 +1,4 @@
-import * as I from 'interface';
-
-const updateAffiliationsSchema: I.JSONSchemaType<I.UpdateAffiliationsBody> = {
+const updateConfirmationSchema = {
     type: 'object',
     properties: {
         affiliations: {
@@ -120,9 +118,16 @@ const updateAffiliationsSchema: I.JSONSchemaType<I.UpdateAffiliationsBody> = {
         },
         isIndependent: {
             type: 'boolean'
+        },
+        confirm: {
+            type: 'boolean'
+        },
+        retainApproval: {
+            type: 'boolean'
         }
     },
-    required: ['affiliations', 'isIndependent']
+    required: [],
+    additionalProperties: false
 };
 
-export default updateAffiliationsSchema;
+export default updateConfirmationSchema;

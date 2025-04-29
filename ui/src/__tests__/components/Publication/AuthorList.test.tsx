@@ -14,6 +14,7 @@ const organisationalAccountWithoutUrl = {
     publicationVersionId: 'test',
     affiliations: [],
     isIndependent: true,
+    retainApproval: true,
     user: { firstName: 'Jisc', lastName: '', orcid: '', role: 'ORGANISATION' as Types.UserRole }
 };
 
