@@ -9,7 +9,6 @@ import * as email from 'lib/email';
 import * as eventService from 'event/service';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
-import * as pdfService from 'pdf/service';
 import * as publicationService from 'publication/service';
 import * as pubRouterService from 'pubRouter/service';
 import * as referenceService from 'reference/service';
@@ -756,41 +755,61 @@ export const postPublishHook = async (publicationVersion: I.PublicationVersion, 
         // If we have a version with a DOI, pass that, but if not just pass one without.
         await doi.updateCanonicalDOI(publicationVersion.publication.doi, versionWithDOI || publicationVersion);
 
+        // Complete remaining tasks in parallel.
+        const postDBUpdatePromises: Array<Promise<unknown>> = [];
+
         // (Re)index publication in opensearch.
-        // TODO: remove this extra logging if we don't observe ARI imports stalling here for some time.
-        console.log(`Indexing publication ${publicationVersion.versionOf} in opensearch.`);
-        await publicationService.upsertOpenSearchRecord({
-            id: publicationVersion.versionOf,
-            type: publicationVersion.publication.type,
-            title: publicationVersion.title,
-            organisationalAuthor: publicationVersion.user.role === 'ORGANISATION',
-            description: publicationVersion.description,
-            keywords: publicationVersion.keywords,
-            content: publicationVersion.content,
-            publishedDate: publicationVersion.publishedDate,
-            cleanContent: convert(publicationVersion.content)
-        });
-        console.log(`Indexing complete.`);
+        postDBUpdatePromises.push(
+            new Promise((resolve) => {
+                // TODO: remove this extra logging if we don't observe ARI imports stalling here for some time.
+                console.log(`Indexing publication ${publicationVersion.versionOf} in opensearch.`);
+                publicationService
+                    .upsertOpenSearchRecord({
+                        id: publicationVersion.versionOf,
+                        type: publicationVersion.publication.type,
+                        title: publicationVersion.title,
+                        organisationalAuthor: publicationVersion.user.role === 'ORGANISATION',
+                        description: publicationVersion.description,
+                        keywords: publicationVersion.keywords,
+                        content: publicationVersion.content,
+                        publishedDate: publicationVersion.publishedDate,
+                        cleanContent: convert(publicationVersion.content)
+                    })
+                    .then((result) => {
+                        console.log(`Indexing complete.`);
+                        resolve(result);
+                    })
+                    .catch((error) => console.log(error));
+            })
+        );
 
         // Delete all pending request control events for this publication version.
-        await eventService.deleteMany({
-            type: 'REQUEST_CONTROL',
-            data: {
-                path: ['publicationVersion', 'id'],
-                equals: publicationVersion.id
-            }
-        });
+        postDBUpdatePromises.push(
+            eventService.deleteMany({
+                type: 'REQUEST_CONTROL',
+                data: {
+                    path: ['publicationVersion', 'id'],
+                    equals: publicationVersion.id
+                }
+            })
+        );
 
-        // Send message to the pdf generation queue and notify publications router of the new pdf.
-        // Skipped locally, as there is not an SQS queue in localstack.
-        // Option to skip, e.g. in bulk import scripts, where instant pdf generation is not a priority.
-        // In both cases, the pdf will still be generated the first time it's requested.
-        if (publicationVersion.versionNumber === 1 && process.env.STAGE !== 'local' && !skipPdfGeneration) {
-            await Promise.all([
-                sqs.sendMessage(publicationVersion.versionOf),
-                pubRouterService.notifyPubRouter(publicationVersion, pdfService.getPDFURL(publicationVersion.versionOf))
-            ]);
+        if (process.env.STAGE !== 'local') {
+            if (!skipPdfGeneration) {
+                // Send message to the pdf generation queue.
+                // Skipped locally, as there is not an SQS queue in localstack.
+                // Option to skip, e.g. in bulk import scripts, where instant pdf generation is not a priority.
+                // In both cases, the pdf will still be generated the first time it's requested.
+                postDBUpdatePromises.push(sqs.sendMessage(publicationVersion.versionOf));
+            }
+
+            if (publicationVersion.versionNumber === 1) {
+                // Notify publications router of the publication if it has just been published for the first time.
+                postDBUpdatePromises.push(pubRouterService.notifyPubRouter(publicationVersion));
+            }
         }
+
+        await Promise.all(postDBUpdatePromises);
     } catch (err) {
         console.log('Error in post-publish hook: ', err);
     }

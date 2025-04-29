@@ -1,5 +1,4 @@
 import * as I from 'interface';
-import * as pdfService from 'pdf/service';
 import * as pubRouterService from './service';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as response from 'lib/response';
@@ -14,7 +13,6 @@ export const notifyPubRouter = async (
     event: I.APIRequest<undefined, undefined, I.LocalNotifyPubRouterPathParams>
 ): Promise<I.JSONResponse> => {
     const publicationId = event.pathParameters.publicationId;
-    const pdfUrl = pdfService.getPDFURL(publicationId);
 
     try {
         const publicationVersion = await publicationVersionService.get(publicationId, 'latest');
@@ -32,7 +30,7 @@ export const notifyPubRouter = async (
             return response.json(200, { message: 'Publication author is Octopus user, ignoring' });
         }
 
-        const { code, message } = await pubRouterService.notifyPubRouter(publicationVersion, pdfUrl);
+        const { code, message } = await pubRouterService.notifyPubRouter(publicationVersion);
 
         return response.json(code, { message });
     } catch (err) {
