@@ -1,7 +1,6 @@
 import * as email from 'lib/email';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
-
 import * as pdfService from 'pdf/service';
 
 const pubRouterPublicationTypePrefix = 'Octopus article; ';
