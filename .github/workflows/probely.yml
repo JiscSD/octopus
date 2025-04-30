@@ -1,0 +1,22 @@
+# Sample workflow for scanning a target with Probely
+name: Scan a target int.octopus with Probely
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scan with Probely
+        id: probely-scan
+        uses: Probely/probely-github-action@main
+        with:
+          api-key: ${{ secrets.PROBELY_API_KEY }}
+          target-id: "BqgPmBrtXnWg"
+          region: "eu"
