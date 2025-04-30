@@ -19,4 +19,4 @@ jobs:
         with:
           api-key: ${{ secrets.PROBELY_API_KEY }}
           target-id: "BqgPmBrtXnWg"
-          region: "eu"
+          region: "us"
