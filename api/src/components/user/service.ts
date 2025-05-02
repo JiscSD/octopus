@@ -254,7 +254,11 @@ export const getPublications = async (
             versionStatusFilter = {
                 versions: {
                     every: {
-                        currentStatus: 'DRAFT',
+                        currentStatus: {
+                            not: {
+                                equals: 'LIVE'
+                            }
+                        },
                         versionNumber: 1
                     }
                 }
