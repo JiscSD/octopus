@@ -18,7 +18,7 @@ export interface NavMenuItem {
 }
 
 export interface PublicationStatus {
-    status: Types.PublicationStatuses;
+    status: Types.PublicationStatus;
     createdAt: string;
     id: string;
 }
@@ -81,7 +81,7 @@ export interface PublicationVersion {
     createdBy: string;
     createdAt: string;
     updatedAt: string;
-    currentStatus: Types.PublicationStatuses;
+    currentStatus: Types.PublicationStatus;
     publishedDate: string | null;
     title: string;
     licence: Types.LicenceType;
@@ -121,7 +121,7 @@ export interface LinkedPublication {
     doi: string;
     title: string | null;
     publishedDate: string | null;
-    currentStatus: Types.PublicationStatuses;
+    currentStatus: Types.PublicationStatus;
     createdBy: string;
     authorFirstName: string | null;
     authorLastName: string | null;

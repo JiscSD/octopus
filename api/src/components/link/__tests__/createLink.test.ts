@@ -97,6 +97,23 @@ describe('Create links', () => {
         expect(link.statusCode).toEqual(200);
     });
 
+    test('Peer reviews cannot be linked to drafts', async () => {
+        const link = await testUtils.agent
+            .post('/links')
+            .query({
+                apiKey: '123456789'
+            })
+            .send({
+                to: 'publication-problem-draft-with-coi-but-no-text',
+                from: 'publication-1'
+            });
+
+        expect(link.statusCode).toEqual(400);
+        expect(link.body.message).toEqual(
+            'Publication with id publication-problem-draft-with-coi-but-no-text is not LIVE, and peer reviews cannot link to drafts.'
+        );
+    });
+
     test('Where a linked to publication has a live version and a draft that could also be linked to, the versionTo recorded is the live version', async () => {
         const link = await testUtils.agent
             .post('/links')
@@ -136,6 +153,21 @@ describe('Create links', () => {
         expect(link.body.message).toEqual(
             'You cannot create a link from the publication with id publication-hypothesis-draft.'
         );
+    });
+
+    test('Cannot create a link from a publication to itself', async () => {
+        const link = await testUtils.agent
+            .post('/links')
+            .query({
+                apiKey: '000000005'
+            })
+            .send({
+                to: 'publication-problem-draft',
+                from: 'publication-problem-draft'
+            });
+
+        expect(link.statusCode).toEqual(400);
+        expect(link.body.message).toEqual('You cannot link a publication to itself.');
     });
 });
 
