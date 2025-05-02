@@ -31,7 +31,7 @@ const sampleLinkedPublication = {
     peerReviewCount: 0,
     linkId: 'test-link',
     draft: true,
-    childPublication: 'test-child',
+    childPublicationId: 'test-child',
     childPublicationType: 'PROBLEM' as Types.PublicationType,
     externalSource: null
 };
