@@ -120,6 +120,21 @@ const userMappings: Prisma.UserMappingCreateManyInput[] = [
         userId: 'cm3fzp3x80003i9po45lfun1h',
         value: 'HMRC',
         source: 'ARI'
+    },
+    {
+        userId: 'cma5fkvbx0001i2i8w1iwup8p',
+        value: 'Ministry of Housing, Communities and Local Government',
+        source: 'ARI'
+    },
+    {
+        userId: 'cma5fkvbx0003i2i82tw4ta7t',
+        value: 'The National Archives',
+        source: 'ARI'
+    },
+    {
+        userId: 'cma5fkvbx0005i2i8z8bqgesc',
+        value: 'Scottish Government Department for Tax and Revenues',
+        source: 'ARI'
     }
 ];
 
