@@ -167,6 +167,7 @@ model CoAuthors {
     code                 String             @default(cuid())
     confirmedCoAuthor    Boolean            @default(false)
     approvalRequested    Boolean            @default(false)
+    retainApproval       Boolean            @default(true)
     linkedUser           String?
     position             Int                @default(0)
     createdAt            DateTime           @default(now())

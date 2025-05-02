@@ -55,22 +55,6 @@ const createPublicationHTMLTemplate = (
 
     const authors = coAuthors.filter((author) => Boolean(author.confirmedCoAuthor && author.linkedUser));
 
-    // If corresponding author is not found in coauthors list, and we have the necessary fields, mock them up
-    if (!authors.find((author) => author.linkedUser === publicationVersion.createdBy)) {
-        authors.unshift({
-            id: publicationVersion.createdBy,
-            approvalRequested: false,
-            confirmedCoAuthor: true,
-            createdAt: new Date(),
-            linkedUser: publicationVersion.createdBy,
-            publicationVersionId: publicationVersion.id,
-            user: publicationVersion.user,
-            reminderDate: null,
-            isIndependent: true,
-            affiliations: []
-        });
-    }
-
     // Get array of all affiliations from all authors
     const allAffiliations = authors
         .map((author) => author.affiliations)
@@ -522,22 +506,6 @@ const createPublicationHTMLTemplate = (
 
 const createPublicationHeaderTemplate = (publicationVersion: I.PublicationVersion): string => {
     const authors = publicationVersion.coAuthors.filter((author) => author.confirmedCoAuthor && author.linkedUser);
-
-    if (!authors.find((author) => author.linkedUser === publicationVersion.createdBy)) {
-        authors.unshift({
-            id: publicationVersion.createdBy,
-            approvalRequested: false,
-            confirmedCoAuthor: true,
-            createdAt: new Date(),
-            linkedUser: publicationVersion.createdBy,
-            publicationVersionId: publicationVersion.id,
-            user: publicationVersion.user,
-            reminderDate: null,
-            isIndependent: true,
-            affiliations: []
-        });
-    }
-
     const base64InterRegular = fs.readFileSync('assets/fonts/Inter-Regular.ttf', { encoding: 'base64' });
 
     return `
@@ -657,7 +625,11 @@ export const generatePublicationVersionPDF = async (
     publicationVersion: I.PublicationVersion
 ): Promise<string | null> => {
     const references = await referenceService.getAllByPublicationVersion(publicationVersion.id);
-    const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf);
+    const { linkedTo } = await publicationService.getDirectLinksForPublication(
+        publicationVersion.versionOf,
+        null,
+        true
+    );
     const htmlTemplate = createPublicationHTMLTemplate(publicationVersion, references, linkedTo);
     const isLocal = process.env.STAGE === 'local';
 

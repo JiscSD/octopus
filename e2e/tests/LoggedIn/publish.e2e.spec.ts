@@ -1833,3 +1833,27 @@ test.describe('Publication Flow + File import', () => {
         await expect(page.getByText('Failed to upload "Playwright.docx". The format is not supported.')).toBeVisible();
     });
 });
+
+test.describe('Text Editor', () => {
+    let page: Page;
+
+    test.beforeAll(async ({ browser }) => {
+        page = await Helpers.users.getPageAsUser(browser);
+    });
+
+    test.afterAll(async () => {
+        page.close();
+    });
+
+    test('Add formula button adds placeholder KaTeX formula', async () => {
+        await Helpers.publicationCreation.createPublication(page, 'test insert formula button', 'PROBLEM');
+        await page.waitForSelector('button:has-text("Main text")');
+        await page.click('button:has-text("Main text")');
+
+        const addFormulaButton = page.locator('button[title="Add formula"]');
+        await expect(addFormulaButton).toBeVisible();
+        await addFormulaButton.click();
+
+        await expect(page.locator(PageModel.publish.text.editor)).toContainText('$$Enter KaTeX expression$$');
+    });
+});

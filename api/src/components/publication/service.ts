@@ -536,8 +536,174 @@ export const doesDuplicateFlagExist = (publication, category, user) =>
         }
     });
 
+type RawLinkedToPublication = {
+    childPublicationId: string;
+    childPublicationType: I.PublicationType;
+    draft: boolean;
+    id: string;
+    linkId: string;
+    liveCurrentStatus: I.PublicationStatusEnum;
+    type: I.PublicationType;
+};
+type RawLinkedFromPublication = {
+    draft: boolean;
+    id: string;
+    linkId: string;
+    liveCurrentStatus: I.PublicationStatusEnum;
+    parentPublicationId: string;
+    parentPublicationType: I.PublicationType;
+    type: I.PublicationType;
+};
+
+// Get a tree-like representation of linked publications, branching from a root publication.
+// The main aim of this is to fetch the data in this particular structure; the bulk of the data
+// returned over the API will be populated separately to avoid this query becoming overcomplicated.
+const getRawLinkedPublications = async (
+    publicationId: string,
+    publicationType: I.PublicationType,
+    requesterIsAuthor: boolean
+): Promise<{
+    linkedTo: RawLinkedToPublication[];
+    linkedFrom: RawLinkedFromPublication[];
+}> => {
+    /*
+     * This set of queries provides two result sets:
+     *
+     * "linkedTo" refers to publications to the left of the publication chain.
+     * "linkedFrom" refers to publications that follow to the right of the publication chain.
+     *
+     * The basic function of each query is to recursively select linked publications in each individual direction of the chain.
+     * This can then be used to generate a tree representation branching from a root publication.
+     *
+     * Additionally, to limit the tree size, a linked publication cannot be of the same type (for instance, we aren't looking to return problems linked to other problems)
+     */
+    const linkedTo = await client.prisma.$queryRaw<RawLinkedToPublication[]>`
+        WITH RECURSIVE to_left AS (
+            SELECT "Links"."publicationFromId" "childPublicationId",
+                "Links"."publicationToId" "id",
+                "Links".id "linkId",
+                "Links".draft,
+                "pfrom".type "childPublicationType",
+                "pto".type,
+                "pto_live_version"."currentStatus" "liveCurrentStatus"
+
+            FROM "Links"
+            LEFT JOIN "Publication" AS pfrom
+            ON "pfrom".id = "Links"."publicationFromId"
+
+            LEFT JOIN "Publication" AS pto
+            ON "pto".id = "Links"."publicationToId"
+
+            LEFT JOIN "PublicationVersion" AS pto_live_version
+            ON "pto".id = "pto_live_version"."versionOf"
+            AND "pto_live_version"."isLatestLiveVersion" = TRUE
+
+            WHERE "Links"."publicationFromId" = ${publicationId}
+
+            UNION ALL
+
+            SELECT "Links"."publicationFromId" "childPublicationId",
+                "Links"."publicationToId" "id",
+                "Links".id "linkId",
+                "Links".draft,
+                "pfrom".type "childPublicationType",
+                "pto".type,
+                "pto_live_version"."currentStatus" "liveCurrentStatus"
+
+            FROM "Links"
+            JOIN to_left
+            ON to_left."id" = "Links"."publicationFromId"
+
+            LEFT JOIN "Publication" AS pfrom
+            ON "pfrom".id = "Links"."publicationFromId"
+
+            LEFT JOIN "Publication" AS pto
+            ON "pto".id = "Links"."publicationToId"
+
+            LEFT JOIN "PublicationVersion" AS pto_live_version
+            ON "pto".id = "pto_live_version"."versionOf"
+            AND "pto_live_version"."isLatestLiveVersion" = TRUE
+        )
+
+        SELECT DISTINCT * FROM to_left
+        WHERE "type" != "childPublicationType"
+        AND CAST("type" AS text) != ${publicationType}
+        ${!requesterIsAuthor ? Prisma.sql`AND "liveCurrentStatus" = 'LIVE'` : Prisma.empty};
+    `;
+
+    const linkedFrom = await client.prisma.$queryRaw<RawLinkedFromPublication[]>`
+        WITH RECURSIVE to_right AS (
+            SELECT "Links"."publicationFromId" "id",
+                "Links"."publicationToId" "parentPublicationId",
+                "Links".id "linkId",
+                "Links".draft,
+                "pfrom".type,
+                "pfrom_live_version"."currentStatus" "liveCurrentStatus",
+                "pto".type "parentPublicationType"
+
+            FROM "Links"
+            LEFT JOIN "Publication" AS pfrom
+            ON "pfrom".id = "Links"."publicationFromId"
+
+            LEFT JOIN "Publication" AS pto
+            ON "pto".id = "Links"."publicationToId"
+
+            LEFT JOIN "PublicationVersion" AS pfrom_live_version
+            ON "pfrom".id = "pfrom_live_version"."versionOf"
+            AND "pfrom_live_version"."isLatestLiveVersion" = TRUE
+
+            WHERE "Links"."publicationToId" = ${publicationId}
+
+            UNION ALL
+
+            SELECT "Links"."publicationFromId" "id",
+                "Links"."publicationToId" "parentPublicationId",
+                "Links".id "linkId",
+                "Links".draft,
+                "pfrom".type,
+                "pfrom_live_version"."currentStatus" "liveCurrentStatus",
+                "pto".type "parentPublicationType"
+
+            FROM "Links"
+            JOIN to_right
+            ON to_right."id" = "Links"."publicationToId"
+
+            LEFT JOIN "Publication" AS pfrom
+            ON "pfrom".id = "Links"."publicationFromId"
+
+            LEFT JOIN "Publication" AS pto
+            ON "pto".id = "Links"."publicationToId"
+
+            LEFT JOIN "PublicationVersion" AS pfrom_live_version
+            ON "pfrom".id = "pfrom_live_version"."versionOf"
+            AND "pfrom_live_version"."isLatestLiveVersion" = TRUE
+
+            WHERE "pto"."type" != 'PROBLEM'
+        )
+
+        SELECT DISTINCT *
+        FROM to_right
+        WHERE "type" != "parentPublicationType"
+        AND "type" != 'PROBLEM'
+        ${!requesterIsAuthor ? Prisma.sql`AND "liveCurrentStatus" = 'LIVE'` : Prisma.empty};
+    `;
+
+    return {
+        linkedTo,
+        linkedFrom
+    };
+};
+
 const sortPublicationsByPublicationDate = (publications: I.LinkedPublication[]) => {
-    return publications.sort((a, b) => new Date(b.publishedDate).valueOf() - new Date(a.publishedDate).valueOf());
+    return publications.sort((a, b) => {
+        if (b.publishedDate && a.publishedDate) {
+            // Sort by publication date, most recent first.
+            return new Date(b.publishedDate).valueOf() - new Date(a.publishedDate).valueOf();
+        } else {
+            // If either publication has no published date, put it at the end.
+            return Number(!!b.publishedDate) - Number(!!a.publishedDate);
+        }
+    });
 };
 
 /**
@@ -569,9 +735,9 @@ const getOrderedLinkedPublications = (a: I.LinkedPublication[], b: I.LinkedPubli
                 ...sortPublicationsByPublicationDate(
                     // Pick the publications from "a" that are parents of the "b" publication...
                     aPrecedesB
-                        ? a.filter((aPub) => (aPub as I.LinkedToPublication).childPublication === bPub.id)
+                        ? a.filter((aPub) => (aPub as I.LinkedToPublication).childPublicationId === bPub.id)
                         : // Or children, if we're working the other way
-                          a.filter((aPub) => (aPub as I.LinkedFromPublication).parentPublication === bPub.id)
+                          a.filter((aPub) => (aPub as I.LinkedFromPublication).parentPublicationId === bPub.id)
                 )
             );
         }
@@ -580,272 +746,21 @@ const getOrderedLinkedPublications = (a: I.LinkedPublication[], b: I.LinkedPubli
     }
 };
 
-export const getLinksForPublication = async (
-    id: string,
-    includeDraftVersion = false
-): Promise<I.PublicationWithLinks> => {
-    const publication = await get(id);
-
-    if (!publication) {
-        return {
-            publication: null,
-            linkedFrom: [],
-            linkedTo: []
-        };
-    }
-
-    const latestVersion = publication?.versions.find((version) =>
-        includeDraftVersion ? version.isLatestVersion : version.isLatestLiveVersion
-    );
-
-    if (!latestVersion) {
-        return {
-            publication: null,
-            linkedFrom: [],
-            linkedTo: []
-        };
-    }
-
-    /*
-     * This set of queries provides two result sets:
-     *
-     * "linkedTo" refers to publications to the left of the publication chain.
-     * "linkedFrom" refers to publications that follow to the right of the publication chain.
-     *
-     * The basic function of each query is to recursively select linked publications in each individual direction of the chain.
-     * This can then be used to generate a tree representation branching from a root publication.
-     *
-     * Additional rules:
-     *
-     * 1. Only LIVE publications are returned.
-     * 2. To limit the tree size, a linked publication cannot be of the same type (for instance, we aren't looking to return problems linked to other problems)
-     */
-
-    const linkedTo = await client.prisma.$queryRaw<I.LinkedToPublication[]>`
-        WITH RECURSIVE to_left AS (
-            SELECT "Links"."id" "linkId",
-                   "Links"."publicationFromId" "childPublication",
-                   "Links"."publicationToId" "id",
-                   "Links".draft,
-                   "pfrom".type "childPublicationType",
-                   "pto".type,
-                   "pto"."doi",
-                   "pto_version".title,
-                   "pto_version"."createdBy",
-                   "pto_version"."publishedDate",
-                   "pto_version"."currentStatus",
-                   "pto_user"."firstName" "authorFirstName",
-                   "pto_user"."lastName" "authorLastName"
-
-              FROM "Links"
-              LEFT JOIN "Publication" AS pfrom
-              ON "pfrom".id = "Links"."publicationFromId"
-
-              LEFT JOIN "Publication" AS pto
-              ON "pto".id = "Links"."publicationToId"
-
-              LEFT JOIN "PublicationVersion" AS pto_version
-              ON "pto".id = "pto_version"."versionOf"
-              AND "pto_version"."isLatestLiveVersion" = TRUE
-
-              LEFT JOIN "User" AS pto_user
-              ON "pto_version"."createdBy" = "pto_user"."id"
-
-            WHERE "Links"."publicationFromId" = ${id}
-
-            UNION ALL
-
-            SELECT l."id" "linkId",
-                   l."publicationFromId" "childPublication",
-                   l."publicationToId" "id",
-                   l."draft",
-                   "pfrom".type "childPublicationType",
-                   "pto".type,
-                   "pto"."doi",
-                   "pto_version".title,
-                   "pto_version"."createdBy",
-                   "pto_version"."publishedDate",
-                   "pto_version"."currentStatus",
-                   "pto_user"."firstName" "authorFirstName",
-                   "pto_user"."lastName" "authorLastName"
-
-              FROM "Links" l
-              JOIN to_left
-              ON to_left."id" = l."publicationFromId"
-
-              LEFT JOIN "Publication" AS pfrom
-              ON "pfrom".id = "l"."publicationFromId"
-
-              LEFT JOIN "Publication" AS pto
-              ON "pto".id = "l"."publicationToId"
-
-              LEFT JOIN "PublicationVersion" AS pto_version
-              ON "pto".id = "pto_version"."versionOf"
-              AND "pto_version"."isLatestLiveVersion" = TRUE
-
-              LEFT JOIN "User" AS pto_user
-              ON "pto_version"."createdBy" = "pto_user"."id"
-        )
-        
-        SELECT DISTINCT * FROM to_left
-        WHERE "type" != "childPublicationType"
-            AND CAST("type" AS text) != ${publication?.type}
-            AND "currentStatus" = 'LIVE';
-    `;
-
-    const linkedFrom = await client.prisma.$queryRaw<I.LinkedFromPublication[]>`
-        WITH RECURSIVE to_right AS (
-            SELECT "Links"."id" "linkId",
-                   "Links"."publicationFromId" "id",
-                   "Links"."publicationToId" "parentPublication",
-                   "Links".draft,
-                   "pfrom".type,
-                   "pfrom"."doi",
-                   "pto".type "parentPublicationType",
-                   "pfrom_version"."title",
-                   "pfrom_version"."createdBy",
-                   "pfrom_version"."publishedDate",
-                   "pfrom_version"."currentStatus",
-                   "pfrom_user"."firstName" "authorFirstName",
-                   "pfrom_user"."lastName" "authorLastName"
-
-              FROM "Links"
-              LEFT JOIN "Publication" AS pfrom
-              ON "pfrom".id = "Links"."publicationFromId"
-
-              LEFT JOIN "PublicationVersion" AS pfrom_version
-              ON "pfrom".id = "pfrom_version"."versionOf"
-              AND "pfrom_version"."isLatestLiveVersion" = TRUE
-
-              LEFT JOIN "Publication" AS pto
-              ON "pto".id = "Links"."publicationToId"
-
-              LEFT JOIN "User" AS pfrom_user
-              ON "pfrom_version"."createdBy" = "pfrom_user"."id"
-
-            WHERE "Links"."publicationToId" = ${id}
-
-            UNION ALL
-
-            SELECT l."id" "linkId",
-                   l."publicationFromId" "id",
-                   l."publicationToId" "parentPublication",
-                   l."draft",
-                   "pfrom".type,
-                   "pfrom"."doi",
-                   "pto".type "parentPublicationType",
-                   "pfrom_version"."title",
-                   "pfrom_version"."createdBy",
-                   "pfrom_version"."publishedDate",
-                   "pfrom_version"."currentStatus",
-                   "pfrom_user"."firstName" "authorFirstName",
-                   "pfrom_user"."lastName" "authorLastName"
-              FROM "Links" l
-              JOIN to_right
-              ON to_right."id" = l."publicationToId"
-
-              LEFT JOIN "Publication" AS pfrom
-              ON "pfrom".id = "l"."publicationFromId"
-
-              LEFT JOIN "PublicationVersion" AS pfrom_version
-              ON "pfrom".id = "pfrom_version"."versionOf"
-              AND "pfrom_version"."isLatestLiveVersion" = TRUE
-
-              LEFT JOIN "Publication" AS pto
-              ON "pto".id = "l"."publicationToId"
-
-              LEFT JOIN "User" AS pfrom_user
-              ON "pfrom_version"."createdBy" = "pfrom_user"."id"
-
-              WHERE "pto"."type" != 'PROBLEM'
-        )
-        SELECT DISTINCT *
-          FROM to_right
-         WHERE "type" != "parentPublicationType"
-           AND "type" != 'PROBLEM'
-           AND "currentStatus" = 'LIVE';
-    `;
-
-    const publicationIds = linkedTo.map((link) => link.id).concat(linkedFrom.map((link) => link.id));
-
-    // Get extra details for linked publications
-    const versions = await client.prisma.publicationVersion.findMany({
-        where: {
-            isLatestLiveVersion: true,
-            versionOf: {
-                in: publicationIds
-            }
-        },
-        select: {
-            versionOf: true,
-            coAuthors: {
-                select: {
-                    id: true,
-                    linkedUser: true,
-                    user: {
-                        select: {
-                            orcid: true,
-                            firstName: true,
-                            lastName: true
-                        }
-                    }
-                },
-                orderBy: {
-                    position: 'asc'
-                }
-            },
-            publication: {
-                select: {
-                    publicationFlags: {
-                        where: {
-                            resolved: false
-                        }
-                    },
-                    linkedFrom: {
-                        where: {
-                            publicationFrom: {
-                                type: 'PEER_REVIEW',
-                                versions: {
-                                    some: {
-                                        isLatestLiveVersion: true
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    });
-
-    // Add authors and counts to 'linkedTo' publications
-    linkedTo.forEach((link) => {
-        const latestVersion = versions.find((version) => version.versionOf === link.id);
-
-        Object.assign(link, {
-            authors: latestVersion?.coAuthors || [],
-            flagCount: latestVersion?.publication.publicationFlags.length || 0,
-            peerReviewCount: latestVersion?.publication.linkedFrom.length || 0
-        });
-    });
-
-    // Add authors and counts to 'linkedFrom' publications
-    linkedFrom.forEach((link) => {
-        const latestVersion = versions.find((version) => version.versionOf === link.id);
-
-        Object.assign(link, {
-            authors: latestVersion?.coAuthors || [],
-            flagCount: latestVersion?.publication.publicationFlags.length || 0,
-            peerReviewCount: latestVersion?.publication.linkedFrom.length || 0
-        });
-    });
-
-    // Sorting - this is a custom order to make the visualisation neater.
+// Sort linked publications for visualization - trying to avoid crossing "chains" primarily,
+// and ordering by publicationDate secondarily.
+const sortLinkedPublicationsForVisualization = (
+    linkedTo: I.LinkedToPublication[],
+    linkedFrom: I.LinkedFromPublication[],
+    selectedPublicationType: I.PublicationType
+): {
+    linkedTo: I.LinkedToPublication[];
+    linkedFrom: I.LinkedFromPublication[];
+} => {
     // Process parents by type, proceeding away from the selected publication's type.
     const types = Enum.publicationTypes;
     const filteredPublicationTypes = types.filter((type) => type !== 'PEER_REVIEW');
     const orderedParents: I.LinkedToPublication[] = [];
-    let parentTypeIdx = types.indexOf(publication.type) - 1;
+    let parentTypeIdx = types.indexOf(selectedPublicationType) - 1;
 
     // For each type, going backwards towards PROBLEM, starting with the one before the selected publication's type...
     while (parentTypeIdx >= 0) {
@@ -854,7 +769,7 @@ export const getLinksForPublication = async (
 
         // Sort parents.
         // For the type immediately before the selected publication's type, just order parents by publication date, descending.
-        if (parentTypeIdx === types.indexOf(publication.type) - 1) {
+        if (parentTypeIdx === types.indexOf(selectedPublicationType) - 1) {
             orderedParents.push(...(sortPublicationsByPublicationDate(publicationsOfType) as I.LinkedToPublication[]));
         } else {
             // For types further along the chain, use custom ordering.
@@ -877,7 +792,7 @@ export const getLinksForPublication = async (
     }
 
     const orderedChildren: I.LinkedFromPublication[] = [];
-    let childTypeIdx = types.indexOf(publication.type) + 1;
+    let childTypeIdx = types.indexOf(selectedPublicationType) + 1;
 
     // For each type, going forwards towards REAL_WORLD_APPLICATION, starting with the one after the selected publication's type...
     while (childTypeIdx <= filteredPublicationTypes.indexOf('REAL_WORLD_APPLICATION')) {
@@ -886,11 +801,9 @@ export const getLinksForPublication = async (
 
         // Sort child publications.
         // For the type immediately after the selected publication's type, just order children by publication date, descending.
-        if (childTypeIdx === types.indexOf(publication.type) + 1) {
+        if (childTypeIdx === types.indexOf(selectedPublicationType) + 1) {
             orderedChildren.push(
-                ...publicationsOfType.sort(
-                    (a, b) => new Date(b.publishedDate).valueOf() - new Date(a.publishedDate).valueOf()
-                )
+                ...(sortPublicationsByPublicationDate(publicationsOfType) as I.LinkedFromPublication[])
             );
         } else {
             // For types further along the chain, order them to keep the visualisation as neat as we can.
@@ -914,30 +827,336 @@ export const getLinksForPublication = async (
     }
 
     return {
-        publication: {
-            id: publication.id,
-            type: publication.type,
-            doi: publication.doi,
-            title: latestVersion.title || '',
-            createdBy: latestVersion.createdBy,
-            currentStatus: latestVersion.currentStatus,
-            publishedDate: latestVersion.publishedDate?.toISOString() || '',
-            authorFirstName: latestVersion.user.firstName,
-            authorLastName: latestVersion.user.lastName || '',
-            authors: latestVersion.coAuthors.map((author) => ({
-                id: author.id,
-                linkedUser: author.linkedUser,
-                user: {
-                    orcid: author.user?.orcid || '',
-                    firstName: author.user?.firstName || '',
-                    lastName: author.user?.lastName || '',
-                    role: author.user?.role || 'USER',
-                    url: author.user?.url || ''
+        linkedTo: orderedParents,
+        linkedFrom: orderedChildren
+    };
+};
+
+// Take raw linked publications from a raw SQL query and populate them with the requisite data for the response.
+const populateRawLinkedPublicationData = async (
+    linkedTo: RawLinkedToPublication[],
+    linkedFrom: RawLinkedFromPublication[],
+    userId: string | null
+): Promise<{
+    linkedTo: I.LinkedToPublication[];
+    linkedFrom: I.LinkedFromPublication[];
+}> => {
+    // Make values unique because the same publication may be linked with different children/parents.
+    const linkedPublicationIds = [
+        ...new Set(linkedTo.map((link) => link.id).concat(linkedFrom.map((link) => link.id)))
+    ];
+
+    const linkedVersions = await client.prisma.publicationVersion.findMany({
+        // Get the latest live version and any current draft version of publications returned by the raw queries.
+        where: {
+            OR: [
+                {
+                    isLatestLiveVersion: true,
+                    versionOf: {
+                        in: linkedPublicationIds
+                    }
+                },
+                {
+                    currentStatus: {
+                        not: 'LIVE'
+                    },
+                    isLatestVersion: true,
+                    versionOf: {
+                        in: linkedPublicationIds
+                    }
                 }
-            })),
-            flagCount: publication.flagCount,
-            peerReviewCount: publication.peerReviewCount
+            ]
         },
+        select: {
+            createdBy: true,
+            currentStatus: true,
+            isLatestVersion: true,
+            isLatestLiveVersion: true,
+            publishedDate: true,
+            title: true,
+            versionOf: true,
+            coAuthors: {
+                select: {
+                    id: true,
+                    linkedUser: true,
+                    user: {
+                        select: {
+                            orcid: true,
+                            firstName: true,
+                            lastName: true,
+                            role: true,
+                            url: true
+                        }
+                    }
+                },
+                orderBy: {
+                    position: 'asc'
+                }
+            },
+            publication: {
+                select: {
+                    doi: true,
+                    externalSource: true,
+                    publicationFlags: {
+                        where: {
+                            resolved: false
+                        }
+                    },
+                    linkedFrom: {
+                        where: {
+                            publicationFrom: {
+                                type: 'PEER_REVIEW',
+                                versions: {
+                                    some: {
+                                        isLatestLiveVersion: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true
+                }
+            }
+        }
+    });
+
+    // Get the fields ready for the response.
+    const tidyRawLinkedPublication = (
+        options:
+            | {
+                  link: RawLinkedToPublication;
+                  direction: 'to';
+              }
+            | { link: RawLinkedFromPublication; direction: 'from' }
+    ): I.LinkedToPublication | I.LinkedFromPublication => {
+        const { direction, link } = options;
+        const latestLiveVersion = linkedVersions.find(
+            (version) => version.versionOf === link.id && version.isLatestLiveVersion
+        );
+        const draftVersion = linkedVersions.find(
+            (version) => version.versionOf === link.id && version.isLatestVersion && version.currentStatus !== 'LIVE'
+        );
+        const isInitialDraft = !!draftVersion && !latestLiveVersion;
+
+        // Fields whose source depends on whether the publication is draft or live.
+        let conditionalFields: Pick<
+            I.LinkedPublication,
+            'doi' | 'title' | 'publishedDate' | 'currentStatus' | 'createdBy'
+        >;
+        let authorFields: Pick<I.LinkedPublication, 'authorFirstName' | 'authorLastName' | 'authors'>;
+
+        if (isInitialDraft) {
+            // Only draft version is available, so get details from that.
+            conditionalFields = {
+                doi: draftVersion.publication.doi,
+                title: draftVersion.title,
+                publishedDate: null,
+                currentStatus: draftVersion.currentStatus,
+                createdBy: draftVersion.createdBy
+            };
+
+            const requesterIsAuthorOnLinkedDraft =
+                !!userId && draftVersion?.coAuthors.some((author) => author.linkedUser === userId);
+
+            // Author details should only be returned to someone with access to the draft.
+            if (requesterIsAuthorOnLinkedDraft) {
+                authorFields = {
+                    authorFirstName: draftVersion.user.firstName,
+                    authorLastName: draftVersion.user.lastName,
+                    authors: draftVersion.coAuthors
+                };
+            } else {
+                authorFields = {
+                    ...conditionalFields,
+                    authorFirstName: null,
+                    authorLastName: null,
+                    authors: null
+                };
+            }
+        } else {
+            if (!latestLiveVersion) {
+                throw Error(`No draft or live version found for linked publication ${link.id}`);
+            }
+
+            conditionalFields = {
+                doi: latestLiveVersion.publication.doi,
+                title: latestLiveVersion.title,
+                publishedDate: latestLiveVersion.publishedDate?.toISOString() || null,
+                currentStatus: latestLiveVersion.currentStatus,
+                createdBy: latestLiveVersion.createdBy
+            };
+            authorFields = {
+                authorFirstName: latestLiveVersion.user.firstName,
+                authorLastName: latestLiveVersion.user.lastName,
+                authors: latestLiveVersion.coAuthors
+            };
+        }
+
+        let directionalFields:
+            | Pick<
+                  I.LinkedToPublication,
+                  'childPublicationId' | 'childPublicationType' | 'draft' | 'externalSource' | 'linkId'
+              >
+            | Pick<I.LinkedFromPublication, 'draft' | 'linkId' | 'parentPublicationId' | 'parentPublicationType'>;
+
+        if (direction === 'to') {
+            const { childPublicationId, childPublicationType, draft, linkId } = link;
+            directionalFields = {
+                childPublicationId,
+                childPublicationType,
+                draft,
+                // One of these will be defined due to the error thrown above, and they have the same value.
+                externalSource:
+                    latestLiveVersion?.publication.externalSource ?? draftVersion?.publication.externalSource ?? null,
+                linkId
+            };
+        } else {
+            const { draft, linkId, parentPublicationId, parentPublicationType } = link;
+            directionalFields = {
+                draft,
+                linkId,
+                parentPublicationId,
+                parentPublicationType
+            };
+        }
+
+        return {
+            ...conditionalFields,
+            ...authorFields,
+            ...directionalFields,
+            id: link.id,
+            type: link.type,
+            flagCount: latestLiveVersion?.publication.publicationFlags.length || 0,
+            peerReviewCount: latestLiveVersion?.publication.linkedFrom.length || 0
+        };
+    };
+
+    const tidiedLinkedTo = linkedTo.map((link) =>
+        tidyRawLinkedPublication({ link, direction: 'to' })
+    ) as I.LinkedToPublication[];
+    const tidiedLinkedFrom = linkedFrom.map((link) =>
+        tidyRawLinkedPublication({ link, direction: 'from' })
+    ) as I.LinkedFromPublication[];
+
+    return {
+        linkedTo: tidiedLinkedTo,
+        linkedFrom: tidiedLinkedFrom
+    };
+};
+
+export const getLinksForPublication = async (
+    id: string,
+    requesterUserId: string | null
+): Promise<I.PublicationWithLinks> => {
+    const publication = await get(id);
+
+    if (!publication) {
+        return {
+            publication: null,
+            linkedFrom: [],
+            linkedTo: []
+        };
+    }
+
+    const latestVersion = publication.versions.find((version) => version.isLatestVersion);
+    const latestLiveVersion = publication.versions.find((version) => version.isLatestLiveVersion);
+    const requesterIsAuthorOnDraft =
+        !!requesterUserId &&
+        !!latestVersion &&
+        latestVersion.currentStatus !== 'LIVE' &&
+        latestVersion.coAuthors.some((author) => author.linkedUser === requesterUserId);
+    const noVersionIsViewable = !(requesterIsAuthorOnDraft || latestLiveVersion);
+
+    // If no viewable version is found, return nothing.
+    if (noVersionIsViewable) {
+        return {
+            publication: null,
+            linkedFrom: [],
+            linkedTo: []
+        };
+    }
+
+    const { linkedTo, linkedFrom } = await getRawLinkedPublications(id, publication.type, requesterIsAuthorOnDraft);
+
+    const { linkedTo: populatedLinkedTo, linkedFrom: populatedLinkedFrom } = await populateRawLinkedPublicationData(
+        linkedTo,
+        linkedFrom,
+        requesterUserId
+    );
+
+    // Sort data for visualization.
+    const { linkedTo: orderedParents, linkedFrom: orderedChildren } = sortLinkedPublicationsForVisualization(
+        populatedLinkedTo,
+        populatedLinkedFrom,
+        publication.type
+    );
+
+    // A way to only return what we need from the coAuthors from the publication get() call.
+    const mapFullCoAuthor = (
+        coAuthor: (typeof publication.versions)[number]['coAuthors'][number]
+    ): I.LinkedPublicationAuthor => ({
+        id: coAuthor.id,
+        linkedUser: coAuthor.linkedUser,
+        user: coAuthor.user
+            ? {
+                  firstName: coAuthor.user.firstName,
+                  lastName: coAuthor.user.lastName,
+                  orcid: coAuthor.user.orcid,
+                  role: coAuthor.user.role,
+                  url: coAuthor.user.url
+              }
+            : null
+    });
+
+    // Assemble data for the selected publication.
+    // Return draft data if allowed, otherwise use live version's data.
+    let conditionalFields: Pick<
+        I.LinkedPublication,
+        'title' | 'publishedDate' | 'currentStatus' | 'createdBy' | 'authorFirstName' | 'authorLastName' | 'authors'
+    >;
+
+    if (requesterIsAuthorOnDraft) {
+        conditionalFields = {
+            title: latestVersion.title,
+            publishedDate: null,
+            currentStatus: latestVersion.currentStatus,
+            createdBy: latestVersion.createdBy,
+            authorFirstName: latestVersion.user.firstName,
+            authorLastName: latestVersion.user.lastName,
+            authors: latestVersion.coAuthors.map((author) => mapFullCoAuthor(author))
+        };
+    } else {
+        if (!latestLiveVersion) {
+            throw Error(`No viewable draft or live version found for publication ${id}`);
+        }
+
+        conditionalFields = {
+            title: latestLiveVersion.title,
+            publishedDate: latestLiveVersion.publishedDate?.toISOString() || null,
+            currentStatus: latestLiveVersion.currentStatus,
+            createdBy: latestLiveVersion.createdBy || '',
+            authorFirstName: latestLiveVersion.user.firstName,
+            authorLastName: latestLiveVersion.user.lastName,
+            authors: latestLiveVersion.coAuthors
+        };
+    }
+
+    const publicationData = {
+        ...conditionalFields,
+        id: publication.id,
+        type: publication.type,
+        doi: publication.doi,
+        flagCount: publication.flagCount,
+        peerReviewCount: publication.peerReviewCount
+    };
+
+    return {
+        publication: publicationData,
         linkedTo: orderedParents,
         linkedFrom: orderedChildren
     };
@@ -945,11 +1164,45 @@ export const getLinksForPublication = async (
 
 export const getDirectLinksForPublication = async (
     id: string,
-    includeDraftVersion = false
+    userId: string | null,
+    requesterIsAuthor = false
 ): Promise<I.PublicationWithLinks> => {
-    const publicationFilter: Prisma.PublicationVersionWhereInput = includeDraftVersion
-        ? { isLatestVersion: true }
+    // Get only the live version of the main publication if not an author, otherwise draft and live.
+    const versionFilter: Prisma.PublicationVersionWhereInput = requesterIsAuthor
+        ? { OR: [{ isLatestVersion: true }, { isLatestLiveVersion: true }] }
         : { isLatestLiveVersion: true };
+    // Authors can get all links made from this publication, but non-authors can only see live links.
+    const linkedToFilter: Prisma.LinksWhereInput = requesterIsAuthor
+        ? {}
+        : {
+              draft: false,
+              publicationTo: {
+                  versions: {
+                      some: {
+                          isLatestLiveVersion: true
+                      }
+                  }
+              }
+          };
+    // Same with links made to this publication.
+    const linkedFromFilter: Prisma.LinksWhereInput = requesterIsAuthor
+        ? {}
+        : {
+              draft: false,
+              publicationFrom: {
+                  versions: {
+                      some: {
+                          isLatestLiveVersion: true
+                      }
+                  }
+              }
+          };
+    // You can only get live versions of linked publications unless you're an author.
+    const linkedVersionFilter: Prisma.PublicationVersionWhereInput = requesterIsAuthor
+        ? {}
+        : {
+              isLatestLiveVersion: true
+          };
 
     const publication = await client.prisma.publication.findUnique({
         where: {
@@ -957,9 +1210,7 @@ export const getDirectLinksForPublication = async (
         },
         include: {
             versions: {
-                where: {
-                    ...publicationFilter
-                },
+                where: versionFilter,
                 include: {
                     coAuthors: {
                         include: {
@@ -970,16 +1221,7 @@ export const getDirectLinksForPublication = async (
                 }
             },
             linkedTo: {
-                where: {
-                    draft: includeDraftVersion ? undefined : includeDraftVersion,
-                    publicationTo: {
-                        versions: {
-                            some: {
-                                isLatestLiveVersion: includeDraftVersion ? undefined : true
-                            }
-                        }
-                    }
-                },
+                where: linkedToFilter,
                 select: {
                     id: true,
                     draft: true,
@@ -997,10 +1239,23 @@ export const getDirectLinksForPublication = async (
                             type: true,
                             externalSource: true,
                             versions: {
-                                where: {
-                                    isLatestLiveVersion: includeDraftVersion ? undefined : true
-                                },
+                                where: linkedVersionFilter,
                                 include: {
+                                    coAuthors: {
+                                        select: {
+                                            id: true,
+                                            linkedUser: true,
+                                            user: {
+                                                select: {
+                                                    firstName: true,
+                                                    lastName: true,
+                                                    orcid: true,
+                                                    role: true,
+                                                    url: true
+                                                }
+                                            }
+                                        }
+                                    },
                                     user: true
                                 }
                             },
@@ -1026,16 +1281,7 @@ export const getDirectLinksForPublication = async (
                 }
             },
             linkedFrom: {
-                where: {
-                    draft: includeDraftVersion ? undefined : includeDraftVersion,
-                    publicationFrom: {
-                        versions: {
-                            some: {
-                                isLatestLiveVersion: includeDraftVersion ? undefined : true
-                            }
-                        }
-                    }
-                },
+                where: linkedFromFilter,
                 select: {
                     id: true,
                     draft: true,
@@ -1052,10 +1298,23 @@ export const getDirectLinksForPublication = async (
                             doi: true,
                             type: true,
                             versions: {
-                                where: {
-                                    isLatestLiveVersion: includeDraftVersion ? undefined : true
-                                },
+                                where: linkedVersionFilter,
                                 include: {
+                                    coAuthors: {
+                                        select: {
+                                            id: true,
+                                            linkedUser: true,
+                                            user: {
+                                                select: {
+                                                    firstName: true,
+                                                    lastName: true,
+                                                    orcid: true,
+                                                    role: true,
+                                                    url: true
+                                                }
+                                            }
+                                        }
+                                    },
                                     user: true
                                 }
                             },
@@ -1109,7 +1368,37 @@ export const getDirectLinksForPublication = async (
     const linkedTo: I.LinkedToPublication[] = publication.linkedTo.map((link) => {
         const { id: linkId, publicationTo, versionTo, draft } = link;
         const { id, type, versions, doi: publicationDoi, publicationFlags, linkedFrom, externalSource } = publicationTo;
-        const { createdBy, user, currentStatus, publishedDate, title } = versions[0];
+        const initialDraftVersion = versions.find(
+            (version) => version.versionNumber === 1 && version.currentStatus !== 'LIVE'
+        );
+        const liveVersion = versions.find((version) => version.isLatestLiveVersion);
+        const versionToUse = initialDraftVersion ?? liveVersion;
+
+        if (!versionToUse) {
+            throw Error(`Could not find version for linked publication ${id}`);
+        }
+
+        const { createdBy, currentStatus, publishedDate, title } = versionToUse;
+        const userIsAuthorOnInitialDraft =
+            initialDraftVersion && initialDraftVersion.coAuthors.some((author) => author.linkedUser === userId);
+
+        const authorFields = liveVersion
+            ? {
+                  authorFirstName: liveVersion.user.firstName,
+                  authorLastName: liveVersion.user.lastName,
+                  authors: liveVersion.coAuthors
+              }
+            : userIsAuthorOnInitialDraft
+            ? {
+                  authorFirstName: initialDraftVersion.user.firstName,
+                  authorLastName: initialDraftVersion.user.lastName,
+                  authors: initialDraftVersion.coAuthors
+              }
+            : {
+                  authorFirstName: '',
+                  authorLastName: '',
+                  authors: []
+              };
 
         return {
             id,
@@ -1117,28 +1406,56 @@ export const getDirectLinksForPublication = async (
             linkId,
             type,
             doi: publicationDoi,
-            childPublication: publication.id,
+            childPublicationId: publication.id,
             childPublicationType: publication.type,
             parentVersionId: versionTo.id,
             parentVersionNumber: versionTo.versionNumber,
             parentVersionIsLatestLive: versionTo.isLatestLiveVersion,
-            title: title || '',
+            title: title || null,
             createdBy,
-            authorFirstName: user.firstName,
-            authorLastName: user.lastName || '',
             currentStatus,
-            publishedDate: publishedDate?.toISOString() || '',
-            authors: [],
+            publishedDate: publishedDate?.toISOString() || null,
             flagCount: publicationFlags.length,
             peerReviewCount: linkedFrom.length,
-            externalSource
+            externalSource,
+            ...authorFields
         };
     });
 
     const linkedFrom: I.LinkedFromPublication[] = publication.linkedFrom.map((link) => {
         const { id: linkId, publicationFrom, versionTo, draft } = link;
         const { id, type, versions, doi: publicationDoi, publicationFlags, linkedFrom } = publicationFrom;
-        const { createdBy, user, currentStatus, publishedDate, title } = versions[0];
+        const initialDraftVersion = versions.find(
+            (version) => version.versionNumber === 1 && version.currentStatus !== 'LIVE'
+        );
+        const liveVersion = versions.find((version) => version.isLatestLiveVersion);
+        const versionToUse = initialDraftVersion ?? liveVersion;
+
+        if (!versionToUse) {
+            throw Error(`Could not find version for linked publication ${id}`);
+        }
+
+        const { createdBy, currentStatus, publishedDate, title } = versionToUse;
+        const userIsAuthorOnInitialDraft =
+            initialDraftVersion && initialDraftVersion.coAuthors.some((author) => author.linkedUser === userId);
+
+        const authorFields = liveVersion
+            ? {
+                  authorFirstName: liveVersion.user.firstName,
+                  authorLastName: liveVersion.user.lastName,
+                  authors: liveVersion.coAuthors
+              }
+            : userIsAuthorOnInitialDraft
+            ? {
+                  authorFirstName: initialDraftVersion.user.firstName,
+                  authorLastName: initialDraftVersion.user.lastName,
+                  authors: initialDraftVersion.coAuthors
+              }
+            : {
+                  authorFirstName: null,
+                  authorLastName: null,
+                  authors: null
+              };
 
         return {
             id,
@@ -1146,70 +1463,19 @@ export const getDirectLinksForPublication = async (
             linkId,
             type,
             doi: publicationDoi,
-            parentPublication: publication.id,
+            parentPublicationId: publication.id,
             parentPublicationType: publication.type,
             parentVersionId: versionTo.id,
             parentVersionNumber: versionTo.versionNumber,
             parentVersionIsLatestLive: versionTo.isLatestLiveVersion,
-            title: title || '',
+            title: title || null,
             createdBy,
-            authorFirstName: user.firstName,
-            authorLastName: user.lastName || '',
             currentStatus,
-            publishedDate: publishedDate?.toISOString() || '',
-            authors: [],
+            publishedDate: publishedDate?.toISOString() || null,
             flagCount: publicationFlags.length,
-            peerReviewCount: linkedFrom.length
+            peerReviewCount: linkedFrom.length,
+            ...authorFields
         };
-    });
-
-    const publicationIds = linkedTo.map((link) => link.id).concat(linkedFrom.map((link) => link.id));
-
-    // get coAuthors for each latest LIVE version of each publication
-    const versions = await client.prisma.publicationVersion.findMany({
-        where: {
-            isLatestLiveVersion: true,
-            versionOf: {
-                in: publicationIds
-            }
-        },
-        select: {
-            versionOf: true,
-            coAuthors: {
-                select: {
-                    id: true,
-                    linkedUser: true,
-                    user: {
-                        select: {
-                            orcid: true,
-                            firstName: true,
-                            lastName: true
-                        }
-                    }
-                },
-                orderBy: {
-                    position: 'asc'
-                }
-            }
-        }
-    });
-
-    // add authors to 'linkedTo' publications
-    linkedTo.forEach((link) => {
-        const authors = versions.find((version) => version.versionOf === link.id)?.coAuthors || [];
-
-        Object.assign(link, {
-            authors
-        });
-    });
-
-    // add authors to 'linkedFrom' publications
-    linkedFrom.forEach((link) => {
-        const authors = versions.find((version) => version.versionOf === link.id)?.coAuthors || [];
-
-        Object.assign(link, {
-            authors
-        });
     });
 
     return {
@@ -1217,12 +1483,12 @@ export const getDirectLinksForPublication = async (
             id: publication.id,
             type: publication.type,
             doi: publication.doi,
-            title: latestLiveVersion.title || '',
+            title: latestLiveVersion.title || null,
             createdBy: latestLiveVersion.createdBy,
             currentStatus: latestLiveVersion.currentStatus,
-            publishedDate: latestLiveVersion.publishedDate?.toISOString() || '',
+            publishedDate: latestLiveVersion.publishedDate?.toISOString() || null,
             authorFirstName: latestLiveVersion.user.firstName,
-            authorLastName: latestLiveVersion.user.lastName || '',
+            authorLastName: latestLiveVersion.user.lastName || null,
             authors: latestLiveVersion.coAuthors.map((author) => ({
                 id: author.id,
                 linkedUser: author.linkedUser,

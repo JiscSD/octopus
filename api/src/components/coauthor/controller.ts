@@ -29,25 +29,6 @@ export const getAll = async (
 
         const coAuthors = version.coAuthors;
 
-        const correspondingAuthor = coAuthors.find((coAuthor) => coAuthor.linkedUser === version.createdBy);
-
-        // enforce adding corresponding author if it's missing - this will fix old publications which don't have the corresponding author in the coAuthors list
-        if (!correspondingAuthor) {
-            const correspondingAuthor = await coAuthorService.createCorrespondingCoAuthor(version);
-
-            // put corresponding author in the first position
-            coAuthors.unshift({
-                ...correspondingAuthor,
-                user: {
-                    firstName: version.user.firstName,
-                    lastName: version.user.lastName,
-                    orcid: version.user.orcid,
-                    role: version.user.role,
-                    url: version.user.url
-                }
-            });
-        }
-
         // Redact emails of other co-authors unless the user is the corresponding author.
         const coAuthorsWithRedactedEmails =
             event.user.id === version.createdBy
@@ -369,7 +350,12 @@ export const updateConfirmation = async (
         }
 
         // update coAuthor confirmation status
-        await coAuthorService.updateConfirmation(version.id, event.user.id, event.body.confirm);
+        await coAuthorService.updateConfirmation(
+            version.id,
+            event.user.id,
+            event.body.confirm,
+            event.body.retainApproval ?? coAuthor.retainApproval
+        );
 
         if (event.body.confirm) {
             // notify main author about confirmation

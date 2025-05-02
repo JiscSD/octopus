@@ -279,7 +279,11 @@ export const updateStatus = async (
                 });
             }
 
-            const links = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
+            const links = await publicationService.getDirectLinksForPublication(
+                publicationVersion.versionOf,
+                null,
+                true
+            );
 
             if (!links.linkedTo.some((link) => link.draft && link.externalSource === 'ARI')) {
                 return response.json(400, {
