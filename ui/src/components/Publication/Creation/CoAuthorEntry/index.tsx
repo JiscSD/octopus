@@ -36,8 +36,8 @@ const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
                     {props.isMainAuthor ? (
                         <span className="leading-10">N/A</span>
                     ) : props.coAuthor.confirmedCoAuthor ? (
-                        <span title={`${props.coAuthor.email} has given approval for this publication to published.`}>
-                            <OutlineIcons.CheckBadgeIcon className="h-5 w-5 text-orcid transition-colors duration-500 dark:text-white-50" />
+                        <span title={`Approved`}>
+                            <OutlineIcons.CheckBadgeIcon className="h-5 w-5 text-green-400 transition-colors duration-500 dark:text-green-50" />
                         </span>
                     ) : (
                         <span
