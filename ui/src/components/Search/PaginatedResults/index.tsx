@@ -16,6 +16,7 @@ type Props = {
     total: number;
 };
 const PaginatedResults: React.FC<Props> = (props: Props) => {
+    console.log('Results in PaginatedResults', props.results);
     const articleId = useId();
     const upperPageBound = props.limit + props.offset > props.total ? props.total : props.limit + props.offset;
     const scrollToTop = () =>
