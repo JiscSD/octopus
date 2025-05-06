@@ -281,6 +281,18 @@ export interface PublicationWithLinks {
     linkedFrom: LinkedFromPublication[];
 }
 
+export interface DeleteLinkPathParams {
+    id: string;
+}
+
+export interface MarkLinkForDeletionBody {
+    toDelete: boolean;
+}
+
+export interface MarkLinkForDeletionPathParams {
+    id: string;
+}
+
 /**
  * @description Users
  */
@@ -461,10 +473,6 @@ export interface ApproveControlRequestPathParams {
 export interface ApproveControlRequestBody {
     approve: 'true' | 'false';
     eventId: string;
-}
-
-export interface DeleteLinkPathParams {
-    id: string;
 }
 
 export type ValidStatuses = 'DRAFT' | 'LIVE' | 'LOCKED';

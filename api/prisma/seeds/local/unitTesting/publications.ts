@@ -1060,6 +1060,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
         type: 'HYPOTHESIS',
         linkedTo: {
             create: {
+                id: 'hypothesis-live-to-problem-live',
                 publicationToId: 'publication-problem-live',
                 versionToId: 'publication-problem-live-v1',
                 draft: false
@@ -1576,6 +1577,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
         versions: {
             create: {
                 id: 'publication-problem-locked-2-v1',
+                doi: '10.82259/ver1-2g35',
                 versionNumber: 1,
                 title: 'Publication PROBLEM-LOCKED 2',
                 conflictOfInterestStatus: false,
@@ -1615,6 +1617,92 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                     ]
                 }
             }
+        }
+    },
+    {
+        id: 'multiversion-hypothesis',
+        doi: '10.82259/cty5-2g36',
+        type: 'HYPOTHESIS',
+        linkedTo: {
+            create: [
+                {
+                    id: 'multiversion-hypothesis-draft-link',
+                    publicationToId: 'publication-problem-live-2',
+                    versionToId: 'publication-problem-live-2-v1'
+                },
+                {
+                    id: 'multiversion-hypothesis-link-to-live',
+                    publicationToId: 'publication-problem-live',
+                    versionToId: 'publication-problem-live-v1',
+                    draft: false
+                }
+            ]
+        },
+        versions: {
+            create: [
+                {
+                    id: 'multiversion-hypothesis-v1',
+                    doi: '10.82259/ver1-2g36',
+                    versionNumber: 1,
+                    title: 'Multiversion Hypothesis',
+                    conflictOfInterestStatus: false,
+                    content: 'Multiversion Hypothesis',
+                    currentStatus: 'LIVE',
+                    isLatestLiveVersion: true,
+                    isLatestVersion: false,
+                    user: { connect: { id: 'test-user-5' } },
+                    publicationStatus: {
+                        create: [
+                            { status: 'DRAFT', createdAt: '2025-05-01T00:00:00.000Z' },
+                            {
+                                status: 'LIVE',
+                                createdAt: '2025-05-01T01:00:00.000Z'
+                            }
+                        ]
+                    },
+                    coAuthors: {
+                        create: [
+                            {
+                                id: 'coauthor-test-user-5-multiversion-hypothesis-v1',
+                                email: 'test-user-5@jisc.ac.uk',
+                                code: 'test-code-user-5',
+                                confirmedCoAuthor: true,
+                                linkedUser: 'test-user-5',
+                                isIndependent: true,
+                                affiliations: []
+                            }
+                        ]
+                    }
+                },
+                {
+                    id: 'multiversion-hypothesis-v2',
+                    doi: '10.82259/ver2-2g36',
+                    versionNumber: 2,
+                    title: 'Multiversion Hypothesis v2',
+                    conflictOfInterestStatus: false,
+                    content: 'Multiversion Hypothesis v2',
+                    currentStatus: 'DRAFT',
+                    isLatestLiveVersion: false,
+                    isLatestVersion: true,
+                    user: { connect: { id: 'test-user-5' } },
+                    publicationStatus: {
+                        create: [{ status: 'DRAFT', createdAt: '2025-05-02T00:00:00.000Z' }]
+                    },
+                    coAuthors: {
+                        create: [
+                            {
+                                id: 'coauthor-test-user-5-multiversion-hypothesis-v2',
+                                email: 'test-user-5@jisc.ac.uk',
+                                code: 'test-code-user-5',
+                                confirmedCoAuthor: true,
+                                linkedUser: 'test-user-5',
+                                isIndependent: true,
+                                affiliations: []
+                            }
+                        ]
+                    }
+                }
+            ]
         }
     }
 ];
