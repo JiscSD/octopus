@@ -266,6 +266,7 @@ export interface LinkedToPublication extends LinkedPublication {
     draft: boolean;
     externalSource: PublicationImportSource | null;
     linkId: string;
+    pendingDeletion?: boolean;
 }
 
 export interface LinkedFromPublication extends LinkedPublication {
@@ -273,6 +274,7 @@ export interface LinkedFromPublication extends LinkedPublication {
     linkId: string;
     parentPublicationId: string;
     parentPublicationType: PublicationType;
+    pendingDeletion?: boolean;
 }
 
 export interface PublicationWithLinks {

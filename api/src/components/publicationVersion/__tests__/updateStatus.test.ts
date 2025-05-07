@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client';
+
 import * as testUtils from 'lib/testUtils';
 import * as client from 'lib/client';
 
@@ -14,7 +16,7 @@ describe('Update publication version status', () => {
                 apiKey: '123456789'
             });
 
-        expect(updatePublicationVersionAttemptOne.status).toEqual(403);
+        expect(updatePublicationVersionAttemptOne.status).toEqual(400);
 
         // add a valid link
         await testUtils.agent
@@ -73,7 +75,7 @@ describe('Update publication version status', () => {
                 apiKey: '123456789'
             });
 
-        expect(updatePublicationVersion.status).toEqual(403);
+        expect(updatePublicationVersion.status).toEqual(400);
     });
 
     test('User with permissions cannot update their publication to LIVE from DRAFT if there is no licence.', async () => {
@@ -83,7 +85,7 @@ describe('Update publication version status', () => {
                 apiKey: '000000005'
             });
 
-        expect(updatePublicationVersion.status).toEqual(403);
+        expect(updatePublicationVersion.status).toEqual(400);
     });
 
     test('User with permissions can update their publication version to LIVE from DRAFT and a publishedDate is created', async () => {
@@ -105,7 +107,7 @@ describe('Update publication version status', () => {
                 apiKey: '123456789'
             });
 
-        expect(updatePublicationVersion.status).toEqual(403);
+        expect(updatePublicationVersion.status).toEqual(400);
     });
 
     test('User with permissions can update their publication version to LIVE with a conflict of interest, if they have provided text', async () => {
@@ -157,7 +159,7 @@ describe('Update publication version status', () => {
                 apiKey: '000000005'
             });
 
-        expect(updatePublicationVersion.status).toEqual(403);
+        expect(updatePublicationVersion.status).toEqual(400);
         expect(updatePublicationVersion.body.message).toEqual(
             'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
         );
@@ -197,7 +199,7 @@ describe('Update publication version status', () => {
             apiKey: '987654321'
         });
 
-        expect(response.status).toEqual(403);
+        expect(response.status).toEqual(400);
         expect(response.body.message).toEqual(
             'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
         );
@@ -220,10 +222,8 @@ describe('Update publication version status', () => {
                 apiKey: '000000005'
             });
 
-        expect(updateStatusResponse1.status).toEqual(403);
-        expect(updateStatusResponse1.body.message).toEqual(
-            'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
-        );
+        expect(updateStatusResponse1.status).toEqual(400);
+        expect(updateStatusResponse1.body.message).toEqual('Please request approval before locking the publication.');
 
         // request co-authors approvals
         const requestApprovalsResponse = await testUtils.agent
@@ -396,9 +396,40 @@ describe('Update publication version status', () => {
                 apiKey: '000000005'
             });
 
-        expect(updatePublicationVersionAttempt.status).toEqual(403);
+        expect(updatePublicationVersionAttempt.status).toEqual(400);
         expect(updatePublicationVersionAttempt.body.message).toEqual(
             'One or more linked publications are still in draft. Please ensure all linked publications are live before publishing this one.'
+        );
+    });
+
+    test('Links pending deletion are deleted on publish', async () => {
+        const linkCountQuery: Prisma.LinksCountArgs = {
+            where: { publicationFromId: 'multiversion-hypothesis', pendingDeletion: true }
+        };
+        const linkCountBefore = await client.prisma.links.count(linkCountQuery);
+        expect(linkCountBefore).toBe(1);
+
+        const updateStatus = await testUtils.agent
+            .put('/publication-versions/multiversion-hypothesis-v2/status/LIVE')
+            .query({
+                apiKey: '000000005'
+            });
+        expect(updateStatus.statusCode).toEqual(200);
+        expect(updateStatus.body.message).toEqual('Publication is now LIVE.');
+
+        const linkCountAfter = await client.prisma.links.count(linkCountQuery);
+        expect(linkCountAfter).toBe(0);
+    });
+
+    test('Publication cannot be published if all valid (not to a draft) links are pending deletion', async () => {
+        const updateStatus = await testUtils.agent
+            .put('/publication-versions/publication-interpretation-draft-v1/status/LIVE')
+            .query({
+                apiKey: '123456789'
+            });
+        expect(updateStatus.statusCode).toBe(400);
+        expect(updateStatus.body.message).toBe(
+            'This publication would be left with no valid links if it was published. Please ensure there is at least one link to a live publication that is not marked for deletion before publishing this publication.'
         );
     });
 });

@@ -853,6 +853,13 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
         id: 'publication-interpretation-draft',
         doi: '10.82259/cty5-2g17',
         type: 'INTERPRETATION',
+        linkedTo: {
+            create: {
+                publicationToId: 'publication-analysis-live',
+                versionToId: 'publication-analysis-live-v1',
+                pendingDeletion: true
+            }
+        },
         versions: {
             create: {
                 id: 'publication-interpretation-draft-v1',
@@ -1635,6 +1642,12 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                     publicationToId: 'publication-problem-live',
                     versionToId: 'publication-problem-live-v1',
                     draft: false
+                },
+                {
+                    id: 'multiversion-hypothesis-pending-deletion',
+                    publicationToId: 'publication-problem-live-3',
+                    versionToId: 'publication-problem-live-3-v1',
+                    pendingDeletion: true
                 }
             ]
         },
