@@ -7,13 +7,14 @@ import * as OutlineIcons from '@heroicons/react/24/outline';
 
 type Props = {
     deleteLink: (id: string) => Promise<void>;
-    inherited: boolean;
     linkedPublication: Interfaces.LinkedToPublication;
     markLinkForDeletion: (id: string, toDelete: boolean) => Promise<void>;
 };
 
 const LinkedPublicationRow: React.FC<Props> = (props): React.ReactElement => {
     const [loading, setLoading] = React.useState(false);
+    const inherited = !props.linkedPublication.draft;
+
     const handleDelete = async () => {
         setLoading(true);
         await props.deleteLink(props.linkedPublication.linkId);
@@ -29,7 +30,7 @@ const LinkedPublicationRow: React.FC<Props> = (props): React.ReactElement => {
 
     return (
         <tr key={props.linkedPublication.id}>
-            <td className={`${props.inherited ? 'w-1/2' : 'w-2/3'} ${tdClasses}`}>
+            <td className={`${inherited ? 'w-1/2' : 'w-2/3'} ${tdClasses}`}>
                 <div className="space-y-2">
                     <span className="font-montserrat text-sm font-medium text-teal-600 transition-colors duration-500 dark:text-teal-100">
                         {Helpers.formatPublicationType(props.linkedPublication.type)}
@@ -57,7 +58,7 @@ const LinkedPublicationRow: React.FC<Props> = (props): React.ReactElement => {
                     </div>
                 </div>
             </td>
-            {props.inherited && (
+            {inherited && (
                 <td className={`w-1/6 font-medium ${tdClasses}`}>
                     {props.linkedPublication.pendingDeletion
                         ? 'To be deleted when published'

@@ -122,7 +122,6 @@ const Links: React.FC = (): React.ReactElement => {
             <Components.LinkedPublicationRow
                 key={linkedPublication.id}
                 deleteLink={deletePublicationLink}
-                inherited={!linkedPublication.draft}
                 linkedPublication={linkedPublication}
                 markLinkForDeletion={markPublicationLinkForDeletion}
             />
