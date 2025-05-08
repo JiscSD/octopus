@@ -192,8 +192,8 @@ export const PageModel = {
             publicationInput: 'input[placeholder="Search for publications"]',
             topicInput: 'input[placeholder="Search for topics"]',
             addLink: 'button[aria-label="Add link"]',
-            deletePublicationLink: '#linked-publication-table > tbody > tr > td > button[title="Delete"]',
-            deleteTopicLink: '#linked-topic-table > tbody > tr > td > button[title="Delete"]'
+            deleteNewPublicationLink: '#new-linked-publication-table > tbody > tr > td >> button[title="Delete"]',
+            deleteNewTopicLink: '#new-linked-topic-table > tbody > tr > td >> button[title="Delete"]'
         },
         text: {
             editor: '.ProseMirror >> nth=0',

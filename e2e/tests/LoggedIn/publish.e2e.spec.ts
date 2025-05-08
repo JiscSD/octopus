@@ -435,7 +435,7 @@ test.describe('Publication flow', () => {
         await page.locator(`[role="option"]:has-text("Computer science")`).click();
         await page.locator(PageModel.publish.linkedItems.addLink).click();
         await page.waitForResponse((response) => response.url().includes('/topics') && response.ok());
-        await expect(page.locator(PageModel.publish.linkedItems.deleteTopicLink)).toBeVisible();
+        await expect(page.locator(PageModel.publish.linkedItems.deleteNewTopicLink)).toBeVisible();
     });
 
     test('Cannot link a non-problem publication to a topic', async ({ browser }) => {
@@ -473,7 +473,7 @@ test.describe('Publication flow', () => {
             (response) => response.url().includes('/publications') && response.request().method() === 'POST'
         );
         await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
-        await expect(page.locator(PageModel.publish.linkedItems.deleteTopicLink)).toBeVisible();
+        await expect(page.locator(PageModel.publish.linkedItems.deleteNewTopicLink)).toBeVisible();
     });
 });
 
