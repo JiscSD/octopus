@@ -73,9 +73,10 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             if (!publicationVersion.content) ready = { ready: false, message: 'You must provide main text' };
             const hasLiveLinks =
                 linkedTo.length && linkedTo.every((linkedPublication) => linkedPublication.currentStatus === 'LIVE');
+            const hasLinkNotPendingDeletion = linkedTo.some((link) => link.pendingDeletion === false);
             if (
                 (publicationVersion.publication.type === 'PROBLEM' &&
-                    !hasLiveLinks &&
+                    (!hasLiveLinks || !hasLinkNotPendingDeletion) &&
                     !publicationVersion.topics.length) ||
                 (publicationVersion.publication.type !== 'PROBLEM' && !hasLiveLinks)
             )
@@ -488,6 +489,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
     const topNextButtonSmallId = 'top-next-button-small-displays';
 
     const linkedToARI = store.linkedTo.some((linkedTo) => linkedTo.externalSource === 'ARI' && linkedTo.draft);
+    const linksPendingDeletion = store.linkedTo.filter((link) => link.pendingDeletion);
 
     return (
         <>
@@ -517,6 +519,18 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                 icon={<OutlineIcons.CloudArrowUpIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />}
             >
                 <p className="text-sm text-grey-700">It is not possible to make any changes post-publication.</p>
+                {!!linksPendingDeletion.length && (
+                    <>
+                        <p className="mt-2 text-sm font-semibold text-grey-700">
+                            Links to the following publications will be deleted upon publish:
+                        </p>
+                        <ul className="mt-2 mx-auto w-min text-sm text-grey-700 list-disc">
+                            {linksPendingDeletion.map((link) => (
+                                <li className="whitespace-nowrap">{link.title}</li>
+                            ))}
+                        </ul>
+                    </>
+                )}
                 {linkedToARI && (
                     <>
                         <p className="text-sm text-grey-700 my-4">

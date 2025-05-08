@@ -364,9 +364,30 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     };
 
     const handlePublish = React.useCallback(async () => {
+        let modalDescription: React.ReactNode[] = [];
+        modalDescription.push(
+            <p key="no-changes-post-publication">It is not possible to make any changes post-publication.</p>
+        );
+
+        const linksPendingDeletion = linkedTo.filter((link) => link.pendingDeletion);
+        if (linksPendingDeletion.length) {
+            modalDescription.push(
+                <React.Fragment key="links-pending-deletion">
+                    <p className="mt-2 font-semibold">
+                        Links to the following publications will be deleted upon publish:
+                    </p>
+                    <ul className="mt-2 mx-auto w-min list-disc">
+                        {linksPendingDeletion.map((link) => (
+                            <li className="whitespace-nowrap">{link.title}</li>
+                        ))}
+                    </ul>
+                </React.Fragment>
+            );
+        }
+
         const confirmed = await confirmation(
             'Are you sure you want to publish?',
-            'It is not possible to make any changes post-publication.',
+            modalDescription,
             <OutlineIcons.CloudArrowUpIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />,
             'Yes',
             'No'
@@ -392,7 +413,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 setPublishing(false);
             }
         }
-    }, [confirmation, publicationVersion?.id, router]);
+    }, [confirmation, linkedTo, publicationVersion?.id, router]);
 
     const handleUnlock = async () => {
         if (isUnlocking) {
