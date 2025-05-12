@@ -74,7 +74,7 @@ export const formatPublicationType = (publicationType: Types.PublicationType): s
 /**
  * @description Format a publication status
  */
-export const formatStatus = (status: Types.PublicationStatuses): string => {
+export const formatStatus = (status: Types.PublicationStatus): string => {
     const statuses = {
         DRAFT: 'Draft',
         LIVE: 'Live',
@@ -389,7 +389,15 @@ export const getTabCompleteness = (
                 }
                 break;
             case 'LINKED_ITEMS':
-                if (linkedTo?.length || publicationVersion.topics.length) {
+                const hasCoauthors = publicationVersion?.coAuthors.length > 1;
+                const hasLink = linkedTo.length > 0 || publicationVersion.topics.length > 0;
+                const allLinkedPublicationsAreLive = linkedTo.every((link) => link.currentStatus === 'LIVE');
+                if (
+                    // When coauthors are added, any link is fine to request approval, even to a draft publication.
+                    (hasCoauthors && hasLink) ||
+                    // When no coauthors are added, all linked publications need to be live.
+                    (!hasCoauthors && hasLink && allLinkedPublicationsAreLive)
+                ) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
                     stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
