@@ -106,7 +106,12 @@ export const PageModel = {
         redFlagLink: '[aria-label="View red flags"]',
         redFlagPreview: '#red-flags > div > div > div > a[title="View  comment thread"]',
         resolveFlag: 'text=Resolve flag',
-        confirmResolve: 'button[aria-label="Resolve"]'
+        confirmResolve: 'button[aria-label="Resolve"]',
+        versionsDropdown: {
+            createNewVersionButton: 'aside a:has-text("Create New Version")',
+            takeOverEditingButton: 'aside a:has-text("Take over editing")',
+            toggleButton: 'aside button[title="Versions"]'
+        }
     },
     organisationalUserInfo: {
         name: 'text=Octopus',
@@ -156,6 +161,9 @@ export const PageModel = {
         removeTopicBookmark: 'a[href="/topics/cly468yyb00177ryzsvccai51"] + button[aria-label="Remove bookmark"]'
     },
     publish: {
+        tabs: {
+            linkedItems: "aside button:has-text('Linked items')"
+        },
         title: 'input[type="text"]',
         publicationType: 'select#publicationType',
         confirmPublicationType: 'input[type="checkbox"]',
@@ -188,12 +196,16 @@ export const PageModel = {
             affiliationDetails: 'textarea[placeholder="Enter any details"]'
         },
         linkedItems: {
-            entityTypeSelect: 'select#linked-entity-type',
-            publicationInput: 'input[placeholder="Search for publications"]',
-            topicInput: 'input[placeholder="Search for topics"]',
             addLink: 'button[aria-label="Add link"]',
+            cancelPublicationPendingDeletionButton:
+                '#inherited-linked-publication-table > tbody > tr > td >> button[title="Cancel pending deletion"]',
             deleteNewPublicationLink: '#new-linked-publication-table > tbody > tr > td >> button[title="Delete"]',
-            deleteNewTopicLink: '#new-linked-topic-table > tbody > tr > td >> button[title="Delete"]'
+            deleteNewTopicLink: '#new-linked-topic-table > tbody > tr > td >> button[title="Delete"]',
+            entityTypeSelect: 'select#linked-entity-type',
+            markPublicationLinkForDeletionButton:
+                '#inherited-linked-publication-table > tbody > tr > td >> button[title="Mark for deletion"]',
+            publicationInput: 'input[placeholder="Search for publications"]',
+            topicInput: 'input[placeholder="Search for topics"]'
         },
         text: {
             editor: '.ProseMirror >> nth=0',
@@ -244,9 +256,7 @@ export const PageModel = {
             dataCollectionApprover: 'textarea#dataPermissionsStatementProvidedBy',
             dataAccessStatementOther: 'input#other',
             dataAccessStatementFreeText: '#dataAccessStatementfreeText'
-        },
-        versionsAccordion: 'aside >> #versions-accordion',
-        versionsAccordionButton: 'aside button[title="Versions"]'
+        }
     },
     coauthorApprove: {},
     coauthorDeny: {},
