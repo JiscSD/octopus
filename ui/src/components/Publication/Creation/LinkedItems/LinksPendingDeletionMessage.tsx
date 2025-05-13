@@ -10,9 +10,9 @@ const LinksPendingDeletionMessage: React.FC<{ publicationTitles: string[] }> = (
                     <p className="mt-2 text-sm font-semibold text-grey-700">
                         Links to the following publications will be deleted upon publish:
                     </p>
-                    <ul className="mt-2 mx-auto w-min text-sm text-grey-700 list-disc">
+                    <ul className="mt-2 mx-auto w-full text-sm text-grey-700 list-disc">
                         {props.publicationTitles.map((title) => (
-                            <li key={title} className="whitespace-nowrap text-left">
+                            <li key={title} className="text-left">
                                 {title}
                             </li>
                         ))}
