@@ -372,16 +372,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         const linksPendingDeletion = linkedTo.filter((link) => link.pendingDeletion);
         if (linksPendingDeletion.length) {
             modalDescription.push(
-                <React.Fragment key="links-pending-deletion">
-                    <p className="mt-2 font-semibold">
-                        Links to the following publications will be deleted upon publish:
-                    </p>
-                    <ul className="mt-2 mx-auto w-min list-disc">
-                        {linksPendingDeletion.map((link) => (
-                            <li className="whitespace-nowrap">{link.title}</li>
-                        ))}
-                    </ul>
-                </React.Fragment>
+                <Components.LinksPendingDeletionMessage
+                    key="links-pending-deletion"
+                    publicationTitles={linksPendingDeletion.flatMap((link) => (link.title ? [link.title] : []))}
+                />
             );
         }
 

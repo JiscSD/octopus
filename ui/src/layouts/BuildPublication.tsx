@@ -520,16 +520,9 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
             >
                 <p className="text-sm text-grey-700">It is not possible to make any changes post-publication.</p>
                 {!!linksPendingDeletion.length && (
-                    <>
-                        <p className="mt-2 text-sm font-semibold text-grey-700">
-                            Links to the following publications will be deleted upon publish:
-                        </p>
-                        <ul className="mt-2 mx-auto w-min text-sm text-grey-700 list-disc">
-                            {linksPendingDeletion.map((link) => (
-                                <li className="whitespace-nowrap">{link.title}</li>
-                            ))}
-                        </ul>
-                    </>
+                    <Components.LinksPendingDeletionMessage
+                        publicationTitles={linksPendingDeletion.flatMap((link) => (link.title ? [link.title] : []))}
+                    />
                 )}
                 {linkedToARI && (
                     <>

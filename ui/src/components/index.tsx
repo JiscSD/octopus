@@ -44,6 +44,7 @@ export { default as LinkedPublicationsCombobox } from './Publication/Creation/Li
 export { default as LinkedPublicationsComboboxOption } from './Publication/Creation/LinkedItems/LinkedPublicationCombobox/Option';
 export { default as LinkedTopicRow } from './Publication/Creation/LinkedItems/LinkedTopicRow';
 export { default as LinkedTopicsCombobox } from './Publication/Creation/LinkedItems/LinkedTopicsCombobox';
+export { default as LinksPendingDeletionMessage } from './Publication/Creation/LinkedItems/LinksPendingDeletionMessage';
 export { default as List } from './List';
 export { default as ListItem } from './List/Item';
 export { default as Maintenance } from './Maintenance';
