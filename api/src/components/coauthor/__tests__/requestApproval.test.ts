@@ -105,7 +105,7 @@ describe('Request co-authors approvals', () => {
             .put('/publication-versions/publication-method-not-ready-to-lock-v1/coauthors/request-approval')
             .query({ apiKey: '123456789' });
 
-        expect(draftPublicationVersionResponse.status).toEqual(403);
+        expect(draftPublicationVersionResponse.status).toEqual(400);
         expect(draftPublicationVersionResponse.body.message).toEqual(
             'Approval emails cannot be sent because the publication is not ready to be LOCKED. Make sure all fields are filled in.'
         );

@@ -392,11 +392,12 @@ export const getTabCompleteness = (
                 const hasCoauthors = publicationVersion?.coAuthors.length > 1;
                 const hasLink = linkedTo.length > 0 || publicationVersion.topics.length > 0;
                 const allLinkedPublicationsAreLive = linkedTo.every((link) => link.currentStatus === 'LIVE');
+                const hasLinkNotPendingDeletion = linkedTo.some((link) => link.pendingDeletion === false);
                 if (
                     // When coauthors are added, any link is fine to request approval, even to a draft publication.
                     (hasCoauthors && hasLink) ||
                     // When no coauthors are added, all linked publications need to be live.
-                    (!hasCoauthors && hasLink && allLinkedPublicationsAreLive)
+                    (!hasCoauthors && hasLink && allLinkedPublicationsAreLive && hasLinkNotPendingDeletion)
                 ) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {

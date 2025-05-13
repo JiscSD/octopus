@@ -193,6 +193,13 @@ functions:
                 path: ${self:custom.versions.v1}/links/{id}
                 method: DELETE
                 cors: true
+    markLinkForDeletion:
+        handler: dist/src/components/link/routes.markForDeletion
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/links/{id}/mark-for-deletion
+                method: POST
+                cors: true
     # CoAuthors
     getCoAuthors:
         handler: dist/src/components/coauthor/routes.getAll

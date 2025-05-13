@@ -224,7 +224,9 @@ paths:
                   message:
                     type: string
                 example:
-                  message: Link deleted
+                  message: Link deleted.
+        '400':
+          $ref: "#/components/responses/BadRequest"
         '401':
           $ref: "#/components/responses/Unauthorized"
         '403':
@@ -445,7 +447,13 @@ paths:
                             type: string
                             description: The ID of the link between the publications.
                           publicationTo:
-                            $ref: "#/components/schemas/LinkedPublication"
+                            allOf:
+                              - $ref: "#/components/schemas/LinkedPublication"
+                              - type: object
+                                properties:
+                                  pendingDeletion:
+                                    type: boolean
+                                    description: Whether a link will be deleted when the next version publish occurs. Used as a mechanism for deleting outdated links without affecting previous, published versions.
                     linkedFrom:
                       type: array
                       description: Other publications this publication is linked from (returns live publications only).
@@ -1013,7 +1021,7 @@ paths:
         - Have values for `title`, `license`, and `content`
         - If a version of a DATA type publication, have a value for `ethicalStatement` and `dataPermissionsStatement`
         - Either:
-            - Be a version of a publication that has at least one link to another publication
+            - Be a version of a publication that has at least one link to another live publication
             - Be related to at least one topic
         - Either:
             - Have `conflictOfInterestStatus` set to `true` and a value for `conflictOfInterestText`

@@ -248,31 +248,71 @@ export const deleteLink = async (
         const link = await linkService.get(event.pathParameters.id);
 
         if (!link) {
-            return response.json(404, { message: 'Link not found' });
-        }
-
-        if (!link.draft) {
-            return response.json(403, { message: 'You are not allowed to delete inherited Links.' });
+            return response.json(404, { message: 'Link not found.' });
         }
 
         const fromCurrentVersion = link.publicationFrom.versions.find((version) => version.isLatestVersion);
+
+        if (fromCurrentVersion?.user.id !== event.user.id) {
+            return response.json(403, { message: 'You do not have permission to delete this link' });
+        }
 
         if (
             fromCurrentVersion?.currentStatus !== 'DRAFT' ||
             !fromCurrentVersion.publicationStatus.every((status) => status.status !== 'LIVE')
         ) {
-            return response.json(404, {
+            return response.json(400, {
                 message: 'A link can only be deleted if it has been made from a publication currently in draft state.'
             });
         }
 
-        if (fromCurrentVersion?.user.id !== event.user.id) {
-            return response.json(403, { message: 'You do not have permissions to delete this link' });
+        if (!link.draft) {
+            return response.json(403, { message: 'You are not allowed to delete inherited links.' });
         }
 
         await linkService.deleteLink(event.pathParameters.id);
 
-        return response.json(200, { message: 'Link deleted' });
+        return response.json(200, { message: 'Link deleted.' });
+    } catch (err) {
+        console.log(err);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const markForDeletion = async (
+    event: I.AuthenticatedAPIRequest<I.MarkLinkForDeletionBody, undefined, I.MarkLinkForDeletionPathParams>
+): Promise<I.JSONResponse> => {
+    try {
+        const link = await linkService.get(event.pathParameters.id);
+
+        if (!link) {
+            return response.json(404, { message: 'Link not found.' });
+        }
+
+        const fromCurrentVersion = link.publicationFrom.versions.find((version) => version.isLatestVersion);
+
+        if (fromCurrentVersion?.user.id !== event.user.id) {
+            return response.json(403, { message: 'You do not have permission to mark this link for deletion.' });
+        }
+
+        if (link.draft) {
+            return response.json(400, {
+                message: 'Draft links cannot be marked for deletion. You can simply delete them instead.'
+            });
+        }
+
+        if (link.publicationFrom.versions.every((version) => version.currentStatus === 'LIVE')) {
+            return response.json(400, {
+                message: 'This publication has no active draft. Please make one first.'
+            });
+        }
+
+        await linkService.markForDeletion(event.pathParameters.id, event.body.toDelete);
+
+        return response.json(200, {
+            message: event.body.toDelete ? 'Link marked for deletion.' : 'Link marked not for deletion.'
+        });
     } catch (err) {
         console.log(err);
 

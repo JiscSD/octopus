@@ -149,6 +149,7 @@ model Links {
     publicationTo     Publication        @relation("to", fields: [publicationToId], references: [id], onDelete: Cascade)
     versionTo         PublicationVersion @relation("toVersion", fields: [versionToId], references: [id], onDelete: Cascade)
     draft             Boolean            @default(true)
+    pendingDeletion   Boolean            @default(false)
 
     @@unique([publicationFromId, publicationToId])
 }
