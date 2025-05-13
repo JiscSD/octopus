@@ -64,9 +64,10 @@ module "ses" {
 }
 
 module "sqs" {
-  source      = "../modules/sqs"
-  sns_arn     = module.sns.arn
-  environment = local.environment
+  source       = "../modules/sqs"
+  sns_arn      = module.sns.topic_arn
+  environment  = local.environment
+  project_name = local.project_name
 }
 
 module "sns" {
@@ -110,4 +111,12 @@ module "codepipeline" {
   source       = "../modules/codepipeline"
   environment  = local.environment
   project_name = local.project_name
+}
+
+module "cloudwatch_alarms" {
+  source                  = "../modules/cloudwatch-alarms"
+  environment             = local.environment
+  project_name            = local.project_name
+  notification_topic_arn  = module.sns.topic_arn
+  rds_instance_identifier = module.postgres.rds_instance_identifier
 }
