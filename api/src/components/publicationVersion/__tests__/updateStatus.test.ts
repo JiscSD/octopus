@@ -213,6 +213,29 @@ describe('Update publication version status', () => {
         expect(response.body.message).toEqual('Publication status is already DRAFT.');
     });
 
+    test('Corresponding author needs valid affiliation status before locking the publication', async () => {
+        // Invalidate affiliation status.
+        await client.prisma.coAuthors.update({
+            where: {
+                id: 'coauthor-test-user-5-problem-draft'
+            },
+            data: {
+                isIndependent: false,
+                affiliations: []
+            }
+        });
+
+        const updateStatusResponse = await testUtils.agent
+            .put('/publication-versions/publication-problem-draft-v1/status/LOCKED')
+            .query({ apiKey: '000000005' })
+            .send();
+
+        expect(updateStatusResponse.status).toEqual(403);
+        expect(updateStatusResponse.body.message).toEqual(
+            'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
+        );
+    });
+
     test('Publication status cannot be updated from DRAFT to LOCKED if missing mandatory data', async () => {
         const updateStatusResponse = await testUtils.agent
             .put('/publication-versions/publication-method-not-ready-to-lock-v1/status/LOCKED')
