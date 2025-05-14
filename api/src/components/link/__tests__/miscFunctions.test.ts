@@ -153,7 +153,8 @@ describe('Removing invalid links for a publication', () => {
                         id: true,
                         code: true,
                         confirmedCoAuthor: true,
-                        linkedUser: true
+                        linkedUser: true,
+                        retainApproval: true
                     }
                 },
                 createdBy: true
@@ -167,9 +168,9 @@ describe('Removing invalid links for a publication', () => {
         // Expect the publication to be unlocked.
         expect(fromVersion.currentStatus).toEqual('DRAFT');
 
-        // Expect co-authors to be reset.)
+        // Expect co-authors to be reset if they do not have approval retention set.
         for (const coAuthor of fromVersion.coAuthors) {
-            if (coAuthor.linkedUser !== fromVersion.createdBy) {
+            if (coAuthor.linkedUser !== fromVersion.createdBy && coAuthor.retainApproval === false) {
                 expect(coAuthor.confirmedCoAuthor).toEqual(false);
                 const coAuthorBefore = coAuthorsBefore.find((coAuthorBefore) => coAuthorBefore.id === coAuthor.id);
                 expect(coAuthorBefore).toBeDefined();

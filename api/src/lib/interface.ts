@@ -239,17 +239,18 @@ export interface CreateLinkBody {
     from: string;
 }
 
+export type LinkedPublicationAuthor = Pick<CoAuthor, 'id' | 'linkedUser'> & { user: CoAuthor['user'] | null };
 export interface LinkedPublication {
     id: string;
     type: PublicationType;
     doi: string;
-    title: string;
-    publishedDate: string;
+    title: string | null;
+    publishedDate: string | null;
     currentStatus: PublicationStatusEnum;
     createdBy: string;
-    authorFirstName: string;
-    authorLastName: string;
-    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'user'>[];
+    authorFirstName: string | null;
+    authorLastName: string | null;
+    authors: LinkedPublicationAuthor[] | null;
     flagCount: number;
     peerReviewCount: number;
     // Only returned with ?direct=true on the getPublicationLinks endpoint.
@@ -260,17 +261,17 @@ export interface LinkedPublication {
 }
 
 export interface LinkedToPublication extends LinkedPublication {
-    linkId: string;
-    draft: boolean;
-    childPublication: string;
+    childPublicationId: string;
     childPublicationType: PublicationType;
+    draft: boolean;
     externalSource: PublicationImportSource | null;
+    linkId: string;
 }
 
 export interface LinkedFromPublication extends LinkedPublication {
-    linkId: string;
     draft: boolean;
-    parentPublication: string;
+    linkId: string;
+    parentPublicationId: string;
     parentPublicationType: PublicationType;
 }
 
@@ -580,10 +581,10 @@ export interface CoAuthor {
     affiliations: MappedOrcidAffiliation[];
     user?: {
         firstName: string;
-        lastName: string;
-        orcid: string;
+        lastName: string | null;
+        orcid: string | null;
         role: Role;
-        url?: string;
+        url: string | null;
     };
 }
 

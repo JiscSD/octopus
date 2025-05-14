@@ -385,8 +385,10 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                 router.reload();
             } catch (err) {
-                const publishError = err as Interfaces.JSONResponseError;
-                setServerError(publishError.message);
+                const errorMessage = axios.isAxiosError(err)
+                    ? err.response?.data.message
+                    : (err as Interfaces.JSONResponseError).message;
+                setServerError(errorMessage);
                 setIsLoading(false);
             }
         }

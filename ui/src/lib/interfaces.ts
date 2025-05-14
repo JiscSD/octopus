@@ -18,7 +18,7 @@ export interface NavMenuItem {
 }
 
 export interface PublicationStatus {
-    status: Types.PublicationStatuses;
+    status: Types.PublicationStatus;
     createdAt: string;
     id: string;
 }
@@ -81,7 +81,7 @@ export interface PublicationVersion {
     createdBy: string;
     createdAt: string;
     updatedAt: string;
-    currentStatus: Types.PublicationStatuses;
+    currentStatus: Types.PublicationStatus;
     publishedDate: string | null;
     title: string;
     licence: Types.LicenceType;
@@ -114,17 +114,18 @@ export interface Publication extends CorePublication {
     versions: PublicationVersion[];
 }
 
+type LinkedPublicationAuthor = Pick<CoAuthor, 'id' | 'linkedUser'> & { user: CoAuthor['user'] | null };
 export interface LinkedPublication {
     id: string;
     type: Types.PublicationType;
     doi: string;
-    title: string;
-    publishedDate: string;
-    currentStatus: Types.PublicationStatuses;
+    title: string | null;
+    publishedDate: string | null;
+    currentStatus: Types.PublicationStatus;
     createdBy: string;
-    authorFirstName: string;
-    authorLastName: string;
-    authors: Pick<CoAuthor, 'id' | 'linkedUser' | 'publicationVersionId' | 'user'>[];
+    authorFirstName: string | null;
+    authorLastName: string | null;
+    authors: LinkedPublicationAuthor[] | null;
     flagCount: number;
     peerReviewCount: number;
     // Only returned with ?direct=true on the getPublicationLinks endpoint.
@@ -135,17 +136,17 @@ export interface LinkedPublication {
 }
 
 export interface LinkedToPublication extends LinkedPublication {
-    linkId: string;
-    draft: boolean;
-    childPublication: string;
+    childPublicationId: string;
     childPublicationType: Types.PublicationType;
+    draft: boolean;
     externalSource: Types.PublicationImportSource | null;
+    linkId: string;
 }
 
 export interface LinkedFromPublication extends LinkedPublication {
-    linkId: string;
     draft: boolean;
-    parentPublication: string;
+    linkId: string;
+    parentPublicationId: string;
     parentPublicationType: Types.PublicationType;
 }
 
@@ -588,4 +589,20 @@ export interface CrosslinkVote {
     crosslinkId: string;
     createdBy: string;
     vote: boolean;
+}
+
+export interface VisualizationBoxData {
+    isDraft: boolean;
+    isSelected: boolean;
+    renderAsLink: boolean;
+    id: string;
+    title: string | null;
+    type: string;
+    createdBy: string;
+    authorFirstName: string | null;
+    authorLastName: string | null;
+    publishedDate: string | null;
+    childPublicationIds: string[];
+    flagCount: number;
+    peerReviewCount: number;
 }

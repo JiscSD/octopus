@@ -118,7 +118,7 @@ export const create = async (
                             type: type
                         },
                         linkTargetId,
-                        event.user.id
+                        event.user
                     );
 
                     if (!validateLink.valid) {
@@ -201,10 +201,10 @@ export const getLinksForPublication = async (
     const publicationId = event.pathParameters.publicationId;
     const directLinks = event.queryStringParameters?.direct === 'true';
     const user = event.user;
-    let includeDraftVersion = false;
+    let requesterIsAuthorOnDraft = false;
 
     try {
-        if (user) {
+        if (user && directLinks) {
             const latestVersion = await publicationVersionService.get(publicationId, 'latest');
 
             // if latest version is a DRAFT, check if user can see it
@@ -213,13 +213,17 @@ export const getLinksForPublication = async (
                 (user.id === latestVersion?.createdBy ||
                     latestVersion?.coAuthors.some((coAuthor) => coAuthor.linkedUser === user.id))
             ) {
-                includeDraftVersion = true;
+                requesterIsAuthorOnDraft = true;
             }
         }
 
         const { publication, linkedFrom, linkedTo } = directLinks
-            ? await publicationService.getDirectLinksForPublication(publicationId, includeDraftVersion)
-            : await publicationService.getLinksForPublication(publicationId, includeDraftVersion);
+            ? await publicationService.getDirectLinksForPublication(
+                  publicationId,
+                  user?.id || null,
+                  requesterIsAuthorOnDraft
+              )
+            : await publicationService.getLinksForPublication(publicationId, user?.id || null);
 
         if (!publication) {
             return response.json(404, { message: 'Not found.' });

@@ -507,13 +507,15 @@ export const requestApproval = async (
                 );
 
                 for (const linkedCoAuthor of linkedCoAuthors) {
-                    await email.notifyCoAuthorsAboutChanges({
-                        coAuthor: { email: linkedCoAuthor.email },
-                        publication: {
-                            title: version.title || '',
-                            url: Helpers.getPublicationUrl(version.versionOf)
-                        }
-                    });
+                    if (!linkedCoAuthor.retainApproval) {
+                        await email.notifyCoAuthorsAboutChanges({
+                            coAuthor: { email: linkedCoAuthor.email },
+                            publication: {
+                                title: version.title || '',
+                                url: Helpers.getPublicationUrl(version.versionOf)
+                            }
+                        });
+                    }
                 }
             }
         }

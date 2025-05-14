@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import * as testUtils from 'lib/testUtils';
 import * as client from 'lib/client';
 
@@ -140,9 +141,9 @@ describe('Update publication version status', () => {
 
     test('Publication owner can publish if all co-authors are confirmed', async () => {
         const updatePublicationVersion = await testUtils.agent
-            .put('/publication-versions/publication-protocol-draft-v1/status/LIVE')
+            .put('/publication-versions/locked-publication-problem-confirmed-co-authors-v1/status/LIVE')
             .query({
-                apiKey: '000000005'
+                apiKey: '123456789'
             });
 
         expect(updatePublicationVersion.status).toEqual(200);
@@ -152,7 +153,7 @@ describe('Update publication version status', () => {
 
     test('Publication owner cannot publish if not all co-authors are confirmed', async () => {
         const updatePublicationVersion = await testUtils.agent
-            .put('/publication-versions/publication-hypothesis-draft-v1/status/LIVE')
+            .put('/publication-versions/publication-problem-draft-v1/status/LIVE')
             .query({
                 apiKey: '000000005'
             });
@@ -163,7 +164,7 @@ describe('Update publication version status', () => {
         );
 
         const getPublicationVersion = await testUtils.agent
-            .get('/publications/publication-hypothesis-draft/publication-versions/latest')
+            .get('/publications/publication-problem-draft/publication-versions/latest')
             .query({
                 apiKey: '000000005'
             });
@@ -235,6 +236,19 @@ describe('Update publication version status', () => {
         );
     });
 
+    test('Publication status cannot be updated from DRAFT to LOCKED if missing mandatory data', async () => {
+        const updateStatusResponse = await testUtils.agent
+            .put('/publication-versions/publication-method-not-ready-to-lock-v1/status/LOCKED')
+            .query({
+                apiKey: '123456789'
+            });
+
+        expect(updateStatusResponse.status).toEqual(403);
+        expect(updateStatusResponse.body.message).toEqual(
+            'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
+        );
+    });
+
     test('Publication status can be updated from DRAFT to LOCKED only after requesting approvals', async () => {
         // try to update status to LOCKED
         const updateStatusResponse1 = await testUtils.agent
@@ -277,6 +291,84 @@ describe('Update publication version status', () => {
 
         expect(response.status).toEqual(200);
         expect(response.body.message).toEqual('Publication is now LIVE.');
+    });
+
+    test('Publication status can be updated from LOCKED to DRAFT', async () => {
+        const response = await testUtils.agent
+            .put('/publication-versions/publication-problem-locked-1-v1/status/DRAFT')
+            .query({
+                apiKey: '000000005'
+            });
+
+        expect(response.status).toEqual(200);
+        expect(response.body.message).toEqual('Publication unlocked for editing');
+
+        const version = await client.prisma.publicationVersion.findUnique({
+            where: {
+                id: 'publication-problem-locked-1-v1'
+            },
+            select: {
+                currentStatus: true
+            }
+        });
+        expect(version?.currentStatus).toEqual('DRAFT');
+    });
+
+    test('Changing status to DRAFT from LOCKED resets coauthors if they do not have approval retention set', async () => {
+        const response = await testUtils.agent
+            .put('/publication-versions/locked-publication-problem-confirmed-co-authors-v1/status/DRAFT')
+            .query({
+                apiKey: '123456789'
+            });
+
+        expect(response.status).toEqual(200);
+
+        const coAuthors = await client.prisma.coAuthors.findMany({
+            where: {
+                publicationVersionId: 'locked-publication-problem-confirmed-co-authors-v1',
+                retainApproval: false
+            }
+        });
+
+        expect(coAuthors.length).toBeGreaterThan(0);
+        expect(coAuthors.every((coAuthor) => coAuthor.confirmedCoAuthor === false)).toBe(true);
+    });
+
+    test('Changing status to DRAFT from LOCKED does not reset coauthors if they have approval retention set', async () => {
+        const applicableCoAuthorQuery: Prisma.CoAuthorsFindManyArgs = {
+            where: {
+                publicationVersionId: 'publication-problem-locked-1-v1',
+                approvalRequested: true,
+                retainApproval: true,
+                confirmedCoAuthor: true
+            },
+            select: {
+                id: true,
+                code: true,
+                confirmedCoAuthor: true
+            }
+        };
+        const applicableCoAuthorsBefore = await client.prisma.coAuthors.findMany(applicableCoAuthorQuery);
+        expect(applicableCoAuthorsBefore.length).toBeGreaterThan(0);
+
+        const response = await testUtils.agent
+            .put('/publication-versions/publication-problem-locked-1-v1/status/DRAFT')
+            .query({
+                apiKey: '000000005'
+            });
+
+        expect(response.status).toEqual(200);
+
+        const applicableCoAuthorsAfter = await client.prisma.coAuthors.findMany(applicableCoAuthorQuery);
+
+        expect(applicableCoAuthorsAfter.length).toBe(applicableCoAuthorsBefore.length);
+        expect(
+            applicableCoAuthorsAfter.every((coAuthor) => {
+                const oldCoAuthor = applicableCoAuthorsBefore.find((oldCoAuthor) => oldCoAuthor.id === coAuthor.id);
+
+                return coAuthor.confirmedCoAuthor && coAuthor.code === oldCoAuthor?.code;
+            })
+        ).toBe(true);
     });
 
     test('User can publish a new version for an existing publication', async () => {
@@ -421,7 +513,7 @@ describe('Update publication version status', () => {
 
         expect(updatePublicationVersionAttempt.status).toEqual(403);
         expect(updatePublicationVersionAttempt.body.message).toEqual(
-            'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
+            'One or more linked publications are still in draft. Please ensure all linked publications are live before publishing this one.'
         );
     });
 });
