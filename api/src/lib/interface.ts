@@ -1102,3 +1102,8 @@ export interface TriggerAriIngestQueryParams {
 export interface LocalNotifyPubRouterPathParams {
     publicationId: string;
 }
+
+export interface CreatePublicationBundleRequestBody {
+    name: string;
+    publicationIds: string[];
+}

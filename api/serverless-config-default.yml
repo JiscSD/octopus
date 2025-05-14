@@ -497,6 +497,14 @@ functions:
                 path: ${self:custom.versions.v1}/integrations/ari/incremental
                 method: POST
                 cors: true
+    # Publication bundles
+    createPublicationBundle:
+        handler: dist/src/components/publicationBundle/routes.create
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-bundles
+                method: POST
+                cors: true
 
 package:
     defaultPatterns:
