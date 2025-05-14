@@ -193,7 +193,7 @@ export const resetCoAuthors = async (publicationVersionId: string) => {
         where: {
             publicationVersionId,
             NOT: {
-                linkedUser: publicationVersion?.createdBy
+                OR: [{ linkedUser: publicationVersion?.createdBy }, { retainApproval: true }]
             }
         },
         data: {
