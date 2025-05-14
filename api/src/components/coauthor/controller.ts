@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import * as coAuthorService from 'coAuthor/service';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
@@ -163,19 +164,19 @@ export const remove = async (
         }
 
         // Is the coauthor actually a coauthor of this version of the publication
-        if (!version.coAuthors.some((coAuthor) => coAuthor.id === event.pathParameters.coauthorId)) {
+        if (!version.coAuthors.some((coAuthor) => coAuthor.id === event.pathParameters.coAuthorId)) {
             return response.json(404, {
                 message: 'This coauthor has not been added to this publication version.'
             });
         }
 
-        await coAuthorService.deleteCoAuthor(event.pathParameters.coauthorId);
+        await coAuthorService.deleteCoAuthor(event.pathParameters.coAuthorId);
 
         // notify co-author that they've been removed
         await email.notifyCoAuthorRemoval({
             coAuthor: {
                 email:
-                    version.coAuthors.find((coAuthor) => coAuthor.id === event.pathParameters.coauthorId)?.email || ''
+                    version.coAuthors.find((coAuthor) => coAuthor.id === event.pathParameters.coAuthorId)?.email || ''
             },
             publication: {
                 title: version.title || ''
@@ -310,8 +311,8 @@ export const link = async (
     }
 };
 
-export const updateConfirmation = async (
-    event: I.AuthenticatedAPIRequest<I.ChangeCoAuthorRequestBody, undefined, I.UpdateCoAuthorPathParams>
+export const updateCoAuthor = async (
+    event: I.AuthenticatedAPIRequest<I.UpdateCoAuthorRequestBody, undefined, I.UpdateCoAuthorPathParams>
 ): Promise<I.JSONResponse> => {
     try {
         const version = await publicationVersionService.privateGetById(event.pathParameters.publicationVersionId);
@@ -323,39 +324,109 @@ export const updateConfirmation = async (
             });
         }
 
-        // Is the publication's current version in locked mode?
-        if (version.currentStatus !== 'LOCKED') {
-            return response.json(400, {
-                message:
-                    version.currentStatus === 'LIVE'
-                        ? 'You cannot approve a LIVE publication version'
-                        : 'This publication version is not ready for review yet'
-            });
-        }
+        // Is the coauthor actually a coauthor of this publication version?
+        const coAuthor = version.coAuthors.find((coAuthor) => coAuthor.id === event.pathParameters.coAuthorId);
 
-        const coAuthor = version.coAuthors.find((coAuthor) => coAuthor.linkedUser === event.user.id);
-
-        // Is the coauthor actually a coauthor of this publication version
         if (!coAuthor) {
-            return response.json(403, {
-                message: 'You are not a co-author of this publication version.'
+            return response.json(404, {
+                message: 'Co-author not found.'
             });
         }
 
-        // check if coauthor confirmed their affiliations
-        if (!(coAuthor.isIndependent || coAuthor.affiliations.length)) {
+        // Check if user is the coauthor in question
+        if (coAuthor.linkedUser !== event.user.id) {
             return response.json(403, {
-                message: 'Please fill out your affiliation information.'
+                message: "You cannot update another co-author's information."
             });
+        }
+
+        // Co-author records can't be updated on a live publication.
+        if (version.currentStatus === 'LIVE') {
+            return response.json(400, {
+                message: 'Co-authors on a live publication version cannot be updated.'
+            });
+        }
+
+        const isCorrespondingAuthor = version.user.id === coAuthor.linkedUser;
+        const settingApproval = event.body.confirm !== undefined;
+        const settingApprovalRetention = event.body.retainApproval !== undefined;
+
+        // Non-corresponding authors cannot update themselves unless publication is locked.
+        if (version.currentStatus === 'DRAFT' && !isCorrespondingAuthor) {
+            return response.json(400, {
+                message: 'This publication version is being edited, so you cannot update your information.'
+            });
+        }
+
+        if (isCorrespondingAuthor && (settingApproval || settingApprovalRetention)) {
+            return response.json(400, {
+                message: 'Corresponding authors cannot change their approval status.'
+            });
+        }
+
+        if (settingApproval) {
+            // Approval can't be set without valid affiliation information.
+            const sendingValidAffiliationStatus = event.body.isIndependent || event.body.affiliations?.length;
+            const affiliationStatusAlreadySet = coAuthor.isIndependent || coAuthor.affiliations.length;
+
+            if (!affiliationStatusAlreadySet && !sendingValidAffiliationStatus) {
+                return response.json(400, {
+                    message: 'Please fill out your affiliation information before submitting your approval.'
+                });
+            }
+
+            const invalidatingAffiliations =
+                (event.body.isIndependent === false && !coAuthor.affiliations.length) ||
+                (!coAuthor.isIndependent && event.body.affiliations?.length === 0);
+
+            if (affiliationStatusAlreadySet && invalidatingAffiliations) {
+                return response.json(400, {
+                    message:
+                        'This change would unset your affiliation information, which is needed to set your approval.'
+                });
+            }
+        }
+
+        const settingAffiliationStatus =
+            event.body.isIndependent !== undefined || event.body.affiliations !== undefined;
+
+        if (settingAffiliationStatus) {
+            if (event.body.isIndependent && event.body.affiliations?.length) {
+                return response.json(400, {
+                    message: 'You cannot be independent and also have affiliations.'
+                });
+            }
+
+            if (coAuthor.confirmedCoAuthor && !isCorrespondingAuthor) {
+                return response.json(400, {
+                    message: 'You cannot change your affiliation information after approving the publication.'
+                });
+            }
+
+            // Must provide some status if publication version is locked.
+            if (!event.body.isIndependent && !event.body.affiliations?.length && version.currentStatus === 'LOCKED') {
+                return response.json(400, {
+                    message: 'Please either provide affiliations or declare your independence.'
+                });
+            }
+
+            const hasDuplicateAffiliations =
+                new Set(event.body.affiliations?.map((affiliation) => affiliation.id)).size !==
+                event.body.affiliations?.length;
+
+            if (hasDuplicateAffiliations) {
+                return response.json(400, { message: 'Duplicate affiliations found.' });
+            }
         }
 
         // update coAuthor confirmation status
-        await coAuthorService.updateConfirmation(
-            version.id,
-            event.user.id,
-            event.body.confirm,
-            event.body.retainApproval ?? coAuthor.retainApproval
-        );
+        const updateData: Prisma.CoAuthorsUpdateInput = {
+            confirmedCoAuthor: event.body.confirm,
+            retainApproval: event.body.retainApproval,
+            isIndependent: event.body.isIndependent,
+            affiliations: (event.body.affiliations as unknown[] as Prisma.InputJsonValue[]) || undefined
+        };
+        await coAuthorService.update(coAuthor.id, updateData);
 
         if (event.body.confirm) {
             // notify main author about confirmation
@@ -479,10 +550,10 @@ export const requestApproval = async (
 export const sendApprovalReminder = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.SendApprovalReminderPathParams>
 ): Promise<I.JSONResponse> => {
-    const { coauthorId, publicationVersionId } = event.pathParameters;
+    const { coAuthorId, publicationVersionId } = event.pathParameters;
 
     const version = await publicationVersionService.getById(publicationVersionId);
-    const author = await coAuthorService.get(coauthorId);
+    const author = await coAuthorService.get(coAuthorId);
 
     if (!version) {
         return response.json(404, {
@@ -546,7 +617,7 @@ export const sendApprovalReminder = async (
         });
 
         // update co-author reminderDate
-        await coAuthorService.update(coauthorId, { reminderDate: new Date() });
+        await coAuthorService.update(coAuthorId, { reminderDate: new Date() });
     } catch (error) {
         console.log(error);
 

@@ -234,8 +234,8 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     props.token
                 ),
                 // update author affiliations on this version
-                api.put(
-                    `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/my-affiliations`,
+                api.patch(
+                    `${Config.endpoints.publicationVersions}/${props.publicationVersion.id}/coauthors/${correspondingAuthor?.id}`,
                     {
                         affiliations: correspondingAuthor?.affiliations || [],
                         isIndependent: correspondingAuthor?.isIndependent || false

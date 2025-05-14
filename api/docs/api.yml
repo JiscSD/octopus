@@ -14,6 +14,8 @@ tags:
   description: Organizations related to the work an author has put into a publication
 - name: Bookmarks
   description: Mark a publication or topic of particular interest
+- name: CoAuthors
+  description: Authors collaborating on a publication
 - name: Links
   description: Links between publications
 - name: Publications
@@ -906,17 +908,22 @@ paths:
           $ref: "#/components/responses/Forbidden"
         '404':
           $ref: "#/components/responses/NotFound"
-  /publication-versions/{publicationVersionId}/my-affiliations:
-    put:
-      summary: Set your own affiliations for a publication version
-      description: The user whose affiliations are to be updated is determined to be the owner of the API key or bearer token used to authenticate the request.
+  /publication-versions/{publicationVersionId}/coauthors/{coAuthorId}:
+    patch:
+      summary: Update a co-author record.
+      description: Update your own affiliations, approval status, etc. on your co-author record. Only the user linked to the co-author record can update it.
       tags:
-        - PublicationVersions
+        - CoAuthors
       security:
         - ApiKey: []
         - BearerToken: []
       parameters:
         - $ref: "#/components/parameters/PublicationVersionId"
+        - in: path
+          name: coAuthorId
+          schema:
+            type: string
+          required: true
       requestBody:
         required: true
         content:
@@ -930,10 +937,16 @@ paths:
                     $ref: "#/components/schemas/Affiliation"
                 isIndependent:
                   $ref: "#/components/schemas/CoAuthorIsIndependent"
-              required: [affiliations, isIndependent]
+                confirm:
+                  type: 'boolean'
+                  description: Whether or not you give your approval for the publication to be published.
+                retainApproval:
+                  type: 'boolean'
+                  description: Whether approval should be retained even if the publication is returned to draft state and edited further.
+              additionalProperties: false
       responses:
         '200':
-          description: Affiliations updated successfully
+          description: Co-author updated successfully
           content:
             application/json:
               schema:
