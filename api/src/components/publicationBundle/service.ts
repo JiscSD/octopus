@@ -38,3 +38,8 @@ export const get = (id: string) =>
             publications: true
         }
     });
+
+export const deletePublicationBundle = (id: string) =>
+    client.prisma.publicationBundle.delete({
+        where: { id }
+    });

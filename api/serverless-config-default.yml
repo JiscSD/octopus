@@ -512,6 +512,13 @@ functions:
                 path: ${self:custom.versions.v1}/publication-bundles/{publicationBundleId}
                 method: PATCH
                 cors: true
+    deletePublicationBundle:
+        handler: dist/src/components/publicationBundle/routes.deletePublicationBundle
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-bundles/{publicationBundleId}
+                method: DELETE
+                cors: true
 
 package:
     defaultPatterns:

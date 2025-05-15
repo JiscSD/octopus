@@ -15,3 +15,7 @@ export const edit = middy(publicationBundleController.edit)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())
     .use(middleware.validator(publicationBundleSchema.edit, 'body'));
+
+export const deletePublicationBundle = middy(publicationBundleController.deletePublicationBundle)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.authentication());

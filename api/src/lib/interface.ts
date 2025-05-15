@@ -1113,6 +1113,6 @@ export interface EditPublicationBundleRequestBody {
     publicationIds?: string[];
 }
 
-export interface EditPublicationBundlePathParams {
+export interface SinglePublicationBundleOperationPathParams {
     publicationBundleId: string;
 }

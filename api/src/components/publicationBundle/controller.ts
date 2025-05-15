@@ -54,7 +54,11 @@ export const create = async (
 };
 
 export const edit = async (
-    event: I.AuthenticatedAPIRequest<I.EditPublicationBundleRequestBody, undefined, I.EditPublicationBundlePathParams>
+    event: I.AuthenticatedAPIRequest<
+        I.EditPublicationBundleRequestBody,
+        undefined,
+        I.SinglePublicationBundleOperationPathParams
+    >
 ): Promise<I.JSONResponse> => {
     if (event.body.publicationIds?.length) {
         const validationCheck = await validatePublicationIds(event.body.publicationIds);
@@ -78,4 +82,22 @@ export const edit = async (
     const editBundle = await publicationBundleService.edit(event.pathParameters.publicationBundleId, event.body);
 
     return response.json(200, editBundle);
+};
+
+export const deletePublicationBundle = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.SinglePublicationBundleOperationPathParams>
+): Promise<I.JSONResponse> => {
+    const bundle = await publicationBundleService.get(event.pathParameters.publicationBundleId);
+
+    if (!bundle) {
+        return response.json(404, { message: 'Publication bundle not found.' });
+    }
+
+    if (bundle.createdBy !== event.user.id) {
+        return response.json(403, { message: 'You do not have permission to delete this publication bundle.' });
+    }
+
+    await publicationBundleService.deletePublicationBundle(event.pathParameters.publicationBundleId);
+
+    return response.json(200, { message: 'Publication bundle deleted.' });
 };
