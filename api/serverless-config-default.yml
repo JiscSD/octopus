@@ -505,6 +505,13 @@ functions:
                 path: ${self:custom.versions.v1}/publication-bundles
                 method: POST
                 cors: true
+    editPublicationBundle:
+        handler: dist/src/components/publicationBundle/routes.edit
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-bundles/{publicationBundleId}
+                method: PATCH
+                cors: true
 
 package:
     defaultPatterns:

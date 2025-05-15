@@ -1107,3 +1107,12 @@ export interface CreatePublicationBundleRequestBody {
     name: string;
     publicationIds: string[];
 }
+
+export interface EditPublicationBundleRequestBody {
+    name?: string;
+    publicationIds?: string[];
+}
+
+export interface EditPublicationBundlePathParams {
+    publicationBundleId: string;
+}

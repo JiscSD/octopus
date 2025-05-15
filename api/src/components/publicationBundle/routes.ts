@@ -9,3 +9,9 @@ export const create = middy(publicationBundleController.create)
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication())
     .use(middleware.validator(publicationBundleSchema.create, 'body'));
+
+export const edit = middy(publicationBundleController.edit)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication())
+    .use(middleware.validator(publicationBundleSchema.edit, 'body'));

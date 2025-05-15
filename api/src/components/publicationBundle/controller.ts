@@ -3,22 +3,21 @@ import * as publicationBundleService from 'publicationBundle/service';
 import * as publicationService from 'publication/service';
 import * as response from 'lib/response';
 
-export const create = async (
-    event: I.AuthenticatedAPIRequest<I.CreatePublicationBundleRequestBody, undefined, undefined>
-): Promise<I.JSONResponse> => {
+const validatePublicationIds = async (publicationIds: string[]): Promise<{ valid: boolean; message: string }> => {
     // Check that publication IDs are unique.
-    const hasDuplicates = new Set(event.body.publicationIds).size !== event.body.publicationIds.length;
+    const hasDuplicates = new Set(publicationIds).size !== publicationIds.length;
 
     if (hasDuplicates) {
-        return response.json(400, {
+        return {
+            valid: false,
             message: 'Publication IDs must be unique.'
-        });
+        };
     }
 
     // Check that publication IDs refer to a live publication.
     const notFoundIds: string[] = [];
     await Promise.all(
-        event.body.publicationIds.map(async (id) => {
+        publicationIds.map(async (id) => {
             const existsLive = await publicationService.isLive(id);
 
             if (!existsLive) {
@@ -28,12 +27,55 @@ export const create = async (
     );
 
     if (notFoundIds.length) {
-        return response.json(400, {
+        return {
+            valid: false,
             message: `No live publications exist with the following IDs: ${notFoundIds.join(', ')}`
-        });
+        };
+    }
+
+    return {
+        valid: true,
+        message: 'Publication IDs are valid.'
+    };
+};
+
+export const create = async (
+    event: I.AuthenticatedAPIRequest<I.CreatePublicationBundleRequestBody, undefined, undefined>
+): Promise<I.JSONResponse> => {
+    const validationCheck = await validatePublicationIds(event.body.publicationIds);
+
+    if (!validationCheck.valid) {
+        return response.json(400, { message: validationCheck.message });
     }
 
     const bundle = await publicationBundleService.create({ ...event.body, userId: event.user.id });
 
     return response.json(201, bundle);
+};
+
+export const edit = async (
+    event: I.AuthenticatedAPIRequest<I.EditPublicationBundleRequestBody, undefined, I.EditPublicationBundlePathParams>
+): Promise<I.JSONResponse> => {
+    if (event.body.publicationIds?.length) {
+        const validationCheck = await validatePublicationIds(event.body.publicationIds);
+
+        if (!validationCheck.valid) {
+            return response.json(400, { message: validationCheck.message });
+        }
+    }
+
+    // Check if the publication bundle exists
+    const bundle = await publicationBundleService.get(event.pathParameters.publicationBundleId);
+
+    if (!bundle) {
+        return response.json(404, { message: 'Publication bundle not found.' });
+    }
+
+    if (bundle.createdBy !== event.user.id) {
+        return response.json(403, { message: 'You do not have permission to edit this publication bundle.' });
+    }
+
+    const editBundle = await publicationBundleService.edit(event.pathParameters.publicationBundleId, event.body);
+
+    return response.json(200, editBundle);
 };
