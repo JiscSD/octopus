@@ -23,3 +23,8 @@ export const deletePublicationBundle = middy(publicationBundleController.deleteP
 export const get = middy(publicationBundleController.get).use(
     middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true })
 );
+
+export const getByUser = middy(publicationBundleController.getByUser)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.authentication())
+    .use(middleware.validator(publicationBundleSchema.getByUser, 'queryStringParameters'));

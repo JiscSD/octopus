@@ -10,15 +10,14 @@ describe('Get a publication bundle', () => {
         const getRequest = await testUtils.agent.get('/publication-bundles/test-bundle');
 
         expect(getRequest.status).toBe(200);
-        const expectedBundle = {
+        expect(getRequest.body).toMatchObject({
             id: expect.any(String),
             createdAt: expect.any(String),
             updatedAt: expect.any(String),
             createdBy: 'test-user-1',
             name: 'Test Bundle',
             publications: [{ id: 'publication-problem-live' }, { id: 'publication-problem-live-2' }]
-        };
-        expect(getRequest.body).toMatchObject(expectedBundle);
+        });
     });
 
     test('Non-existent bundle returns 404', async () => {

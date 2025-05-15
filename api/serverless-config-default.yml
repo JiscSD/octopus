@@ -526,6 +526,13 @@ functions:
                 path: ${self:custom.versions.v1}/publication-bundles/{publicationBundleId}
                 method: GET
                 cors: true
+    getPublicationBundlesByUser:
+        handler: dist/src/components/publicationBundle/routes.getByUser
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-bundles
+                method: GET
+                cors: true
 
 package:
     defaultPatterns:

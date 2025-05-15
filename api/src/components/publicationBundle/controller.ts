@@ -113,3 +113,11 @@ export const get = async (
 
     return response.json(200, bundle);
 };
+
+export const getByUser = async (
+    event: I.AuthenticatedAPIRequest<undefined, I.GetPublicationBundlesByUserQueryParams, undefined>
+): Promise<I.JSONResponse> => {
+    const bundles = await publicationBundleService.getByUser(event.user.id, event.queryStringParameters);
+
+    return response.json(200, bundles);
+};

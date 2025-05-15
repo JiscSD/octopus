@@ -1116,3 +1116,8 @@ export interface EditPublicationBundleRequestBody {
 export interface SinglePublicationBundleOperationPathParams {
     publicationBundleId: string;
 }
+
+export interface GetPublicationBundlesByUserQueryParams {
+    limit?: number;
+    offset?: number;
+}
