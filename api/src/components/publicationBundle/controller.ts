@@ -101,3 +101,15 @@ export const deletePublicationBundle = async (
 
     return response.json(200, { message: 'Publication bundle deleted.' });
 };
+
+export const get = async (
+    event: I.APIRequest<undefined, undefined, I.SinglePublicationBundleOperationPathParams>
+): Promise<I.JSONResponse> => {
+    const bundle = await publicationBundleService.get(event.pathParameters.publicationBundleId);
+
+    if (!bundle) {
+        return response.json(404, { message: 'Publication bundle not found.' });
+    }
+
+    return response.json(200, bundle);
+};

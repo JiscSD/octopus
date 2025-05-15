@@ -19,3 +19,7 @@ export const edit = middy(publicationBundleController.edit)
 export const deletePublicationBundle = middy(publicationBundleController.deletePublicationBundle)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.authentication());
+
+export const get = middy(publicationBundleController.get).use(
+    middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true })
+);
