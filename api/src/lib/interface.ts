@@ -1095,3 +1095,22 @@ export interface TriggerAriIngestQueryParams {
 export interface LocalNotifyPubRouterPathParams {
     publicationId: string;
 }
+
+export interface CreatePublicationBundleRequestBody {
+    name: string;
+    publicationIds: string[];
+}
+
+export interface EditPublicationBundleRequestBody {
+    name?: string;
+    publicationIds?: string[];
+}
+
+export interface SinglePublicationBundleOperationPathParams {
+    publicationBundleId: string;
+}
+
+export interface GetPublicationBundlesByUserQueryParams {
+    limit?: number;
+    offset?: number;
+}

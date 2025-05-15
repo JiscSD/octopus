@@ -33,6 +33,14 @@ const createUsers = async (): Promise<void> => {
     }
 };
 
+const createPublicationBundles = async (): Promise<void> => {
+    for (const publicationBundle of seeds.testPublicationBundles) {
+        await client.prisma.publicationBundle.create({
+            data: publicationBundle
+        });
+    }
+};
+
 // Seed the database with a smaller set of data, just enough to run the automated tests.
 export const testSeed = async (): Promise<void> => {
     // These don't depend on anything.
@@ -57,7 +65,8 @@ export const testSeed = async (): Promise<void> => {
         }),
         client.prisma.event.createMany({
             data: seeds.testEvents
-        })
+        }),
+        createPublicationBundles()
     ]);
     // These depend on topics.
     await Promise.all([
