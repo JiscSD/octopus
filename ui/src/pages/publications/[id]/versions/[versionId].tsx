@@ -173,7 +173,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const confirmation = Contexts.useConfirmationModal();
     const [bookmarkId, setBookmarkId] = React.useState(props.bookmarkId);
     const isBookmarked = bookmarkId ? true : false;
-    const [isPublishing, setPublishing] = React.useState<boolean>(false);
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [serverError, setServerError] = React.useState('');
     const [isEditingAffiliations, setIsEditingAffiliations] = React.useState(false);
     const [isUnlocking, setIsUnlocking] = React.useState(false);
@@ -312,12 +312,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         return 'INFO';
     }, [publicationVersion, user?.id, currentCoAuthor?.confirmedCoAuthor]);
 
-    const updateCoAuthor = React.useCallback(
+    const updateApproval = React.useCallback(
         async (confirm: boolean) => {
             setServerError('');
             try {
                 await api.patch(
-                    `/publication-versions/${publicationVersion?.id}/coauthor-confirmation`,
+                    `/publication-versions/${publicationVersion?.id}/coauthors/${currentCoAuthor?.id}`,
                     {
                         confirm
                     },
@@ -374,7 +374,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
         if (confirmed) {
             setServerError('');
-            setPublishing(true);
+            setIsLoading(true);
 
             try {
                 await api.put(
@@ -385,9 +385,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                 router.reload();
             } catch (err) {
-                const publishError = err as Interfaces.JSONResponseError;
-                setServerError(publishError.message);
-                setPublishing(false);
+                const errorMessage = axios.isAxiosError(err)
+                    ? err.response?.data.message
+                    : (err as Interfaces.JSONResponseError).message;
+                setServerError(errorMessage);
+                setIsLoading(false);
             }
         }
     }, [confirmation, publicationVersion?.id, router]);
@@ -474,7 +476,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         const confirmed = await confirmation('Change your mind?', undefined, undefined, 'Yes, changes are needed');
 
         if (confirmed) {
-            await updateCoAuthor(false);
+            await updateApproval(false);
             await mutatePublicationVersion();
         }
     };
@@ -488,7 +490,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         );
 
         if (confirmed) {
-            await updateCoAuthor(true);
+            await updateApproval(true);
             await mutatePublicationVersion();
         }
     };
@@ -721,18 +723,17 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 publicationVersion={publicationVersion}
                                 isCorrespondingAuthor={isCorrespondingAuthor}
                                 isReadyForPublish={isReadyForPublish}
-                                isPublishing={isPublishing}
+                                isLoading={isLoading}
                                 onUnlockPublication={handleUnlock}
                                 onApprove={handleApproval}
                                 onCancelApproval={handleCancelApproval}
                                 onPublish={handlePublish}
                                 onEditAffiliations={handleOpenAffiliationsModal}
+                                setServerError={setServerError}
                             />
                             <div className="pb-16">
                                 <Components.ApprovalsTracker
                                     publicationVersion={publicationVersion}
-                                    isPublishing={isPublishing}
-                                    onPublish={handlePublish}
                                     onError={setServerError}
                                     onEditAffiliations={handleOpenAffiliationsModal}
                                     refreshPublicationVersionData={mutatePublicationVersion}

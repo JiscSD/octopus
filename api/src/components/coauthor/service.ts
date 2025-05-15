@@ -156,29 +156,6 @@ export const removeFromPublicationVersion = async (publicationVersionId: string,
     return removeCoAuthor;
 };
 
-export const updateConfirmation = async (
-    publicationVersionId: string,
-    userId: string,
-    confirm: boolean,
-    retainApproval: boolean
-) => {
-    const updateCoAuthor = await client.prisma.coAuthors.updateMany({
-        where: {
-            publicationVersionId,
-            linkedUser: userId
-        },
-        data: {
-            confirmedCoAuthor: confirm,
-            retainApproval
-        }
-    });
-    await publicationVersionService.update(publicationVersionId, {
-        updatedAt: new Date().toISOString()
-    });
-
-    return updateCoAuthor;
-};
-
 export const resetCoAuthors = async (publicationVersionId: string) => {
     const publicationVersion = await client.prisma.publicationVersion.findFirst({
         where: {
@@ -193,7 +170,7 @@ export const resetCoAuthors = async (publicationVersionId: string) => {
         where: {
             publicationVersionId,
             NOT: {
-                linkedUser: publicationVersion?.createdBy
+                OR: [{ linkedUser: publicationVersion?.createdBy }, { retainApproval: true }]
             }
         },
         data: {

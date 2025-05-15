@@ -74,7 +74,7 @@ export const formatPublicationType = (publicationType: Types.PublicationType): s
 /**
  * @description Format a publication status
  */
-export const formatStatus = (status: Types.PublicationStatuses): string => {
+export const formatStatus = (status: Types.PublicationStatus): string => {
     const statuses = {
         DRAFT: 'Draft',
         LIVE: 'Live',
@@ -389,7 +389,15 @@ export const getTabCompleteness = (
                 }
                 break;
             case 'LINKED_ITEMS':
-                if (linkedTo?.length || publicationVersion.topics.length) {
+                const hasCoauthors = publicationVersion?.coAuthors.length > 1;
+                const hasLink = linkedTo.length > 0 || publicationVersion.topics.length > 0;
+                const allLinkedPublicationsAreLive = linkedTo.every((link) => link.currentStatus === 'LIVE');
+                if (
+                    // When coauthors are added, any link is fine to request approval, even to a draft publication.
+                    (hasCoauthors && hasLink) ||
+                    // When no coauthors are added, all linked publications need to be live.
+                    (!hasCoauthors && hasLink && allLinkedPublicationsAreLive)
+                ) {
                     stepsWithCompleteness.push({ status: 'COMPLETE', ...step });
                 } else {
                     stepsWithCompleteness.push({ status: 'INCOMPLETE', ...step });
@@ -622,12 +630,12 @@ export const getSitemapIndexXML = async (category: 'publications' | 'users'): Pr
 };
 
 export const abbreviateUserName = <
-    T extends { firstName: string; lastName: string; role?: Types.UserRole } | undefined
+    T extends { firstName: string | null; lastName: string | null; role?: Types.UserRole } | undefined
 >(
     user: T
 ): string => {
     // Should not occur, but just in case, better to present something than nothing.
-    if (!user || (!user.firstName && !user.lastName)) {
+    if (!user || !user.firstName) {
         return 'Anon. User';
     }
     // Majority of cases: user is not an organisational account, and has requisite data for default abbreviation.

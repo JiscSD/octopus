@@ -40,7 +40,8 @@ export { default as LearnAboutOctopus } from './LearnAboutOctopus';
 export { default as Link } from './Link';
 export { default as LinkedItemTable } from './Publication/Creation/LinkedItems/LinkedItemTable';
 export { default as LinkedPublicationRow } from './Publication/Creation/LinkedItems/LinkedPublicationRow';
-export { default as LinkedPublicationsCombobox } from './Publication/Creation/LinkedItems/LinkedPublicationsCombobox';
+export { default as LinkedPublicationsCombobox } from './Publication/Creation/LinkedItems/LinkedPublicationCombobox';
+export { default as LinkedPublicationsComboboxOption } from './Publication/Creation/LinkedItems/LinkedPublicationCombobox/Option';
 export { default as LinkedTopicRow } from './Publication/Creation/LinkedItems/LinkedTopicRow';
 export { default as LinkedTopicsCombobox } from './Publication/Creation/LinkedItems/LinkedTopicsCombobox';
 export { default as List } from './List';
@@ -85,6 +86,7 @@ export { default as PublicationSidebarCardSections } from './Publication/Sidebar
 export { default as PublicationSimpleResult } from './Publication/SimpleResult';
 export { default as PublicationSkeleton } from './Publication/Skeleton';
 export { default as PublicationVisualization } from './Publication/Visualization';
+export { default as PublicationVisualizationBox } from './Publication/Visualization/Box';
 export { default as RelatedPublications } from './Publication/RelatedPublications';
 export { default as RelatedPublicationsCard } from './Publication/RelatedPublications/Card';
 export { default as RelatedPublicationsResult } from './Publication/RelatedPublications/Result';

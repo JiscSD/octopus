@@ -353,15 +353,24 @@ export const validateConflictOfInterest = <
     return true;
 };
 
-export const checkIsReadyToPublish = async (publicationVersion: I.PublicationVersion): Promise<boolean> => {
+export const checkIsReadyToPublish = async (
+    publicationVersion: I.PublicationVersion
+): Promise<{
+    ready: boolean;
+    reason: string;
+}> => {
     if (!publicationVersion) {
-        return false;
+        return { ready: false, reason: 'Publication version not found' };
     }
 
-    const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
+    const { linkedTo } = await publicationService.getDirectLinksForPublication(
+        publicationVersion.versionOf,
+        null,
+        true
+    );
 
-    const hasAtLeastOneLinkOrTopic =
-        linkedTo.length !== 0 ||
+    const hasAtLeastOneLiveLinkOrTopic =
+        (linkedTo.length !== 0 && linkedTo.every((linkedPublication) => linkedPublication.currentStatus === 'LIVE')) ||
         (publicationVersion.publication.type === 'PROBLEM' && publicationVersion.topics.length !== 0);
     const hasFilledRequiredFields =
         ['title', 'licence'].every((field) => publicationVersion[field]) &&
@@ -377,16 +386,23 @@ export const checkIsReadyToPublish = async (publicationVersion: I.PublicationVer
         (coAuthor) => coAuthor.confirmedCoAuthor && (coAuthor.isIndependent || coAuthor.affiliations.length)
     );
 
-    return (
-        hasAtLeastOneLinkOrTopic &&
+    const ready =
+        hasAtLeastOneLiveLinkOrTopic &&
         hasFilledRequiredFields &&
         conflictOfInterest &&
         !hasPublishDate &&
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
         coAuthorsAreVerified &&
-        publicationVersion.isLatestVersion
-    );
+        publicationVersion.isLatestVersion;
+    const reason = !hasAtLeastOneLiveLinkOrTopic
+        ? 'One or more linked publications are still in draft. Please ensure all linked publications are live before publishing this one.'
+        : 'Publication is not ready to be made LIVE. Make sure all fields are filled in.';
+
+    return {
+        ready,
+        reason
+    };
 };
 
 export const checkIsReadyToRequestApprovals = async (publicationVersion: I.PublicationVersion): Promise<boolean> => {
@@ -398,7 +414,11 @@ export const checkIsReadyToRequestApprovals = async (publicationVersion: I.Publi
         return false;
     }
 
-    const { linkedTo } = await publicationService.getDirectLinksForPublication(publicationVersion.versionOf, true);
+    const { linkedTo } = await publicationService.getDirectLinksForPublication(
+        publicationVersion.versionOf,
+        null,
+        true
+    );
 
     const hasAtLeastOneLinkOrTopic =
         linkedTo.length !== 0 ||
