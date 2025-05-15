@@ -143,8 +143,8 @@ const CoAuthor: React.FC = (): React.ReactElement => {
             approvalRequested: false,
             confirmedCoAuthor: false,
             isIndependent: false,
-            retainApproval: true,
-            affiliations: []
+            affiliations: [],
+            retainApproval: true
         };
 
         authorsArray.push(newAuthor);
