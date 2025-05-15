@@ -1,19 +1,23 @@
 import * as I from 'interface';
-import createSchema from './create';
 
 const editPublicationBundleBody: I.JSONSchemaType<I.EditPublicationBundleRequestBody> = {
-    ...createSchema,
+    type: 'object',
     properties: {
         name: {
-            ...createSchema.properties.name,
+            type: 'string',
+            minLength: 1,
             nullable: true
         },
         publicationIds: {
-            ...createSchema.properties.publicationIds,
+            type: 'array',
+            items: { type: 'string' },
+            minItems: 2,
+            maxItems: 30,
             nullable: true
         }
     },
-    required: []
+    required: [],
+    additionalProperties: false
 };
 
 export default editPublicationBundleBody;
