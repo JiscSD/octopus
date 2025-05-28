@@ -212,7 +212,7 @@ functions:
         handler: dist/src/components/coauthor/routes.remove
         events:
             - http:
-                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors/{coauthorId}
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors/{coAuthorId}
                 method: DELETE
                 cors: true
     linkCoAuthor:
@@ -222,11 +222,11 @@ functions:
                 path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/link-coauthor
                 method: PATCH
                 cors: true
-    updateCoAuthorConfirmation:
-        handler: dist/src/components/coauthor/routes.updateConfirmation
+    updateCoAuthor:
+        handler: dist/src/components/coauthor/routes.updateCoAuthor
         events:
             - http:
-                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthor-confirmation
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors/{coAuthorId}
                 method: PATCH
                 cors: true
     requestApproval:
@@ -240,7 +240,7 @@ functions:
         handler: dist/src/components/coauthor/routes.sendApprovalReminder
         events:
             - http:
-                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors/{coauthorId}/approval-reminder
+                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/coauthors/{coAuthorId}/approval-reminder
                 method: POST
                 cors: true
     # Flags
@@ -376,13 +376,6 @@ functions:
                 method: put
                 cors: true
     # Affiliations
-    updateAffiliations:
-        handler: dist/src/components/affiliations/routes.updateAffiliations
-        events:
-            - http:
-                path: ${self:custom.versions.v1}/publication-versions/{publicationVersionId}/my-affiliations
-                method: PUT
-                cors: true
     getORCIDAffiliations:
         handler: dist/src/components/affiliations/routes.getORCIDAffiliations
         events:
