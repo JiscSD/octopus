@@ -7,7 +7,6 @@ The Octopus API is a [Prisma](https://www.prisma.io/) project, using [PostgreSQL
 -   Install [Node](https://github.com/nodejs/node) `v20`.
 -   Recommended: use [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js versions.
 -   Install [Docker](https://docs.docker.com/get-docker).
--   Install [Serverless](https://www.serverless.com) `v4`.
 -   Obtain credentials to allow access to the [ORCID Public/Member API](https://info.orcid.org/documentation/integration-guide/registering-a-public-api-client/).
 -   Obtain credentials to allow access to the [DataCite API](https://support.datacite.org/docs/api).
 -   Create your environment file as described below.
@@ -61,12 +60,6 @@ $ ~/api$ npm run seed:local
 $ ~/api$ npm run dev
 ```
 
-To run all tests locally (the API must be running first):
-
-```bash
-~/api$ npm run test:local
-```
-
 To view the UI, you will also need to start the UI Next.js application. More information can be found in the [UI readme](../ui/README.md).
 
 ---
@@ -93,8 +86,6 @@ Create a new migration:
 ```bash
 ~/api$ npx prisma migrate dev --name new_migration_name
 ```
-
-You can then apply the changes made by the new migration using the two commands above (generate and migrate reset).
 
 More information on migrations in Prisma can be found here: [Prisma Migrate Documentation](https://www.prisma.io/docs/concepts/components/prisma-migrate/).
 
@@ -152,7 +143,7 @@ Octopus is built to integrate with some external systems in order to import publ
 
 ### Languages
 
--   [TypeScript](https://www.typescriptlang.org/) - [See config]('./tsconfig.json')
+-   [TypeScript](https://www.typescriptlang.org/) - [See config](./tsconfig.json)
 -   [PostgreSQL](https://www.postgresql.org/)
 
 ### ORM
@@ -171,14 +162,20 @@ Octopus is built to integrate with some external systems in order to import publ
 
 ### Linting
 
--   [ESLint](https://eslint.org/) - [See config]('./.eslintrc.json')
--   [Prettier](https://prettier.io/) - [See config]('./.prettierrc.json')
+-   [ESLint](https://eslint.org/) - [See config](./.eslintrc.json)
+-   [Prettier](https://prettier.io/) - [See config](./.prettierrc.json)
 
 ---
 
 ## Testing
 
-API tests are written in [Jest](https://jestjs.io/) and each endpoint has tests written to ensure the code is correct and working. These can be run manually using `npm run test:local`.
+API tests are written in [Jest](https://jestjs.io/) and each endpoint has tests written to ensure the code is correct and working.
+
+To run all tests locally (the API must be running first), either use the jest extension for VS code and trigger them from the Testing tab within VS code, or run:
+
+```bash
+~/api$ npm run test:local
+```
 
 ---
 
@@ -186,6 +183,4 @@ API tests are written in [Jest](https://jestjs.io/) and each endpoint has tests 
 
 This is a place to track where we have added dependency overrides in package.json and explain why so that we can understand when they're no longer necessary.
 
--   fast-xml-parser ^4.2.5: to address [dependabot alert](https://github.com/JiscSD/octopus/security/dependabot/59)
--   http-cache-semantics ^4.1.1: to address [dependabot alert](https://github.com/JiscSD/octopus/security/dependabot/45)
 -   micromatch ^4.0.8: to address [snyk alert](https://security.snyk.io/vuln/SNYK-JS-MICROMATCH-6838728)
