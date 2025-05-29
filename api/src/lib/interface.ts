@@ -746,6 +746,7 @@ export interface UserPublicationsFilters {
     versionStatus?: string;
     initialDraftsOnly?: boolean;
     exclude?: string;
+    type?: string;
 }
 
 export interface SendApprovalReminderPathParams {
