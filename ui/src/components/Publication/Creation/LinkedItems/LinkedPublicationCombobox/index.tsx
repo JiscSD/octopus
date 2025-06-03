@@ -38,7 +38,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
 
     const minimumQueryEntered = search.length > 2;
     const swrKey = props.draftsOnly
-        ? `${Config.endpoints.users}/${user?.id}/publications?initialDraftsOnly=true&limit=10${minimumQueryEntered ? `&query=${search}` : ''}&exclude=${excludedIds.join(',')}`
+        ? `${Config.endpoints.users}/${user?.id}/publications?initialDraftsOnly=true&limit=10${minimumQueryEntered ? `&query=${search}` : ''}&exclude=${excludedIds.join(',')}&type=${formattedAsString}`
         : `/publication-versions?type=${formattedAsString}&limit=10${
               minimumQueryEntered ? `&search=${search}` : ''
           }&exclude=${excludedIds.join(',')}`;
