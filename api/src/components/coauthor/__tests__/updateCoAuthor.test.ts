@@ -235,6 +235,19 @@ describe('Update co-author', () => {
         expect(coAuthor?.retainApproval).toEqual(false);
     });
 
+    test('Email is sent when co-author retracts their approval', async () => {
+        const retractConfirmation = await testUtils.agent
+            .patch('/publication-versions/locked-publication-problem-confirmed-co-authors-v1/coauthors/test-user-2')
+            .query({ apiKey: '987654321' })
+            .send({ confirm: false });
+
+        expect(retractConfirmation.status).toEqual(200);
+
+        // Cancellation email should have been sent to corresponding author
+        const findMail = await testUtils.getEmails('test-user-1@jisc.ac.uk');
+        expect(findMail.messages[0].Subject).toContain('A co-author has cancelled their approval');
+    });
+
     test('Cannot be independent and have affiliations at the same time', async () => {
         const updateAffiliationsResponse = await testUtils.agent
             .patch('/publication-versions/publication-problem-draft-v1/coauthors/coauthor-test-user-5-problem-draft')
