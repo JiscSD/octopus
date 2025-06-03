@@ -64,6 +64,7 @@ describe('Individual cases', () => {
                             linkedUser: 'test-2',
                             affiliations: [],
                             isIndependent: true,
+                            retainApproval: true,
                             user: {
                                 firstName: 'Test',
                                 lastName: 'User',
