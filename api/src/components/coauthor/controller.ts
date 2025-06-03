@@ -428,30 +428,34 @@ export const updateCoAuthor = async (
         };
         await coAuthorService.update(coAuthor.id, updateData);
 
-        if (event.body.confirm) {
-            // notify main author about confirmation
-            await email.notifyCoAuthorConfirmation({
-                coAuthor: {
-                    fullName: Helpers.getUserFullName(event.user)
-                },
-                publication: {
-                    authorEmail: version.user.email || '',
-                    title: version.title || '',
-                    url: Helpers.getPublicationUrl(version.versionOf)
-                },
-                remainingConfirmationsCount:
-                    version.coAuthors.filter((coAuthor) => !coAuthor.confirmedCoAuthor).length - 1
-            });
-        } else {
-            // notify corresponding author about cancelled approval
-            await email.notifyCoAuthorCancelledApproval({
-                publication: {
-                    id: version.versionOf,
-                    title: version.title || '',
-                    authorEmail: version.user.email || '',
-                    url: Helpers.getPublicationUrl(version.versionOf)
-                }
-            });
+        if (settingApproval) {
+            if (event.body.confirm === true) {
+                // notify main author about confirmation
+                await email.notifyCoAuthorConfirmation({
+                    coAuthor: {
+                        fullName: Helpers.getUserFullName(event.user)
+                    },
+                    publication: {
+                        authorEmail: version.user.email || '',
+                        title: version.title || '',
+                        url: Helpers.getPublicationUrl(version.versionOf)
+                    },
+                    remainingConfirmationsCount:
+                        version.coAuthors.filter((coAuthor) => !coAuthor.confirmedCoAuthor).length - 1
+                });
+            }
+
+            // Handle coauthor retracting their approval.
+            if (coAuthor.confirmedCoAuthor && event.body.confirm === false) {
+                await email.notifyCoAuthorCancelledApproval({
+                    publication: {
+                        id: version.versionOf,
+                        title: version.title || '',
+                        authorEmail: version.user.email || '',
+                        url: Helpers.getPublicationUrl(version.versionOf)
+                    }
+                });
+            }
         }
 
         return response.json(200, { message: 'This co-author has changed their confirmation status.' });
