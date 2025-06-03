@@ -1,5 +1,5 @@
-resource "aws_sqs_queue" "science-octopus-pdf-queue" {
-  name = "science-octopus-pdf-queue-${var.environment}"
+resource "aws_sqs_queue" "pdf-generation-queue" {
+  name = "pdf-generation-queue-${var.environment}-${var.project_name}"
 
   visibility_timeout_seconds = 30
   delay_seconds              = 0
@@ -9,19 +9,19 @@ resource "aws_sqs_queue" "science-octopus-pdf-queue" {
   sqs_managed_sse_enabled    = (var.environment == "prod")
 
   redrive_policy = jsonencode({
-    deadLetterTargetArn = aws_sqs_queue.science-octopus-pdf-queue-dlq.arn
+    deadLetterTargetArn = aws_sqs_queue.pdf-generation-dlq.arn
     maxReceiveCount     = 1
   })
 
 }
 
-resource "aws_sqs_queue" "science-octopus-pdf-queue-dlq" {
-  name                    = "science-octopus-pdf-queue-dlq-${var.environment}"
+resource "aws_sqs_queue" "pdf-generation-dlq" {
+  name                    = "pdf-generation-dlq-${var.environment}-${var.project_name}"
   sqs_managed_sse_enabled = (var.environment == "prod")
 }
 
 resource "aws_cloudwatch_metric_alarm" "dlq-messages-sent-alarm" {
-  alarm_name          = "science-octopus-pdf-dlq-messages-sent-alarm-${var.environment}"
+  alarm_name          = "pdf-generation-dlq-messages-sent-alarm-${var.environment}-${var.project_name}"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = 1
   metric_name         = "ApproximateNumberOfMessagesVisible"
@@ -33,7 +33,7 @@ resource "aws_cloudwatch_metric_alarm" "dlq-messages-sent-alarm" {
   alarm_actions       = [var.sns_arn]
 
   dimensions = {
-    QueueName = aws_sqs_queue.science-octopus-pdf-queue-dlq.name
+    QueueName = aws_sqs_queue.pdf-generation-dlq.name
   }
 
 }
