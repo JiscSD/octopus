@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client';
+import * as enums from 'lib/enum';
 import * as testUtils from 'lib/testUtils';
 import * as userService from 'user/service';
 
@@ -57,8 +58,23 @@ describe("Get a given user's publications", () => {
         expect(publications.status).toEqual(400);
     });
 
-    test('Results can be filtered by a query term', async () => {
+    test('Results can be filtered by a whole word query term', async () => {
         const queryTerm = 'interpretation';
+        const publications = await testUtils.agent.get('/users/test-user-1/publications').query({ query: queryTerm });
+
+        expect(publications.status).toEqual(200);
+        expect(publications.body.data.length).toEqual(1);
+        expect(
+            (publications.body as UserPublications).data.every((publication) =>
+                publication.versions.some(
+                    (version) => version.isLatestLiveVersion && version.title?.toLowerCase().includes(queryTerm)
+                )
+            )
+        ).toEqual(true);
+    });
+
+    test('Results can be filtered by a partial word query term', async () => {
+        const queryTerm = 'interp';
         const publications = await testUtils.agent.get('/users/test-user-1/publications').query({ query: queryTerm });
 
         expect(publications.status).toEqual(200);
@@ -166,5 +182,33 @@ describe("Get a given user's publications", () => {
                 (publication) => !publicationIdsToExclude.includes(publication.id)
             )
         ).toEqual(true);
+    });
+
+    test('Can filter by publication type', async () => {
+        await Promise.all(
+            enums.publicationTypes.map(async (type) => {
+                const getPublications = await testUtils.agent.get(`/users/test-user-1/publications?type=${type}`);
+
+                expect(getPublications.status).toEqual(200);
+                expect(getPublications.body.data.every((publication) => publication.type === type)).toEqual(true);
+            })
+        );
+    });
+
+    test('Can filter by multiple publication types at once', async () => {
+        const getPublications = await testUtils.agent.get('/users/test-user-1/publications?type=PROBLEM,PROTOCOL');
+
+        expect(getPublications.status).toEqual(200);
+        expect(
+            getPublications.body.data.every((publication) => ['PROBLEM', 'PROTOCOL'].includes(publication.type))
+        ).toEqual(true);
+    });
+
+    test('Type filtering rejects invalid types', async () => {
+        const getPublications = await testUtils.agent.get('/users/test-user-1/publications?type=DINOSAUR');
+
+        expect(getPublications.status).toEqual(400);
+        expect(getPublications.body.message).toHaveLength(1);
+        expect(getPublications.body.message[0].keyword).toEqual('pattern');
     });
 });
