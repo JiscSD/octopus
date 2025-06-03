@@ -76,6 +76,8 @@ model Publication {
     // Populated when a publication has been imported from an external source.
     externalId       String?
     externalSource   PublicationImportSource?
+    // Currently only used for imported publications.
+    archived         Boolean                  @default(false)
 }
 
 model PublicationVersion {

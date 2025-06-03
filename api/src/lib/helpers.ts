@@ -263,3 +263,9 @@ export const isPublicationExemptFromReversioning = <T extends Pick<I.Publication
 
     return isPeerReview || isARI;
 };
+
+export const checkBooleanArgValue = (arg: string): void => {
+    if (arg && !(arg === 'true' || arg === 'false')) {
+        throw new Error(`"${arg}" must be "true" or "false"`);
+    }
+};
