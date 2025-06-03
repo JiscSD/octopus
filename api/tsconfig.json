@@ -87,6 +87,9 @@
             "publication/*": [
                 "src/components/publication/*"
             ],
+            "publicationBundle/*": [
+                "src/components/publicationBundle/*"
+            ],
             "publicationVersion/*": [
                 "src/components/publicationVersion/*"
             ],

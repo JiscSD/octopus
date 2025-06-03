@@ -1508,3 +1508,11 @@ export const getDirectLinksForPublication = async (
         linkedFrom
     };
 };
+
+export const isLive = async (id: string) => {
+    const livePublication = await client.prisma.publication.findFirst({
+        where: { id, versions: { some: { currentStatus: 'LIVE' } } }
+    });
+
+    return !!livePublication;
+};
