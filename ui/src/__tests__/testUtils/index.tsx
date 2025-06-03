@@ -62,6 +62,7 @@ export const testPublicationVersion: Interfaces.PublicationVersion = {
             publicationVersionId: 'test-v1',
             affiliations: [],
             isIndependent: true,
+            retainApproval: true,
             user: {
                 firstName: testCoreUser.firstName,
                 lastName: testCoreUser.lastName,
