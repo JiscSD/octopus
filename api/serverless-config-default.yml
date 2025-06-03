@@ -490,6 +490,42 @@ functions:
                 path: ${self:custom.versions.v1}/integrations/ari/incremental
                 method: POST
                 cors: true
+    # Publication bundles
+    createPublicationBundle:
+        handler: dist/src/components/publicationBundle/routes.create
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-bundles
+                method: POST
+                cors: true
+    editPublicationBundle:
+        handler: dist/src/components/publicationBundle/routes.edit
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-bundles/{publicationBundleId}
+                method: PATCH
+                cors: true
+    deletePublicationBundle:
+        handler: dist/src/components/publicationBundle/routes.deletePublicationBundle
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-bundles/{publicationBundleId}
+                method: DELETE
+                cors: true
+    getPublicationBundle:
+        handler: dist/src/components/publicationBundle/routes.get
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-bundles/{publicationBundleId}
+                method: GET
+                cors: true
+    getPublicationBundlesByUser:
+        handler: dist/src/components/publicationBundle/routes.getByUser
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/publication-bundles
+                method: GET
+                cors: true
 
 package:
     defaultPatterns:
