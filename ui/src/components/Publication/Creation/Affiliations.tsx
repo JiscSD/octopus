@@ -25,9 +25,9 @@ const Affiliations: React.FC = (): React.ReactElement => {
     } = useSWR<Interfaces.MappedOrcidAffiliation[]>('/orcid-affiliations');
 
     useSWR(
-        isValidating || error
+        isValidating || error || !correspondingAuthor
             ? null
-            : `${Config.endpoints.publicationVersions}/${publicationVersion.id}/my-affiliations`,
+            : `${Config.endpoints.publicationVersions}/${publicationVersion.id}/coauthors/${correspondingAuthor.id}`,
         (url) => {
             const updatedAuthorAffiliations = orcidAffiliations.filter((affiliation) =>
                 correspondingAuthor?.affiliations.some(({ id }) => affiliation.id === id)
@@ -45,7 +45,7 @@ const Affiliations: React.FC = (): React.ReactElement => {
             updateAuthorAffiliations(updatedAuthorAffiliations);
 
             // also update author affiliations in DB
-            api.put(
+            api.patch(
                 url,
                 { affiliations: updatedAuthorAffiliations, isIndependent: correspondingAuthor?.isIndependent },
                 user?.token

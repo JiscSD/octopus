@@ -95,11 +95,13 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
         : undefined;
 
     const flagsSwrKey = `${Config.endpoints.users}/${props.user.id}/flags?offset=${flagsOffset}&includeResolved=${includeResolvedFlags}`;
+    console.log('Flags swr key', flagsSwrKey);
     const { data: getFlagsResponse, isValidating: getFlagsIsValidating } = useSWR<
         Interfaces.SearchResults<Interfaces.FlagByUser>
     >(flagsSwrKey, null, {
         fallbackData: props.flags || undefined
     });
+    console.log('Get flags response', getFlagsResponse);
 
     const searchInputRef = React.useRef<HTMLInputElement>(null);
     const missingNames = !props.user.firstName && !props.user.lastName;
@@ -155,8 +157,9 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
         setPublicationsQuery(searchTerm);
     };
 
-    const flags = getFlagsResponse?.data || [];
-    const flagResults = getFlagsResponse ? (
+    const flags = useMemo(() => getFlagsResponse?.data || [], [getFlagsResponse]);
+    console.log('Memoized flags', flags);
+    const flagResults = flags.length ? (
         <div className="rounded">
             {flags.map((flag, index: number) => {
                 let classes = '';
@@ -171,6 +174,13 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
 
                 const publication = flag.publication;
                 const { coAuthors, content, description, publishedDate, title } = publication.versions[0];
+                const explanationText = (
+                    <>
+                        Raised on <time suppressHydrationWarning>{Helpers.formatDate(flag.createdAt)}</time> for{' '}
+                        {Config.values.octopusInformation.redFlagReasons[flag.category].nicename.toLowerCase()} against
+                        the following publication:
+                    </>
+                );
 
                 return (
                     <Components.PublicationSearchResult
@@ -183,14 +193,13 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
                         preface={
                             <div className="flex gap-4 leading-none">
                                 <SolidIcons.FlagIcon className="h-4 w-4 text-red-500" />
-                                <span>
-                                    Raised on <time suppressHydrationWarning>{Helpers.formatDate(flag.createdAt)}</time>{' '}
-                                    for{' '}
-                                    {Config.values.octopusInformation.redFlagReasons[
-                                        flag.category
-                                    ].nicename.toLowerCase()}{' '}
-                                    against the following publication:
-                                </span>
+                                {flag.resolved ? (
+                                    <>
+                                        <s>{explanationText}</s> (Resolved)
+                                    </>
+                                ) : (
+                                    <span>{explanationText}</span>
+                                )}
                             </div>
                         }
                         publicationId={publication.id}

@@ -18,11 +18,7 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
         const authors = props.publicationVersion.coAuthors.filter((author) => author.confirmedCoAuthor && author.user);
         return authors;
     }, [props.publicationVersion]);
-
-    const authorNames = React.useMemo(
-        () => authors.map((author) => Helpers.abbreviateUserName(author.user)).join(', '),
-        [authors]
-    );
+    const correspondingAuthor = authors.find((author) => author.linkedUser === props.publicationVersion.createdBy);
 
     const { flagCount, peerReviewCount } = props.publicationVersion.publication;
     const hasFlagAndPeerReview = flagCount && peerReviewCount;
@@ -39,42 +35,24 @@ const Card: React.FC<Props> = (props): React.ReactElement => {
                         : props.publicationVersion.title}
                 </p>
                 <span className="mb-4 block font-montserrat text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
-                    <div className="overflow-hidden text-ellipsis whitespace-nowrap" title={authorNames}>
-                        {authors.map((author, index) => (
-                            <div key={author.id} className="flex">
-                                <span
-                                    className={`${
-                                        hasFlagAndPeerReview ? 'w-1/2' : hasOneOfFlagOrPeerReview ? 'w-3/4' : ''
-                                    } truncate`}
-                                >
-                                    <Components.Link href={`${Config.urls.viewUser.path}/${author.linkedUser}`}>
-                                        {Helpers.abbreviateUserName(author.user)}
-                                    </Components.Link>
-                                    {author.linkedUser !== 'octopus' && author.user && author.user.orcid && (
-                                        <>
-                                            &nbsp;
-                                            <a
-                                                href={`https://${
-                                                    process.env.NEXT_PUBLIC_STAGE === 'local' ? 'sandbox.' : ''
-                                                }orcid.org/${author.user?.orcid}`}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                            >
-                                                <Assets.OrcidLogoIcon width={16} className="inline align-middle" />
-                                            </a>
-                                        </>
-                                    )}
-                                    {index < authors.length - 1 ? ', ' : ''}
-                                </span>
-                                <Components.EngagementCounts
-                                    className={`justify-end ${
-                                        hasFlagAndPeerReview ? 'w-1/2' : hasOneOfFlagOrPeerReview ? 'w-1/4' : ''
-                                    }`}
-                                    flagCount={flagCount}
-                                    peerReviewCount={peerReviewCount}
-                                />
-                            </div>
-                        ))}
+                    <div className="overflow-hidden text-ellipsis whitespace-nowrap">
+                        <div className="flex">
+                            <span
+                                className={`${
+                                    hasFlagAndPeerReview ? 'w-1/2' : hasOneOfFlagOrPeerReview ? 'w-3/4' : ''
+                                } truncate`}
+                            >
+                                {Helpers.abbreviateUserName(correspondingAuthor?.user)}
+                                {authors.length > 1 && ' et al.'}
+                            </span>
+                            <Components.EngagementCounts
+                                className={`justify-end ${
+                                    hasFlagAndPeerReview ? 'w-1/2' : hasOneOfFlagOrPeerReview ? 'w-1/4' : ''
+                                }`}
+                                flagCount={flagCount}
+                                peerReviewCount={peerReviewCount}
+                            />
+                        </div>
                     </div>
                 </span>
                 <div className="flex items-center justify-between">

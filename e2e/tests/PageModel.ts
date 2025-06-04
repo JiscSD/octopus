@@ -176,7 +176,7 @@ export const PageModel = {
         replaceButton: 'button:has-text("Replace")',
         importModal: 'div[title="Document Import"]',
         draftEditButton: 'a:has-text("Edit draft publication")',
-        unlockButton: 'a:has-text("Cancel all authorship requests and unlock for editing")',
+        unlockButton: 'a:has-text("Cancel pending authorship requests and unlock for editing")',
         confirmUnlockButton: 'button:has-text("Unlock")',
         keyInformation: {
             rorID: 'input[name=ror]',

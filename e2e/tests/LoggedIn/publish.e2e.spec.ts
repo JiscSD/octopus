@@ -447,10 +447,11 @@ test.describe('Publication flow', () => {
         );
         // Go to Linked Items tab
         await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
-        // Topic related controls should not be visible
-        await expect(page.locator(PageModel.publish.linkedItems.entityTypeSelect)).not.toBeVisible();
-        await expect(page.locator(PageModel.publish.linkedItems.publicationInput)).toBeVisible();
-        await expect(page.locator(PageModel.publish.linkedItems.topicInput)).not.toBeVisible();
+        // Topic option should not be visible
+        const options = await page.getByRole('option').all();
+        await expect(options.length).toBe(2);
+        await expect(options[0]).toHaveAccessibleName('Publications');
+        await expect(options[1]).toHaveAccessibleName('Drafts');
     });
 
     test('Create a problem from an existing research topic', async ({ browser }) => {
@@ -1256,8 +1257,56 @@ test.describe('Publication flow + co-authors', () => {
         await page.close();
     });
 
-    test('Editing a publication removes existing approvals', async ({ browser }) => {
-        test.slow();
+    // TODO: uncomment these tests once it is possible to disable approval retention with the UI.
+
+    // test('Editing a publication removes existing approvals', async ({ browser }) => {
+    //     test.slow();
+    //     const page = await Helpers.users.getPageAsUser(browser);
+
+    //     await Helpers.publicationCreation.createPublishReadyPublication(page);
+    //     await addCoAuthorsAndRequestApproval(page, [Helpers.users.user2]);
+
+    //     await confirmCoAuthorInvitation(browser, Helpers.users.user2);
+
+    //     await page.reload();
+    //     await expect(page.getByText('All authors have approved this publication').first()).toBeVisible();
+
+    //     await unlockPublication(page);
+
+    //     // Request approval from co author
+    //     await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+    //     await requestApproval(page);
+
+    //     await expect(page.getByText('Approval Pending')).toBeVisible();
+
+    //     await page.close();
+    // });
+
+    // test('Co-authors are notified if the publication was edited after they confirmed their involvement', async ({
+    //     browser
+    // }) => {
+    //     test.slow();
+    //     const page = await Helpers.users.getPageAsUser(browser);
+
+    //     await Helpers.publicationCreation.createPublishReadyPublication(page);
+    //     await addCoAuthorsAndRequestApproval(page, [Helpers.users.user2]);
+
+    //     await confirmCoAuthorInvitation(browser, Helpers.users.user2);
+
+    //     // unlock and request approvals again
+    //     await unlockPublication(page);
+    //     await requestApproval(page);
+
+    //     await verifyLastEmailNotification(
+    //         browser,
+    //         Helpers.users.user2,
+    //         'Changes have been made to a publication that you are an author on'
+    //     );
+
+    //     await page.close();
+    // });
+
+    test('Co-author approval is retained by default', async ({ browser }) => {
         const page = await Helpers.users.getPageAsUser(browser);
 
         await Helpers.publicationCreation.createPublishReadyPublication(page);
@@ -1270,36 +1319,8 @@ test.describe('Publication flow + co-authors', () => {
 
         await unlockPublication(page);
 
-        // Request approval from co author
-        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
-        await requestApproval(page);
-
-        await expect(page.getByText('Approval Pending')).toBeVisible();
-
-        await page.close();
-    });
-
-    test('Co-authors are notified if the publication was edited after they confirmed their involvement', async ({
-        browser
-    }) => {
-        test.slow();
-        const page = await Helpers.users.getPageAsUser(browser);
-
-        await Helpers.publicationCreation.createPublishReadyPublication(page);
-        await addCoAuthorsAndRequestApproval(page, [Helpers.users.user2]);
-
-        await confirmCoAuthorInvitation(browser, Helpers.users.user2);
-
-        // unlock and request approvals again
-        await unlockPublication(page);
-        await requestApproval(page);
-
-        await verifyLastEmailNotification(
-            browser,
-            Helpers.users.user2,
-            'Changes have been made to a publication that you are an author on'
-        );
-
+        // Because co-authors have approved, there is no need to re-request approval.
+        await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
         await page.close();
     });
 
@@ -1376,9 +1397,7 @@ test.describe('Publication flow + co-authors', () => {
         await Promise.all([
             page.waitForResponse(
                 (response) =>
-                    response.url().includes('/my-affiliations') &&
-                    response.request().method() === 'PUT' &&
-                    response.ok()
+                    response.url().includes('/coauthors/') && response.request().method() === 'PATCH' && response.ok()
             ),
             page.waitForResponse(
                 (response) =>
@@ -1830,5 +1849,29 @@ test.describe('Publication Flow + File import', () => {
         await fileChooser2.setFiles([assetsDirName + 'Playwright.docx']);
         await page.click('button[title="Upload image"]');
         await expect(page.getByText('Failed to upload "Playwright.docx". The format is not supported.')).toBeVisible();
+    });
+});
+
+test.describe('Text Editor', () => {
+    let page: Page;
+
+    test.beforeAll(async ({ browser }) => {
+        page = await Helpers.users.getPageAsUser(browser);
+    });
+
+    test.afterAll(async () => {
+        page.close();
+    });
+
+    test('Add formula button adds placeholder KaTeX formula', async () => {
+        await Helpers.publicationCreation.createPublication(page, 'test insert formula button', 'PROBLEM');
+        await page.waitForSelector('button:has-text("Main text")');
+        await page.click('button:has-text("Main text")');
+
+        const addFormulaButton = page.locator('button[title="Add formula"]');
+        await expect(addFormulaButton).toBeVisible();
+        await addFormulaButton.click();
+
+        await expect(page.locator(PageModel.publish.text.editor)).toContainText('$$Enter KaTeX expression$$');
     });
 });

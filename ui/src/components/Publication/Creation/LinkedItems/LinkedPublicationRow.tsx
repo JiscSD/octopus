@@ -32,14 +32,16 @@ const LinkedPublicationRow: React.FC<Props> = (props): React.ReactElement => {
                         {props.linkedPublication.title}
                     </p>
                     <div className="flex items-center space-x-2">
-                        {props.linkedPublication.publishedDate ? (
-                            <time
-                                className="text-xs text-grey-700 transition-colors duration-500 dark:text-white-100"
-                                suppressHydrationWarning
-                            >
-                                {Helpers.formatDate(props.linkedPublication.publishedDate)},
-                            </time>
-                        ) : null}
+                        <span className="text-xs text-grey-700 transition-colors duration-500 dark:text-white-100">
+                            {props.linkedPublication.publishedDate ? (
+                                <time suppressHydrationWarning>
+                                    {Helpers.formatDate(props.linkedPublication.publishedDate)}
+                                </time>
+                            ) : (
+                                'Draft'
+                            )}
+                            ,
+                        </span>
                         <span className="text-sm text-grey-700 transition-colors duration-500 dark:text-white-100">
                             {Helpers.abbreviateUserName({
                                 firstName: props.linkedPublication.authorFirstName,

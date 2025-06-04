@@ -2,7 +2,7 @@ import * as Components from '@/components';
 import * as Config from '@/config';
 import * as Helpers from '@/helpers';
 import * as TestUtils from '@/testUtils';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 
 describe('Linked publication row', () => {
     beforeEach(() => {
@@ -12,6 +12,10 @@ describe('Linked publication row', () => {
                 deleteLink={jest.fn(() => Promise.resolve())}
             />
         );
+    });
+
+    it('Row is rendered', () => {
+        expect(screen.getByRole('row')).toBeInTheDocument();
     });
 
     it('Publication type is shown', () => {
@@ -91,6 +95,7 @@ describe('Draft links', () => {
         });
         fireEvent.click(deleteButton);
         expect(deleteLink).toHaveBeenCalledWith(TestUtils.testLinkedToPublication.linkId);
+        expect(deleteLink).toHaveBeenCalledTimes(1);
     });
 
     it('"Deletion forbidden" button is not shown if link is draft', () => {
@@ -99,5 +104,25 @@ describe('Draft links', () => {
                 name: 'Deletion forbidden as link is inherited from previous version'
             })
         ).not.toBeInTheDocument();
+    });
+});
+
+describe('Linked publication row with draft publication', () => {
+    it('"Draft" is shown instead of published date', () => {
+        render(
+            <table>
+                <tbody>
+                    <Components.LinkedPublicationRow
+                        deleteLink={jest.fn()}
+                        linkedPublication={{
+                            ...TestUtils.testLinkedToPublication,
+                            publishedDate: null,
+                            currentStatus: 'DRAFT'
+                        }}
+                    />
+                </tbody>
+            </table>
+        );
+        expect(screen.getByText('Draft,')).toBeInTheDocument();
     });
 });

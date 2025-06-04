@@ -2,31 +2,32 @@ import React from 'react';
 import * as Framer from 'framer-motion';
 
 import * as Components from '@/components';
+import * as Config from '@/config';
 import * as Interfaces from '@/interfaces';
 import * as Types from '@/types';
 
-type LinkedEntityTableProps = {
+type LinkedItemTableProps = {
     deleteLink: (id: string) => Promise<void>;
     entities: Interfaces.LinkedToPublication[] | Interfaces.BaseTopic[];
     entityType: Types.LinkedEntityType;
 };
 
-const LinkedEntityTable: React.FC<LinkedEntityTableProps> = (props): React.ReactElement => {
+const LinkedItemTable: React.FC<LinkedItemTableProps> = (props): React.ReactElement => {
     const thClasses =
         'whitespace-pre py-3.5 px-3 sm:px-6 text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50';
-    const showingPublications = props.entityType === 'PUBLICATION';
+    const showingPublications = props.entityType === 'LIVE_PUBLICATION' || props.entityType === 'DRAFT_PUBLICATION';
     return (
         <Framer.motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }} className="mt-8 flex flex-col">
             <div className="inline-block min-w-full py-2 align-middle">
                 <div className="overflow-hidden rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
                     <table
                         className="min-w-full table-fixed divide-y divide-grey-100 dark:divide-teal-300"
-                        id={`linked-${props.entityType.toLowerCase()}-table`}
+                        id={`linked-${props.entityType === 'TOPIC' ? 'topic' : 'publication'}-table`}
                     >
                         <thead className="bg-grey-50 transition-colors duration-500 dark:bg-grey-700">
                             <tr>
                                 <th className={`${showingPublications ? 'w-3/5' : 'w-4/5'} text-left ${thClasses}`}>
-                                    {props.entityType.charAt(0).toUpperCase() + props.entityType.slice(1).toLowerCase()}
+                                    {Config.values.linkedEntityTypeLabels[props.entityType]}
                                 </th>
                                 {showingPublications && <th className={`w-1/5 text-center ${thClasses}`}>View</th>}
                                 <th className={`w-1/5 text-center ${thClasses}`}>Delete</th>
@@ -43,7 +44,7 @@ const LinkedEntityTable: React.FC<LinkedEntityTableProps> = (props): React.React
                                 ) : (
                                     <Components.LinkedTopicRow
                                         key={entity.id}
-                                        topic={entity as Interfaces.BaseTopic}
+                                        topic={entity}
                                         deleteTopic={props.deleteLink}
                                     />
                                 )
@@ -56,4 +57,4 @@ const LinkedEntityTable: React.FC<LinkedEntityTableProps> = (props): React.React
     );
 };
 
-export default LinkedEntityTable;
+export default LinkedItemTable;

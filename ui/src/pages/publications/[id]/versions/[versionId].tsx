@@ -173,7 +173,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     const confirmation = Contexts.useConfirmationModal();
     const [bookmarkId, setBookmarkId] = React.useState(props.bookmarkId);
     const isBookmarked = bookmarkId ? true : false;
-    const [isPublishing, setPublishing] = React.useState<boolean>(false);
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [serverError, setServerError] = React.useState('');
     const [isEditingAffiliations, setIsEditingAffiliations] = React.useState(false);
     const [isUnlocking, setIsUnlocking] = React.useState(false);
@@ -312,12 +312,12 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         return 'INFO';
     }, [publicationVersion, user?.id, currentCoAuthor?.confirmedCoAuthor]);
 
-    const updateCoAuthor = React.useCallback(
+    const updateApproval = React.useCallback(
         async (confirm: boolean) => {
             setServerError('');
             try {
                 await api.patch(
-                    `/publication-versions/${publicationVersion?.id}/coauthor-confirmation`,
+                    `/publication-versions/${publicationVersion?.id}/coauthors/${currentCoAuthor?.id}`,
                     {
                         confirm
                     },
@@ -374,7 +374,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
         if (confirmed) {
             setServerError('');
-            setPublishing(true);
+            setIsLoading(true);
 
             try {
                 await api.put(
@@ -385,9 +385,11 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
 
                 router.reload();
             } catch (err) {
-                const publishError = err as Interfaces.JSONResponseError;
-                setServerError(publishError.message);
-                setPublishing(false);
+                const errorMessage = axios.isAxiosError(err)
+                    ? err.response?.data.message
+                    : (err as Interfaces.JSONResponseError).message;
+                setServerError(errorMessage);
+                setIsLoading(false);
             }
         }
     }, [confirmation, publicationVersion?.id, router]);
@@ -397,9 +399,52 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
             return;
         }
 
+        const allCoAuthorsApprovedWithRetention = publicationVersion?.coAuthors.every(
+            (coAuthor) => coAuthor.confirmedCoAuthor && coAuthor.retainApproval
+        );
+        const hasAnApprovalWithoutRetention = publicationVersion?.coAuthors.some(
+            (coAuthor) => coAuthor.confirmedCoAuthor && !coAuthor.retainApproval
+        );
+        const hasUnapprovedCoAuthor = publicationVersion?.coAuthors.some((coAuthor) => !coAuthor.confirmedCoAuthor);
+
+        let modalDescription: React.ReactNode[] = [];
+
+        if (allCoAuthorsApprovedWithRetention) {
+            modalDescription.push(
+                <p key="all-coauthors-retained-approval">
+                    All of your co-authors have approved and are happy for you to make further edits without needing
+                    their re-approval. After unlocking this publication, you will be able to publish immediately after
+                    you have finished making your changes.
+                </p>
+            );
+        } else {
+            if (hasAnApprovalWithoutRetention) {
+                modalDescription.push(
+                    <p key="unretained-approval-description">
+                        One or more of your authors have requested to review any further changes to this publication.
+                        They will be invited to re-approve the publication after you have made your changes before it
+                        can be published.
+                    </p>
+                );
+            }
+
+            if (hasUnapprovedCoAuthor) {
+                modalDescription.push(
+                    <p
+                        key="unapproved-coauthor-description"
+                        className={hasAnApprovalWithoutRetention ? 'mt-4' : undefined}
+                    >
+                        At least one of your authors has not approved this publication yet. Please be aware that
+                        unlocking your publication will prevent them from approving it until you have finished making
+                        your changes.
+                    </p>
+                );
+            }
+        }
+
         const confirmed = await confirmation(
             'Are you sure you want to cancel and unlock?',
-            'Unlocking this publication for editing will invalidate all existing author approvals. Authors will be invited to approve your new changes once you have finished editing',
+            modalDescription,
             <OutlineIcons.LockOpenIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />,
             'Unlock',
             'Cancel'
@@ -431,7 +476,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         const confirmed = await confirmation('Change your mind?', undefined, undefined, 'Yes, changes are needed');
 
         if (confirmed) {
-            await updateCoAuthor(false);
+            await updateApproval(false);
             await mutatePublicationVersion();
         }
     };
@@ -445,7 +490,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
         );
 
         if (confirmed) {
-            await updateCoAuthor(true);
+            await updateApproval(true);
             await mutatePublicationVersion();
         }
     };
@@ -678,18 +723,17 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                                 publicationVersion={publicationVersion}
                                 isCorrespondingAuthor={isCorrespondingAuthor}
                                 isReadyForPublish={isReadyForPublish}
-                                isPublishing={isPublishing}
+                                isLoading={isLoading}
                                 onUnlockPublication={handleUnlock}
                                 onApprove={handleApproval}
                                 onCancelApproval={handleCancelApproval}
                                 onPublish={handlePublish}
                                 onEditAffiliations={handleOpenAffiliationsModal}
+                                setServerError={setServerError}
                             />
                             <div className="pb-16">
                                 <Components.ApprovalsTracker
                                     publicationVersion={publicationVersion}
-                                    isPublishing={isPublishing}
-                                    onPublish={handlePublish}
                                     onError={setServerError}
                                     onEditAffiliations={handleOpenAffiliationsModal}
                                     refreshPublicationVersionData={mutatePublicationVersion}

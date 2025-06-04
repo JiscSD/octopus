@@ -337,7 +337,8 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                             confirmedCoAuthor: true,
                             linkedUser: 'test-user-2',
                             isIndependent: true,
-                            affiliations: []
+                            affiliations: [],
+                            retainApproval: false
                         }
                     ]
                 }
@@ -377,7 +378,7 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                             id: 'coauthor-test-user-6-problem-draft',
                             email: 'test-user-6@jisc.ac.uk',
                             code: 'test-code-user-6',
-                            confirmedCoAuthor: true,
+                            confirmedCoAuthor: false,
                             linkedUser: 'test-user-6'
                         },
                         {
@@ -470,7 +471,8 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                             confirmedCoAuthor: true,
                             linkedUser: 'test-user-6',
                             isIndependent: true,
-                            affiliations: []
+                            affiliations: [],
+                            approvalRequested: true
                         },
                         {
                             id: 'coauthor-test-user-7-problem-locked-1',
@@ -478,7 +480,8 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                             code: 'test-code-user-7',
                             confirmedCoAuthor: false,
                             isIndependent: true,
-                            affiliations: []
+                            affiliations: [],
+                            approvalRequested: true
                         }
                     ]
                 },
@@ -563,7 +566,13 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                 currentStatus: 'DRAFT',
                 keywords: ['science', 'technology'],
                 user: { connect: { id: 'test-user-5' } },
-                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] },
+                publicationStatus: {
+                    create: [
+                        { status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' },
+                        { status: 'LOCKED', createdAt: '2022-01-20T16:51:42.523Z' },
+                        { status: 'DRAFT', createdAt: '2022-01-20T17:51:42.523Z' }
+                    ]
+                },
                 coAuthors: {
                     create: [
                         {
@@ -576,13 +585,15 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                             id: 'coauthor-test-user-6-hypothesis-draft',
                             email: 'test-user-6@jisc.ac.uk',
                             code: 'test-code-user-6',
-                            confirmedCoAuthor: false,
-                            linkedUser: 'test-user-6'
+                            linkedUser: 'test-user-6',
+                            approvalRequested: true,
+                            retainApproval: false
                         },
                         {
                             id: 'coauthor-test-user-7-hypothesis-draft',
                             email: 'test-user-7@jisc.ac.uk',
-                            code: 'test-code-user-7'
+                            code: 'test-code-user-7',
+                            approvalRequested: true
                         }
                     ]
                 }
@@ -1614,6 +1625,45 @@ const publicationSeeds: Prisma.PublicationCreateInput[] = [
                         }
                     ]
                 }
+            }
+        }
+    },
+    {
+        id: 'publication-method-not-ready-to-lock',
+        doi: '10.82259/cty5-2g36',
+        type: 'PROTOCOL',
+        linkedTo: {
+            create: {
+                publicationToId: 'publication-hypothesis-live',
+                versionToId: 'publication-hypothesis-live-v1',
+                draft: true
+            }
+        },
+        versions: {
+            create: {
+                id: 'publication-method-not-ready-to-lock-v1',
+                versionNumber: 1,
+                title: 'Method (not ready to lock)',
+                conflictOfInterestStatus: true,
+                content: 'Method (not ready to lock)',
+                currentStatus: 'DRAFT',
+                user: { connect: { id: 'test-user-1' } },
+                coAuthors: {
+                    create: [
+                        {
+                            id: 'coauthor-test-user-1-publication-method-not-ready-to-lock-v1',
+                            email: 'test-user-1@jisc.ac.uk',
+                            confirmedCoAuthor: true,
+                            linkedUser: 'test-user-1',
+                            isIndependent: true
+                        },
+                        {
+                            id: 'coauthor-test-user-2-publication-method-not-ready-to-lock-v1',
+                            email: 'test-user-2@jisc.ac.uk'
+                        }
+                    ]
+                },
+                publicationStatus: { create: [{ status: 'DRAFT', createdAt: '2022-01-20T15:51:42.523Z' }] }
             }
         }
     }
