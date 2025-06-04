@@ -130,6 +130,15 @@ export const testLinkedFromPublication: Interfaces.LinkedFromPublication = {
     parentPublicationType: 'PROBLEM'
 };
 
+export const testLinkedToPublication: Interfaces.LinkedToPublication = {
+    ...testLinkedPublication,
+    linkId: 'testlink',
+    draft: false,
+    childPublicationId: 'test-child',
+    childPublicationType: 'PROBLEM',
+    externalSource: null
+};
+
 export const testFlag: Interfaces.Flag = {
     id: 'testflag',
     category: 'PLAGIARISM',
