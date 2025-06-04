@@ -18,8 +18,7 @@ const LinkedPublicationRow: React.FC<Props> = (props): React.ReactElement => {
         setLoading(false);
     };
     const iconClasses = 'h-6 w-6 text-teal-600 transition-colors duration-500 dark:text-teal-400';
-    const tdClasses =
-        'whitespace-nowrap py-4 px-3 sm:px-6 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50';
+    const tdClasses = 'py-4 px-3 sm:px-6 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50';
 
     return (
         <tr key={props.linkedPublication.id}>

@@ -30,7 +30,7 @@ describe('Linked publication row', () => {
 
     it('Published date is shown', () => {
         expect(
-            screen.getByText(Helpers.formatDate(TestUtils.testLinkedToPublication.publishedDate as string) + ',')
+            screen.getByText(Helpers.formatDate(TestUtils.testLinkedToPublication.publishedDate as string))
         ).toBeInTheDocument();
     });
 
