@@ -192,6 +192,27 @@ const userSeeds: Prisma.UserCreateManyInput[] = [
         firstName: 'HMRC (UK)',
         email: 'ari.comment@go-science.gov.uk',
         defaultTopicId: 'clkv6ulvm01dul2rs0q6u2yor' // Revenue. Taxation. Internal revenue
+    },
+    {
+        id: 'cma5fkvbx0001i2i8w1iwup8p',
+        role: 'ORGANISATION',
+        firstName: 'Ministry of Housing, Communities and Local Government (UK)',
+        email: 'ari.comment@go-science.gov.uk',
+        defaultTopicId: 'cly468zhx004d7ryzsezmjjyt' // Housing and urban planning policy
+    },
+    {
+        id: 'cma5fkvbx0003i2i82tw4ta7t',
+        role: 'ORGANISATION',
+        firstName: 'The National Archives (UK)',
+        email: 'ari.comment@go-science.gov.uk',
+        defaultTopicId: 'cly468zlt00527ryz1vpeghn5' // Libraries, museums and archives
+    },
+    {
+        id: 'cma5fkvbx0005i2i8z8bqgesc',
+        role: 'ORGANISATION',
+        firstName: 'Scottish Government Department for Tax and Revenues (UK)',
+        email: 'ari.comment@go-science.gov.uk',
+        defaultTopicId: 'clkv6ulvm01dul2rs0q6u2yor' // Revenue. Taxation. Internal revenue
     }
 ];
 export default userSeeds;
