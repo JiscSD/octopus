@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as ariUtils from 'integration/ariUtils';
+import * as client from 'lib/client';
 import * as ecs from 'lib/ecs';
 import * as ingestLogService from 'ingestLog/service';
 import * as Helpers from 'lib/helpers';
@@ -168,15 +169,119 @@ export const incrementalAriIngest = async (dryRun: boolean, reportFormat: I.Inge
     return `${preamble} ${writeCount} publication${writeCount !== 1 ? 's' : ''}.`;
 };
 
+/**
+ * Check for newly archived ARIs. If an ARI previously imported to octopus has been archived in the ARI DB,
+ * it will be marked as archived in octopus.
+ */
+export const checkArchivedARIs = async (
+    allDepartments: boolean,
+    dryRun: boolean,
+    reportFormat: I.IngestReportFormat
+): Promise<string> => {
+    const startTime = performance.now();
+
+    console.log(`${((performance.now() - startTime) / 1000).toFixed(1)}: Retrieving ARIs from ARI DB...`);
+    const allAris = await ariUtils.getAllARIs();
+    console.log(`${((performance.now() - startTime) / 1000).toFixed(1)}: Finished retrieving ARIs.`);
+
+    // Filter to only include archived ARIs, and those that are in participating departments if specified.
+    let arisToUse: I.ARIQuestion[];
+
+    if (allDepartments) {
+        arisToUse = allAris;
+    } else {
+        const participatingDepartmentNames = await ariUtils.getParticipatingDepartmentNames();
+        arisToUse = allAris.filter((ari) => participatingDepartmentNames.includes(ari.department.toLowerCase()));
+    }
+
+    console.log('Processing ARIs...');
+    let updatedCount = 0;
+    const notFound = new Set<number>();
+
+    for (const ari of arisToUse) {
+        const existingAri = await client.prisma.publication.findFirst({
+            where: {
+                externalId: ari.questionId.toString(),
+                externalSource: 'ARI'
+            }
+        });
+
+        if (!existingAri) {
+            notFound.add(ari.questionId);
+            continue;
+        }
+
+        if (!existingAri.archived === ari.isArchived) {
+            updatedCount++;
+
+            if (!dryRun) {
+                await client.prisma.publication.update({
+                    where: { id: existingAri.id },
+                    data: { archived: ari.isArchived }
+                });
+            }
+        }
+    }
+
+    if (updatedCount) {
+        console.log(`Updated archival status of ${updatedCount} publications.`);
+    }
+
+    const endTime = performance.now();
+    const durationSeconds = Math.round((endTime - startTime) / 100) / 10;
+
+    // Write report file.
+    await ariUtils.archivedCheckReport(reportFormat, {
+        durationSeconds,
+        updatedCount,
+        dryRun,
+        notFound: Array.from(notFound)
+    });
+
+    return `${dryRun ? 'Dry run' : 'Real run'} finished in ${durationSeconds} seconds.`;
+};
+
+const triggerScriptECSTask = (commandParts: string[]) =>
+    ecs.runFargateTask({
+        clusterArn: Helpers.checkEnvVariable('ECS_CLUSTER_ARN'),
+        containerOverride: {
+            command: commandParts,
+            name: 'script-runner'
+        },
+        securityGroups: [Helpers.checkEnvVariable('ECS_TASK_SECURITY_GROUP_ID')],
+        subnetIds: Helpers.checkEnvVariable('PRIVATE_SUBNET_IDS').split(','),
+        taskDefinitionId: Helpers.checkEnvVariable('ECS_TASK_DEFINITION_ID')
+    });
+
 export const triggerAriIngest = async (dryRun?: boolean): Promise<string> => {
+    if (process.env.STAGE !== 'local') {
+        // If not local, trigger task to run in ECS.
+        const commandParts = [
+            'npm',
+            'run',
+            'ariImport',
+            '--',
+            ...(dryRun ? ['dryRun=true'] : []),
+            'reportFormat=email'
+        ];
+        await triggerScriptECSTask(commandParts);
+
+        return 'Task triggered.';
+    } else {
+        // If local, just run the ingest directly.
+        return await incrementalAriIngest(!!dryRun, 'file');
+    }
+};
+
+export const triggerAriArchivedCheck = async (dryRun?: boolean): Promise<string> => {
     if (process.env.STAGE !== 'local') {
         // If not local, trigger task to run in ECS.
         await ecs.runFargateTask({
             clusterArn: Helpers.checkEnvVariable('ECS_CLUSTER_ARN'),
             ...(dryRun && {
                 containerOverride: {
-                    command: ['npm', 'run', 'ariImport', '--', 'dryRun=true', 'reportFormat=email'],
-                    name: 'ari-import'
+                    command: ['npm', 'run', 'ariArchivedCheck', '--', 'dryRun=true', 'reportFormat=email'],
+                    name: 'script-runner'
                 }
             }),
             securityGroups: [Helpers.checkEnvVariable('ECS_TASK_SECURITY_GROUP_ID')],
@@ -186,7 +291,7 @@ export const triggerAriIngest = async (dryRun?: boolean): Promise<string> => {
 
         return 'Task triggered.';
     } else {
-        // If local, just run the ingest directly.
-        return await incrementalAriIngest(!!dryRun, 'file');
+        // If local, just run the archived check directly.
+        return await checkArchivedARIs(false, !!dryRun, 'file');
     }
 };

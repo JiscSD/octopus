@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "script-runner" {
   container_definitions = jsonencode([
     {
       "name" : "script-runner",
-      "image" : "${local.account_id}.dkr.ecr.${local.region_name}.amazonaws.com/${var.project_name}-script-runner-${var.environment}:latest",
+      "image" : "${local.account_id}.dkr.ecr.${local.region_name}.amazonaws.com/${var.project_name}-${var.environment}:latest",
       "entryPoints" : [
         "sh", "-c"
       ],
