@@ -1,0 +1,18 @@
+version: 0.1
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to ECR...
+      - aws ecr get-login-password --region $DEFAULT_REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$DEFAULT_REGION.amazonaws.com
+  build:
+    commands:
+      - echo Building docker image...
+      - docker build --platform linux/arm64 --tag $IMAGE_NAME -f ./infra/docker/scriptRunner/Dockerfile ./api
+      - docker tag $IMAGE_NAME:latest $ACCOUNT_ID.dkr.ecr.$DEFAULT_REGION.amazonaws.com/$PROJECT_NAME-script-runner-$ENVIRONMENT:$IMAGE_NAME
+      - docker tag $IMAGE_NAME:latest $ACCOUNT_ID.dkr.ecr.$DEFAULT_REGION.amazonaws.com/$PROJECT_NAME-script-runner-$ENVIRONMENT:$COMMIT_ID
+  post_build:
+    commands:
+      - echo Pushing docker image...
+      - docker push $ACCOUNT_ID.dkr.ecr.$DEFAULT_REGION.amazonaws.com/$PROJECT_NAME-script-runner-$ENVIRONMENT:$IMAGE_NAME
+      - docker push $ACCOUNT_ID.dkr.ecr.$DEFAULT_REGION.amazonaws.com/$PROJECT_NAME-script-runner-$ENVIRONMENT:$COMMIT_ID

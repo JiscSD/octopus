@@ -7,8 +7,8 @@ locals {
   region_name = data.aws_region.current.name
 }
 
-resource "aws_ecs_task_definition" "ari-import" {
-  family                   = "${var.project_name}-ari-import-${var.environment}"
+resource "aws_ecs_task_definition" "script-runner" {
+  family                   = "${var.project_name}-script-runner-${var.environment}"
   requires_compatibilities = ["FARGATE"]
 
   cpu    = 256
@@ -26,8 +26,8 @@ resource "aws_ecs_task_definition" "ari-import" {
 
   container_definitions = jsonencode([
     {
-      "name" : "ari-import",
-      "image" : "${local.account_id}.dkr.ecr.${local.region_name}.amazonaws.com/${var.project_name}-${var.environment}:latest",
+      "name" : "script-runner",
+      "image" : "${local.account_id}.dkr.ecr.${local.region_name}.amazonaws.com/${var.project_name}-script-runner-${var.environment}:latest",
       "entryPoints" : [
         "sh", "-c"
       ],
@@ -36,7 +36,7 @@ resource "aws_ecs_task_definition" "ari-import" {
         "logDriver" : "awslogs",
         "options" : {
           "awslogs-create-group" : "true",
-          "awslogs-group" : "${var.project_name}-ari-import-ecs-task-${var.environment}",
+          "awslogs-group" : "${var.project_name}-script-runner-ecs-task-${var.environment}",
           "awslogs-region" : "${local.region_name}",
           "awslogs-stream-prefix" : "ecs"
         },
@@ -122,9 +122,9 @@ resource "aws_ecs_task_definition" "ari-import" {
   ])
 }
 
-resource "aws_security_group" "ari-import-task-sg" {
-  name                   = "${var.project_name}-ari-import-task-sg-${var.environment}"
-  description            = "Security group for ari import ecs task"
+resource "aws_security_group" "script-runner-task-sg" {
+  name                   = "${var.project_name}-script-runner-task-sg-${var.environment}"
+  description            = "Security group for script runner ecs task"
   vpc_id                 = var.vpc_id
   revoke_rules_on_delete = true
 
@@ -136,18 +136,18 @@ resource "aws_security_group" "ari-import-task-sg" {
   }
 
   tags = {
-    Name = "${var.project_name}-ari-import-task-sg-${var.environment}"
+    Name = "${var.project_name}-script-runner-task-sg-${var.environment}"
   }
 }
 
 resource "aws_ssm_parameter" "ecs-security-group-id" {
   name  = "ecs_task_security_group_id_${var.environment}_${var.project_name}"
   type  = "String"
-  value = aws_security_group.ari-import-task-sg.id
+  value = aws_security_group.script-runner-task-sg.id
 }
 
 resource "aws_ssm_parameter" "ecs-task-definition-id" {
   name  = "ecs_task_definition_id_${var.environment}_${var.project_name}"
   type  = "String"
-  value = "${aws_ecs_task_definition.ari-import.id}:${aws_ecs_task_definition.ari-import.revision}"
+  value = "${aws_ecs_task_definition.script-runner.id}:${aws_ecs_task_definition.script-runner.revision}"
 }
