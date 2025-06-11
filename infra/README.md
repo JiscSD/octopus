@@ -81,6 +81,5 @@ We are in the process of moving the int environment to a separate AWS account. U
 - Terraform will expect a number of profiles to be defined in your `~/.aws/credentials` file when running commands, depending on the account you're working with:
   - `octopus-tfstate`: a separate account to store terraform state for all environments, and other centralised things TBD
   - `octopus-int`: the account for the int environment (where new-int currently lives, and where int will eventually live)
-    - Please note that on the AWS sign-in page, this account was provisioned with the name OctopusProjectProd, which unfortunately can't be changed.
   - `octopus-dev`: the account for the prod environment (where prod and int currently live, and eventually will only contain prod)
     - This profile name will likely be changed to `octopus-prod` when the migration is done.

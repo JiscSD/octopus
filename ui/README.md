@@ -6,11 +6,12 @@ The Octopus UI is a [Next.js](https://nextjs.org/) project bootstrapped with [cr
 
 ## Getting started
 
-Create a `.env` file inside `~/ui` using `cp .env.example .env`. Update it to add your ORCID (the same one you used in the api .env file):
+Create a `.env` file inside `~/ui` using `cp .env.example .env`. Update it to add the ORCID app ID (the same one you used in the api .env file), and the contentful space ID and access token if you want to see real blog posts on the blog pages:
 
 ```
-# set to same as ORCID_ID in api .env file
 NEXT_PUBLIC_ORCID_APP_ID=PUT_ORCID_APP_ID_HERE
+NEXT_PUBLIC_CONTENTFUL_SPACE_ID=PUT_CONTENTFUL_SPACE_ID_HERE
+NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN=PUT_CONTENTFUL_ACCESS_TOKEN_HERE
 ```
 
 Leave the rest of the file as is.
@@ -28,7 +29,9 @@ Alternatively, as a one-off, this can be done in one command, again replacing `$
 
 `npm run customInstall --tiptap_token=${TIPTAP_PRO_TOKEN}`
 
-To start the UI application, run: `npm run dev`.
+To start the UI application, run: `npm run dev`. Open [https://localhost:3001](https://localhost:3001) with your browser to see the result.
+
+To view any dynamic pages, you will also need to start the API. More information can be found in the [API readme](../api/README.md).
 
 ### Warning about self-signed certificate generation
 
@@ -44,10 +47,6 @@ Sudo password:[types]
 ```
 
 From this output, you are free to type the password; the certificate will be generated and the command will proceed correctly.
-
-Open [https://localhost:3001](https://localhost:3001) with your browser to see the result.
-
-To view any dynamic pages, you will also need to start the API. More information can be found in the [API readme](../api/README.md).
 
 ---
 
