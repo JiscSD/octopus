@@ -30,22 +30,25 @@ const Links: React.FC = (): React.ReactElement => {
     const linkablePublicationTypes = Helpers.publicationsAvailabletoPublication(type);
 
     const [loading, setLoading] = React.useState<boolean>(false);
+    const [deletionUpdate, setDeletionUpdate] = React.useState('');
 
     const deletePublicationLink = useCallback(
         async (linkId: string) => {
             setError(null);
             if (user) {
                 try {
+                    setDeletionUpdate('Deleting linked publication');
                     await api.destroy(`/links/${linkId}`, user.token);
 
                     // update linked publications in the UI
                     updateLinkedTo(linkedTo.filter((link) => link.linkId !== linkId));
+                    setDeletionUpdate('Linked publication deleted');
                 } catch (err) {
                     setError('There was a problem removing the link.');
                 }
             }
         },
-        [linkedTo, setError, updateLinkedTo, user]
+        [linkedTo, setDeletionUpdate, setError, updateLinkedTo, user]
     );
 
     const deleteTopicLink = useCallback(
@@ -54,6 +57,7 @@ const Links: React.FC = (): React.ReactElement => {
 
             if (user) {
                 try {
+                    setDeletionUpdate('Deleting linked topic');
                     // Update publication's topic IDs with current list minus ID to delete
                     await api.patch(
                         `${Config.endpoints.publicationVersions}/${publicationVersionId}`,
@@ -65,6 +69,7 @@ const Links: React.FC = (): React.ReactElement => {
 
                     // update topics in the UI
                     updateTopics(topics.filter((topic) => topic.id !== topicId));
+                    setDeletionUpdate('Linked topic deleted');
                 } catch (err) {
                     setError(
                         axios.isAxiosError(err) ? err.response?.data.message : 'There was a problem removing the topic.'
@@ -72,7 +77,7 @@ const Links: React.FC = (): React.ReactElement => {
                 }
             }
         },
-        [publicationVersionId, setError, topics, updateTopics, user]
+        [publicationVersionId, setDeletionUpdate, setError, topics, updateTopics, user]
     );
 
     // When making a research problem, we refer to "items" to link to (because it could be a topic), and not just "publications"
@@ -172,6 +177,9 @@ const Links: React.FC = (): React.ReactElement => {
                 </div>
             </div>
 
+            <div className="sr-only" aria-live="polite">
+                {deletionUpdate}
+            </div>
             {!!linkedTo.length && (
                 <Components.LinkedItemTable
                     deleteLink={deletePublicationLink}

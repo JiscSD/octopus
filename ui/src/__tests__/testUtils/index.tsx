@@ -1,5 +1,17 @@
 import * as Interfaces from '@/interfaces';
 
+export const testCoreUser: Interfaces.CoreUser = {
+    id: 'test',
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john_doe@mailinator.com',
+    role: 'USER',
+    createdAt: '2023-02-27T09:50:00.000Z',
+    updatedAt: '2023-02-27T09:50:00.000Z',
+    orcid: 'test',
+    employment: []
+};
+
 export const testPublicationVersion: Interfaces.PublicationVersion = {
     id: 'test-v1',
     versionOf: 'test',
@@ -26,16 +38,7 @@ export const testPublicationVersion: Interfaces.PublicationVersion = {
     content: null,
     language: 'en',
     fundersStatement: null,
-    user: {
-        id: 'test',
-        orcid: 'test',
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john_doe@mailinator.com',
-        createdAt: '2023-02-27T09:50:00.000Z',
-        updatedAt: '2023-02-27T09:50:00.000Z',
-        role: 'USER'
-    },
+    user: testCoreUser as Interfaces.PublicationVersionUser,
     publicationStatus: [
         {
             status: 'LIVE',
@@ -49,7 +52,25 @@ export const testPublicationVersion: Interfaces.PublicationVersion = {
         }
     ],
     funders: [],
-    coAuthors: [],
+    coAuthors: [
+        {
+            id: 'test-coauthor',
+            confirmedCoAuthor: true,
+            linkedUser: testCoreUser.id,
+            approvalRequested: false,
+            email: testCoreUser.email as string,
+            publicationVersionId: 'test-v1',
+            affiliations: [],
+            isIndependent: true,
+            retainApproval: true,
+            user: {
+                firstName: testCoreUser.firstName,
+                lastName: testCoreUser.lastName,
+                role: testCoreUser.role,
+                orcid: testCoreUser.orcid
+            }
+        }
+    ],
     publication: {
         id: 'test',
         type: 'PROBLEM',
@@ -69,18 +90,6 @@ export const testPublication: Interfaces.Publication = {
     linkedFrom: [],
     publicationFlags: [],
     versions: [testPublicationVersion]
-};
-
-export const testCoreUser: Interfaces.CoreUser = {
-    id: 'test',
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john_doe@mailinator.com',
-    role: 'USER',
-    createdAt: '2023-02-27T09:50:00.000Z',
-    updatedAt: '2023-02-27T09:50:00.000Z',
-    orcid: 'test',
-    employment: []
 };
 
 export const testUser: Interfaces.User = {
@@ -119,6 +128,15 @@ export const testLinkedFromPublication: Interfaces.LinkedFromPublication = {
     draft: false,
     parentPublicationId: 'test',
     parentPublicationType: 'PROBLEM'
+};
+
+export const testLinkedToPublication: Interfaces.LinkedToPublication = {
+    ...testLinkedPublication,
+    linkId: 'testlink',
+    draft: false,
+    childPublicationId: 'test-child',
+    childPublicationType: 'PROBLEM',
+    externalSource: null
 };
 
 export const testFlag: Interfaces.Flag = {

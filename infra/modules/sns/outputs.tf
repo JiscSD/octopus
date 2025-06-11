@@ -1,3 +1,3 @@
-output "arn" {
-  value = aws_sns_topic.pdf-queue-dlq-messages-topic.arn
+output "topic_arn" {
+  value = aws_sns_topic.dev-team-messages-topic.arn
 }

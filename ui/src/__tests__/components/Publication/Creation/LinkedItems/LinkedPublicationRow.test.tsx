@@ -1,54 +1,16 @@
 import * as Components from '@/components';
+import * as Config from '@/config';
 import * as Helpers from '@/helpers';
-import * as Types from '@/types';
-import { render, screen } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
-
-const sampleLinkedPublication = {
-    id: 'test-parent',
-    type: 'PROBLEM' as Types.PublicationType,
-    doi: '10.1234/test',
-    title: 'Test Title',
-    publishedDate: '2025-04-07T00:00:00Z',
-    currentStatus: 'LIVE' as Types.PublicationStatus,
-    createdBy: 'test-user',
-    authorFirstName: 'Test',
-    authorLastName: 'User',
-    authors: [
-        {
-            id: 'coauthor-1',
-            linkedUser: 'test-user',
-            publicationVersionId: 'test-parent-v1',
-            user: {
-                firstName: 'Test',
-                lastName: 'User',
-                orcid: '0000-0001-2345-6789',
-                role: 'USER' as Types.UserRole
-            }
-        }
-    ],
-    flagCount: 0,
-    peerReviewCount: 0,
-    linkId: 'test-link',
-    draft: true,
-    childPublicationId: 'test-child',
-    childPublicationType: 'PROBLEM' as Types.PublicationType,
-    externalSource: null
-};
+import * as TestUtils from '@/testUtils';
+import { render, screen, fireEvent } from '@testing-library/react';
 
 describe('Linked publication row', () => {
-    const deleteLinkMock = jest.fn(() => Promise.resolve());
     beforeEach(() => {
         render(
-            // Also render a table to prevent validateDOMNesting errors for orphaned row.
-            <table>
-                <tbody>
-                    <Components.LinkedPublicationRow
-                        deleteLink={deleteLinkMock}
-                        linkedPublication={sampleLinkedPublication}
-                    />
-                </tbody>
-            </table>
+            <Components.LinkedPublicationRow
+                linkedPublication={TestUtils.testLinkedToPublication}
+                deleteLink={jest.fn(() => Promise.resolve())}
+            />
         );
     });
 
@@ -57,31 +19,91 @@ describe('Linked publication row', () => {
     });
 
     it('Publication type is shown', () => {
-        expect(screen.getByText('Research Problem')).toBeInTheDocument();
+        expect(
+            screen.getByText(Helpers.formatPublicationType(TestUtils.testLinkedToPublication.type))
+        ).toBeInTheDocument();
     });
 
     it('Title is shown', () => {
-        expect(screen.getByText('Test Title')).toBeInTheDocument();
+        expect(screen.getByText(TestUtils.testLinkedToPublication.title as string)).toBeInTheDocument();
     });
 
     it('Published date is shown', () => {
-        expect(screen.getByText(Helpers.formatDate('2025-04-07T00:00:00Z'))).toBeInTheDocument();
+        expect(
+            screen.getByText(Helpers.formatDate(TestUtils.testLinkedToPublication.publishedDate as string))
+        ).toBeInTheDocument();
     });
 
     it('Abbreviated author name is shown', () => {
         expect(
-            screen.getByText(Helpers.abbreviateUserName({ firstName: 'Test', lastName: 'User' }))
+            screen.getByText(
+                Helpers.abbreviateUserName({
+                    firstName: TestUtils.testLinkedToPublication.authorFirstName,
+                    lastName: TestUtils.testLinkedToPublication.authorLastName
+                })
+            )
         ).toBeInTheDocument();
     });
 
-    it('Delete button is shown', () => {
-        expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
+    it('Link to publication is shown', () => {
+        expect(
+            screen.getByRole('link', {
+                name: 'Visit publication'
+            })
+        ).toHaveAttribute('href', `${Config.urls.viewPublication.path}/${TestUtils.testLinkedToPublication.id}`);
     });
 
-    it('Delete button triggers deleteLink function', async () => {
-        const deleteButton = screen.getByRole('button', { name: 'Delete' });
-        await userEvent.click(deleteButton);
-        expect(deleteLinkMock).toHaveBeenCalledTimes(1);
+    it('Disabled deletion button is shown if link is not draft', () => {
+        expect(
+            screen.getByRole('button', {
+                name: 'Deletion forbidden as link is inherited from previous version'
+            })
+        ).toBeDisabled();
+    });
+
+    it('Delete button is not shown if link is not draft', () => {
+        expect(
+            screen.queryByRole('button', {
+                name: 'Delete linked publication'
+            })
+        ).not.toBeInTheDocument();
+    });
+});
+
+describe('Draft links', () => {
+    const deleteLink = jest.fn(() => Promise.resolve());
+    beforeEach(() => {
+        render(
+            <Components.LinkedPublicationRow
+                linkedPublication={{ ...TestUtils.testLinkedToPublication, draft: true }}
+                deleteLink={deleteLink}
+            />
+        );
+    });
+
+    it('Enabled delete button is shown if link is draft', () => {
+        expect(
+            screen.getByRole('button', {
+                name: 'Delete'
+            })
+        ).toBeEnabled();
+    });
+
+    it('Delete button triggers deleteLink function from props', () => {
+        const deleteButton = screen.getByRole('button', {
+            name: 'Delete'
+        });
+        fireEvent.click(deleteButton);
+        expect(deleteLink).toHaveBeenCalledWith(TestUtils.testLinkedToPublication.linkId);
+        expect(deleteLink).toHaveBeenCalledTimes(1);
+    });
+
+    it('"Deletion forbidden" button is not shown if link is draft', () => {
+        expect(
+            screen.queryByRole('button', {
+                name: 'Deletion forbidden as link is inherited from previous version'
+            })
+        ).not.toBeInTheDocument();
     });
 });
 
@@ -93,7 +115,7 @@ describe('Linked publication row with draft publication', () => {
                     <Components.LinkedPublicationRow
                         deleteLink={jest.fn()}
                         linkedPublication={{
-                            ...sampleLinkedPublication,
+                            ...TestUtils.testLinkedToPublication,
                             publishedDate: null,
                             currentStatus: 'DRAFT'
                         }}
@@ -102,28 +124,5 @@ describe('Linked publication row with draft publication', () => {
             </table>
         );
         expect(screen.getByText('Draft,')).toBeInTheDocument();
-    });
-});
-
-describe('Linked publication created in previous version', () => {
-    it('Deletion is disabled', () => {
-        render(
-            <table>
-                <tbody>
-                    <Components.LinkedPublicationRow
-                        deleteLink={jest.fn()}
-                        linkedPublication={{
-                            ...sampleLinkedPublication,
-                            draft: false
-                        }}
-                    />
-                </tbody>
-            </table>
-        );
-        const deletionButton = screen.getByRole('button');
-        expect(deletionButton).toHaveAccessibleDescription(
-            'Deletion forbidden as link is inherited from previous version'
-        );
-        expect(deletionButton).toBeDisabled();
     });
 });
