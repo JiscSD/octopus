@@ -280,7 +280,14 @@ export const triggerAriArchivedCheck = async (dryRun?: boolean): Promise<string>
             clusterArn: Helpers.checkEnvVariable('ECS_CLUSTER_ARN'),
             ...(dryRun && {
                 containerOverride: {
-                    command: ['npm', 'run', 'ariArchivedCheck', '--', 'dryRun=true', 'reportFormat=email'],
+                    command: [
+                        'npm',
+                        'run',
+                        'ariArchivedCheck',
+                        '--',
+                        ...(dryRun ? ['dryRun=true'] : []),
+                        'reportFormat=email'
+                    ],
                     name: 'script-runner'
                 }
             }),
