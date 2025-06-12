@@ -56,3 +56,5 @@ Of particular importance is how ARIs are matched to an owning organisational use
 Topics are mapped similarly. If an ARI has values in its `topics` field, the mapping will check whether octopus has any TopicMappings in the database that match with them and associate the publication it creates/updates with the topic(s) from those mappings. If there are no topics listed on the ARI, the organisational user is expected to have a `defaultTopicId`, which is used as a fallback.
 
 #### Archived ARIs
+
+ARIs can be archived. This presents an issue for Octopus, which doesn't have a way of archiving publications as such. To deal with this, we have the `ariArchivedCheck` [script](../../../scripts/ariArchivedCheck.ts) / ECS task. It will see if any ARIs octopus has already imported have become archived since they were imported. If so, it will set the `archived` field on the publication to match the value on the ARI db. We can then use this to display on the front end that the publication is archived.
