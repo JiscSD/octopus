@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as dotenv from 'dotenv';
 
 // Important to do this so that environment variables are treated the same as in deployed code.
@@ -8,12 +7,6 @@ import * as ariUtils from 'integration/ariUtils';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
 import * as integrationService from 'integration/service';
-
-const checkBooleanArgValue = (arg: string): void => {
-    if (arg && !(arg === 'true' || arg === 'false')) {
-        throw new Error(`"${arg}" must be "true" or "false"`);
-    }
-};
 
 /**
  * Can take the following arguments:
@@ -52,7 +45,7 @@ const parseArguments = (): {
     const { allDepartments: allDepartmentsArg, dryRun: dryRunArg, full: fullArg, reportFormat: reportFormatArg } = args;
 
     for (const arg of [allDepartmentsArg, dryRunArg, fullArg]) {
-        checkBooleanArgValue(arg);
+        Helpers.checkBooleanArgValue(arg);
     }
 
     if (reportFormatArg && !(reportFormatArg === 'email' || reportFormatArg === 'file')) {
@@ -79,42 +72,14 @@ export const fullAriIngest = async (
 ): Promise<string> => {
     const startTime = performance.now();
 
-    // Collect all ARIs in a variable.
-    const allAris: I.ARIQuestion[] = [];
-
-    // After a page has been retrieved, add the data to the aris variable,
-    // get the next page and repeat until reaching the last page.
-    let pageUrl = ariUtils.ariEndpoint;
-    // Updates with each loop. Contains total count which we need outside the loop.
-    let paginationInfo;
-
     console.log(`${((performance.now() - startTime) / 1000).toFixed(1)}: Retrieving ARIs from ARI DB...`);
 
-    do {
-        // Get page.
-        const response = await axios.get(pageUrl);
-        const pageAris = response.data.data;
-
-        // Add page's ARIs to our variable.
-        allAris.push(...pageAris);
-
-        // Get the next page URL.
-        // On the last run this will be undefined but that's fine because we won't need to repeat the loop.
-        paginationInfo = response.data.meta.pagination;
-        pageUrl = paginationInfo.links.next;
-    } while (pageUrl);
+    const allAris = await ariUtils.getAllARIs();
 
     console.log(`${((performance.now() - startTime) / 1000).toFixed(1)}: Finished retrieving ARIs.`);
 
-    // In case something has caused this process to fail, perhaps the API changed, etc...
-    if (allAris.length !== paginationInfo.total) {
-        throw new Error('Number of ARIs retrieved does not match reported total. Stopping.');
-    }
-
-    // Determine which departments are having their ARIs imported.
+    // Filter out archived ARIs and those not in the participating departments (if desired).
     const participatingDepartmentNames = await ariUtils.getParticipatingDepartmentNames();
-
-    // Remove archived ARIs and ARIs from departments we are not importing.
     const aris = allAris.filter(
         (ari) =>
             !ari.isArchived && (allDepartments || participatingDepartmentNames.includes(ari.department.toLowerCase()))

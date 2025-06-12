@@ -10,6 +10,7 @@ import * as topicMappingService from 'topicMapping/service';
 import * as userMappingService from 'userMapping/service';
 import * as userService from 'user/service';
 
+import axios from 'axios';
 import * as fs from 'fs/promises';
 import { Prisma } from '@prisma/client';
 
@@ -490,7 +491,99 @@ ${unrecognisedTopics.length ? 'Unrecognised topics: "' + unrecognisedTopics.join
             </body>
         </html>
     `;
-        await email.ariIngestReport(html, text);
+        await email.ariReport(html, text, 'ingest');
+
+        return;
+    }
+};
+
+export const getAllARIs = async (): Promise<I.ARIQuestion[]> => {
+    // Collect all ARIs in a variable.
+    const allAris: I.ARIQuestion[] = [];
+
+    // After a page has been retrieved, add the data to the aris variable,
+    // get the next page and repeat until reaching the last page.
+    let pageUrl = ariEndpoint;
+    // Updates with each loop. Contains total count which we need outside the loop.
+    let paginationInfo;
+
+    do {
+        // Get page.
+        const response = await axios.get(pageUrl);
+        const pageAris = response.data.data;
+
+        // Add page's ARIs to our variable.
+        allAris.push(...pageAris);
+
+        // Get the next page URL.
+        // On the last run this will be undefined but that's fine because we won't need to repeat the loop.
+        paginationInfo = response.data.meta.pagination;
+        pageUrl = paginationInfo.links.next;
+    } while (pageUrl);
+
+    // In case something has caused this process to fail, perhaps the API changed, etc...
+    if (allAris.length !== paginationInfo.total) {
+        throw new Error('Number of ARIs retrieved does not match reported total. Stopping.');
+    }
+
+    return allAris;
+};
+
+export const archivedCheckReport = async (
+    format: I.IngestReportFormat,
+    details: {
+        durationSeconds: number;
+        updatedCount: number;
+        dryRun: boolean;
+        notFound: number[];
+    }
+): Promise<void> => {
+    const { durationSeconds, updatedCount, dryRun, notFound } = details;
+    const intro = `ARI archived check ${dryRun ? 'dry ' : ''}run completed.`;
+    const timingInfo =
+        `Duration: ${durationSeconds} seconds.` +
+        (dryRun && updatedCount
+            ? ` A real run would have taken a minimum of ${
+                  updatedCount / 2
+              } additional seconds due to datacite API rate limits while creating/updating publications.`
+            : '');
+    const detailsPrefix = `The ${dryRun ? 'simulated ' : ''}results of this run are as follows.`;
+    const text = `
+${intro}
+${timingInfo}
+${detailsPrefix} 
+Publications updated: ${updatedCount}.
+${notFound.length ? 'Publications not found: ' + notFound.join(', ') + '.' : ''}`;
+
+    if (format === 'file') {
+        const fileName = 'ari-archived-check-report.txt';
+        await fs.writeFile(fileName, text);
+        console.log(`Report file written to ${fileName}.`);
+
+        return;
+    }
+
+    if (format === 'email') {
+        const html = `
+        <html>
+            <body>
+                <p>${intro}</p>
+                <p>${timingInfo}</p>
+                <p>${detailsPrefix}</p>
+                <ul>
+                    <li>Publications updated: ${updatedCount}</li>
+                    ${
+                        notFound.length
+                            ? '<li>ARI questions not found in octopus: <ul><li>' +
+                              notFound.join('</li><li>') +
+                              '</li></ul></li>'
+                            : ''
+                    }
+                </ul>
+            </body>
+        </html>
+    `;
+        await email.ariReport(html, text, 'archived-check');
 
         return;
     }

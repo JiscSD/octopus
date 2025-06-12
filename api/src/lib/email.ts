@@ -922,12 +922,12 @@ export const newAriChildPublication = async (options: {
 };
 
 // See ariUtils file for body construction.
-export const ariIngestReport = async (html: string, text: string): Promise<void> => {
+export const ariReport = async (html: string, text: string, type: 'ingest' | 'archived-check'): Promise<void> => {
     await send({
         html,
         text,
         to: process.env.INGEST_REPORT_RECIPIENTS ? process.env.INGEST_REPORT_RECIPIENTS.split(',') : '',
-        subject: 'ARI ingest report'
+        subject: type === 'ingest' ? 'ARI ingest report' : 'ARI archived check report'
     });
 };
 

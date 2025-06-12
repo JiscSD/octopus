@@ -2,8 +2,8 @@ data "aws_ssm_parameter" "github_codestar_connection_arn" {
   name = "${var.project_name}_github_codestar_connection_arn"
 }
 
-resource "aws_codepipeline" "docker-image-codepipeline" {
-  name          = "${var.project_name}-docker-image-pipeline-${var.environment}"
+resource "aws_codepipeline" "script-runner-docker-image-codepipeline" {
+  name          = "${var.project_name}-script-runner-docker-image-pipeline-${var.environment}"
   role_arn      = aws_iam_role.codepipeline_role.arn
   pipeline_type = "V2"
 
@@ -46,7 +46,7 @@ resource "aws_codepipeline" "docker-image-codepipeline" {
       version         = "1"
 
       configuration = {
-        ProjectName = aws_codebuild_project.deploy-docker-image.name
+        ProjectName = aws_codebuild_project.deploy-script-runner-docker-image.name
         EnvironmentVariables = jsonencode([
           {
             name  = "COMMIT_ID",
@@ -68,7 +68,7 @@ resource "aws_codepipeline" "docker-image-codepipeline" {
         }
         file_paths {
           # Whenever something to do with the ARI ingest code or this docker container is changed.
-          includes = ["infra/modules/codepipeline/buildspec/deploy-docker-image.yml", "api"]
+          includes = ["infra/modules/codepipeline/buildspec/deploy-script-runner-docker-image.yml", "api"]
         }
       }
     }
@@ -98,7 +98,7 @@ resource "aws_iam_role" "codepipeline_role" {
   assume_role_policy = data.aws_iam_policy_document.codepipeline_role_policy.json
 }
 
-data "aws_iam_policy_document" "codepipeline_policy" {
+data "aws_iam_policy_document" "script-runner-docker-image-codepipeline_policy" {
   statement {
     effect = "Allow"
     actions = [
@@ -149,9 +149,9 @@ data "aws_iam_policy_document" "codepipeline_policy" {
 }
 
 // IAM codepipeline policy
-resource "aws_iam_role_policy" "codepipeline_policy" {
-  name = "${var.project_name}-codepipeline_policy-${var.environment}"
+resource "aws_iam_role_policy" "script-runner-docker-image-codepipeline_policy" {
+  name = "${var.project_name}-script-runner-docker-image-codepipeline_policy-${var.environment}"
   role = aws_iam_role.codepipeline_role.id
 
-  policy = data.aws_iam_policy_document.codepipeline_policy.json
+  policy = data.aws_iam_policy_document.script-runner-docker-image-codepipeline_policy.json
 }
