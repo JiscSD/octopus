@@ -70,7 +70,7 @@ resource "aws_scheduler_schedule" "ari_import_cron" {
       containerOverrides = [
         {
           command = terraform.workspace == "prod" ? ["npm", "run", "ariImport", "--", "dryRun=true", "reportFormat=email"] : ["npm", "run", "ariImport", "--", "reportFormat=email"]
-          name    = "ari-import"
+          name    = "script-runner"
         }
       ]
     })
