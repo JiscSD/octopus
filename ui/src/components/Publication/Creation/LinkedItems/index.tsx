@@ -12,25 +12,60 @@ import * as Types from '@/types';
  * @description Edit links
  */
 const Links: React.FC = (): React.ReactElement => {
+    // State
+    const [deletionUpdate, setDeletionUpdate] = React.useState('');
     const [entityType, setEntityType] = React.useState<Types.LinkedEntityType>('LIVE_PUBLICATION');
-    const { publicationVersionId, topics, updateTopics, linkedTo, updateLinkedTo, error, setError } =
-        Stores.usePublicationCreationStore((state) => ({
-            publicationVersionId: state.publicationVersion.id,
-            topics: state.publicationVersion.topics,
-            updateTopics: state.updateTopics,
-            linkedTo: state.linkedTo,
-            updateLinkedTo: state.updateLinkedTo,
-            error: state.error,
-            setError: state.setError
-        }));
-
+    // Store
+    const {
+        error,
+        linkedTo,
+        publicationId,
+        publicationVersionId,
+        setError,
+        topics,
+        type,
+        updateLinkedTo,
+        updateTopics
+    } = Stores.usePublicationCreationStore((state) => ({
+        error: state.error,
+        linkedTo: state.linkedTo,
+        publicationId: state.publicationVersion.versionOf,
+        publicationVersionId: state.publicationVersion.id,
+        setError: state.setError,
+        topics: state.publicationVersion.topics,
+        type: state.publicationVersion.publication.type,
+        updateLinkedTo: state.updateLinkedTo,
+        updateTopics: state.updateTopics
+    }));
     const user = Stores.useAuthStore((state) => state.user);
 
-    const type = Stores.usePublicationCreationStore((state) => state.publicationVersion.publication.type);
     const linkablePublicationTypes = Helpers.publicationsAvailabletoPublication(type);
 
-    const [loading, setLoading] = React.useState<boolean>(false);
-    const [deletionUpdate, setDeletionUpdate] = React.useState('');
+    const createPublicationLink = async (targetPublicationId: string) => {
+        setError(null);
+        if (targetPublicationId && user) {
+            try {
+                await api.post(
+                    '/links',
+                    {
+                        to: targetPublicationId,
+                        from: publicationId
+                    },
+                    user.token
+                );
+
+                // refetch direct links
+                const response = await api.get(
+                    `${Config.endpoints.publications}/${publicationId}/links?direct=true`,
+                    user.token
+                );
+
+                updateLinkedTo(response.data.linkedTo);
+            } catch (err) {
+                setError('There was a problem creating the link.');
+            }
+        }
+    };
 
     const deletePublicationLink = useCallback(
         async (linkId: string) => {
@@ -159,18 +194,15 @@ const Links: React.FC = (): React.ReactElement => {
                     )}
                     <div className="flex-1">
                         {entityType === 'TOPIC' ? (
-                            <Components.LinkedTopicsCombobox
-                                setError={setError}
-                                loading={loading}
-                                setLoading={setLoading}
-                                topics={topics}
-                            />
+                            <Components.LinkedTopicsCombobox setError={setError} topics={topics} />
                         ) : (
-                            <Components.LinkedPublicationsCombobox
+                            <Components.PublicationCombobox
+                                buttonCallback={createPublicationLink}
+                                buttonText="Add link"
                                 draftsOnly={entityType === 'DRAFT_PUBLICATION'}
+                                excludedIds={[publicationId, ...linkedTo.map((link) => link.id)]}
                                 setError={setError}
-                                loading={loading}
-                                setLoading={setLoading}
+                                targetTypes={linkablePublicationTypes}
                             />
                         )}
                     </div>

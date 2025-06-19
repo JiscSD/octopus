@@ -3,45 +3,37 @@ import useSWR from 'swr';
 import * as HeadlessUI from '@headlessui/react';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 
-import * as api from '@/api';
 import * as Components from '@/components';
 import * as Config from '@/config';
-import * as Helpers from '@/helpers';
 import * as Interfaces from '@/interfaces';
 import * as Stores from '@/stores';
 import * as Types from '@/types';
 
-type LinkedPublicationsComboboxProps = {
-    setError: (error: string | null) => void;
-    loading: boolean;
-    setLoading: (isLoading: boolean) => void;
+type PublicationComboboxProps = {
+    buttonCallback: (publicationId: string) => Promise<void>;
+    buttonText: string;
     draftsOnly: boolean;
+    excludedIds: string[];
+    setError: (error: string | null) => void;
+    targetTypes?: string[];
 };
 
-const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (props): React.ReactElement => {
+const PublicationCombobox: React.FC<PublicationComboboxProps> = (props): React.ReactElement => {
     const user = Stores.useAuthStore((state) => state.user);
-    const { currentPublicationId, type, linkedTo, updateLinkedTo } = Stores.usePublicationCreationStore((state) => ({
-        currentPublicationId: state.publicationVersion.versionOf,
-        type: state.publicationVersion.publication.type,
-        linkedTo: state.linkedTo,
-        updateLinkedTo: state.updateLinkedTo
-    }));
 
+    const [loading, setLoading] = React.useState<boolean>(false);
     const [search, setSearch] = React.useState('');
     const [selectedPublication, setSelectedPublication] =
         React.useState<Types.LinkedPublicationComboboxOptionValue | null>(null);
 
-    const availableLinkTypes = (type && Helpers.publicationsAvailabletoPublication(type)) || [];
-    const formattedAsString = availableLinkTypes.join(',');
-
-    const excludedIds = [currentPublicationId, ...linkedTo.map((link) => link.id)];
-
     const minimumQueryEntered = search.length > 2;
+    const excludedIdsParam = props.excludedIds.length ? `&exclude=${props.excludedIds.join(',')}` : '';
+    const typeFilterParam = props.targetTypes?.length ? `&type=${props.targetTypes.join(',')}` : '';
     const swrKey = props.draftsOnly
-        ? `${Config.endpoints.users}/${user?.id}/publications?initialDraftsOnly=true&limit=10${minimumQueryEntered ? `&query=${search}` : ''}&exclude=${excludedIds.join(',')}&type=${formattedAsString}`
-        : `/publication-versions?type=${formattedAsString}&limit=10${
+        ? `${Config.endpoints.users}/${user?.id}/publications?initialDraftsOnly=true&limit=10${minimumQueryEntered ? `&query=${search}` : ''}${typeFilterParam}${excludedIdsParam}`
+        : `/publication-versions?limit=10${
               minimumQueryEntered ? `&search=${search}` : ''
-          }&exclude=${excludedIds.join(',')}`;
+          }${typeFilterParam}${excludedIdsParam}`;
 
     const {
         data: results = {
@@ -71,7 +63,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
             // Every publication returned from the request is expected to have 1 version (draft).
             const version = publication.versions[0];
             return (
-                <Components.LinkedPublicationsComboboxOption
+                <Components.PublicationComboboxOption
                     content={version.content}
                     id={publication.id}
                     key={publication.id}
@@ -89,7 +81,7 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
         });
     } else if (!props.draftsOnly && livePublications.length) {
         options = livePublications.map((publicationVersion, index) => (
-            <Components.LinkedPublicationsComboboxOption
+            <Components.PublicationComboboxOption
                 content={publicationVersion.content}
                 id={publicationVersion.versionOf}
                 key={publicationVersion.versionOf}
@@ -109,40 +101,11 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
         props.setError(error.message);
     }
 
-    const createLink = async () => {
-        props.setError(null);
-        props.setLoading(true);
-        if (selectedPublication && user) {
-            try {
-                setSearch('');
-                setSelectedPublication(null);
-                await api.post(
-                    '/links',
-                    {
-                        to: selectedPublication.id,
-                        from: currentPublicationId
-                    },
-                    user.token
-                );
-
-                // refetch direct links
-                const response = await api.get(
-                    `${Config.endpoints.publications}/${currentPublicationId}/links?direct=true`,
-                    user.token
-                );
-
-                updateLinkedTo(response.data.linkedTo);
-            } catch (err) {
-                props.setError('There was a problem creating the link.');
-            }
-        }
-        props.setLoading(false);
-    };
-
     return (
         <HeadlessUI.Combobox value={selectedPublication} onChange={setSelectedPublication}>
             <div className="flex items-center gap-4">
                 <HeadlessUI.Combobox.Input
+                    aria-label={'Search for publications'}
                     className="w-full rounded border border-grey-100 bg-white-50 p-2 text-grey-800 shadow focus:ring-2 focus:ring-yellow-400 sm:mr-0"
                     autoComplete="off"
                     displayValue={(publication: Types.LinkedPublicationComboboxOptionValue | null) =>
@@ -152,12 +115,18 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
                     onChange={(event) => setSearch(event.target.value)}
                 />
                 <Components.Button
-                    title="Add link"
+                    title={props.buttonText}
                     className="flex-shrink-0"
-                    disabled={isValidating || props.loading || !selectedPublication}
-                    onClick={createLink}
+                    disabled={isValidating || loading || !selectedPublication}
+                    onClick={async () => {
+                        setLoading(true);
+                        setSearch('');
+                        setSelectedPublication(null);
+                        await props.buttonCallback(selectedPublication?.id || '');
+                        setLoading(false);
+                    }}
                     endIcon={
-                        props.loading ? (
+                        loading ? (
                             <OutlineIcons.ArrowPathIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                         ) : (
                             <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
@@ -180,4 +149,4 @@ const LinkedPublicationsCombobox: React.FC<LinkedPublicationsComboboxProps> = (p
     );
 };
 
-export default React.memo(LinkedPublicationsCombobox);
+export default React.memo(PublicationCombobox);
