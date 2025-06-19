@@ -150,6 +150,16 @@ const urls = {
         canonical: `${base.host}/topics`
     },
 
+    // Bundles
+    createBundle: {
+        path: '/bundles/create',
+        documentTitle: `Create new bundle - ${base.title}`,
+        title: 'Create new bundle',
+        canonical: `${base.host}/bundles/create`,
+        description: 'Create a bundle to group multiple publications together.',
+        keywords: ['publication', 'bundle', 'export', 'share']
+    },
+
     // Static Pages
     home: {
         path: '/',

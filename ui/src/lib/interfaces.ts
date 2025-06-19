@@ -23,32 +23,6 @@ export interface PublicationStatus {
     id: string;
 }
 
-export interface PublicationRef {
-    id: string;
-    type: Types.PublicationType;
-    doi: string;
-    versions: {
-        title: string;
-        publishedDate: string;
-        currentStatus: PublicationStatus;
-        description: string;
-        keywords: string[];
-        user: User;
-    }[];
-    linkedTo: LinkTo[];
-    linkedFrom: LinkFrom[];
-}
-
-export interface LinkTo {
-    id: string;
-    publicationToRef: PublicationRef;
-}
-
-export interface LinkFrom {
-    id: string;
-    publicationFromRef: PublicationRef;
-}
-
 export interface CorePublication {
     id: string;
     type: Types.PublicationType;

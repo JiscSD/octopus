@@ -27,7 +27,7 @@ describe('Linked publication combobox option', () => {
         render(
             // Option must be nested in a combobox
             <HeadlessUI.Combobox>
-                <Components.LinkedPublicationsComboboxOption {...sampleProps} />
+                <Components.PublicationComboboxOption {...sampleProps} />
             </HeadlessUI.Combobox>
         );
     });
@@ -61,7 +61,7 @@ describe('Individual cases', () => {
             'This is some publication content This is some publication content This is some publication content This is some publication content This is some publication content This is some publication content This is some publication content This is some publication content This is some publication content This is some publication content ';
         render(
             <HeadlessUI.Combobox>
-                <Components.LinkedPublicationsComboboxOption {...sampleProps} content={longContent} />
+                <Components.PublicationComboboxOption {...sampleProps} content={longContent} />
             </HeadlessUI.Combobox>
         );
         expect(screen.getByRole('option')).toHaveAccessibleDescription(Helpers.truncateString(longContent, 220));

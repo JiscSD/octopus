@@ -21,6 +21,7 @@ const endpoints = {
     flags: `${baseURL}/flags`,
     links: `${baseURL}/links`,
     publications: `${baseURL}/publications`,
+    publicationBundles: `${baseURL}/publication-bundles`,
     publicationVersions: `${baseURL}/publication-versions`,
     revokeOrcidAccess: `${baseURL}/revoke-orcid-access`,
     topics: `${baseURL}/topics`,
