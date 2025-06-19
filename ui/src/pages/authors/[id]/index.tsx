@@ -184,7 +184,7 @@ const Author: Types.NextPage<Props> = (props): React.ReactElement => {
 
                 return (
                     <Components.PublicationSearchResult
-                        key={publication.id}
+                        key={flag.id}
                         className={classes}
                         coAuthors={coAuthors}
                         content={content}
