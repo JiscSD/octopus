@@ -32,6 +32,7 @@
         "test:local": "STAGE=local jest --runInBand --testTimeout=60000",
         "test:watch": "npm run test:local -- --watch",
         "type": "tsc --noEmit",
+        "ariArchivedCheck": "tsx scripts/ariArchivedCheck.ts",
         "ariImport": "tsx scripts/ariImport.ts",
         "backfillCoAuthors": "tsx scripts/backfillCoAuthors.ts",
         "createOrganisationalAccounts": "tsx scripts/createOrganisationalAccounts.ts",

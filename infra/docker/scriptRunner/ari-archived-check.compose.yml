@@ -1,0 +1,10 @@
+# For testing the ARI archived check job on a docker image locally.
+services:
+  ari-archived-check-runner:
+    build:
+      context: ../../../api
+      dockerfile: ../infra/docker/scriptRunner/Dockerfile
+    command: /bin/sh -cx "npm run ariArchivedCheck -- dryRun=true reportFormat=file && cat ari-archived-check-report.txt"
+    env_file: ../../../api/.env
+    # So it can access the DB and opensearch that are exposed on host ports.
+    network_mode: host

@@ -31,7 +31,7 @@ resource "aws_iam_policy" "scheduler" {
           "ecs:RunTask"
         ]
         # Replace revision number with *
-        Resource = ["${trimsuffix(aws_ecs_task_definition.ari-import.arn, ":${aws_ecs_task_definition.ari-import.revision}")}:*"]
+        Resource = ["${trimsuffix(aws_ecs_task_definition.script-runner.arn, ":${aws_ecs_task_definition.script-runner.revision}")}:*"]
       },
       {
         Effect = "Allow",
@@ -66,14 +66,14 @@ resource "aws_scheduler_schedule" "ari_import_cron" {
 
     # On prod, override container command to do a dry run instead of a real one.
     # The output will be checked before manually triggering a real run using the API.
-    input = terraform.workspace == "prod" ? jsonencode({
+    input = jsonencode({
       containerOverrides = [
         {
-          command = ["npm", "run", "ariImport", "--", "dryRun=true", "reportFormat=email"]
-          name    = "ari-import"
+          command = terraform.workspace == "prod" ? ["npm", "run", "ariImport", "--", "dryRun=true", "reportFormat=email"] : ["npm", "run", "ariImport", "--", "reportFormat=email"]
+          name    = "script-runner"
         }
       ]
-    }) : null
+    })
 
     dead_letter_config {
       arn = aws_sqs_queue.scheduler-dlq.arn
@@ -81,11 +81,11 @@ resource "aws_scheduler_schedule" "ari_import_cron" {
 
     ecs_parameters {
       # Trimming the revision suffix here so that schedule always uses latest revision
-      task_definition_arn = trimsuffix(aws_ecs_task_definition.ari-import.arn, ":${aws_ecs_task_definition.ari-import.revision}")
+      task_definition_arn = trimsuffix(aws_ecs_task_definition.script-runner.arn, ":${aws_ecs_task_definition.script-runner.revision}")
       launch_type         = "FARGATE"
 
       network_configuration {
-        security_groups = [aws_security_group.ari-import-task-sg.id]
+        security_groups = [aws_security_group.script-runner-task-sg.id]
         subnets         = var.private_subnet_ids
       }
     }

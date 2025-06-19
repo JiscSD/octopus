@@ -16,4 +16,3 @@ COPY package.json package-lock.json ./
 RUN npm i
 COPY --exclude=**/node_modules . .
 RUN npx prisma generate
-CMD ["npm", "run", "ariImport", "--", "dryRun=false", "reportFormat=email"]
