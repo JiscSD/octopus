@@ -55,6 +55,7 @@ data "aws_iam_policy_document" "deploy_backend_policy" {
       "events:ListTargetsByRule",
       "events:DescribeRule",
       "iam:CreateRole",
+      "iam:DeleteRole",
       "iam:DeleteRolePolicy",
       "iam:ListRolePolicies",
       "iam:ListAttachedRolePolicies",
