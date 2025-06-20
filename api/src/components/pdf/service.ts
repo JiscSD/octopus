@@ -694,11 +694,3 @@ export const generatePublicationVersionPDF = async (
         }
     }
 };
-
-export const getPDFURL = (publicationId: string): string => {
-    const objectKey = `${publicationId}.pdf`;
-
-    return process.env.STAGE === 'local'
-        ? Helpers.checkEnvVariable('LOCALSTACK_SERVER') + s3.buckets.pdfs + `/${objectKey}`
-        : `https://${s3.buckets.pdfs}.s3.amazonaws.com/${objectKey}`;
-};
