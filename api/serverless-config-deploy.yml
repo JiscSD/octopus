@@ -4,11 +4,3 @@ functions:
         handler: dist/src/components/sqs/handler.generatePDFs
         events:
             - sqs: 'arn:aws:sqs:${aws:region}:${aws:accountId}:science-octopus-pdf-queue-${self:provider.stage}'
-    notifyPubRouter:
-        handler: dist/src/components/pubRouter/controller.notifyPubRouter
-        events:
-            - s3:
-                bucket: 'science-octopus-publishing-pdfs-${self:provider.stage}'
-                event: s3:ObjectCreated:*
-                existing: true
-                forceDeploy: true
