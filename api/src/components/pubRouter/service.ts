@@ -1,7 +1,7 @@
 import * as email from 'lib/email';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
-import * as pdfService from 'pdf/service';
+import * as s3 from 'lib/s3';
 
 const pubRouterPublicationTypePrefix = 'Octopus article; ';
 
@@ -58,7 +58,7 @@ const getPubRouterMetadata = (publicationVersion: I.PublicationVersion) => {
     const formattedPublicationDate = publicationVersion.createdAt.toISOString().split('T')[0];
     const publication = publicationVersion.publication;
     const formattedCoAuthors = publicationVersion.coAuthors?.map((coAuthor) => formatCoAuthor(coAuthor));
-    const pdfUrl = pdfService.getPDFURL(publication.id);
+    const pdfUrl = s3.getPDFURL(publication.id);
 
     return {
         provider: {
