@@ -24,15 +24,7 @@ When adding a new item to the .env file, make sure to update the environment var
 
 ### AWS/Serverless credentials setup
 
-You will need AWS credentials to run the app locally with [serverless-offline](https://www.serverless.com/plugins/serverless-offline). These should be exported as local environment variables, like this:
-
-```
-export AWS_ACCESS_KEY_ID="..."
-export AWS_SECRET_ACCESS_KEY="..."
-export AWS_SESSION_TOKEN="..."
-```
-
-You will also need to tell the system your serverless license key. This can be done by running (from the api directory) `npx sls login` and following the wizard.
+You will need to tell the system your serverless license key. This can be done by running (from the api directory) `npx sls login` and following the wizard.
 
 Alternatively you can just set it as an environment variable:
 

@@ -1103,6 +1103,11 @@ export interface TriggerAriIngestQueryParams {
     dryRun?: boolean;
 }
 
+export interface TriggerAriArchivedCheckQueryParams {
+    apiKey: string;
+    dryRun?: boolean;
+}
+
 export interface LocalNotifyPubRouterPathParams {
     publicationId: string;
 }
