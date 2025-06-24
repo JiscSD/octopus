@@ -7,9 +7,9 @@ locals {
   region_name = data.aws_region.current.name
 }
 
-resource "aws_codebuild_project" "deploy-docker-image" {
-  name          = "${var.project_name}-codebuild-deploy-docker-image-${var.environment}"
-  description   = "Build docker image"
+resource "aws_codebuild_project" "deploy-script-runner-docker-image" {
+  name          = "${var.project_name}-codebuild-deploy-script-runner-docker-image-${var.environment}"
+  description   = "Build script runner docker image"
   build_timeout = "300"
   service_role  = aws_iam_role.codepipeline_role.arn
 
@@ -58,6 +58,6 @@ resource "aws_codebuild_project" "deploy-docker-image" {
 
   source {
     type      = "CODEPIPELINE"
-    buildspec = "infra/modules/codepipeline/buildspec/deploy-docker-image.yml"
+    buildspec = "infra/modules/codepipeline/buildspec/deploy-script-runner-docker-image.yml"
   }
 }

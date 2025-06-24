@@ -426,7 +426,7 @@ describe('ARI import processes', () => {
         await ingestLogService.create('ARI');
         const triggerImport = await testUtils.agent
             .post('/integrations/ari/incremental')
-            .query({ apiKey: process.env.TRIGGER_ARI_INGEST_API_KEY });
+            .query({ apiKey: process.env.TRIGGER_SCRIPT_API_KEY });
 
         // May not seem right but the service task has technically been triggered, hence 200.
         expect(triggerImport.status).toEqual(200);
