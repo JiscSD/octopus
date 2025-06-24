@@ -14,7 +14,7 @@ type Props = {
 const HeaderActions: React.FC<Props> = (props) => {
     const { user } = Stores.useAuthStore();
 
-    if (!user || props.publicationType === 'PEER_REVIEW') {
+    if (!user) {
         return null;
     }
 
@@ -31,7 +31,7 @@ const HeaderActions: React.FC<Props> = (props) => {
                     />
                 );
             })}
-            {!props.authorIds.includes(user.id) && (
+            {!props.authorIds.includes(user.id) && props.publicationType !== 'PEER_REVIEW' && (
                 <Components.Button
                     title="Write a review"
                     variant="block"
