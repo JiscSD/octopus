@@ -1,3 +1,4 @@
+import * as Enum from 'enum';
 import * as I from 'interface';
 
 const getPublicationsSchema: I.JSONSchemaType<I.UserPublicationsFilters> = {
@@ -28,6 +29,11 @@ const getPublicationsSchema: I.JSONSchemaType<I.UserPublicationsFilters> = {
         },
         exclude: {
             type: 'string',
+            nullable: true
+        },
+        type: {
+            type: 'string',
+            pattern: `^((${Enum.publicationTypes.join('|')})(,)?)+$`,
             nullable: true
         }
     },

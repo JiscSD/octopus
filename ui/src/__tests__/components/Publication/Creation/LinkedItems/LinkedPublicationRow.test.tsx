@@ -1,40 +1,9 @@
 import * as Components from '@/components';
+import * as Config from '@/config';
 import * as Helpers from '@/helpers';
-import * as Types from '@/types';
-import { render, screen } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
-
-const sampleLinkedPublication = {
-    id: 'test-parent',
-    type: 'PROBLEM' as Types.PublicationType,
-    doi: '10.1234/test',
-    title: 'Test Title',
-    publishedDate: '2025-04-07T00:00:00Z',
-    currentStatus: 'LIVE' as Types.PublicationStatus,
-    createdBy: 'test-user',
-    authorFirstName: 'Test',
-    authorLastName: 'User',
-    authors: [
-        {
-            id: 'coauthor-1',
-            linkedUser: 'test-user',
-            publicationVersionId: 'test-parent-v1',
-            user: {
-                firstName: 'Test',
-                lastName: 'User',
-                orcid: '0000-0001-2345-6789',
-                role: 'USER' as Types.UserRole
-            }
-        }
-    ],
-    flagCount: 0,
-    peerReviewCount: 0,
-    linkId: 'test-link',
-    draft: true,
-    childPublicationId: 'test-child',
-    childPublicationType: 'PROBLEM' as Types.PublicationType,
-    externalSource: null
-};
+import * as TestUtils from '@/testUtils';
+import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 describe('New linked publication row', () => {
     const deleteLinkMock = jest.fn(() => Promise.resolve());
@@ -45,7 +14,7 @@ describe('New linked publication row', () => {
                 <tbody>
                     <Components.LinkedPublicationRow
                         deleteLink={deleteLinkMock}
-                        linkedPublication={sampleLinkedPublication}
+                        linkedPublication={{ ...TestUtils.testLinkedToPublication, draft: true }}
                         markLinkForDeletion={jest.fn()}
                     />
                 </tbody>
@@ -58,30 +27,54 @@ describe('New linked publication row', () => {
     });
 
     it('Publication type is shown', () => {
-        expect(screen.getByText('Research Problem')).toBeInTheDocument();
+        expect(
+            screen.getByText(Helpers.formatPublicationType(TestUtils.testLinkedToPublication.type))
+        ).toBeInTheDocument();
     });
 
     it('Title is shown', () => {
-        expect(screen.getByText('Test Title')).toBeInTheDocument();
+        expect(screen.getByText(TestUtils.testLinkedToPublication.title as string)).toBeInTheDocument();
     });
 
     it('Published date is shown', () => {
-        expect(screen.getByText(Helpers.formatDate('2025-04-07T00:00:00Z'))).toBeInTheDocument();
+        expect(
+            screen.getByText(Helpers.formatDate(TestUtils.testLinkedToPublication.publishedDate as string))
+        ).toBeInTheDocument();
     });
 
     it('Abbreviated author name is shown', () => {
         expect(
-            screen.getByText(Helpers.abbreviateUserName({ firstName: 'Test', lastName: 'User' }))
+            screen.getByText(
+                Helpers.abbreviateUserName({
+                    firstName: TestUtils.testLinkedToPublication.authorFirstName,
+                    lastName: TestUtils.testLinkedToPublication.authorLastName
+                })
+            )
         ).toBeInTheDocument();
     });
 
-    it('Delete button is shown', () => {
-        expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
+    it('Link to publication is shown', () => {
+        expect(
+            screen.getByRole('link', {
+                name: 'Visit publication'
+            })
+        ).toHaveAttribute('href', `${Config.urls.viewPublication.path}/${TestUtils.testLinkedToPublication.id}`);
     });
 
-    it('Delete button triggers deleteLink function', async () => {
-        const deleteButton = screen.getByRole('button', { name: 'Delete' });
-        await userEvent.click(deleteButton);
+    it('Enabled delete button is shown if link is draft', () => {
+        expect(
+            screen.getByRole('button', {
+                name: 'Delete'
+            })
+        ).toBeEnabled();
+    });
+
+    it('Delete button triggers deleteLink function from props', () => {
+        const deleteButton = screen.getByRole('button', {
+            name: 'Delete'
+        });
+        fireEvent.click(deleteButton);
+        expect(deleteLinkMock).toHaveBeenCalledWith(TestUtils.testLinkedToPublication.linkId);
         expect(deleteLinkMock).toHaveBeenCalledTimes(1);
     });
 });
@@ -94,7 +87,7 @@ describe('Linked publication row with draft publication', () => {
                     <Components.LinkedPublicationRow
                         deleteLink={jest.fn()}
                         linkedPublication={{
-                            ...sampleLinkedPublication,
+                            ...TestUtils.testLinkedToPublication,
                             publishedDate: null,
                             currentStatus: 'DRAFT'
                         }}
@@ -116,7 +109,7 @@ describe('Linked publication created in previous version, not flagged for deleti
                     <Components.LinkedPublicationRow
                         deleteLink={jest.fn()}
                         linkedPublication={{
-                            ...sampleLinkedPublication,
+                            ...TestUtils.testLinkedToPublication,
                             draft: false,
                             pendingDeletion: false
                         }}
@@ -140,7 +133,7 @@ describe('Linked publication created in previous version, not flagged for deleti
         const markForDeletionButton = screen.getByRole('button', { name: 'Mark for deletion' });
         await userEvent.click(markForDeletionButton);
         expect(markForDeletionMock).toHaveBeenCalledTimes(1);
-        expect(markForDeletionMock).toHaveBeenCalledWith(sampleLinkedPublication.linkId, true);
+        expect(markForDeletionMock).toHaveBeenCalledWith(TestUtils.testLinkedToPublication.linkId, true);
     });
 });
 
@@ -153,7 +146,7 @@ describe('Linked publication created in previous version, flagged for deletion',
                     <Components.LinkedPublicationRow
                         deleteLink={jest.fn()}
                         linkedPublication={{
-                            ...sampleLinkedPublication,
+                            ...TestUtils.testLinkedToPublication,
                             draft: false,
                             pendingDeletion: true
                         }}
@@ -177,6 +170,6 @@ describe('Linked publication created in previous version, flagged for deletion',
         const cancelDeletionButton = screen.getByRole('button', { name: 'Cancel pending deletion' });
         await userEvent.click(cancelDeletionButton);
         expect(markForDeletionMock).toHaveBeenCalledTimes(1);
-        expect(markForDeletionMock).toHaveBeenCalledWith(sampleLinkedPublication.linkId, false);
+        expect(markForDeletionMock).toHaveBeenCalledWith(TestUtils.testLinkedToPublication.linkId, false);
     });
 });

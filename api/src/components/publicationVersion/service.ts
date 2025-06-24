@@ -10,6 +10,7 @@ import * as eventService from 'event/service';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
 import * as publicationService from 'publication/service';
+import * as pubRouterService from 'pubRouter/service';
 import * as referenceService from 'reference/service';
 import * as sqs from 'lib/sqs';
 
@@ -819,6 +820,7 @@ export const postPublishHook = async (publicationVersion: I.PublicationVersion, 
         // Complete remaining tasks in parallel.
         const postDBUpdatePromises: Array<Promise<unknown>> = [];
 
+        // (Re)index publication in opensearch.
         postDBUpdatePromises.push(
             new Promise((resolve) => {
                 // TODO: remove this extra logging if we don't observe ARI imports stalling here for some time.
@@ -861,6 +863,11 @@ export const postPublishHook = async (publicationVersion: I.PublicationVersion, 
                 // Option to skip, e.g. in bulk import scripts, where instant pdf generation is not a priority.
                 // In both cases, the pdf will still be generated the first time it's requested.
                 postDBUpdatePromises.push(sqs.sendMessage(publicationVersion.versionOf));
+            }
+
+            if (publicationVersion.versionNumber === 1) {
+                // Notify publications router of the publication if it has just been published for the first time.
+                postDBUpdatePromises.push(pubRouterService.notifyPubRouter(publicationVersion));
             }
         }
 

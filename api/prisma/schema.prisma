@@ -37,6 +37,7 @@ model User {
     defaultTopicId      String?
     defaultTopic        Topic?               @relation(fields: [defaultTopicId], references: [id])
     mappings            UserMapping[]
+    publicationBundles  PublicationBundle[]
 }
 
 model Verification {
@@ -59,23 +60,24 @@ model Images {
 }
 
 model Publication {
-    id               String                   @id @default(cuid())
-    url_slug         String                   @unique @default(cuid())
-    type             PublicationType
-    doi              String
-    publicationFlags PublicationFlags[]
-    linkedTo         Links[]                  @relation("from")
-    linkedFrom       Links[]                  @relation("to")
-    versions         PublicationVersion[]
+    id                 String                   @id @default(cuid())
+    url_slug           String                   @unique @default(cuid())
+    type               PublicationType
+    doi                String
+    publicationFlags   PublicationFlags[]
+    linkedTo           Links[]                  @relation("from")
+    linkedFrom         Links[]                  @relation("to")
+    versions           PublicationVersion[]
+    publicationBundles PublicationBundle[]
     // These reverse relations are needed by prisma, but we shouldn't use them in the application.
     // Prisma doesn't allow symmetrical many-to-many self relations.
     // There must be an "asymmetrical" relationship (e.g. from and to) in the schema. In practice, we will treat
     // crosslink entities as having a pair of publications associated that are of equal importance.
-    crosslinksFrom   Crosslink[]              @relation("crosslinkFrom")
-    crosslinksTo     Crosslink[]              @relation("crosslinkTo")
+    crosslinksFrom     Crosslink[]              @relation("crosslinkFrom")
+    crosslinksTo       Crosslink[]              @relation("crosslinkTo")
     // Populated when a publication has been imported from an external source.
-    externalId       String?
-    externalSource   PublicationImportSource?
+    externalId         String?
+    externalSource     PublicationImportSource?
 }
 
 model PublicationVersion {
@@ -309,6 +311,16 @@ model IngestLog {
     source PublicationImportSource
     start  DateTime                @default(now())
     end    DateTime?
+}
+
+model PublicationBundle {
+    id           String        @id @default(cuid())
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
+    name         String
+    createdBy    String
+    user         User          @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    publications Publication[]
 }
 
 enum EventType {

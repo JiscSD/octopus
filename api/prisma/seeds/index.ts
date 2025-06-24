@@ -10,6 +10,7 @@ export { default as prodUsers } from './prod/users';
 export { default as testBookmarks } from './local/unitTesting/bookmarks';
 export { default as testEvents } from './local/unitTesting/events';
 export { default as testIngestLogs } from './local/unitTesting/ingestLogs';
+export { default as testPublicationBundles } from './local/unitTesting/publicationBundles';
 export { default as testPublications } from './local/unitTesting/publications';
 export { default as testReferences } from './local/unitTesting/references';
 export { default as testTopicMappings } from './local/unitTesting/topicMappings';

@@ -1,29 +1,39 @@
+import axios from 'axios';
 import React from 'react';
-import * as Stores from '@/stores';
-import * as Interfaces from '@/interfaces';
+
+import * as api from '@/api';
 import * as Components from '@/components';
-import * as Helpers from '@/helpers';
 import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Interfaces from '@/interfaces';
 import * as OutlineIcons from '@heroicons/react/24/outline';
+import * as Stores from '@/stores';
 
 type Props = {
     publicationVersion: Interfaces.PublicationVersion;
     isReadyForPublish: boolean;
     isCorrespondingAuthor: boolean;
-    isPublishing: boolean;
+    isLoading: boolean;
     onUnlockPublication: () => Promise<void>;
     onApprove: () => Promise<void>;
     onCancelApproval: () => Promise<void>;
     onPublish: () => Promise<void>;
     onEditAffiliations: () => void;
+    setServerError: (error: string) => void;
 };
 
 const CoAuthoringActions: React.FC<Props> = (props) => {
     const { user } = Stores.useAuthStore();
+    const [isLoading, setIsLoading] = React.useState<boolean>(props.isLoading);
+    const [approvalRetentionChangeFeedback, setApprovalRetentionChangeFeedback] = React.useState<string>('');
 
     const author = React.useMemo(
         () => props.publicationVersion.coAuthors.find((author) => author.linkedUser === user?.id),
         [props.publicationVersion.coAuthors, user?.id]
+    );
+
+    const [retainApproval, setRetainApproval] = React.useState<boolean>(
+        author?.retainApproval === false ? false : true
     );
 
     const sortedAffiliationNames = React.useMemo(
@@ -35,6 +45,28 @@ const CoAuthoringActions: React.FC<Props> = (props) => {
     );
 
     const isApproved = React.useMemo(() => author?.confirmedCoAuthor || false, [author?.confirmedCoAuthor]);
+
+    const updateApprovalRetention = React.useCallback(
+        async (retainApproval: boolean) => {
+            props.setServerError('');
+            setIsLoading(true);
+            try {
+                await api.patch(
+                    `/publication-versions/${props.publicationVersion?.id}/coauthors/${author?.id}`,
+                    {
+                        retainApproval
+                    },
+                    user?.token
+                );
+                setRetainApproval(retainApproval);
+                setApprovalRetentionChangeFeedback('Your approval retention preference has been submitted.');
+            } catch (err) {
+                props.setServerError(axios.isAxiosError(err) ? err.response?.data?.message : (err as Error).message);
+            }
+            setIsLoading(false);
+        },
+        [props.publicationVersion?.id, user?.token]
+    );
 
     return (
         <div className="mb-4 flex flex-col gap-12 rounded-lg bg-grey-50 p-6 text-grey-900 shadow ring-1 ring-black ring-opacity-5 transition-colors duration-500 dark:bg-grey-700 dark:text-white-50 dark:ring-transparent xl:flex-row xl:gap-6">
@@ -64,7 +96,7 @@ const CoAuthoringActions: React.FC<Props> = (props) => {
                                     await props.onUnlockPublication();
                                 }}
                             >
-                                Cancel all authorship requests and unlock for editing
+                                Cancel pending authorship requests and unlock for editing
                             </Components.Link>
                         </div>
                     </div>
@@ -169,34 +201,50 @@ const CoAuthoringActions: React.FC<Props> = (props) => {
                     <Components.Button
                         className="max-w-fit"
                         variant="block"
-                        disabled={!props.isReadyForPublish || props.isPublishing}
+                        disabled={!props.isReadyForPublish || props.isLoading}
                         endIcon={<OutlineIcons.CloudArrowUpIcon className="w-5 shrink-0 text-white-50" />}
                         title="Publish"
                         onClick={props.onPublish}
                     >
                         Publish
                     </Components.Button>
-                ) : isApproved ? (
-                    <Components.Button
-                        className="max-w-fit"
-                        variant="block"
-                        endIcon={<OutlineIcons.XMarkIcon className="w-5 shrink-0 text-white-50" />}
-                        title="Cancel your approval"
-                        onClick={props.onCancelApproval}
-                    >
-                        Cancel your approval
-                    </Components.Button>
                 ) : (
-                    <Components.Button
-                        className="max-w-fit"
-                        variant="block"
-                        disabled={!(author?.isIndependent || author?.affiliations.length)}
-                        endIcon={<OutlineIcons.CheckIcon className="w-5 shrink-0 text-white-50" />}
-                        title="Approve this publication"
-                        onClick={props.onApprove}
-                    >
-                        Approve this publication
-                    </Components.Button>
+                    <>
+                        <Components.Checkbox
+                            checked={retainApproval}
+                            className="mb-4"
+                            disabled={isLoading}
+                            id="retain-approval"
+                            label="Automatically approve future changes to this draft"
+                            name="retain-approval"
+                            onChange={(event) => updateApprovalRetention(event.target.checked)}
+                        />
+                        <div aria-live="polite" className="sr-only">
+                            {approvalRetentionChangeFeedback}
+                        </div>
+                        {isApproved ? (
+                            <Components.Button
+                                className="max-w-fit"
+                                variant="block"
+                                endIcon={<OutlineIcons.XMarkIcon className="w-5 shrink-0 text-white-50" />}
+                                title="Cancel your approval"
+                                onClick={props.onCancelApproval}
+                            >
+                                Cancel your approval
+                            </Components.Button>
+                        ) : (
+                            <Components.Button
+                                className="max-w-fit"
+                                variant="block"
+                                disabled={!(author?.isIndependent || author?.affiliations.length) || props.isLoading}
+                                endIcon={<OutlineIcons.CheckIcon className="w-5 shrink-0 text-white-50" />}
+                                title="Approve this publication"
+                                onClick={props.onApprove}
+                            >
+                                Approve this publication
+                            </Components.Button>
+                        )}
+                    </>
                 )}
             </div>
         </div>
