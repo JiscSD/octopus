@@ -383,22 +383,24 @@ export const checkIsReadyToPublish = async (publicationVersion: I.PublicationVer
     const isProblem = publicationVersion.publication.type === 'PROBLEM';
     const isProblemWithTopics = isProblem && publicationVersion.topics.length !== 0;
 
-    if (!linkedTo.length && !isProblemWithTopics) {
-        return {
-            ready: false,
-            message: `This publication must be linked to a live publication ${
-                isProblem ? 'or topic ' : ''
-            } in order to publish.`
-        };
-    }
+    if (!isProblemWithTopics) {
+        if (!linkedTo.length) {
+            return {
+                ready: false,
+                message: `This publication must be linked to a live publication ${
+                    isProblem ? 'or topic ' : ''
+                } in order to publish.`
+            };
+        }
 
-    // Would publishing leave any valid links (if some are pending deletion)?
-    if (linkedTo.length && linkedTo.every((linkedPublication) => linkedPublication.pendingDeletion === true)) {
-        return {
-            ready: false,
-            message:
-                'This publication would be left with no valid links if it was published. Please ensure there is at least one link to a live publication that is not marked for deletion before publishing this publication.'
-        };
+        // Would publishing leave any valid links (if some are pending deletion)?
+        if (linkedTo.length && linkedTo.every((linkedPublication) => linkedPublication.pendingDeletion === true)) {
+            return {
+                ready: false,
+                message:
+                    'This publication would be left with no valid links if it was published. Please ensure there is at least one link to a live publication that is not marked for deletion before publishing this publication.'
+            };
+        }
     }
 
     const hasFilledRequiredFields =
