@@ -253,7 +253,6 @@ const Links: React.FC = (): React.ReactElement => {
                                 when this new version is published.
                             </p>
                             <Components.LinkedItemTable
-                                deleteLink={deletePublicationLink}
                                 entityType="PUBLICATION"
                                 inherited={true}
                                 rows={inheritedLinkRows}
