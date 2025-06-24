@@ -231,7 +231,7 @@ describe('Update publication version status', () => {
             .query({ apiKey: '000000005' })
             .send();
 
-        expect(updateStatusResponse.status).toEqual(403);
+        expect(updateStatusResponse.status).toEqual(400);
         expect(updateStatusResponse.body.message).toEqual(
             'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
         );
