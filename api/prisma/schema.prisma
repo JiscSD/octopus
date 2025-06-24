@@ -272,12 +272,10 @@ model Notification {
     id     String @id @default(cuid())
     userId String
 
-    type    NotificationTypeEnum
-    title   String
-    content String?
+    type       NotificationTypeEnum
+    actionType NotificationActionTypeEnum
 
-    entityId   String?
-    entityType NotificationEntityTypeEnum?
+    payload Json?
 
     status    NotificationStatusEnum @default(PENDING)
     createdAt DateTime               @default(now())
@@ -608,14 +606,14 @@ enum NotificationTypeEnum {
     BULLETIN
 }
 
+enum NotificationActionTypeEnum {
+    PUBLICATION_VERSION_CREATED
+    PUBLICATION_RED_FLAGGED
+}
+
 enum NotificationStatusEnum {
     PENDING
     FAILED
-}
-
-enum NotificationEntityTypeEnum {
-    PUBLICATION
-    TOPIC
 }
 
 enum PublicationImportSource {

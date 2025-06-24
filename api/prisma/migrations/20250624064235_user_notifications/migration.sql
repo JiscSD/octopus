@@ -2,10 +2,10 @@
 CREATE TYPE "NotificationTypeEnum" AS ENUM ('BULLETIN');
 
 -- CreateEnum
-CREATE TYPE "NotificationStatusEnum" AS ENUM ('PENDING', 'FAILED');
+CREATE TYPE "NotificationActionTypeEnum" AS ENUM ('PUBLICATION_VERSION_CREATED', 'PUBLICATION_RED_FLAGGED');
 
 -- CreateEnum
-CREATE TYPE "NotificationEntityTypeEnum" AS ENUM ('PUBLICATION', 'TOPIC');
+CREATE TYPE "NotificationStatusEnum" AS ENUM ('PENDING', 'FAILED');
 
 -- CreateTable
 CREATE TABLE "UserSettings" (
@@ -22,10 +22,8 @@ CREATE TABLE "Notification" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "type" "NotificationTypeEnum" NOT NULL,
-    "title" TEXT NOT NULL,
-    "content" TEXT,
-    "entityId" TEXT,
-    "entityType" "NotificationEntityTypeEnum",
+    "actionType" "NotificationActionTypeEnum" NOT NULL,
+    "payload" JSONB,
     "status" "NotificationStatusEnum" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
