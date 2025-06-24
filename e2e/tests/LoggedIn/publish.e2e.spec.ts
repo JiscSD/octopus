@@ -427,7 +427,7 @@ test.describe('Publication flow', () => {
         const page = await Helpers.users.getPageAsUser(browser);
         await Helpers.publicationCreation.createPublication(page, 'problem to link to topic', 'PROBLEM');
         // Go to Linked Items tab
-        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
+        await (await page.waitForSelector(PageModel.publish.tabs.linkedItems)).click();
         // Link a topic and expect it to appear below with a delete button
         await page.locator(PageModel.publish.linkedItems.entityTypeSelect).selectOption('Research topics');
         await page.locator(PageModel.publish.linkedItems.topicInput).click();
@@ -435,7 +435,7 @@ test.describe('Publication flow', () => {
         await page.locator(`[role="option"]:has-text("Computer science")`).click();
         await page.locator(PageModel.publish.linkedItems.addLink).click();
         await page.waitForResponse((response) => response.url().includes('/topics') && response.ok());
-        await expect(page.locator(PageModel.publish.linkedItems.deleteTopicLink)).toBeVisible();
+        await expect(page.locator(PageModel.publish.linkedItems.deleteNewTopicLink)).toBeVisible();
     });
 
     test('Cannot link a non-problem publication to a topic', async ({ browser }) => {
@@ -446,7 +446,7 @@ test.describe('Publication flow', () => {
             'HYPOTHESIS'
         );
         // Go to Linked Items tab
-        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
+        await (await page.waitForSelector(PageModel.publish.tabs.linkedItems)).click();
         // Topic option should not be visible
         const options = await page.getByRole('option').all();
         await expect(options.length).toBe(2);
@@ -472,8 +472,67 @@ test.describe('Publication flow', () => {
         await page.waitForResponse(
             (response) => response.url().includes('/publications') && response.request().method() === 'POST'
         );
-        await (await page.waitForSelector("aside button:has-text('Linked items')")).click();
-        await expect(page.locator(PageModel.publish.linkedItems.deleteTopicLink)).toBeVisible();
+        await (await page.waitForSelector(PageModel.publish.tabs.linkedItems)).click();
+        await expect(page.locator(PageModel.publish.linkedItems.deleteNewTopicLink)).toBeVisible();
+    });
+
+    test('Links inherited from a previous version can be marked for deletion upon publish', async ({ browser }) => {
+        // Create v1 of a publication with one link
+        const page = await Helpers.users.getPageAsUser(browser);
+        await Helpers.publicationCreation.createPublication(page, 'pending deletion link test', 'PROBLEM');
+        await Helpers.publicationCreation.completeKeyInformationTab(page);
+        await Helpers.publicationCreation.completeAffiliationsTab(page, true);
+        await Helpers.publicationCreation.completeLinkedItemsTab(
+            page,
+            'living organisms',
+            'How do living organisms function, survive, reproduce and evolve?'
+        );
+        await Helpers.publicationCreation.completeMainTextTabMinimally(
+            page,
+            'a link on this publication should be flagged for deletion and deleted on publish'
+        );
+        await Helpers.publicationCreation.completeConflictOfInterestTab(page, false);
+        await page.locator(PageModel.publish.publishButton).click();
+        await Promise.all([
+            page.waitForURL('/publications/**/versions/latest'),
+            page.locator(PageModel.publish.confirmPublishButton).click()
+        ]);
+
+        // Create v2
+        await page.locator(PageModel.livePublication.versionsDropdown.createNewVersionButton).click();
+        await Promise.all([
+            page.locator('button[title="Confirm"]').click(),
+            page.waitForURL('/publications/**/edit?step=0')
+        ]);
+        await (await page.waitForSelector(PageModel.publish.tabs.linkedItems)).click();
+
+        // Mark the existing link for deletion
+        await Promise.all([
+            page.locator(PageModel.publish.linkedItems.markPublicationLinkForDeletionButton).click(),
+            page.waitForResponse(
+                (response) => response.url().includes('/mark-for-deletion') && response.request().method() === 'POST'
+            )
+        ]);
+        await expect(page.locator(PageModel.publish.linkedItems.cancelPublicationPendingDeletionButton)).toBeVisible();
+        // Publish should be disabled because there are no valid links remaining that aren't pending deletion
+        await expect(page.locator(PageModel.publish.publishButton)).toBeDisabled();
+
+        // Add a new link
+        await page.locator(PageModel.publish.linkedItems.publicationInput).click();
+        await page.keyboard.type('organisational');
+        await page.locator(`[role="option"]:has-text("Organisational account publication 1")`).click();
+        await Promise.all([
+            page.waitForResponse((response) => response.url().includes('/links') && response.ok()),
+            page.locator(PageModel.publish.linkedItems.addLink).click()
+        ]);
+        await expect(page.locator(PageModel.publish.linkedItems.deleteNewPublicationLink)).toBeVisible();
+
+        // Attempt to publish
+        await page.locator(PageModel.publish.publishButton).click();
+        await expect(page.getByText('Links to the following publications will be deleted upon publish:')).toBeVisible();
+        await expect(
+            page.locator('li:has-text("How do living organisms function, survive, reproduce and evolve?")')
+        ).toBeVisible();
     });
 });
 
@@ -1514,7 +1573,7 @@ test.describe('Publication flow + co-authors', () => {
         await page.locator(PageModel.publish.previewButton).click();
         await page.locator(`h1:has-text("${newTitle}")`).first().waitFor({ state: 'visible' });
 
-        await page.locator(PageModel.publish.versionsAccordionButton).waitFor();
+        await page.locator(PageModel.livePublication.versionsDropdown.toggleButton).waitFor();
 
         // switch between versions
         await expect(
@@ -1683,20 +1742,20 @@ test.describe('Publication flow + co-authors', () => {
         await page.reload();
         await page.locator(PageModel.publish.publishButtonTracker).click();
         await page.locator(PageModel.publish.confirmPublishButtonTracker).click();
-        await page.locator('aside a:has-text("Create New Version")').waitFor();
-        await expect(page.locator('aside a:has-text("Create New Version")')).toBeVisible();
+        await page.locator(PageModel.livePublication.versionsDropdown.createNewVersionButton).waitFor();
+        await expect(page.locator(PageModel.livePublication.versionsDropdown.createNewVersionButton)).toBeVisible();
 
         const publicationUrl = page.url();
 
         // login as co-author
         const page2 = await Helpers.users.getPageAsUser(browser, Helpers.users.user2);
         await page2.goto(publicationUrl);
-        await page2.locator('aside button[title="Versions"]').waitFor();
+        await page2.locator(PageModel.livePublication.versionsDropdown.toggleButton).waitFor();
 
         // create v2 from 'Versions' dropdown
-        await expect(page2.locator('aside button[title="Versions"]')).toBeVisible();
-        await expect(page2.locator('aside a:has-text("Create New Version")')).toBeVisible();
-        await page2.locator('aside a:has-text("Create New Version")').click();
+        await expect(page2.locator(PageModel.livePublication.versionsDropdown.toggleButton)).toBeVisible();
+        await expect(page2.locator(PageModel.livePublication.versionsDropdown.createNewVersionButton)).toBeVisible();
+        await page2.locator(PageModel.livePublication.versionsDropdown.createNewVersionButton).click();
         await page2.locator('button[title="Confirm"]').click();
 
         // wait to be redirected to the edit page
@@ -1712,11 +1771,11 @@ test.describe('Publication flow + co-authors', () => {
 
         // check previous corresponding author can 'Take over editing' from the 'Versions' dropdown
         await page.reload();
-        await page.locator('aside button[title="Versions"]').waitFor();
-        await expect(page.locator('aside button[title="Versions"]')).toBeVisible();
-        await expect(page.locator('aside a:has-text("Take over editing")')).toBeVisible();
+        await page.locator(PageModel.livePublication.versionsDropdown.toggleButton).waitFor();
+        await expect(page.locator(PageModel.livePublication.versionsDropdown.toggleButton)).toBeVisible();
+        await expect(page.locator(PageModel.livePublication.versionsDropdown.takeOverEditingButton)).toBeVisible();
 
-        await page.locator('aside a:has-text("Take over editing")').click();
+        await page.locator(PageModel.livePublication.versionsDropdown.takeOverEditingButton).click();
         await page.locator('button[title="Request Control"]').click();
         await page.waitForResponse(
             (response) => response.url().includes('/publication-versions/latest/request-control') && response.ok()
