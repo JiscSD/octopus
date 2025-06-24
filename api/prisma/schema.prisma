@@ -38,6 +38,16 @@ model User {
     defaultTopic        Topic?               @relation(fields: [defaultTopicId], references: [id])
     mappings            UserMapping[]
     publicationBundles  PublicationBundle[]
+    notifications       Notification[]
+    settings            UserSettings?
+}
+
+model UserSettings {
+    id                                 String  @id @default(cuid())
+    userId                             String  @unique
+    enableBookmarkNotifications        Boolean @default(true)
+    enableBookmarkVersionNotifications Boolean @default(true)
+    user                               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Verification {
@@ -256,6 +266,21 @@ model Bookmark {
     user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([entityId, type, userId])
+}
+
+model Notification {
+    id     String @id @default(cuid())
+    userId String
+
+    type       NotificationTypeEnum
+    actionType NotificationActionTypeEnum
+
+    payload Json?
+
+    status    NotificationStatusEnum @default(PENDING)
+    createdAt DateTime               @default(now())
+    updatedAt DateTime               @updatedAt
+    user      User                   @relation(fields: [userId], references: [id])
 }
 
 model Event {
@@ -575,6 +600,20 @@ enum ReferenceType {
 enum BookmarkType {
     PUBLICATION
     TOPIC
+}
+
+enum NotificationTypeEnum {
+    BULLETIN
+}
+
+enum NotificationActionTypeEnum {
+    PUBLICATION_VERSION_CREATED
+    PUBLICATION_RED_FLAGGED
+}
+
+enum NotificationStatusEnum {
+    PENDING
+    FAILED
 }
 
 enum PublicationImportSource {
