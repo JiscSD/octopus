@@ -354,14 +354,14 @@ export const validateConflictOfInterest = <
     return true;
 };
 
-export const checkIsReadyToPublish = async (
-    publicationVersion: I.PublicationVersion
-): Promise<{
+type ReadyCheckResult = {
     ready: boolean;
-    reason: string;
-}> => {
+    message: string;
+};
+
+export const checkIsReadyToPublish = async (publicationVersion: I.PublicationVersion): Promise<ReadyCheckResult> => {
     if (!publicationVersion) {
-        return { ready: false, reason: 'Publication version not found' };
+        return { ready: false, message: 'Publication version not found' };
     }
 
     const { linkedTo } = await publicationService.getDirectLinksForPublication(
@@ -370,9 +370,37 @@ export const checkIsReadyToPublish = async (
         true
     );
 
-    const hasAtLeastOneLiveLinkOrTopic =
-        (linkedTo.length !== 0 && linkedTo.every((linkedPublication) => linkedPublication.currentStatus === 'LIVE')) ||
-        (publicationVersion.publication.type === 'PROBLEM' && publicationVersion.topics.length !== 0);
+    // Are any linked publications not live?
+    if (!linkedTo.every((linkedPublication) => linkedPublication.currentStatus === 'LIVE')) {
+        return {
+            ready: false,
+            message:
+                'One or more linked publications are still in draft. Please ensure all linked publications are live before publishing this one.'
+        };
+    }
+
+    // Are there any links (to publications, or topics if publication is a problem)?
+    const isProblem = publicationVersion.publication.type === 'PROBLEM';
+    const isProblemWithTopics = isProblem && publicationVersion.topics.length !== 0;
+
+    if (!linkedTo.length && !isProblemWithTopics) {
+        return {
+            ready: false,
+            message: `This publication must be linked to a live publication ${
+                isProblem ? 'or topic ' : ''
+            } in order to publish.`
+        };
+    }
+
+    // Would publishing leave any valid links (if some are pending deletion)?
+    if (linkedTo.length && linkedTo.every((linkedPublication) => linkedPublication.pendingDeletion === true)) {
+        return {
+            ready: false,
+            message:
+                'This publication would be left with no valid links if it was published. Please ensure there is at least one link to a live publication that is not marked for deletion before publishing this publication.'
+        };
+    }
+
     const hasFilledRequiredFields =
         ['title', 'licence'].every((field) => publicationVersion[field]) &&
         !Helpers.isEmptyContent(publicationVersion.content || '');
@@ -388,7 +416,6 @@ export const checkIsReadyToPublish = async (
     );
 
     const ready =
-        hasAtLeastOneLiveLinkOrTopic &&
         hasFilledRequiredFields &&
         conflictOfInterest &&
         !hasPublishDate &&
@@ -396,23 +423,30 @@ export const checkIsReadyToPublish = async (
         isDataAndHasPermissionsStatement &&
         coAuthorsAreVerified &&
         publicationVersion.isLatestVersion;
-    const reason = !hasAtLeastOneLiveLinkOrTopic
-        ? 'One or more linked publications are still in draft. Please ensure all linked publications are live before publishing this one.'
-        : 'Publication is not ready to be made LIVE. Make sure all fields are filled in.';
 
     return {
         ready,
-        reason
+        message: ready
+            ? 'Publication is ready to publish.'
+            : 'Publication is not ready to be made LIVE. Make sure all fields are filled in.'
     };
 };
 
-export const checkIsReadyToRequestApprovals = async (publicationVersion: I.PublicationVersion): Promise<boolean> => {
+export const checkIsReadyToRequestApprovals = async (
+    publicationVersion: I.PublicationVersion
+): Promise<ReadyCheckResult> => {
     if (!publicationVersion) {
-        return false;
+        return {
+            ready: false,
+            message: 'Publication version not found.'
+        };
     }
 
     if (!publicationVersion.isLatestVersion || publicationVersion.currentStatus !== 'DRAFT') {
-        return false;
+        return {
+            ready: false,
+            message: 'Publication is not an active draft.'
+        };
     }
 
     const { linkedTo } = await publicationService.getDirectLinksForPublication(
@@ -437,30 +471,44 @@ export const checkIsReadyToRequestApprovals = async (publicationVersion: I.Publi
             author.linkedUser === publicationVersion.createdBy && (author.isIndependent || author.affiliations.length)
     );
 
-    return (
+    const ready =
         hasAtLeastOneLinkOrTopic &&
         hasFilledRequiredFields &&
         conflictOfInterest &&
         isDataAndHasEthicalStatement &&
         isDataAndHasPermissionsStatement &&
         hasConfirmedAffiliations &&
-        publicationVersion.isLatestVersion
-    );
+        publicationVersion.isLatestVersion;
+
+    return {
+        ready,
+        message: ready ? 'Publication is ready to request approvals' : 'Make sure all fields are filled in.'
+    };
 };
 
-export const checkIsReadyToLock = async (publicationVersion: I.PublicationVersion): Promise<boolean> => {
-    if (!publicationVersion) {
-        return false;
-    }
-
-    if (publicationVersion.currentStatus !== 'DRAFT') {
-        return false;
-    }
-
+export const checkIsReadyToLock = async (publicationVersion: I.PublicationVersion): Promise<ReadyCheckResult> => {
     const isReadyToRequestApprovals = await checkIsReadyToRequestApprovals(publicationVersion);
+
+    if (isReadyToRequestApprovals.ready === false) {
+        return {
+            ready: false,
+            message: 'Publication is not ready to be LOCKED. ' + isReadyToRequestApprovals.message
+        };
+    }
+
     const hasRequestedApprovals = !!publicationVersion.coAuthors.some((author) => author.approvalRequested);
 
-    return isReadyToRequestApprovals && hasRequestedApprovals;
+    if (!hasRequestedApprovals) {
+        return {
+            ready: false,
+            message: 'Please request approval before locking the publication.'
+        };
+    }
+
+    return {
+        ready: true,
+        message: 'Publication is ready to be locked.'
+    };
 };
 
 export const deleteVersion = async (publicationVersion: I.PublicationVersion) => {
@@ -655,6 +703,9 @@ export const transferOwnership = (publicationVersionId: string, requesterId: str
 // published immediately (i.e. not going through full drafting workflow) and bypasses the updateStatus function.
 export const postPublishHook = async (publicationVersion: I.PublicationVersion, skipPdfGeneration?: boolean) => {
     try {
+        // Delete links pending deletion.
+        await publicationService.deleteLinksPendingDeletion(publicationVersion.versionOf);
+
         // Tasks specific to peer reviews.
         if (publicationVersion.publication.type === 'PEER_REVIEW') {
             // Ensure links made from a PEER_REVIEW version point to the latest live version of the target publication.

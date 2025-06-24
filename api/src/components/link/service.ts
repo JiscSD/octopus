@@ -306,3 +306,13 @@ export const removeInvalidLinksForPublication = async (publicationId: string, di
 
     await deleteInvalidLinks(flattenDraftLinkData(draftLinksForPublication));
 };
+
+export const markForDeletion = (linkId: string, toDelete: boolean) =>
+    client.prisma.links.update({
+        where: {
+            id: linkId
+        },
+        data: {
+            pendingDeletion: toDelete
+        }
+    });

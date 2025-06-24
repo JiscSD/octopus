@@ -301,9 +301,11 @@ export const updateStatus = async (
                 }
 
                 // check if publication version is ready to be LOCKED
-                if (!(await publicationVersionService.checkIsReadyToLock(publicationVersion))) {
-                    return response.json(403, {
-                        message: 'Publication is not ready to be LOCKED. Make sure all fields are filled in.'
+                const isReadyToLock = await publicationVersionService.checkIsReadyToLock(publicationVersion);
+
+                if (!isReadyToLock.ready) {
+                    return response.json(400, {
+                        message: isReadyToLock.message
                     });
                 }
 
@@ -317,8 +319,8 @@ export const updateStatus = async (
                 const isReadyToPublish = await publicationVersionService.checkIsReadyToPublish(publicationVersion);
 
                 if (!isReadyToPublish.ready) {
-                    return response.json(403, {
-                        message: isReadyToPublish.reason
+                    return response.json(400, {
+                        message: isReadyToPublish.message
                     });
                 }
             }
@@ -341,8 +343,8 @@ export const updateStatus = async (
                 const isReadyToPublish = await publicationVersionService.checkIsReadyToPublish(publicationVersion);
 
                 if (!isReadyToPublish.ready) {
-                    return response.json(403, {
-                        message: isReadyToPublish.reason
+                    return response.json(400, {
+                        message: isReadyToPublish.message
                     });
                 }
             }

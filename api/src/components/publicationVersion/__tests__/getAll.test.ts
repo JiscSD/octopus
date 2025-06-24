@@ -42,7 +42,7 @@ describe('Get many publication versions', () => {
             offset: 10
         });
         // This will change if we add more live seed publications.
-        expect(getPublications.body.data.length).toEqual(6);
+        expect(getPublications.body.data.length).toEqual(7);
     });
 
     test('Can order by publication date, descending', async () => {
@@ -144,7 +144,7 @@ describe('Get many publication versions', () => {
 
         expect(getPublications.status).toEqual(200);
         // Includes everything.
-        expect(getPublications.body.metadata.total).toEqual(16);
+        expect(getPublications.body.metadata.total).toEqual(17);
     });
 
     test('Author filtering rejects invalid types', async () => {
