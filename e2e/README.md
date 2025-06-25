@@ -43,7 +43,7 @@ There are some issues with WSL when running in headed mode. If you do not see a 
 
 ### Playwright config
 
-The playwright config can be found under `playwright.config.ts`; you might want to review this to ensure you understand how the tests are being performed.
+The playwright config can be found at [playwright.config.ts](./playwright.config.ts). You might want to review this to ensure you understand how the tests are being performed.
 
 ## The tests
 
@@ -51,36 +51,15 @@ The tests are split into two main categories: LoggedIn and LoggedOut.
 
 ### Logged Out
 
-These test areas of the site that do not need authentication. They are split into respective parts of the site:
-
-```
-browse.e2e.spec.ts
-inaccessiblePages.e2e.spec.ts
-livePublication.e2e.spec.ts
-profile.e2e.spec.ts
-search.e2e.spec.ts
-staticPages.e2e.spec.ts
-```
+These test areas of the site that do not need authentication.
 
 ### Logged In
 
 These test areas of the site that do require authentication. Note that these tests have a setup dependency; this will run first, log in all the test users and store the browser state in a file that is reused by the LoggedIn tests. This saves us having to repeatedly log in in each separate test that needs it.
 
-They are split into respective parts of the site:
-
-```
-browse.e2e.spec.ts
-livePublication.e2e.spec.ts
-login.e2e.spec.ts
-profile.e2e.spec.ts
-publish.e2e.spec.ts
-revokeOrcidAccess.spec.ts
-search.e2e.spec.ts
-```
-
 ### Helper files
 
-There are two files that are used throughout, which contain commonly used features and functions: `helpers.ts` and `PageModel.ts`.
+There are helper files that are used throughout, which contain commonly used features and functions. These are located in [tests/helpers](./tests/helpers/) and are generally split by the area of the application being used.
 
 ### Assets
 
