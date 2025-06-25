@@ -3,6 +3,8 @@ import {
     EventType,
     Languages,
     LicenceType,
+    NotificationTypeEnum,
+    NotificationActionTypeEnum,
     Prisma,
     PublicationFlagCategoryEnum,
     PublicationImportSource,
@@ -24,6 +26,10 @@ export {
     ImageExtension,
     Languages,
     LicenceType,
+    Notification,
+    NotificationTypeEnum,
+    NotificationStatusEnum,
+    NotificationActionTypeEnum,
     PublicationFlagCategoryEnum,
     PublicationImportSource,
     PublicationStatusEnum,
@@ -1114,4 +1120,18 @@ export interface SinglePublicationBundleOperationPathParams {
 export interface GetPublicationBundlesByUserQueryParams {
     limit?: number;
     offset?: number;
+}
+
+export interface NotificationPayload {
+    title?: string;
+}
+
+export interface CreateNotificationRequestBody {
+    type: NotificationTypeEnum;
+    actionType: NotificationActionTypeEnum;
+    payload?: NotificationPayload;
+}
+
+export interface SendNotificationPathParams {
+    type: NotificationTypeEnum;
 }
