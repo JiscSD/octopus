@@ -196,7 +196,6 @@ export const checkArchivedARIs = async (
 
     console.log('Processing ARIs...');
     let updatedCount = 0;
-    const notFound = new Set<number>();
 
     for (const ari of arisToUse) {
         const existingAri = await client.prisma.publication.findFirst({
@@ -207,7 +206,6 @@ export const checkArchivedARIs = async (
         });
 
         if (!existingAri) {
-            notFound.add(ari.questionId);
             continue;
         }
 
@@ -234,8 +232,7 @@ export const checkArchivedARIs = async (
     await ariUtils.archivedCheckReport(reportFormat, {
         durationSeconds,
         updatedCount,
-        dryRun,
-        notFound: Array.from(notFound)
+        dryRun
     });
 
     return `${dryRun ? 'Dry run' : 'Real run'} finished in ${durationSeconds} seconds.`;
