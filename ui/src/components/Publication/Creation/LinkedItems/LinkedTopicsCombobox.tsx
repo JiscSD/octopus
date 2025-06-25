@@ -11,8 +11,6 @@ import * as Config from '@/config';
 
 type LinkedTopicsComboboxProps = {
     setError: (error: string | null) => void;
-    loading: boolean;
-    setLoading: (isLoading: boolean) => void;
     topics: Interfaces.BaseTopic[];
 };
 
@@ -23,6 +21,7 @@ const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React
     }));
     const user = Stores.useAuthStore((state) => state.user);
 
+    const [loading, setLoading] = React.useState<boolean>(false);
     const [search, setSearch] = React.useState('');
     const [selectedTopic, setSelectedTopic] = React.useState<Interfaces.Topic | null>(null);
 
@@ -53,7 +52,7 @@ const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React
 
     const addTopic = async () => {
         props.setError(null);
-        props.setLoading(true);
+        setLoading(true);
         if (selectedTopic && user) {
             try {
                 setSearch('');
@@ -70,7 +69,7 @@ const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React
                 props.setError('There was a problem adding the topic.');
             }
         }
-        props.setLoading(false);
+        setLoading(false);
     };
 
     return (
@@ -88,10 +87,10 @@ const LinkedTopicsCombobox: React.FC<LinkedTopicsComboboxProps> = (props): React
                 <Components.Button
                     title="Add link"
                     className="flex-shrink-0"
-                    disabled={isValidating || props.loading || !selectedTopic}
+                    disabled={isValidating || loading || !selectedTopic}
                     onClick={addTopic}
                     endIcon={
-                        props.loading ? (
+                        loading ? (
                             <OutlineIcons.ArrowPathIcon className="h-6 w-6 animate-reverse-spin text-teal-600 transition-colors duration-500 dark:text-teal-400" />
                         ) : (
                             <OutlineIcons.PlusCircleIcon className="h-6 w-6 text-teal-500 transition-colors duration-500 dark:text-white-50" />
