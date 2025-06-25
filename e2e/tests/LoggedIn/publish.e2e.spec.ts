@@ -586,18 +586,22 @@ const confirmInvolvement = async (browser: Browser, user: Helpers.users.TestUser
     await expect(page.locator('a[title="Select your affiliations"]')).toBeVisible();
 };
 
-const approvePublication = async (page: Page, hasAffiliations?: boolean) => {
+const approvePublication = async (page: Page, retainApproval: boolean = true) => {
     // confirm affiliations
     await page.locator('a[title="Select your affiliations"]').first().click();
-
-    if (hasAffiliations) {
-        await page.locator('button[title="Add affiliation"]').first().click();
-    } else {
-        await page.locator('#confirm-independent-author').click();
-    }
+    await page.locator('#confirm-independent-author').click();
     await page.locator('button:has-text("Confirm Affiliations")').click();
 
     // approve
+    if (!retainApproval) {
+        await Promise.all([
+            page.getByLabel('Automatically approve future changes to this draft').click(),
+            page.waitForResponse(
+                (response) => response.request().method() === 'PATCH' && response.url().includes('/coauthors/')
+            )
+        ]);
+    }
+
     await (await page.waitForSelector('button:has-text("approve")')).click();
 
     await (await page.waitForSelector('button[title="Yes, this is ready to publish"]')).click();
@@ -605,10 +609,14 @@ const approvePublication = async (page: Page, hasAffiliations?: boolean) => {
     await page.waitForSelector('button[title="Cancel your approval"]');
 };
 
-const confirmCoAuthorInvitation = async (browser: Browser, user: Helpers.users.TestUser) => {
+const confirmCoAuthorInvitation = async (
+    browser: Browser,
+    user: Helpers.users.TestUser,
+    retainApproval: boolean = true
+) => {
     const page = await Helpers.users.getPageAsUser(browser, user);
     await confirmInvolvement(browser, user, page);
-    await approvePublication(page);
+    await approvePublication(page, retainApproval);
     await page.close();
 };
 
@@ -1316,55 +1324,6 @@ test.describe('Publication flow + co-authors', () => {
         await page.close();
     });
 
-    // TODO: uncomment these tests once it is possible to disable approval retention with the UI.
-
-    // test('Editing a publication removes existing approvals', async ({ browser }) => {
-    //     test.slow();
-    //     const page = await Helpers.users.getPageAsUser(browser);
-
-    //     await Helpers.publicationCreation.createPublishReadyPublication(page);
-    //     await addCoAuthorsAndRequestApproval(page, [Helpers.users.user2]);
-
-    //     await confirmCoAuthorInvitation(browser, Helpers.users.user2);
-
-    //     await page.reload();
-    //     await expect(page.getByText('All authors have approved this publication').first()).toBeVisible();
-
-    //     await unlockPublication(page);
-
-    //     // Request approval from co author
-    //     await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
-    //     await requestApproval(page);
-
-    //     await expect(page.getByText('Approval Pending')).toBeVisible();
-
-    //     await page.close();
-    // });
-
-    // test('Co-authors are notified if the publication was edited after they confirmed their involvement', async ({
-    //     browser
-    // }) => {
-    //     test.slow();
-    //     const page = await Helpers.users.getPageAsUser(browser);
-
-    //     await Helpers.publicationCreation.createPublishReadyPublication(page);
-    //     await addCoAuthorsAndRequestApproval(page, [Helpers.users.user2]);
-
-    //     await confirmCoAuthorInvitation(browser, Helpers.users.user2);
-
-    //     // unlock and request approvals again
-    //     await unlockPublication(page);
-    //     await requestApproval(page);
-
-    //     await verifyLastEmailNotification(
-    //         browser,
-    //         Helpers.users.user2,
-    //         'Changes have been made to a publication that you are an author on'
-    //     );
-
-    //     await page.close();
-    // });
-
     test('Co-author approval is retained by default', async ({ browser }) => {
         const page = await Helpers.users.getPageAsUser(browser);
 
@@ -1380,6 +1339,53 @@ test.describe('Publication flow + co-authors', () => {
 
         // Because co-authors have approved, there is no need to re-request approval.
         await expect(page.locator(PageModel.publish.publishButton)).toBeEnabled();
+        await page.close();
+    });
+
+    test('Co-author can set their approval not to be retained', async ({ browser }) => {
+        test.slow();
+        const page = await Helpers.users.getPageAsUser(browser);
+
+        await Helpers.publicationCreation.createPublishReadyPublication(page);
+        await addCoAuthorsAndRequestApproval(page, [Helpers.users.user2]);
+
+        await confirmCoAuthorInvitation(browser, Helpers.users.user2, false);
+
+        await page.reload();
+        await expect(page.getByText('All authors have approved this publication').first()).toBeVisible();
+
+        await unlockPublication(page);
+
+        // Request approval from co author
+        await expect(page.locator(PageModel.publish.requestApprovalButton)).toBeEnabled();
+        await requestApproval(page);
+
+        await expect(page.getByText('Approval Pending')).toBeVisible();
+
+        await page.close();
+    });
+
+    test('Co-authors without approval retention are notified if the publication was edited after they confirmed their involvement', async ({
+        browser
+    }) => {
+        test.slow();
+        const page = await Helpers.users.getPageAsUser(browser);
+
+        await Helpers.publicationCreation.createPublishReadyPublication(page);
+        await addCoAuthorsAndRequestApproval(page, [Helpers.users.user2]);
+
+        await confirmCoAuthorInvitation(browser, Helpers.users.user2, false);
+
+        // unlock and request approvals again
+        await unlockPublication(page);
+        await requestApproval(page);
+
+        await verifyLastEmailNotification(
+            browser,
+            Helpers.users.user2,
+            'Changes have been made to a publication that you are an author on'
+        );
+
         await page.close();
     });
 

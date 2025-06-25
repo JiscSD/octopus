@@ -110,8 +110,6 @@
         "@swc/core-linux-x64-musl": "1.9.3"
     },
     "overrides": {
-        "fast-xml-parser": "^4.2.5",
-        "http-cache-semantics": "^4.1.1",
         "micromatch": "^4.0.8"
     }
 }
