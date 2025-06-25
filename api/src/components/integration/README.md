@@ -17,7 +17,7 @@ They should also always be owned by an organisational user account. That is, a u
 
 ### Where/how does this run?
 
-On deployed environments, integrations are run in containers on AWS Elastic Container Service. These containers are defined in the infrastructure code (see [Dockerfile](../../../../infra/docker/ariImportRunner/Dockerfile)), so they can be built and tested locally from the `infra/docker/ariImportRunner` directory with `docker compose up` (see [compose.yml](../../../../infra/docker/ariImportRunner/compose.yml)).
+On deployed environments, integrations are run in containers on AWS Elastic Container Service. These containers are defined in the infrastructure code (see [Dockerfile](../../../../infra/docker/scriptRunner/Dockerfile)), so they can be built and tested locally from the `infra/docker/scriptRunner` directory with `docker compose up`, passing the desired compose file with the `-f` flag (such as [ari-import.compose.yml](../../../../infra/docker/scriptRunner/ari-import.compose.yml)).
 
 These task containers may be triggered using an API key protected API endpoint that in turn triggers the task to spin up (e.g. the `triggerARIIngest` endpoint), or automatically at a specified time by an Eventbridge scheduler (see this in the [infra code](../../../../infra/modules/ecs/schedule.tf)).
 
@@ -54,3 +54,7 @@ Various ARI fields are mapped to octopus ones in the `mapAriQuestionToPublicatio
 Of particular importance is how ARIs are matched to an owning organisational user account. The mapping process expects a UserMapping to exist associating the `department` field value from the ARI (where the title matches, case insensitive, and the mapping source is 'ARI') with the user ID of an organisational account.
 
 Topics are mapped similarly. If an ARI has values in its `topics` field, the mapping will check whether octopus has any TopicMappings in the database that match with them and associate the publication it creates/updates with the topic(s) from those mappings. If there are no topics listed on the ARI, the organisational user is expected to have a `defaultTopicId`, which is used as a fallback.
+
+#### Archived ARIs
+
+ARIs can be archived. This presents an issue for Octopus, which doesn't have a way of archiving publications as such. To deal with this, we have the `ariArchivedCheck` [script](../../../scripts/ariArchivedCheck.ts) / ECS task. It will see if any ARIs octopus has already imported have become archived since they were imported. If so, it will set the `archived` field on the publication to match the value on the ARI db. We can then use this to display on the front end that the publication is archived.

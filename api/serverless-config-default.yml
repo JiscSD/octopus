@@ -491,10 +491,17 @@ functions:
                 cors: true
     # Integrations
     triggerARIIngest:
-        handler: dist/src/components/integration/routes.triggerARIIngest
+        handler: dist/src/components/integration/routes.triggerAriIngest
         events:
             - http:
                 path: ${self:custom.versions.v1}/integrations/ari/incremental
+                method: POST
+                cors: true
+    triggerARIArchivedCheck:
+        handler: dist/src/components/integration/routes.triggerAriArchivedCheck
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/integrations/ari/archived-check
                 method: POST
                 cors: true
     # Publication bundles
