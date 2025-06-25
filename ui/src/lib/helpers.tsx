@@ -278,7 +278,8 @@ export const linkedPublicationTypes = {
     DATA: ['PROBLEM', 'ANALYSIS'],
     ANALYSIS: ['PROBLEM', 'INTERPRETATION'],
     INTERPRETATION: ['PROBLEM', 'REAL_WORLD_APPLICATION'],
-    REAL_WORLD_APPLICATION: ['PROBLEM']
+    REAL_WORLD_APPLICATION: ['PROBLEM'],
+    PEER_REVIEW: ['PROBLEM']
 };
 
 // original URL regex: /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])/
