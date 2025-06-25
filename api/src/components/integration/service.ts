@@ -276,25 +276,15 @@ export const triggerAriIngest = async (dryRun?: boolean): Promise<string> => {
 export const triggerAriArchivedCheck = async (dryRun?: boolean): Promise<string> => {
     if (process.env.STAGE !== 'local') {
         // If not local, trigger task to run in ECS.
-        await ecs.runFargateTask({
-            clusterArn: Helpers.checkEnvVariable('ECS_CLUSTER_ARN'),
-            ...(dryRun && {
-                containerOverride: {
-                    command: [
-                        'npm',
-                        'run',
-                        'ariArchivedCheck',
-                        '--',
-                        ...(dryRun ? ['dryRun=true'] : []),
-                        'reportFormat=email'
-                    ],
-                    name: 'script-runner'
-                }
-            }),
-            securityGroups: [Helpers.checkEnvVariable('ECS_TASK_SECURITY_GROUP_ID')],
-            subnetIds: Helpers.checkEnvVariable('PRIVATE_SUBNET_IDS').split(','),
-            taskDefinitionId: Helpers.checkEnvVariable('ECS_TASK_DEFINITION_ID')
-        });
+        const commandParts = [
+            'npm',
+            'run',
+            'ariArchivedCheck',
+            '--',
+            ...(dryRun ? ['dryRun=true'] : []),
+            'reportFormat=email'
+        ];
+        await triggerScriptECSTask(commandParts);
 
         return 'Task triggered.';
     } else {
