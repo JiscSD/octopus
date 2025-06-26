@@ -34,10 +34,10 @@ async function sendAllBulletinNotifications(
 ): Promise<BulkSendResponse> {
     const response: BulkSendResponse = { error: null, totalSent: 0, totalFailed: 0 };
 
-    const pendingNotifications = await notificationService.getMany(undefined, type, I.NotificationStatusEnum.PENDING);
+    const pendingNotifications = await notificationService.getBulletin(I.NotificationStatusEnum.PENDING);
     const failedNotificationsIds: string[] = [];
 
-    const notificationsByUserId = new Map<string, Awaited<ReturnType<typeof notificationService.getMany>>>();
+    const notificationsByUserId = new Map<string, Awaited<ReturnType<typeof notificationService.getBulletin>>>();
 
     for (const notification of pendingNotifications) {
         if (!notificationsByUserId.has(notification.userId)) {
@@ -55,14 +55,14 @@ async function sendAllBulletinNotifications(
             continue;
         }
 
-        if (user.lastDigestSentAt && user.lastDigestSentAt.getTime() > Date.now() - digestDeltaTime) {
+        if (user.lastBulletinSentAt && user.lastBulletinSentAt.getTime() > Date.now() - digestDeltaTime) {
             continue;
         }
 
         await sendBulletinNotification();
         response.totalSent += userNotifications.length;
 
-        await userService.updateUser(userId, { lastDigestSentAt: new Date() });
+        await userService.updateUser(userId, { lastBulletinSentAt: new Date() });
 
         await Promise.all(userNotifications.map((n) => notificationService.remove(n.id)));
     }

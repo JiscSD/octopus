@@ -173,7 +173,7 @@ export const get = (id: string, isAccountOwner = false) =>
             orcidAccessToken: isAccountOwner ? true : false,
             locked: true,
             defaultTopicId: true,
-            lastDigestSentAt: true
+            lastBulletinSentAt: true
         }
     });
 

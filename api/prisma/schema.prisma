@@ -40,7 +40,7 @@ model User {
     publicationBundles  PublicationBundle[]
     notifications       Notification[]
     settings            UserSettings?
-    lastDigestSentAt    DateTime?
+    lastBulletinSentAt  DateTime?
 }
 
 model UserSettings {

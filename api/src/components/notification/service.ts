@@ -12,9 +12,10 @@ export const create = (
         select: { status: true, createdAt: true }
     });
 
-export const getMany = (userId?: string, type?: I.NotificationTypeEnum, status?: I.NotificationStatusEnum) =>
+export const getBulletin = (status?: I.NotificationStatusEnum) =>
     client.prisma.notification.findMany({
-        where: { userId, type, status },
+        where: { status },
+        // Order by userId to easily group notifications by user
         orderBy: { userId: 'asc' },
         select: { id: true, userId: true }
     });
