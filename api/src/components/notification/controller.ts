@@ -41,7 +41,7 @@ async function sendAllBulletinNotifications(digestDeltaTime: number): Promise<Bu
             1. The notifications are already sorted by userId
             2. We can use a `currentUserId` variable to track the current user
                and loop through the notifications only once
-    */    
+    */
     for (const notification of pendingNotifications) {
         if (!notificationsByUserId.has(notification.userId)) {
             notificationsByUserId.set(notification.userId, []);
