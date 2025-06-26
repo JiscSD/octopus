@@ -7,6 +7,9 @@ CREATE TYPE "NotificationActionTypeEnum" AS ENUM ('PUBLICATION_VERSION_CREATED',
 -- CreateEnum
 CREATE TYPE "NotificationStatusEnum" AS ENUM ('PENDING', 'FAILED');
 
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "lastBulletinSentAt" TIMESTAMP(3);
+
 -- CreateTable
 CREATE TABLE "UserSettings" (
     "id" TEXT NOT NULL,
