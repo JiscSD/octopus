@@ -364,9 +364,24 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
     };
 
     const handlePublish = React.useCallback(async () => {
+        let modalDescription: React.ReactNode[] = [];
+        modalDescription.push(
+            <p key="no-changes-post-publication">It is not possible to make any changes post-publication.</p>
+        );
+
+        const linksPendingDeletion = linkedTo.filter((link) => link.pendingDeletion);
+        if (linksPendingDeletion.length) {
+            modalDescription.push(
+                <Components.LinksPendingDeletionMessage
+                    key="links-pending-deletion"
+                    publicationTitles={linksPendingDeletion.flatMap((link) => (link.title ? [link.title] : []))}
+                />
+            );
+        }
+
         const confirmed = await confirmation(
             'Are you sure you want to publish?',
-            'It is not possible to make any changes post-publication.',
+            modalDescription,
             <OutlineIcons.CloudArrowUpIcon className="h-10 w-10 text-grey-600" aria-hidden="true" />,
             'Yes',
             'No'
@@ -392,7 +407,7 @@ const Publication: Types.NextPage<Props> = (props): React.ReactElement => {
                 setIsLoading(false);
             }
         }
-    }, [confirmation, publicationVersion?.id, router]);
+    }, [confirmation, linkedTo, publicationVersion?.id, router]);
 
     const handleUnlock = async () => {
         if (isUnlocking) {

@@ -1,10 +1,11 @@
 import * as email from 'lib/email';
 import * as Helpers from 'lib/helpers';
 import * as I from 'interface';
+import * as s3 from 'lib/s3';
 
 const pubRouterPublicationTypePrefix = 'Octopus article; ';
 
-const getPubRouterMetadata = (publicationVersion: I.PublicationVersion, pdfUrl: string) => {
+const getPubRouterMetadata = (publicationVersion: I.PublicationVersion) => {
     const formatCoAuthor = (coAuthor: I.PublicationVersion['coAuthors'][0]) => {
         if (!coAuthor.user) return null;
 
@@ -57,6 +58,7 @@ const getPubRouterMetadata = (publicationVersion: I.PublicationVersion, pdfUrl: 
     const formattedPublicationDate = publicationVersion.createdAt.toISOString().split('T')[0];
     const publication = publicationVersion.publication;
     const formattedCoAuthors = publicationVersion.coAuthors?.map((coAuthor) => formatCoAuthor(coAuthor));
+    const pdfUrl = s3.getPDFURL(publication.id);
 
     return {
         provider: {
@@ -136,10 +138,9 @@ const postToPubRouter = (pdfMetadata: ReturnType<typeof getPubRouterMetadata>, e
     });
 
 export const notifyPubRouter = async (
-    publicationVersion: I.PublicationVersion,
-    pdfUrl: string
+    publicationVersion: I.PublicationVersion
 ): Promise<{ code: number; message: string }> => {
-    const pdfMetadata = getPubRouterMetadata(publicationVersion, pdfUrl);
+    const pdfMetadata = getPubRouterMetadata(publicationVersion);
     console.log('PDF metadata: ', JSON.stringify(pdfMetadata));
 
     // Send to PubRouter.

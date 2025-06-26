@@ -496,8 +496,8 @@ export const requestApproval = async (
         if (version.currentStatus === 'DRAFT') {
             const isReadyToRequestApprovals = await publicationVersionService.checkIsReadyToRequestApprovals(version);
 
-            if (!isReadyToRequestApprovals) {
-                return response.json(403, {
+            if (!isReadyToRequestApprovals.ready) {
+                return response.json(400, {
                     message:
                         'Approval emails cannot be sent because the publication is not ready to be LOCKED. Make sure all fields are filled in.'
                 });

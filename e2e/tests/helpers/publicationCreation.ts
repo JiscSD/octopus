@@ -44,7 +44,7 @@ export const completeLinkedItemsTab = async (page: Page, linkedPubSearchTerm: st
         page.waitForResponse((response) => response.url().includes('/links') && response.ok()),
         page.locator(PageModel.publish.linkedItems.addLink).click()
     ]);
-    await expect(page.locator(PageModel.publish.linkedItems.deletePublicationLink)).toBeVisible();
+    await expect(page.locator(PageModel.publish.linkedItems.deleteNewPublicationLink)).toBeVisible();
 
     await page.locator(PageModel.publish.nextButton).click();
 };

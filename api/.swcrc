@@ -78,6 +78,9 @@
             "publicationVersion/*": [
                 "src/components/publicationVersion/*"
             ],
+            "pubRouter/*": [
+                "src/components/pubRouter/*"
+            ],
             "reference/*": [
                 "src/components/reference/*"
             ],
