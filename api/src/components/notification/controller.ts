@@ -29,7 +29,6 @@ async function sendBulletinNotification(): Promise<void> {
 }
 
 async function sendAllBulletinNotifications(
-    type: I.NotificationTypeEnum,
     digestDeltaTime: number
 ): Promise<BulkSendResponse> {
     const response: BulkSendResponse = { error: null, totalSent: 0, totalFailed: 0 };
@@ -39,6 +38,7 @@ async function sendAllBulletinNotifications(
 
     const notificationsByUserId = new Map<string, Awaited<ReturnType<typeof notificationService.getBulletin>>>();
 
+    // IMPROVEMENT: Use a single notifications loop
     for (const notification of pendingNotifications) {
         if (!notificationsByUserId.has(notification.userId)) {
             notificationsByUserId.set(notification.userId, []);
@@ -79,6 +79,6 @@ async function sendAllBulletinNotifications(
 export const sendAllByType = async (type: I.NotificationTypeEnum): Promise<BulkSendResponse> => {
     switch (type) {
         case I.NotificationTypeEnum.BULLETIN:
-            return sendAllBulletinNotifications(type, BULLETIN_DIGEST_DELTA_TIME);
+            return sendAllBulletinNotifications(BULLETIN_DIGEST_DELTA_TIME);
     }
 };
