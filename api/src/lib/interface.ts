@@ -272,6 +272,7 @@ export interface LinkedToPublication extends LinkedPublication {
     draft: boolean;
     externalSource: PublicationImportSource | null;
     linkId: string;
+    pendingDeletion?: boolean;
 }
 
 export interface LinkedFromPublication extends LinkedPublication {
@@ -279,12 +280,25 @@ export interface LinkedFromPublication extends LinkedPublication {
     linkId: string;
     parentPublicationId: string;
     parentPublicationType: PublicationType;
+    pendingDeletion?: boolean;
 }
 
 export interface PublicationWithLinks {
     publication: LinkedPublication | null;
     linkedTo: LinkedToPublication[];
     linkedFrom: LinkedFromPublication[];
+}
+
+export interface DeleteLinkPathParams {
+    id: string;
+}
+
+export interface MarkLinkForDeletionBody {
+    toDelete: boolean;
+}
+
+export interface MarkLinkForDeletionPathParams {
+    id: string;
 }
 
 /**
@@ -467,10 +481,6 @@ export interface ApproveControlRequestPathParams {
 export interface ApproveControlRequestBody {
     approve: 'true' | 'false';
     eventId: string;
-}
-
-export interface DeleteLinkPathParams {
-    id: string;
 }
 
 export type ValidStatuses = 'DRAFT' | 'LIVE' | 'LOCKED';
@@ -1095,6 +1105,11 @@ export interface HandledARI {
 export type IngestReportFormat = 'email' | 'file';
 
 export interface TriggerAriIngestQueryParams {
+    apiKey: string;
+    dryRun?: boolean;
+}
+
+export interface TriggerAriArchivedCheckQueryParams {
     apiKey: string;
     dryRun?: boolean;
 }

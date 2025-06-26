@@ -11,7 +11,7 @@ type Props = {
 
 const LinkedTopicRow: React.FC<Props> = (props): React.ReactElement => {
     const [loading, setLoading] = React.useState(false);
-    const handleClick = async () => {
+    const handleDelete = async () => {
         setLoading(true);
         await props.deleteTopic(props.topic.id);
         setLoading(false);
@@ -42,7 +42,7 @@ const LinkedTopicRow: React.FC<Props> = (props): React.ReactElement => {
                                     <OutlineIcons.TrashIcon className={iconClasses} aria-hidden="true" />
                                 )
                             }
-                            onClick={handleClick}
+                            onClick={handleDelete}
                             disabled={loading}
                         />
                     ) : (

@@ -3,14 +3,22 @@ import * as Config from '@/config';
 import * as Helpers from '@/helpers';
 import * as TestUtils from '@/testUtils';
 import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
-describe('Linked publication row', () => {
+describe('New linked publication row', () => {
+    const deleteLinkMock = jest.fn(() => Promise.resolve());
     beforeEach(() => {
         render(
-            <Components.LinkedPublicationRow
-                linkedPublication={TestUtils.testLinkedToPublication}
-                deleteLink={jest.fn(() => Promise.resolve())}
-            />
+            // Also render a table to prevent validateDOMNesting errors for orphaned row.
+            <table>
+                <tbody>
+                    <Components.LinkedPublicationRow
+                        deleteLink={deleteLinkMock}
+                        linkedPublication={{ ...TestUtils.testLinkedToPublication, draft: true }}
+                        markLinkForDeletion={jest.fn()}
+                    />
+                </tbody>
+            </table>
         );
     });
 
@@ -53,34 +61,6 @@ describe('Linked publication row', () => {
         ).toHaveAttribute('href', `${Config.urls.viewPublication.path}/${TestUtils.testLinkedToPublication.id}`);
     });
 
-    it('Disabled deletion button is shown if link is not draft', () => {
-        expect(
-            screen.getByRole('button', {
-                name: 'Deletion forbidden as link is inherited from previous version'
-            })
-        ).toBeDisabled();
-    });
-
-    it('Delete button is not shown if link is not draft', () => {
-        expect(
-            screen.queryByRole('button', {
-                name: 'Delete linked publication'
-            })
-        ).not.toBeInTheDocument();
-    });
-});
-
-describe('Draft links', () => {
-    const deleteLink = jest.fn(() => Promise.resolve());
-    beforeEach(() => {
-        render(
-            <Components.LinkedPublicationRow
-                linkedPublication={{ ...TestUtils.testLinkedToPublication, draft: true }}
-                deleteLink={deleteLink}
-            />
-        );
-    });
-
     it('Enabled delete button is shown if link is draft', () => {
         expect(
             screen.getByRole('button', {
@@ -94,16 +74,8 @@ describe('Draft links', () => {
             name: 'Delete'
         });
         fireEvent.click(deleteButton);
-        expect(deleteLink).toHaveBeenCalledWith(TestUtils.testLinkedToPublication.linkId);
-        expect(deleteLink).toHaveBeenCalledTimes(1);
-    });
-
-    it('"Deletion forbidden" button is not shown if link is draft', () => {
-        expect(
-            screen.queryByRole('button', {
-                name: 'Deletion forbidden as link is inherited from previous version'
-            })
-        ).not.toBeInTheDocument();
+        expect(deleteLinkMock).toHaveBeenCalledWith(TestUtils.testLinkedToPublication.linkId);
+        expect(deleteLinkMock).toHaveBeenCalledTimes(1);
     });
 });
 
@@ -119,10 +91,85 @@ describe('Linked publication row with draft publication', () => {
                             publishedDate: null,
                             currentStatus: 'DRAFT'
                         }}
+                        markLinkForDeletion={jest.fn()}
                     />
                 </tbody>
             </table>
         );
         expect(screen.getByText('Draft,')).toBeInTheDocument();
+    });
+});
+
+describe('Linked publication created in previous version, not flagged for deletion', () => {
+    const markForDeletionMock = jest.fn(() => Promise.resolve());
+    beforeEach(() => {
+        render(
+            <table>
+                <tbody>
+                    <Components.LinkedPublicationRow
+                        deleteLink={jest.fn()}
+                        linkedPublication={{
+                            ...TestUtils.testLinkedToPublication,
+                            draft: false,
+                            pendingDeletion: false
+                        }}
+                        markLinkForDeletion={markForDeletionMock}
+                    />
+                </tbody>
+            </table>
+        );
+    });
+
+    it('Status message is shown', () => {
+        expect(screen.getByText('To be retained when published')).toBeInTheDocument();
+    });
+
+    it('Mark for deletion button is shown', () => {
+        const deletionButton = screen.getByRole('button');
+        expect(deletionButton).toHaveAccessibleDescription('Mark for deletion');
+    });
+
+    it('Mark for deletion button triggers function passed to "markLinkForDeletion" prop', async () => {
+        const markForDeletionButton = screen.getByRole('button', { name: 'Mark for deletion' });
+        await userEvent.click(markForDeletionButton);
+        expect(markForDeletionMock).toHaveBeenCalledTimes(1);
+        expect(markForDeletionMock).toHaveBeenCalledWith(TestUtils.testLinkedToPublication.linkId, true);
+    });
+});
+
+describe('Linked publication created in previous version, flagged for deletion', () => {
+    const markForDeletionMock = jest.fn(() => Promise.resolve());
+    beforeEach(() => {
+        render(
+            <table>
+                <tbody>
+                    <Components.LinkedPublicationRow
+                        deleteLink={jest.fn()}
+                        linkedPublication={{
+                            ...TestUtils.testLinkedToPublication,
+                            draft: false,
+                            pendingDeletion: true
+                        }}
+                        markLinkForDeletion={markForDeletionMock}
+                    />
+                </tbody>
+            </table>
+        );
+    });
+
+    it('Status message is shown', () => {
+        expect(screen.getByText('To be deleted when published')).toBeInTheDocument();
+    });
+
+    it('Cancel deletion button is shown', () => {
+        const deletionButton = screen.getByRole('button');
+        expect(deletionButton).toHaveAccessibleDescription('Cancel pending deletion');
+    });
+
+    it('Cancel deletion button triggers function passed to "markLinkForDeletion" prop', async () => {
+        const cancelDeletionButton = screen.getByRole('button', { name: 'Cancel pending deletion' });
+        await userEvent.click(cancelDeletionButton);
+        expect(markForDeletionMock).toHaveBeenCalledTimes(1);
+        expect(markForDeletionMock).toHaveBeenCalledWith(TestUtils.testLinkedToPublication.linkId, false);
     });
 });

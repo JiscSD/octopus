@@ -12,25 +12,60 @@ import * as Types from '@/types';
  * @description Edit links
  */
 const Links: React.FC = (): React.ReactElement => {
+    // State
+    const [deletionUpdate, setDeletionUpdate] = React.useState('');
     const [entityType, setEntityType] = React.useState<Types.LinkedEntityType>('LIVE_PUBLICATION');
-    const { publicationVersionId, topics, updateTopics, linkedTo, updateLinkedTo, error, setError } =
-        Stores.usePublicationCreationStore((state) => ({
-            publicationVersionId: state.publicationVersion.id,
-            topics: state.publicationVersion.topics,
-            updateTopics: state.updateTopics,
-            linkedTo: state.linkedTo,
-            updateLinkedTo: state.updateLinkedTo,
-            error: state.error,
-            setError: state.setError
-        }));
-
+    // Store
+    const {
+        error,
+        linkedTo,
+        publicationId,
+        publicationVersionId,
+        setError,
+        topics,
+        type,
+        updateLinkedTo,
+        updateTopics
+    } = Stores.usePublicationCreationStore((state) => ({
+        error: state.error,
+        linkedTo: state.linkedTo,
+        publicationId: state.publicationVersion.versionOf,
+        publicationVersionId: state.publicationVersion.id,
+        setError: state.setError,
+        topics: state.publicationVersion.topics,
+        type: state.publicationVersion.publication.type,
+        updateLinkedTo: state.updateLinkedTo,
+        updateTopics: state.updateTopics
+    }));
     const user = Stores.useAuthStore((state) => state.user);
 
-    const type = Stores.usePublicationCreationStore((state) => state.publicationVersion.publication.type);
     const linkablePublicationTypes = Helpers.publicationsAvailabletoPublication(type);
 
-    const [loading, setLoading] = React.useState<boolean>(false);
-    const [deletionUpdate, setDeletionUpdate] = React.useState('');
+    const createPublicationLink = async (targetPublicationId: string) => {
+        setError(null);
+        if (targetPublicationId && user) {
+            try {
+                await api.post(
+                    '/links',
+                    {
+                        to: targetPublicationId,
+                        from: publicationId
+                    },
+                    user.token
+                );
+
+                // refetch direct links
+                const response = await api.get(
+                    `${Config.endpoints.publications}/${publicationId}/links?direct=true`,
+                    user.token
+                );
+
+                updateLinkedTo(response.data.linkedTo);
+            } catch (err) {
+                setError('There was a problem creating the link.');
+            }
+        }
+    };
 
     const deletePublicationLink = useCallback(
         async (linkId: string) => {
@@ -49,6 +84,28 @@ const Links: React.FC = (): React.ReactElement => {
             }
         },
         [linkedTo, setDeletionUpdate, setError, updateLinkedTo, user]
+    );
+
+    const markPublicationLinkForDeletion = useCallback(
+        async (linkId: string, toDelete: boolean) => {
+            setError(null);
+            if (user) {
+                try {
+                    await api.post(`/links/${linkId}/mark-for-deletion`, { toDelete }, user.token);
+
+                    // update linked publications in the UI
+                    const newLinkedTo = structuredClone(linkedTo);
+                    const changedLinkIndex = newLinkedTo.findIndex(
+                        (linkedPublication) => linkedPublication.linkId === linkId
+                    );
+                    newLinkedTo[changedLinkIndex].pendingDeletion = toDelete;
+                    updateLinkedTo(newLinkedTo);
+                } catch (err) {
+                    setError('There was a problem marking the link for deletion.');
+                }
+            }
+        },
+        [linkedTo, setError, updateLinkedTo, user]
     );
 
     const deleteTopicLink = useCallback(
@@ -87,7 +144,7 @@ const Links: React.FC = (): React.ReactElement => {
 
     // Problems can link to all entity types.
     if (isProblem) {
-        linkableEntityTypes = Object.keys(Config.values.linkedEntityTypeLabels) as Types.LinkedEntityType[];
+        linkableEntityTypes = ['DRAFT_PUBLICATION', 'LIVE_PUBLICATION', 'TOPIC'];
     } else {
         // Peer reviews can't link to drafts.
         if (type === 'PEER_REVIEW') {
@@ -97,6 +154,47 @@ const Links: React.FC = (): React.ReactElement => {
         }
     }
 
+    const inheritedLinkRows: React.ReactNode[] = [];
+    const newLinkRows: React.ReactNode[] = [];
+
+    for (const linkedPublication of linkedTo) {
+        const row = (
+            <Components.LinkedPublicationRow
+                key={linkedPublication.id}
+                deleteLink={deletePublicationLink}
+                linkedPublication={linkedPublication}
+                markLinkForDeletion={markPublicationLinkForDeletion}
+            />
+        );
+        if (linkedPublication.draft) {
+            newLinkRows.push(row);
+        } else {
+            inheritedLinkRows.push(row);
+        }
+    }
+
+    const inheritedTopicRows: React.ReactNode[] = [];
+    const newTopicRows: React.ReactNode[] = [];
+
+    for (const topic of topics) {
+        const row = <Components.LinkedTopicRow key={topic.id} topic={topic} deleteTopic={deleteTopicLink} />;
+        if (topic.draft) {
+            newTopicRows.push(row);
+        } else {
+            inheritedTopicRows.push(row);
+        }
+    }
+
+    const h3Classes =
+        'mb-4 font-montserrat text-lg font-semibold text-grey-800 transition-colors duration-500 dark:text-white-100';
+    const paragraphClasses = 'text-sm text-grey-800 transition-colors duration-500 dark:text-white-50';
+
+    const linkedEntityTypeLabels: Record<Types.LinkedEntityType, string> = {
+        LIVE_PUBLICATION: 'Publications',
+        TOPIC: 'Research topics',
+        DRAFT_PUBLICATION: 'Drafts'
+    };
+
     return (
         <div className="space-y-6 lg:space-y-10 2xl:w-10/12">
             <div>
@@ -104,14 +202,14 @@ const Links: React.FC = (): React.ReactElement => {
                     text={`What ${linkableEntityLabel}s should this publication be linked from?`}
                     required
                 />
-                <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
+                <p className={`mb-6 ${paragraphClasses}`}>
                     All publications in Octopus are linked to each other to form research chains, branching down from
                     research problems to real world implementations.{' '}
                     {isProblem &&
                         ' For research problems, if there is no existing publication on the system that yours relates to, you can link to a research topic instead.'}
                 </p>
 
-                <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
+                <p className={`mb-6 ${paragraphClasses}`}>
                     Your {Helpers.formatPublicationType(type)} must be linked from at least one other{' '}
                     {linkableEntityLabel} on Octopus. {Helpers.formatPublicationType(type)} can be linked from{' '}
                     {linkablePublicationTypes.map((type, index) => {
@@ -129,7 +227,7 @@ const Links: React.FC = (): React.ReactElement => {
                     {isProblem && ' Use the dropdown to switch between searching for publications or research topics.'}
                 </p>
 
-                <p className="mb-6 block text-sm text-grey-800 transition-colors duration-500 dark:text-white-50">
+                <p className={paragraphClasses}>
                     This approach structures the content of the platform and makes your work more discoverable. It also
                     helps you avoid repeating work, as there is no need to keep re-writing descriptions of well-known
                     Research Problems, or Methods etc.
@@ -137,7 +235,7 @@ const Links: React.FC = (): React.ReactElement => {
             </div>
 
             <div className="relative">
-                <Components.PublicationCreationStepTitle text="Add links" required />
+                <Components.PublicationCreationStepTitle text="Add new links" required />
                 <div className="flex flex-col flex-wrap gap-4 sm:flex-row sm:items-center">
                     {type !== 'PEER_REVIEW' && (
                         <select
@@ -152,25 +250,22 @@ const Links: React.FC = (): React.ReactElement => {
                         >
                             {linkableEntityTypes.map((type) => (
                                 <option key={type} value={type}>
-                                    {Config.values.linkedEntityTypeLabels[type]}
+                                    {linkedEntityTypeLabels[type]}
                                 </option>
                             ))}
                         </select>
                     )}
                     <div className="flex-1">
                         {entityType === 'TOPIC' ? (
-                            <Components.LinkedTopicsCombobox
-                                setError={setError}
-                                loading={loading}
-                                setLoading={setLoading}
-                                topics={topics}
-                            />
+                            <Components.LinkedTopicsCombobox setError={setError} topics={topics} />
                         ) : (
-                            <Components.LinkedPublicationsCombobox
+                            <Components.PublicationCombobox
+                                buttonCallback={createPublicationLink}
+                                buttonText="Add link"
                                 draftsOnly={entityType === 'DRAFT_PUBLICATION'}
+                                excludedIds={[publicationId, ...linkedTo.map((link) => link.id)]}
                                 setError={setError}
-                                loading={loading}
-                                setLoading={setLoading}
+                                targetTypes={linkablePublicationTypes}
                             />
                         )}
                     </div>
@@ -180,15 +275,37 @@ const Links: React.FC = (): React.ReactElement => {
             <div className="sr-only" aria-live="polite">
                 {deletionUpdate}
             </div>
-            {!!linkedTo.length && (
-                <Components.LinkedItemTable
-                    deleteLink={deletePublicationLink}
-                    entities={linkedTo}
-                    entityType="LIVE_PUBLICATION"
-                />
+            {(!!inheritedLinkRows.length || !!inheritedTopicRows.length) && (
+                <div>
+                    <h3 className={h3Classes}>Links on published version</h3>
+                    {!!inheritedLinkRows.length && (
+                        <>
+                            <p className={paragraphClasses}>
+                                Links that were added on the previously published version can be marked to be deleted
+                                when this new version is published.
+                            </p>
+                            <Components.LinkedItemTable
+                                entityType="PUBLICATION"
+                                inherited={true}
+                                rows={inheritedLinkRows}
+                            />
+                        </>
+                    )}
+                    {!!inheritedTopicRows.length && (
+                        <Components.LinkedItemTable entityType="TOPIC" inherited={true} rows={inheritedTopicRows} />
+                    )}
+                </div>
             )}
-            {!!topics?.length && (
-                <Components.LinkedItemTable deleteLink={deleteTopicLink} entities={topics} entityType="TOPIC" />
+            {(!!newLinkRows.length || !!newTopicRows.length) && (
+                <div>
+                    <h3 className={h3Classes}>Links added in this version</h3>
+                    {!!newLinkRows.length && (
+                        <Components.LinkedItemTable entityType="PUBLICATION" inherited={false} rows={newLinkRows} />
+                    )}
+                    {!!newTopicRows.length && (
+                        <Components.LinkedItemTable entityType="TOPIC" inherited={false} rows={newTopicRows} />
+                    )}
+                </div>
             )}
             {!error && !linkedTo.length && !topics?.length && (
                 <Components.Alert

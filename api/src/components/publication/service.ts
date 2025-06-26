@@ -1225,6 +1225,7 @@ export const getDirectLinksForPublication = async (
                 select: {
                     id: true,
                     draft: true,
+                    pendingDeletion: requesterIsAuthor || undefined,
                     versionTo: {
                         select: {
                             id: true,
@@ -1285,6 +1286,7 @@ export const getDirectLinksForPublication = async (
                 select: {
                     id: true,
                     draft: true,
+                    pendingDeletion: requesterIsAuthor || undefined,
                     versionTo: {
                         select: {
                             id: true,
@@ -1366,7 +1368,7 @@ export const getDirectLinksForPublication = async (
     }
 
     const linkedTo: I.LinkedToPublication[] = publication.linkedTo.map((link) => {
-        const { id: linkId, publicationTo, versionTo, draft } = link;
+        const { id: linkId, publicationTo, versionTo, draft, pendingDeletion } = link;
         const { id, type, versions, doi: publicationDoi, publicationFlags, linkedFrom, externalSource } = publicationTo;
         const initialDraftVersion = versions.find(
             (version) => version.versionNumber === 1 && version.currentStatus !== 'LIVE'
@@ -1403,6 +1405,7 @@ export const getDirectLinksForPublication = async (
         return {
             id,
             draft,
+            pendingDeletion,
             linkId,
             type,
             doi: publicationDoi,
@@ -1423,7 +1426,7 @@ export const getDirectLinksForPublication = async (
     });
 
     const linkedFrom: I.LinkedFromPublication[] = publication.linkedFrom.map((link) => {
-        const { id: linkId, publicationFrom, versionTo, draft } = link;
+        const { id: linkId, publicationFrom, versionTo, draft, pendingDeletion } = link;
         const { id, type, versions, doi: publicationDoi, publicationFlags, linkedFrom } = publicationFrom;
         const initialDraftVersion = versions.find(
             (version) => version.versionNumber === 1 && version.currentStatus !== 'LIVE'
@@ -1460,6 +1463,7 @@ export const getDirectLinksForPublication = async (
         return {
             id,
             draft,
+            pendingDeletion,
             linkId,
             type,
             doi: publicationDoi,
@@ -1508,6 +1512,14 @@ export const getDirectLinksForPublication = async (
         linkedFrom
     };
 };
+
+export const deleteLinksPendingDeletion = (publicationId: string) =>
+    client.prisma.links.deleteMany({
+        where: {
+            publicationFromId: publicationId,
+            pendingDeletion: true
+        }
+    });
 
 export const isLive = async (id: string) => {
     const livePublication = await client.prisma.publication.findFirst({
