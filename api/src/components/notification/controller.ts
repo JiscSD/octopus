@@ -28,9 +28,7 @@ async function sendBulletinNotification(): Promise<void> {
     // Send the email template using a mail service
 }
 
-async function sendAllBulletinNotifications(
-    digestDeltaTime: number
-): Promise<BulkSendResponse> {
+async function sendAllBulletinNotifications(digestDeltaTime: number): Promise<BulkSendResponse> {
     const response: BulkSendResponse = { error: null, totalSent: 0, totalFailed: 0 };
 
     const pendingNotifications = await notificationService.getBulletin(I.NotificationStatusEnum.PENDING);
@@ -38,7 +36,12 @@ async function sendAllBulletinNotifications(
 
     const notificationsByUserId = new Map<string, Awaited<ReturnType<typeof notificationService.getBulletin>>>();
 
-    // IMPROVEMENT: Use a single notifications loop
+    /*
+        Possible improvement: Use a single notifications loop, as:
+            1. The notifications are already sorted by userId
+            2. We can use a `currentUserId` variable to track the current user
+               and loop through the notifications only once
+    */    
     for (const notification of pendingNotifications) {
         if (!notificationsByUserId.has(notification.userId)) {
             notificationsByUserId.set(notification.userId, []);
