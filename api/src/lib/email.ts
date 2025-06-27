@@ -973,7 +973,7 @@ export const automaticUnlock = async (options: {
 
 type NotifyBulletinNotification = Pick<
     I.Notification & {
-        payload: I.NotificationPayload | null
+        payload: I.NotificationPayload | null;
     },
     'id' | 'actionType' | 'payload'
 >;
@@ -986,9 +986,9 @@ export const notifyBulletin = async (options: {
         return;
     }
 
-    if (options.notifications.some(n => !n.payload || !n.payload.title)) {
+    if (options.notifications.some((n) => !n.payload || !n.payload.title)) {
         console.warn('Some notifications do not have a payload or title, skipping email generation.');
-        
+
         return;
     }
 
