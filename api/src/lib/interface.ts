@@ -3,6 +3,8 @@ import {
     EventType,
     Languages,
     LicenceType,
+    NotificationTypeEnum,
+    NotificationActionTypeEnum,
     Prisma,
     PublicationFlagCategoryEnum,
     PublicationImportSource,
@@ -24,6 +26,10 @@ export {
     ImageExtension,
     Languages,
     LicenceType,
+    Notification,
+    NotificationTypeEnum,
+    NotificationStatusEnum,
+    NotificationActionTypeEnum,
     PublicationFlagCategoryEnum,
     PublicationImportSource,
     PublicationStatusEnum,
@@ -308,6 +314,11 @@ export interface User {
     orcid: string | null;
     role: Role;
     defaultTopicId: string | null;
+    settings?: {
+        enableBookmarkNotifications: boolean;
+        enableBookmarkVersionNotifications: boolean;
+    } | null;
+    lastBulletinSentAt?: Date | null;
 }
 
 export interface UserFilters {
@@ -1129,4 +1140,18 @@ export interface SinglePublicationBundleOperationPathParams {
 export interface GetPublicationBundlesByUserQueryParams {
     limit?: number;
     offset?: number;
+}
+
+export interface NotificationPayload {
+    title?: string;
+}
+
+export interface CreateNotificationRequestBody {
+    type: NotificationTypeEnum;
+    actionType: NotificationActionTypeEnum;
+    payload?: NotificationPayload;
+}
+
+export interface SendNotificationPathParams {
+    type: NotificationTypeEnum;
 }
