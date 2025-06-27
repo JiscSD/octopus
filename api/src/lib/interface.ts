@@ -314,11 +314,11 @@ export interface User {
     orcid: string | null;
     role: Role;
     defaultTopicId: string | null;
-    settings: {
+    settings?: {
         enableBookmarkNotifications: boolean;
         enableBookmarkVersionNotifications: boolean;
     } | null;
-    lastBulletinSentAt: Date | null;
+    lastBulletinSentAt?: Date | null;
 }
 
 export interface UserFilters {
