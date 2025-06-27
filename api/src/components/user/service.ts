@@ -15,7 +15,7 @@ export const upsertUser = (orcid: string, updateUserInformation: I.UpdateUserInf
             locked: true,
             orcid: true,
             role: true,
-            defaultTopicId: true,
+            defaultTopicId: true
         },
         where: {
             orcid
