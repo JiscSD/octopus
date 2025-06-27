@@ -337,6 +337,11 @@ functions:
                 path: ${self:custom.versions.v1}/bookmarks
                 method: GET
                 cors: true
+    # Notifications
+    sendBulletin:
+        handler: dist/src/components/notifications/routes.sendBulletin
+        events:
+            - schedule: cron(0 10 ? * MON *) # Every Monday at 10
     # Verification
     requestVerification:
         handler: dist/src/components/verification/routes.requestCode

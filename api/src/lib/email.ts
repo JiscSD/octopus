@@ -970,3 +970,64 @@ export const automaticUnlock = async (options: {
         subject
     });
 };
+
+type NotifyBulletinNotification = Pick<
+    I.Notification & {
+        payload: I.NotificationPayload | null
+    },
+    'id' | 'actionType' | 'payload'
+>;
+
+export const notifyBulletin = async (options: {
+    recipientEmail: string;
+    notifications: NotifyBulletinNotification[];
+}): Promise<void> => {
+    if (!options.notifications || options.notifications.length === 0 || !options.recipientEmail) {
+        return;
+    }
+
+    if (options.notifications.some(n => !n.payload || !n.payload.title)) {
+        console.warn('Some notifications do not have a payload or title, skipping email generation.');
+        
+        return;
+    }
+
+    let html = '<p>The following activity has occurred relating to publications you have published or bookmarked: </p>';
+    let text = `The following activity has occurred relating to publications you have published or bookmarked: \n\n`;
+    const preview = 'The following new activity has occurred on publications';
+    const subject =
+        'There has been activity on one or more Octopus publications that you have published or bookmarked.';
+
+    const notificationsByActionType = options.notifications.reduce((acc, notification) => {
+        if (!acc.has(notification.actionType)) {
+            acc.set(notification.actionType, []);
+        }
+
+        acc.get(notification.actionType)?.push(notification);
+
+        return acc;
+    }, new Map<I.NotificationActionTypeEnum, NotifyBulletinNotification[]>());
+
+    for (const [actionType, notifications] of notificationsByActionType.entries()) {
+        switch (actionType) {
+            case I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED: {
+                html += '<ul>';
+
+                for (const notification of notifications) {
+                    html += `<li>The publication you have bookmarked, ${notification.payload?.title} has had a new version published. Click here to view the new version.</li>`;
+                    text += `The publication you have bookmarked, ${notification.payload?.title} has had a new version published. Click here to view the new version.\n`;
+                }
+
+                html += '</ul>';
+                break;
+            }
+        }
+    }
+
+    await send({
+        html: standardHTMLEmailTemplate(subject, html, preview),
+        text,
+        to: options.recipientEmail,
+        subject
+    });
+};

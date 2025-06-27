@@ -16,7 +16,7 @@ export const getBulletin = (status?: I.NotificationStatusEnum) =>
     client.prisma.notification.findMany({
         where: { type: I.NotificationTypeEnum.BULLETIN, status },
         orderBy: { userId: 'asc' },
-        select: { id: true, userId: true }
+        select: { id: true, userId: true, actionType: true, payload: true }
     });
 
 export const update = (id: string, data: Pick<I.Notification, 'status'>) =>

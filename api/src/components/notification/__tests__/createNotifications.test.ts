@@ -8,14 +8,24 @@ describe('Create notifications', () => {
         await testUtils.testSeed();
     });
 
-    test('Create notification by type - BULLETIN', async () => {
-        const payload = {
-            userId: 'test-user-1',
-            type: I.NotificationTypeEnum.BULLETIN,
-            actionType: I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED,
-            payload: { title: 'Test bulletin notification' }
-        };
-        const notification = await notificationController.create(payload);
-        expect(notification.status).toEqual(I.NotificationStatusEnum.PENDING);
+    Object.values(I.NotificationTypeEnum).forEach((type) => {
+        Object.values(I.NotificationActionTypeEnum).forEach((actionType, index) => {
+            test(`Create notification by ${type} type, ${actionType}, with payload`, async () => {
+                const payload = {
+                    type,
+                    actionType,
+                    userId: `test-user-${index + 1}`,
+                    payload: { title: 'PUBLICATION TITLE' }
+                };
+                const notification = await notificationController.create(payload);
+                expect(notification.status).toEqual(I.NotificationStatusEnum.PENDING);
+            });
+
+            test(`Create notification by ${type} type, ${actionType}, no payload`, async () => {
+                const payload = { type, actionType, userId: `test-user-${index + 1}` };
+                const notification = await notificationController.create(payload);
+                expect(notification.status).toEqual(I.NotificationStatusEnum.PENDING);
+            });
+        });
     });
 });
