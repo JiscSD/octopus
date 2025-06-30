@@ -15,6 +15,24 @@ export const create = async (data: {
     return notification;
 };
 
+export const getAll = async (): Promise<I.JSONResponse> => {
+    try {
+        const notifications = await notificationService.getAll();
+
+        return response.json(200, {
+            message: 'Notifications retrieved successfully.',
+            data: notifications
+        });
+    } catch (error) {
+        console.error('Error retrieving notifications:', error);
+
+        return response.json(500, {
+            message: 'Failed to retrieve notifications.',
+            error: error instanceof Error ? error.message : 'Unknown error'
+        });
+    }
+};
+
 export const sendByType = async (type: I.NotificationTypeEnum): Promise<I.NotificationSendBulkResponse> => {
     switch (type) {
         case I.NotificationTypeEnum.BULLETIN:
