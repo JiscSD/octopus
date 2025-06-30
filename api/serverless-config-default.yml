@@ -339,9 +339,14 @@ functions:
                 cors: true
     # Notifications
     sendBulletin:
-        handler: dist/src/components/notifications/routes.sendBulletin
+        handler: dist/src/components/notification/routes.sendBulletin
         events:
             - schedule: cron(0 10 ? * MON *) # Every Monday at 10
+            - http:
+                path: ${self:custom.versions.v1}/notifications/bulletin
+                method: POST
+                cors: true
+            
     # Verification
     requestVerification:
         handler: dist/src/components/verification/routes.requestCode

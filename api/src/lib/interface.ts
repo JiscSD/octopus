@@ -3,6 +3,7 @@ import {
     EventType,
     Languages,
     LicenceType,
+    Notification,
     NotificationTypeEnum,
     NotificationActionTypeEnum,
     Prisma,
@@ -1146,12 +1147,28 @@ export interface NotificationPayload {
     title?: string;
 }
 
-export interface CreateNotificationRequestBody {
+export type NotificationWithPayload = Notification & {
+    payload: NotificationPayload;
+};
+
+export interface NotificationCreateRequestBody {
     type: NotificationTypeEnum;
     actionType: NotificationActionTypeEnum;
     payload?: NotificationPayload;
 }
 
-export interface SendNotificationPathParams {
+export interface NotificationSendPathParams {
     type: NotificationTypeEnum;
+}
+
+export interface NotificationSendSingleResponse {
+    error: Error | null;
+    skipped: boolean;
+}
+
+export interface NotificationSendBulkResponse {
+    errors: Error[];
+    totalSent: number;
+    totalFailed: number;
+    totalSkipped: number;
 }

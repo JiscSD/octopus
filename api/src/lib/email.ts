@@ -971,24 +971,11 @@ export const automaticUnlock = async (options: {
     });
 };
 
-type NotifyBulletinNotification = Pick<
-    I.Notification & {
-        payload: I.NotificationPayload | null;
-    },
-    'id' | 'actionType' | 'payload'
->;
-
 export const notifyBulletin = async (options: {
     recipientEmail: string;
-    notifications: NotifyBulletinNotification[];
+    notificationsByActionType: Map<I.NotificationActionTypeEnum, Pick<I.Notification, 'id' | 'payload'>[]>;
 }): Promise<void> => {
-    if (!options.notifications || options.notifications.length === 0 || !options.recipientEmail) {
-        return;
-    }
-
-    if (options.notifications.some((n) => !n.payload || !n.payload.title)) {
-        console.warn('Some notifications do not have a payload or title, skipping email generation.');
-
+    if (!options.recipientEmail) {
         return;
     }
 
@@ -998,24 +985,30 @@ export const notifyBulletin = async (options: {
     const subject =
         'There has been activity on one or more Octopus publications that you have published or bookmarked.';
 
-    const notificationsByActionType = options.notifications.reduce((acc, notification) => {
-        if (!acc.has(notification.actionType)) {
-            acc.set(notification.actionType, []);
+    let sendEmail = false;
+
+    for (const [actionType, notifications] of options.notificationsByActionType.entries()) {
+        if (notifications.length === 0) {
+            continue;
         }
 
-        acc.get(notification.actionType)?.push(notification);
-
-        return acc;
-    }, new Map<I.NotificationActionTypeEnum, NotifyBulletinNotification[]>());
-
-    for (const [actionType, notifications] of notificationsByActionType.entries()) {
         switch (actionType) {
             case I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED: {
                 html += '<ul>';
 
                 for (const notification of notifications) {
-                    html += `<li>The publication you have bookmarked, ${notification.payload?.title} has had a new version published. Click here to view the new version.</li>`;
-                    text += `The publication you have bookmarked, ${notification.payload?.title} has had a new version published. Click here to view the new version.\n`;
+                    const payload = notification.payload as I.NotificationPayload;
+
+                    if (!payload?.title) {
+                        console.error(
+                            `Notification with ID ${notification.id} has no payload or title, skipping email content generation.`
+                        );
+                        continue;
+                    }
+
+                    sendEmail = true;
+                    html += `<li>The publication you have bookmarked, ${payload.title} has had a new version published. Click here to view the new version.</li>`;
+                    text += `The publication you have bookmarked, ${payload.title} has had a new version published. Click here to view the new version.\n`;
                 }
 
                 html += '</ul>';
@@ -1024,10 +1017,12 @@ export const notifyBulletin = async (options: {
         }
     }
 
-    await send({
-        html: standardHTMLEmailTemplate(subject, html, preview),
-        text,
-        to: options.recipientEmail,
-        subject
-    });
+    if (sendEmail) {
+        await send({
+            html: standardHTMLEmailTemplate(subject, html, preview),
+            text,
+            to: options.recipientEmail,
+            subject
+        });
+    }
 };

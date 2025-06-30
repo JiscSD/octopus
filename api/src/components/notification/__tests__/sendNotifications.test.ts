@@ -15,7 +15,7 @@ describe('Send notifications', () => {
             payload: { title: 'PUBLICATION TITLE' }
         };
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 30; i++) {
             await notificationController.create({ ...payload, userId: 'test-user-1' });
             await notificationController.create({ ...payload, userId: 'test-user-2' });
             await notificationController.create({ ...payload, userId: 'test-organisational-account-1' });
@@ -27,8 +27,8 @@ describe('Send notifications', () => {
         expect(result.errors[0].message).toBe(
             'User with ID test-organisational-account-1 does not exist or has no email.'
         );
-        expect(result.totalSent).toBe(10);
-        expect(result.totalFailed).toBe(5);
+        expect(result.totalSent).toBe(60);
+        expect(result.totalFailed).toBe(30);
         expect(result.totalSkipped).toBe(0);
     });
 
@@ -39,7 +39,7 @@ describe('Send notifications', () => {
             payload: { title: 'PUBLICATION TITLE' }
         };
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 30; i++) {
             await notificationController.create({ ...payload, userId: 'test-user-1' });
             await notificationController.create({ ...payload, userId: 'test-user-2' });
             await notificationController.create({ ...payload, userId: 'test-organisational-account-1' });
@@ -52,7 +52,7 @@ describe('Send notifications', () => {
             'User with ID test-organisational-account-1 does not exist or has no email.'
         );
         expect(result.totalSent).toBe(0);
-        expect(result.totalFailed).toBe(5);
-        expect(result.totalSkipped).toBe(10);
+        expect(result.totalFailed).toBe(30);
+        expect(result.totalSkipped).toBe(60);
     });
 });
