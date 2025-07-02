@@ -5,28 +5,47 @@ import * as Components from '@/components';
 import * as Interfaces from '@/interfaces';
 import * as Config from '@/config';
 
-import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 type Props = {
     coAuthor: Interfaces.CoAuthor;
     deleteCoAuthor: (id: string) => void;
-    dragHandleProps: DraggableProvidedDragHandleProps | null | undefined;
     isMainAuthor?: boolean;
     entryProps?: React.DetailedHTMLProps<React.HTMLAttributes<HTMLTableRowElement>, HTMLTableRowElement>;
 };
 
 const CoAuthorEntry: React.FC<Props> = (props): React.ReactElement => {
+    const { attributes, isDragging, listeners, setNodeRef, transform, transition } = useSortable({
+        id: props.coAuthor.id
+    });
+
+    const getItemStyle = (isDragging: boolean): React.CSSProperties => ({
+        boxShadow: isDragging ? '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)' : undefined,
+        filter: isDragging ? 'opacity(0.7)' : undefined,
+        position: isDragging ? 'relative' : 'inherit',
+        userSelect: 'none',
+        zIndex: isDragging ? 1000 : 1
+    });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        ...getItemStyle(isDragging)
+    };
+
     const handleClick = () => {
         props.deleteCoAuthor(props.coAuthor.id);
     };
 
     return (
-        <tr {...props.entryProps}>
+        <tr ref={setNodeRef} style={style} {...props.entryProps}>
             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50 sm:pl-6">
                 <span
-                    {...props.dragHandleProps}
-                    className="rounded-sm outline-2 outline-offset-2 outline-yellow-400"
+                    className="rounded-sm outline-2 outline-offset-2 outline-yellow-400 hover:cursor-grab"
                     title="Drag to reorder authors"
+                    {...attributes}
+                    {...listeners}
                 >
                     <OutlineIcons.Bars3Icon className="h-5 w-5 text-teal-700 transition-colors duration-500 dark:text-white-50" />
                 </span>
