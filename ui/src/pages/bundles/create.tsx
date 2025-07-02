@@ -257,12 +257,18 @@ const CreateBundle: NextPage = (): JSX.Element => {
                                 </table>
                             </Framer.motion.div>
                         )}
-                        <Components.Button
-                            disabled={!bundleName || publications.length < 2 || savingBundle}
-                            onClick={saveBundle}
-                            title="Save"
-                            variant="block"
-                        />
+                        <div className="flex items-center gap-4">
+                            <Components.Button
+                                href={Config.urls.viewBundles.path}
+                                title="Cancel"
+                            />
+                            <Components.Button
+                                disabled={!bundleName || publications.length < 2 || savingBundle}
+                                onClick={saveBundle}
+                                title="Save"
+                                variant="block"
+                            />
+                        </div>
                     </div>
                 </section>
             </Layouts.Standard>
