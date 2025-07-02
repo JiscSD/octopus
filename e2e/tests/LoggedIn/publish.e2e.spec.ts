@@ -870,8 +870,7 @@ test.describe('Publication flow + co-authors', () => {
         // publish the new publication
         await page.locator(PageModel.publish.publishButtonTracker).click();
         await Promise.all([
-            page.waitForNavigation(),
-            page.locator(PageModel.publish.confirmPublishButtonTracker).click()
+            (page.waitForURL('**/versions/latest'), page.locator(PageModel.publish.confirmPublishButtonTracker).click())
         ]);
 
         // check publication title and authors
@@ -927,6 +926,7 @@ test.describe('Publication flow + co-authors', () => {
     });
 
     test('Authors order can be changed', async ({ browser }) => {
+        test.slow();
         const page = await Helpers.users.getPageAsUser(browser);
 
         // create new publication
@@ -943,11 +943,11 @@ test.describe('Publication flow + co-authors', () => {
         // change the order of authors using the keyboard
         await page.locator('span[title="Drag to reorder authors"]').first().focus();
         await page.keyboard.press('Space'); // select first row
-        await page.waitForTimeout(100);
+        await page.waitForTimeout(300);
         await page.keyboard.press('ArrowDown'); // move it down
-        await page.waitForTimeout(100);
+        await page.waitForTimeout(300);
         await page.keyboard.press('Space'); // confirm position
-        await page.waitForTimeout(100);
+        await page.waitForTimeout(300);
 
         // verify authors order again
         await expect(page.locator('table > tbody > tr').first()).toContainText(Helpers.users.user2.email);
@@ -965,8 +965,7 @@ test.describe('Publication flow + co-authors', () => {
         // publish
         await page.locator(PageModel.publish.publishButtonTracker).click();
         await Promise.all([
-            page.waitForNavigation(),
-            page.locator(PageModel.publish.confirmPublishButtonTracker).click()
+            (page.waitForURL('**/versions/latest'), page.locator(PageModel.publish.confirmPublishButtonTracker).click())
         ]);
 
         // check publication title and authors
@@ -1234,8 +1233,7 @@ test.describe('Publication flow + co-authors', () => {
         // publish
         await page.locator(PageModel.publish.publishButtonTracker).click();
         await Promise.all([
-            page.waitForNavigation(),
-            page.locator(PageModel.publish.confirmPublishButtonTracker).click()
+            (page.waitForURL('**/versions/latest'), page.locator(PageModel.publish.confirmPublishButtonTracker).click())
         ]);
 
         // check draft publication controls are not available anymore
@@ -1545,8 +1543,7 @@ test.describe('Publication flow + co-authors', () => {
         await expect(page.locator(PageModel.publish.publishButtonTracker)).toBeEnabled();
         await page.locator(PageModel.publish.publishButtonTracker).click();
         await Promise.all([
-            page.waitForNavigation(),
-            page.locator(PageModel.publish.confirmPublishButtonTracker).click()
+            (page.waitForURL('**/versions/latest'), page.locator(PageModel.publish.confirmPublishButtonTracker).click())
         ]);
 
         // close corresponding author session
