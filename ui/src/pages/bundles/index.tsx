@@ -88,9 +88,7 @@ const ViewBundles: Types.NextPage<Props> = (props): JSX.Element => {
 
         const confirmed = await confirmation(
             'Remove bundle',
-            <p>
-                Are you sure you want to remove the bundle <span className="font-semibold">{bundle?.name}</span>?
-            </p>,
+            <p>Are you sure you want to delete this publication bundle?</p>,
             <OutlineIcons.TrashIcon className="h-8 w-8 text-grey-600" aria-hidden="true" />,
             'Confirm'
         );
@@ -153,23 +151,31 @@ const ViewBundles: Types.NextPage<Props> = (props): JSX.Element => {
                         <div className="sr-only" aria-live="polite">
                             {deletionUpdate}
                         </div>
-                        <Components.PaginatedResults
-                            offset={offset}
-                            setOffset={setOffset}
-                            isValidating={offset > 0 ? isValidating : false}
-                            limit={fallback.metadata.limit}
-                            total={response?.metadata.total || 0}
-                            noResultsTitle='You do not have any publication bundles'
-                            noResultsMessage="You can create a new bundle by clicking the button above."
-                            scrollFunction={scrollFunction}
-                            results={
-                                <ViewBundlesResults
-                                    onDelete={handleDelete}
-                                    bundles={response!.data}
-                                    isDeletingId={isDeletingId}
-                                />
-                            }
-                        />
+
+                        {!response!.data.length ? (
+                            <Components.Alert
+                                key="no-results-alert"
+                                severity="INFO"
+                                title="You do not have any publication bundles"
+                            />
+                        ) : (
+                            <Components.PaginatedResults
+                                offset={offset}
+                                setOffset={setOffset}
+                                isValidating={offset > 0 ? isValidating : false}
+                                limit={fallback.metadata.limit}
+                                total={response?.metadata.total || 0}
+                                noResultsTitle="You do not have any publication bundles"
+                                scrollFunction={scrollFunction}
+                                results={
+                                    <ViewBundlesResults
+                                        onDelete={handleDelete}
+                                        bundles={response!.data}
+                                        isDeletingId={isDeletingId}
+                                    />
+                                }
+                            />
+                        )}
                     </div>
                 </section>
             </Layouts.Standard>

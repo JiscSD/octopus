@@ -1,4 +1,4 @@
-import path from "path";
+import path from 'path';
 
 function checkEnvVariable(variable: string | undefined): string {
     if (variable === undefined) {
