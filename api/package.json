@@ -32,6 +32,7 @@
         "test:local": "STAGE=local jest --runInBand --testTimeout=60000",
         "test:watch": "npm run test:local -- --watch",
         "type": "tsc --noEmit",
+        "ariArchivedCheck": "tsx scripts/ariArchivedCheck.ts",
         "ariImport": "tsx scripts/ariImport.ts",
         "backfillCoAuthors": "tsx scripts/backfillCoAuthors.ts",
         "createOrganisationalAccounts": "tsx scripts/createOrganisationalAccounts.ts",
@@ -109,8 +110,6 @@
         "@swc/core-linux-x64-musl": "1.9.3"
     },
     "overrides": {
-        "fast-xml-parser": "^4.2.5",
-        "http-cache-semantics": "^4.1.1",
         "micromatch": "^4.0.8"
     }
 }
