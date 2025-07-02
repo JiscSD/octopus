@@ -535,10 +535,9 @@ export const archivedCheckReport = async (
         durationSeconds: number;
         updatedCount: number;
         dryRun: boolean;
-        notFound: number[];
     }
 ): Promise<void> => {
-    const { durationSeconds, updatedCount, dryRun, notFound } = details;
+    const { durationSeconds, updatedCount, dryRun } = details;
     const intro = `ARI archived check ${dryRun ? 'dry ' : ''}run completed.`;
     const timingInfo =
         `Duration: ${durationSeconds} seconds.` +
@@ -552,8 +551,7 @@ export const archivedCheckReport = async (
 ${intro}
 ${timingInfo}
 ${detailsPrefix} 
-Publications updated: ${updatedCount}.
-${notFound.length ? 'Publications not found: ' + notFound.join(', ') + '.' : ''}`;
+Publications updated: ${updatedCount}.`;
 
     if (format === 'file') {
         const fileName = 'ari-archived-check-report.txt';
@@ -570,16 +568,7 @@ ${notFound.length ? 'Publications not found: ' + notFound.join(', ') + '.' : ''}
                 <p>${intro}</p>
                 <p>${timingInfo}</p>
                 <p>${detailsPrefix}</p>
-                <ul>
-                    <li>Publications updated: ${updatedCount}</li>
-                    ${
-                        notFound.length
-                            ? '<li>ARI questions not found in octopus: <ul><li>' +
-                              notFound.join('</li><li>') +
-                              '</li></ul></li>'
-                            : ''
-                    }
-                </ul>
+                <p>Publications updated: ${updatedCount}</p>
             </body>
         </html>
     `;
