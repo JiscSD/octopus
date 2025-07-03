@@ -8,6 +8,7 @@ type Props = {
     error?: string;
     isValidating: boolean;
     limit: number;
+    noResultsTitle?: string;
     noResultsMessage?: string;
     offset: number;
     results: React.ReactNode;
@@ -41,7 +42,7 @@ const PaginatedResults: React.FC<Props> = (props: Props) => {
                         <Components.Alert
                             key="no-results-alert"
                             severity="INFO"
-                            title="No results found"
+                            title={props.noResultsTitle || 'No results found'}
                             details={
                                 props.noResultsMessage
                                     ? [props.noResultsMessage]
