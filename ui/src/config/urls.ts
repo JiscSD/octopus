@@ -1,5 +1,3 @@
-import path from 'path';
-
 function checkEnvVariable(variable: string | undefined): string {
     if (variable === undefined) {
         throw new Error('Environment Variable is undefined.');
