@@ -81,6 +81,9 @@
             "link/*": [
                 "src/components/link/*"
             ],
+            "notification/*": [
+                "src/components/notification/*"
+            ],
             "pdf/*": [
                 "src/components/pdf/*"
             ],

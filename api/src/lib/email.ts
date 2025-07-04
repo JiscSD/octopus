@@ -970,3 +970,59 @@ export const automaticUnlock = async (options: {
         subject
     });
 };
+
+export const notifyBulletin = async (options: {
+    recipientEmail: string;
+    notificationsByActionType: Map<I.NotificationActionTypeEnum, Pick<I.Notification, 'id' | 'payload'>[]>;
+}): Promise<void> => {
+    if (!options.recipientEmail) {
+        return;
+    }
+
+    let html = '<p>The following activity has occurred relating to publications you have published or bookmarked: </p>';
+    let text = `The following activity has occurred relating to publications you have published or bookmarked: \n\n`;
+    const preview = 'The following new activity has occurred on publications';
+    const subject =
+        'There has been activity on one or more Octopus publications that you have published or bookmarked.';
+
+    let sendEmail = false;
+
+    for (const [actionType, notifications] of options.notificationsByActionType.entries()) {
+        if (notifications.length === 0) {
+            continue;
+        }
+
+        switch (actionType) {
+            case I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED: {
+                html += '<ul>';
+
+                for (const notification of notifications) {
+                    const payload = notification.payload as I.NotificationPayload;
+
+                    if (!payload?.title) {
+                        console.error(
+                            `Notification with ID ${notification.id} has no payload or title, skipping email content generation.`
+                        );
+                        continue;
+                    }
+
+                    sendEmail = true;
+                    html += `<li>The publication you have bookmarked, ${payload.title} has had a new version published. Click here to view the new version.</li>`;
+                    text += `The publication you have bookmarked, ${payload.title} has had a new version published. Click here to view the new version.\n`;
+                }
+
+                html += '</ul>';
+                break;
+            }
+        }
+    }
+
+    if (sendEmail) {
+        await send({
+            html: standardHTMLEmailTemplate(subject, html, preview),
+            text,
+            to: options.recipientEmail,
+            subject
+        });
+    }
+};
