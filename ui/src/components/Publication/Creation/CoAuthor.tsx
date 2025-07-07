@@ -11,6 +11,7 @@ import {
     DndContext,
     DragEndEvent,
     KeyboardSensor,
+    Modifier,
     PointerSensor,
     useSensor,
     useSensors
@@ -54,6 +55,28 @@ const CoAuthor: React.FC = (): React.ReactElement => {
             const newCoAuthors = arrayMove(coAuthors, oldIndex, newIndex);
             updateCoAuthors(newCoAuthors);
         }
+    };
+
+    const disablePageScrollModifier: Modifier = (context) => {
+        if (!context.activatorEvent || context.activatorEvent.type !== 'keydown') {
+            return context.transform;
+        }
+
+        if (typeof window === 'undefined' || !window.document.documentElement) {
+            return context.transform;
+        }
+
+        const docIndex = context.scrollableAncestors.indexOf(window.document.documentElement);
+        if (docIndex === -1) {
+            return context.transform;
+        }
+
+
+        if (context.scrollableAncestors.at(-1) === window.document.documentElement) {
+            context.scrollableAncestors.pop();
+        }
+
+        return context.transform;
     };
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -194,7 +217,12 @@ const CoAuthor: React.FC = (): React.ReactElement => {
                 <div className="overflow-x-auto rounded-lg shadow ring-1 ring-black ring-opacity-5 dark:ring-transparent">
                     <div className="inline-block min-w-full align-middle">
                         <div className="overflow-hidden">
-                            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                            <DndContext
+                                sensors={sensors}
+                                collisionDetection={closestCenter}
+                                onDragEnd={handleDragEnd}
+                                modifiers={[disablePageScrollModifier]}
+                            >
                                 <SortableContext
                                     items={coAuthors.map((coAuthor) => coAuthor.id)}
                                     strategy={verticalListSortingStrategy}
