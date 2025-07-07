@@ -71,7 +71,6 @@ const CoAuthor: React.FC = (): React.ReactElement => {
             return context.transform;
         }
 
-
         if (context.scrollableAncestors.at(-1) === window.document.documentElement) {
             context.scrollableAncestors.pop();
         }
