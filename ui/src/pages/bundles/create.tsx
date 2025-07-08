@@ -1,6 +1,7 @@
 import { AxiosResponse, isAxiosError } from 'axios';
 import * as Framer from 'framer-motion';
 import Head from 'next/head';
+import * as Router from 'next/router';
 import { NextPage } from 'next';
 import * as OutlineIcons from '@heroicons/react/24/outline';
 import React from 'react';
@@ -41,6 +42,8 @@ const CreateBundle: NextPage = (): JSX.Element => {
     const [savingBundle, setSavingBundle] = React.useState(false);
 
     const confirmation = Contexts.useConfirmationModal();
+
+    const router = Router.useRouter();
 
     const addPublication = async (publicationId: string) => {
         const getPublication: AxiosResponse<Interfaces.Publication> = await api.get(
@@ -93,8 +96,6 @@ const CreateBundle: NextPage = (): JSX.Element => {
                 },
                 user?.token
             );
-            setBundleName('');
-            setPublications([]);
             setToast({
                 visible: true,
                 title: 'Bundle created successfully',
@@ -102,6 +103,8 @@ const CreateBundle: NextPage = (): JSX.Element => {
                 icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-600" />,
                 dismiss: true
             });
+
+            router.push(Config.urls.viewBundles.path);
         } catch (err) {
             const { message } = err as Interfaces.JSONResponseError;
             setError(
@@ -257,12 +260,15 @@ const CreateBundle: NextPage = (): JSX.Element => {
                                 </table>
                             </Framer.motion.div>
                         )}
-                        <Components.Button
-                            disabled={!bundleName || publications.length < 2 || savingBundle}
-                            onClick={saveBundle}
-                            title="Save"
-                            variant="block"
-                        />
+                        <div className="flex items-center gap-4">
+                            <Components.Button href={Config.urls.viewBundles.path} title="Cancel" />
+                            <Components.Button
+                                disabled={!bundleName || publications.length < 2 || savingBundle}
+                                onClick={saveBundle}
+                                title="Save"
+                                variant="block"
+                            />
+                        </div>
                     </div>
                 </section>
             </Layouts.Standard>
