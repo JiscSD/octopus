@@ -88,6 +88,22 @@ export interface Publication extends CorePublication {
     versions: PublicationVersion[];
 }
 
+export interface PublicationBundle {
+    id: string;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    createdBy: string;
+    publications: {
+        authorFirstName: string;
+        authorLastName: string;
+        id: string;
+        publishedDate: string;
+        title: string;
+        type: Types.PublicationType;
+    }[];
+}
+
 type LinkedPublicationAuthor = Pick<CoAuthor, 'id' | 'linkedUser'> & { user: CoAuthor['user'] | null };
 export interface LinkedPublication {
     id: string;
