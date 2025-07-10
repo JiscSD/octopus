@@ -1,14 +1,7 @@
-import * as notificationService from 'notification/service';
-import * as userService from 'user/service';
 import * as I from 'interface';
-
-const BULLETIN_DIGEST_DELTA_TIME = 7 * 24 * 60 * 60 * 1000;
-
-type BulkSendResponse = {
-    error: Error | null;
-    totalSent: number;
-    totalFailed: number;
-};
+import * as response from 'lib/response';
+import * as bulletinNotification from 'notification/bulletin';
+import * as notificationService from 'notification/service';
 
 export const create = async (data: {
     userId: string;
@@ -22,66 +15,45 @@ export const create = async (data: {
     return notification;
 };
 
-async function sendBulletinNotification(): Promise<void> {
-    // TODO https://jiscdev.atlassian.net/browse/OC-1078:
-    // Generate the email template using the user notifications + the actionType
-    // Send the email template using a mail service
-}
+export const getAll = async (): Promise<I.JSONResponse> => {
+    try {
+        const notifications = await notificationService.getAll();
 
-async function sendAllBulletinNotifications(digestDeltaTime: number): Promise<BulkSendResponse> {
-    const response: BulkSendResponse = { error: null, totalSent: 0, totalFailed: 0 };
+        return response.json(200, {
+            message: 'Notifications retrieved successfully.',
+            data: notifications
+        });
+    } catch (error) {
+        console.error('Error retrieving notifications:', error);
 
-    const pendingNotifications = await notificationService.getBulletin(I.NotificationStatusEnum.PENDING);
-    const failedNotificationsIds: string[] = [];
-
-    const notificationsByUserId = new Map<string, Awaited<ReturnType<typeof notificationService.getBulletin>>>();
-
-    /*
-        Possible improvement: Use a single notifications loop, as:
-            1. The notifications are already sorted by userId
-            2. We can use a `currentUserId` variable to track the current user
-               and loop through the notifications only once
-    */
-    for (const notification of pendingNotifications) {
-        if (!notificationsByUserId.has(notification.userId)) {
-            notificationsByUserId.set(notification.userId, []);
-        }
-
-        notificationsByUserId.get(notification.userId)?.push(notification);
+        return response.json(500, {
+            message: 'Failed to retrieve notifications.',
+            error: error instanceof Error ? error.message : 'Unknown error'
+        });
     }
+};
 
-    for (const [userId, userNotifications] of notificationsByUserId.entries()) {
-        const user = await userService.get(userId, true);
-
-        if (!user || !user.email) {
-            failedNotificationsIds.push(...userNotifications.map((n) => n.id));
-            continue;
-        }
-
-        if (user.lastBulletinSentAt && user.lastBulletinSentAt.getTime() > Date.now() - digestDeltaTime) {
-            continue;
-        }
-
-        await sendBulletinNotification();
-        response.totalSent += userNotifications.length;
-
-        await userService.updateUser(userId, { lastBulletinSentAt: new Date() });
-
-        await Promise.all(userNotifications.map((n) => notificationService.remove(n.id)));
-    }
-
-    await Promise.all(
-        failedNotificationsIds.map((id) => notificationService.update(id, { status: I.NotificationStatusEnum.FAILED }))
-    );
-
-    response.totalFailed = failedNotificationsIds.length;
-
-    return response;
-}
-
-export const sendAllByType = async (type: I.NotificationTypeEnum): Promise<BulkSendResponse> => {
+export const sendByType = async (type: I.NotificationTypeEnum): Promise<I.NotificationSendBulkResponse> => {
     switch (type) {
         case I.NotificationTypeEnum.BULLETIN:
-            return sendAllBulletinNotifications(BULLETIN_DIGEST_DELTA_TIME);
+            return bulletinNotification.sendAll();
+    }
+};
+
+export const sendBulletin = async (): Promise<I.JSONResponse> => {
+    try {
+        const result = await sendByType(I.NotificationTypeEnum.BULLETIN);
+
+        return response.json(200, {
+            message: 'Bulletin notifications sent successfully.',
+            data: result
+        });
+    } catch (error) {
+        console.error('Error sending bulletin notifications:', error);
+
+        return response.json(500, {
+            message: 'Failed to send bulletin notifications.',
+            error: error instanceof Error ? error.message : 'Unknown error'
+        });
     }
 };

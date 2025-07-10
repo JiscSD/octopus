@@ -173,6 +173,12 @@ export const get = (id: string, isAccountOwner = false) =>
             orcidAccessToken: isAccountOwner ? true : false,
             locked: true,
             defaultTopicId: true,
+            settings: {
+                select: {
+                    enableBookmarkNotifications: true,
+                    enableBookmarkVersionNotifications: true
+                }
+            },
             lastBulletinSentAt: true
         }
     });
