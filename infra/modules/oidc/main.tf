@@ -54,6 +54,8 @@ data "aws_iam_policy_document" "deploy_backend_policy" {
       "ec2:RunInstances",
       "events:ListTargetsByRule",
       "events:DescribeRule",
+      "events:PutRule",
+      "events:RemoveTargets",
       "iam:CreateRole",
       "iam:DeleteRole",
       "iam:DeleteRolePolicy",
