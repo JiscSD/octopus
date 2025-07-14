@@ -81,7 +81,7 @@ provider:
           Resource: 'arn:aws:s3:::science-octopus-publishing-sitemaps-${self:provider.stage}'
           Action: 's3:ListBucket'
         - Effect: 'Allow'
-          Resource: 'arn:aws:sqs:${aws:region}:${aws:accountId}:science-octopus-pdf-queue-${self:provider.stage}'
+          Resource: 'arn:aws:sqs:${aws:region}:${aws:accountId}:pdf-generation-queue-${self:provider.stage}-octopus'
           Action:
               - 'lambda:CreateEventSourceMapping'
               - 'lambda:ListEventSourceMappings'
