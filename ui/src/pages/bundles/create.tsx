@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import * as Router from 'next/router';
 import { NextPage } from 'next';
 import * as Router from 'next/router';
 import * as OutlineIcons from '@heroicons/react/24/outline';
@@ -43,6 +44,8 @@ const CreateBundle: NextPage = (): JSX.Element => {
                 icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-600" />,
                 dismiss: true
             });
+
+            router.push(Config.urls.viewBundles.path);
 
             router.push(Config.urls.viewBundles.path);
         } catch (err) {
