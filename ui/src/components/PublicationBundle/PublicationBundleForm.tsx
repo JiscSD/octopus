@@ -75,7 +75,9 @@ const PublicationBundleForm = (props: Props): JSX.Element => {
         'whitespace-pre py-3.5 px-3 sm:px-6 text-sm font-semibold text-grey-900 transition-colors duration-500 dark:text-grey-50';
     const tdClasses = 'py-4 px-3 sm:px-6 text-sm text-grey-900 transition-colors duration-500 dark:text-white-50';
 
-    const invalidNumberOfPublications = publications.length < 2 || publications.length >= 30;
+    const numberOfPublicationsLowerLimit = publications.length < 2;
+    const numberOfPublicationsUpperLimit = publications.length >= 30;
+    const invalidNumberOfPublications =numberOfPublicationsLowerLimit || numberOfPublicationsUpperLimit;
 
     return (
         <div className="w-full xl:w-2/3 2xl:w-1/2 flex flex-col gap-8">
@@ -106,6 +108,7 @@ const PublicationBundleForm = (props: Props): JSX.Element => {
                     draftsOnly={false}
                     excludedIds={publications.map((publication) => publication.id)}
                     setError={setError}
+                    disabled={numberOfPublicationsUpperLimit}
                 />
             </form>
             <div className="sr-only" aria-live="polite">
@@ -212,7 +215,7 @@ const PublicationBundleForm = (props: Props): JSX.Element => {
                 ) : null}
             </div>
             <Components.Button
-                disabled={!bundleName || isLoading || invalidNumberOfPublications}
+                disabled={!bundleName || isLoading || numberOfPublicationsLowerLimit}
                 onClick={() => onSave({ name: bundleName, publications })}
                 title="Save"
                 variant="block"
