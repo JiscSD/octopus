@@ -1,6 +1,5 @@
 import React from 'react';
 import Head from 'next/head';
-import * as Router from 'next/router';
 import { NextPage } from 'next';
 import * as Router from 'next/router';
 import * as OutlineIcons from '@heroicons/react/24/outline';
