@@ -77,7 +77,7 @@ const PublicationBundleForm = (props: Props): JSX.Element => {
 
     const numberOfPublicationsLowerLimit = publications.length < 2;
     const numberOfPublicationsUpperLimit = publications.length >= 30;
-    const invalidNumberOfPublications =numberOfPublicationsLowerLimit || numberOfPublicationsUpperLimit;
+    const invalidNumberOfPublications = numberOfPublicationsLowerLimit || numberOfPublicationsUpperLimit;
 
     return (
         <div className="w-full xl:w-2/3 2xl:w-1/2 flex flex-col gap-8">
