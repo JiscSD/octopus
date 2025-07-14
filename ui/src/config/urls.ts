@@ -151,12 +151,30 @@ const urls = {
     },
 
     // Bundles
+    viewBundles: {
+        path: '/bundles',
+        documentTitle: `Publication bundles - ${base.title}`,
+        title: 'Publication bundles',
+        canonical: `${base.host}/bundles`,
+        description: 'View and manage your publication bundles.',
+        keywords: ['publication', 'bundle', 'export', 'share']
+    },
+
     createBundle: {
         path: '/bundles/create',
         documentTitle: `Create new bundle - ${base.title}`,
         title: 'Create new bundle',
         canonical: `${base.host}/bundles/create`,
         description: 'Create a bundle to group multiple publications together.',
+        keywords: ['publication', 'bundle', 'export', 'share']
+    },
+
+    editBundle: {
+        path: '/bundles/edit',
+        documentTitle: `Edit bundle - ${base.title}`,
+        title: 'Edit bundle',
+        canonical: `${base.host}/bundles/edit`,
+        description: 'Edit an existing bundle to update its contents or details.',
         keywords: ['publication', 'bundle', 'export', 'share']
     },
 
