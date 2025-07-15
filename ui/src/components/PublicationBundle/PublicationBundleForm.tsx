@@ -14,11 +14,12 @@ import * as Stores from '@/stores';
 type Props = {
     bundle?: Interfaces.PublicationBundle | null;
     isSaving?: boolean;
+    editable?: boolean;
     onSave: (bundle: Pick<Interfaces.PublicationBundle, 'name' | 'publications'>) => void;
 };
 
 const PublicationBundleForm = (props: Props): JSX.Element => {
-    const { bundle, isSaving: isLoading, onSave } = props;
+    const { bundle, isSaving: isLoading, onSave, editable } = props;
     const { setError } = Stores.usePublicationCreationStore((state) => ({ setError: state.setError }));
 
     const [bundleName, setBundleName] = React.useState<string>(bundle?.name || '');
@@ -77,35 +78,37 @@ const PublicationBundleForm = (props: Props): JSX.Element => {
 
     return (
         <div className="w-full xl:w-2/3 2xl:w-1/2 flex flex-col gap-8">
-            <form className="flex flex-col gap-4">
-                <label
-                    className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-100"
-                    htmlFor="bundle-name"
-                >
-                    Name <Components.RequiredIndicator />
-                </label>
-                <input
-                    id="bundle-name"
-                    required
-                    type="text"
-                    value={bundleName}
-                    onChange={(e) => setBundleName(e.target.value)}
-                    className="block rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400"
-                />
-                <label
-                    className="mt-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-100"
-                    htmlFor="add-publications"
-                >
-                    Add publications <Components.RequiredIndicator />
-                </label>
-                <Components.PublicationCombobox
-                    buttonText="Add to bundle"
-                    buttonCallback={async (publicationId) => addPublication(publicationId)}
-                    draftsOnly={false}
-                    excludedIds={publications.map((publication) => publication.id)}
-                    setError={setError}
-                />
-            </form>
+            {editable ? (
+                <form className="flex flex-col gap-4">
+                    <label
+                        className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-100"
+                        htmlFor="bundle-name"
+                    >
+                        Name <Components.RequiredIndicator />
+                    </label>
+                    <input
+                        id="bundle-name"
+                        required
+                        type="text"
+                        value={bundleName}
+                        onChange={(e) => setBundleName(e.target.value)}
+                        className="block rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400"
+                    />
+                    <label
+                        className="mt-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-100"
+                        htmlFor="add-publications"
+                    >
+                        Add publications <Components.RequiredIndicator />
+                    </label>
+                    <Components.PublicationCombobox
+                        buttonText="Add to bundle"
+                        buttonCallback={async (publicationId) => addPublication(publicationId)}
+                        draftsOnly={false}
+                        excludedIds={publications.map((publication) => publication.id)}
+                        setError={setError}
+                    />
+                </form>
+            ) : null}
             <div className="sr-only" aria-live="polite">
                 {deletionUpdate}
             </div>
@@ -123,7 +126,7 @@ const PublicationBundleForm = (props: Props): JSX.Element => {
                             <tr>
                                 <th className={`text-left ${thClasses}`}>Publication</th>
                                 <th className={thClasses}>View</th>
-                                <th className={thClasses}>Delete</th>
+                                {editable ? <th className={thClasses}>Delete</th> : null}
                             </tr>
                         </thead>
                         <tbody className="my-4 bg-white-50 transition-colors duration-500 dark:bg-grey-600">
@@ -165,41 +168,45 @@ const PublicationBundleForm = (props: Props): JSX.Element => {
                                             </Components.Link>
                                         </div>
                                     </td>
-                                    <td className={`w-1/5 text-center font-medium ${tdClasses}`}>
-                                        <div className="flex items-center justify-center">
-                                            <Components.IconButton
-                                                className="p-2"
-                                                title="Delete"
-                                                icon={
-                                                    deleting ? (
-                                                        <OutlineIcons.ArrowPathIcon
-                                                            className={iconClasses + ' animate-spin'}
-                                                            aria-hidden="true"
-                                                        />
-                                                    ) : (
-                                                        <OutlineIcons.TrashIcon
-                                                            className={iconClasses}
-                                                            aria-hidden="true"
-                                                        />
-                                                    )
-                                                }
-                                                onClick={async () => await deletePublication(publication.id)}
-                                                disabled={deleting}
-                                            />
-                                        </div>
-                                    </td>
+                                    {editable ? (
+                                        <td className={`w-1/5 text-center font-medium ${tdClasses}`}>
+                                            <div className="flex items-center justify-center">
+                                                <Components.IconButton
+                                                    className="p-2"
+                                                    title="Delete"
+                                                    icon={
+                                                        deleting ? (
+                                                            <OutlineIcons.ArrowPathIcon
+                                                                className={iconClasses + ' animate-spin'}
+                                                                aria-hidden="true"
+                                                            />
+                                                        ) : (
+                                                            <OutlineIcons.TrashIcon
+                                                                className={iconClasses}
+                                                                aria-hidden="true"
+                                                            />
+                                                        )
+                                                    }
+                                                    onClick={async () => await deletePublication(publication.id)}
+                                                    disabled={deleting}
+                                                />
+                                            </div>
+                                        </td>
+                                    ) : null}
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </Framer.motion.div>
             )}
-            <Components.Button
-                disabled={!bundleName || publications.length < 2 || isLoading}
-                onClick={() => onSave({ name: bundleName, publications })}
-                title="Save"
-                variant="block"
-            />
+            {editable ? (
+                <Components.Button
+                    disabled={!bundleName || publications.length < 2 || isLoading}
+                    onClick={() => onSave({ name: bundleName, publications })}
+                    title="Save"
+                    variant="block"
+                />
+            ) : null}
         </div>
     );
 };
