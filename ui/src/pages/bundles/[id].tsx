@@ -14,7 +14,7 @@ import * as Stores from '@/stores';
 import * as Types from '@/types';
 
 export const getServerSideProps: Types.GetServerSideProps = async (context) => {
-    const token = Helpers.getJWT(context) ?? null;
+    const token = Helpers.getJWT(context);
     const id = context.params?.id as string;
 
     let bundle: Interfaces.PublicationBundle | null = null;
@@ -36,8 +36,8 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     return {
         props: {
             bundle,
-            token,
             editMode,
+            token: token || null,
             protectedPage: false
         }
     };
@@ -47,16 +47,16 @@ type Props = {
     bundle: Interfaces.PublicationBundle | null;
     editMode: boolean;
     token: string | null;
+    protectedPage: boolean;
 };
 
 const ViewBundle: NextPage<Props> = (props): JSX.Element => {
-    const { bundle, editMode } = props;
+    const { bundle, editMode, token } = props;
     const [savingBundle, setSavingBundle] = React.useState(false);
     const [linkCopied, setLinkCopied] = React.useState(false);
 
     const router = Router.useRouter();
     const setToast = Stores.useToastStore((state) => state.setToast);
-    const user = Stores.useAuthStore((state) => state.user);
 
     const saveBundle = async (data: Pick<Interfaces.PublicationBundle, 'name' | 'publications'>) => {
         if (!bundle) {
@@ -71,7 +71,7 @@ const ViewBundle: NextPage<Props> = (props): JSX.Element => {
                     name: data.name,
                     publicationIds: data.publications.map((publication) => publication.id)
                 },
-                user?.token
+                token ?? undefined
             );
             setToast({
                 visible: true,
