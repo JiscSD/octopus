@@ -13,8 +13,8 @@ import * as Layouts from '@/layouts';
 import * as Stores from '@/stores';
 import * as Types from '@/types';
 
-export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context) => {
-    const token = Helpers.getJWT(context);
+export const getServerSideProps: Types.GetServerSideProps = async (context) => {
+    const token = Helpers.getJWT(context) ?? null;
     const id = context.params?.id as string;
 
     let bundle: Interfaces.PublicationBundle | null = null;
@@ -38,15 +38,15 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
             bundle,
             token,
             editMode,
-            protectedPage: true
+            protectedPage: false
         }
     };
-});
+};
 
 type Props = {
     bundle: Interfaces.PublicationBundle | null;
     editMode: boolean;
-    token: string;
+    token: string | null;
 };
 
 const ViewBundle: NextPage<Props> = (props): JSX.Element => {
@@ -145,7 +145,7 @@ const ViewBundle: NextPage<Props> = (props): JSX.Element => {
                 <section className="container mx-auto px-8 pb-10 pt-10 lg:gap-4 lg:pt-20">
                     {bundle ? (
                         <>
-                            <Components.PageTitle text={bundle.name} className={editMode ? 'lg:mb-2' : undefined} />
+                            <Components.PageTitle text={bundle.name} className={editMode ? 'lg:mb-2' : 'mb-4'} />
                             {editMode ? (
                                 <h2 className="font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50 mb-8 mt-4 lg:mt-0 ">
                                     Shareable link:{' '}
