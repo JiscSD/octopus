@@ -38,7 +38,7 @@ export const getAll = async (): Promise<I.JSONResponse> => {
 
 export const sendByType = async (
     type: I.NotificationTypeEnum,
-    force: boolean
+    force = false
 ): Promise<I.NotificationSendBulkResponse> => {
     switch (type) {
         case I.NotificationTypeEnum.BULLETIN:
