@@ -21,7 +21,22 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 
     try {
         const response = await api.get(`${Config.endpoints.publicationBundles}/${id}`, token);
-        bundle = response.data;
+
+        // Augment bundle publications with latest live versions
+        bundle = { ...response.data, publications: [] };
+
+        for (const publication of response.data.publications) {
+            const latestLiveVersion = publication.versions[0];
+            if (!latestLiveVersion) continue;
+            bundle!.publications.push({
+                authorFirstName: latestLiveVersion.user.firstName,
+                authorLastName: latestLiveVersion.user.lastName,
+                id: publication.id,
+                publishedDate: latestLiveVersion.publishedDate || '',
+                title: latestLiveVersion.title,
+                type: publication.type
+            });
+        }
     } catch (err) {
         console.log(err);
     }
