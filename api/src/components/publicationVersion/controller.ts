@@ -2,6 +2,7 @@ import * as I from 'interface';
 import * as response from 'lib/response';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as publicationService from 'publication/service';
+import * as notificationService from 'notification/service';
 import * as coAuthorService from 'coAuthor/service';
 import * as userService from 'user/service';
 import * as Helpers from 'lib/helpers';
@@ -468,6 +469,22 @@ export const create = async (
 
         // create new version importing data from the latest one
         const newPublicationVersion = await publicationVersionService.create(latestPublicationVersion, event.user);
+
+        // notify all users who bookmarked this publication about the new version
+        const bookmarkedUsers = await userService.getBookmarkedUsers(publicationId);
+
+        await notificationService.createMany(
+            bookmarkedUsers.map((user) => ({
+                userId: user.id,
+                type: I.NotificationTypeEnum.BULLETIN,
+                actionType: I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED,
+                payload: {
+                    publicationVersionId: newPublicationVersion.id,
+                    publicationId: newPublicationVersion.versionOf,
+                    title: newPublicationVersion.title || ''
+                }
+            }))
+        );
 
         return response.json(201, newPublicationVersion);
     } catch (err) {

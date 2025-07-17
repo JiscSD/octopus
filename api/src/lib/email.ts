@@ -983,7 +983,7 @@ export const notifyBulletin = async (options: {
     let text = `The following activity has occurred relating to publications you have published or bookmarked: \n\n`;
     const preview = 'The following new activity has occurred on publications';
     const subject =
-        'There has been activity on one or more Octopus publications that you have published or bookmarked.';
+        'There has been activity on one or more Octopus publications that you have published or bookmarked';
 
     let sendEmail = false;
 
