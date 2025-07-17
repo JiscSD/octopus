@@ -131,7 +131,6 @@ const PublicationBundleForm = (props: Props): JSX.Element => {
                                     <th className={thClasses}>View</th>
                                     <th className={thClasses}>Delete</th>
                                 </tr>
-<<<<<<< Updated upstream
                             </thead>
                             <tbody className="my-4 bg-white-50 transition-colors duration-500 dark:bg-grey-600">
                                 {publications.map((publication) => (
@@ -215,18 +214,6 @@ const PublicationBundleForm = (props: Props): JSX.Element => {
                     </div>
                 ) : null}
             </div>
-            <Components.Button
-                disabled={!bundleName || isLoading || numberOfPublicationsLowerLimit}
-                onClick={() => onSave({ name: bundleName, publications })}
-                title="Save"
-                variant="block"
-            />
-=======
-                            ))}
-                        </tbody>
-                    </table>
-                </Framer.motion.div>
-            )}
             <div className="flex items-center gap-4">
                 <Components.Button href={Config.urls.viewBundles.path} title="Cancel" />
                 <Components.Button
@@ -236,7 +223,6 @@ const PublicationBundleForm = (props: Props): JSX.Element => {
                     variant="block"
                 />
             </div>
->>>>>>> Stashed changes
         </div>
     );
 };
