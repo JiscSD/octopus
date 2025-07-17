@@ -238,7 +238,7 @@ function ViewBundlesResults(props: {
                             <td className={`w-1/4 hidden md:table-cell ${tdClasses}`}>
                                 <div className="flex items-center justify-center">
                                     <Components.Link
-                                        href={`${Config.urls.editBundle.path}/${bundle.id}`}
+                                        href={`${Config.urls.viewBundle.path}/${bundle.id}`}
                                         ariaLabel={'View bundle details'}
                                         className="p-2"
                                     >

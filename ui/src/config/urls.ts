@@ -169,12 +169,12 @@ const urls = {
         keywords: ['publication', 'bundle', 'export', 'share']
     },
 
-    editBundle: {
-        path: '/bundles/edit',
-        documentTitle: `Edit bundle - ${base.title}`,
-        title: 'Edit bundle',
-        canonical: `${base.host}/bundles/edit`,
-        description: 'Edit an existing bundle to update its contents or details.',
+    viewBundle: {
+        path: '/bundles',
+        documentTitle: `Publication bundle - ${base.title}`,
+        title: 'Publication bundle',
+        canonical: `${base.host}/bundles`,
+        description: 'View a publication bundle containing multiple publications.',
         keywords: ['publication', 'bundle', 'export', 'share']
     },
 
