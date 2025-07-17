@@ -124,6 +124,9 @@ const styles = {
         letter-spacing: 5px;
         text-align: center;
     `,
+    ul: `
+        padding-left: 16px;
+    `,
     li: `
         margin-bottom: 24px;
     `
@@ -982,8 +985,7 @@ export const notifyBulletin = async (options: {
         return;
     }
 
-    let html =
-        '<p>The following activity has occurred relating to publications you have published or bookmarked: </p><br />';
+    let html = '<p>The following activity has occurred relating to publications you have published or bookmarked: </p><br />';
     let text = `The following activity has occurred relating to publications you have published or bookmarked: \n\n`;
     const preview = 'The following new activity has occurred on publications';
     const subject = 'There has been activity on one or more Octopus publications that you have published or bookmarked';
