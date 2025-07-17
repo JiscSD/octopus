@@ -123,6 +123,9 @@ const styles = {
         font-size: 32px;
         letter-spacing: 5px;
         text-align: center;
+    `,
+    li: `
+        margin-bottom: 16px;
     `
 };
 
@@ -982,8 +985,7 @@ export const notifyBulletin = async (options: {
     let html = '<p>The following activity has occurred relating to publications you have published or bookmarked: </p>';
     let text = `The following activity has occurred relating to publications you have published or bookmarked: \n\n`;
     const preview = 'The following new activity has occurred on publications';
-    const subject =
-        'There has been activity on one or more Octopus publications that you have published or bookmarked';
+    const subject = 'There has been activity on one or more Octopus publications that you have published or bookmarked';
 
     let sendEmail = false;
 
@@ -1006,12 +1008,24 @@ export const notifyBulletin = async (options: {
                         continue;
                     }
 
+                    if (!payload?.url) {
+                        console.error(
+                            `Notification with ID ${notification.id} has no payload or URL, skipping email content generation.`
+                        );
+                        continue;
+                    }
+
                     sendEmail = true;
-                    html += `<li>The publication you have bookmarked, ${payload.title} has had a new version published. Click here to view the new version.</li>`;
-                    text += `The publication you have bookmarked, ${payload.title} has had a new version published. Click here to view the new version.\n`;
+                    const itemMsg = `The publication you have bookmarked, ${payload.title} has had a new version published.`;
+                    html += `<li style="${styles.li}"><p style="${styles.p}">${itemMsg}</p> <a href="${payload.url}">Click here to view the new version.</a></li>`;
+                    text += `${itemMsg}\n`;
                 }
 
-                html += '</ul>';
+                html += '</ul>\n\n';
+                const footerMsg =
+                    'To update your notification preferences and manage your bookmarked publications, sign in and visit';
+                html += `<p style="${styles.p}">${footerMsg} <a href="https://www.octopus.ac/notifications">https://www.octopus.ac/notifications</a></p>`;
+                text += `${footerMsg} https://www.octopus.ac/notifications`;
                 break;
             }
         }

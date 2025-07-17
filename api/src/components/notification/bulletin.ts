@@ -3,7 +3,8 @@ import * as email from 'lib/email';
 import * as notificationService from 'notification/service';
 import * as userService from 'user/service';
 
-const BULLETIN_DIGEST_DELTA_TIME = 7 * 24 * 60 * 60 * 1000;
+// Use 6 days + 23 hours instead of exactly 7 days to ensure the condition passes on weekly cron runs
+const BULLETIN_DIGEST_DELTA_TIME = 6.9 * 24 * 60 * 60 * 1000;
 const BULLETIN_USERS_PER_BATCH = 10;
 
 type BulletinNotifications = Awaited<ReturnType<typeof notificationService.getBulletin>>;

@@ -479,9 +479,8 @@ export const create = async (
                 type: I.NotificationTypeEnum.BULLETIN,
                 actionType: I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED,
                 payload: {
-                    publicationVersionId: newPublicationVersion.id,
-                    publicationId: newPublicationVersion.versionOf,
-                    title: newPublicationVersion.title || ''
+                    title: newPublicationVersion.title || '',
+                    url: Helpers.getPublicationUrl(newPublicationVersion.versionOf!) || ''
                 }
             }))
         );
