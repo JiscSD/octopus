@@ -40,7 +40,7 @@ type Props = {
     token: string;
 };
 
-const EditBundle: NextPage<Props> = (props): JSX.Element => {
+const ViewBundle: NextPage<Props> = (props): JSX.Element => {
     const { bundle } = props;
     const [savingBundle, setSavingBundle] = React.useState(false);
 
@@ -88,12 +88,12 @@ const EditBundle: NextPage<Props> = (props): JSX.Element => {
     return (
         <>
             <Head>
-                <title>{Config.urls.editBundle.documentTitle}</title>
-                <meta name="description" content={Config.urls.editBundle.description} />
-                <meta name="og:title" content={Config.urls.editBundle.documentTitle} />
-                <meta name="og:description" content={Config.urls.editBundle.description} />
-                <meta name="keywords" content={Config.urls.editBundle.keywords.join(', ')} />
-                {bundle ? <link rel="canonical" href={`${Config.urls.editBundle.canonical}/${bundle.id}`} /> : null}
+                <title>{Config.urls.viewBundle.documentTitle}</title>
+                <meta name="description" content={Config.urls.viewBundle.description} />
+                <meta name="og:title" content={Config.urls.viewBundle.documentTitle} />
+                <meta name="og:description" content={Config.urls.viewBundle.description} />
+                <meta name="keywords" content={Config.urls.viewBundle.keywords.join(', ')} />
+                {bundle ? <link rel="canonical" href={`${Config.urls.viewBundle.canonical}/${bundle.id}`} /> : null}
             </Head>
             <Layouts.Standard fixedHeader={false}>
                 <section className="container mx-auto px-8 pb-10 pt-10 lg:gap-4 lg:pt-20">
@@ -126,4 +126,4 @@ const EditBundle: NextPage<Props> = (props): JSX.Element => {
     );
 };
 
-export default EditBundle;
+export default ViewBundle;
