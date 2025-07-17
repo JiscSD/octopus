@@ -125,7 +125,7 @@ const styles = {
         text-align: center;
     `,
     li: `
-        margin-bottom: 16px;
+        margin-bottom: 24px;
     `
 };
 
@@ -982,7 +982,7 @@ export const notifyBulletin = async (options: {
         return;
     }
 
-    let html = '<p>The following activity has occurred relating to publications you have published or bookmarked: </p>';
+    let html = '<p>The following activity has occurred relating to publications you have published or bookmarked: </p><br />';
     let text = `The following activity has occurred relating to publications you have published or bookmarked: \n\n`;
     const preview = 'The following new activity has occurred on publications';
     const subject = 'There has been activity on one or more Octopus publications that you have published or bookmarked';
@@ -996,7 +996,7 @@ export const notifyBulletin = async (options: {
 
         switch (actionType) {
             case I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED: {
-                html += '<ul>';
+                html += `<ul style="${styles.ul}">`;
 
                 for (const notification of notifications) {
                     const payload = notification.payload as I.NotificationPayload;
@@ -1016,16 +1016,18 @@ export const notifyBulletin = async (options: {
                     }
 
                     sendEmail = true;
-                    const itemMsg = `The publication you have bookmarked, ${payload.title} has had a new version published.`;
-                    html += `<li style="${styles.li}"><p style="${styles.p}">${itemMsg}</p> <a href="${payload.url}">Click here to view the new version.</a></li>`;
-                    text += `${itemMsg}\n`;
+                    const itemMsg = `The publication you have bookmarked, <strong>${payload.title}</strong> has had a new version published.`;
+                    html += `<li style="${styles.li}"><p style="${styles.p}">${itemMsg} <a href="${payload.url}">Click here to view the new version.</a><p></li>`;
+                    text += `${itemMsg} You can view the new version here: ${payload.url}\n`;
                 }
 
-                html += '</ul>\n\n';
+                html += '</ul><br /><br />';
+                text += '\n\n';
+
                 const footerMsg =
                     'To update your notification preferences and manage your bookmarked publications, sign in and visit';
-                html += `<p style="${styles.p}">${footerMsg} <a href="https://www.octopus.ac/notifications">https://www.octopus.ac/notifications</a></p>`;
-                text += `${footerMsg} https://www.octopus.ac/notifications`;
+                html += `<p style="${styles.p}">${footerMsg} <a href="${baseURL}/notifications">${baseURL}/notifications</a></p>`;
+                text += `${footerMsg} ${baseURL}/notifications`;
                 break;
             }
         }

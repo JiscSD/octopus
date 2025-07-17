@@ -359,6 +359,21 @@ export const updateStatus = async (
             event.queryStringParameters.ariContactConsent
         );
 
+        // notify all users who bookmarked this publication about the new version
+        const bookmarkedUsers = await userService.getBookmarkedUsers(publicationVersion.versionOf);
+
+        await notificationService.createMany(
+            bookmarkedUsers.map((user) => ({
+                userId: user.id,
+                type: I.NotificationTypeEnum.BULLETIN,
+                actionType: I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED,
+                payload: {
+                    title: publicationVersion.title || '',
+                    url: Helpers.getPublicationUrl(publicationVersion.versionOf!) || ''
+                }
+            }))
+        );
+
         return response.json(200, { message: 'Publication is now LIVE.' });
     } catch (err) {
         console.log(err);
@@ -469,21 +484,6 @@ export const create = async (
 
         // create new version importing data from the latest one
         const newPublicationVersion = await publicationVersionService.create(latestPublicationVersion, event.user);
-
-        // notify all users who bookmarked this publication about the new version
-        const bookmarkedUsers = await userService.getBookmarkedUsers(publicationId);
-
-        await notificationService.createMany(
-            bookmarkedUsers.map((user) => ({
-                userId: user.id,
-                type: I.NotificationTypeEnum.BULLETIN,
-                actionType: I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED,
-                payload: {
-                    title: newPublicationVersion.title || '',
-                    url: Helpers.getPublicationUrl(newPublicationVersion.versionOf!) || ''
-                }
-            }))
-        );
 
         return response.json(201, newPublicationVersion);
     } catch (err) {
