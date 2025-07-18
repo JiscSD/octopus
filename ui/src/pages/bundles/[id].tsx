@@ -48,10 +48,18 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         editMode = bundle.createdBy === decodedToken?.id;
     }
 
+    const clientBundle = bundle
+        ? {
+              id: bundle.id,
+              name: bundle.name,
+              publications: bundle.publications
+          }
+        : null;
+
     return {
         props: {
-            bundle,
             editMode,
+            bundle: clientBundle,
             token: token || null,
             protectedPage: false
         }
@@ -59,7 +67,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
 };
 
 type Props = {
-    bundle: Interfaces.PublicationBundle | null;
+    bundle: Interfaces.ClientPublicationBundle | null;
     editMode: boolean;
     token: string | null;
     protectedPage: boolean;
@@ -73,7 +81,7 @@ const ViewBundle: NextPage<Props> = (props): JSX.Element => {
     const router = Router.useRouter();
     const setToast = Stores.useToastStore((state) => state.setToast);
 
-    const saveBundle = async (data: Pick<Interfaces.PublicationBundle, 'name' | 'publications'>) => {
+    const saveBundle = async (data: Omit<Interfaces.ClientPublicationBundle, 'id'>) => {
         if (!bundle) {
             return;
         }

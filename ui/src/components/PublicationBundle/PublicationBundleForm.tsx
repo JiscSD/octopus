@@ -12,10 +12,10 @@ import * as Interfaces from '@/interfaces';
 import * as Stores from '@/stores';
 
 type Props = {
-    bundle?: Interfaces.PublicationBundle | null;
+    bundle?: Interfaces.ClientPublicationBundle | null;
     isSaving?: boolean;
     editable?: boolean;
-    onSave: (bundle: Pick<Interfaces.PublicationBundle, 'name' | 'publications'>) => void;
+    onSave: (bundle: Omit<Interfaces.ClientPublicationBundle, 'id'>) => void;
 };
 
 const PublicationBundleForm = (props: Props): JSX.Element => {
@@ -25,7 +25,7 @@ const PublicationBundleForm = (props: Props): JSX.Element => {
     const [bundleName, setBundleName] = React.useState<string>(bundle?.name || '');
     const [deletionUpdate, setDeletionUpdate] = React.useState('');
     const [deleting, setDeleting] = React.useState(false);
-    const [publications, setPublications] = React.useState<Interfaces.PublicationBundle['publications']>(
+    const [publications, setPublications] = React.useState<Interfaces.ClientPublicationBundle['publications']>(
         bundle?.publications || []
     );
 
@@ -82,36 +82,38 @@ const PublicationBundleForm = (props: Props): JSX.Element => {
 
     return (
         <div className="w-full xl:w-2/3 2xl:w-1/2 flex flex-col gap-8 relative">
-            <form className="flex flex-col gap-4">
-                <label
-                    className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-100"
-                    htmlFor="bundle-name"
-                >
-                    Name <Components.RequiredIndicator />
-                </label>
-                <input
-                    id="bundle-name"
-                    required
-                    type="text"
-                    value={bundleName}
-                    onChange={(e) => setBundleName(e.target.value)}
-                    className="block rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400"
-                />
-                <label
-                    className="mt-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-100"
-                    htmlFor="add-publications"
-                >
-                    Add publications <Components.RequiredIndicator />
-                </label>
-                <Components.PublicationCombobox
-                    buttonText="Add to bundle"
-                    buttonCallback={async (publicationId) => addPublication(publicationId)}
-                    draftsOnly={false}
-                    excludedIds={publications.map((publication) => publication.id)}
-                    setError={setError}
-                    disabled={numberOfPublicationsUpperLimit}
-                />
-            </form>
+            {editable ? (
+                <form className="flex flex-col gap-4">
+                    <label
+                        className="font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-100"
+                        htmlFor="bundle-name"
+                    >
+                        Name <Components.RequiredIndicator />
+                    </label>
+                    <input
+                        id="bundle-name"
+                        required
+                        type="text"
+                        value={bundleName}
+                        onChange={(e) => setBundleName(e.target.value)}
+                        className="block rounded-md border border-grey-100 bg-white-50 text-grey-800 shadow outline-0 focus:ring-2 focus:ring-yellow-400"
+                    />
+                    <label
+                        className="mt-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-100"
+                        htmlFor="add-publications"
+                    >
+                        Add publications <Components.RequiredIndicator />
+                    </label>
+                    <Components.PublicationCombobox
+                        buttonText="Add to bundle"
+                        buttonCallback={async (publicationId) => addPublication(publicationId)}
+                        draftsOnly={false}
+                        excludedIds={publications.map((publication) => publication.id)}
+                        setError={setError}
+                        disabled={numberOfPublicationsUpperLimit}
+                    />
+                </form>
+            ) : null}
             <div className="sr-only" aria-live="polite">
                 {deletionUpdate}
             </div>
