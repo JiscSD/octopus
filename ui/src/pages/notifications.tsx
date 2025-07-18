@@ -44,7 +44,7 @@ type Props = {
     token: string;
 };
 
-const MyBookmarks: Types.NextPage<Props> = (props): React.ReactElement => {
+const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
     const [userPublicationBookmarks, setUserPublicationBookmarks] = React.useState(props.userPublicationBookmarks);
     const [userTopicBookmarks, setUserTopicBookmarks] = React.useState(props.userTopicBookmarks);
 
@@ -69,16 +69,16 @@ const MyBookmarks: Types.NextPage<Props> = (props): React.ReactElement => {
         <>
             <Head>
                 <meta name="robots" content="noindex, nofollow" />
-                <meta name="description" content={Config.urls.myBookmarks.description} />
-                <meta name="keywords" content={Config.urls.myBookmarks.keywords.join(',')} />
-                <link rel="canonical" href={Config.urls.myBookmarks.canonical} />
-                <title>{Config.urls.myBookmarks.title}</title>
+                <meta name="description" content={Config.urls.notifications.description} />
+                <meta name="keywords" content={Config.urls.notifications.keywords.join(',')} />
+                <link rel="canonical" href={Config.urls.notifications.canonical} />
+                <title>{Config.urls.notifications.title}</title>
             </Head>
             <Layouts.Standard fixedHeader={false}>
                 <header className="container mx-auto px-8  lg:pb-4 lg:pt-8">
                     <div className="mb-8 flex items-center">
                         <h1 className="block font-montserrat text-2xl font-bold leading-tight text-grey-800 transition-colors duration-500 dark:text-white-50 md:text-3xl xl:text-3xl xl:leading-tight">
-                            Bookmarks
+                            Notifications
                         </h1>
                     </div>
                 </header>
@@ -140,4 +140,4 @@ const MyBookmarks: Types.NextPage<Props> = (props): React.ReactElement => {
     );
 };
 
-export default MyBookmarks;
+export default Notifications;

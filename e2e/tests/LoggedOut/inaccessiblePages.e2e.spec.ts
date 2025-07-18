@@ -21,7 +21,7 @@ test.describe('Checking inaccessible pages', () => {
 
         // Check my bookmarks page
         await page.goBack();
-        await page.goto(`/my-bookmarks`, { waitUntil: 'domcontentloaded' });
+        await page.goto(`/notifications`, { waitUntil: 'domcontentloaded' });
         await page.waitForLoadState();
         await expect(page.locator(PageModel.login.signInButton)).toBeVisible();
     });
