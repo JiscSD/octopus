@@ -36,7 +36,25 @@ export const get = (id: string) =>
     client.prisma.publicationBundle.findUnique({
         where: { id },
         include: {
-            publications: true
+            publications: {
+                include: {
+                    versions: {
+                        where: {
+                            isLatestLiveVersion: true
+                        },
+                        select: {
+                            title: true,
+                            publishedDate: true,
+                            user: {
+                                select: {
+                                    firstName: true,
+                                    lastName: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     });
 
