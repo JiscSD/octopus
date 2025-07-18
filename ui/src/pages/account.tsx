@@ -186,7 +186,7 @@ const Account: Types.NextPage<Props> = (props): React.ReactElement => {
 
                         {verticalDivider}
 
-                         <Components.Link
+                        <Components.Link
                             href={`${Config.urls.notifications.path}`}
                             className="rounded underline decoration-teal-500 decoration-2 underline-offset-1 outline-none focus:ring-2 focus:ring-yellow-500"
                         >
