@@ -247,3 +247,24 @@ export const updateOrganisationalAccounts = async (
 
     return output;
 };
+
+export const getUserSettings = async (
+    event: I.AuthenticatedAPIRequest<undefined, undefined, I.GetUserParameters>
+): Promise<I.JSONResponse> => {
+    try {
+        const user = await userService.get(event.user.id);
+
+        if (!user) {
+            return response.json(404, { message: 'User not found' });
+        }
+
+        return response.json(200, {
+            enableBookmarkNotifications: user.settings?.enableBookmarkNotifications ?? true,
+            enableBookmarkVersionNotifications: user.settings?.enableBookmarkVersionNotifications ?? true
+        });
+    } catch (err) {
+        console.log(err);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};

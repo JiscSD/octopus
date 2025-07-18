@@ -224,6 +224,11 @@ export interface User extends CoreUser {
     works: WorksRecord[];
 }
 
+export interface UserSettings {
+    enableBookmarkNotifications: boolean;
+    enableBookmarkVersionNotifications: boolean;
+}
+
 export interface SearchResults<T extends FlagByUser | Publication | PublicationVersion | PublicationBundle | User> {
     data: T[];
     metadata: SearchResultMeta;

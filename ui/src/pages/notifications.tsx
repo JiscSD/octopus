@@ -13,6 +13,7 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
     const token = Helpers.getJWT(context);
     let userPublicationBookmarks: Interfaces.BookmarkedEntityData[] = [];
     let userTopicBookmarks: Interfaces.BookmarkedEntityData[] = [];
+    let userSettings: Interfaces.UserSettings | null = null;
 
     try {
         const response = await api.get(`${Config.endpoints.bookmarks}?type=PUBLICATION`, token);
@@ -28,10 +29,18 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
         console.log(err);
     }
 
+    try {
+        const response = await api.get(`${Config.endpoints.users}/me/settings`, token);
+        userSettings = response.data;
+    } catch (err) {
+        console.log(err);
+    }
+
     return {
         props: {
             userPublicationBookmarks,
             userTopicBookmarks,
+            userSettings,
             token,
             protectedPage: true
         }
@@ -41,12 +50,14 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
 type Props = {
     userPublicationBookmarks: Interfaces.BookmarkedEntityData[];
     userTopicBookmarks: Interfaces.BookmarkedEntityData[];
+    userSettings: Interfaces.UserSettings;
     token: string;
 };
 
 const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
     const [userPublicationBookmarks, setUserPublicationBookmarks] = React.useState(props.userPublicationBookmarks);
     const [userTopicBookmarks, setUserTopicBookmarks] = React.useState(props.userTopicBookmarks);
+    const [userSettings, setUserSettings] = React.useState<Interfaces.UserSettings>(props.userSettings);
 
     const deletePublicationBookmark = async (id: string) => {
         try {
@@ -56,6 +67,7 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
             console.log(err);
         }
     };
+
     const deleteTopicBookmark = async (id: string) => {
         try {
             await api.destroy(`${Config.endpoints.bookmarks}/${id}`, props.token);
@@ -63,6 +75,29 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
         } catch (err) {
             console.log(err);
         }
+    };
+
+    const changeBookmarkNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const checked = e.target.checked;
+        const updatedSettings = {
+            ...userSettings,
+            enableBookmarkNotifications: checked,
+            enableBookmarkVersionNotifications: checked
+        };
+        setUserSettings(updatedSettings);
+    };
+
+    const changeBookmarkVersionNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const checked = e.target.checked;
+        const updatedSettings = {
+            ...userSettings,
+            enableBookmarkVersionNotifications: checked,
+            // Because we only have 1 subfield, we can directly update the parent.
+            // Once we have more than 1 subfield, we need to check if all subfields are true/false & update the parent
+            // It has to behave like a select/deselect all
+            enableBookmarkNotifications: checked
+        };
+        setUserSettings(updatedSettings);
     };
 
     return (
@@ -82,6 +117,30 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
                         </h1>
                     </div>
                 </header>
+
+                <section className="container mx-auto mb-16 px-8">
+                    <fieldset>
+                        <legend className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
+                            Notification settings
+                        </legend>
+                        <Components.Checkbox
+                            id="bookmark-notifications"
+                            name="bookmark-notifications"
+                            onChange={changeBookmarkNotifications}
+                            checked={userSettings.enableBookmarkNotifications}
+                            label="Receive notifications for bookmarked publications"
+                            className="font-semibold w-fit"
+                        />
+                        <Components.Checkbox
+                            id="bookmark-version-notifications"
+                            name="bookmark-version-notifications"
+                            onChange={changeBookmarkVersionNotifications}
+                            checked={userSettings.enableBookmarkVersionNotifications}
+                            label="Receive notifications about new versions of bookmarked publications"
+                            className="mt-4 ml-8 w-fit"
+                        />
+                    </fieldset>
+                </section>
 
                 <section className="container mx-auto mb-16 px-8">
                     {userPublicationBookmarks.length || userTopicBookmarks.length ? (

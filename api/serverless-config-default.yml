@@ -149,6 +149,13 @@ functions:
                 path: ${self:custom.versions.v1}/users/me/control-requests
                 method: GET
                 cors: true
+    getUserSettings:
+        handler: dist/src/components/user/routes.getUserSettings
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/users/me/settings
+                method: GET
+                cors: true
     # Auth
     authorization:
         handler: dist/src/components/authorization/routes.authorize
