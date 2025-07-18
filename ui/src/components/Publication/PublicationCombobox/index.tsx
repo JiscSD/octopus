@@ -103,7 +103,11 @@ const PublicationCombobox: React.FC<PublicationComboboxProps> = (props): React.R
     }
 
     return (
-        <HeadlessUI.Combobox value={selectedPublication} onChange={setSelectedPublication} disabled={props.disabled}>
+        <HeadlessUI.Combobox
+            value={selectedPublication}
+            onChange={setSelectedPublication}
+            disabled={props.disabled || loading}
+        >
             <div className="flex items-center gap-4">
                 <HeadlessUI.Combobox.Input
                     aria-label={'Search for publications'}

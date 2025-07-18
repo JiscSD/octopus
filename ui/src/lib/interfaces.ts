@@ -104,6 +104,8 @@ export interface PublicationBundle {
     }[];
 }
 
+export type ClientPublicationBundle = Pick<PublicationBundle, 'id' | 'name' | 'publications'>;
+
 type LinkedPublicationAuthor = Pick<CoAuthor, 'id' | 'linkedUser'> & { user: CoAuthor['user'] | null };
 export interface LinkedPublication {
     id: string;
