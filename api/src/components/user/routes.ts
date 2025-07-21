@@ -34,3 +34,9 @@ export const getUserSettings = middy(userController.getUserSettings)
     .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
     .use(middleware.httpJsonBodyParser())
     .use(middleware.authentication());
+
+export const updateUserSettings = middy(userController.updateUserSettings)
+    .use(middleware.doNotWaitForEmptyEventLoop({ runOnError: true, runOnBefore: true, runOnAfter: true }))
+    .use(middleware.httpJsonBodyParser())
+    .use(middleware.authentication())
+    .use(middleware.validator(userSchema.updateSettings, 'body'));

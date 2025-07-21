@@ -156,6 +156,13 @@ functions:
                 path: ${self:custom.versions.v1}/users/me/settings
                 method: GET
                 cors: true
+    updateUserSettings:
+        handler: dist/src/components/user/routes.updateUserSettings
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/users/me/settings
+                method: PUT
+                cors: true
     # Auth
     authorization:
         handler: dist/src/components/authorization/routes.authorize

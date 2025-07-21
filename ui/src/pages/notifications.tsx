@@ -1,13 +1,15 @@
 import React from 'react';
 import Head from 'next/head';
+import * as OutlineIcons from '@heroicons/react/24/outline';
 
-import * as Interfaces from '@/interfaces';
-import * as Components from '@/components';
-import * as Layouts from '@/layouts';
-import * as Helpers from '@/helpers';
-import * as Config from '@/config';
-import * as Types from '@/types';
 import * as api from '@/api';
+import * as Components from '@/components';
+import * as Config from '@/config';
+import * as Helpers from '@/helpers';
+import * as Interfaces from '@/interfaces';
+import * as Layouts from '@/layouts';
+import * as Stores from '@/stores';
+import * as Types from '@/types';
 
 export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context) => {
     const token = Helpers.getJWT(context);
@@ -58,6 +60,8 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
     const [userPublicationBookmarks, setUserPublicationBookmarks] = React.useState(props.userPublicationBookmarks);
     const [userTopicBookmarks, setUserTopicBookmarks] = React.useState(props.userTopicBookmarks);
     const [userSettings, setUserSettings] = React.useState<Interfaces.UserSettings>(props.userSettings);
+    const [loading, setLoading] = React.useState<boolean>(false);
+    const setToast = Stores.useToastStore((state) => state.setToast);
 
     const deletePublicationBookmark = async (id: string) => {
         try {
@@ -77,6 +81,32 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     };
 
+    const updateBookmarkNotificationsSettings = async (settings: Interfaces.UserSettings) => {
+        setLoading(true);
+        try {
+            const payload = settings as unknown as Interfaces.JSON;
+            await api.put(`${Config.endpoints.users}/me/settings`, payload, props.token);
+            setUserSettings(settings);
+            setToast({
+                visible: true,
+                title: 'Success',
+                message: 'Bookmark notifications settings updated successfully',
+                icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-green-600" />,
+                dismiss: true
+            });
+        } catch (err) {
+            console.error('Error updating bookmark notifications settings:', err);
+            setToast({
+                visible: true,
+                title: 'Error',
+                message: 'Failed to update bookmark notifications settings',
+                icon: <OutlineIcons.XCircleIcon className="h-6 w-6 text-red-600" />,
+                dismiss: true
+            });
+        }
+        setLoading(false);
+    };
+
     const changeBookmarkNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const checked = e.target.checked;
         const updatedSettings = {
@@ -84,7 +114,7 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
             enableBookmarkNotifications: checked,
             enableBookmarkVersionNotifications: checked
         };
-        setUserSettings(updatedSettings);
+        updateBookmarkNotificationsSettings(updatedSettings);
     };
 
     const changeBookmarkVersionNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,7 +127,7 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
             // It has to behave like a select/deselect all
             enableBookmarkNotifications: checked
         };
-        setUserSettings(updatedSettings);
+        updateBookmarkNotificationsSettings(updatedSettings);
     };
 
     return (
@@ -124,20 +154,22 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
                             Notification settings
                         </legend>
                         <Components.Checkbox
+                            disabled={loading}
                             id="bookmark-notifications"
                             name="bookmark-notifications"
                             onChange={changeBookmarkNotifications}
                             checked={userSettings.enableBookmarkNotifications}
                             label="Receive notifications for bookmarked publications"
-                            className="font-semibold w-fit"
+                            className={`font-semibold w-fit ${loading ? 'cursor-wait' : ''}`}
                         />
                         <Components.Checkbox
+                            disabled={loading}
                             id="bookmark-version-notifications"
                             name="bookmark-version-notifications"
                             onChange={changeBookmarkVersionNotifications}
                             checked={userSettings.enableBookmarkVersionNotifications}
                             label="Receive notifications about new versions of bookmarked publications"
-                            className="mt-4 ml-8 w-fit"
+                            className={`mt-4 ml-8 w-fit ${loading ? 'cursor-wait' : ''}`}
                         />
                     </fieldset>
                 </section>

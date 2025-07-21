@@ -252,16 +252,35 @@ export const getUserSettings = async (
     event: I.AuthenticatedAPIRequest<undefined, undefined, I.GetUserParameters>
 ): Promise<I.JSONResponse> => {
     try {
+        // The default values are set to true, so if the settings are not found, we return true for both.
+        const settings = (await userService.getUserSettings(event.user.id)) ?? {
+            enableBookmarkNotifications: true,
+            enableBookmarkVersionNotifications: true
+        };
+
+        return response.json(200, settings);
+    } catch (err) {
+        console.log(err);
+
+        return response.json(500, { message: 'Unknown server error.' });
+    }
+};
+
+export const updateUserSettings = async (
+    event: I.AuthenticatedAPIRequest<NonNullable<I.User['settings']>, undefined, I.GetUserParameters>
+): Promise<I.JSONResponse> => {
+    try {
+        const updatedSettings = event.body;
+
         const user = await userService.get(event.user.id);
 
         if (!user) {
             return response.json(404, { message: 'User not found' });
         }
 
-        return response.json(200, {
-            enableBookmarkNotifications: user.settings?.enableBookmarkNotifications ?? true,
-            enableBookmarkVersionNotifications: user.settings?.enableBookmarkVersionNotifications ?? true
-        });
+        await userService.updateUserSettings(event.user.id, updatedSettings);
+
+        return response.json(200, updatedSettings);
     } catch (err) {
         console.log(err);
 
