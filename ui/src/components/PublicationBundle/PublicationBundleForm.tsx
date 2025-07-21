@@ -205,7 +205,7 @@ const PublicationBundleForm = (props: Props): JSX.Element => {
                         </table>
                     </Framer.motion.div>
                 )}
-                {invalidNumberOfPublications ? (
+                {editable && invalidNumberOfPublications ? (
                     <div className="first:rounded-lg rounded-b-lg bg-grey-50 px-6 py-4 text-left text-sm text-grey-900 dark:bg-grey-700 dark:text-white-50 sm:text-center">
                         <h4 className="text-lg dark:text-white-50">
                             <span className="font-semibold">
