@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test';
-import * as Helpers from '../helpers';
 import { PageModel } from '../PageModel';
 
 test.describe('Checking inaccessible pages', () => {
@@ -19,7 +18,7 @@ test.describe('Checking inaccessible pages', () => {
         await page.waitForLoadState();
         await expect(page.locator(PageModel.login.signInButton)).toBeVisible();
 
-        // Check my bookmarks page
+        // Check notifications page
         await page.goBack();
         await page.goto(`/notifications`, { waitUntil: 'domcontentloaded' });
         await page.waitForLoadState();
