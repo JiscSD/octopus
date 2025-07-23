@@ -94,4 +94,10 @@ To run the tests, run the command `npm run test`.
 
 We have a job which utilises [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci) to run an accessibility audit on all pages - [See config](./lighthouserc.js). If the accessibility score falls below 95, the action will fail and all accessibility failures will be outputted.
 
+## Overridden dependencies
+
+This is a place to track where we have added dependency overrides in package.json and explain why so that we can understand when they're no longer necessary.
+
+- @babel/runtime ^7.27.4: to address [snyk alert](https://security.snyk.io/vuln/SNYK-JS-BABELRUNTIME-10044504)
+- form-data ^4.0.4: to address [snyk alert](https://security.snyk.io/vuln/SNYK-JS-FORMDATA-10841150)
 ---
