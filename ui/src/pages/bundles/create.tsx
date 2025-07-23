@@ -77,7 +77,7 @@ const CreateBundle: NextPage = (): JSX.Element => {
                         text="Save this bundle to create a shareable link"
                         className="font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50"
                     />
-                    <Components.PublicationBundleForm onSave={saveBundle} isSaving={savingBundle} />
+                    <Components.PublicationBundleForm onSave={saveBundle} isSaving={savingBundle} editable={true} />
                 </section>
             </Layouts.Standard>
         </>
