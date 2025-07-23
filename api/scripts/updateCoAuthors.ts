@@ -28,7 +28,7 @@ import * as coAuthorService from 'coAuthor/service';
 type InputData = {
     publicationIds: string[];
     coAuthorData: Prisma.CoAuthorsUpdateInput
-}
+};
 
 const parseArguments = (): { environment: I.Environment; dryRun: boolean } => {
     const args = Helpers.parseNpmScriptArgs();
@@ -54,7 +54,7 @@ const readDataFromFile = (): InputData => {
     const inputFileName = 'scripts/update-co-authors.json';
 
     if (!fs.existsSync(inputFileName)) {
-        throw new Error(`Input file "${inputFileName}" not found.`)
+        throw new Error(`Input file "${inputFileName}" not found.`);
     }
 
     const fileData = JSON.parse(fs.readFileSync(inputFileName, 'utf8'));
@@ -69,7 +69,7 @@ const readDataFromFile = (): InputData => {
     return fileData;
 };
 
-const updatePublicationApproval = async (data: InputData, dryRun?: boolean) => {
+const updatePublicationApproval = async (data: InputData, dryRun?: boolean): Promise<void> => {
     const { publicationIds, coAuthorData } = data;
 
     for (const publicationId of publicationIds) {
@@ -80,9 +80,10 @@ const updatePublicationApproval = async (data: InputData, dryRun?: boolean) => {
 
         try {
             const publicationVersion = await publicationVersionService.get(publicationId, "latest");
+
             if (!publicationVersion) {
                 console.log(`Publication with ID ${publicationId} not found.`);
-                continue;
+                continue;   
             }
 
             if (publicationVersion.currentStatus === 'LIVE') {
@@ -93,6 +94,11 @@ const updatePublicationApproval = async (data: InputData, dryRun?: boolean) => {
             console.log(`Updating co-authors for publication ${publicationId}. Found ${publicationVersion.coAuthors.length} co-authors.`);
 
             for (const coAuthor of publicationVersion.coAuthors) {
+                if (coAuthor.id === publicationVersion.createdBy) {
+                    console.log(`Skipping co-author ${coAuthor.id} as they are the creator of the publication.`);
+                    continue;
+                }
+
                 if (dryRun) {
                     console.log(`Dry run: would update co-author ${coAuthor.id} with data:`, coAuthorData);
                     continue;
