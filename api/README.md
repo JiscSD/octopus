@@ -175,4 +175,5 @@ To run all tests locally (the API must be running first), either use the jest ex
 
 This is a place to track where we have added dependency overrides in package.json and explain why so that we can understand when they're no longer necessary.
 
--   micromatch ^4.0.8: to address [snyk alert](https://security.snyk.io/vuln/SNYK-JS-MICROMATCH-6838728)
+- micromatch ^4.0.8: to address [snyk alert](https://security.snyk.io/vuln/SNYK-JS-MICROMATCH-6838728)
+- form-data ^4.0.4: to address [snyk alert](https://security.snyk.io/vuln/SNYK-JS-FORMDATA-10841150)
