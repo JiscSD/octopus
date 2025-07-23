@@ -35,6 +35,7 @@
         "ariArchivedCheck": "tsx scripts/ariArchivedCheck.ts",
         "ariImport": "tsx scripts/ariImport.ts",
         "backfillCoAuthors": "tsx scripts/backfillCoAuthors.ts",
+        "updateCoAuthors": "tsx scripts/updateCoAuthors.ts",
         "createOrganisationalAccounts": "tsx scripts/createOrganisationalAccounts.ts",
         "createTopicMappings": "tsx scripts/createTopicMappings.ts",
         "createTopics": "tsx scripts/createTopics.ts",
