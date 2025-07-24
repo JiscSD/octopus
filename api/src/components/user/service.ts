@@ -507,3 +507,23 @@ export const getBookmarkedUsers = async (publicationId: string) => {
         }
     });
 };
+
+export const getUserSettings = async (id: string) =>
+    client.prisma.userSettings.findUnique({
+        where: {
+            userId: id
+        }
+    });
+
+export const updateUserSettings = async (id: string, settings: Prisma.UserSettingsUpdateInput) =>
+    client.prisma.userSettings.upsert({
+        where: {
+            userId: id
+        },
+        update: settings,
+        create: {
+            userId: id,
+            enableBookmarkNotifications: !!settings.enableBookmarkNotifications,
+            enableBookmarkVersionNotifications: !!settings.enableBookmarkVersionNotifications
+        }
+    });
