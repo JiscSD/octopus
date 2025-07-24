@@ -49,6 +49,8 @@ data "template_file" "install_software" {
 data "aws_ami" "amazon-linux-2023" {
   most_recent = true
 
+  owners = ["amazon"]
+
   filter {
     name   = "owner-alias"
     values = ["amazon"]
