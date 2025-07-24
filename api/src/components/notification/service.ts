@@ -12,6 +12,19 @@ export const create = (
         select: { status: true, createdAt: true }
     });
 
+export const createMany = (
+    notifications: {
+        userId: string;
+        type: I.NotificationTypeEnum;
+        actionType: I.NotificationActionTypeEnum;
+        payload?: I.NotificationPayload;
+    }[]
+) =>
+    client.prisma.notification.createMany({
+        data: notifications,
+        skipDuplicates: true
+    });
+
 export const getAll = () =>
     client.prisma.notification.findMany({
         orderBy: { userId: 'asc' },

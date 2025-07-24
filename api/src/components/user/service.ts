@@ -492,3 +492,18 @@ export const updateUser = async (id: string, data: Prisma.UserUpdateInput) =>
             id
         }
     });
+
+export const getBookmarkedUsers = async (publicationId: string) => {
+    return client.prisma.user.findMany({
+        where: {
+            bookmarks: {
+                some: {
+                    entityId: publicationId
+                }
+            }
+        },
+        select: {
+            id: true
+        }
+    });
+};
