@@ -6,7 +6,7 @@ export const PageModel = {
         logoutButton: 'a:text("Log out")',
         browseButton: 'ul a:has-text("Browse")',
         publishButton: 'ul a:has-text("Publish")',
-        myBookmarksButton: 'a[href="/my-bookmarks"]',
+        notificationsButton: 'a[href="/notifications"]',
         myPublicationsButton: 'a[href="/account"]',
         myAccountButton: 'a:has-text("My Account")'
     },

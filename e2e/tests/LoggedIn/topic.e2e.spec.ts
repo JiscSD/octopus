@@ -38,8 +38,8 @@ test.describe('Topic page', () => {
 
         // Confirm it is present on 'my bookmarks' page
         await page.locator(PageModel.header.usernameButton).click();
-        await page.locator(PageModel.header.myBookmarksButton).click();
-        await page.waitForURL('**/my-bookmarks');
+        await page.locator(PageModel.header.notificationsButton).click();
+        await page.waitForURL('**/notifications');
 
         await expect(page.locator(PageModel.myBookmarks.bookmarkedTopicLink)).toBeVisible();
     });
@@ -55,7 +55,7 @@ test.describe('Topic page', () => {
 
         // Confirm it is not present on 'my bookmarks' page
         await page.locator(PageModel.header.usernameButton).click();
-        await page.locator(PageModel.header.myBookmarksButton).click();
+        await page.locator(PageModel.header.notificationsButton).click();
 
         await expect(page.locator(PageModel.myBookmarks.bookmarkedTopicLink)).not.toBeVisible();
     });
@@ -67,7 +67,7 @@ test.describe('Topic page', () => {
 
         // Remove bookmark from 'my bookmarks' page
         await page.locator(PageModel.header.usernameButton).click();
-        await page.locator(PageModel.header.myBookmarksButton).click();
+        await page.locator(PageModel.header.notificationsButton).click();
         await expect(page.locator(PageModel.myBookmarks.removeTopicBookmark)).toBeVisible();
         await page.locator(PageModel.myBookmarks.removeTopicBookmark).click();
         await expect(page.locator(PageModel.myBookmarks.bookmarkedTopicLink)).not.toBeVisible();

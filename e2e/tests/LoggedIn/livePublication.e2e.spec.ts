@@ -33,7 +33,7 @@ export const testBookmarking = async (page: Page, id: string) => {
 
     // Check in 'my bookmarks' page
     await page.locator(PageModel.header.usernameButton).click();
-    await page.locator(PageModel.header.myBookmarksButton).click();
+    await page.locator(PageModel.header.notificationsButton).click();
 
     await page.waitForSelector(PageModel.myBookmarks.bookmarkedPublicationLink);
     await expect(page.locator(PageModel.myBookmarks.bookmarkedPublicationLink)).toHaveAttribute(
