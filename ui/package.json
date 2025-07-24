@@ -71,7 +71,7 @@
     },
     "devDependencies": {
         "@contentful/rich-text-types": "^16.3.5",
-        "@lhci/cli": "^0.13.0",
+        "@lhci/cli": "^0.15.1",
         "@tailwindcss/forms": "^0.5.9",
         "@tailwindcss/typography": "^0.5.15",
         "@testing-library/dom": "^9.3.4",
@@ -103,6 +103,7 @@
         "typescript": "^5.4.2"
     },
     "overrides": {
-        "@babel/runtime": "^7.27.4"
+        "@babel/runtime": "^7.27.4",
+        "form-data": "^4.0.4"
     }
 }
