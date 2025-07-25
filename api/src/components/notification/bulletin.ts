@@ -236,7 +236,7 @@ export const createBulletin = async (
     const payload = { title: '', url: '' };
 
     let usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
-    
+
     if (metadata?.currentUserId) {
         usersToBeNotified = usersToBeNotified.filter((user) => user.id !== metadata.currentUserId);
     }
