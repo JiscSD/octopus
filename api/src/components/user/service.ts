@@ -176,7 +176,8 @@ export const get = (id: string, isAccountOwner = false) =>
             settings: {
                 select: {
                     enableBookmarkNotifications: true,
-                    enableBookmarkVersionNotifications: true
+                    enableBookmarkVersionNotifications: true,
+                    enableBookmarkFlagNotifications: true
                 }
             },
             lastBulletinSentAt: true
@@ -524,6 +525,7 @@ export const updateUserSettings = async (id: string, settings: Prisma.UserSettin
         create: {
             userId: id,
             enableBookmarkNotifications: !!settings.enableBookmarkNotifications,
-            enableBookmarkVersionNotifications: !!settings.enableBookmarkVersionNotifications
+            enableBookmarkVersionNotifications: !!settings.enableBookmarkVersionNotifications,
+            enableBookmarkFlagNotifications: !!settings.enableBookmarkFlagNotifications
         }
     });

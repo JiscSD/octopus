@@ -8,6 +8,7 @@ import * as I from 'interface';
 import * as publicationService from 'publication/service';
 import * as response from 'lib/response';
 import * as userService from 'user/service';
+import * as notificationController from 'notification/controller';
 
 export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagPathParams>): Promise<I.JSONResponse> => {
     try {
@@ -156,6 +157,13 @@ export const createFlag = async (
         // Send off notifications
         await Promise.all(emailPromises);
 
+        // store bulletin notification
+        await notificationController.createBulletin(
+            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED,
+            latestPublishedVersion,
+            event.user.id
+        );
+
         return response.json(200, flag);
     } catch (err) {
         console.log(err);
@@ -265,6 +273,13 @@ export const createFlagComment = async (
         // Send off notifications
         await Promise.all(emailPromises);
 
+        // store bulletin notification
+        await notificationController.createBulletin(
+            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED,
+            latestPublishedVersion,
+            event.user.id
+        );
+
         return response.json(200, flagComment);
     } catch (err) {
         console.log(err);
@@ -336,6 +351,13 @@ export const resolveFlag = async (
 
         // Send off notifications
         await Promise.all(emailPromises);
+
+        // store bulletin notification
+        await notificationController.createBulletin(
+            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED,
+            latestPublishedVersion,
+            event.user.id
+        );
 
         return response.json(200, resolveFlag);
     } catch (err) {

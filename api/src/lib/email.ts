@@ -977,6 +977,81 @@ export const automaticUnlock = async (options: {
     });
 };
 
+const NOTIFICATION_MESSAGES = {
+    [I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED]: {
+        getText: (title: string): string =>
+            `The publication you have bookmarked, <strong>${title}</strong> has had a new version published.`,
+        getLink: (url: string): string => `<a href="${url}">Click here to view the new version.</a>`,
+        getTextPlain: (title: string, url: string): string =>
+            `The publication you have bookmarked, ${title} has had a new version published. You can view the new version here: ${url}`
+    },
+    [I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED]: {
+        getText: (title: string): string =>
+            `The publication you have bookmarked, <strong>${title}</strong> has had a red flag raised.`,
+        getLink: (url: string): string => `<a href="${url}">Click here to view the red flag</a>`,
+        getTextPlain: (title: string, url: string): string =>
+            `The publication you have bookmarked, ${title} has had a red flag raised. You can view the red flag here: ${url}`
+    },
+    [I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED]: {
+        getText: (title: string): string =>
+            `The publication you have bookmarked, <strong>${title}</strong> has had a red flag resolved.`,
+        getLink: (url: string): string => `<a href="${url}">Click here to view the publication</a>`,
+        getTextPlain: (title: string, url: string): string =>
+            `The publication you have bookmarked, ${title} has had a red flag resolved. You can view the publication here: ${url}`
+    },
+    [I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED]: {
+        getText: (title: string): string =>
+            `The publication you have bookmarked, <strong>${title}</strong> has had a comment added to a red flag.`,
+        getLink: (url: string): string => `<a href="${url}">Click here to view the comment</a>`,
+        getTextPlain: (title: string, url: string): string =>
+            `The publication you have bookmarked, ${title} has had a comment added to a red flag. You can view the comment here: ${url}`
+    }
+};
+
+const buildNotificationContent = (
+    notificationsByActionType: Map<I.NotificationActionTypeEnum, Pick<I.Notification, 'id' | 'payload'>[]>
+): { html: string; text: string; hasValidNotifications: boolean } => {
+    let html =
+        '<p>The following activity has occurred relating to publications you have published or bookmarked: </p><br />';
+    let text = 'The following activity has occurred relating to publications you have published or bookmarked: \n\n';
+    let hasValidNotifications = false;
+
+    html += `<ul style="${styles.ul}">`;
+
+    for (const [actionType, notifications] of notificationsByActionType.entries()) {
+        if (notifications.length === 0 || !Object.keys(NOTIFICATION_MESSAGES).includes(actionType)) {
+            continue;
+        }
+
+        const messageConfig = NOTIFICATION_MESSAGES[actionType];
+
+        for (const notification of notifications) {
+            const payload = notification.payload as I.NotificationPayload;
+
+            if (!payload?.title || !payload?.url) {
+                console.error(
+                    `Notification with ID ${notification.id} has no payload, title, or URL, skipping email content generation.`
+                );
+                continue;
+            }
+
+            hasValidNotifications = true;
+
+            const messageText = messageConfig.getText(payload.title);
+            const linkText = messageConfig.getLink(payload.url);
+            const plainText = messageConfig.getTextPlain(payload.title, payload.url);
+
+            html += `<li style="${styles.li}"><p style="${styles.p}">${messageText} ${linkText}<p></li>`;
+            text += `${plainText}\n`;
+        }
+    }
+
+    html += '</ul><br /><br />';
+    text += '\n\n';
+
+    return { html, text, hasValidNotifications };
+};
+
 export const notifyBulletin = async (options: {
     recipientEmail: string;
     notificationsByActionType: Map<I.NotificationActionTypeEnum, Pick<I.Notification, 'id' | 'payload'>[]>;
@@ -985,64 +1060,30 @@ export const notifyBulletin = async (options: {
         return;
     }
 
-    let html =
-        '<p>The following activity has occurred relating to publications you have published or bookmarked: </p><br />';
-    let text = `The following activity has occurred relating to publications you have published or bookmarked: \n\n`;
-    const preview = 'The following new activity has occurred on publications';
+    const {
+        html: contentHtml,
+        text: contentText,
+        hasValidNotifications
+    } = buildNotificationContent(options.notificationsByActionType);
+
+    if (!hasValidNotifications) {
+        return;
+    }
+
     const subject = 'There has been activity on one or more Octopus publications that you have published or bookmarked';
+    const preview = 'The following new activity has occurred on publications';
 
-    let sendEmail = false;
+    const footerMsg =
+        'To update your notification preferences and manage your bookmarked publications, sign in and visit';
+    const fullHtml =
+        contentHtml +
+        `<p style="${styles.p}">${footerMsg} <a href="${baseURL}/notifications">${baseURL}/notifications</a></p>`;
+    const fullText = contentText + `${footerMsg} ${baseURL}/notifications`;
 
-    for (const [actionType, notifications] of options.notificationsByActionType.entries()) {
-        if (notifications.length === 0) {
-            continue;
-        }
-
-        switch (actionType) {
-            case I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED: {
-                html += `<ul style="${styles.ul}">`;
-
-                for (const notification of notifications) {
-                    const payload = notification.payload as I.NotificationPayload;
-
-                    if (!payload?.title) {
-                        console.error(
-                            `Notification with ID ${notification.id} has no payload or title, skipping email content generation.`
-                        );
-                        continue;
-                    }
-
-                    if (!payload?.url) {
-                        console.error(
-                            `Notification with ID ${notification.id} has no payload or URL, skipping email content generation.`
-                        );
-                        continue;
-                    }
-
-                    sendEmail = true;
-                    const itemMsg = `The publication you have bookmarked, <strong>${payload.title}</strong> has had a new version published.`;
-                    html += `<li style="${styles.li}"><p style="${styles.p}">${itemMsg} <a href="${payload.url}">Click here to view the new version.</a><p></li>`;
-                    text += `${itemMsg} You can view the new version here: ${payload.url}\n`;
-                }
-
-                html += '</ul><br /><br />';
-                text += '\n\n';
-
-                const footerMsg =
-                    'To update your notification preferences and manage your bookmarked publications, sign in and visit';
-                html += `<p style="${styles.p}">${footerMsg} <a href="${baseURL}/notifications">${baseURL}/notifications</a></p>`;
-                text += `${footerMsg} ${baseURL}/notifications`;
-                break;
-            }
-        }
-    }
-
-    if (sendEmail) {
-        await send({
-            html: standardHTMLEmailTemplate(subject, html, preview),
-            text,
-            to: options.recipientEmail,
-            subject
-        });
-    }
+    await send({
+        html: standardHTMLEmailTemplate(subject, fullHtml, preview),
+        text: fullText,
+        to: options.recipientEmail,
+        subject
+    });
 };

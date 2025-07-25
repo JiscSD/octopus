@@ -76,3 +76,20 @@ export const sendBulletin = async (
         });
     }
 };
+
+export const createBulletin = async (
+    actionType: I.NotificationActionTypeEnum,
+    publicationVersion: Pick<I.PublicationVersion, 'title' | 'versionOf'>,
+    currentUserId?: string
+): Promise<void> => {
+    if (
+        [
+            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
+            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED,
+            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED,
+            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED
+        ].includes(actionType)
+    ) {
+        await bulletinNotification.createBulletinForPublicationBookmarks(actionType, publicationVersion, currentUserId);
+    }
+};

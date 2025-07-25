@@ -1,5 +1,6 @@
 import * as I from 'interface';
 import * as email from 'lib/email';
+import * as Helpers from 'lib/helpers';
 import * as notificationService from 'notification/service';
 import * as userService from 'user/service';
 
@@ -42,9 +43,37 @@ async function sendSingle(
             acc.set(notification.actionType, []);
         }
 
+        // user.settings?.[field] should be checked against false specifically (opt-out approach)
+        // as any other value (undefined, null, etc) should allow the notification (defaults to true)
+
         switch (notification.actionType) {
-            case I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED: {
+            case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED: {
                 if (user.settings?.enableBookmarkVersionNotifications === false) {
+                    return acc;
+                }
+
+                acc.get(notification.actionType)?.push(notification);
+                break;
+            }
+
+            case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED:
+                if (user.settings?.enableBookmarkFlagNotifications === false) {
+                    return acc;
+                }
+
+                acc.get(notification.actionType)?.push(notification);
+                break;
+
+            case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED:
+                if (user.settings?.enableBookmarkFlagNotifications === false) {
+                    return acc;
+                }
+
+                acc.get(notification.actionType)?.push(notification);
+                break;
+
+            case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED: {
+                if (user.settings?.enableBookmarkFlagNotifications === false) {
                     return acc;
                 }
 
@@ -195,3 +224,27 @@ export async function sendAll(
 
     return response;
 }
+
+export const createBulletinForPublicationBookmarks = async (
+    actionType: I.NotificationActionTypeEnum,
+    publicationVersion: Pick<I.PublicationVersion, 'title' | 'versionOf'>,
+    currentUserId?: string
+): Promise<void> => {
+    let usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
+
+    if (currentUserId) {
+        usersToBeNotified = usersToBeNotified.filter((user) => user.id !== currentUserId);
+    }
+
+    await notificationService.createMany(
+        usersToBeNotified.map((user) => ({
+            userId: user.id,
+            type: I.NotificationTypeEnum.BULLETIN,
+            actionType: actionType,
+            payload: {
+                title: publicationVersion.title ?? '',
+                url: Helpers.getPublicationUrl(publicationVersion.versionOf)
+            }
+        }))
+    );
+};

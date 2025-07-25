@@ -255,7 +255,8 @@ export const getUserSettings = async (
         // The default values are set to true, so if the settings are not found, we return true for both.
         const settings = (await userService.getUserSettings(event.user.id)) ?? {
             enableBookmarkNotifications: true,
-            enableBookmarkVersionNotifications: true
+            enableBookmarkVersionNotifications: true,
+            enableBookmarkFlagNotifications: true
         };
 
         return response.json(200, settings);
