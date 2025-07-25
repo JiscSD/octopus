@@ -2,6 +2,7 @@ import * as I from 'interface';
 import * as response from 'lib/response';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as publicationService from 'publication/service';
+import * as notificationBulletin from 'notification/bulletin';
 import * as coAuthorService from 'coAuthor/service';
 import * as userService from 'user/service';
 import * as Helpers from 'lib/helpers';
@@ -356,6 +357,12 @@ export const updateStatus = async (
             publicationVersion.id,
             'LIVE',
             event.queryStringParameters.ariContactConsent
+        );
+
+        // store bulletin notification
+        await notificationBulletin.createBulletin(
+            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
+            publicationVersion
         );
 
         return response.json(200, { message: 'Publication is now LIVE.' });

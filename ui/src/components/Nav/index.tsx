@@ -116,8 +116,8 @@ const Nav: React.FC = (): React.ReactElement => {
                         value: Config.urls.account.path
                     },
                     {
-                        label: 'My Bookmarks',
-                        value: Config.urls.myBookmarks.path
+                        label: 'Notifications',
+                        value: Config.urls.notifications.path
                     },
                     {
                         label: 'Log out',

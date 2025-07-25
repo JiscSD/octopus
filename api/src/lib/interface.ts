@@ -318,6 +318,7 @@ export interface User {
     settings?: {
         enableBookmarkNotifications: boolean;
         enableBookmarkVersionNotifications: boolean;
+        enableBookmarkFlagNotifications: boolean;
     } | null;
     lastBulletinSentAt?: Date | null;
 }
@@ -1145,6 +1146,7 @@ export interface GetPublicationBundlesByUserQueryParams {
 
 export interface NotificationPayload {
     title?: string;
+    url?: string;
 }
 
 export type NotificationWithPayload = Notification & {
