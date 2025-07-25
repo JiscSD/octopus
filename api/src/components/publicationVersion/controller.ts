@@ -2,7 +2,7 @@ import * as I from 'interface';
 import * as response from 'lib/response';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as publicationService from 'publication/service';
-import * as notificationController from 'notification/controller';
+import * as notificationBulletin from 'notification/bulletin';
 import * as coAuthorService from 'coAuthor/service';
 import * as userService from 'user/service';
 import * as Helpers from 'lib/helpers';
@@ -360,7 +360,7 @@ export const updateStatus = async (
         );
 
         // store bulletin notification
-        await notificationController.createBulletin(
+        await notificationBulletin.createBulletin(
             I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
             publicationVersion
         );

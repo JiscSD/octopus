@@ -43,7 +43,7 @@ async function sendSingle(
             acc.set(notification.actionType, []);
         }
 
-        // user.settings?.[field] should be checked against false specifically (opt-out approach)
+        // user.settings?.[field] should be checked against false specifically (opt-out
         // as any other value (undefined, null, etc) should allow the notification (defaults to true)
 
         switch (notification.actionType) {
@@ -225,26 +225,41 @@ export async function sendAll(
     return response;
 }
 
-export const createBulletinForPublicationBookmarks = async (
+export const createBulletin = async (
     actionType: I.NotificationActionTypeEnum,
     publicationVersion: Pick<I.PublicationVersion, 'title' | 'versionOf'>,
-    currentUserId?: string
+    metadata?: {
+        currentUserId?: string;
+        flagId?: string;
+    }
 ): Promise<void> => {
-    let usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
+    const payload = { title: '', url: '' };
 
-    if (currentUserId) {
-        usersToBeNotified = usersToBeNotified.filter((user) => user.id !== currentUserId);
+    let usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
+    
+    if (metadata?.currentUserId) {
+        usersToBeNotified = usersToBeNotified.filter((user) => user.id !== metadata.currentUserId);
     }
 
+    if (actionType === I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED) {
+        payload.title = publicationVersion.title ?? '';
+        payload.url = Helpers.getPublicationUrl(publicationVersion.versionOf);
+    } else if (
+        [
+            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED,
+            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED,
+            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED
+        ].includes(actionType)
+    ) {
+        payload.title = publicationVersion.title ?? '';
+        payload.url = `${Helpers.getPublicationUrl(publicationVersion.versionOf)}${
+            metadata?.flagId ? `/flag/${metadata.flagId}` : ''
+        }`;
+    }
+
+    const type = I.NotificationTypeEnum.BULLETIN;
+
     await notificationService.createMany(
-        usersToBeNotified.map((user) => ({
-            userId: user.id,
-            type: I.NotificationTypeEnum.BULLETIN,
-            actionType: actionType,
-            payload: {
-                title: publicationVersion.title ?? '',
-                url: Helpers.getPublicationUrl(publicationVersion.versionOf)
-            }
-        }))
+        usersToBeNotified.map((user) => ({ userId: user.id, type, actionType, payload }))
     );
 };

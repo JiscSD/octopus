@@ -8,7 +8,7 @@ import * as I from 'interface';
 import * as publicationService from 'publication/service';
 import * as response from 'lib/response';
 import * as userService from 'user/service';
-import * as notificationController from 'notification/controller';
+import * as notificationBulletin from 'notification/bulletin';
 
 export const get = async (event: I.APIRequest<undefined, undefined, I.GetFlagPathParams>): Promise<I.JSONResponse> => {
     try {
@@ -158,10 +158,13 @@ export const createFlag = async (
         await Promise.all(emailPromises);
 
         // store bulletin notification
-        await notificationController.createBulletin(
+        await notificationBulletin.createBulletin(
             I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED,
             latestPublishedVersion,
-            event.user.id
+            {
+                currentUserId: event.user.id,
+                flagId: flag.id
+            }
         );
 
         return response.json(200, flag);
@@ -274,10 +277,13 @@ export const createFlagComment = async (
         await Promise.all(emailPromises);
 
         // store bulletin notification
-        await notificationController.createBulletin(
+        await notificationBulletin.createBulletin(
             I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED,
             latestPublishedVersion,
-            event.user.id
+            {
+                currentUserId: event.user.id,
+                flagId: event.pathParameters.id
+            }
         );
 
         return response.json(200, flagComment);
@@ -353,10 +359,13 @@ export const resolveFlag = async (
         await Promise.all(emailPromises);
 
         // store bulletin notification
-        await notificationController.createBulletin(
+        await notificationBulletin.createBulletin(
             I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED,
             latestPublishedVersion,
-            event.user.id
+            {
+                currentUserId: event.user.id,
+                flagId: event.pathParameters.id
+            }
         );
 
         return response.json(200, resolveFlag);
