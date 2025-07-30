@@ -11,7 +11,7 @@ describe('Send notifications', () => {
     test('Send all notifications by bulletin type, outside time window', async () => {
         const payload = {
             type: I.NotificationTypeEnum.BULLETIN,
-            actionType: I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED,
+            actionType: I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
             payload: { title: 'PUBLICATION TITLE' }
         };
 
@@ -35,7 +35,7 @@ describe('Send notifications', () => {
     test('Send all notifications by bulletin type, inside time window', async () => {
         const payload = {
             type: I.NotificationTypeEnum.BULLETIN,
-            actionType: I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED,
+            actionType: I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
             payload: { title: 'PUBLICATION TITLE' }
         };
 

@@ -43,7 +43,7 @@ async function sendSingle(
         }
 
         switch (notification.actionType) {
-            case I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED: {
+            case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED: {
                 if (user.settings?.enableBookmarkVersionNotifications === false) {
                     return acc;
                 }

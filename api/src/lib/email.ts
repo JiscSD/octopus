@@ -999,7 +999,7 @@ export const notifyBulletin = async (options: {
         }
 
         switch (actionType) {
-            case I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED: {
+            case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED: {
                 html += `<ul style="${styles.ul}">`;
 
                 for (const notification of notifications) {
