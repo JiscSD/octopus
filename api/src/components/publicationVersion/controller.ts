@@ -366,7 +366,7 @@ export const updateStatus = async (
             bookmarkedUsers.map((user) => ({
                 userId: user.id,
                 type: I.NotificationTypeEnum.BULLETIN,
-                actionType: I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
+                actionType: I.NotificationActionTypeEnum.PUBLICATION_VERSION_CREATED,
                 payload: {
                     title: publicationVersion.title || '',
                     url: Helpers.getPublicationUrl(publicationVersion.versionOf) || ''
