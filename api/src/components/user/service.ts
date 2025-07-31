@@ -512,3 +512,18 @@ export const updateUserSettings = async (id: string, settings: Prisma.UserSettin
             enableBookmarkVersionNotifications: !!settings.enableBookmarkVersionNotifications
         }
     });
+    
+export const getBookmarkedUsers = async (publicationId: string) => {
+    return client.prisma.user.findMany({
+        where: {
+            bookmarks: {
+                some: {
+                    entityId: publicationId
+                }
+            }
+        },
+        select: {
+            id: true
+        }
+    });
+};

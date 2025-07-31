@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Head from 'next/head';
 import * as Router from 'next/router';
 import type { NextPage } from 'next';
@@ -13,7 +13,7 @@ import * as Layouts from '@/layouts';
 import * as Stores from '@/stores';
 import * as Types from '@/types';
 
-export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSession(async (context) => {
+export const getServerSideProps: Types.GetServerSideProps = async (context) => {
     const token = Helpers.getJWT(context);
     const id = context.params?.id as string;
 
@@ -41,29 +41,47 @@ export const getServerSideProps: Types.GetServerSideProps = Helpers.withServerSe
         console.log(err);
     }
 
+    let editMode = false;
+
+    if (bundle && token) {
+        const decodedToken = await Helpers.getDecodedUserToken(token);
+        editMode = bundle.createdBy === decodedToken?.id;
+    }
+
+    const clientBundle = bundle
+        ? {
+              id: bundle.id,
+              name: bundle.name,
+              publications: bundle.publications
+          }
+        : null;
+
     return {
         props: {
-            bundle,
-            token,
-            protectedPage: true
+            editMode,
+            bundle: clientBundle,
+            token: token || null,
+            protectedPage: false
         }
     };
-});
+};
 
 type Props = {
-    bundle: Interfaces.PublicationBundle | null;
-    token: string;
+    bundle: Interfaces.ClientPublicationBundle | null;
+    editMode: boolean;
+    token: string | null;
+    protectedPage: boolean;
 };
 
 const ViewBundle: NextPage<Props> = (props): JSX.Element => {
-    const { bundle } = props;
+    const { bundle, editMode, token } = props;
     const [savingBundle, setSavingBundle] = React.useState(false);
+    const [linkCopied, setLinkCopied] = React.useState(false);
 
     const router = Router.useRouter();
     const setToast = Stores.useToastStore((state) => state.setToast);
-    const user = Stores.useAuthStore((state) => state.user);
 
-    const saveBundle = async (data: Pick<Interfaces.PublicationBundle, 'name' | 'publications'>) => {
+    const saveBundle = async (data: Omit<Interfaces.ClientPublicationBundle, 'id'>) => {
         if (!bundle) {
             return;
         }
@@ -76,7 +94,7 @@ const ViewBundle: NextPage<Props> = (props): JSX.Element => {
                     name: data.name,
                     publicationIds: data.publications.map((publication) => publication.id)
                 },
-                user?.token
+                token ?? undefined
             );
             setToast({
                 visible: true,
@@ -100,6 +118,42 @@ const ViewBundle: NextPage<Props> = (props): JSX.Element => {
         setSavingBundle(false);
     };
 
+    const bundleShareableLink = useMemo(() => {
+        if (!bundle) return '';
+        const path = `${Config.urls.viewBundle.path}/${bundle.id}`;
+        const origin = process.env.NEXT_PUBLIC_BASE_URL;
+
+        return `${origin}${path}`;
+    }, [bundle]);
+
+    const copyToClipboard = () => {
+        if (!bundleShareableLink) return;
+
+        navigator.clipboard
+            .writeText(bundleShareableLink)
+            .then(() => {
+                setLinkCopied(true);
+                setToast({
+                    visible: true,
+                    title: 'Link copied to clipboard',
+                    message: 'You can now share this link with others.',
+                    icon: <OutlineIcons.CheckIcon className="h-6 w-6 text-teal-600" />,
+                    dismiss: true
+                });
+                setTimeout(() => setLinkCopied(false), 3000);
+            })
+            .catch((err) => {
+                console.error('Failed to copy link:', err);
+                setToast({
+                    visible: true,
+                    title: 'Error copying link',
+                    message: 'An error occurred while copying the link. Please try again.',
+                    icon: <OutlineIcons.XCircleIcon className="h-6 w-6 text-red-600" />,
+                    dismiss: true
+                });
+            });
+    };
+
     return (
         <>
             <Head>
@@ -114,15 +168,30 @@ const ViewBundle: NextPage<Props> = (props): JSX.Element => {
                 <section className="container mx-auto px-8 pb-10 pt-10 lg:gap-4 lg:pt-20">
                     {bundle ? (
                         <>
-                            <Components.PageTitle text={bundle.name} className="mb-8" />
-                            <Components.PageSubTitle
-                                text=""
-                                // text={`Shareable link: ${ Config.urls.viewBundle.path }/${bundle.id}`}
-                                className="font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50"
-                            />
+                            <Components.PageTitle text={bundle.name} className={editMode ? 'lg:mb-2' : 'mb-4'} />
+                            {editMode ? (
+                                <h2 className="font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50 mb-8 mt-4 lg:mt-0 ">
+                                    Shareable link:{' '}
+                                    <Components.Button
+                                        childClassName="truncate max-w-[calc(100vw-6rem)]"
+                                        onClick={copyToClipboard}
+                                        title={bundleShareableLink}
+                                        endIcon={
+                                            linkCopied ? (
+                                                <OutlineIcons.ClipboardDocumentCheckIcon className="h-5 w-5 text-green-500 transition-colors duration-500 dark:text-green-50" />
+                                            ) : (
+                                                <OutlineIcons.ClipboardDocumentIcon className="h-5 w-5 text-teal-500 transition-colors duration-500 dark:text-white-50" />
+                                            )
+                                        }
+                                    >
+                                        {bundleShareableLink}
+                                    </Components.Button>
+                                </h2>
+                            ) : null}
                             <Components.PublicationBundleForm
                                 bundle={bundle}
                                 onSave={saveBundle}
+                                editable={editMode}
                                 isSaving={savingBundle}
                             />
                         </>
@@ -130,7 +199,7 @@ const ViewBundle: NextPage<Props> = (props): JSX.Element => {
                         <>
                             <Components.PageTitle text="Bundle not found" className="mb-8" />
                             <Components.PageSubTitle
-                                text="The bundle you are trying to edit does not exist or has been deleted."
+                                text="The bundle you are trying to view does not exist or has been deleted."
                                 className="font-montserrat text-lg font-medium text-grey-700 transition-colors duration-500 dark:text-grey-50"
                             />
                         </>

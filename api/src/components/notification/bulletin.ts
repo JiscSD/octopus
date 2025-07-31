@@ -3,7 +3,8 @@ import * as email from 'lib/email';
 import * as notificationService from 'notification/service';
 import * as userService from 'user/service';
 
-const BULLETIN_DIGEST_DELTA_TIME = 7 * 24 * 60 * 60 * 1000;
+// Use 6 days + 23 hours instead of exactly 7 days to ensure the condition passes on weekly cron runs
+const BULLETIN_DIGEST_DELTA_TIME = 6.9 * 24 * 60 * 60 * 1000;
 const BULLETIN_USERS_PER_BATCH = 10;
 
 type BulletinNotifications = Awaited<ReturnType<typeof notificationService.getBulletin>>;
@@ -11,7 +12,8 @@ type BulletinNotifications = Awaited<ReturnType<typeof notificationService.getBu
 async function sendSingle(
     userId: string,
     userNotifications: BulletinNotifications,
-    digestDeltaTime: number
+    digestDeltaTime: number,
+    force: boolean
 ): Promise<I.NotificationSendSingleResponse> {
     const response: I.NotificationSendSingleResponse = { error: null, skipped: false };
 
@@ -28,7 +30,7 @@ async function sendSingle(
     }
 
     // skip if the user has already received a bulletin notification within the specified time frame
-    if (user.lastBulletinSentAt && user.lastBulletinSentAt.getTime() > Date.now() - digestDeltaTime) {
+    if (!force && user.lastBulletinSentAt && user.lastBulletinSentAt.getTime() > Date.now() - digestDeltaTime) {
         response.skipped = true;
 
         return response;
@@ -77,12 +79,13 @@ async function processBatch(
     sent: BulletinNotifications,
     failed: BulletinNotifications,
     skipped: BulletinNotifications,
-    failedUserIds: Set<string>
+    failedUserIds: Set<string>,
+    force: boolean
 ): Promise<{ errors: Error[] }> {
     const errors: Error[] = [];
     // Send notifications to all users in the batch concurrently
     const batchPromises = userBatch.map(async ({ userId, notifications }) => {
-        const result = await sendSingle(userId, notifications, digestDeltaTime);
+        const result = await sendSingle(userId, notifications, digestDeltaTime, force);
 
         return { userId, notifications, result };
     });
@@ -111,7 +114,10 @@ async function processBatch(
     return { errors };
 }
 
-export async function sendAll(digestDeltaTime = BULLETIN_DIGEST_DELTA_TIME): Promise<I.NotificationSendBulkResponse> {
+export async function sendAll(
+    force: boolean,
+    digestDeltaTime = BULLETIN_DIGEST_DELTA_TIME
+): Promise<I.NotificationSendBulkResponse> {
     const response: I.NotificationSendBulkResponse = { errors: [], totalSent: 0, totalFailed: 0, totalSkipped: 0 };
 
     const pendingNotifications = await notificationService.getBulletin(I.NotificationStatusEnum.PENDING);
@@ -140,7 +146,15 @@ export async function sendAll(digestDeltaTime = BULLETIN_DIGEST_DELTA_TIME): Pro
             userBatch.push({ userId, notifications: [...userNotifications] });
 
             if (userBatch.length >= BULLETIN_USERS_PER_BATCH) {
-                const { errors } = await processBatch(userBatch, digestDeltaTime, sent, failed, skipped, failedUserIds);
+                const { errors } = await processBatch(
+                    userBatch,
+                    digestDeltaTime,
+                    sent,
+                    failed,
+                    skipped,
+                    failedUserIds,
+                    force
+                );
                 response.errors = response.errors.concat(errors);
                 userBatch.length = 0;
             }
@@ -154,7 +168,7 @@ export async function sendAll(digestDeltaTime = BULLETIN_DIGEST_DELTA_TIME): Pro
 
     // Process the last user
     userBatch.push({ userId, notifications: [...userNotifications] });
-    const { errors } = await processBatch(userBatch, digestDeltaTime, sent, failed, skipped, failedUserIds);
+    const { errors } = await processBatch(userBatch, digestDeltaTime, sent, failed, skipped, failedUserIds, force);
     response.errors = response.errors.concat(errors);
 
     // Remove sent notifications

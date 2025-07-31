@@ -352,14 +352,14 @@ functions:
                 method: GET
                 cors: true
     # Notifications
-    getAll:
+    getAllNotifications:
         handler: dist/src/components/notification/routes.getAll
         events:
             - http:
                 path: ${self:custom.versions.v1}/notifications
                 method: GET
                 cors: true
-    sendBulletin:
+    sendBulletinNotifications:
         handler: dist/src/components/notification/routes.sendBulletin
         events:
             - schedule: cron(0 10 ? * MON *) # Every Monday at 10
