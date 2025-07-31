@@ -1145,6 +1145,7 @@ export interface GetPublicationBundlesByUserQueryParams {
 
 export interface NotificationPayload {
     title?: string;
+    url?: string;
 }
 
 export type NotificationWithPayload = Notification & {
