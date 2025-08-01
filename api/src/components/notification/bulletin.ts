@@ -252,13 +252,13 @@ const getUsersToBeNotified = async (
         ).includes(actionType)
     ) {
         usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
-        
+
         return usersToBeNotified;
     }
 
     if (actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED) {
         usersToBeNotified = await userService.getRedFlagUsers(publicationVersion.versionOf);
-        
+
         return usersToBeNotified;
     }
 
@@ -279,7 +279,7 @@ const getPayload = (
     if (actionType === I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED) {
         payload.title = publicationVersion.title ?? '';
         payload.url = Helpers.getPublicationUrl(publicationVersion.versionOf);
-        
+
         return payload;
     }
 
