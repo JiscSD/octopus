@@ -176,7 +176,8 @@ export const get = (id: string, isAccountOwner = false) =>
             settings: {
                 select: {
                     enableBookmarkNotifications: true,
-                    enableBookmarkVersionNotifications: true
+                    enableBookmarkVersionNotifications: true,
+                    enableBookmarkFlagNotifications: true
                 }
             },
             lastBulletinSentAt: true
@@ -493,6 +494,21 @@ export const updateUser = async (id: string, data: Prisma.UserUpdateInput) =>
         }
     });
 
+export const getBookmarkedUsers = async (publicationId: string) => {
+    return client.prisma.user.findMany({
+        where: {
+            bookmarks: {
+                some: {
+                    entityId: publicationId
+                }
+            }
+        },
+        select: {
+            id: true
+        }
+    });
+};
+
 export const getUserSettings = async (id: string) =>
     client.prisma.userSettings.findUnique({
         where: {
@@ -509,21 +525,7 @@ export const updateUserSettings = async (id: string, settings: Prisma.UserSettin
         create: {
             userId: id,
             enableBookmarkNotifications: !!settings.enableBookmarkNotifications,
-            enableBookmarkVersionNotifications: !!settings.enableBookmarkVersionNotifications
+            enableBookmarkVersionNotifications: !!settings.enableBookmarkVersionNotifications,
+            enableBookmarkFlagNotifications: !!settings.enableBookmarkFlagNotifications
         }
     });
-
-export const getBookmarkedUsers = async (publicationId: string) => {
-    return client.prisma.user.findMany({
-        where: {
-            bookmarks: {
-                some: {
-                    entityId: publicationId
-                }
-            }
-        },
-        select: {
-            id: true
-        }
-    });
-};

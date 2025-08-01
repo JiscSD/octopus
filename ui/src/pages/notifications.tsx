@@ -111,8 +111,9 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
         const checked = e.target.checked;
         const updatedSettings = {
             ...userSettings,
-            enableBookmarkNotifications: checked,
-            enableBookmarkVersionNotifications: checked
+            enableBookmarkVersionNotifications: checked,
+            enableBookmarkFlagNotifications: checked,
+            enableBookmarkNotifications: checked
         };
         updateBookmarkNotificationsSettings(updatedSettings);
     };
@@ -122,11 +123,19 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
         const updatedSettings = {
             ...userSettings,
             enableBookmarkVersionNotifications: checked,
-            // Because we only have 1 subfield, we can directly update the parent.
-            // Once we have more than 1 subfield, we need to check if all subfields are true/false & update the parent
-            // It has to behave like a select/deselect all
-            enableBookmarkNotifications: checked
+            enableBookmarkNotifications: checked || userSettings.enableBookmarkFlagNotifications
         };
+        updateBookmarkNotificationsSettings(updatedSettings);
+    };
+
+    const changeBookmarkFlagNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const checked = e.target.checked;
+        const updatedSettings = {
+            ...userSettings,
+            enableBookmarkFlagNotifications: checked,
+            enableBookmarkNotifications: checked || userSettings.enableBookmarkVersionNotifications
+        };
+
         updateBookmarkNotificationsSettings(updatedSettings);
     };
 
@@ -169,6 +178,15 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
                             onChange={changeBookmarkVersionNotifications}
                             checked={userSettings.enableBookmarkVersionNotifications}
                             label="Receive notifications about new versions of bookmarked publications"
+                            className={`mt-4 ml-8 w-fit ${loading ? 'cursor-wait' : ''}`}
+                        />
+                        <Components.Checkbox
+                            disabled={loading}
+                            id="bookmark-flag-notifications"
+                            name="bookmark-flag-notifications"
+                            onChange={changeBookmarkFlagNotifications}
+                            checked={userSettings.enableBookmarkFlagNotifications}
+                            label="Receive notifications about red flags on bookmarked publications"
                             className={`mt-4 ml-8 w-fit ${loading ? 'cursor-wait' : ''}`}
                         />
                     </fieldset>

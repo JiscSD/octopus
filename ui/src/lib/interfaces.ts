@@ -229,6 +229,7 @@ export interface User extends CoreUser {
 export interface UserSettings {
     enableBookmarkNotifications: boolean;
     enableBookmarkVersionNotifications: boolean;
+    enableBookmarkFlagNotifications: boolean;
 }
 
 export interface SearchResults<T extends FlagByUser | Publication | PublicationVersion | PublicationBundle | User> {

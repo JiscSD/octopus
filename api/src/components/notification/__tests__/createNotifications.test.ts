@@ -8,24 +8,40 @@ describe('Create notifications', () => {
         await testUtils.testSeed();
     });
 
-    Object.values(I.NotificationTypeEnum).forEach((type) => {
-        Object.values(I.NotificationActionTypeEnum).forEach((actionType, index) => {
-            test(`Create notification by ${type} type, ${actionType}, with payload`, async () => {
-                const payload = {
-                    type,
-                    actionType,
-                    userId: `test-user-${index + 1}`,
-                    payload: { title: 'PUBLICATION TITLE' }
-                };
-                const notification = await notificationController.create(payload);
-                expect(notification.status).toEqual(I.NotificationStatusEnum.PENDING);
-            });
+    for (const userId of ['test-user-1', 'test-user-2', 'test-organisational-account-1']) {
+        Object.values(I.NotificationTypeEnum).forEach((type) => {
+            Object.values(I.NotificationActionTypeEnum).forEach((actionType) => {
+                test(`Create notification by ${type} type, ${actionType}, with payload`, async () => {
+                    const payload = {
+                        type,
+                        actionType,
+                        userId,
+                        payload: {
+                            title: 'PUBLICATION TITLE',
+                            url: 'https://www.octopus.ac/publications/1/versions/latest'
+                        }
+                    };
 
-            test(`Create notification by ${type} type, ${actionType}, no payload`, async () => {
-                const payload = { type, actionType, userId: `test-user-${index + 1}` };
-                const notification = await notificationController.create(payload);
-                expect(notification.status).toEqual(I.NotificationStatusEnum.PENDING);
+                    const notifications = await Promise.all(
+                        Array.from({ length: 30 }, () => notificationController.create(payload))
+                    );
+
+                    notifications.forEach((notification) => {
+                        expect(notification.status).toEqual(I.NotificationStatusEnum.PENDING);
+                    });
+                });
+
+                test(`Create notification by ${type} type, ${actionType}, no payload`, async () => {
+                    const payload = { type, actionType, userId };
+                    const notifications = await Promise.all(
+                        Array.from({ length: 30 }, () => notificationController.create(payload))
+                    );
+
+                    notifications.forEach((notification) => {
+                        expect(notification.status).toEqual(I.NotificationStatusEnum.PENDING);
+                    });
+                });
             });
         });
-    });
+    }
 });
