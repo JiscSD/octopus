@@ -80,6 +80,15 @@ async function sendSingle(
                 acc.get(notification.actionType)?.push(notification);
                 break;
             }
+
+            case I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED: {
+                if (user.settings?.enableVersionFlagNotifications === false) {
+                    return acc;
+                }
+
+                acc.get(notification.actionType)?.push(notification);
+                break;
+            }
         }
 
         return acc;
@@ -225,39 +234,89 @@ export async function sendAll(
     return response;
 }
 
-export const createBulletin = async (
+const getUsersToBeNotified = async (
+    actionType: I.NotificationActionTypeEnum,
+    publicationVersion: Pick<I.PublicationVersion, 'versionOf'>,
+    excludeUserId?: string
+): Promise<{ id: string }[]> => {
+    let usersToBeNotified: { id: string }[] = [];
+
+    if (
+        (
+            [
+                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
+                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED,
+                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED,
+                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED
+            ] as I.NotificationActionTypeEnum[]
+        ).includes(actionType)
+    ) {
+        usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
+        
+        return usersToBeNotified;
+    }
+
+    if (actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED) {
+        usersToBeNotified = await userService.getRedFlagUsers(publicationVersion.versionOf);
+        
+        return usersToBeNotified;
+    }
+
+    if (excludeUserId) {
+        usersToBeNotified = usersToBeNotified.filter((user) => user.id !== excludeUserId);
+    }
+
+    return usersToBeNotified;
+};
+
+const getPayload = (
     actionType: I.NotificationActionTypeEnum,
     publicationVersion: Pick<I.PublicationVersion, 'title' | 'versionOf'>,
-    metadata?: {
-        currentUserId?: string;
-        flagId?: string;
-    }
-): Promise<void> => {
-    const payload = { title: '', url: '' };
-
-    let usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
-
-    if (metadata?.currentUserId) {
-        usersToBeNotified = usersToBeNotified.filter((user) => user.id !== metadata.currentUserId);
-    }
+    flagId?: string
+): I.NotificationPayload => {
+    const payload: I.NotificationPayload = { title: '', url: '' };
 
     if (actionType === I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED) {
         payload.title = publicationVersion.title ?? '';
         payload.url = Helpers.getPublicationUrl(publicationVersion.versionOf);
-    } else if (
-        [
-            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED,
-            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED,
-            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED
-        ].includes(actionType)
-    ) {
-        payload.title = publicationVersion.title ?? '';
-        payload.url = `${Helpers.getPublicationUrl(publicationVersion.versionOf)}${
-            metadata?.flagId ? `/flag/${metadata.flagId}` : ''
-        }`;
+        
+        return payload;
     }
 
+    if (
+        (
+            [
+                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED,
+                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED,
+                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED
+            ] as I.NotificationActionTypeEnum[]
+        ).includes(actionType)
+    ) {
+        payload.title = publicationVersion.title ?? '';
+        payload.url = `${Helpers.getPublicationUrl(publicationVersion.versionOf)}${flagId ? `/flag/${flagId}` : ''}`;
+
+        return payload;
+    }
+
+    if (actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED) {
+        payload.title = publicationVersion.title ?? '';
+        payload.url = Helpers.getPublicationUrl(publicationVersion.versionOf);
+    }
+
+    return payload;
+};
+
+export const createBulletin = async (
+    actionType: I.NotificationActionTypeEnum,
+    publicationVersion: Pick<I.PublicationVersion, 'title' | 'versionOf'>,
+    metadata?: {
+        excludeUserId?: string;
+        flagId?: string;
+    }
+): Promise<void> => {
     const type = I.NotificationTypeEnum.BULLETIN;
+    const usersToBeNotified = await getUsersToBeNotified(actionType, publicationVersion, metadata?.excludeUserId);
+    const payload = getPayload(actionType, publicationVersion, metadata?.flagId);
 
     await notificationService.createMany(
         usersToBeNotified.map((user) => ({ userId: user.id, type, actionType, payload }))

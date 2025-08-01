@@ -107,13 +107,22 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
         setLoading(false);
     };
 
+    const changeVersionFlagNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const checked = e.target.checked;
+        const updatedSettings = {
+            ...userSettings,
+            enableVersionFlagNotifications: checked
+        };
+    };
+
     const changeBookmarkNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const checked = e.target.checked;
         const updatedSettings = {
             ...userSettings,
             enableBookmarkVersionNotifications: checked,
             enableBookmarkFlagNotifications: checked,
-            enableBookmarkNotifications: checked
+            enableBookmarkNotifications: checked,
+            enableVersionFlagNotifications: checked
         };
         updateBookmarkNotificationsSettings(updatedSettings);
     };
@@ -188,6 +197,15 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
                             checked={userSettings.enableBookmarkFlagNotifications}
                             label="Receive notifications about red flags on bookmarked publications"
                             className={`mt-4 ml-8 w-fit ${loading ? 'cursor-wait' : ''}`}
+                        />
+                        <Components.Checkbox
+                            disabled={loading}
+                            id="version-flag-notifications"
+                            name="version-flag-notifications"
+                            onChange={changeVersionFlagNotifications}
+                            checked={userSettings.enableVersionFlagNotifications}
+                            label="Enable notifications about publications I have red flagged"
+                            className={`mt-4 font-semibold w-fit ${loading ? 'cursor-wait' : ''}`}
                         />
                     </fieldset>
                 </section>
