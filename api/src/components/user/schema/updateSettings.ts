@@ -8,9 +8,12 @@ const updateSettingsSchema: I.JSONSchemaType<I.User['settings']> = {
         },
         enableBookmarkVersionNotifications: {
             type: 'boolean'
+        },
+        enableBookmarkFlagNotifications: {
+            type: 'boolean'
         }
     },
-    required: ['enableBookmarkNotifications', 'enableBookmarkVersionNotifications']
+    required: ['enableBookmarkNotifications', 'enableBookmarkVersionNotifications', 'enableBookmarkFlagNotifications']
 };
 
 export default updateSettingsSchema;
