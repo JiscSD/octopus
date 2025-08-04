@@ -90,6 +90,15 @@ async function sendSingle(
                 acc.get(notification.actionType)?.push(notification);
                 break;
             }
+
+            case I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED: {
+                if (user.settings?.enablePeerReviewNotifications === false) {
+                    return acc;
+                }
+
+                acc.get(notification.actionType)?.push(notification);
+                break;
+            }
         }
 
         return acc;
@@ -242,36 +251,64 @@ const getUsersToBeNotified = async (
 ): Promise<{ id: string }[]> => {
     let usersToBeNotified: { id: string }[] = [];
 
-    if (
-        (
-            [
-                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
-                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED,
-                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED,
-                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED
-            ] as I.NotificationActionTypeEnum[]
-        ).includes(actionType)
-    ) {
-        usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
+    switch (actionType) {
+        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED: {
+            usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
 
-        return usersToBeNotified;
-    }
-
-    if (actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED) {
-        const previousLatestVersion = await publicationVersionService.getPreviousPublishedVersion(
-            publicationVersion.versionOf
-        );
-
-        if (!previousLatestVersion || !previousLatestVersion.publishedDate) {
             return usersToBeNotified;
         }
 
-        usersToBeNotified = await userService.getUsersWithOutstandingFlagsBeforeDate(
-            publicationVersion.versionOf,
-            previousLatestVersion.publishedDate
-        );
+        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED: {
+            usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
 
-        return usersToBeNotified;
+            return usersToBeNotified;
+        }
+
+        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED: {
+            usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
+
+            return usersToBeNotified;
+        }
+
+        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED: {
+            usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
+
+            return usersToBeNotified;
+        }
+
+        case I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED: {
+            const previousLatestVersion = await publicationVersionService.getPreviousPublishedVersion(
+                publicationVersion.versionOf
+            );
+
+            if (!previousLatestVersion || !previousLatestVersion.publishedDate) {
+                return usersToBeNotified;
+            }
+
+            usersToBeNotified = await userService.getUsersWithOutstandingFlagsBeforeDate(
+                publicationVersion.versionOf,
+                previousLatestVersion.publishedDate
+            );
+
+            return usersToBeNotified;
+        }
+
+        case I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED: {
+            const previousLatestVersion = await publicationVersionService.getPreviousPublishedVersion(
+                publicationVersion.versionOf
+            );
+
+            if (!previousLatestVersion || !previousLatestVersion.publishedDate) {
+                return usersToBeNotified;
+            }
+
+            usersToBeNotified = await userService.getUsersWithPeerReviewsBeforeDate(
+                publicationVersion.versionOf,
+                previousLatestVersion.publishedDate
+            );
+
+            return usersToBeNotified;
+        }
     }
 
     if (excludeUserId) {
@@ -288,31 +325,54 @@ const getPayload = (
 ): I.NotificationPayload => {
     const payload: I.NotificationPayload = { title: '', url: '' };
 
-    if (actionType === I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED) {
-        payload.title = publicationVersion.title ?? '';
-        payload.url = Helpers.getPublicationUrl(publicationVersion.versionOf);
+    switch (actionType) {
+        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED: {
+            payload.title = publicationVersion.title ?? '';
+            payload.url = Helpers.getPublicationUrl(publicationVersion.versionOf);
 
-        return payload;
-    }
+            return payload;
+        }
 
-    if (
-        (
-            [
-                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED,
-                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED,
-                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED
-            ] as I.NotificationActionTypeEnum[]
-        ).includes(actionType)
-    ) {
-        payload.title = publicationVersion.title ?? '';
-        payload.url = `${Helpers.getPublicationUrl(publicationVersion.versionOf)}${flagId ? `/flag/${flagId}` : ''}`;
+        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED: {
+            payload.title = publicationVersion.title ?? '';
+            payload.url = `${Helpers.getPublicationUrl(publicationVersion.versionOf)}${
+                flagId ? `/flag/${flagId}` : ''
+            }`;
 
-        return payload;
-    }
+            return payload;
+        }
 
-    if (actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED) {
-        payload.title = publicationVersion.title ?? '';
-        payload.url = Helpers.getPublicationUrl(publicationVersion.versionOf);
+        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED: {
+            payload.title = publicationVersion.title ?? '';
+            payload.url = `${Helpers.getPublicationUrl(publicationVersion.versionOf)}${
+                flagId ? `/flag/${flagId}` : ''
+            }`;
+
+            return payload;
+        }
+
+        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED: {
+            payload.title = publicationVersion.title ?? '';
+            payload.url = `${Helpers.getPublicationUrl(publicationVersion.versionOf)}${
+                flagId ? `/flag/${flagId}` : ''
+            }`;
+
+            return payload;
+        }
+
+        case I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED: {
+            payload.title = publicationVersion.title ?? '';
+            payload.url = Helpers.getPublicationUrl(publicationVersion.versionOf);
+
+            return payload;
+        }
+
+        case I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED: {
+            payload.title = publicationVersion.title ?? '';
+            payload.url = Helpers.getPublicationUrl(publicationVersion.versionOf);
+
+            return payload;
+        }
     }
 
     return payload;
