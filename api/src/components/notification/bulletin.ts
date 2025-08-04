@@ -2,6 +2,7 @@ import * as I from 'interface';
 import * as email from 'lib/email';
 import * as Helpers from 'lib/helpers';
 import * as notificationService from 'notification/service';
+import * as publicationVersionService from 'publicationVersion/service';
 import * as userService from 'user/service';
 
 // Use 6 days + 23 hours instead of exactly 7 days to ensure the condition passes on weekly cron runs
@@ -74,6 +75,15 @@ async function sendSingle(
 
             case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED: {
                 if (user.settings?.enableBookmarkFlagNotifications === false) {
+                    return acc;
+                }
+
+                acc.get(notification.actionType)?.push(notification);
+                break;
+            }
+
+            case I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED: {
+                if (user.settings?.enableVersionFlagNotifications === false) {
                     return acc;
                 }
 
@@ -225,39 +235,100 @@ export async function sendAll(
     return response;
 }
 
-export const createBulletin = async (
+const getUsersToBeNotified = async (
+    actionType: I.NotificationActionTypeEnum,
+    publicationVersion: Pick<I.PublicationVersion, 'versionOf'>,
+    excludeUserId?: string
+): Promise<{ id: string }[]> => {
+    let usersToBeNotified: { id: string }[] = [];
+
+    if (
+        (
+            [
+                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
+                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED,
+                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED,
+                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED
+            ] as I.NotificationActionTypeEnum[]
+        ).includes(actionType)
+    ) {
+        usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
+
+        return usersToBeNotified;
+    }
+
+    if (actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED) {
+        const previousLatestVersion = await publicationVersionService.getPreviousPublishedVersion(
+            publicationVersion.versionOf
+        );
+
+        if (!previousLatestVersion || !previousLatestVersion.publishedDate) {
+            return usersToBeNotified;
+        }
+
+        usersToBeNotified = await userService.getUsersWithOutstandingFlagsBeforeDate(
+            publicationVersion.versionOf,
+            previousLatestVersion.publishedDate
+        );
+
+        return usersToBeNotified;
+    }
+
+    if (excludeUserId) {
+        usersToBeNotified = usersToBeNotified.filter((user) => user.id !== excludeUserId);
+    }
+
+    return usersToBeNotified;
+};
+
+const getPayload = (
     actionType: I.NotificationActionTypeEnum,
     publicationVersion: Pick<I.PublicationVersion, 'title' | 'versionOf'>,
-    metadata?: {
-        currentUserId?: string;
-        flagId?: string;
-    }
-): Promise<void> => {
-    const payload = { title: '', url: '' };
-
-    let usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
-
-    if (metadata?.currentUserId) {
-        usersToBeNotified = usersToBeNotified.filter((user) => user.id !== metadata.currentUserId);
-    }
+    flagId?: string
+): I.NotificationPayload => {
+    const payload: I.NotificationPayload = { title: '', url: '' };
 
     if (actionType === I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED) {
         payload.title = publicationVersion.title ?? '';
         payload.url = Helpers.getPublicationUrl(publicationVersion.versionOf);
-    } else if (
-        [
-            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED,
-            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED,
-            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED
-        ].includes(actionType)
-    ) {
-        payload.title = publicationVersion.title ?? '';
-        payload.url = `${Helpers.getPublicationUrl(publicationVersion.versionOf)}${
-            metadata?.flagId ? `/flag/${metadata.flagId}` : ''
-        }`;
+
+        return payload;
     }
 
+    if (
+        (
+            [
+                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED,
+                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED,
+                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED
+            ] as I.NotificationActionTypeEnum[]
+        ).includes(actionType)
+    ) {
+        payload.title = publicationVersion.title ?? '';
+        payload.url = `${Helpers.getPublicationUrl(publicationVersion.versionOf)}${flagId ? `/flag/${flagId}` : ''}`;
+
+        return payload;
+    }
+
+    if (actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED) {
+        payload.title = publicationVersion.title ?? '';
+        payload.url = Helpers.getPublicationUrl(publicationVersion.versionOf);
+    }
+
+    return payload;
+};
+
+export const createBulletin = async (
+    actionType: I.NotificationActionTypeEnum,
+    publicationVersion: Pick<I.PublicationVersion, 'title' | 'versionOf'>,
+    metadata?: {
+        excludeUserId?: string;
+        flagId?: string;
+    }
+): Promise<void> => {
     const type = I.NotificationTypeEnum.BULLETIN;
+    const usersToBeNotified = await getUsersToBeNotified(actionType, publicationVersion, metadata?.excludeUserId);
+    const payload = getPayload(actionType, publicationVersion, metadata?.flagId);
 
     await notificationService.createMany(
         usersToBeNotified.map((user) => ({ userId: user.id, type, actionType, payload }))

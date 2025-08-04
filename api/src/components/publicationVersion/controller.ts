@@ -2,7 +2,7 @@ import * as I from 'interface';
 import * as response from 'lib/response';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as publicationService from 'publication/service';
-import * as notificationService from 'notification/service';
+import * as notificationBulletin from 'notification/bulletin';
 import * as coAuthorService from 'coAuthor/service';
 import * as userService from 'user/service';
 import * as Helpers from 'lib/helpers';
@@ -359,20 +359,15 @@ export const updateStatus = async (
             event.queryStringParameters.ariContactConsent
         );
 
-        // notify all users who bookmarked this publication about the new version
-        const bookmarkedUsers = await userService.getBookmarkedUsers(publicationVersion.versionOf);
+        await notificationBulletin.createBulletin(I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED, {
+            title: publicationVersion.title || '',
+            versionOf: publicationVersion.versionOf
+        });
 
-        await notificationService.createMany(
-            bookmarkedUsers.map((user) => ({
-                userId: user.id,
-                type: I.NotificationTypeEnum.BULLETIN,
-                actionType: I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
-                payload: {
-                    title: publicationVersion.title || '',
-                    url: Helpers.getPublicationUrl(publicationVersion.versionOf) || ''
-                }
-            }))
-        );
+        await notificationBulletin.createBulletin(I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED, {
+            title: publicationVersion.title || '',
+            versionOf: publicationVersion.versionOf
+        });
 
         return response.json(200, { message: 'Publication is now LIVE.' });
     } catch (err) {
