@@ -359,15 +359,25 @@ export const updateStatus = async (
             event.queryStringParameters.ariContactConsent
         );
 
-        await notificationBulletin.createBulletin(I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED, {
-            title: publicationVersion.title || '',
-            versionOf: publicationVersion.versionOf
-        });
+        await Promise.all([
+            // Notify all users that bookmarked this publication version that a new version is now LIVE.
+            notificationBulletin.createBulletin(I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED, {
+                title: publicationVersion.title || '',
+                versionOf: publicationVersion.versionOf
+            }),
 
-        await notificationBulletin.createBulletin(I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED, {
-            title: publicationVersion.title || '',
-            versionOf: publicationVersion.versionOf
-        });
+            // Notify all users that red-flagged this publication version that a new version is now LIVE.
+            notificationBulletin.createBulletin(I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED, {
+                title: publicationVersion.title || '',
+                versionOf: publicationVersion.versionOf
+            }),
+
+            // Notify all users that peer-reviewed this publication version that a new version is now LIVE.
+            notificationBulletin.createBulletin(I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED, {
+                title: publicationVersion.title || '',
+                versionOf: publicationVersion.versionOf
+            })
+        ]);
 
         return response.json(200, { message: 'Publication is now LIVE.' });
     } catch (err) {

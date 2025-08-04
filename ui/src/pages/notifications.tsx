@@ -107,6 +107,14 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
         setLoading(false);
     };
 
+    const changePeerReviewNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const checked = e.target.checked;
+        const updatedSettings = {
+            ...userSettings,
+            enablePeerReviewNotifications: checked
+        };
+    };
+
     const changeVersionFlagNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const checked = e.target.checked;
         const updatedSettings = {
@@ -205,6 +213,15 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
                             onChange={changeVersionFlagNotifications}
                             checked={userSettings.enableVersionFlagNotifications}
                             label="Enable notifications about publications I have red flagged"
+                            className={`mt-4 font-semibold w-fit ${loading ? 'cursor-wait' : ''}`}
+                        />
+                        <Components.Checkbox
+                            disabled={loading}
+                            id="version-peer-review-notifications"
+                            name="version-peer-review-notifications"
+                            onChange={changePeerReviewNotifications}
+                            checked={userSettings.enablePeerReviewNotifications}
+                            label="Enable notifications about publications I have peer reviewed"
                             className={`mt-4 font-semibold w-fit ${loading ? 'cursor-wait' : ''}`}
                         />
                     </fieldset>
