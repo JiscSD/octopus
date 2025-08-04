@@ -2,6 +2,7 @@ import * as I from 'interface';
 import * as email from 'lib/email';
 import * as Helpers from 'lib/helpers';
 import * as notificationService from 'notification/service';
+import * as publicationVersionService from 'publicationVersion/service';
 import * as userService from 'user/service';
 
 // Use 6 days + 23 hours instead of exactly 7 days to ensure the condition passes on weekly cron runs
@@ -257,7 +258,18 @@ const getUsersToBeNotified = async (
     }
 
     if (actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED) {
-        usersToBeNotified = await userService.getRedFlagUsers(publicationVersion.versionOf);
+        const previousLatestVersion = await publicationVersionService.getPreviousPublishedVersion(
+            publicationVersion.versionOf
+        );
+
+        if (!previousLatestVersion || !previousLatestVersion.publishedDate) {
+            return usersToBeNotified;
+        }
+
+        usersToBeNotified = await userService.getUsersWithOutstandingFlagsBeforeDate(
+            publicationVersion.versionOf,
+            previousLatestVersion.publishedDate
+        );
 
         return usersToBeNotified;
     }

@@ -510,20 +510,36 @@ export const getBookmarkedUsers = async (publicationId: string) => {
     });
 };
 
-export const getRedFlagUsers = async (publicationId: string) => {
-    return client.prisma.user.findMany({
+export const getUsersWithOutstandingFlagsBeforeDate = async (
+    publicationId: string,
+    previousPublishedVersionDate: Date
+) => {
+    const usersWithRecentFlags = await client.prisma.user.findMany({
         where: {
             PublicationFlags: {
                 some: {
+                    publicationId: publicationId,
                     resolved: false,
-                    publicationId
+                    createdAt: {
+                        gte: previousPublishedVersionDate
+                    }
                 }
             }
         },
-        select: {
-            id: true
+        include: {
+            PublicationFlags: {
+                where: {
+                    publicationId: publicationId,
+                    resolved: false,
+                    createdAt: {
+                        gte: previousPublishedVersionDate
+                    }
+                }
+            }
         }
     });
+
+    return usersWithRecentFlags;
 };
 
 export const getUserSettings = async (id: string) =>
