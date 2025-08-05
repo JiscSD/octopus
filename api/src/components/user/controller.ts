@@ -258,7 +258,8 @@ export const getUserSettings = async (
             enableBookmarkVersionNotifications: true,
             enableBookmarkFlagNotifications: true,
             enableVersionFlagNotifications: true,
-            enablePeerReviewNotifications: true
+            enablePeerReviewNotifications: true,
+            enableLinkedFromNotifications: true
         };
 
         return response.json(200, settings);

@@ -232,6 +232,7 @@ export interface UserSettings {
     enableBookmarkFlagNotifications: boolean;
     enableVersionFlagNotifications: boolean;
     enablePeerReviewNotifications: boolean;
+    enableLinkedFromNotifications: boolean;
 }
 
 export interface SearchResults<T extends FlagByUser | Publication | PublicationVersion | PublicationBundle | User> {

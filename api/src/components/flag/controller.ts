@@ -162,7 +162,7 @@ export const createFlag = async (
             I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED,
             latestPublishedVersion,
             {
-                excludeUserId: event.user.id,
+                excludedUserIds: [event.user.id],
                 flagId: flag.id
             }
         );
@@ -281,7 +281,7 @@ export const createFlagComment = async (
             I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED,
             latestPublishedVersion,
             {
-                excludeUserId: event.user.id,
+                excludedUserIds: [event.user.id],
                 flagId: event.pathParameters.id
             }
         );
@@ -363,7 +363,7 @@ export const resolveFlag = async (
             I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED,
             latestPublishedVersion,
             {
-                excludeUserId: event.user.id,
+                excludedUserIds: [event.user.id],
                 flagId: event.pathParameters.id
             }
         );

@@ -179,7 +179,8 @@ export const get = (id: string, isAccountOwner = false) =>
                     enableBookmarkVersionNotifications: true,
                     enableBookmarkFlagNotifications: true,
                     enableVersionFlagNotifications: true,
-                    enablePeerReviewNotifications: true
+                    enablePeerReviewNotifications: true,
+                    enableLinkedFromNotifications: true
                 }
             },
             lastBulletinSentAt: true
@@ -511,18 +512,19 @@ export const getBookmarkedUsers = async (publicationId: string) => {
     });
 };
 
-export const getUsersWithOutstandingFlagsBeforeDate = async (
+export const getUsersWithOutstandingFlagsInTimeInterval = async (
     publicationId: string,
-    previousPublishedVersionDate: Date
+    startDate: Date,
+    endDate: Date
 ) => {
     const usersWithRecentFlags = await client.prisma.user.findMany({
         where: {
             PublicationFlags: {
                 some: {
                     publicationId: publicationId,
-                    resolved: false,
                     createdAt: {
-                        gte: previousPublishedVersionDate
+                        gte: startDate,
+                        lte: endDate
                     }
                 }
             }
@@ -531,9 +533,9 @@ export const getUsersWithOutstandingFlagsBeforeDate = async (
             PublicationFlags: {
                 where: {
                     publicationId: publicationId,
-                    resolved: false,
                     createdAt: {
-                        gte: previousPublishedVersionDate
+                        gte: startDate,
+                        lte: endDate
                     }
                 }
             }
@@ -543,20 +545,22 @@ export const getUsersWithOutstandingFlagsBeforeDate = async (
     return usersWithRecentFlags;
 };
 
-export const getUsersWithPeerReviewsBeforeDate = async (publicationId: string, previousPublishedVersionDate: Date) => {
-    const usersWithPeerReviews = await client.prisma.user.findMany({
+export const getUsersWithDirectLinkToPublications = async (
+    publicationVersionId: string,
+    type?: I.PublicationType,
+    typeFilter: 'include' | 'exclude' = 'include'
+) => {
+    const typeCondition = type ? (typeFilter === 'include' ? { type: type } : { type: { not: type } }) : {};
+
+    const usersWithLinkedPublicationsFromVersion = await client.prisma.user.findMany({
         where: {
             publicationVersions: {
                 some: {
-                    isLatestLiveVersion: true,
-                    publishedDate: {
-                        gte: previousPublishedVersionDate
-                    },
                     publication: {
-                        type: 'PEER_REVIEW',
+                        ...typeCondition,
                         linkedTo: {
                             some: {
-                                publicationToId: publicationId
+                                versionToId: publicationVersionId
                             }
                         }
                     }
@@ -564,11 +568,26 @@ export const getUsersWithPeerReviewsBeforeDate = async (publicationId: string, p
             }
         },
         select: {
-            id: true
+            id: true,
+            publicationVersions: {
+                where: {
+                    publication: {
+                        ...typeCondition,
+                        linkedTo: {
+                            some: {
+                                versionToId: publicationVersionId
+                            }
+                        }
+                    }
+                },
+                select: {
+                    title: true
+                }
+            }
         }
     });
 
-    return usersWithPeerReviews;
+    return usersWithLinkedPublicationsFromVersion;
 };
 
 export const getUserSettings = async (id: string) =>

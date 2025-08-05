@@ -321,6 +321,7 @@ export interface User {
         enableBookmarkFlagNotifications: boolean;
         enableVersionFlagNotifications: boolean;
         enablePeerReviewNotifications: boolean;
+        enableLinkedFromNotifications: boolean;
     } | null;
     lastBulletinSentAt?: Date | null;
 }

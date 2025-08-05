@@ -99,6 +99,15 @@ async function sendSingle(
                 acc.get(notification.actionType)?.push(notification);
                 break;
             }
+
+            case I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_FROM: {
+                if (user.settings?.enableLinkedFromNotifications === false) {
+                    return acc;
+                }
+
+                acc.get(notification.actionType)?.push(notification);
+                break;
+            }
         }
 
         return acc;
@@ -244,153 +253,142 @@ export async function sendAll(
     return response;
 }
 
-const getUsersToBeNotified = async (
-    actionType: I.NotificationActionTypeEnum,
-    publicationVersion: Pick<I.PublicationVersion, 'versionOf'>,
-    excludeUserId?: string
-): Promise<{ id: string }[]> => {
-    let usersToBeNotified: { id: string }[] = [];
-
-    switch (actionType) {
-        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED: {
-            usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
-
-            return usersToBeNotified;
-        }
-
-        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED: {
-            usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
-
-            return usersToBeNotified;
-        }
-
-        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED: {
-            usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
-
-            return usersToBeNotified;
-        }
-
-        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED: {
-            usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
-
-            return usersToBeNotified;
-        }
-
-        case I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED: {
-            const previousLatestVersion = await publicationVersionService.getPreviousPublishedVersion(
-                publicationVersion.versionOf
-            );
-
-            if (!previousLatestVersion || !previousLatestVersion.publishedDate) {
-                return usersToBeNotified;
-            }
-
-            usersToBeNotified = await userService.getUsersWithOutstandingFlagsBeforeDate(
-                publicationVersion.versionOf,
-                previousLatestVersion.publishedDate
-            );
-
-            return usersToBeNotified;
-        }
-
-        case I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED: {
-            const previousLatestVersion = await publicationVersionService.getPreviousPublishedVersion(
-                publicationVersion.versionOf
-            );
-
-            if (!previousLatestVersion || !previousLatestVersion.publishedDate) {
-                return usersToBeNotified;
-            }
-
-            usersToBeNotified = await userService.getUsersWithPeerReviewsBeforeDate(
-                publicationVersion.versionOf,
-                previousLatestVersion.publishedDate
-            );
-
-            return usersToBeNotified;
-        }
-    }
-
-    if (excludeUserId) {
-        usersToBeNotified = usersToBeNotified.filter((user) => user.id !== excludeUserId);
-    }
-
-    return usersToBeNotified;
-};
-
-const getPayload = (
-    actionType: I.NotificationActionTypeEnum,
-    publicationVersion: Pick<I.PublicationVersion, 'title' | 'versionOf'>,
-    flagId?: string
-): I.NotificationPayload => {
-    const payload: I.NotificationPayload = { title: '', url: '' };
-
-    switch (actionType) {
-        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED: {
-            payload.title = publicationVersion.title ?? '';
-            payload.url = Helpers.getPublicationUrl(publicationVersion.versionOf);
-
-            return payload;
-        }
-
-        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED: {
-            payload.title = publicationVersion.title ?? '';
-            payload.url = `${Helpers.getPublicationUrl(publicationVersion.versionOf)}${
-                flagId ? `/flag/${flagId}` : ''
-            }`;
-
-            return payload;
-        }
-
-        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED: {
-            payload.title = publicationVersion.title ?? '';
-            payload.url = `${Helpers.getPublicationUrl(publicationVersion.versionOf)}${
-                flagId ? `/flag/${flagId}` : ''
-            }`;
-
-            return payload;
-        }
-
-        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED: {
-            payload.title = publicationVersion.title ?? '';
-            payload.url = `${Helpers.getPublicationUrl(publicationVersion.versionOf)}${
-                flagId ? `/flag/${flagId}` : ''
-            }`;
-
-            return payload;
-        }
-
-        case I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED: {
-            payload.title = publicationVersion.title ?? '';
-            payload.url = Helpers.getPublicationUrl(publicationVersion.versionOf);
-
-            return payload;
-        }
-
-        case I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED: {
-            payload.title = publicationVersion.title ?? '';
-            payload.url = Helpers.getPublicationUrl(publicationVersion.versionOf);
-
-            return payload;
-        }
-    }
-
-    return payload;
-};
-
 export const createBulletin = async (
     actionType: I.NotificationActionTypeEnum,
-    publicationVersion: Pick<I.PublicationVersion, 'title' | 'versionOf'>,
+    publicationVersion: Pick<I.PublicationVersion, 'title' | 'versionOf' | 'publishedDate'>,
     metadata?: {
-        excludeUserId?: string;
+        excludedUserIds?: string[];
         flagId?: string;
     }
 ): Promise<void> => {
     const type = I.NotificationTypeEnum.BULLETIN;
-    const usersToBeNotified = await getUsersToBeNotified(actionType, publicationVersion, metadata?.excludeUserId);
-    const payload = getPayload(actionType, publicationVersion, metadata?.flagId);
 
-    await notificationService.createMany(
-        usersToBeNotified.map((user) => ({ userId: user.id, type, actionType, payload }))
-    );
+    let entries: { userId: string; payload: I.NotificationPayload }[] = [];
+
+    switch (actionType) {
+        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED: {
+            const usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
+            const payload = {
+                title: publicationVersion.title ?? '',
+                url: Helpers.getPublicationUrl(publicationVersion.versionOf)
+            };
+            entries = usersToBeNotified.map((user) => ({ userId: user.id, payload }));
+            break;
+        }
+
+        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED: {
+            const usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
+            const payload = {
+                title: publicationVersion.title ?? '',
+                url: `${Helpers.getPublicationUrl(publicationVersion.versionOf)}${
+                    metadata?.flagId ? `/flag/${metadata.flagId}` : ''
+                }`
+            };
+            entries = usersToBeNotified.map((user) => ({ userId: user.id, payload }));
+            break;
+        }
+
+        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED: {
+            const usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
+            const payload = {
+                title: publicationVersion.title ?? '',
+                url: `${Helpers.getPublicationUrl(publicationVersion.versionOf)}${
+                    metadata?.flagId ? `/flag/${metadata.flagId}` : ''
+                }`
+            };
+            entries = usersToBeNotified.map((user) => ({ userId: user.id, payload }));
+            break;
+        }
+
+        case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED: {
+            const usersToBeNotified = await userService.getBookmarkedUsers(publicationVersion.versionOf);
+            const payload = {
+                title: publicationVersion.title ?? '',
+                url: `${Helpers.getPublicationUrl(publicationVersion.versionOf)}${
+                    metadata?.flagId ? `/flag/${metadata.flagId}` : ''
+                }`
+            };
+            entries = usersToBeNotified.map((user) => ({ userId: user.id, payload }));
+            break;
+        }
+
+        case I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED: {
+            const previousPublishedVersion = await publicationVersionService.getPreviousPublishedVersion(
+                publicationVersion.versionOf
+            );
+
+            if (!previousPublishedVersion || !previousPublishedVersion.publishedDate) {
+                break;
+            }
+
+            const usersToBeNotified = await userService.getUsersWithOutstandingFlagsInTimeInterval(
+                publicationVersion.versionOf,
+                previousPublishedVersion.publishedDate,
+                publicationVersion.publishedDate || new Date()
+            );
+
+            const payload = {
+                title: publicationVersion.title ?? '',
+                url: Helpers.getPublicationUrl(publicationVersion.versionOf)
+            };
+            entries = usersToBeNotified.map((user) => ({ userId: user.id, payload }));
+            break;
+        }
+
+        case I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED: {
+            const previousPublishedVersion = await publicationVersionService.getPreviousPublishedVersion(
+                publicationVersion.versionOf
+            );
+
+            if (!previousPublishedVersion) {
+                break;
+            }
+
+            const usersToBeNotified = await userService.getUsersWithDirectLinkToPublications(
+                previousPublishedVersion.id,
+                'PEER_REVIEW',
+                'include'
+            );
+
+            const payload = {
+                title: publicationVersion.title ?? '',
+                url: Helpers.getPublicationUrl(publicationVersion.versionOf)
+            };
+            entries = usersToBeNotified.map((user) => ({ userId: user.id, payload }));
+            break;
+        }
+
+        case I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_FROM: {
+            const previousPublishedVersion = await publicationVersionService.getPreviousPublishedVersion(
+                publicationVersion.versionOf
+            );
+
+            if (!previousPublishedVersion) {
+                break;
+            }
+
+            const usersToBeNotified = await userService.getUsersWithDirectLinkToPublications(
+                previousPublishedVersion.id,
+                'PEER_REVIEW',
+                'exclude'
+            );
+
+            entries = usersToBeNotified.map((user) => ({
+                userId: user.id,
+                payload: {
+                    title: user.publicationVersions[0].title ?? '',
+                    url: Helpers.getPublicationUrl(publicationVersion.versionOf)
+                }
+            }));
+            break;
+        }
+    }
+
+    const excludedUserIds = metadata?.excludedUserIds || [];
+
+    if (excludedUserIds) {
+        entries = entries.filter(({ userId }) => !excludedUserIds.includes(userId));
+    }
+
+    await notificationService.createMany(entries.map(({ userId, payload }) => ({ type, actionType, userId, payload })));
 };
