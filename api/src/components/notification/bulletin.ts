@@ -50,7 +50,7 @@ async function sendSingle(
         switch (notification.actionType) {
             case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED: {
                 if (user.settings?.enableBookmarkVersionNotifications === false) {
-                    return acc;
+                    break;
                 }
 
                 acc.get(notification.actionType)?.push(notification);
@@ -59,7 +59,7 @@ async function sendSingle(
 
             case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED:
                 if (user.settings?.enableBookmarkFlagNotifications === false) {
-                    return acc;
+                    break;
                 }
 
                 acc.get(notification.actionType)?.push(notification);
@@ -67,7 +67,7 @@ async function sendSingle(
 
             case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED:
                 if (user.settings?.enableBookmarkFlagNotifications === false) {
-                    return acc;
+                    break;
                 }
 
                 acc.get(notification.actionType)?.push(notification);
@@ -75,7 +75,7 @@ async function sendSingle(
 
             case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED: {
                 if (user.settings?.enableBookmarkFlagNotifications === false) {
-                    return acc;
+                    break;
                 }
 
                 acc.get(notification.actionType)?.push(notification);
@@ -84,7 +84,7 @@ async function sendSingle(
 
             case I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED: {
                 if (user.settings?.enableVersionFlagNotifications === false) {
-                    return acc;
+                    break;
                 }
 
                 acc.get(notification.actionType)?.push(notification);
@@ -93,7 +93,7 @@ async function sendSingle(
 
             case I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED: {
                 if (user.settings?.enablePeerReviewNotifications === false) {
-                    return acc;
+                    break;
                 }
 
                 acc.get(notification.actionType)?.push(notification);
@@ -102,7 +102,7 @@ async function sendSingle(
 
             case I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_FROM: {
                 if (user.settings?.enableLinkedFromNotifications === false) {
-                    return acc;
+                    break;
                 }
 
                 acc.get(notification.actionType)?.push(notification);
@@ -339,7 +339,7 @@ export const createBulletin = async (
             const previousPublishedVersion = await publicationVersionService.getPreviousPublishedVersion(
                 publicationVersion.versionOf
             );
-
+            
             if (!previousPublishedVersion) {
                 break;
             }
@@ -355,6 +355,7 @@ export const createBulletin = async (
                 url: Helpers.getPublicationUrl(publicationVersion.versionOf)
             };
             entries = usersToBeNotified.map((user) => ({ userId: user.id, payload }));
+            console.log("ENTRIES", entries);
             break;
         }
 
