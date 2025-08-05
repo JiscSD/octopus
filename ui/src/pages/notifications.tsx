@@ -114,7 +114,7 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
             enableLinkedFromNotifications: checked
         };
         updateNotificationsSettings(updatedSettings);
-    }
+    };
 
     const changePeerReviewNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const checked = e.target.checked;
