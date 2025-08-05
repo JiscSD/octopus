@@ -339,7 +339,7 @@ export const createBulletin = async (
             const previousPublishedVersion = await publicationVersionService.getPreviousPublishedVersion(
                 publicationVersion.versionOf
             );
-            
+
             if (!previousPublishedVersion) {
                 break;
             }
@@ -355,7 +355,7 @@ export const createBulletin = async (
                 url: Helpers.getPublicationUrl(publicationVersion.versionOf)
             };
             entries = usersToBeNotified.map((user) => ({ userId: user.id, payload }));
-            console.log("ENTRIES", entries);
+            console.log('ENTRIES', entries);
             break;
         }
 
