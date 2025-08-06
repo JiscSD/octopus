@@ -107,11 +107,11 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
         setLoading(false);
     };
 
-    const changeLinkedFromNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const changeLinkedNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const checked = e.target.checked;
         const updatedSettings = {
             ...userSettings,
-            enableLinkedFromNotifications: checked
+            enableLinkedNotifications: checked
         };
         updateNotificationsSettings(updatedSettings);
     };
@@ -237,10 +237,10 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
                         />
                         <Components.Checkbox
                             disabled={loading}
-                            id="version-linked-from-notifications"
-                            name="version-linked-from-notifications"
-                            onChange={changeLinkedFromNotifications}
-                            checked={userSettings.enableLinkedFromNotifications}
+                            id="version-linked-notifications"
+                            name="version-linked-notifications"
+                            onChange={changeLinkedNotifications}
+                            checked={userSettings.enableLinkedNotifications}
                             label="Enable notifications about publications that are linked to mine"
                             className={`mt-4 font-semibold w-fit ${loading ? 'cursor-wait' : ''}`}
                         />

@@ -180,7 +180,7 @@ export const get = (id: string, isAccountOwner = false) =>
                     enableBookmarkFlagNotifications: true,
                     enableVersionFlagNotifications: true,
                     enablePeerReviewNotifications: true,
-                    enableLinkedFromNotifications: true
+                    enableLinkedNotifications: true
                 }
             },
             lastBulletinSentAt: true
@@ -545,14 +545,14 @@ export const getUsersWithOutstandingFlagsInTimeInterval = async (
     return usersWithRecentFlags;
 };
 
-export const getUsersWithDirectLinkToPublications = async (
+export const getUsersWithDirectLinkToVersion = async (
     publicationVersionId: string,
     type?: I.PublicationType,
     typeFilter: 'include' | 'exclude' = 'include'
 ) => {
     const typeCondition = type ? (typeFilter === 'include' ? { type: type } : { type: { not: type } }) : {};
 
-    const usersWithLinkedPublicationsFromVersion = await client.prisma.user.findMany({
+    const usersWithLinkedPublicationsToVersion = await client.prisma.user.findMany({
         where: {
             publicationVersions: {
                 some: {
@@ -576,6 +576,63 @@ export const getUsersWithDirectLinkToPublications = async (
                         linkedTo: {
                             some: {
                                 versionToId: publicationVersionId
+                            }
+                        }
+                    }
+                },
+                select: {
+                    title: true
+                }
+            }
+        }
+    });
+
+    return usersWithLinkedPublicationsToVersion;
+};
+
+export const getUsersWithDirectLinkFromVersion = async (
+    publicationVersionId: string,
+    type?: I.PublicationType,
+    typeFilter: 'include' | 'exclude' = 'include'
+) => {
+    const typeCondition = type ? (typeFilter === 'include' ? { type: type } : { type: { not: type } }) : {};
+
+    const usersWithLinkedPublicationsFromVersion = await client.prisma.user.findMany({
+        where: {
+            publicationVersions: {
+                some: {
+                    publication: {
+                        ...typeCondition,
+                        linkedFrom: {
+                            some: {
+                                publicationFrom: {
+                                    versions: {
+                                        some: {
+                                            id: publicationVersionId
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        select: {
+            id: true,
+            publicationVersions: {
+                where: {
+                    publication: {
+                        ...typeCondition,
+                        linkedFrom: {
+                            some: {
+                                publicationFrom: {
+                                    versions: {
+                                        some: {
+                                            id: publicationVersionId
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

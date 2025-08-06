@@ -161,6 +161,7 @@ export const createFlag = async (
         await notificationBulletin.createBulletin(
             I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED,
             latestPublishedVersion,
+            null,
             {
                 excludedUserIds: [event.user.id],
                 flagId: flag.id
@@ -280,6 +281,7 @@ export const createFlagComment = async (
         await notificationBulletin.createBulletin(
             I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED,
             latestPublishedVersion,
+            null,
             {
                 excludedUserIds: [event.user.id],
                 flagId: event.pathParameters.id
@@ -362,6 +364,7 @@ export const resolveFlag = async (
         await notificationBulletin.createBulletin(
             I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED,
             latestPublishedVersion,
+            null,
             {
                 excludedUserIds: [event.user.id],
                 flagId: event.pathParameters.id

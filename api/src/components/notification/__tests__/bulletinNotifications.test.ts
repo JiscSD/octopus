@@ -22,7 +22,8 @@ describe('Bulletin notifications', () => {
 
         await notificationBulletin.createBulletin(
             I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
-            publicationVersion.body
+            publicationVersion.body,
+            null
         );
 
         let bulletin = await notificationService.getBulletin(I.NotificationStatusEnum.PENDING);
@@ -47,6 +48,7 @@ describe('Bulletin notifications', () => {
         await notificationBulletin.createBulletin(
             I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
             publicationVersion.body,
+            null,
             { excludedUserIds: ['test-user-2'] }
         );
 
@@ -70,7 +72,8 @@ describe('Bulletin notifications', () => {
 
         await notificationBulletin.createBulletin(
             I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED,
-            publicationVersion.body
+            publicationVersion.body,
+            null
         );
 
         let bulletin = await notificationService.getBulletin(I.NotificationStatusEnum.PENDING);
@@ -95,6 +98,7 @@ describe('Bulletin notifications', () => {
         await notificationBulletin.createBulletin(
             I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED,
             publicationVersion.body,
+            null,
             { excludedUserIds: ['test-user-2'] }
         );
 
@@ -106,7 +110,7 @@ describe('Bulletin notifications', () => {
         expect(bulletin.length).toBe(0);
     });
 
-    test('Create bulletin [PUBLICATION_VERSION_PEER_REVIEWED] and [PUBLICATION_VERSION_LINKED_FROM]', async () => {
+    test('Create bulletin [PUBLICATION_VERSION_PEER_REVIEWED] and [PUBLICATION_VERSION_LINKED_PARENT]', async () => {
         const publicationVersion = await testUtils.agent
             .get('/publications/publication-problem-live-2/publication-versions/latest')
             .query({ apiKey: '123456789' });
@@ -120,7 +124,7 @@ describe('Bulletin notifications', () => {
             (b) => b.actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED
         );
         const bulletinLinkedFrom = bulletin.filter(
-            (b) => b.actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_FROM
+            (b) => b.actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PARENT
         );
 
         expect(bulletinPeerReviewed.length).toBe(2);

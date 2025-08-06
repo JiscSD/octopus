@@ -1020,13 +1020,21 @@ const NOTIFICATION_MESSAGES = {
         getTextPlain: (title: string, url: string): string =>
             `The publication you peer reviewed, ${title} has had a new version published. You can view the new version here: ${url}`
     },
-    [I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_FROM]: {
+    [I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PARENT]: {
         getText: (title: string): string =>
             `The publication you are an author on, <strong>${title}</strong> has had a parent publication re-versioned.`,
         getLink: (url: string): string =>
             `<a href="${url}">Click here to view the new version of the parent publication</a>`,
         getTextPlain: (title: string, url: string): string =>
             `The publication you are an author on, ${title} has had a parent publication re-versioned. You can view the new version of the parent publication here: ${url}`
+    },
+    [I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_CHILD]: {
+        getText: (title: string): string =>
+            `The publication you are an author on, <strong>${title}</strong> has had a child publication re-versioned.`,
+        getLink: (url: string): string =>
+            `<a href="${url}">Click here to view the new version of the child publication</a>`,
+        getTextPlain: (title: string, url: string): string =>
+            `The publication you are an author on, ${title} has had a child publication re-versioned. You can view the new version of the child publication here: ${url}`
     }
 };
 

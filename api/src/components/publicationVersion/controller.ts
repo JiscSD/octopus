@@ -359,34 +359,49 @@ export const updateStatus = async (
             event.queryStringParameters.ariContactConsent
         );
 
+        const excludedUserIds = publicationVersion.coAuthors
+            .map((coAuthor) => coAuthor.linkedUser)
+            .filter((i): i is string => i !== null);
+
+        const previousPublishedVersion = await publicationVersionService.getPreviousPublishedVersion(
+            publicationVersion.versionOf
+        );
+
         await Promise.all([
             // Notify all users that bookmarked this publication version that a new version is now LIVE.
             notificationBulletin.createBulletin(
                 I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
-                publicationVersion
+                publicationVersion,
+                previousPublishedVersion
             ),
 
             // Notify all users that red-flagged this publication version that a new version is now LIVE.
             notificationBulletin.createBulletin(
                 I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED,
-                publicationVersion
+                publicationVersion,
+                previousPublishedVersion
             ),
 
             // Notify all users that peer-reviewed this publication version that a new version is now LIVE.
             notificationBulletin.createBulletin(
                 I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED,
-                publicationVersion
+                publicationVersion,
+                previousPublishedVersion
             ),
 
-            // Notify all users that linked from this publication version
+            // Notify all users that linked from/to this publication version
             notificationBulletin.createBulletin(
-                I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_FROM,
+                I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PARENT,
                 publicationVersion,
-                {
-                    excludedUserIds: publicationVersion.coAuthors
-                        .map((coAuthor) => coAuthor.linkedUser)
-                        .filter((i): i is string => i !== null)
-                }
+                previousPublishedVersion,
+                { excludedUserIds }
+            ),
+
+            notificationBulletin.createBulletin(
+                I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_CHILD,
+                publicationVersion,
+                previousPublishedVersion,
+                { excludedUserIds }
             )
         ]);
 
