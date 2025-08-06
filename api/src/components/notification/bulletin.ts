@@ -38,80 +38,100 @@ async function sendSingle(
         return response;
     }
 
+    const notificationToBeCleared: string[] = [];
+    const notificationsByActionType: Map<I.NotificationActionTypeEnum, BulletinNotifications> = new Map();
+
     // Construct the notifications by action type and user settings
-    const notificationsByActionType = userNotifications.reduce((acc, notification) => {
-        if (!acc.has(notification.actionType)) {
-            acc.set(notification.actionType, []);
+    for (const notification of userNotifications) {
+        if (!notificationsByActionType.has(notification.actionType)) {
+            notificationsByActionType.set(notification.actionType, []);
         }
 
-        // user.settings?.[field] should be checked against false specifically (opt-out
-        // as any other value (undefined, null, etc) should allow the notification (defaults to true)
+        // user.settings?.[field] should be checked against false specifically as any
+        // other value (undefined, null, etc) should be considered true (it's opt-out)
 
         switch (notification.actionType) {
             case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED: {
                 if (user.settings?.enableBookmarkVersionNotifications === false) {
+                    notificationToBeCleared.push(notification.id);
                     break;
                 }
 
-                acc.get(notification.actionType)?.push(notification);
+                notificationsByActionType.get(notification.actionType)?.push(notification);
                 break;
             }
 
             case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RAISED:
                 if (user.settings?.enableBookmarkFlagNotifications === false) {
+                    notificationToBeCleared.push(notification.id);
                     break;
                 }
 
-                acc.get(notification.actionType)?.push(notification);
+                notificationsByActionType.get(notification.actionType)?.push(notification);
                 break;
 
             case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED:
                 if (user.settings?.enableBookmarkFlagNotifications === false) {
+                    notificationToBeCleared.push(notification.id);
                     break;
                 }
 
-                acc.get(notification.actionType)?.push(notification);
+                notificationsByActionType.get(notification.actionType)?.push(notification);
                 break;
 
             case I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED: {
                 if (user.settings?.enableBookmarkFlagNotifications === false) {
+                    notificationToBeCleared.push(notification.id);
                     break;
                 }
 
-                acc.get(notification.actionType)?.push(notification);
+                notificationsByActionType.get(notification.actionType)?.push(notification);
                 break;
             }
 
             case I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED: {
                 if (user.settings?.enableVersionFlagNotifications === false) {
+                    notificationToBeCleared.push(notification.id);
                     break;
                 }
 
-                acc.get(notification.actionType)?.push(notification);
+                notificationsByActionType.get(notification.actionType)?.push(notification);
                 break;
             }
 
             case I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED: {
                 if (user.settings?.enablePeerReviewNotifications === false) {
+                    notificationToBeCleared.push(notification.id);
                     break;
                 }
 
-                acc.get(notification.actionType)?.push(notification);
+                notificationsByActionType.get(notification.actionType)?.push(notification);
                 break;
             }
 
             case I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_FROM: {
                 if (user.settings?.enableLinkedFromNotifications === false) {
+                    notificationToBeCleared.push(notification.id);
                     break;
                 }
 
-                acc.get(notification.actionType)?.push(notification);
+                notificationsByActionType.get(notification.actionType)?.push(notification);
                 break;
             }
         }
+    }
 
-        return acc;
-    }, new Map<I.NotificationActionTypeEnum, BulletinNotifications>());
+    if (notificationToBeCleared.length > 0) {
+        try {
+            await notificationService.removeMany(notificationToBeCleared);
+        } catch (error) {
+            response.error =
+                error instanceof Error ? error : new Error('Unknown error occurred while clearing notifications');
+            console.error(`Failed to clear notifications for user ${userId}:`, response.error);
+
+            return response;
+        }
+    }
 
     try {
         await email.notifyBulletin({
@@ -125,7 +145,14 @@ async function sendSingle(
         return response;
     }
 
-    await userService.updateUser(userId, { lastBulletinSentAt: new Date() });
+    try {
+        await userService.updateUser(userId, { lastBulletinSentAt: new Date() });
+    } catch (error) {
+        response.error = error instanceof Error ? error : new Error('Unknown error occurred while updating user');
+        console.error(`Failed to update lastBulletinSentAt for user ${userId}:`, response.error);
+
+        return response;
+    }
 
     return response;
 }

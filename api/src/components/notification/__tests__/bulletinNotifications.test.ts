@@ -12,7 +12,7 @@ describe('Bulletin notifications', () => {
 
     afterEach(async () => {
         const bulletin = await notificationService.getBulletin();
-        await Promise.all(bulletin.map((b) => notificationService.remove(b.id)));
+        await notificationService.removeMany(bulletin.map((b) => b.id));
     });
 
     test('Create bulletin [PUBLICATION_BOOKMARK_VERSION_CREATED]', async () => {
