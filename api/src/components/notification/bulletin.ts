@@ -2,7 +2,6 @@ import * as I from 'interface';
 import * as email from 'lib/email';
 import * as Helpers from 'lib/helpers';
 import * as notificationService from 'notification/service';
-import * as publicationVersionService from 'publicationVersion/service';
 import * as userService from 'user/service';
 
 // Use 6 days + 23 hours instead of exactly 7 days to ensure the condition passes on weekly cron runs
@@ -418,10 +417,6 @@ export const createBulletin = async (
         }
 
         case I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_CHILD: {
-            const previousPublishedVersion = await publicationVersionService.getPreviousPublishedVersion(
-                currentPublishedVersion.versionOf
-            );
-
             if (!previousPublishedVersion) {
                 break;
             }

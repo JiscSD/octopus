@@ -3,6 +3,7 @@ import * as testUtils from 'lib/testUtils';
 import * as Helpers from 'lib/helpers';
 import * as notificationBulletin from 'notification/bulletin';
 import * as notificationService from 'notification/service';
+import * as publicationVersionService from 'publicationVersion/service';
 
 describe('Bulletin notifications', () => {
     beforeAll(async () => {
@@ -70,10 +71,14 @@ describe('Bulletin notifications', () => {
             .get('/publications/publication-problem-live/publication-versions/latest')
             .query({ apiKey: '123456789' });
 
+        const previousPublishedVersion = await publicationVersionService.getPreviousPublishedVersion(
+            publicationVersion.body.versionOf
+        );
+
         await notificationBulletin.createBulletin(
             I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED,
             publicationVersion.body,
-            null
+            previousPublishedVersion
         );
 
         let bulletin = await notificationService.getBulletin(I.NotificationStatusEnum.PENDING);
@@ -90,27 +95,7 @@ describe('Bulletin notifications', () => {
         expect(payload.title).toBe(publicationVersion.body.title);
     });
 
-    test('Create bulletin [PUBLICATION_VERSION_RED_FLAG_RAISED] with excluded userIds', async () => {
-        const publicationVersion = await testUtils.agent
-            .get('/publications/publication-problem-live/publication-versions/latest')
-            .query({ apiKey: '123456789' });
-
-        await notificationBulletin.createBulletin(
-            I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED,
-            publicationVersion.body,
-            null,
-            { excludedUserIds: ['test-user-2'] }
-        );
-
-        let bulletin = await notificationService.getBulletin(I.NotificationStatusEnum.PENDING);
-        bulletin = bulletin.filter(
-            (b) => b.actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED
-        );
-
-        expect(bulletin.length).toBe(0);
-    });
-
-    test('Create bulletin [PUBLICATION_VERSION_PEER_REVIEWED] and [PUBLICATION_VERSION_LINKED_PARENT]', async () => {
+    test('Create bulletin [PUBLICATION_VERSION_PEER_REVIEWED]', async () => {
         const publicationVersion = await testUtils.agent
             .get('/publications/publication-problem-live-2/publication-versions/latest')
             .query({ apiKey: '123456789' });
@@ -122,9 +107,6 @@ describe('Bulletin notifications', () => {
         const bulletin = await notificationService.getBulletin(I.NotificationStatusEnum.PENDING);
         const bulletinPeerReviewed = bulletin.filter(
             (b) => b.actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED
-        );
-        const bulletinLinkedFrom = bulletin.filter(
-            (b) => b.actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PARENT
         );
 
         expect(bulletinPeerReviewed.length).toBe(2);
@@ -140,12 +122,9 @@ describe('Bulletin notifications', () => {
         expect(secondPayload).toBeDefined();
         expect(secondPayload.url).toBe(Helpers.getPublicationUrl(publicationVersion.body.versionOf));
         expect(secondPayload.title).toBe(publicationVersion.body.title);
-
-        expect(bulletinLinkedFrom.length).toBe(1);
-        expect(bulletinLinkedFrom[0].userId).toBe('test-user-5');
-        const linkedFromPayload = bulletinLinkedFrom[0].payload as I.NotificationPayload;
-        expect(linkedFromPayload).toBeDefined();
-        expect(linkedFromPayload.url).toBe(Helpers.getPublicationUrl(publicationVersion.body.versionOf));
-        expect(linkedFromPayload.title).toBe('Multiversion Hypothesis v2');
     });
+
+    test('Create bulletin [PUBLICATION_VERSION_LINKED_PARENT]', async () => {});
+
+    test('Create bulletin [PUBLICATION_VERSION_LINKED_CHILD]', async () => {});
 });

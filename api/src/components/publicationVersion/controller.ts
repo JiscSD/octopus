@@ -368,7 +368,7 @@ export const updateStatus = async (
         );
 
         await Promise.all([
-            // Notify all users that bookmarked this publication version that a new version is now LIVE.
+            // Notifies all users that bookmarked this publication version that a new version is now LIVE.
             notificationBulletin.createBulletin(
                 I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
                 publicationVersion,
@@ -382,14 +382,14 @@ export const updateStatus = async (
                 previousPublishedVersion
             ),
 
-            // Notify all users that peer-reviewed this publication version that a new version is now LIVE.
+            // Notifies authors that peer-reviewed this publication version that a new version is now LIVE.
             notificationBulletin.createBulletin(
                 I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED,
                 publicationVersion,
                 previousPublishedVersion
             ),
 
-            // Notify all users that linked from/to this publication version
+            // Notifies authors of child publications (that link FROM this publication)
             notificationBulletin.createBulletin(
                 I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PARENT,
                 publicationVersion,
@@ -397,6 +397,7 @@ export const updateStatus = async (
                 { excludedUserIds }
             ),
 
+            // Notifies authors of parent publications (that this publication links TO)
             notificationBulletin.createBulletin(
                 I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_CHILD,
                 publicationVersion,
