@@ -124,7 +124,7 @@ describe('Bulletin notifications', () => {
         expect(secondPayload.title).toBe(publicationVersion.body.title);
     });
 
-    test('Create bulletin [PUBLICATION_VERSION_LINKED_PARENT]', async () => {
+    test('Create bulletin [PUBLICATION_VERSION_LINKED_PREDECESSOR]', async () => {
         const publicationVersion = await testUtils.agent
             .get('/publications/publication-problem-live-2/publication-versions/latest')
             .query({ apiKey: '123456789' });
@@ -134,14 +134,14 @@ describe('Bulletin notifications', () => {
         );
 
         await notificationBulletin.createBulletin(
-            I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PARENT,
+            I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PREDECESSOR,
             publicationVersion.body,
             previousPublishedVersion
         );
 
         const bulletin = await notificationService.getBulletin(I.NotificationStatusEnum.PENDING);
         const bulletinLinkedParent = bulletin.filter(
-            (b) => b.actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PARENT
+            (b) => b.actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PREDECESSOR
         );
 
         expect(bulletinLinkedParent.length).toBe(1);
@@ -152,7 +152,7 @@ describe('Bulletin notifications', () => {
         expect(payload.url).toBe(Helpers.getPublicationUrl(publicationVersion.body.versionOf));
     });
 
-    test('Create bulletin [PUBLICATION_VERSION_LINKED_CHILD]', async () => {
+    test('Create bulletin [PUBLICATION_VERSION_LINKED_SUCCESSOR]', async () => {
         const publicationVersion = await testUtils.agent
             .get('/publications/publication-problem-live-2/publication-versions/latest')
             .query({ apiKey: '123456789' });
@@ -166,14 +166,14 @@ describe('Bulletin notifications', () => {
         }
 
         await notificationBulletin.createBulletin(
-            I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_CHILD,
+            I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_SUCCESSOR,
             publicationVersion.body,
             previousPublishedVersion
         );
 
         const bulletin = await notificationService.getBulletin(I.NotificationStatusEnum.PENDING);
         const bulletinLinkedParent = bulletin.filter(
-            (b) => b.actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_CHILD
+            (b) => b.actionType === I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_SUCCESSOR
         );
 
         expect(bulletinLinkedParent.length).toBe(2);
@@ -235,13 +235,13 @@ describe('Bulletin notifications', () => {
         );
 
         await notificationBulletin.createBulletin(
-            I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PARENT,
+            I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PREDECESSOR,
             publicationVersion.body,
             previousPublishedVersion
         );
 
         await notificationBulletin.createBulletin(
-            I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_CHILD,
+            I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_SUCCESSOR,
             publicationVersion.body,
             previousPublishedVersion
         );
@@ -259,7 +259,7 @@ describe('Bulletin notifications', () => {
             .query({ apiKey: '123456789' });
 
         await notificationBulletin.createBulletin(
-            I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PARENT,
+            I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PREDECESSOR,
             publicationVersion.body,
             publicationVersion.body
         );

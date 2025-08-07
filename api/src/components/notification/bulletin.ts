@@ -108,7 +108,7 @@ async function sendSingle(
                 break;
             }
 
-            case I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PARENT: {
+            case I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PREDECESSOR: {
                 if (user.settings?.enableLinkedNotifications === false) {
                     notificationToBeCleared.push(notification.id);
                     break;
@@ -118,7 +118,7 @@ async function sendSingle(
                 break;
             }
 
-            case I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_CHILD: {
+            case I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_SUCCESSOR: {
                 if (user.settings?.enableLinkedNotifications === false) {
                     notificationToBeCleared.push(notification.id);
                     break;
@@ -356,6 +356,7 @@ export const createBulletin = async (
         }
 
         case I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED: {
+            // We use the previous version because this is the one with the flag
             if (!previousPublishedVersion || !previousPublishedVersion.publishedDate) {
                 break;
             }
@@ -376,6 +377,7 @@ export const createBulletin = async (
         }
 
         case I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED: {
+            // We use the previous version because this is the one with the link
             if (!previousPublishedVersion) {
                 break;
             }
@@ -395,7 +397,8 @@ export const createBulletin = async (
             break;
         }
 
-        case I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PARENT: {
+        case I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PREDECESSOR: {
+            // We use the previous version because this is the one with the link
             if (!previousPublishedVersion) {
                 break;
             }
@@ -412,11 +415,13 @@ export const createBulletin = async (
             break;
         }
 
-        case I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_CHILD: {
+        case I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_SUCCESSOR: {
+            // We use the previous version because this is the one with the link
             if (!previousPublishedVersion) {
                 break;
             }
 
+            // Exclude peer review as that case is handled above in PUBLICATION_VERSION_PEER_REVIEWED
             const usersToBeNotified = await userService.getUsersWithDirectLinkToVersion(
                 previousPublishedVersion.id,
                 'PEER_REVIEW',

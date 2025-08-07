@@ -391,7 +391,7 @@ export const updateStatus = async (
 
             // Notifies authors of child publications (that link FROM this publication)
             notificationBulletin.createBulletin(
-                I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PARENT,
+                I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PREDECESSOR,
                 publicationVersion,
                 previousPublishedVersion,
                 { excludedUserIds }
@@ -399,7 +399,7 @@ export const updateStatus = async (
 
             // Notifies authors of parent publications (that this publication links TO)
             notificationBulletin.createBulletin(
-                I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_CHILD,
+                I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_SUCCESSOR,
                 publicationVersion,
                 previousPublishedVersion,
                 { excludedUserIds }
