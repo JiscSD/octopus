@@ -400,11 +400,7 @@ export const createBulletin = async (
                 break;
             }
 
-            const usersToBeNotified = await userService.getUsersWithDirectLinkFromVersion(
-                previousPublishedVersion.id,
-                'PEER_REVIEW',
-                'exclude'
-            );
+            const usersToBeNotified = await userService.getUsersWithDirectLinkFromVersion(previousPublishedVersion.id);
 
             entries = usersToBeNotified.map((user) => ({
                 userId: user.id,
@@ -421,7 +417,11 @@ export const createBulletin = async (
                 break;
             }
 
-            const usersToBeNotified = await userService.getUsersWithDirectLinkToVersion(previousPublishedVersion.id);
+            const usersToBeNotified = await userService.getUsersWithDirectLinkToVersion(
+                previousPublishedVersion.id,
+                'PEER_REVIEW',
+                'exclude'
+            );
 
             entries = usersToBeNotified.map((user) => ({
                 userId: user.id,
