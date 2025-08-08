@@ -22,7 +22,7 @@ const sqs = new SQS(config);
 export const createQueue = async (): Promise<AWS_SQS.CreateQueueResult> => {
     // create SQS locally for PDF message queue
     return sqs.createQueue({
-        QueueName: `science-octopus-pdf-queue-${process.env.STAGE}`,
+        QueueName: `pdf-generation-queue-${process.env.STAGE}-octopus`,
         Attributes: {
             DelaySeconds: '60',
             MessageRetentionPeriod: '86400'
