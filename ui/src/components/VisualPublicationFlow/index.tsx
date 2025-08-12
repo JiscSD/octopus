@@ -80,8 +80,8 @@ const VisualPublicationFlow: React.FC = (): React.ReactElement => (
         />
         <GridItem
             className="row-start-4 row-end-4 lg:col-start-2 lg:col-end-2"
-            title="Results"
-            content="Raw data or summarised results collected according to an existing published Method (can be linked to a data repository)."
+            title="Results / Sources"
+            content="Results can be raw data or summarised results collected according to an existing published Method (can be linked to a data repository). Sources refers to any existing evidence or material that are the object(s) of study for the research."
             icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white-50" />}
             position="LEFT"
         />
@@ -101,8 +101,8 @@ const VisualPublicationFlow: React.FC = (): React.ReactElement => (
         />
         <GridItem
             className="row-start-7 row-end-7 lg:col-start-1 lg:col-end-2"
-            title="Real World Application"
-            content="Real World Applications arising from an existing published Interpretation."
+            title="Applications / Implications"
+            content="Applications or implications arising from an existing published Interpretation."
             icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white-50" />}
             position="RIGHT"
         />

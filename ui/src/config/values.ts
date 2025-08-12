@@ -39,11 +39,11 @@ export const octopusInformation: Interfaces.OctopusInformation = {
         },
         DATA: {
             id: 'DATA',
-            label: 'Results',
+            label: 'Results/Sources of Evidence',
             inlineDescription:
-                'Raw data or summarised results collected according to an existing published Method (can be linked to a data repository).',
+                'Results can be raw data or summarised results collected according to an existing published Method (can be linked to a data repository). Sources refers to any existing evidence or material that are the object(s) of study for the research.',
             faqDescription:
-                'A &apos;results&apos; publication comprises raw data or summarised results collected according to an existing published &apos;method&apos;. It should describe the data or results themselves, without any analysis. It should provide details of the exact conditions under which the method was carried out and anything needed for an analysis or interpretation of the results. You can include links to the raw data files if they are in a specialist repository. Octopus is not a data repository itself.'
+                'A &apos;Results/Sources&apos; publication can be either the raw data or summarised results collected according to an existing published &apos;method&apos;, or any existing evidence or material that form the object(s) of study for the research. It should describe the data, sources or results themselves, without any analysis. For results, it should provide details of the exact conditions under which the method was carried out and anything needed for an analysis or interpretation of the results. You can include links to the raw data files if they are in a specialist repository. Octopus is not a data repository itself.'
         },
         ANALYSIS: {
             id: 'ANALYSIS',
@@ -61,10 +61,10 @@ export const octopusInformation: Interfaces.OctopusInformation = {
         },
         REAL_WORLD_APPLICATION: {
             id: 'REAL_WORLD_APPLICATION',
-            label: 'Real World Application',
-            inlineDescription: 'Real World Applications arising from an existing published Interpretation.',
+            label: 'Applications/Implications',
+            inlineDescription: 'Applications or implications arising from an existing published Interpretation.',
             faqDescription:
-                'A &apos;real world application&apos; publication describes how findings might have (or have had) an impact in the real world. This might be through a practical or policy application, and would be the appropriate publication type for case studies.'
+                'An &apos;Applications/Implications&apos; publication describes how findings might have (or have had) an impact in the real world or for others in the field of study. This might be through a practical or policy application, and would be the appropriate publication type for case studies.'
         },
         PEER_REVIEW: {
             id: 'PEER_REVIEW',

@@ -154,7 +154,7 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                         <SupportText>
                             Octopus has 8 publication types which closely align with the research process and move away
                             from the traditional research paper. These are linked to form a research chain, from initial
-                            Research Problem to Real World Application. You will no longer need to structure your
+                            Research Problem to Applications/Implications. You will no longer need to structure your
                             publications like a paper, with an abstract and introduction, as the publication chain
                             itself serves this role. You will be asked to write a very short description to aid
                             discovery.{' '}
@@ -180,12 +180,12 @@ const Create: Types.NextPage<PageProps> = (props): React.ReactElement => {
                         >
                             {props.publicationType ? (
                                 <option key={props.publicationType} value={props.publicationType}>
-                                    {Helpers.formatPublicationType(props.publicationType)}
+                                    {Helpers.formatPublicationType(props.publicationType, true)}
                                 </option>
                             ) : (
                                 Config.values.publicationTypes.map((type) => (
                                     <option key={type} value={type}>
-                                        {Helpers.formatPublicationType(type)}
+                                        {Helpers.formatPublicationType(type, true)}
                                     </option>
                                 ))
                             )}
