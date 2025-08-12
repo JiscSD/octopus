@@ -168,7 +168,7 @@ const Visualization: React.FC<VisualizationProps> = (props): React.ReactElement 
     return (
         <section className="container mb-8 px-8 pt-8 lg:pt-16">
             <div className="overflow-hidden" ref={visualizationHeaderRef}>
-                <div className="grid min-w-[1000px] grid-cols-7 gap-[2%]">
+                <div className="grid min-w-[1000px] grid-cols-7 gap-[2%] 3xl:gap-[1.75%]">
                     {filteredPublicationTypes.map((type) => (
                         <div key={type}>
                             <span className="block h-12 p-2 font-montserrat text-xs font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 xl:h-14 xl:text-sm 2xl:h-auto">
@@ -183,7 +183,7 @@ const Visualization: React.FC<VisualizationProps> = (props): React.ReactElement 
                     className="sm:scrollbar min-h-[16rem] overflow-x-auto overflow-y-hidden"
                     ref={visualizationWrapperRef}
                 >
-                    <div className="grid min-w-[1000px] grid-cols-7 gap-[2%]">
+                    <div className="grid min-w-[1000px] grid-cols-7 gap-[2%] 3xl:gap-[1.75%]">
                         {data && (
                             <Xwrapper>
                                 {filteredPublicationTypes.map((type) => (
