@@ -66,7 +66,7 @@ const VisualPublicationFlow: React.FC = (): React.ReactElement => (
         />
         <GridItem
             className="row-start-2 row-end-2 lg:col-start-2 lg:col-end-2"
-            title="Rationale/Hypothesis"
+            title="Rationale / Hypothesis"
             content="An original hypothesis relating to an existing published Research Problem or the rationale for how you think the Research Problem could be addressed."
             icon={<OutlineIcons.LinkIcon className="h-5 w-5 text-white-50" />}
             position="LEFT"

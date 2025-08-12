@@ -1605,7 +1605,11 @@ components:
         - PROBLEM = Research Problem
         - HYPOTHESIS = Rationale / Hypothesis
         - PROTOCOL = Method
-        - DATA = Results
+        - DATA = Results / Sources of Evidence
+        - ANALYSIS = Analysis
+        - INTERPRETATION = Interpretation
+        - REAL_WORLD_APPLICATION = Applications / Implications
+        - PEER_REVIEW = Peer Review
     PublicationUrlSlug:
       type: string
       description: Unused legacy field.
