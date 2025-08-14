@@ -49,6 +49,7 @@ model UserSettings {
     enableBookmarkNotifications        Boolean @default(true)
     enableBookmarkVersionNotifications Boolean @default(true)
     enableBookmarkFlagNotifications    Boolean @default(true)
+    enableVersionFlagNotifications     Boolean @default(true)
     user                               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -616,6 +617,7 @@ enum NotificationActionTypeEnum {
     PUBLICATION_BOOKMARK_RED_FLAG_RAISED
     PUBLICATION_BOOKMARK_RED_FLAG_RESOLVED
     PUBLICATION_BOOKMARK_RED_FLAG_COMMENTED
+    PUBLICATION_VERSION_RED_FLAG_RAISED
 }
 
 enum NotificationStatusEnum {

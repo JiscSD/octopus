@@ -177,7 +177,8 @@ export const get = (id: string, isAccountOwner = false) =>
                 select: {
                     enableBookmarkNotifications: true,
                     enableBookmarkVersionNotifications: true,
-                    enableBookmarkFlagNotifications: true
+                    enableBookmarkFlagNotifications: true,
+                    enableVersionFlagNotifications: true
                 }
             },
             lastBulletinSentAt: true
@@ -509,6 +510,38 @@ export const getBookmarkedUsers = async (publicationId: string) => {
     });
 };
 
+export const getUsersWithOutstandingFlagsBeforeDate = async (
+    publicationId: string,
+    previousPublishedVersionDate: Date
+) => {
+    const usersWithRecentFlags = await client.prisma.user.findMany({
+        where: {
+            PublicationFlags: {
+                some: {
+                    publicationId: publicationId,
+                    resolved: false,
+                    createdAt: {
+                        gte: previousPublishedVersionDate
+                    }
+                }
+            }
+        },
+        include: {
+            PublicationFlags: {
+                where: {
+                    publicationId: publicationId,
+                    resolved: false,
+                    createdAt: {
+                        gte: previousPublishedVersionDate
+                    }
+                }
+            }
+        }
+    });
+
+    return usersWithRecentFlags;
+};
+
 export const getUserSettings = async (id: string) =>
     client.prisma.userSettings.findUnique({
         where: {
@@ -516,16 +549,17 @@ export const getUserSettings = async (id: string) =>
         }
     });
 
-export const updateUserSettings = async (id: string, settings: Prisma.UserSettingsUpdateInput) =>
+export const updateUserSettings = async (
+    id: string,
+    settings: Omit<Prisma.UserSettingsCreateManyInput, 'id' | 'userId'>
+) =>
     client.prisma.userSettings.upsert({
         where: {
             userId: id
         },
         update: settings,
         create: {
-            userId: id,
-            enableBookmarkNotifications: !!settings.enableBookmarkNotifications,
-            enableBookmarkVersionNotifications: !!settings.enableBookmarkVersionNotifications,
-            enableBookmarkFlagNotifications: !!settings.enableBookmarkFlagNotifications
+            ...settings,
+            userId: id
         }
     });

@@ -319,6 +319,7 @@ export interface User {
         enableBookmarkNotifications: boolean;
         enableBookmarkVersionNotifications: boolean;
         enableBookmarkFlagNotifications: boolean;
+        enableVersionFlagNotifications: boolean;
     } | null;
     lastBulletinSentAt?: Date | null;
 }
