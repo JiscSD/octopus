@@ -81,7 +81,7 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
         }
     };
 
-    const updateBookmarkNotificationsSettings = async (settings: Interfaces.UserSettings) => {
+    const updateNotificationsSettings = async (settings: Interfaces.UserSettings) => {
         setLoading(true);
         try {
             const payload = settings as unknown as Interfaces.JSON;
@@ -90,21 +90,30 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
             setToast({
                 visible: true,
                 title: 'Success',
-                message: 'Bookmark notifications settings updated successfully',
+                message: 'Notifications settings updated successfully',
                 icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-green-600" />,
                 dismiss: true
             });
         } catch (err) {
-            console.error('Error updating bookmark notifications settings:', err);
+            console.error('Error updating notifications settings:', err);
             setToast({
                 visible: true,
                 title: 'Error',
-                message: 'Failed to update bookmark notifications settings',
+                message: 'Failed to update notifications settings',
                 icon: <OutlineIcons.XCircleIcon className="h-6 w-6 text-red-600" />,
                 dismiss: true
             });
         }
         setLoading(false);
+    };
+
+    const changeLinkedNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const checked = e.target.checked;
+        const updatedSettings = {
+            ...userSettings,
+            enableLinkedNotifications: checked
+        };
+        updateNotificationsSettings(updatedSettings);
     };
 
     const changePeerReviewNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,6 +122,7 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
             ...userSettings,
             enablePeerReviewNotifications: checked
         };
+        updateNotificationsSettings(updatedSettings);
     };
 
     const changeVersionFlagNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,6 +131,7 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
             ...userSettings,
             enableVersionFlagNotifications: checked
         };
+        updateNotificationsSettings(updatedSettings);
     };
 
     const changeBookmarkNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,7 +143,7 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
             enableBookmarkNotifications: checked,
             enableVersionFlagNotifications: checked
         };
-        updateBookmarkNotificationsSettings(updatedSettings);
+        updateNotificationsSettings(updatedSettings);
     };
 
     const changeBookmarkVersionNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -142,7 +153,7 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
             enableBookmarkVersionNotifications: checked,
             enableBookmarkNotifications: checked || userSettings.enableBookmarkFlagNotifications
         };
-        updateBookmarkNotificationsSettings(updatedSettings);
+        updateNotificationsSettings(updatedSettings);
     };
 
     const changeBookmarkFlagNotifications = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -153,7 +164,7 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
             enableBookmarkNotifications: checked || userSettings.enableBookmarkVersionNotifications
         };
 
-        updateBookmarkNotificationsSettings(updatedSettings);
+        updateNotificationsSettings(updatedSettings);
     };
 
     return (
@@ -222,6 +233,15 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
                             onChange={changePeerReviewNotifications}
                             checked={userSettings.enablePeerReviewNotifications}
                             label="Enable notifications about publications I have peer reviewed"
+                            className={`mt-4 font-semibold w-fit ${loading ? 'cursor-wait' : ''}`}
+                        />
+                        <Components.Checkbox
+                            disabled={loading}
+                            id="version-linked-notifications"
+                            name="version-linked-notifications"
+                            onChange={changeLinkedNotifications}
+                            checked={userSettings.enableLinkedNotifications}
+                            label="Enable notifications about publications that are linked to mine"
                             className={`mt-4 font-semibold w-fit ${loading ? 'cursor-wait' : ''}`}
                         />
                     </fieldset>

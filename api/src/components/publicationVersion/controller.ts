@@ -359,24 +359,51 @@ export const updateStatus = async (
             event.queryStringParameters.ariContactConsent
         );
 
+        const excludedUserIds = publicationVersion.coAuthors
+            .map((coAuthor) => coAuthor.linkedUser)
+            .filter((i): i is string => i !== null);
+
+        const previousPublishedVersion = await publicationVersionService.getPreviousPublishedVersion(
+            publicationVersion.versionOf
+        );
+
         await Promise.all([
-            // Notify all users that bookmarked this publication version that a new version is now LIVE.
-            notificationBulletin.createBulletin(I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED, {
-                title: publicationVersion.title || '',
-                versionOf: publicationVersion.versionOf
-            }),
+            // Notifies all users that bookmarked this publication version that a new version is now LIVE.
+            notificationBulletin.createBulletin(
+                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
+                publicationVersion,
+                previousPublishedVersion
+            ),
 
             // Notify all users that red-flagged this publication version that a new version is now LIVE.
-            notificationBulletin.createBulletin(I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED, {
-                title: publicationVersion.title || '',
-                versionOf: publicationVersion.versionOf
-            }),
+            notificationBulletin.createBulletin(
+                I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED,
+                publicationVersion,
+                previousPublishedVersion
+            ),
 
-            // Notify all users that peer-reviewed this publication version that a new version is now LIVE.
-            notificationBulletin.createBulletin(I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED, {
-                title: publicationVersion.title || '',
-                versionOf: publicationVersion.versionOf
-            })
+            // Notifies authors that peer-reviewed this publication version that a new version is now LIVE.
+            notificationBulletin.createBulletin(
+                I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED,
+                publicationVersion,
+                previousPublishedVersion
+            ),
+
+            // Notifies authors of child publications (that link FROM this publication)
+            notificationBulletin.createBulletin(
+                I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PREDECESSOR,
+                publicationVersion,
+                previousPublishedVersion,
+                { excludedUserIds }
+            ),
+
+            // Notifies authors of parent publications (that this publication links TO)
+            notificationBulletin.createBulletin(
+                I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_SUCCESSOR,
+                publicationVersion,
+                previousPublishedVersion,
+                { excludedUserIds }
+            )
         ]);
 
         return response.json(200, { message: 'Publication is now LIVE.' });

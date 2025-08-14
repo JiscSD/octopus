@@ -17,6 +17,9 @@ const updateSettingsSchema: I.JSONSchemaType<I.User['settings']> = {
         },
         enablePeerReviewNotifications: {
             type: 'boolean'
+        },
+        enableLinkedNotifications: {
+            type: 'boolean'
         }
     },
     required: [
@@ -24,7 +27,8 @@ const updateSettingsSchema: I.JSONSchemaType<I.User['settings']> = {
         'enableBookmarkVersionNotifications',
         'enableBookmarkFlagNotifications',
         'enableVersionFlagNotifications',
-        'enablePeerReviewNotifications'
+        'enablePeerReviewNotifications',
+        'enableLinkedNotifications'
     ]
 };
 
