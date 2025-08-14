@@ -127,12 +127,12 @@ const urls = {
         keywords: [],
         canonical: `${base.host}/verify`
     },
-    myBookmarks: {
-        path: '/my-bookmarks',
+    notifications: {
+        path: '/notifications',
         title: `${base.title}`,
         description: '',
         keywords: [],
-        canonical: `${base.host}/my-bookmarks`
+        canonical: `${base.host}/notifications`
     },
 
     // RedFlags
