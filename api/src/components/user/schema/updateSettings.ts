@@ -14,13 +14,17 @@ const updateSettingsSchema: I.JSONSchemaType<I.User['settings']> = {
         },
         enableVersionFlagNotifications: {
             type: 'boolean'
+        },
+        enablePeerReviewNotifications: {
+            type: 'boolean'
         }
     },
     required: [
         'enableBookmarkNotifications',
         'enableBookmarkVersionNotifications',
         'enableBookmarkFlagNotifications',
-        'enableVersionFlagNotifications'
+        'enableVersionFlagNotifications',
+        'enablePeerReviewNotifications'
     ]
 };
 

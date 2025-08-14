@@ -178,7 +178,8 @@ export const get = (id: string, isAccountOwner = false) =>
                     enableBookmarkNotifications: true,
                     enableBookmarkVersionNotifications: true,
                     enableBookmarkFlagNotifications: true,
-                    enableVersionFlagNotifications: true
+                    enableVersionFlagNotifications: true,
+                    enablePeerReviewNotifications: true
                 }
             },
             lastBulletinSentAt: true
@@ -540,6 +541,34 @@ export const getUsersWithOutstandingFlagsBeforeDate = async (
     });
 
     return usersWithRecentFlags;
+};
+
+export const getUsersWithPeerReviewsBeforeDate = async (publicationId: string, previousPublishedVersionDate: Date) => {
+    const usersWithPeerReviews = await client.prisma.user.findMany({
+        where: {
+            publicationVersions: {
+                some: {
+                    isLatestLiveVersion: true,
+                    publishedDate: {
+                        gte: previousPublishedVersionDate
+                    },
+                    publication: {
+                        type: 'PEER_REVIEW',
+                        linkedTo: {
+                            some: {
+                                publicationToId: publicationId
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        select: {
+            id: true
+        }
+    });
+
+    return usersWithPeerReviews;
 };
 
 export const getUserSettings = async (id: string) =>
