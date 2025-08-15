@@ -3,4 +3,4 @@ functions:
     generatePDFsFromQueue:
         handler: dist/src/components/sqs/handler.generatePDFs
         events:
-            - sqs: 'arn:aws:sqs:${aws:region}:${aws:accountId}:science-octopus-pdf-queue-${self:provider.stage}'
+            - sqs: 'arn:aws:sqs:${aws:region}:${aws:accountId}:pdf-generation-queue-${self:provider.stage}-octopus'
