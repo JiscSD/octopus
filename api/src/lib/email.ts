@@ -199,15 +199,39 @@ export const standardHTMLEmailTemplate = (subject: string, html: string, preview
 };
 
 export const send = async (options: I.EmailSendOptions): Promise<SMTPTransport.SentMessageInfo> => {
-    const emailResponse = await transporter.sendMail({
-        from,
-        to: options.to,
-        subject: options.subject,
-        html: options.html,
-        text: options.text
-    });
+    try {
+        const emailResponse = await transporter.sendMail({
+            from,
+            to: options.to,
+            subject: options.subject,
+            html: options.html,
+            text: options.text
+        });
 
-    return emailResponse;
+        if (emailResponse.rejected) {
+            for (const rejectedEmail of emailResponse.rejected) {
+                const address = typeof rejectedEmail === 'string' ? rejectedEmail : rejectedEmail.address;
+                const obfuscatedEmail = Helpers.obfuscateEmail(address);
+                console.error(`[EMAIL] [ERROR] Email to ${obfuscatedEmail} was rejected.`);
+            }
+        }
+
+        if (emailResponse.pending) {
+            for (const pendingEmail of emailResponse.pending) {
+                const address = typeof pendingEmail === 'string' ? pendingEmail : pendingEmail.address;
+                const obfuscatedEmail = Helpers.obfuscateEmail(address);
+                console.warn(`[EMAIL] [WARN] Email to ${obfuscatedEmail} is pending.`);
+            }
+        }
+
+        return emailResponse;
+    } catch (error) {
+        const recipients = Array.isArray(options.to) ? options.to : [options.to];
+        const obfuscatedEmails = recipients.map(Helpers.obfuscateEmail).join(', ');
+        console.error(`[EMAIL] [ERROR] Error sending email to ${obfuscatedEmails}:`, error);
+
+        return Promise.reject(error);
+    }
 };
 
 /* Templates */
