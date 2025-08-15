@@ -94,7 +94,7 @@ const AimsData: JumpTo[] = [
                 }
             },
             {
-                header: 'Real World Applications',
+                header: 'Applications/Implications',
                 content: {
                     problem:
                         'There is a lack of emphasis on real-world implementation and publication of specific case studies in the current publication process, as these are not deemed &apos;high impact&apos;.',

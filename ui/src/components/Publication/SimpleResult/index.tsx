@@ -76,7 +76,7 @@ const SimpleResult: React.FC<Props> = (props): React.ReactElement => {
         >
             <div className="flex flex-grow basis-1/5 flex-col sm:pr-5">
                 <p className="pb-5 font-bold text-pink-500 dark:text-pink-300">
-                    {Helpers.formatPublicationType(props.publication.type)}
+                    {Helpers.formatPublicationType(props.publication.type, true)}
                 </p>
                 <p className="flex-1 flex-grow pb-5 font-montserrat text-grey-800 transition-colors duration-500 dark:text-white-50">
                     {latestLiveVersion ? latestLiveVersion.title : latestVersion?.title}

@@ -19,15 +19,15 @@ export function sanitizeSearchQuery(searchQuery: string): string {
 /**
  * @description Format a publication type returned from the DB
  */
-export const formatPublicationType = (publicationType: I.PublicationType): string => {
+export const formatPublicationType = (publicationType: I.PublicationType, detailed = false): string => {
     const types = {
         PROBLEM: 'Research Problem',
         HYPOTHESIS: 'Rationale / Hypothesis',
         PROTOCOL: 'Method',
-        DATA: 'Results',
+        DATA: detailed ? 'Results / Sources of Evidence' : 'Results / Sources',
         ANALYSIS: 'Analysis',
         INTERPRETATION: 'Interpretation',
-        REAL_WORLD_APPLICATION: 'Real World Application',
+        REAL_WORLD_APPLICATION: 'Applications / Implications',
         PEER_REVIEW: 'Peer Review'
     };
 

@@ -700,7 +700,7 @@ const BuildPublication: React.FC<BuildPublicationProps> = (props) => {
                     <div className="mb-12 flex flex-wrap items-center justify-between gap-8">
                         <span className="block font-montserrat text-lg font-semibold text-teal-600 transition-colors duration-500 dark:text-teal-400">
                             {store.publicationVersion &&
-                                Helpers.formatPublicationType(store.publicationVersion.publication.type)}
+                                Helpers.formatPublicationType(store.publicationVersion.publication.type, true)}
                         </span>
                         <div aria-live="polite" className="sr-only">
                             {navigationAnnouncement}

@@ -1032,10 +1032,10 @@ const UserTerms: NextPage = (): React.ReactElement => (
                                 <li className="mb-2">Research Problem</li>
                                 <li className="mb-2">Rationale/Hypothesis</li>
                                 <li className="mb-2">Method</li>
-                                <li className="mb-2">Results</li>
+                                <li className="mb-2">Results/Sources</li>
                                 <li className="mb-2">Analysis</li>
                                 <li className="mb-2">Interpretation</li>
-                                <li className="mb-2">Real World Application</li>
+                                <li className="mb-2">Applications/Implications</li>
                                 <li className="mb-2">Peer Review</li>
                             </ul>
                             <span className="font-bold">The nature and purpose of the Processing</span>

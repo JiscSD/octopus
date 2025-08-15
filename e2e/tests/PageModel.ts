@@ -54,12 +54,12 @@ export const PageModel = {
         video: 'video',
         pubTypes: [
             'h3:text("Research Problem")',
-            'h3:text("Rationale/Hypothesis")',
+            'h3:text("Rationale / Hypothesis")',
             'h3:text("Methods")',
-            'h3:text("Results")',
+            'h3:text("Results / Sources")',
             'h3:text("Analysis")',
             'h3:text("Interpretation")',
-            'h3:text("Real World Application")'
+            'h3:text("Applications / Implications")',
         ]
     },
     browse: {
