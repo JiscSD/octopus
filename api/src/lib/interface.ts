@@ -1124,6 +1124,11 @@ export interface TriggerAriArchivedCheckQueryParams {
     dryRun?: boolean;
 }
 
+export interface TriggerNotificationsQueryParams {
+    apiKey: string;
+    force?: boolean;
+}
+
 export interface LocalNotifyPubRouterPathParams {
     publicationId: string;
 }

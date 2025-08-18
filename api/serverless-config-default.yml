@@ -362,12 +362,21 @@ functions:
     sendBulletinNotifications:
         handler: dist/src/components/notification/routes.sendBulletin
         events:
-            - schedule: cron(0 10 ? * MON *) # Every Monday at 10
             - http:
                 path: ${self:custom.versions.v1}/notifications/bulletin
                 method: POST
                 cors: true
-            
+    sendBulletinNotificationsCron:
+        handler: dist/src/components/notification/routes.sendBulletinCron
+        events:
+            - schedule: cron(0 10 ? * MON *) # Every Monday at 10
+    clearFailedNotifications:
+        handler: dist/src/components/notification/routes.clearFailed
+        events:
+            - http:
+                path: ${self:custom.versions.v1}/notifications/clearFailed
+                method: POST
+                cors: true
     # Verification
     requestVerification:
         handler: dist/src/components/verification/routes.requestCode
