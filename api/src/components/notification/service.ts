@@ -56,3 +56,8 @@ export const removeMany = (ids: string[]) =>
     client.prisma.notification.deleteMany({
         where: { id: { in: ids } }
     });
+
+export const clearFailedNotifications = () =>
+    client.prisma.notification.deleteMany({
+        where: { status: I.NotificationStatusEnum.FAILED }
+    });
