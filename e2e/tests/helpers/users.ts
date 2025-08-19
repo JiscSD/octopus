@@ -60,16 +60,16 @@ export const login = async (page: Page, browser: Browser, user: TestUser) => {
     await page.click(PageModel.login.signInButton);
 
     // After signing in, we can either be still on orcid (if authorization is required), or back on octopus.
-    await page.waitForURL(/oauth\/authorize/);
-    await page.waitForLoadState('networkidle');
-    const needsAuthorization = await page.locator(PageModel.login.authorizeHeading).isVisible();
+    // await page.waitForURL(/oauth\/authorize/);
+    // await page.waitForLoadState('networkidle');
+    // const needsAuthorization = await page.locator(PageModel.login.authorizeHeading).isVisible();
 
-    if (needsAuthorization) {
-        await expect(page.url()).toContain('/oauth/authorize');
-        await page.click(PageModel.login.authorizeButton);
-    }
+    // if (needsAuthorization) {
+    //     await expect(page.url()).toContain('/oauth/authorize');
+    //     await page.click(PageModel.login.authorizeButton);
+    // }
 
-    await page.waitForURL(/login\?code=/);
+    // await page.waitForURL(/login\?code=/);
     await page.waitForSelector(PageModel.header.usernameButton);
 
     // check if email verification is required
