@@ -974,3 +974,17 @@ export const updateStatus = async (id: string, status: I.PublicationStatusEnum, 
 
     return updatedVersion;
 };
+
+export const getPreviousPublishedVersion = async (publicationId: string): Promise<I.PublicationVersion | null> => {
+    return client.prisma.publicationVersion.findFirst({
+        where: {
+            versionOf: publicationId,
+            isLatestLiveVersion: false,
+            currentStatus: 'LIVE'
+        },
+        orderBy: {
+            publishedDate: 'desc'
+        },
+        include: defaultPublicationVersionInclude
+    });
+};

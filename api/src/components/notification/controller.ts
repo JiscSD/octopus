@@ -1,10 +1,7 @@
 import * as I from 'interface';
-import * as Helpers from 'lib/helpers';
 import * as response from 'lib/response';
 import * as bulletinNotification from 'notification/bulletin';
 import * as notificationService from 'notification/service';
-
-const triggerScriptApiKey = Helpers.checkEnvVariable('TRIGGER_SCRIPT_API_KEY');
 
 export const create = async (data: {
     userId: string;
@@ -47,17 +44,9 @@ export const sendByType = async (
 };
 
 export const sendBulletin = async (
-    event: I.APIRequest<undefined, { force: string; apiKey: string }>
+    event: I.APIRequest<undefined, I.TriggerNotificationsQueryParams>
 ): Promise<I.JSONResponse> => {
-    // TODO:
-    // This is a temporary endpoint for sending bulletin notifications so that we can test it without waiting for the next scheduled run.
-    // This endpoint has to be triggered by the cron job only
-    const force = event.queryStringParameters?.force === 'true';
-    const apiKey = event.queryStringParameters?.apiKey;
-
-    if (triggerScriptApiKey && apiKey !== triggerScriptApiKey) {
-        return response.json(403, { message: 'Forbidden: Invalid API key.' });
-    }
+    const force = event.queryStringParameters?.force === true;
 
     try {
         const result = await sendByType(I.NotificationTypeEnum.BULLETIN, force);
@@ -72,6 +61,24 @@ export const sendBulletin = async (
 
         return response.json(500, {
             message: 'Failed to send bulletin notifications.',
+            error: error instanceof Error ? error.message : 'Unknown error'
+        });
+    }
+};
+
+export const clearFailedNotifications = async (): Promise<I.JSONResponse> => {
+    try {
+        const result = await notificationService.clearFailedNotifications();
+
+        return response.json(200, {
+            message: 'Failed notifications cleared successfully.',
+            data: result
+        });
+    } catch (error) {
+        console.error('Error clearing failed notifications:', error);
+
+        return response.json(500, {
+            message: 'Failed to clear failed notifications.',
             error: error instanceof Error ? error.message : 'Unknown error'
         });
     }

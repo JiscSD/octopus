@@ -319,6 +319,9 @@ export interface User {
         enableBookmarkNotifications: boolean;
         enableBookmarkVersionNotifications: boolean;
         enableBookmarkFlagNotifications: boolean;
+        enableVersionFlagNotifications: boolean;
+        enablePeerReviewNotifications: boolean;
+        enableLinkedNotifications: boolean;
     } | null;
     lastBulletinSentAt?: Date | null;
 }
@@ -1119,6 +1122,11 @@ export interface TriggerAriIngestQueryParams {
 export interface TriggerAriArchivedCheckQueryParams {
     apiKey: string;
     dryRun?: boolean;
+}
+
+export interface TriggerNotificationsQueryParams {
+    apiKey: string;
+    force?: boolean;
 }
 
 export interface LocalNotifyPubRouterPathParams {

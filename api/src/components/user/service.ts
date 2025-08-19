@@ -177,7 +177,10 @@ export const get = (id: string, isAccountOwner = false) =>
                 select: {
                     enableBookmarkNotifications: true,
                     enableBookmarkVersionNotifications: true,
-                    enableBookmarkFlagNotifications: true
+                    enableBookmarkFlagNotifications: true,
+                    enableVersionFlagNotifications: true,
+                    enablePeerReviewNotifications: true,
+                    enableLinkedNotifications: true
                 }
             },
             lastBulletinSentAt: true
@@ -509,6 +512,141 @@ export const getBookmarkedUsers = async (publicationId: string) => {
     });
 };
 
+export const getUsersWithOutstandingFlagsInTimeInterval = async (
+    publicationId: string,
+    startDate: Date,
+    endDate: Date
+) => {
+    const usersWithRecentFlags = await client.prisma.user.findMany({
+        where: {
+            PublicationFlags: {
+                some: {
+                    publicationId: publicationId,
+                    createdAt: {
+                        gte: startDate,
+                        lte: endDate
+                    }
+                }
+            }
+        },
+        include: {
+            PublicationFlags: {
+                where: {
+                    publicationId: publicationId,
+                    createdAt: {
+                        gte: startDate,
+                        lte: endDate
+                    }
+                }
+            }
+        }
+    });
+
+    return usersWithRecentFlags;
+};
+
+export const getUsersWithDirectLinkToVersion = async (
+    publicationVersionId: string,
+    type?: I.PublicationType,
+    typeFilter: 'include' | 'exclude' = 'include'
+) => {
+    const typeCondition = type ? (typeFilter === 'include' ? { type: type } : { type: { not: type } }) : {};
+
+    const usersWithLinkedPublicationsToVersion = await client.prisma.user.findMany({
+        where: {
+            publicationVersions: {
+                some: {
+                    publication: {
+                        ...typeCondition,
+                        linkedTo: {
+                            some: {
+                                versionToId: publicationVersionId
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        select: {
+            id: true,
+            publicationVersions: {
+                where: {
+                    publication: {
+                        ...typeCondition,
+                        linkedTo: {
+                            some: {
+                                versionToId: publicationVersionId
+                            }
+                        }
+                    }
+                },
+                select: {
+                    title: true
+                }
+            }
+        }
+    });
+
+    return usersWithLinkedPublicationsToVersion;
+};
+
+export const getUsersWithDirectLinkFromVersion = async (
+    publicationVersionId: string,
+    type?: I.PublicationType,
+    typeFilter: 'include' | 'exclude' = 'include'
+) => {
+    const typeCondition = type ? (typeFilter === 'include' ? { type: type } : { type: { not: type } }) : {};
+
+    const usersWithLinkedPublicationsFromVersion = await client.prisma.user.findMany({
+        where: {
+            publicationVersions: {
+                some: {
+                    publication: {
+                        ...typeCondition,
+                        linkedFrom: {
+                            some: {
+                                publicationFrom: {
+                                    versions: {
+                                        some: {
+                                            id: publicationVersionId
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        select: {
+            id: true,
+            publicationVersions: {
+                where: {
+                    publication: {
+                        ...typeCondition,
+                        linkedFrom: {
+                            some: {
+                                publicationFrom: {
+                                    versions: {
+                                        some: {
+                                            id: publicationVersionId
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                select: {
+                    title: true
+                }
+            }
+        }
+    });
+
+    return usersWithLinkedPublicationsFromVersion;
+};
+
 export const getUserSettings = async (id: string) =>
     client.prisma.userSettings.findUnique({
         where: {
@@ -516,16 +654,17 @@ export const getUserSettings = async (id: string) =>
         }
     });
 
-export const updateUserSettings = async (id: string, settings: Prisma.UserSettingsUpdateInput) =>
+export const updateUserSettings = async (
+    id: string,
+    settings: Omit<Prisma.UserSettingsCreateManyInput, 'id' | 'userId'>
+) =>
     client.prisma.userSettings.upsert({
         where: {
             userId: id
         },
         update: settings,
         create: {
-            userId: id,
-            enableBookmarkNotifications: !!settings.enableBookmarkNotifications,
-            enableBookmarkVersionNotifications: !!settings.enableBookmarkVersionNotifications,
-            enableBookmarkFlagNotifications: !!settings.enableBookmarkFlagNotifications
+            ...settings,
+            userId: id
         }
     });

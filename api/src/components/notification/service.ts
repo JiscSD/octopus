@@ -51,3 +51,13 @@ export const update = (id: string, data: Pick<I.Notification, 'status'>) =>
     client.prisma.notification.update({ where: { id }, data });
 
 export const remove = (id: string) => client.prisma.notification.delete({ where: { id } });
+
+export const removeMany = (ids: string[]) =>
+    client.prisma.notification.deleteMany({
+        where: { id: { in: ids } }
+    });
+
+export const clearFailedNotifications = () =>
+    client.prisma.notification.deleteMany({
+        where: { status: I.NotificationStatusEnum.FAILED }
+    });

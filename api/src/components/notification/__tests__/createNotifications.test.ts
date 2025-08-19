@@ -8,9 +8,13 @@ describe('Create notifications', () => {
         await testUtils.testSeed();
     });
 
-    for (const userId of ['test-user-1', 'test-user-2', 'test-organisational-account-1']) {
-        Object.values(I.NotificationTypeEnum).forEach((type) => {
-            Object.values(I.NotificationActionTypeEnum).forEach((actionType) => {
+    const types = Object.values(I.NotificationTypeEnum);
+    const actionTypes = Object.values(I.NotificationActionTypeEnum);
+    const userIds = ['test-user-1', 'test-user-2', 'test-organisational-account-1'];
+
+    for (const type of types) {
+        for (const actionType of actionTypes) {
+            for (const userId of userIds) {
                 test(`Create notification by ${type} type, ${actionType}, with payload`, async () => {
                     const payload = {
                         type,
@@ -41,7 +45,7 @@ describe('Create notifications', () => {
                         expect(notification.status).toEqual(I.NotificationStatusEnum.PENDING);
                     });
                 });
-            });
-        });
+            }
+        }
     }
 });
