@@ -100,7 +100,7 @@ export const getByUser = async (
     const bundles = await client.prisma.publicationBundle.findMany({
         where,
         include: {
-            entries: true,
+            entries: true
         },
         orderBy: {
             createdAt: 'desc'

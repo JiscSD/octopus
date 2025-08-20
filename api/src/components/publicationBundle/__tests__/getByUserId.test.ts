@@ -29,12 +29,12 @@ describe('Get your own publication bundles', () => {
                         {
                             id: 'test-entry-2',
                             position: 1,
-                            publicationId: 'publication-problem-live-2',
+                            publicationId: 'publication-problem-live-2'
                         },
                         {
                             id: 'test-entry-1',
                             position: 0,
-                            publicationId: 'publication-problem-live',
+                            publicationId: 'publication-problem-live'
                         }
                     ]
                 },
@@ -48,12 +48,12 @@ describe('Get your own publication bundles', () => {
                         {
                             id: 'test-entry-4',
                             position: 1,
-                            publicationId: 'publication-protocol-live',
+                            publicationId: 'publication-protocol-live'
                         },
                         {
                             id: 'test-entry-3',
                             position: 0,
-                            publicationId: 'publication-hypothesis-live',
+                            publicationId: 'publication-hypothesis-live'
                         }
                     ]
                 }

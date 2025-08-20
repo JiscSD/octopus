@@ -45,7 +45,7 @@ describe('Edit a publication bundle', () => {
                 }
             ]
         };
-        
+
         expect(editRequest.body).toMatchObject(expectedBundle);
     });
 
@@ -102,7 +102,7 @@ describe('Edit a publication bundle', () => {
             createdBy: 'test-user-1',
             name: 'Test Bundle',
             entries: [
-                 {
+                {
                     id: 'test-entry-1',
                     position: 0,
                     publicationId: 'publication-problem-live',
