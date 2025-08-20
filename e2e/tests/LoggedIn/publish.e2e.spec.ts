@@ -125,7 +125,7 @@ const methodPublication: PublicationTestType = {
 };
 
 const resultsPublication: PublicationTestType = {
-    pubType: 'Results',
+    pubType: 'Results / Sources',
     title: 'test title',
     author: Helpers.users.user1.fullName,
     text: 'main text',
@@ -151,7 +151,7 @@ const interpretationPublication: PublicationTestType = {
 };
 
 const realWorldApplicationPublication: PublicationTestType = {
-    pubType: 'Real World Application',
+    pubType: 'Applications / Implications',
     title: 'test title',
     author: Helpers.users.user1.fullName,
     text: 'main text'
@@ -398,8 +398,8 @@ test.describe('Publication flow', () => {
         await checkPublication(page, interpretationPublication, [Helpers.users.user1]);
     });
 
-    // Real world applications have no unique fields. Just test that we can make one successfully.
-    test('Create a real world application (standard publication)', async ({ browser }) => {
+    //  Applications/implications have no unique fields. Just test that we can make one successfully.
+    test('Create an application/implication (standard publication)', async ({ browser }) => {
         const page = await Helpers.users.getPageAsUser(browser);
         await Helpers.publicationCreation.createPublication(page, 'test title', 'REAL_WORLD_APPLICATION');
         await Helpers.publicationCreation.completeKeyInformationTab(page);
