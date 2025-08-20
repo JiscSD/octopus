@@ -204,16 +204,16 @@ const Links: React.FC = (): React.ReactElement => {
                 />
                 <p className={`mb-6 ${paragraphClasses}`}>
                     All publications in Octopus are linked to each other to form research chains, branching down from
-                    research problems to real world implementations.{' '}
+                    research problems to applications/implications.{' '}
                     {isProblem &&
                         ' For research problems, if there is no existing publication on the system that yours relates to, you can link to a research topic instead.'}
                 </p>
 
                 <p className={`mb-6 ${paragraphClasses}`}>
-                    Your {Helpers.formatPublicationType(type)} must be linked from at least one other{' '}
-                    {linkableEntityLabel} on Octopus. {Helpers.formatPublicationType(type)} can be linked from{' '}
+                    Your {Helpers.formatPublicationType(type, true)} must be linked from at least one other{' '}
+                    {linkableEntityLabel} on Octopus. {Helpers.formatPublicationType(type, true)} can be linked from{' '}
                     {linkablePublicationTypes.map((type, index) => {
-                        return `${Helpers.formatPublicationType(type)}${
+                        return `${Helpers.formatPublicationType(type, true)}${
                             index !== linkablePublicationTypes.length - 1
                                 ? ', '
                                 : isProblem

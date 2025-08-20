@@ -48,7 +48,7 @@ test.describe('Publication search', () => {
                 response.url().includes('/publication-versions?limit=10&offset=0&authorType=individual') &&
                 response.ok()
         );
-        await page.getByRole('checkbox', { name: 'Results' }).click();
+        await page.getByRole('checkbox', { name: 'Results / Sources' }).click();
         await page.waitForResponse(
             (response) =>
                 response.url().includes('/publication-versions?type=DATA&limit=10&offset=0&authorType=individual') &&
