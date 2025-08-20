@@ -16,7 +16,10 @@ export const create = (data: { name: string; publicationIds: string[]; userId: s
         },
         include: {
             entries: {
-                include: { publication: true }
+                include: { publication: true },
+                orderBy: {
+                    position: 'asc'
+                }
             }
         }
     });
@@ -38,7 +41,10 @@ export const edit = (id: string, data: I.EditPublicationBundleRequestBody) =>
         },
         include: {
             entries: {
-                include: { publication: true }
+                include: { publication: true },
+                orderBy: {
+                    position: 'asc'
+                }
             }
         }
     });
@@ -94,7 +100,7 @@ export const getByUser = async (
     const bundles = await client.prisma.publicationBundle.findMany({
         where,
         include: {
-            entries: true
+            entries: true,
         },
         orderBy: {
             createdAt: 'desc'
