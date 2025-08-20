@@ -76,6 +76,7 @@ export { default as PublicationCreationMainText } from './Publication/Creation/M
 export { default as PublicationCreationResearchProcess } from './Publication/Creation/ResearchProcess';
 export { default as PublicationCreationStepTitle } from './Publication/Creation/StepTitle';
 export { default as PublicationBundleForm } from './PublicationBundle/PublicationBundleForm';
+export { default as PublicationBundleFormEntry } from './PublicationBundle/PublicationBundleFormEntry';
 export { default as PublicationLink } from './Publication/Link';
 export { default as PublicationPageCoAuthoringActions } from './Publication/PublicationPage/CoAuthoringActions';
 export { default as PublicationPageHeaderActions } from './Publication/PublicationPage/HeaderActions';

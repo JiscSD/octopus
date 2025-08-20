@@ -83,7 +83,7 @@ model Publication {
     linkedTo           Links[]                        @relation("from")
     linkedFrom         Links[]                        @relation("to")
     versions           PublicationVersion[]
-    publicationBundles PublicationBundlePublication[]
+    publicationBundles PublicationBundleEntry[]
     // These reverse relations are needed by prisma, but we shouldn't use them in the application.
     // Prisma doesn't allow symmetrical many-to-many self relations.
     // There must be an "asymmetrical" relationship (e.g. from and to) in the schema. In practice, we will treat
@@ -352,10 +352,10 @@ model PublicationBundle {
     name         String
     createdBy    String
     user         User                           @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-    publications PublicationBundlePublication[]
+    entries PublicationBundleEntry[]
 }
 
-model PublicationBundlePublication {
+model PublicationBundleEntry {
     id                  String @id @default(cuid())
     publicationBundleId String
     publicationId       String

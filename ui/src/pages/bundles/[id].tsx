@@ -23,18 +23,22 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         const response = await api.get(`${Config.endpoints.publicationBundles}/${id}`, token);
 
         // Augment bundle publications with latest live versions
-        bundle = { ...response.data, publications: [] };
+        bundle = { ...response.data, entries: [] } as Interfaces.PublicationBundle;
 
-        for (const publication of response.data.publications) {
-            const latestLiveVersion = publication.versions[0];
+        for (const entry of response.data.entries) {
+            const latestLiveVersion = entry.publication.versions[0];
             if (!latestLiveVersion) continue;
-            bundle!.publications.push({
-                authorFirstName: latestLiveVersion.user.firstName,
-                authorLastName: latestLiveVersion.user.lastName,
-                id: publication.id,
-                publishedDate: latestLiveVersion.publishedDate || '',
-                title: latestLiveVersion.title,
-                type: publication.type
+
+            bundle.entries.push({
+                ...entry,
+                publication: {
+                    authorFirstName: latestLiveVersion.user.firstName,
+                    authorLastName: latestLiveVersion.user.lastName,
+                    id: entry.id,
+                    publishedDate: latestLiveVersion.publishedDate || '',
+                    title: latestLiveVersion.title,
+                    type: entry.publication.type
+                }
             });
         }
     } catch (err) {
@@ -52,7 +56,7 @@ export const getServerSideProps: Types.GetServerSideProps = async (context) => {
         ? {
               id: bundle.id,
               name: bundle.name,
-              publications: bundle.publications
+              entries: bundle.entries
           }
         : null;
 
@@ -92,14 +96,14 @@ const ViewBundle: NextPage<Props> = (props): JSX.Element => {
                 `${Config.endpoints.publicationBundles}/${bundle.id}`,
                 {
                     name: data.name,
-                    publicationIds: data.publications.map((publication) => publication.id)
+                    publicationIds: data.entries.map((entry) => entry.publicationId)
                 },
                 token ?? undefined
             );
             setToast({
                 visible: true,
                 title: 'Bundle saved successfully',
-                message: `The bundle "${data.name}" has been updated with ${data.publications.length} publications.`,
+                message: `The bundle "${data.name}" has been updated with ${data.entries.length} publications.`,
                 icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-600" />,
                 dismiss: true
             });
