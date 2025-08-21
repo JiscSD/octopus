@@ -119,7 +119,7 @@ export const initialDevSeed = async (): Promise<void> => {
 
         // Create local PDF generation queue
         try {
-            await sqs.getQueue(`science-octopus-pdf-queue-${process.env.STAGE}`);
+            await sqs.getQueue(`pdf-generation-queue-${process.env.STAGE}-octopus`);
             console.log('PDF queue already exists');
         } catch (err) {
             await sqs.createQueue();
