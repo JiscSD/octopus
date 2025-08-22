@@ -3,6 +3,7 @@ on: [push]
 
 jobs:
   build:
+    if: github.repository == 'JiscSD/octopus'
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -23,6 +24,7 @@ jobs:
         run: npx tsc --noemit
 
   prettier:
+    if: github.repository == 'JiscSD/octopus'
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -43,6 +45,7 @@ jobs:
         run: npm run format:check
 
   eslint:
+    if: github.repository == 'JiscSD/octopus'
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:

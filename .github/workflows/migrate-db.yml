@@ -16,6 +16,7 @@ on:
 
 jobs:
   migrate_db:
+    if: github.repository == 'JiscSD/octopus'
     name: Migrate Database
     runs-on: ubuntu-latest
     steps:
