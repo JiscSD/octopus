@@ -7,7 +7,7 @@
     "license": "GPL-3.0-only",
     "repository": {
         "type": "git",
-        "url": "https://github.com/JiscSD/octopus/tree/main/api"
+        "url": "https://github.com/Jisc/octopus/tree/main/api"
     },
     "engines": {
         "node": "20.x"

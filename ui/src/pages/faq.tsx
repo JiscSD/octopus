@@ -117,7 +117,7 @@ const faqContents = [
         content: `
             <p className='mb-2'>Yes. All research published on Octopus is made available under an open access license. Authors retain the copyright to their work.</p>
             <p className='mb-2'>Anyone can read publications without creating an account, but please check the license terms before you share, adapt, or build upon another&apos;s work.</p>
-            <p>The platform is published under the open source license GPLv3. The platform code is available via our public <a href='https://github.com/JiscSD/octopus' className='underline' target='_blank'>Github repository</a>. We invite any interested parties to participate in the ongoing development of the service and its features. See our <a href='${Config.urls.terms.path}' className='underline' target='_blank'>terms page</a> for more information.</p>
+            <p>The platform is published under the open source license GPLv3. The platform code is available via our public <a href='https://github.com/Jisc/octopus' className='underline' target='_blank'>Github repository</a>. We invite any interested parties to participate in the ongoing development of the service and its features. See our <a href='${Config.urls.terms.path}' className='underline' target='_blank'>terms page</a> for more information.</p>
         `
     },
     {

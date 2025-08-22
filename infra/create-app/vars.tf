@@ -32,3 +32,8 @@ variable "rds_performance_insights_retention_period" {
 variable "elasticsearch_instance_size" {
   type = string
 }
+
+variable "repoId" {
+  type        = string
+  description = "The GitHub repository ID in the form owner/repo"
+}
