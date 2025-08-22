@@ -1,6 +1,6 @@
 <img src="https://www.jisc.ac.uk/sites/all/themes/jisc_clean/img/jisc-logo.svg" align="right" width=50 height=50/><h1 align="left">Octopus</h1>
 
-![ui-tasks](https://github.com/JiscSD/octopus/actions/workflows/ui-tasks.yml/badge.svg)
+![ui-tasks](/actions/workflows/ui-tasks.yml/badge.svg)
 
 ---
 
@@ -194,7 +194,7 @@ Everyone interacting with this codebase should adhere to our [Code of Conduct](.
 
 Some code has been removed that is no longer needed for the ongoing operation of octopus, but is logged here for future reference:
 
-- Seed data scripts that were used to process the initial data used to populate the database. They were last included in [this commit](https://github.com/JiscSD/octopus/tree/fdd0fc5e0f673a1fe42c4cec0b74fe126be2225b/seed-data-scripts).
+- Seed data scripts that were used to process the initial data used to populate the database. They were last included in [this commit](/tree/fdd0fc5e0f673a1fe42c4cec0b74fe126be2225b/seed-data-scripts).
 
 ## Licence
 

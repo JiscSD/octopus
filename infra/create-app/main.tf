@@ -49,6 +49,7 @@ module "oidc" {
   source       = "../modules/oidc"
   environment  = local.environment
   project_name = local.project_name
+  repoId       = var.repoId
 }
 
 module "s3" {
@@ -111,6 +112,7 @@ module "codepipeline" {
   source       = "../modules/codepipeline"
   environment  = local.environment
   project_name = local.project_name
+  repoId       = var.repoId
 }
 
 module "cloudwatch_alarms" {
