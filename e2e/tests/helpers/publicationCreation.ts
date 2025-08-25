@@ -206,4 +206,6 @@ export const createLivePublication = async (page: Page, title?: string) => {
         page.waitForURL('**/versions/latest'),
         page.locator(PageModel.publish.confirmPublishButton).click()
     ]);
+
+    return page.url();
 };
