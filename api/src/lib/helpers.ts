@@ -269,3 +269,15 @@ export const checkBooleanArgValue = (arg: string): void => {
         throw new Error(`"${arg}" must be "true" or "false"`);
     }
 };
+
+export function obfuscateEmail(email: string): string {
+    try {
+        const [name, domain] = email.split('@');
+
+        return `${name.substring(0, 3)}*****@${domain}`;
+    } catch (error) {
+        console.error('Error obfuscating email:', error);
+
+        return email;
+    }
+}

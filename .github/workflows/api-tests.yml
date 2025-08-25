@@ -8,10 +8,10 @@ permissions:
   contents: read # This is required for actions/checkout
 
 jobs:
-  api-tests:
+  api-tests: 
     timeout-minutes: 20
     runs-on: ubuntu-latest
-    if: ${{ !github.event.pull_request.draft }}
+    if: github.repository == 'JiscSD/octopus' && ${{ !github.event.pull_request.draft }}
 
     steps:
       - name: Checkout
