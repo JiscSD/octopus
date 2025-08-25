@@ -25,21 +25,21 @@ const CreateBundle: NextPage = (): JSX.Element => {
     const setToast = Stores.useToastStore((state) => state.setToast);
     const user = Stores.useAuthStore((state) => state.user);
 
-    const saveBundle = async (bundle: Pick<Interfaces.PublicationBundle, 'name' | 'publications'>) => {
+    const saveBundle = async (bundle: Pick<Interfaces.PublicationBundle, 'name' | 'entries'>) => {
         setSavingBundle(true);
         try {
             await api.post(
                 Config.endpoints.publicationBundles,
                 {
                     name: bundle.name,
-                    publicationIds: bundle.publications.map((publication) => publication.id)
+                    publicationIds: bundle.entries.map((entry) => entry.publicationId)
                 },
                 user?.token
             );
             setToast({
                 visible: true,
                 title: 'Bundle created successfully',
-                message: `The bundle "${bundle.name}" has been created with ${bundle.publications.length} publications.`,
+                message: `The bundle "${bundle.name}" has been created with ${bundle.entries.length} publications.`,
                 icon: <OutlineIcons.CheckCircleIcon className="h-6 w-6 text-teal-600" />,
                 dismiss: true
             });

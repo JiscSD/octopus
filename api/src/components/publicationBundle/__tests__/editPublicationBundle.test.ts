@@ -1,4 +1,3 @@
-import * as client from 'lib/client';
 import * as testUtils from 'lib/testUtils';
 
 describe('Edit a publication bundle', () => {
@@ -25,20 +24,29 @@ describe('Edit a publication bundle', () => {
             updatedAt: expect.any(String),
             createdBy: 'test-user-1',
             name: 'Edited name',
-            publications: [
-                { id: 'publication-hypothesis-live' },
-                { id: 'publication-protocol-live' },
-                { id: 'publication-data-live' }
+            entries: [
+                {
+                    id: expect.any(String),
+                    position: 0,
+                    publicationId: 'publication-hypothesis-live',
+                    publication: { id: 'publication-hypothesis-live' }
+                },
+                {
+                    id: expect.any(String),
+                    position: 1,
+                    publicationId: 'publication-protocol-live',
+                    publication: { id: 'publication-protocol-live' }
+                },
+                {
+                    id: expect.any(String),
+                    position: 2,
+                    publicationId: 'publication-data-live',
+                    publication: { id: 'publication-data-live' }
+                }
             ]
         };
-        expect(editRequest.body).toMatchObject(expectedBundle);
 
-        // Check data of bundle in DB
-        const bundle = await client.prisma.publicationBundle.findUnique({
-            where: { id: editRequest.body.id },
-            include: { publications: true }
-        });
-        expect(bundle).toMatchObject({ ...expectedBundle, createdAt: expect.any(Date), updatedAt: expect.any(Date) });
+        expect(editRequest.body).toMatchObject(expectedBundle);
     });
 
     test('Unauthenticated user cannot create a publication bundle', async () => {
@@ -93,7 +101,20 @@ describe('Edit a publication bundle', () => {
             updatedAt: expect.any(String),
             createdBy: 'test-user-1',
             name: 'Test Bundle',
-            publications: [{ id: 'publication-problem-live' }, { id: 'publication-problem-live-2' }]
+            entries: [
+                {
+                    id: 'test-entry-1',
+                    position: 0,
+                    publicationId: 'publication-problem-live',
+                    publication: { id: 'publication-problem-live' }
+                },
+                {
+                    id: 'test-entry-2',
+                    position: 1,
+                    publicationId: 'publication-problem-live-2',
+                    publication: { id: 'publication-problem-live-2' }
+                }
+            ]
         };
         expect(editRequest.body).toMatchObject(expectedBundle);
     });

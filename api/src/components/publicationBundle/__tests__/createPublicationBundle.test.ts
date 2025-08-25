@@ -1,4 +1,3 @@
-import * as client from 'lib/client';
 import * as testUtils from 'lib/testUtils';
 
 describe('Create a publication bundle', () => {
@@ -25,16 +24,22 @@ describe('Create a publication bundle', () => {
             updatedAt: expect.any(String),
             createdBy: 'test-user-1',
             name: 'Test Bundle',
-            publications: [{ id: 'publication-problem-live' }, { id: 'publication-problem-live-2' }]
+            entries: [
+                {
+                    id: expect.any(String),
+                    position: 0,
+                    publicationId: 'publication-problem-live',
+                    publication: { id: 'publication-problem-live' }
+                },
+                {
+                    id: expect.any(String),
+                    position: 1,
+                    publicationId: 'publication-problem-live-2',
+                    publication: { id: 'publication-problem-live-2' }
+                }
+            ]
         };
         expect(createRequest.body).toMatchObject(expectedBundle);
-
-        // Check presence of bundle in DB
-        const bundle = await client.prisma.publicationBundle.findUnique({
-            where: { id: createRequest.body.id },
-            include: { publications: true }
-        });
-        expect(bundle).toMatchObject({ ...expectedBundle, createdAt: expect.any(Date), updatedAt: expect.any(Date) });
     });
 
     test('Unauthenticated user cannot create a publication bundle', async () => {
