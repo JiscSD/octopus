@@ -398,12 +398,7 @@ export const createBulletin = async (
         }
 
         case I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PREDECESSOR: {
-            // We use the previous version because this is the one with the link
-            if (!previousPublishedVersion) {
-                break;
-            }
-
-            const usersToBeNotified = await userService.getUsersWithDirectLinkFromVersion(previousPublishedVersion.id);
+            const usersToBeNotified = await userService.getUsersWithDirectLinkFromVersion(currentPublishedVersion.id);
 
             entries = usersToBeNotified.map((user) => ({
                 userId: user.id,
