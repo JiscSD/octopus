@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "trust_github_oidc" {
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:JiscSD/octopus:*"]
+      values   = ["${var.repoId}:*"]
     }
   }
 }

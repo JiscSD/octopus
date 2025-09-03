@@ -27,7 +27,7 @@ resource "aws_codepipeline" "script-runner-docker-image-codepipeline" {
       // options given here: https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference-CodestarConnectionSource.html#action-reference-CodestarConnectionSource-config
       configuration = {
         ConnectionArn        = data.aws_ssm_parameter.github_codestar_connection_arn.value
-        FullRepositoryId     = "JiscSD/octopus"
+        FullRepositoryId     = var.repoId
         BranchName           = var.environment
         OutputArtifactFormat = "CODE_ZIP"
       }

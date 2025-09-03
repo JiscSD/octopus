@@ -13,7 +13,7 @@ env:
 
 jobs:
   prettier:
-    if: github.repository == 'JiscSD/octopus'
+    if: github.repository != 'Jisc/octopus'
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -34,7 +34,7 @@ jobs:
         run: npm run format:check
 
   eslint:
-    if: github.repository == 'JiscSD/octopus'
+    if: github.repository != 'Jisc/octopus'
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -55,7 +55,7 @@ jobs:
         run: npm run lint
 
   lighthouseci:
-    if: github.repository == 'JiscSD/octopus'
+    if: github.repository != 'Jisc/octopus'
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -82,7 +82,7 @@ jobs:
         run: lhci autorun
 
   ui-tests:
-    if: github.repository == 'JiscSD/octopus'
+    if: github.repository != 'Jisc/octopus'
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -103,7 +103,7 @@ jobs:
         run: npm run test
 
   typescript-lint:
-    if: github.repository == 'JiscSD/octopus'
+    if: github.repository != 'Jisc/octopus'
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:

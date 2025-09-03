@@ -56,7 +56,7 @@ const nextConfig = {
             },
             {
                 source: '/documentation/api',
-                destination: 'https://jiscsd.github.io/octopus',
+                destination: 'https://jisc.github.io/octopus',
                 permanent: true
             }
         ];

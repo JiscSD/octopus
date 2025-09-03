@@ -1,6 +1,6 @@
 # Octopus API documentation
 
-This directory contains the files needed to deploy a static [documentation page](https://jiscsd.github.io/octopus/) for the octopus API.
+This directory contains the files needed to deploy a static [documentation page](https://jisc.github.io/octopus/) for the octopus API.
 
 These are:
 

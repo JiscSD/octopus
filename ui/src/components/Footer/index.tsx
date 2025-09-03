@@ -31,7 +31,7 @@ const Footer: React.FC<Props> = (props: Props): React.ReactElement => (
                 <h2 className="col-span-1 block font-montserrat text-4xl font-bold text-white-50 lg:mb-12">Octopus</h2>
                 <div className="col-span-1 flex space-x-4 pt-4 md:col-span-3 lg:col-span-3">
                     <Components.Link
-                        href="https://github.com/JiscSD/octopus"
+                        href="https://github.com/Jisc/octopus"
                         openNew={true}
                         ariaLabel="Github Repository"
                         className="h-fit"

@@ -15,7 +15,7 @@ env:
 
 jobs:
   migrate_db:
-    if: github.repository == 'JiscSD/octopus'
+    if: github.repository != 'Jisc/octopus'
     name: Migrate Database
     uses: ./.github/workflows/migrate-db.yml
     with:
@@ -27,7 +27,7 @@ jobs:
       DATABASE_URL: ${{ secrets.DB_CONNECTION_INT }} # The entire connection string, including the RDS DNS, username, password and database
 
   deploy_api:
-    if: github.repository == 'JiscSD/octopus'
+    if: github.repository != 'Jisc/octopus'
     name: Deploy API
     runs-on: ubuntu-latest
     needs: migrate_db

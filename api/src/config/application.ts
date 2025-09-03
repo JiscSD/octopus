@@ -5,7 +5,7 @@ export default {
     author: 'Jisc',
     repository: {
         type: 'git',
-        url: 'https://github.com/JiscSD/octopus'
+        url: 'https://github.com/Jisc/octopus'
     },
     engines: {
         node: '20.x'

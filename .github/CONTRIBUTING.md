@@ -4,7 +4,7 @@ Welcome! :tada::sparkles: and thank you for taking the time to contribute to thi
 
 Please take a moment to read through this document in order to make the contribution process as straightforward as possible.
 
-If you want to ask a question, please head on over to the project discussion area on Github: [Octopus Github discussions](https://github.com/JiscSD/octopus/discussions).
+If you want to ask a question, please head on over to the project discussion area on Github: [Octopus Github discussions](https://github.com/Jisc/octopus/discussions).
 
 Please adhere to our [Code of Conduct](CODE-OF-CONDUCT.md) when contributing to this repository.
 
@@ -24,7 +24,7 @@ Please adhere to our [Code of Conduct](CODE-OF-CONDUCT.md) when contributing to 
 
 ---
 
-If you spot a :bug: bug :bug: then feel free to [open an issue](https://github.com/JiscSD/octopus/issues).
+If you spot a :bug: bug :bug: then feel free to [open an issue](https://github.com/Jisc/octopus/issues).
 
 A helpful bug report should include:
 
@@ -39,7 +39,7 @@ A helpful bug report should include:
 
 ---
 
-If you have an :bulb: idea :bulb: for an enhancement or feature then feel free to [post an idea](https://github.com/JiscSD/octopus/discussions/categories/ideas).
+If you have an :bulb: idea :bulb: for an enhancement or feature then feel free to [post an idea](https://github.com/Jisc/octopus/discussions/categories/ideas).
 
 When posting, select the category as `Ideas` and then add a title and some content.
 
@@ -55,7 +55,7 @@ If you would like to submit any changes and contribute some code, please:
 2. create a new branch
 3. make changes
 4. commit/push your new branch
-5. [submit a PR for review](https://github.com/JiscSD/octopus/pulls)
+5. [submit a PR for review](https://github.com/Jisc/octopus/pulls)
 
 A draft pull request should be created as soon as the branch is created, with the label `work in progress`. Only once the PR is ready to be reviewed should you request a review on GitHub.  
 We use Pull request labels to specify when changes are made to the `UI`, the `API`, or `Documentation`.
