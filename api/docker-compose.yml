@@ -107,7 +107,7 @@ services:
             - VALIDATION_CODE_EXPIRY=10
             - VALIDATION_CODE_ATTEMPTS=3
             - DATABASE_URL=postgresql://mydbuser:mydbpwd@api-test-db:5432/postgres?schema=public
-            - QUEUE_URL=http://localhost:4566/000000000000/science-octopus-pdf-queue-local
+            - QUEUE_URL=http://localhost:4566/000000000000/pdf-generation-queue-local-octopus
             - SQS_ENDPOINT=http://localstack:4566
             - LIST_USERS_API_KEY=123456789
             - TRIGGER_SCRIPT_API_KEY=123456789
