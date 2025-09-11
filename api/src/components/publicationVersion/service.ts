@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 import { convert } from 'html-to-text';
 import { createId } from '@paralleldrive/cuid2';
 import { Prisma } from '@prisma/client';
-
+import * as notificationBulletin from 'notification/bulletin';
 import * as client from 'lib/client';
 import * as doi from 'lib/doi';
 import * as email from 'lib/email';
@@ -700,6 +700,54 @@ export const transferOwnership = (publicationVersionId: string, requesterId: str
         }
     });
 
+const createBulletinNotifications = async (
+    publicationVersion: I.PublicationVersion,
+    previousVersion: I.PublicationVersion | null
+) => {
+    const excludedUserIds = publicationVersion.coAuthors
+        .map((coAuthor) => coAuthor.linkedUser)
+        .filter((i): i is string => i !== null);
+
+    await Promise.all([
+        // Notifies all users that bookmarked this publication version that a new version is now LIVE.
+        notificationBulletin.createBulletin(
+            I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
+            publicationVersion,
+            previousVersion
+        ),
+
+        // Notify all users that red-flagged the previous publication version that a new version is now LIVE.
+        notificationBulletin.createBulletin(
+            I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED,
+            publicationVersion,
+            previousVersion
+        ),
+
+        // Notifies authors that peer-reviewed the previous publication version that a new version is now LIVE.
+        notificationBulletin.createBulletin(
+            I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED,
+            publicationVersion,
+            previousVersion
+        ),
+
+        // Notifies authors of PARENT publications (that link from this publication)
+        notificationBulletin.createBulletin(
+            I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PREDECESSOR,
+            publicationVersion,
+            previousVersion,
+            { excludedUserIds }
+        ),
+
+        // Notifies authors of CHILD publications (that link to the previous version of this publication)
+        notificationBulletin.createBulletin(
+            I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_SUCCESSOR,
+            publicationVersion,
+            previousVersion,
+            { excludedUserIds }
+        )
+    ]);
+};
+
 // Actions that run after a version is published (changes status to LIVE).
 // Pulled out to a separate function because things may need to run when something is
 // published immediately (i.e. not going through full drafting workflow) and bypasses the updateStatus function.
@@ -821,6 +869,9 @@ export const postPublishHook = async (publicationVersion: I.PublicationVersion, 
 
         // Complete remaining tasks in parallel.
         const postDBUpdatePromises: Array<Promise<unknown>> = [];
+
+        // Notifications
+        postDBUpdatePromises.push(createBulletinNotifications(publicationVersion, previousVersion));
 
         // (Re)index publication in opensearch.
         postDBUpdatePromises.push(

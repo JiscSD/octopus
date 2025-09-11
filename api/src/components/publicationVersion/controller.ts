@@ -2,7 +2,6 @@ import * as I from 'interface';
 import * as response from 'lib/response';
 import * as publicationVersionService from 'publicationVersion/service';
 import * as publicationService from 'publication/service';
-import * as notificationBulletin from 'notification/bulletin';
 import * as coAuthorService from 'coAuthor/service';
 import * as userService from 'user/service';
 import * as Helpers from 'lib/helpers';
@@ -358,53 +357,6 @@ export const updateStatus = async (
             'LIVE',
             event.queryStringParameters.ariContactConsent
         );
-
-        const excludedUserIds = publicationVersion.coAuthors
-            .map((coAuthor) => coAuthor.linkedUser)
-            .filter((i): i is string => i !== null);
-
-        const previousPublishedVersion = await publicationVersionService.getPreviousPublishedVersion(
-            publicationVersion.versionOf
-        );
-
-        await Promise.all([
-            // Notifies all users that bookmarked this publication version that a new version is now LIVE.
-            notificationBulletin.createBulletin(
-                I.NotificationActionTypeEnum.PUBLICATION_BOOKMARK_VERSION_CREATED,
-                publicationVersion,
-                previousPublishedVersion
-            ),
-
-            // Notify all users that red-flagged this publication version that a new version is now LIVE.
-            notificationBulletin.createBulletin(
-                I.NotificationActionTypeEnum.PUBLICATION_VERSION_RED_FLAG_RAISED,
-                publicationVersion,
-                previousPublishedVersion
-            ),
-
-            // Notifies authors that peer-reviewed this publication version that a new version is now LIVE.
-            notificationBulletin.createBulletin(
-                I.NotificationActionTypeEnum.PUBLICATION_VERSION_PEER_REVIEWED,
-                publicationVersion,
-                previousPublishedVersion
-            ),
-
-            // Notifies authors of child publications (that link FROM this publication)
-            notificationBulletin.createBulletin(
-                I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_PREDECESSOR,
-                publicationVersion,
-                previousPublishedVersion,
-                { excludedUserIds }
-            ),
-
-            // Notifies authors of parent publications (that this publication links TO)
-            notificationBulletin.createBulletin(
-                I.NotificationActionTypeEnum.PUBLICATION_VERSION_LINKED_SUCCESSOR,
-                publicationVersion,
-                previousPublishedVersion,
-                { excludedUserIds }
-            )
-        ]);
 
         return response.json(200, { message: 'Publication is now LIVE.' });
     } catch (err) {
