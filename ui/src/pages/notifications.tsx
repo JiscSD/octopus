@@ -187,9 +187,14 @@ const Notifications: Types.NextPage<Props> = (props): React.ReactElement => {
 
                 <section className="container mx-auto mb-16 px-8">
                     <fieldset>
-                        <legend className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50 lg:mb-8">
+                        <legend className="mb-4 font-montserrat text-xl font-semibold text-grey-800 transition-colors duration-500 dark:text-white-50">
                             Notification settings
                         </legend>
+                        <p className="mb-8 font-montserrat text-grey-700 transition-colors duration-500 dark:text-grey-50 max-w-3xl">
+                            Use these settings to control which notifications you would like to receive. Relevant
+                            activity will be sent to you in a weekly bulletin email scheduled to be sent every Monday at
+                            10:00am GMT.
+                        </p>
                         <Components.Checkbox
                             disabled={loading}
                             id="bookmark-notifications"
