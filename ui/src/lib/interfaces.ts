@@ -94,17 +94,22 @@ export interface PublicationBundle {
     createdAt: string;
     updatedAt: string;
     createdBy: string;
-    publications: {
-        authorFirstName: string;
-        authorLastName: string;
+    entries: {
         id: string;
-        publishedDate: string;
-        title: string;
-        type: Types.PublicationType;
+        position: number;
+        publicationId: string;
+        publication: {
+            authorFirstName: string;
+            authorLastName: string;
+            id: string;
+            publishedDate: string;
+            title: string;
+            type: Types.PublicationType;
+        };
     }[];
 }
 
-export type ClientPublicationBundle = Pick<PublicationBundle, 'id' | 'name' | 'publications'>;
+export type ClientPublicationBundle = Pick<PublicationBundle, 'id' | 'name' | 'entries'>;
 
 type LinkedPublicationAuthor = Pick<CoAuthor, 'id' | 'linkedUser'> & { user: CoAuthor['user'] | null };
 export interface LinkedPublication {

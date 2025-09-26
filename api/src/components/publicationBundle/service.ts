@@ -7,12 +7,20 @@ export const create = (data: { name: string; publicationIds: string[]; userId: s
         data: {
             name: data.name,
             createdBy: data.userId,
-            publications: {
-                connect: data.publicationIds.map((id) => ({ id }))
+            entries: {
+                create: data.publicationIds.map((publicationId, idx) => ({
+                    publication: { connect: { id: publicationId } },
+                    position: idx
+                }))
             }
         },
         include: {
-            publications: true
+            entries: {
+                include: { publication: true },
+                orderBy: {
+                    position: 'asc'
+                }
+            }
         }
     });
 
@@ -21,14 +29,23 @@ export const edit = (id: string, data: I.EditPublicationBundleRequestBody) =>
         where: { id },
         data: {
             name: data.name ?? undefined,
-            publications: data.publicationIds
+            entries: data.publicationIds
                 ? {
-                      set: data.publicationIds.map((id) => ({ id }))
+                      deleteMany: {},
+                      create: data.publicationIds.map((publicationId, idx) => ({
+                          publication: { connect: { id: publicationId } },
+                          position: idx
+                      }))
                   }
                 : undefined
         },
         include: {
-            publications: true
+            entries: {
+                include: { publication: true },
+                orderBy: {
+                    position: 'asc'
+                }
+            }
         }
     });
 
@@ -36,23 +53,30 @@ export const get = (id: string) =>
     client.prisma.publicationBundle.findUnique({
         where: { id },
         include: {
-            publications: {
+            entries: {
                 include: {
-                    versions: {
-                        where: {
-                            isLatestLiveVersion: true
-                        },
-                        select: {
-                            title: true,
-                            publishedDate: true,
-                            user: {
+                    publication: {
+                        include: {
+                            versions: {
+                                where: {
+                                    isLatestLiveVersion: true
+                                },
                                 select: {
-                                    firstName: true,
-                                    lastName: true
+                                    title: true,
+                                    publishedDate: true,
+                                    user: {
+                                        select: {
+                                            firstName: true,
+                                            lastName: true
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
+                },
+                orderBy: {
+                    position: 'asc'
                 }
             }
         }
@@ -68,7 +92,7 @@ export const getByUser = async (
     filters?: I.GetPublicationBundlesByUserQueryParams
 ): Promise<{
     metadata: I.SearchResultMeta;
-    data: Prisma.PublicationBundleGetPayload<{ include: { publications: true } }>[];
+    data: Prisma.PublicationBundleGetPayload<{ include: { entries: true } }>[];
 }> => {
     const where: Prisma.PublicationBundleWhereInput = {
         createdBy: userId
@@ -76,7 +100,7 @@ export const getByUser = async (
     const bundles = await client.prisma.publicationBundle.findMany({
         where,
         include: {
-            publications: true
+            entries: true
         },
         orderBy: {
             createdAt: 'desc'

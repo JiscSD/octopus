@@ -228,7 +228,7 @@ function ViewBundlesResults(props: {
                                     </Components.Link>
                                     <p className="text-xs">
                                         <span className="md:hidden">{Helpers.formatDate(bundle.createdAt)},</span>{' '}
-                                        {bundle.publications.length} publications
+                                        {bundle.entries.length} publications
                                     </p>
                                 </div>
                             </td>

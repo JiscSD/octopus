@@ -10,6 +10,7 @@ describe('Get your own publication bundles', () => {
         const getRequest = await testUtils.agent.get('/publication-bundles').query({
             apiKey: '123456789'
         });
+
         expect(getRequest.status).toBe(200);
         expect(getRequest.body).toMatchObject({
             metadata: {
@@ -24,7 +25,18 @@ describe('Get your own publication bundles', () => {
                     updatedAt: expect.any(String),
                     createdBy: 'test-user-1',
                     name: 'Test Bundle',
-                    publications: [{ id: 'publication-problem-live' }, { id: 'publication-problem-live-2' }]
+                    entries: [
+                        {
+                            id: 'test-entry-2',
+                            position: 1,
+                            publicationId: 'publication-problem-live-2'
+                        },
+                        {
+                            id: 'test-entry-1',
+                            position: 0,
+                            publicationId: 'publication-problem-live'
+                        }
+                    ]
                 },
                 {
                     id: expect.any(String),
@@ -32,7 +44,18 @@ describe('Get your own publication bundles', () => {
                     updatedAt: expect.any(String),
                     createdBy: 'test-user-1',
                     name: 'Test Bundle 2',
-                    publications: [{ id: 'publication-hypothesis-live' }, { id: 'publication-protocol-live' }]
+                    entries: [
+                        {
+                            id: 'test-entry-4',
+                            position: 1,
+                            publicationId: 'publication-protocol-live'
+                        },
+                        {
+                            id: 'test-entry-3',
+                            position: 0,
+                            publicationId: 'publication-hypothesis-live'
+                        }
+                    ]
                 }
             ]
         });

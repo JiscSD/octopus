@@ -16,7 +16,20 @@ describe('Get a publication bundle', () => {
             updatedAt: expect.any(String),
             createdBy: 'test-user-1',
             name: 'Test Bundle',
-            publications: [{ id: 'publication-problem-live' }, { id: 'publication-problem-live-2' }]
+            entries: [
+                {
+                    id: 'test-entry-1',
+                    position: 0,
+                    publicationId: 'publication-problem-live',
+                    publication: { id: 'publication-problem-live' }
+                },
+                {
+                    id: 'test-entry-2',
+                    position: 1,
+                    publicationId: 'publication-problem-live-2',
+                    publication: { id: 'publication-problem-live-2' }
+                }
+            ]
         });
     });
 

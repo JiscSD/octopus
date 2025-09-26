@@ -75,26 +75,26 @@ model Images {
 }
 
 model Publication {
-    id                 String                   @id @default(cuid())
-    url_slug           String                   @unique @default(cuid())
+    id                 String                         @id @default(cuid())
+    url_slug           String                         @unique @default(cuid())
     type               PublicationType
     doi                String
     publicationFlags   PublicationFlags[]
-    linkedTo           Links[]                  @relation("from")
-    linkedFrom         Links[]                  @relation("to")
+    linkedTo           Links[]                        @relation("from")
+    linkedFrom         Links[]                        @relation("to")
     versions           PublicationVersion[]
-    publicationBundles PublicationBundle[]
+    publicationBundles PublicationBundleEntry[]
     // These reverse relations are needed by prisma, but we shouldn't use them in the application.
     // Prisma doesn't allow symmetrical many-to-many self relations.
     // There must be an "asymmetrical" relationship (e.g. from and to) in the schema. In practice, we will treat
     // crosslink entities as having a pair of publications associated that are of equal importance.
-    crosslinksFrom     Crosslink[]              @relation("crosslinkFrom")
-    crosslinksTo       Crosslink[]              @relation("crosslinkTo")
+    crosslinksFrom     Crosslink[]                    @relation("crosslinkFrom")
+    crosslinksTo       Crosslink[]                    @relation("crosslinkTo")
     // Populated when a publication has been imported from an external source.
     externalId         String?
     externalSource     PublicationImportSource?
     // Currently only used for imported publications.
-    archived           Boolean                  @default(false)
+    archived           Boolean                        @default(false)
 }
 
 model PublicationVersion {
@@ -346,13 +346,24 @@ model IngestLog {
 }
 
 model PublicationBundle {
-    id           String        @id @default(cuid())
-    createdAt    DateTime      @default(now())
-    updatedAt    DateTime      @updatedAt
+    id           String                         @id @default(cuid())
+    createdAt    DateTime                       @default(now())
+    updatedAt    DateTime                       @updatedAt
     name         String
     createdBy    String
-    user         User          @relation(fields: [createdBy], references: [id], onDelete: Cascade)
-    publications Publication[]
+    user         User                           @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+    entries PublicationBundleEntry[]
+}
+
+model PublicationBundleEntry {
+    id                  String @id @default(cuid())
+    publicationBundleId String
+    publicationId       String
+    position            Int
+    publicationBundle PublicationBundle @relation(fields: [publicationBundleId], references: [id], onDelete: Cascade)
+    publication       Publication       @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+
+    @@unique([publicationBundleId, publicationId])
 }
 
 enum EventType {
